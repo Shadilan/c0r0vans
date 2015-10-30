@@ -6,8 +6,15 @@ import android.location.LocationListener;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.android.volley.Response;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import utility.GPSInfo;
 import utility.serverConnect;
@@ -17,8 +24,10 @@ public class Login extends AppCompatActivity {
     private TextView LoginField;
     private TextView PasswordField;
     private Button LoginButton;
-    private TextView GPSStatus;
+    private ImageView GPSStatus;
+    private ImageView ConnectStatus;
     private LocationListener locationListener;
+    private Response.Listener<JSONObject> LoginListener;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,18 +35,42 @@ public class Login extends AppCompatActivity {
         Log.d("LoginView", "Initialization");
         sp = this.getApplicationContext().getSharedPreferences("SpiritProto", AppCompatActivity.MODE_PRIVATE);
         LoginField= (TextView)  this.findViewById(R.id.LoginField);
-        LoginField.setText(sp.getString("Login",""));
+        LoginField.setText(sp.getString("Login", ""));
         PasswordField=(TextView) this.findViewById(R.id.PasswordField);
         PasswordField.setText(sp.getString("Password", ""));
-        GPSStatus= (TextView)  this.findViewById(R.id.GPSStatus);
+        GPSStatus= (ImageView)  this.findViewById(R.id.imgGPS);
+        ConnectStatus= (ImageView)  this.findViewById(R.id.imgConnected);
         GPSInfo.getInstance(this.getApplicationContext());
-        serverConnect.instance
+        serverConnect.getInstance().Connect(getResources().getString(R.string.serveradress), this.getApplicationContext());
+        LoginListener=new Response.Listener<JSONObject>(){
+
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    Log.d("LoginView","Response:"+response.toString());
+                    String token=response.getString("Token");
+                    if (!token.equals(null)) ConnectStatus.setVisibility(View.VISIBLE);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        serverConnect.getInstance().AddLoginListener(LoginListener);
         LoginButton = (Button) findViewById(R.id.LoginButton);
-        LoginButton.setOnClickListener();
+        LoginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedPreferences.Editor editor = sp.edit();
+                editor.putString("Login", LoginField.getText().toString()) ;
+                editor.putString("Password",PasswordField.getText().toString()) ;
+                editor.commit();
+                serverConnect.getInstance().ExecLogin(LoginField.getText().toString(),PasswordField.getText().toString());
+            }
+        });
         locationListener =new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
-                GPSStatus.setText("GPS Located");
+                GPSStatus.setVisibility(View.VISIBLE);
             }
 
             @Override

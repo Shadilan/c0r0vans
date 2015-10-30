@@ -5,10 +5,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
 import coe.com.c0r0vans.R;
-
 import java.util.HashMap;
 
-import coe.com.c0r0vans.R;
 
 /**
  * @author Shadilan

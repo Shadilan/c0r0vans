@@ -23,7 +23,7 @@ import java.util.ArrayList;
 public class serverConnect {
     private static serverConnect instance;
 
-    public serverConnect getInstance(){
+    public static serverConnect getInstance(){
         if (instance ==null){
             instance=new serverConnect();
         }
@@ -96,9 +96,10 @@ public class serverConnect {
      */
     private void DoLoginListeners(JSONObject response){
         if (remloginListeners!=null && remloginListeners.size()>0) loginListeners.removeAll(remloginListeners);
-        for (Response.Listener<JSONObject> listener:loginListeners){
-            listener.onResponse(response);
-        }
+        if (loginListeners !=null)
+            for (Response.Listener<JSONObject> listener:loginListeners){
+                listener.onResponse(response);
+            }
     }
 
     private ArrayList<Response.Listener<JSONObject>> getDataListeners;

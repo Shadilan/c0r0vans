@@ -13,4 +13,6 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
+    <string name="serveradress">http://service-merchantarg.rhcloud.com</string>
+    <string name="title_activity_main_window">кОрОваны</string>
 </resources>

@@ -46,7 +46,7 @@
         android:layout_toEndOf="@+id/textView2"
         android:password="true" />
 
-    <TextView
+    TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="GPSStatus:"
@@ -56,7 +56,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
-    <TextView
+    TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/GPSStatus"
@@ -73,4 +73,31 @@
         android:id="@+id/LoginButton"
         android:layout_below="@+id/PasswordField"
         android:layout_centerHorizontal="true" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imgConnected"
+        android:layout_gravity="left|top"
+        android:minHeight="160dp"
+        android:minWidth="160dp"
+        android:layout_below="@+id/LoginButton"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:src="@mipmap/server_connect"
+        android:visibility="invisible" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imgGPS"
+        android:layout_gravity="right|top"
+        android:minHeight="160dp"
+        android:minWidth="160dp"
+        android:layout_below="@+id/LoginButton"
+        android:layout_alignRight="@+id/PasswordField"
+        android:layout_alignEnd="@+id/PasswordField"
+        android:src="@mipmap/gps_connect"
+        android:visibility="invisible" />
+
 </RelativeLayout>
