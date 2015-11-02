@@ -4,4 +4,18 @@
     android:layout_height="match_parent" android:id="@+id/map"
     tools:context="coe.com.c0r0vans.MainWindow"
     android:name="com.google.android.gms.maps.SupportMapFragment"
-    tools:layout="@android:layout/activity_list_item" />
+    tools:layout="@android:layout/activity_list_item">
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left|top"
+        android:src="@mipmap/route"
+        android:padding="10dp"
+        android:layout_marginTop="20dp"
+        android:minHeight="40dp"
+        android:maxHeight="40dp"
+        android:minWidth="40dp"
+        android:maxWidth="40dp"
+        android:paddingRight="10dp"/>
+
+    </fragment>

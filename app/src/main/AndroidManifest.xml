@@ -36,11 +36,13 @@
         -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="@string/google_maps_key" />
+            android:value="AIzaSyBvcqhXWYeJZyU8b5nOtRGet6Jl4KcLWtM" />
 
         <activity
             android:name=".MainWindow"
             android:label="@string/title_activity_main_window" >
+        </activity>
+        <activity android:name=".ActionsActivity" >
         </activity>
     </application>
 

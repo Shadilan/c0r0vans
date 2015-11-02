@@ -171,9 +171,12 @@ public class serverConnect {
      */
     private void DoactionListeners(JSONObject response){
         if (remgetDataListeners!=null && remgetDataListeners.size()>0) actionListeners.removeAll(remactionListeners);
-        for (Response.Listener<JSONObject> listener:actionListeners){
-            listener.onResponse(response);
+        if (actionListeners!=null) {
+            for (Response.Listener<JSONObject> listener : actionListeners) {
+                listener.onResponse(response);
+            }
         }
+        RefreshData(GPSInfo.getInstance().GetLat(),GPSInfo.getInstance().GetLng());
     }
     //UserActions
     /**

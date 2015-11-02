@@ -21,7 +21,29 @@ public class ImageLoader {
      * @param context Application Context
      */
     public static void Loader(Context context){
+        //Buttons
+        images.put("route_but",BitmapFactory.decodeResource(context.getResources(), R.mipmap.route));
+        //Markers
         images.put("android",BitmapFactory.decodeResource(context.getResources(), R.mipmap.ic_launcher));
+        images.put("hero",BitmapFactory.decodeResource(context.getResources(), R.mipmap.hero));
+        images.put("city",BitmapFactory.decodeResource(context.getResources(), R.mipmap.city));
+        images.put("ambush",BitmapFactory.decodeResource(context.getResources(), R.mipmap.ambush));
+        //Actions
+            //City
+        images.put("start_route",BitmapFactory.decodeResource(context.getResources(), R.mipmap.start_route));
+        images.put("end_route",BitmapFactory.decodeResource(context.getResources(), R.mipmap.end_route));
+        images.put("buy_item",BitmapFactory.decodeResource(context.getResources(), R.mipmap.buy_item));
+        images.put("set_home",BitmapFactory.decodeResource(context.getResources(), R.mipmap.set_home));
+            //Player
+        images.put("create_ambush",BitmapFactory.decodeResource(context.getResources(), R.mipmap.create_ambush));
+        images.put("create_waypoint",BitmapFactory.decodeResource(context.getResources(), R.mipmap.create_waypoint));
+        images.put("drop_route",BitmapFactory.decodeResource(context.getResources(), R.mipmap.remove_route));
+            //Ambush
+        images.put("remove_ambush",BitmapFactory.decodeResource(context.getResources(), R.mipmap.rem_ambush));
+        images.put("attack_ambush",BitmapFactory.decodeResource(context.getResources(), R.mipmap.rem_ambush));
+            //Route
+        images.put("remove_route",BitmapFactory.decodeResource(context.getResources(), R.mipmap.remove_route));
+
 
     }
 

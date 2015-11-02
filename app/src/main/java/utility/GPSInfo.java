@@ -78,7 +78,7 @@ public class GPSInfo {
 
                     lat = (int) (location.getLatitude() * 1000000);
                     lng = (int) (location.getLongitude() * 1000000);
-                    RequestUpdate(location.getProvider());
+                    //RequestUpdate(location.getProvider());
                     if (locationListeners !=null){
                         for (LocationListener ll:locationListeners){
                             ll.onLocationChanged(location);
