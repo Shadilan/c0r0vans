@@ -140,6 +140,46 @@ public class serverConnect {
 
 
 
+    private ArrayList<Response.Listener<JSONObject>> routeListeners;
+    private ArrayList<Response.Listener<JSONObject>> remRouteListeners;
+
+    /**
+     * Add getData Listener to object
+     * @param listener Listener to add
+     */
+    public void addRouteListener(Response.Listener<JSONObject> listener){
+        if (routeListeners==null){
+            routeListeners=new ArrayList<>();
+        }
+        routeListeners.add(listener);
+    }
+
+    /**
+     * Remove getData Listener from object
+     * @param listener Listener to remove
+     */
+    public void removeRouteDataListener(Response.Listener<JSONObject> listener){
+        if (remRouteListeners==null){
+            remRouteListeners=new ArrayList<>();
+        }
+        remRouteListeners.add(listener);
+    }
+
+    /**
+     * Exec Listeners on event
+     * @param response Response from server
+     */
+    private void doRouteListeners(JSONObject response){
+        if (remRouteListeners!=null && remRouteListeners.size()>0) actionListeners.removeAll(remRouteListeners);
+        if (routeListeners!=null) {
+            for (Response.Listener<JSONObject> listener : routeListeners) {
+                listener.onResponse(response);
+            }
+        }
+        RefreshData(GPSInfo.getInstance().GetLat(),GPSInfo.getInstance().GetLng());
+    }
+
+
     private ArrayList<Response.Listener<JSONObject>> actionListeners;
     private ArrayList<Response.Listener<JSONObject>> remactionListeners;
 
@@ -262,6 +302,32 @@ public class serverConnect {
                     @Override
                     public void onResponse(JSONObject response) {
                         DoactionListeners(response);
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d("ActionTest", error.toString());
+
+                    }
+                });
+        Log.d("ServeConnect",jsObjRequest.toString());
+        reqq.add(jsObjRequest);
+        return true;
+    }
+    /**
+     * Exec simple action
+     * @return true
+     */
+    public boolean GetRouteList(){
+        if (!checkConnection()) return false;
+        Log.d("ServeConnect","Connection start");
+        String url=ServerAddres+"/routelist.jsp"+"?Token="+Token;
+        final JsonObjectRequest jsObjRequest = new JsonObjectRequest
+                (Request.Method.GET, url, null, new Response.Listener<JSONObject>(){
+
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        doRouteListeners(response);
                     }
                 }, new Response.ErrorListener() {
                     @Override
