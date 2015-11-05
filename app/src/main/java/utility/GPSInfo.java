@@ -71,15 +71,17 @@ public class GPSInfo {
      */
     public void RequestUpdate(String prov) {
         try {
-            locationManager.requestLocationUpdates(prov, 300000, 1, new LocationListener() {
+            locationManager.requestLocationUpdates(prov, 5*1000, 0, new LocationListener() {
                 @Override
 
                 public void onLocationChanged(Location location) {
 
                     lat = (int) (location.getLatitude() * 1000000);
                     lng = (int) (location.getLongitude() * 1000000);
+
                     //RequestUpdate(location.getProvider());
                     if (locationListeners !=null){
+                        if (locationListenersRem !=null) locationListeners.removeAll(locationListenersRem);
                         for (LocationListener ll:locationListeners){
                             ll.onLocationChanged(location);
                         }
@@ -89,6 +91,7 @@ public class GPSInfo {
                 @Override
                 public void onStatusChanged(String provider, int status, Bundle extras) {
                     if (locationListeners !=null){
+                        if (locationListenersRem !=null) locationListeners.removeAll(locationListenersRem);
                         for (LocationListener ll:locationListeners){
                             ll.onStatusChanged(provider,status,extras);
                         }
@@ -98,6 +101,7 @@ public class GPSInfo {
                 @Override
                 public void onProviderEnabled(String provider) {
                     if (locationListeners !=null){
+                        if (locationListenersRem !=null) locationListeners.removeAll(locationListenersRem);
                         for (LocationListener ll:locationListeners){
                             ll.onProviderEnabled(provider);
                         }
@@ -107,6 +111,7 @@ public class GPSInfo {
                 @Override
                 public void onProviderDisabled(String provider) {
                     if (locationListeners !=null){
+                        if (locationListenersRem !=null) locationListeners.removeAll(locationListenersRem);
                         for (LocationListener ll:locationListeners){
                             ll.onProviderDisabled(provider);
                         }

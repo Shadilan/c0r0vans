@@ -1,11 +1,16 @@
 package coe.com.c0r0vans;
 
 import android.content.Intent;
+import android.content.Loader;
+import android.content.SharedPreferences;
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.widget.TextView;
 
 import com.android.volley.Response;
 import com.google.android.gms.games.Game;
@@ -23,6 +28,7 @@ import org.json.JSONObject;
 import java.lang.reflect.Array;
 import java.sql.Ref;
 import java.util.ArrayList;
+import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -31,6 +37,7 @@ import coe.com.c0r0vans.GameObjects.City;
 import coe.com.c0r0vans.GameObjects.GameObject;
 import coe.com.c0r0vans.GameObjects.Player;
 import coe.com.c0r0vans.GameObjects.SelectedObject;
+import utility.Essages;
 import utility.GPSInfo;
 import utility.ImageLoader;
 import utility.serverConnect;
@@ -42,6 +49,9 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
     private ArrayList<City> Cities;
     private ArrayList<Ambush> Ambushes;
     private Timer RefreshTimer;
+    private TextView essegeText;
+    private int SetupDone=0;
+    Handler myHandler = new Handler();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,6 +61,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                 .findFragmentById(R.id.map);
         ImageLoader.Loader(this.getApplicationContext());
         mapFragment.getMapAsync(this);
+        essegeText=(TextView) findViewById(R.id.essageText);
 
     }
 
@@ -67,21 +78,31 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        setupMap();
-        init();
+        if (SetupDone==0) {
+            setupMap();
+            init();
+            SetupDone=1;
+        }
+
     }
     private void setupMap(){
-        LatLng target = new LatLng(GPSInfo.getInstance().GetLat()/1E6, GPSInfo.getInstance().GetLng()/1E6);
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(target, 18));
-        mMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
-        mMap.getUiSettings().setScrollGesturesEnabled(false);
-        mMap.getUiSettings().setTiltGesturesEnabled(false);
-        mMap.getUiSettings().setMyLocationButtonEnabled(false);
-        mMap.getUiSettings().setZoomControlsEnabled(false);
-        mMap.getUiSettings().setZoomGesturesEnabled(false);
-        mMap.getUiSettings().setCompassEnabled(false);
-        mMap.getUiSettings().setMapToolbarEnabled(false);
-        mMap.getUiSettings().setIndoorLevelPickerEnabled(false);
+
+            LatLng target = new LatLng(GPSInfo.getInstance().GetLat() / 1E6, GPSInfo.getInstance().GetLng() / 1E6);
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(target, 18));
+            mMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
+            mMap.getUiSettings().setScrollGesturesEnabled(false);
+            mMap.getUiSettings().setTiltGesturesEnabled(false);
+            mMap.getUiSettings().setMyLocationButtonEnabled(false);
+            mMap.getUiSettings().setZoomControlsEnabled(false);
+            mMap.getUiSettings().setZoomGesturesEnabled(false);
+            mMap.getUiSettings().setCompassEnabled(false);
+            mMap.getUiSettings().setMapToolbarEnabled(false);
+            mMap.getUiSettings().setIndoorLevelPickerEnabled(false);
+    }
+    private void Tick(){
+        serverConnect.getInstance().RefreshData(GPSInfo.getInstance().GetLat(), GPSInfo.getInstance().GetLng());
+        Essages.instance.Tick();
+        essegeText.setText(Essages.instance.getEssagesText());
 
     }
     private void init(){
@@ -93,12 +114,18 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
         createListeners();
         serverConnect.getInstance().RefreshData(GPSInfo.getInstance().GetLat(), GPSInfo.getInstance().GetLng());
         RefreshTimer=new Timer("RefreshData");
+        ImageLoader.Loader(getApplicationContext());
         RefreshTimer.schedule(new TimerTask() {
             @Override
             public void run() {
-                serverConnect.getInstance().RefreshData(GPSInfo.getInstance().GetLat(),GPSInfo.getInstance().GetLng());
+                myHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        Tick();
+                    }
+                });
             }
-        },1000*60);
+        }, 1000 * 60);
 
 
 
@@ -185,6 +212,13 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+            }
+        });
+        serverConnect.getInstance().AddactionListener(new Response.Listener<JSONObject>(){
+
+            @Override
+            public void onResponse(JSONObject response) {
+                Essages.instance.AddEssage("Action done.");
             }
         });
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {

@@ -78,6 +78,14 @@ public class Essages {
         }
         return essageStrings;
     }
+    public String getEssagesText() {
+        String result="";
+        for (Essage essage : essageList) {
+
+            result+=essage.getText()+"\n";
+        }
+        return result;
+    }
 
     class Essage {
         private String Text;
