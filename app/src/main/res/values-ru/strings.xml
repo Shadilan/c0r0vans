@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">к0р0ваны</string>
+    <string name="title_activity_main_window">к0р0ваны</string>
+    <string name="login_window">Вход</string>
+    <string name="action_window">Действия</string>
+    <string name="route_window">Маршруты</string>
+</resources>

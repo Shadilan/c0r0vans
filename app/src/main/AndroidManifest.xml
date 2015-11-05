@@ -18,13 +18,22 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".Login"
-            android:label="@string/app_name" >
+            android:name=".MainWindow"
+            android:label="@string/title_activity_main_window" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".Login"
+            android:label="Вход"
+            android:theme="@style/Theme.AppCompat.Light.Dialog"
+            >
+        </activity>
+        <activity android:name=".ActionsActivity"
+            android:label="Действия"
+            android:theme="@style/Theme.AppCompat.Light.Dialog">
         </activity>
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
@@ -38,14 +47,8 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyBvcqhXWYeJZyU8b5nOtRGet6Jl4KcLWtM" />
 
-        <activity
-            android:name=".MainWindow"
-            android:label="@string/title_activity_main_window" >
-        </activity>
-        <activity android:name=".ActionsActivity"
-            android:label="Действия"
-            android:theme="@style/Theme.AppCompat.Light.Dialog">
-        </activity>
+
+
         <activity android:name=".RouteList" >
         </activity>
     </application>
