@@ -60,6 +60,9 @@ public class Login extends AppCompatActivity {
                     if (Connected && Positioned)
                     {
                         Intent i = new Intent(getApplicationContext(), MainWindow.class);
+                        GPSInfo.getInstance().RemoveLocationListener(locationListener);
+                        serverConnect.getInstance().removeLoginListener(LoginListener);
+                        Log.d("LoginActivity", "Start Main from Login.");
                         startActivity(i);
                     }
 
@@ -88,6 +91,9 @@ public class Login extends AppCompatActivity {
                 if (Connected && Positioned)
                 {
                     Intent i = new Intent(getApplicationContext(), MainWindow.class);
+                    GPSInfo.getInstance().RemoveLocationListener(locationListener);
+                    serverConnect.getInstance().removeLoginListener(LoginListener);
+                    Log.d("LoginActivity","Start Main from GPS.");
                     startActivity(i);
                 }
             }

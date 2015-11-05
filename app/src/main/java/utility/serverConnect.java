@@ -278,6 +278,7 @@ public class serverConnect {
                     public void onErrorResponse(VolleyError error) {
 
                         Log.d("LoginTest",error.toString());
+                        Essages.instance.AddEssage(error.toString());
                     }
                 });
         reqq.add(jsObjRequest);
@@ -307,6 +308,7 @@ public class serverConnect {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Log.d("ActionTest", error.toString());
+                        Essages.instance.AddEssage(error.toString());
 
                     }
                 });
@@ -333,6 +335,7 @@ public class serverConnect {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Log.d("ActionTest", error.toString());
+                        Essages.instance.AddEssage(error.toString());
 
                     }
                 });

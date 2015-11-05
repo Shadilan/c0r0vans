@@ -3,9 +3,13 @@ package coe.com.c0r0vans;
 import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
+import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -20,11 +24,13 @@ import utility.serverConnect;
 public class ActionsActivity extends AppCompatActivity {
     ArrayList<ObjectAction> actions;
     private TextView infoView;
+    private ImageView targetImage;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_actions);
-        infoView= (TextView) findViewById(R.id.infoView);
+        infoView= (TextView) findViewById(R.id.TargetInfo);
+        targetImage= (ImageView) findViewById(R.id.TargetImage);
 
     }
     @Override
@@ -32,13 +38,18 @@ public class ActionsActivity extends AppCompatActivity {
         super.onStart();
         if (SelectedObject.getInstance().getTarget()!=null){
             infoView.setText(SelectedObject.getInstance().getTarget().getInfo());
+            targetImage.setImageBitmap(SelectedObject.getInstance().getTarget().getImage());
             actions=SelectedObject.getInstance().getTarget().getActions();
-            TableLayout ActionTable= (TableLayout) findViewById(R.id.ActionTables);
+            LinearLayout ActionTable= (LinearLayout) findViewById(R.id.ActionList);
             ActionTable.removeAllViews();
             for (ObjectAction act:actions){
-                TableRow row=new TableRow(this);
                 CommandButton btn=new CommandButton(this,act.getCommand());
+                btn.setMinimumWidth(80);
+                btn.setMinimumWidth(80);
+                btn.setMaxWidth(80);
+                btn.setMaxHeight(80);
                 btn.setImageBitmap(act.getImage());
+
                 btn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -46,14 +57,8 @@ public class ActionsActivity extends AppCompatActivity {
                         finish();
                     }
                 });
-                TextView txt=new TextView(this);
-                txt.setSingleLine(false);
-                txt.setHorizontallyScrolling(false);
-                txt.setMinLines(2);
-                txt.setText(act.getInfo());
-                row.addView(btn);
-                row.addView(txt);
-                ActionTable.addView(row);
+
+                ActionTable.addView(btn);
             }
 
         }
@@ -70,9 +75,6 @@ public class ActionsActivity extends AppCompatActivity {
         private String Command;
         public String getCommand(){
             return Command;
-        }
-        public void SetComman(String Command){
-            this.Command=Command;
         }
     }
 }

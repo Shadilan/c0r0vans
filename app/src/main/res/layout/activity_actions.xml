@@ -1,145 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:windowBackground="@android:color/transparent"
-    tools:context="coe.com.c0r0vans.ActionsActivity">
-
     <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
         android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        tools:context="coe.com.c0r0vans.ActionsActivity">
 
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/scrollView" >
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minWidth="100dp"
+                android:minHeight="100dp"
+                android:maxWidth="100dp"
+                android:maxHeight="100dp"
+                android:id="@+id/TargetImage" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/infoView"
+                android:id="@+id/TargetInfo"
+                android:minHeight="100dp"
+                android:maxHeight="100dp"
                 android:singleLine="false" />
-        </ScrollView>
+        </LinearLayout>
 
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="fill_parent"
-            android:id="@+id/scrollView2" >
+        <HorizontalScrollView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+             >
 
             <LinearLayout
                 android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <TableLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:id="@+id/ActionTables">
-
-                    <TableRow
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
-
-                        <ImageButton
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:minWidth="80dp"
-                            android:minHeight="80dp"
-                            android:id="@+id/Action1" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textAppearance="?android:attr/textAppearanceLarge"
-                            android:text="Skill information"
-                            android:id="@+id/ActionInfo1" />
-                    </TableRow>
-
-                    <TableRow
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
-
-                        <ImageButton
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:minWidth="80dp"
-                            android:minHeight="80dp"
-                            android:id="@+id/Action2" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textAppearance="?android:attr/textAppearanceLarge"
-                            android:text="Skill information"
-                            android:id="@+id/ActionInfo2" />
-                    </TableRow>
-
-                    <TableRow
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
-
-                        <ImageButton
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:minWidth="80dp"
-                            android:minHeight="80dp"
-                            android:id="@+id/Action3" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textAppearance="?android:attr/textAppearanceLarge"
-                            android:text="Skill information"
-                            android:id="@+id/ActionInfo3" />
-
-                    </TableRow>
-
-                    <TableRow
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
-
-                        <ImageButton
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:minWidth="80dp"
-                            android:minHeight="80dp"
-                            android:id="@+id/Action4" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textAppearance="?android:attr/textAppearanceLarge"
-                            android:text="Skill information"
-                            android:id="@+id/ActionInfo4" />
-                    </TableRow>
-
-                    <TableRow
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent" >
-
-                        <ImageButton
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:minWidth="80dp"
-                            android:minHeight="80dp"
-                            android:id="@+id/Action5" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textAppearance="?android:attr/textAppearanceLarge"
-                            android:text="Skill information"
-                            android:id="@+id/ActionInfo5" />
-                    </TableRow>
-                </TableLayout>
-
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/ActionList"
+                android:minHeight="80dp"
+                android:minWidth="80dp"
+                >
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:minWidth="80dp"
+                    android:minHeight="80dp"/>
             </LinearLayout>
-        </ScrollView>
+        </HorizontalScrollView>
 
     </LinearLayout>
 
-</RelativeLayout>
+

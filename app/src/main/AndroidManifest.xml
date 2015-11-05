@@ -42,7 +42,9 @@
             android:name=".MainWindow"
             android:label="@string/title_activity_main_window" >
         </activity>
-        <activity android:name=".ActionsActivity" >
+        <activity android:name=".ActionsActivity"
+            android:label="Действия"
+            android:theme="@style/Theme.AppCompat.Light.Dialog">
         </activity>
         <activity android:name=".RouteList" >
         </activity>

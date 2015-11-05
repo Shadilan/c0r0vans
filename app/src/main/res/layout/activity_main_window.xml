@@ -17,5 +17,10 @@
         android:minWidth="40dp"
         android:maxWidth="40dp"
         android:paddingRight="10dp"/>
-
+    <TextView android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left|bottom"
+        android:id="@+id/essageText"
+        android:layout_marginTop="20dp"
+        android:paddingRight="10dp"/>
     </fragment>
