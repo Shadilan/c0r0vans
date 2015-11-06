@@ -71,7 +71,7 @@ public class GPSInfo {
      */
     public void RequestUpdate(String prov) {
         try {
-            locationManager.requestLocationUpdates(prov, 5*1000, 0, new LocationListener() {
+            locationManager.requestLocationUpdates(prov, 1000, 0, new LocationListener() {
                 @Override
 
                 public void onLocationChanged(Location location) {

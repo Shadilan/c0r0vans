@@ -78,26 +78,22 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/imgConnected"
-        android:layout_gravity="left|top"
-        android:minHeight="160dp"
-        android:minWidth="160dp"
-        android:layout_below="@+id/LoginButton"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
+        android:layout_gravity="start|top"
         android:src="@mipmap/server_connect"
-        android:visibility="invisible" />
+        android:visibility="invisible"
+        android:layout_below="@+id/LoginButton"
+        android:layout_toLeftOf="@+id/LoginButton"
+        android:layout_toStartOf="@+id/LoginButton" />
 
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/imgGPS"
-        android:layout_gravity="right|top"
-        android:minHeight="160dp"
-        android:minWidth="160dp"
-        android:layout_below="@+id/LoginButton"
-        android:layout_alignRight="@+id/PasswordField"
-        android:layout_alignEnd="@+id/PasswordField"
+        android:layout_gravity="end|top"
         android:src="@mipmap/gps_connect"
-        android:visibility="invisible" />
+        android:visibility="invisible"
+        android:layout_below="@+id/LoginButton"
+        android:layout_toRightOf="@+id/LoginButton"
+        android:layout_toEndOf="@+id/LoginButton" />
 
 </RelativeLayout>
