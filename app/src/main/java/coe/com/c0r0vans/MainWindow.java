@@ -1,19 +1,17 @@
 package coe.com.c0r0vans;
 
 import android.content.Intent;
-import android.content.Loader;
-import android.content.SharedPreferences;
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
-import android.support.v7.app.AppCompatActivity;
+
 import android.util.Log;
 import android.widget.TextView;
 
 import com.android.volley.Response;
-import com.google.android.gms.games.Game;
+
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -25,10 +23,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.lang.reflect.Array;
-import java.sql.Ref;
+
 import java.util.ArrayList;
-import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -48,11 +44,13 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
     private Player player;
     private ArrayList<City> Cities;
     private ArrayList<Ambush> Ambushes;
-    private Timer RefreshTimer;
     private TextView essegeText;
     private int SetupDone=0;
     Handler myHandler = new Handler();
     @Override
+    /**
+     * Create form;
+     */
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_window);
@@ -62,33 +60,48 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
         ImageLoader.Loader(this.getApplicationContext());
         mapFragment.getMapAsync(this);
         essegeText=(TextView) findViewById(R.id.essageText);
+        init();
+        Log.d("LoginActivity","Start Login.");
+        if (!serverConnect.getInstance().isLogin()) {
+            Intent i = new Intent(getApplicationContext(), Login.class);
+            startActivity(i);
+        }
 
     }
+    /**
+     * Make initialization.
+     */
+    private void init(){
+        //init fields
+        Cities=new ArrayList<>();
+        Ambushes=new ArrayList<>();
 
+
+        ImageLoader.Loader(getApplicationContext());
+        GPSInfo.getInstance(getApplicationContext());
+        serverConnect.getInstance().Connect(getResources().getString(R.string.serveradress), this.getApplicationContext());
+        serverConnect.getInstance().RefreshData(GPSInfo.getInstance().GetLat(), GPSInfo.getInstance().GetLng());
+    }
 
     /**
      * Manipulates the map once available.
      * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
+     * This is where we can add markers or lines, add listeners or move the camera.
      */
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        if (SetupDone==0) {
-            setupMap();
-            init();
-            SetupDone=1;
-        }
-
+        setupMap();
+        player=new Player(mMap);
+        createListeners();
+        StartTickTimer();
     }
+
+    /**
+     * Setup map view
+     */
     private void setupMap(){
 
-            LatLng target = new LatLng(GPSInfo.getInstance().GetLat() / 1E6, GPSInfo.getInstance().GetLng() / 1E6);
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(target, 18));
             mMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
             mMap.getUiSettings().setScrollGesturesEnabled(false);
             mMap.getUiSettings().setTiltGesturesEnabled(false);
@@ -99,38 +112,8 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
             mMap.getUiSettings().setMapToolbarEnabled(false);
             mMap.getUiSettings().setIndoorLevelPickerEnabled(false);
     }
-    private void Tick(){
-        serverConnect.getInstance().RefreshData(GPSInfo.getInstance().GetLat(), GPSInfo.getInstance().GetLng());
-        Essages.instance.Tick();
-        essegeText.setText(Essages.instance.getEssagesText());
-
-    }
-    private void init(){
-        //init fields
-        Cities=new ArrayList<>();
-        Ambushes=new ArrayList<>();
-        player=new Player(mMap);
-
-        createListeners();
-        serverConnect.getInstance().RefreshData(GPSInfo.getInstance().GetLat(), GPSInfo.getInstance().GetLng());
-        RefreshTimer=new Timer("RefreshData");
-        ImageLoader.Loader(getApplicationContext());
-        RefreshTimer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                myHandler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        Tick();
-                    }
-                });
-            }
-        }, 1000 * 60);
 
 
-
-
-    }
     private void createListeners()
     {
         GPSInfo.getInstance().AddLocationListener(new LocationListener() {
@@ -158,7 +141,6 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
             }
         });
         serverConnect.getInstance().AddGetDataListener(new Response.Listener<JSONObject>() {
-
             @Override
             public void onResponse(JSONObject response) {
                 try {
@@ -214,7 +196,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                 }
             }
         });
-        serverConnect.getInstance().AddactionListener(new Response.Listener<JSONObject>(){
+        serverConnect.getInstance().AddactionListener(new Response.Listener<JSONObject>() {
 
             @Override
             public void onResponse(JSONObject response) {
@@ -234,6 +216,12 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
         });
 
     }
+
+    /**
+     * Return object by marker
+     * @param m Marker
+     * @return GameObject
+     */
     private GameObject findObjectByMarker(Marker m){
         if (player.getMarker().equals(m)){
             return player;
@@ -244,5 +232,34 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
             }
         }
         return  null;
+    }
+
+    /**
+     * Start Timer to load data and other needs.
+     */
+    private void StartTickTimer(){
+        Timer refreshTimer = new Timer("RefreshData");
+
+        refreshTimer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                myHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        Tick();
+                    }
+                });
+            }
+        }, 1000 * 60);
+    }
+
+    /**
+     * Timed action on tick;
+     */
+    private void Tick(){
+        serverConnect.getInstance().RefreshData(GPSInfo.getInstance().GetLat(), GPSInfo.getInstance().GetLng());
+        Essages.instance.Tick();
+        essegeText.setText(Essages.instance.getEssagesText());
+
     }
 }

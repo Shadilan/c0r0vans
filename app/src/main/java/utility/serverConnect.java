@@ -263,6 +263,7 @@ public class serverConnect {
     public boolean RefreshData(int Lat,int Lng){
 
         if (!checkConnection()) return false;
+        if (Token==null) return false;
         Log.d("ServeConnect","Connection start");
         String url=ServerAddres+"/getdata.jsp"+"?Token="+Token+"&Lat="+Lat+"&Lng="+Lng;
         Log.d("ServeConnect",url);
@@ -271,6 +272,7 @@ public class serverConnect {
 
                     @Override
                     public void onResponse(JSONObject response) {
+                        //TODO Add check token error if not login remove token
                             DoGetDataListeners(response);
                     }
                 }, new Response.ErrorListener() {
@@ -295,6 +297,7 @@ public class serverConnect {
      */
     public boolean ExecCommand(String Command, String Target, int Lat,int Lng ){
         if (!checkConnection()) return false;
+        if (Token==null) return false;
         Log.d("ServeConnect","Connection start");
         String url=ServerAddres+"/simpleCommand.jsp"+"?Token="+Token+"&Command="+Command+"&Lat="+Lat+"&Lng="+Lng+"&Target="+Target;
         final JsonObjectRequest jsObjRequest = new JsonObjectRequest
@@ -302,6 +305,7 @@ public class serverConnect {
 
                     @Override
                     public void onResponse(JSONObject response) {
+                        //TODO Add check token error if not login remove token
                         DoactionListeners(response);
                     }
                 }, new Response.ErrorListener() {
@@ -329,6 +333,7 @@ public class serverConnect {
 
                     @Override
                     public void onResponse(JSONObject response) {
+                        //TODO Add check token error if not login remove token
                         doRouteListeners(response);
                     }
                 }, new Response.ErrorListener() {
@@ -341,6 +346,15 @@ public class serverConnect {
                 });
         Log.d("ServeConnect",jsObjRequest.toString());
         reqq.add(jsObjRequest);
+        return true;
+    }
+
+    /**
+     * Check if we have Token
+     * @return true if we have token otherwise false;
+     */
+    public boolean isLogin(){
+        if (Token==null) return false;
         return true;
     }
 }

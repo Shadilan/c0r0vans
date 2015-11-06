@@ -37,6 +37,7 @@ public class Login extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_main);
         Log.d("LoginView", "Initialization");
+        
         sp = this.getApplicationContext().getSharedPreferences("SpiritProto", AppCompatActivity.MODE_PRIVATE);
         LoginField= (TextView)  this.findViewById(R.id.LoginField);
         LoginField.setText(sp.getString("Login", ""));
@@ -90,11 +91,9 @@ public class Login extends AppCompatActivity {
                 Positioned=true;
                 if (Connected && Positioned)
                 {
-                    Intent i = new Intent(getApplicationContext(), MainWindow.class);
                     GPSInfo.getInstance().RemoveLocationListener(locationListener);
                     serverConnect.getInstance().removeLoginListener(LoginListener);
-                    Log.d("LoginActivity","Start Main from GPS.");
-                    startActivity(i);
+                    finish();
                 }
             }
 
