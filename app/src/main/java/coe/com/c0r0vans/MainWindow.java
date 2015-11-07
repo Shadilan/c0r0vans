@@ -8,6 +8,8 @@ import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
 
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.android.volley.Response;
@@ -36,6 +38,7 @@ import coe.com.c0r0vans.GameObjects.SelectedObject;
 import utility.Essages;
 import utility.GPSInfo;
 import utility.ImageLoader;
+import utility.ResourceString;
 import utility.serverConnect;
 
 public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
@@ -58,6 +61,17 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         ImageLoader.Loader(this.getApplicationContext());
+        ImageButton routeButton= (ImageButton) findViewById(R.id.route_button);
+        ResourceString.getInstance(getApplicationContext());
+        Log.d("PackageInfo", getApplicationContext().getPackageName());
+        Log.d("PackageInfo", getPackageName());
+        routeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getApplicationContext(), RouteList.class);
+                startActivity(i);
+            }
+        });
         mapFragment.getMapAsync(this);
         essegeText=(TextView) findViewById(R.id.essageText);
         init();
@@ -250,14 +264,14 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                     }
                 });
             }
-        }, 1000 * 60);
+        }, 1000 );
     }
 
     /**
      * Timed action on tick;
      */
     private void Tick(){
-        serverConnect.getInstance().RefreshData(GPSInfo.getInstance().GetLat(), GPSInfo.getInstance().GetLng());
+        if (Math.random()*60>58) serverConnect.getInstance().RefreshData(GPSInfo.getInstance().GetLat(), GPSInfo.getInstance().GetLng());
         Essages.instance.Tick();
         essegeText.setText(Essages.instance.getEssagesText());
 

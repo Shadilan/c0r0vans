@@ -5,4 +5,13 @@
     <string name="title_activity_main_window">c0r0vans</string>
     <string name="action_window">Actions</string>
     <string name="route_window">Routes</string>
+    <string name="begin">Begin:</string>
+    <string name="end">End:</string>
+    <string name="gold">Gold:</string>
+    <string name="time_to_go">Travel time:</string>
+    <string name="name">Name:</string>
+    <string name="caravans">Caravans:</string>
+    <string name="hirelings">Hirelings:</string>
+    <string name="homecity">Home city:</string>
+    <string name="onroute">Route started.</string>
 </resources>

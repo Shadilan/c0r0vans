@@ -5,4 +5,13 @@
     <string name="login_window">Вход</string>
     <string name="action_window">Действия</string>
     <string name="route_window">Маршруты</string>
+    <string name="begin">Начало:</string>
+    <string name="end">Конец:</string>
+    <string name="gold">Золото:</string>
+    <string name="time_to_go">Время в пути:</string>
+    <string name="caravans">Караваны:</string>
+    <string name="hirelings">Наемники:</string>
+    <string name="name">Имя:</string>
+    <string name="homecity">Местожительства:</string>
+    <string name="onroute">Прокладывает маршрут.</string>
 </resources>
