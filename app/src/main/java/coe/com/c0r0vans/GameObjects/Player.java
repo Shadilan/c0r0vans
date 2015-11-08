@@ -32,6 +32,9 @@ public class Player implements GameObject{
     private int Caravans=0;
     private int Ambushes=0;
     private int Route=0;
+    public int getRoute(){
+        return Route;
+    }
     private int Gold=0;
 
 

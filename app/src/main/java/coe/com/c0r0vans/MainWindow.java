@@ -107,6 +107,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
         mMap = googleMap;
         setupMap();
         player=new Player(mMap);
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(player.getMarker().getPosition(), 18));
         createListeners();
         StartTickTimer();
     }
