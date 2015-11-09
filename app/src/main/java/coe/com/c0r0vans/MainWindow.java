@@ -49,7 +49,8 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
     private ArrayList<Ambush> Ambushes;
     private TextView essegeText;
     private int SetupDone=0;
-    Handler myHandler = new Handler();
+    private Handler myHandler = new Handler();
+    private Timer refreshTimer;
     @Override
     /**
      * Create form;
@@ -109,7 +110,6 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
         player=new Player(mMap);
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(player.getMarker().getPosition(), 18));
         createListeners();
-        StartTickTimer();
     }
 
     /**
@@ -253,7 +253,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
      * Start Timer to load data and other needs.
      */
     private void StartTickTimer(){
-        Timer refreshTimer = new Timer("RefreshData");
+        refreshTimer = new Timer("RefreshData");
 
         refreshTimer.schedule(new TimerTask() {
             @Override
@@ -275,6 +275,19 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
         if (Math.random()*60>58) serverConnect.getInstance().RefreshData(GPSInfo.getInstance().GetLat(), GPSInfo.getInstance().GetLng());
         Essages.instance.Tick();
         essegeText.setText(Essages.instance.getEssagesText());
+
+    }
+    @Override
+    protected void onPause(){
+        super.onPause();
+        refreshTimer.cancel();
+        refreshTimer.purge();
+        refreshTimer=null;
+    }
+    @Override
+    protected void onResume(){
+        super.onResume();
+        StartTickTimer();
 
     }
 }
