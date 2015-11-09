@@ -85,40 +85,44 @@ public class City implements GameObject{
     @Override
     public ArrayList<ObjectAction> getActions() {
         ArrayList<ObjectAction> Actions=new ArrayList<>();
-        ObjectAction act=new ObjectAction() {
-            @Override
-            public Bitmap getImage() {
-                return ImageLoader.getImage("start_route");
-            }
+        ObjectAction act;
+        if (((Player)SelectedObject.getInstance().getExecuter()).getRoute()==0) {
+            act = new ObjectAction() {
+                @Override
+                public Bitmap getImage() {
+                    return ImageLoader.getImage("start_route");
+                }
 
-            @Override
-            public String getInfo() {
-                return "Начать маршрут из этого города.";
-            }
+                @Override
+                public String getInfo() {
+                    return "Начать маршрут из этого города.";
+                }
 
-            @Override
-            public String getCommand() {
-                return "create_route";
-            }
-        };
-        Actions.add(act);
-        act=new ObjectAction() {
-            @Override
-            public Bitmap getImage() {
-                return ImageLoader.getImage("end_route");
-            }
+                @Override
+                public String getCommand() {
+                    return "create_route";
+                }
+            };
+            Actions.add(act);
+        } else {
+            act = new ObjectAction() {
+                @Override
+                public Bitmap getImage() {
+                    return ImageLoader.getImage("end_route");
+                }
 
-            @Override
-            public String getInfo() {
-                return "Закончить маршрут на этом городе и запустить караван.";
-            }
+                @Override
+                public String getInfo() {
+                    return "Закончить маршрут на этом городе и запустить караван.";
+                }
 
-            @Override
-            public String getCommand() {
-                return "end_route";
-            }
-        };
-        Actions.add(act);
+                @Override
+                public String getCommand() {
+                    return "end_route";
+                }
+            };
+            Actions.add(act);
+        }
         return Actions;
     }
 }

@@ -35,7 +35,7 @@ public class ImageLoader {
         images.put("buy_item",BitmapFactory.decodeResource(context.getResources(), R.mipmap.buy_item));
         images.put("set_home",BitmapFactory.decodeResource(context.getResources(), R.mipmap.set_home));
             //Player
-        images.put("create_ambush",BitmapFactory.decodeResource(context.getResources(), R.mipmap.create_ambush));
+        images.put("create_ambush",BitmapFactory.decodeResource(context.getResources(), R.mipmap.ambush));
         images.put("create_waypoint",BitmapFactory.decodeResource(context.getResources(), R.mipmap.create_waypoint));
         images.put("drop_route",BitmapFactory.decodeResource(context.getResources(), R.mipmap.remove_route));
             //Ambush

@@ -10,6 +10,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="left|top"
         android:src="@mipmap/route"
+        android:id="@+id/route_button"
         android:padding="10dp"
         android:layout_marginTop="20dp"
         android:minHeight="40dp"

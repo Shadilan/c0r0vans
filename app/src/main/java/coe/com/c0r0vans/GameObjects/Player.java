@@ -16,6 +16,7 @@ import java.util.ArrayList;
 
 import utility.GPSInfo;
 import utility.ImageLoader;
+import utility.ResourceString;
 
 /**
  * @author Shadilan
@@ -31,6 +32,9 @@ public class Player implements GameObject{
     private int Caravans=0;
     private int Ambushes=0;
     private int Route=0;
+    public int getRoute(){
+        return Route;
+    }
     private int Gold=0;
 
 
@@ -88,11 +92,11 @@ public class Player implements GameObject{
 
     @Override
     public String getInfo() {
-        String result="Имя:"+this.Name+"\n"+
+        String result= ResourceString.getInstance().getString("name")+this.Name+"\n"+
                 "Местожительства:"+this.City+"\n"+
-                "Золото:"+this.Gold+"\n"+
-                "Караваны:"+this.Caravans+"\n"+
-                "Наемники:"+this.Ambushes+"\n"
+                ResourceString.getInstance().getString("gold")+this.Gold+"\n"+
+                ResourceString.getInstance().getString("caravans")+this.Caravans+"\n"+
+                ResourceString.getInstance().getString("hirelings")+this.Ambushes+"\n"
                 ;
         if (this.Route>0) result+="Прокладывает маршрут.";
         return result;
@@ -155,23 +159,7 @@ public class Player implements GameObject{
             };
             Actions.add(act);
         }
-        act=new ObjectAction() {
-            @Override
-            public Bitmap getImage() {
-                return ImageLoader.getImage("set_home");
-            }
 
-            @Override
-            public String getInfo() {
-                return "Установить текущий город в качестве домашнего.";
-            }
-
-            @Override
-            public String getCommand() {
-                return "set_home";
-            }
-        };
-        Actions.add(act);
         return Actions;
     }
 
