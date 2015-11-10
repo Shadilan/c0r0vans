@@ -91,7 +91,7 @@ public class Ambush implements GameObject {
 
             @Override
             public String getCommand() {
-                return "create_route";
+                return "createRoute";
             }
         };
         Actions.add(act);

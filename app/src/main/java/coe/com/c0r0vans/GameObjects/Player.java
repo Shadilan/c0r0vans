@@ -118,7 +118,7 @@ public class Player implements GameObject{
 
             @Override
             public String getCommand() {
-                return "create_ambush";
+                return "createAmbush";
             }
         };
         Actions.add(act);
@@ -136,7 +136,7 @@ public class Player implements GameObject{
 
                 @Override
                 public String getCommand() {
-                    return "create_waypoint";
+                    return "createWaypoint";
                 }
             };
             Actions.add(act);

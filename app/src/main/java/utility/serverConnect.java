@@ -299,7 +299,7 @@ public class serverConnect {
         if (!checkConnection()) return false;
         if (Token==null) return false;
         Log.d("ServeConnect","Connection start");
-        String url=ServerAddres+"/simpleCommand.jsp"+"?Token="+Token+"&Command="+Command+"&Lat="+Lat+"&Lng="+Lng+"&Target="+Target;
+        String url=ServerAddres+"/makeaction.jsp"+"?Token="+Token+"&Action="+Command+"&Lat="+Lat+"&Lng="+Lng+"&Target="+Target;
         final JsonObjectRequest jsObjRequest = new JsonObjectRequest
                 (Request.Method.GET, url, null, new Response.Listener<JSONObject>(){
 
