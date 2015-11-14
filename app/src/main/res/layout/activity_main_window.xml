@@ -4,7 +4,8 @@
     android:layout_height="match_parent" android:id="@+id/map"
     tools:context="coe.com.c0r0vans.MainWindow"
     android:name="com.google.android.gms.maps.SupportMapFragment"
-    tools:layout="@android:layout/activity_list_item">
+    tools:layout="@android:layout/activity_list_item"
+    >
     <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -21,7 +22,6 @@
     <TextView android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="left|bottom"
-        android:id="@+id/essageText"
-        android:layout_marginTop="20dp"
-        android:paddingRight="10dp"/>
+        android:layout_marginBottom="20dp"
+        android:id="@+id/essageText" />
     </fragment>

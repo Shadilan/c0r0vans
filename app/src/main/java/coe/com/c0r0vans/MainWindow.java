@@ -1,6 +1,7 @@
 package coe.com.c0r0vans;
 
 import android.content.Intent;
+import android.graphics.Rect;
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
@@ -66,6 +67,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
         ResourceString.getInstance(getApplicationContext());
         Log.d("PackageInfo", getApplicationContext().getPackageName());
         Log.d("PackageInfo", getPackageName());
+        Log.d("InfoSend","ActivityStarted");
         routeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -209,13 +211,24 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+                Essages.instance.AddEssage("Data refreshed.");
             }
         });
         serverConnect.getInstance().AddactionListener(new Response.Listener<JSONObject>() {
 
             @Override
             public void onResponse(JSONObject response) {
-                Essages.instance.AddEssage("Action done.");
+                 try {
+                  if(response.getString("Result").equalsIgnoreCase("Success")){
+                      Essages.instance.AddEssage(response.getString("Message"));
+
+                  } else {
+                      Essages.instance.AddEssage(response.getString("Code")+':'+response.getString("Message"));
+                  }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
             }
         });
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
@@ -242,6 +255,11 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
             return player;
         }
         for (City obj:Cities){
+            if (obj.getMarker().equals(m)){
+                return obj;
+            }
+        }
+        for (Ambush obj:Ambushes){
             if (obj.getMarker().equals(m)){
                 return obj;
             }
@@ -274,7 +292,14 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
     private void Tick(){
         if (Math.random()*60>58) serverConnect.getInstance().RefreshData(GPSInfo.getInstance().GetLat(), GPSInfo.getInstance().GetLng());
         Essages.instance.Tick();
-        essegeText.setText(Essages.instance.getEssagesText());
+        String txt=Essages.instance.getEssagesText();
+        essegeText.setText(txt);
+        Rect result = new Rect();
+        essegeText.getPaint().getTextBounds(txt, 0, txt.length(), result);
+        Log.d("TestTick", "HereCall" + result.height());
+        //essegeText.setY(findViewById(R.id.map).getHeight()-result.height());
+        essegeText.setHeight(result.height()*(Essages.instance.getEssagesLines()+1));
+        StartTickTimer();
 
     }
     @Override

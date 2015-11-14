@@ -86,6 +86,9 @@ public class Essages {
         }
         return result;
     }
+    public int getEssagesLines(){
+        return essageList.size();
+    }
 
     class Essage {
         private String Text;

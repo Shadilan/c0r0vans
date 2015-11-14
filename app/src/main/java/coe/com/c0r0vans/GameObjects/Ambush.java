@@ -72,7 +72,7 @@ public class Ambush implements GameObject {
 
     @Override
     public String getInfo() {
-        return "Владелец:"+OwnerName;
+        return "Это ЗАСАДА!!!";
     }
 
     @Override
