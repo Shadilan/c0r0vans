@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import utility.ImageLoader;
 
 /**
- * Created by Shadilan on 02.11.2015.
+ * @author Shadilan
  */
 public class Ambush implements GameObject {
     private Marker mark;
@@ -81,17 +81,17 @@ public class Ambush implements GameObject {
         ObjectAction act=new ObjectAction() {
             @Override
             public Bitmap getImage() {
-                return ImageLoader.getImage("start_route");
+                return ImageLoader.getImage("remove_ambush");
             }
 
             @Override
             public String getInfo() {
-                return "Начать маршрут из этого города.";
+                return "Убрать засаду.";
             }
 
             @Override
             public String getCommand() {
-                return "createRoute";
+                return "removeAmbush";
             }
         };
         Actions.add(act);

@@ -1,8 +1,10 @@
 package coe.com.c0r0vans;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -33,23 +35,39 @@ public class RouteList extends AppCompatActivity {
         float StartX;
         float StartY;
         View StartView;
+        Boolean Toched=false;
         @Override
         public boolean onTouch(View v, MotionEvent event) {
-            if (event.getActionMasked() == MotionEvent.ACTION_DOWN) {
+            if (event.getAction() == MotionEvent.ACTION_DOWN && !Toched) {
                 StartX = event.getRawX();
                 StartY = event.getRawY();
                 StartView=v;
+                ((TextView) v).setTextColor(Color.BLACK);
+                Log.d("Actions", "Action Down");
+                Toched=true;
             }
-            if (event.getActionMasked() == MotionEvent.ACTION_UP) {
+
+            if (event.getAction() == MotionEvent.ACTION_UP
+                    || event.getAction()==MotionEvent.ACTION_CANCEL) {
+                Log.d("Actions","Action Up");
+                ((TextView) v).setTextColor(Color.GRAY);
+                Toched=false;
                 float CurrentXMove = StartX - event.getRawX();
                 float CurrentYMove = StartY - event.getRawY();
                 if (CurrentXMove > Math.abs(CurrentYMove) && CurrentXMove > 100) {
                     //Swipe Action
-                    serverConnect.getInstance().ExecCommand("removeRoute",((CommandTextView) StartView).getGUID(), GPSInfo.getInstance().GetLat(),GPSInfo.getInstance().GetLat());
+                    Log.d("Actions", "SWIPE");
+                    serverConnect.getInstance().ExecCommand("dropRoute",((CommandTextView) StartView).getGUID(), GPSInfo.getInstance().GetLat(),GPSInfo.getInstance().GetLat());
+                    try {
+                        routeItemList.removeView(v);
+                    } catch (NullPointerException e){
+                        Essages.instance.AddEssage(e.toString());
+                    }
+
                 }
 
             }
-            return false;
+            return true;
         }
     };
 
@@ -69,6 +87,8 @@ public class RouteList extends AppCompatActivity {
                             Route route = new Route(routes.getJSONObject(i));
                             CommandTextView cmd = new CommandTextView(getApplicationContext(), route.getGUID());
                             cmd.setText(route.getInfo());
+                            cmd.setTextColor(Color.GRAY);
+                            cmd.setTextSize(cmd.getTextSize()+2);
                             cmd.setOnTouchListener(touchListener);
                             routeItemList.addView(cmd);
 

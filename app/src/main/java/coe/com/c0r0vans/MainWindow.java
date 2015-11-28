@@ -11,6 +11,7 @@ import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.volley.Response;
@@ -52,6 +53,8 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
     private int SetupDone=0;
     private Handler myHandler = new Handler();
     private Timer refreshTimer;
+    private ImageView connect_img;
+    private int SendedRequest=0;
     @Override
     /**
      * Create form;
@@ -64,6 +67,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                 .findFragmentById(R.id.map);
         ImageLoader.Loader(this.getApplicationContext());
         ImageButton routeButton= (ImageButton) findViewById(R.id.route_button);
+        connect_img = (ImageView) findViewById(R.id.connect_img);
         ResourceString.getInstance(getApplicationContext());
         Log.d("PackageInfo", getApplicationContext().getPackageName());
         Log.d("PackageInfo", getPackageName());
@@ -208,10 +212,11 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                         obj.RemoveObject();
                     }
                     Ambushes.removeAll(remAmbushes);
+                    SendedRequest=0;
+                    connect_img.setVisibility(View.VISIBLE);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                Essages.instance.AddEssage("Data refreshed.");
             }
         });
         serverConnect.getInstance().AddactionListener(new Response.Listener<JSONObject>() {
@@ -290,7 +295,12 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
      * Timed action on tick;
      */
     private void Tick(){
-        if (Math.random()*60>58) serverConnect.getInstance().RefreshData(GPSInfo.getInstance().GetLat(), GPSInfo.getInstance().GetLng());
+        if (Math.random()*60>58) {
+            SendedRequest++;
+            if (SendedRequest>1) connect_img.setVisibility(View.INVISIBLE);
+            serverConnect.getInstance().RefreshData(GPSInfo.getInstance().GetLat(), GPSInfo.getInstance().GetLng());
+
+        }
         Essages.instance.Tick();
         String txt=Essages.instance.getEssagesText();
         essegeText.setText(txt);

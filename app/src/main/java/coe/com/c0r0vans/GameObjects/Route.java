@@ -32,7 +32,7 @@ public class Route {
         try {
             GUID=obj.getString("GUID");
             StartName=obj.getString("StartName");
-            EndName=obj.getString("EndName");
+            EndName=obj.getString("FinishName");
             Gold=obj.getInt("Gold");
             TimeToGo=obj.getInt("Time");
         } catch (JSONException e) {
@@ -41,9 +41,9 @@ public class Route {
     }
     public String getInfo(){
         return ResourceString.getInstance().getString("begin")+StartName+"\n"
-                +ResourceString.getInstance().getString("end")+EndName+"\n"
-                +ResourceString.getInstance().getString("gold")+Gold+"\n"
-                +ResourceString.getInstance().getString("time_to_go")+TimeToGo;
+                +ResourceString.getInstance().getString("end")+EndName+"\n";
+                //+ResourceString.getInstance().getString("gold")+Gold+"\n"
+                //+ResourceString.getInstance().getString("time_to_go")+TimeToGo;
     }
     public String getGUID(){
         return GUID;

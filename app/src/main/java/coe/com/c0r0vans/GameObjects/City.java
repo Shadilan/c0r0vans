@@ -86,7 +86,7 @@ public class City implements GameObject{
     public ArrayList<ObjectAction> getActions() {
         ArrayList<ObjectAction> Actions=new ArrayList<>();
         ObjectAction act;
-        if (((Player)SelectedObject.getInstance().getExecuter()).getRoute()==0) {
+        //if (((Player)SelectedObject.getInstance().getExecuter()).getRoute()==0) {
             act = new ObjectAction() {
                 @Override
                 public Bitmap getImage() {
@@ -104,7 +104,7 @@ public class City implements GameObject{
                 }
             };
             Actions.add(act);
-        } else {
+        //} else {
             act = new ObjectAction() {
                 @Override
                 public Bitmap getImage() {
@@ -118,11 +118,28 @@ public class City implements GameObject{
 
                 @Override
                 public String getCommand() {
-                    return "end_route";
+                    return "finishRoute";
                 }
             };
             Actions.add(act);
-        }
+        act = new ObjectAction() {
+            @Override
+            public Bitmap getImage() {
+                return ImageLoader.getImage("set_home");
+            }
+
+            @Override
+            public String getInfo() {
+                return "Установить город в качестве домашнего.";
+            }
+
+            @Override
+            public String getCommand() {
+                return "setHome";
+            }
+        };
+        Actions.add(act);
+        //}
         return Actions;
     }
 }

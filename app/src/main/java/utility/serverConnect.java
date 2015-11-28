@@ -1,8 +1,10 @@
 package utility;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import com.android.volley.Request;
@@ -132,7 +134,22 @@ public class serverConnect {
      * @param response Response from server
      */
     private void DoGetDataListeners(JSONObject response){
-        if (remgetDataListeners!=null && remgetDataListeners.size()>0) getDataListeners.removeAll(remgetDataListeners);
+        try {
+            if (response.getString("Result").equalsIgnoreCase("Error"))
+                if (response.getString("Code").equalsIgnoreCase("AccessDenied"))
+                {
+                    SharedPreferences sp = context.getSharedPreferences("SpiritProto", AppCompatActivity.MODE_PRIVATE);
+
+                    String login=sp.getString("Login", "");
+
+                    String passw =sp.getString("Password", "");
+                    ExecLogin(login,passw);
+                } else Essages.instance.AddEssage(response.getString("Message"));
+            else
+            if (remgetDataListeners!=null && remgetDataListeners.size()>0) getDataListeners.removeAll(remgetDataListeners);
+        } catch (JSONException e) {
+            Essages.instance.AddEssage(e.toString());
+        }
         for (Response.Listener<JSONObject> listener:getDataListeners){
             listener.onResponse(response);
         }
@@ -327,7 +344,7 @@ public class serverConnect {
     public boolean GetRouteList(){
         if (!checkConnection()) return false;
         Log.d("ServeConnect","Connection start");
-        String url=ServerAddres+"/routelist.jsp"+"?Token="+Token;
+        String url=ServerAddres+"/getRouteList.jsp"+"?Token="+Token;
         final JsonObjectRequest jsObjRequest = new JsonObjectRequest
                 (Request.Method.GET, url, null, new Response.Listener<JSONObject>(){
 
@@ -354,7 +371,6 @@ public class serverConnect {
      * @return true if we have token otherwise false;
      */
     public boolean isLogin(){
-        if (Token==null) return false;
-        return true;
+        return Token != null;
     }
 }
