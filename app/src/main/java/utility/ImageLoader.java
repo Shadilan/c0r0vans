@@ -13,7 +13,7 @@ import java.util.HashMap;
  * Static image collection to use without context;
  */
 public class ImageLoader {
-    private static ImageLoader instance;
+    //private static ImageLoader instance;
     private static HashMap<String,Bitmap> images=new HashMap<>();
 
     /**
@@ -21,8 +21,6 @@ public class ImageLoader {
      * @param context Application Context
      */
     public static void Loader(Context context){
-        //Buttons
-        images.put("route_but",BitmapFactory.decodeResource(context.getResources(), R.mipmap.route));
         //Markers
         images.put("android",BitmapFactory.decodeResource(context.getResources(), R.mipmap.ic_launcher));
         images.put("hero",BitmapFactory.decodeResource(context.getResources(), R.mipmap.hero));

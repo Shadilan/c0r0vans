@@ -1,9 +1,7 @@
 package utility;
 
-import android.Manifest;
+
 import android.content.Context;
-import android.content.pm.PackageManager;
-import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -31,7 +29,7 @@ public class GPSInfo {
 
     private int lat = -1;
     private int lng = -1;
-    private int request = 0;
+    //private int request = 0;
     private LocationManager locationManager;
     private ArrayList<LocationListener> locationListeners;
     private ArrayList<LocationListener> locationListenersRem;
@@ -59,7 +57,7 @@ public class GPSInfo {
      */
     private GPSInfo(Context mContext) {
         locationManager = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
-        Criteria criteria = new Criteria();
+        //Criteria criteria = new Criteria();
         for (String prov : locationManager.getAllProviders()) {
             RequestUpdate(prov);
         }

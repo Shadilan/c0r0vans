@@ -1,7 +1,6 @@
 package coe.com.c0r0vans;
 
 import android.content.Intent;
-import android.graphics.Rect;
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
@@ -10,9 +9,7 @@ import android.support.v4.app.FragmentActivity;
 
 import android.util.Log;
 import android.view.View;
-import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.android.volley.Response;
 
@@ -38,7 +35,7 @@ import coe.com.c0r0vans.GameObjects.City;
 import coe.com.c0r0vans.GameObjects.GameObject;
 import coe.com.c0r0vans.GameObjects.Player;
 import coe.com.c0r0vans.GameObjects.SelectedObject;
-import utility.Essages;
+
 import utility.GPSInfo;
 import utility.ImageLoader;
 import utility.ResourceString;
@@ -48,10 +45,8 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
     private Player player;
-    private ArrayList<City> Cities;
-    private ArrayList<Ambush> Ambushes;
-    private TextView essegeText;
-    private int SetupDone=0;
+    private ArrayList<GameObject> Objects;
+    //private int SetupDone=0;
     private Handler myHandler = new Handler();
     private Timer refreshTimer;
     private ImageView connect_img;
@@ -68,13 +63,14 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         ImageLoader.Loader(this.getApplicationContext());
-        ImageButton routeButton= (ImageButton) findViewById(R.id.route_button);
-        connect_img = (ImageView) findViewById(R.id.connect_img);
+//        ImageView Settings= (ImageView) findViewById(R.id.settings);
+        ImageView PlayerInfo= (ImageView) findViewById(R.id.infoview);
+        connect_img = (ImageView) findViewById(R.id.server_connect);
         ResourceString.getInstance(getApplicationContext());
         Log.d("PackageInfo", getApplicationContext().getPackageName());
         Log.d("PackageInfo", getPackageName());
-        Log.d("InfoSend","ActivityStarted");
-        routeButton.setOnClickListener(new View.OnClickListener() {
+        Log.d("InfoSend", "ActivityStarted");
+        PlayerInfo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(getApplicationContext(), RouteList.class);
@@ -82,7 +78,6 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
             }
         });
         mapFragment.getMapAsync(this);
-        essegeText=(TextView) findViewById(R.id.essageText);
         init();
         Log.d("LoginActivity","Start Login.");
         if (!serverConnect.getInstance().isLogin()) {
@@ -96,13 +91,11 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
      */
     private void init(){
         //init fields
-        Cities=new ArrayList<>();
-        Ambushes=new ArrayList<>();
-
+        Objects=new ArrayList<>();
 
         ImageLoader.Loader(getApplicationContext());
         GPSInfo.getInstance(getApplicationContext());
-        serverConnect.getInstance().Connect(getResources().getString(R.string.serveradress), this.getApplicationContext());
+        serverConnect.getInstance().connect(getResources().getString(R.string.serveradress), this.getApplicationContext());
         serverConnect.getInstance().RefreshData(GPSInfo.getInstance().GetLat(), GPSInfo.getInstance().GetLng());
     }
 
@@ -163,57 +156,50 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
 
             }
         });
-        serverConnect.getInstance().AddGetDataListener(new Response.Listener<JSONObject>() {
+        serverConnect.getInstance().addDataListener(new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 try {
-                    player.loadJSON(response.getJSONObject("Player"));
-                    //Cities
-                    ArrayList<City> remCity = new ArrayList<>(Cities);
-                    JSONArray arr;
-                    if (response.has("Cities")) {
-                        arr = response.getJSONArray("Cities");
-                        for (int i = 0; i < arr.length(); i++) {
-                            String GUID = arr.getJSONObject(i).getString("GUID");
-                            City notchange = null;
-                            for (City obj : remCity) {
-                                if (GUID.equals(obj.getGUID())) {
-                                    notchange = obj;
-                                    break;
-                                }
-                            }
-                            if (notchange == null) {
-                                Cities.add(new City(mMap, arr.getJSONObject(i)));
-                            } else remCity.remove(notchange);
-                        }
-                    }
-                    for (City obj : remCity) {
-                        obj.RemoveObject();
-                    }
-                    Cities.removeAll(remCity);
-                    //Ambushes
-                    ArrayList<Ambush> remAmbushes = new ArrayList<>(Ambushes);
-                    if (response.has("Ambushes")) {
-                        arr = response.getJSONArray("Ambushes");
+                    //Проверить наличие массива JSON. Objects
+                    if (response.has("Objects")) {
+                        //Скопировать данные в массив для удаления
+                        ArrayList<GameObject> remObjects= new ArrayList<>(Objects);
+                        JSONArray JObj=response.getJSONArray("Objects");
+                        int leng=JObj.length();
 
-                        for (int i = 0; i < arr.length(); i++) {
-                            String GUID = arr.getJSONObject(i).getString("GUID");
-                            Ambush notchange = null;
-                            for (Ambush obj : remAmbushes) {
-                                if (GUID.equals(obj.getGUID())) {
-                                    notchange = obj;
+                        for (int i=0;i<leng;i++){
+                            GameObject robj=null;
+                            for (GameObject obj:remObjects){
+                                if (obj.getGUID().equals(JObj.getJSONObject(i).getString("GUID"))){
+                                    robj=obj;
                                     break;
                                 }
                             }
-                            if (notchange == null) {
-                                Ambushes.add(new Ambush(mMap, arr.getJSONObject(i)));
-                            } else remAmbushes.remove(notchange);
+                            if (robj!=null) {
+                                remObjects.remove(robj);
+                                robj.loadJSON(JObj.getJSONObject(i));
+                            } else {
+                                if (JObj.getJSONObject(i).getString("TYPE").equals("PLAYER")) {
+                                    player.loadJSON(JObj.getJSONObject(i));
+
+                                } else if (JObj.getJSONObject(i).getString("TYPE").equals("CITY")) {
+                                    City city=new City(mMap,JObj.getJSONObject(i));
+                                    Objects.add(city);
+                                } else if (JObj.getJSONObject(i).getString("TYPE").equals("AMBUSH")) {
+                                    Ambush ambush=new Ambush(mMap);
+                                    ambush.loadJSON(JObj.getJSONObject(i));
+                                    Objects.add(ambush);
+                                } else if (JObj.getJSONObject(i).getString("TYPE").equals("CARAVAN")) {
+                                    Log.d("Game Warning","Caravan object");
+                                } else if (JObj.getJSONObject(i).getString("TYPE").equals("SIGN")) {
+                                    Log.d("Game Warning","Sign object");
+                                } else {
+                                    Log.d("Game Warning","Unknown object");
+                                }
+                            }
+                            Objects.removeAll(remObjects);
                         }
                     }
-                    for (Ambush obj : remAmbushes) {
-                        obj.RemoveObject();
-                    }
-                    Ambushes.removeAll(remAmbushes);
                     SendedRequest = 0;
                     connect_img.setVisibility(View.INVISIBLE);
                 } catch (JSONException e) {
@@ -221,19 +207,17 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                 }
             }
         });
-        serverConnect.getInstance().AddactionListener(new Response.Listener<JSONObject>() {
+        serverConnect.getInstance().addActionListener(new Response.Listener<JSONObject>() {
 
             @Override
             public void onResponse(JSONObject response) {
                 try {
-                    if (response.getString("Result").equalsIgnoreCase("Success")) {
-                        Essages.instance.AddEssage(response.getString("Message"));
-
-                    } else {
-                        Essages.instance.AddEssage(response.getString("Code") + ':' + response.getString("Message"));
+                    if (!response.getString("Result").equalsIgnoreCase("Success")) {
+                        Log.d("Game Error:",response.getString("Error"));
+                        Log.d("Game Error:",response.getString("Message"));
                     }
                 } catch (JSONException e) {
-                    e.printStackTrace();
+                    Log.d("Unexped Error:", e.toString());
                 }
 
             }
@@ -280,12 +264,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
         if (player.getMarker().equals(m)){
             return player;
         }
-        for (City obj:Cities){
-            if (obj.getMarker().equals(m)){
-                return obj;
-            }
-        }
-        for (Ambush obj:Ambushes){
+        for (GameObject obj:Objects){
             if (obj.getMarker().equals(m)){
                 return obj;
             }
@@ -322,14 +301,6 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
             serverConnect.getInstance().RefreshData(GPSInfo.getInstance().GetLat(), GPSInfo.getInstance().GetLng());
 
         }
-        Essages.instance.Tick();
-        String txt=Essages.instance.getEssagesText();
-        essegeText.setText(txt);
-        Rect result = new Rect();
-        essegeText.getPaint().getTextBounds(txt, 0, txt.length(), result);
-        Log.d("TestTick", "HereCall" + result.height());
-        //essegeText.setY(findViewById(R.id.map).getHeight()-result.height());
-        essegeText.setHeight(result.height()*(Essages.instance.getEssagesLines()+1));
         StartTickTimer();
 
     }

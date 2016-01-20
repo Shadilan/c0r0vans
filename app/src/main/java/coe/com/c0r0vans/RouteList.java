@@ -10,14 +10,6 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.android.volley.Response;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.w3c.dom.Text;
-
-import coe.com.c0r0vans.GameObjects.Route;
 import utility.Essages;
 import utility.GPSInfo;
 import utility.serverConnect;
@@ -28,7 +20,7 @@ public class RouteList extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_route_list);
-        routeItemList= (LinearLayout) findViewById(R.id.route_list_items);
+
     }
 
     private View.OnTouchListener touchListener=new View.OnTouchListener() {
@@ -74,32 +66,6 @@ public class RouteList extends AppCompatActivity {
     @Override
     protected void onStart(){
         super.onStart();
-        routeItemList.removeAllViews();
-        serverConnect.getInstance().addRouteListener(new Response.Listener<JSONObject>() {
-
-            @Override
-            public void onResponse(JSONObject response) {
-                try {
-                    if (response.has("Routes")) {
-                        routeItemList.removeAllViews();
-                        JSONArray routes = response.getJSONArray("Routes");
-                        for (int i = 0; i < routes.length(); i++) {
-                            Route route = new Route(routes.getJSONObject(i));
-                            CommandTextView cmd = new CommandTextView(getApplicationContext(), route.getGUID());
-                            cmd.setText(route.getInfo());
-                            cmd.setTextColor(Color.GRAY);
-                            cmd.setTextSize(cmd.getTextSize()+2);
-                            cmd.setOnTouchListener(touchListener);
-                            routeItemList.addView(cmd);
-
-                        }
-                    }
-                } catch (JSONException e) {
-                    Essages.instance.AddEssage("Error get routes" + e.toString());
-                }
-            }
-        });
-        serverConnect.getInstance().GetRouteList();
 
     }
     private class CommandTextView extends TextView{

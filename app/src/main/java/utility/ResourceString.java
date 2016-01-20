@@ -3,7 +3,6 @@ package utility;
 import android.content.Context;
 import android.util.Log;
 
-import coe.com.c0r0vans.R;
 
 /**
  * @author Shadilan
