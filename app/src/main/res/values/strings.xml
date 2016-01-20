@@ -14,4 +14,13 @@
     <string name="hirelings">Hirelings:</string>
     <string name="homecity">Home city:</string>
     <string name="onroute">Route started.</string>
+    <string name="experience">Exp</string>
+    <string name="level">Level:</string>
+    <string name="information">Info</string>
+    <string name="upgrades">Upgrades</string>
+    <string name="tnl">To next level:</string>
+    <string name="ambushes">Ambushes:</string>
+    <string name="ambushes_left">Ambushes left:</string>
+    <string name="most_in">Most reach in</string>
+
 </resources>

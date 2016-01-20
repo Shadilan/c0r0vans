@@ -111,7 +111,7 @@ public class serverConnect {
      * Add getData Listener to object
      * @param listener Listener to add
      */
-    public void AddGetDataListener(Response.Listener<JSONObject> listener){
+    public void AddDataListener(Response.Listener<JSONObject> listener){
         if (getDataListeners==null){
             getDataListeners=new ArrayList<>();
         }
@@ -133,7 +133,7 @@ public class serverConnect {
      * Exec Listeners on event
      * @param response Response from server
      */
-    private void DoGetDataListeners(JSONObject response){
+    private void DoDataListeners(JSONObject response){
         try {
             if (response.getString("Result").equalsIgnoreCase("Error"))
                 if (response.getString("Code").equalsIgnoreCase("AccessDenied"))

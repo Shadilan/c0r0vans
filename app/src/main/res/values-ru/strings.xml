@@ -14,4 +14,12 @@
     <string name="name">Имя:</string>
     <string name="homecity">Местожительства:</string>
     <string name="onroute">Прокладывает маршрут.</string>
+    <string name="experience">Опыт:</string>
+    <string name="level">Уровень:</string>
+    <string name="information">Информация</string>
+    <string name="upgrades">Улучшения</string>
+    <string name="tnl">До следующего уровня:</string>
+    <string name="ambushes">Засад:</string>
+    <string name="ambushes_left">Засад осталось:</string>
+    <string name="most_in">Самый богатый в </string>
 </resources>

@@ -20,6 +20,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 
@@ -55,6 +56,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
     private Timer refreshTimer;
     private ImageView connect_img;
     private int SendedRequest=0;
+    private int clientZoom=18;
     @Override
     /**
      * Create form;
@@ -128,7 +130,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
             mMap.getUiSettings().setTiltGesturesEnabled(false);
             mMap.getUiSettings().setMyLocationButtonEnabled(false);
             mMap.getUiSettings().setZoomControlsEnabled(false);
-            mMap.getUiSettings().setZoomGesturesEnabled(false);
+            mMap.getUiSettings().setZoomGesturesEnabled(true);
             mMap.getUiSettings().setCompassEnabled(false);
             mMap.getUiSettings().setMapToolbarEnabled(false);
             mMap.getUiSettings().setIndoorLevelPickerEnabled(false);
@@ -141,7 +143,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
             @Override
             public void onLocationChanged(Location location) {
                 LatLng target = new LatLng(location.getLatitude(), location.getLongitude());
-                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(target, 18));
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(target, clientZoom));
                 Log.d("MapViewTest", "Coord:" + location.getLatitude() + "x" + location.getLongitude());
                 player.getMarker().setPosition(target);
             }
@@ -212,8 +214,8 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                         obj.RemoveObject();
                     }
                     Ambushes.removeAll(remAmbushes);
-                    SendedRequest=0;
-                    connect_img.setVisibility(View.VISIBLE);
+                    SendedRequest = 0;
+                    connect_img.setVisibility(View.INVISIBLE);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -223,13 +225,13 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
 
             @Override
             public void onResponse(JSONObject response) {
-                 try {
-                  if(response.getString("Result").equalsIgnoreCase("Success")){
-                      Essages.instance.AddEssage(response.getString("Message"));
+                try {
+                    if (response.getString("Result").equalsIgnoreCase("Success")) {
+                        Essages.instance.AddEssage(response.getString("Message"));
 
-                  } else {
-                      Essages.instance.AddEssage(response.getString("Code")+':'+response.getString("Message"));
-                  }
+                    } else {
+                        Essages.instance.AddEssage(response.getString("Code") + ':' + response.getString("Message"));
+                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -245,6 +247,25 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                 SelectedObject.getInstance().setTarget(target);
                 startActivity(myIntent);
                 return false;
+
+            }
+        });
+        mMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
+            @Override
+            public void onCameraChange(CameraPosition cameraPosition) {
+                clientZoom= (int) cameraPosition.zoom;
+                if (clientZoom<16) {
+                    clientZoom=16;
+                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(GPSInfo.getInstance().GetLat()/1e6,GPSInfo.getInstance().GetLng()/1e6), clientZoom));
+                }
+                if (clientZoom>20) {
+                    clientZoom=20;
+                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(GPSInfo.getInstance().GetLat()/1e6,GPSInfo.getInstance().GetLng()/1e6), clientZoom));
+                }
+                if (GPSInfo.getInstance().GetLat()!=cameraPosition.target.latitude*1e6||GPSInfo.getInstance().GetLng()!=cameraPosition.target.longitude*1e6){
+                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(GPSInfo.getInstance().GetLat()/1e6,GPSInfo.getInstance().GetLng()/1e6), clientZoom));
+                }
+
             }
         });
 
@@ -295,9 +316,9 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
      * Timed action on tick;
      */
     private void Tick(){
-        if (Math.random()*60>58) {
+        if (Math.random()*60>56) {
             SendedRequest++;
-            if (SendedRequest>1) connect_img.setVisibility(View.INVISIBLE);
+            if (SendedRequest>1) connect_img.setVisibility(View.VISIBLE);
             serverConnect.getInstance().RefreshData(GPSInfo.getInstance().GetLat(), GPSInfo.getInstance().GetLng());
 
         }

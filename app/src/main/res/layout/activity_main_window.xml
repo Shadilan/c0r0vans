@@ -1,42 +1,119 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="coe.com.c0r0vans.MainWindow"
+    tools:layout="@android:layout/activity_list_item">
 <fragment xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent" android:id="@+id/map"
-    tools:context="coe.com.c0r0vans.MainWindow"
     android:name="com.google.android.gms.maps.SupportMapFragment"
-    tools:layout="@android:layout/activity_list_item"
-    >
-    <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="left|top"
-        android:src="@mipmap/route"
-        android:id="@+id/route_button"
-        android:padding="10dp"
-        android:layout_marginTop="20dp"
-        android:minHeight="40dp"
-        android:maxHeight="40dp"
-        android:minWidth="40dp"
-        android:maxWidth="40dp"
-        android:paddingRight="10dp"/>
-    <TextView android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="left|bottom"
-        android:layout_marginBottom="20dp"
-        android:id="@+id/essageText" />
+
+    />
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="right|top"
+        android:layout_gravity="end|top"
         android:src="@mipmap/server_connect"
-        android:id="@+id/connect_img"
+        android:id="@+id/info"
         android:padding="10dp"
         android:paddingRight="10dp"
-        android:layout_marginTop="20dp"
         android:minHeight="20dp"
         android:maxHeight="20dp"
         android:minWidth="20dp"
         android:maxWidth="20dp"
-
+        android:visibility="invisible"
+        android:layout_above="@+id/essageText"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left|top"
+        android:src="@mipmap/info"
+        android:id="@+id/infoview"
+        android:padding="10dp"
+        android:minHeight="40dp"
+        android:maxHeight="40dp"
+        android:minWidth="40dp"
+        android:maxWidth="40dp"
+        android:paddingRight="10dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
         />
-    </fragment>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|top"
+        android:src="@mipmap/setings"
+        android:id="@+id/settings"
+        android:padding="10dp"
+        android:minHeight="40dp"
+        android:maxHeight="40dp"
+        android:minWidth="40dp"
+        android:maxWidth="40dp"
+        android:paddingLeft="10dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical|bottom"
+        android:src="@mipmap/show"
+        android:id="@+id/showchat"
+        android:layout_alignBottom="@+id/essageText"
+        android:layout_centerHorizontal="true" />
+    <TextView android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left|top"
+        android:layout_marginLeft="100dp"
+        android:layout_marginTop="10dp"
+        android:text="@string/level"
+        android:id="@+id/textView5" />
+    <TextView android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left|top"
+        android:layout_marginLeft="100dp"
+        android:layout_marginTop="30dp"
+        android:text="@string/experience"
+        android:id="@+id/textView4" />
+    <TextView android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left|top"
+        android:layout_marginLeft="100dp"
+        android:layout_marginTop="50dp"
+        android:text="@string/gold"
+        android:id="@+id/textView3" />
+    <TextView android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left|top"
+        android:layout_marginLeft="200dp"
+        android:layout_marginTop="10dp"
+        android:id="@+id/LevelAmount"
+        />
+    <TextView android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left|top"
+        android:layout_marginLeft="200dp"
+        android:layout_marginTop="30dp"
+        android:id="@+id/ExpAmount"
+        />
+    <TextView android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left|top"
+        android:layout_marginLeft="200dp"
+        android:layout_marginTop="50dp"
+        android:id="@+id/GoldAmount"
+        />
+    <TextView android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left|bottom"
+        android:id="@+id/essageText"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+
+    </RelativeLayout>
