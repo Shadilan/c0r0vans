@@ -28,10 +28,14 @@ public class City implements GameObject{
         return GUID;
     }
 
-    public City(GoogleMap map,JSONObject obj){
+    public City(GoogleMap map,JSONObject obj) throws JSONException {
         this.map=map;
+        int Lat=obj.getInt("Lat");
+        int Lng=obj.getInt("Lng");
         image=ImageLoader.getImage("city");
-        //mark=map.addMarker(new MarkerOptions());
+
+        mark=map.addMarker(new MarkerOptions().position(new LatLng(Lat / 1e6, Lng / 1e6)));
+        mark.setIcon(BitmapDescriptorFactory.fromBitmap(getImage()));
         loadJSON(obj);
 
 
@@ -60,7 +64,6 @@ public class City implements GameObject{
             GUID=obj.getString("GUID");
             int Lat=obj.getInt("Lat");
             int Lng=obj.getInt("Lng");
-            CityName=obj.getString("CityName");
             if (mark==null) {
                 setMarker(map.addMarker(new MarkerOptions().position(new LatLng(Lat / 1e6, Lng / 1e6))));
             } else {
@@ -85,6 +88,7 @@ public class City implements GameObject{
     @Override
     public ArrayList<ObjectAction> getActions() {
         ArrayList<ObjectAction> Actions=new ArrayList<>();
+        /*
         ObjectAction act;
         //if (((Player)SelectedObject.getInstance().getExecuter()).getRoute()==0) {
             act = new ObjectAction() {
@@ -140,6 +144,7 @@ public class City implements GameObject{
         };
         Actions.add(act);
         //}
+        */
         return Actions;
     }
 }
