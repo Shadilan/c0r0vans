@@ -32,8 +32,8 @@
             >
         </activity>
         <activity android:name=".ActionsActivity"
-            android:label="@string/action_window"
-            android:theme="@style/Theme.AppCompat.Light.Dialog">
+            android:label=""
+            android:theme="@style/MyDialogTheme">
         </activity>
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
@@ -48,10 +48,6 @@
             android:value="AIzaSyAneP9YQLzXNYHcKpJ2LkFOrgJHhp2_WiY" />
 
 
-
-        <activity android:name=".RouteList"
-            android:label="@string/route_window">
-        </activity>
     </application>
 
 </manifest>

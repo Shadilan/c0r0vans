@@ -51,7 +51,7 @@ public class Login extends AppCompatActivity {
                     Log.d("LoginView","Response:"+response.toString());
                     //Todo:Change to correct implementation.
                     //String token=response.getString("Token");
-                    String token=response.getString("Message");
+                    String token=response.getString("Token");
                     if (!(token ==null)) {
                         ConnectStatus.setVisibility(View.VISIBLE);
                         Connected=true;
@@ -76,7 +76,10 @@ public class Login extends AppCompatActivity {
                 editor.putString("Login", LoginField.getText().toString());
                 editor.putString("Password", PasswordField.getText().toString());
                 editor.apply();
-                serverConnect.getInstance().ExecLogin(LoginField.getText().toString(), PasswordField.getText().toString());
+                Log.d("Debug info","Test login1");
+                if (serverConnect.getInstance().ExecLogin(LoginField.getText().toString(), PasswordField.getText().toString()))
+                    Log.d("Debug info","Login True");    else Log.d("Debug info","Login False");
+                ;
             }
         });
         locationListener =new LocationListener() {

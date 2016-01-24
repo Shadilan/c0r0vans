@@ -1,6 +1,7 @@
 package coe.com.c0r0vans.GameObjects;
 
 import android.graphics.Bitmap;
+import android.util.Log;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -26,9 +27,11 @@ public class Ambush implements GameObject {
 
     public  Ambush(GoogleMap map){
         this.map=map;
+
     }
     public  Ambush(GoogleMap map,JSONObject obj)
     {
+        Log.d("Debug info","Ambush loaded.");
         this.map=map;
         loadJSON(obj);
         mark.setIcon(BitmapDescriptorFactory.fromBitmap(getImage()));
@@ -54,9 +57,9 @@ public class Ambush implements GameObject {
             GUID=obj.getString("GUID");
             int Lat=obj.getInt("Lat");
             int Lng=obj.getInt("Lng");
-            OwnerName=obj.getString("Owner");
             if (mark==null) {
                 setMarker(map.addMarker(new MarkerOptions().position(new LatLng(Lat / 1e6, Lng / 1e6))));
+                mark.setIcon(BitmapDescriptorFactory.fromBitmap(getImage()));
             } else {
                 mark.setPosition(new LatLng(Lat / 1e6, Lng / 1e6));
             }
@@ -77,6 +80,7 @@ public class Ambush implements GameObject {
 
     @Override
     public ArrayList<ObjectAction> getActions() {
+        Log.d("Debug info","Ambush action request.");
         ArrayList<ObjectAction> Actions=new ArrayList<>();
         ObjectAction act=new ObjectAction() {
             @Override
@@ -91,7 +95,7 @@ public class Ambush implements GameObject {
 
             @Override
             public String getCommand() {
-                return "removeAmbush";
+                return "DestroyAmbush";
             }
         };
         Actions.add(act);

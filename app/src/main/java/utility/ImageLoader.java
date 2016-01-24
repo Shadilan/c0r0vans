@@ -24,6 +24,7 @@ public class ImageLoader {
         //Markers
         images.put("android",BitmapFactory.decodeResource(context.getResources(), R.mipmap.ic_launcher));
         images.put("hero",BitmapFactory.decodeResource(context.getResources(), R.mipmap.hero));
+        images.put("marker",BitmapFactory.decodeResource(context.getResources(), R.mipmap.marker));
         images.put("city",BitmapFactory.decodeResource(context.getResources(), R.mipmap.city));
         images.put("ambush",BitmapFactory.decodeResource(context.getResources(), R.mipmap.ambush));
         //Actions

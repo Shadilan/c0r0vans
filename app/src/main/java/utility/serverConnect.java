@@ -56,11 +56,14 @@ public class serverConnect {
      * @param ctx Application context
      */
     public void connect(String serverAddres,Context ctx){
-        if (ServerAddres!=null) {
+        Log.d("Debug info!",serverAddres);
             ServerAddres = serverAddres;
+            Log.d("Debug info!!",ServerAddres);
             context = ctx;
+            Log.d("Debug info!",ctx.toString());
             reqq = Volley.newRequestQueue(context);
-        }
+            Log.d("Debug info!","TTT");
+
     }
 
     /**
@@ -68,10 +71,14 @@ public class serverConnect {
      * @return Return true if connection exists
      */
     private boolean checkConnection(){
+        Log.d("Debug info","c1");
         if (context==null) return false;
+        Log.d("Debug info","c2");
         ConnectivityManager connMgr = (ConnectivityManager)
                 instance.context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        Log.d("Debug info","c3");
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+        Log.d("Debug info","c4");
         return networkInfo != null && networkInfo.isConnected();
     }
 
@@ -209,9 +216,11 @@ public class serverConnect {
      * @return true
      */
     public boolean ExecLogin(String Login, String Password){
+        Log.d("Debug info","el1");
         if (!checkConnection()) return false;
+        Log.d("Debug info","el2");
         String url=ServerAddres+"/login.jsp"+"?Login="+Login+"&Password="+Password;
-        Log.d("Debug info","Connect url:"+url);
+        Log.d("Debug info","Connect url:"+url);
         final JsonObjectRequest jsObjRequest = new JsonObjectRequest
                 (Request.Method.GET, url, null, new Response.Listener<JSONObject>(){
 
@@ -245,7 +254,7 @@ public class serverConnect {
         if (!checkConnection()) return false;
         if (Token==null) return false;
         String url=ServerAddres+"/getdata.jsp"+"?ReqName=ScanRange&Token="+Token+"&plat="+Lat+"&plng="+Lng;
-        Log.d("Debug info","Connect url:"+url);
+        Log.d("Debug info","Connect url:"+url);
         final JsonObjectRequest jsObjRequest = new JsonObjectRequest
                 (Request.Method.GET, url, null, new Response.Listener<JSONObject>(){
                     @Override
@@ -271,11 +280,12 @@ public class serverConnect {
      * @param Lng Longtitude of player
      * @return true
      */
-    public boolean ExecCommand(String Command, String Target, int Lat,int Lng ){
+    public boolean ExecCommand(String Command, String Target, int Lat,int Lng , int TLat,int TLng){
         if (!checkConnection()) return false;
         if (Token==null) return false;
-        Log.d("ServeConnect","Connection start");
-        String url=ServerAddres+"/makeaction.jsp"+"?Token="+Token+"&Action="+Command+"&Lat="+Lat+"&Lng="+Lng+"&Target="+Target;
+
+        String url=ServerAddres+"/getdata.jsp"+"?Token="+Token+"&ReqName="+Command+"&plat="+Lat+"&plng="+Lng+"&TGUID="+Target+"&lat="+TLat+"&lng="+TLng;
+        Log.d("Debug info","Connection url:"+url);
         final JsonObjectRequest jsObjRequest = new JsonObjectRequest
                 (Request.Method.GET, url, null, new Response.Listener<JSONObject>(){
 

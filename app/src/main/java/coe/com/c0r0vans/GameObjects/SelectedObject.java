@@ -1,5 +1,7 @@
 package coe.com.c0r0vans.GameObjects;
 
+import com.google.android.gms.maps.model.LatLng;
+
 /**
  * @author Shadilan
  */
@@ -16,6 +18,9 @@ public class SelectedObject {
     public GameObject getTarget(){
         return target;
     }
+    private LatLng point;
+    public void setPoint(LatLng point){this.point=point;}
+    public LatLng getPoint(){return point;}
     public void setTarget(GameObject target){
         this.target=target;
     }

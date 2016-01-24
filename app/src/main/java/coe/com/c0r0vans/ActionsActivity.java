@@ -15,6 +15,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import coe.com.c0r0vans.GameObjects.ObjectAction;
+import coe.com.c0r0vans.GameObjects.Player;
 import coe.com.c0r0vans.GameObjects.SelectedObject;
 import utility.GPSInfo;
 import utility.serverConnect;
@@ -34,7 +35,16 @@ public class ActionsActivity extends AppCompatActivity {
     @Override
     protected void onStart(){
         super.onStart();
+
         if (SelectedObject.getInstance().getTarget()!=null){
+            if (SelectedObject.getInstance().getTarget() instanceof Player){
+                targetImage.setVisibility(View.INVISIBLE);
+                infoView.setVisibility(View.INVISIBLE);
+            } else
+            {
+                targetImage.setVisibility(View.VISIBLE);
+                infoView.setVisibility(View.VISIBLE);
+            }
             infoView.setText(SelectedObject.getInstance().getTarget().getInfo());
             targetImage.setImageBitmap(SelectedObject.getInstance().getTarget().getImage());
             actions=SelectedObject.getInstance().getTarget().getActions();
@@ -51,7 +61,7 @@ public class ActionsActivity extends AppCompatActivity {
                 btn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        serverConnect.getInstance().ExecCommand(((CommandButton) v).getCommand(), SelectedObject.getInstance().getTarget().getGUID(), GPSInfo.getInstance().GetLat(), GPSInfo.getInstance().GetLng());
+                        serverConnect.getInstance().ExecCommand(((CommandButton) v).getCommand(), SelectedObject.getInstance().getTarget().getGUID(), GPSInfo.getInstance().GetLat(), GPSInfo.getInstance().GetLng(),(int)(SelectedObject.getInstance().getPoint().latitude*1E6),(int)(SelectedObject.getInstance().getPoint().longitude*1E6));
                         finish();
                     }
                 });

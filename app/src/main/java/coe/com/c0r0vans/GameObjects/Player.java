@@ -1,10 +1,13 @@
 package coe.com.c0r0vans.GameObjects;
 
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.media.Image;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.Circle;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -25,6 +28,7 @@ public class Player implements GameObject{
 
     private Bitmap image;
     private Marker mark;
+    private Circle circle;
     private GoogleMap map;
     private String GUID;
     private String Name;
@@ -32,6 +36,9 @@ public class Player implements GameObject{
     private int Caravans=0;
     private int Ambushes=0;
     private int Route=0;
+    private int AmbushRad=30;
+    private int SeeDist=50;
+    public int getAmbushRad(){return AmbushRad;}
     public int getRoute(){
         return Route;
     }
@@ -43,16 +50,33 @@ public class Player implements GameObject{
     }
     public Player(GoogleMap mMap){
         image= ImageLoader.getImage("hero");
+        Bitmap mimage= ImageLoader.getImage("marker");
         map=mMap;
-        mark=mMap.addMarker(new MarkerOptions().position(new LatLng(GPSInfo.getInstance().GetLat()/1E6, GPSInfo.getInstance().GetLng() / 1E6)));
-        mark.setIcon(BitmapDescriptorFactory.fromBitmap(image));
-
+        mark=mMap.addMarker(new MarkerOptions().position(new LatLng(GPSInfo.getInstance().GetLat() / 1E6, GPSInfo.getInstance().GetLng() / 1E6)));
+        CircleOptions circleOptions=new CircleOptions();
+        circleOptions.center(new LatLng(GPSInfo.getInstance().GetLat() / 1E6, GPSInfo.getInstance().GetLng() / 1E6));
+        circleOptions.radius(SeeDist);
+        circleOptions.strokeColor(Color.RED);
+        circleOptions.strokeWidth(1);
+        circle=mMap.addCircle(circleOptions);
+        mark.setIcon(BitmapDescriptorFactory.fromBitmap(mimage));
+        mark.setAnchor(0.5f, 0.5f);
     }
     public Player(GoogleMap mMap,Marker m){
         image= ImageLoader.getImage("hero");
+        Bitmap mimage= ImageLoader.getImage("marker");
         map=mMap;
         mark=m;
-        mark.setIcon(BitmapDescriptorFactory.fromBitmap(image));
+        CircleOptions circleOptions=new CircleOptions();
+        circleOptions.center(new LatLng(GPSInfo.getInstance().GetLat() / 1E6, GPSInfo.getInstance().GetLng() / 1E6));
+        circleOptions.radius(100);
+        circleOptions.strokeColor(Color.RED);
+        circleOptions.strokeWidth(1);
+        circle=mMap.addCircle(circleOptions);
+        mark.setIcon(BitmapDescriptorFactory.fromBitmap(mimage));
+        mark.setAnchor(0.5f, 0.5f);
+
+
 
     }
 
@@ -66,9 +90,13 @@ public class Player implements GameObject{
         return mark;
     }
 
+    public Circle getCircle(){
+        return circle;
+    }
     @Override
     public void setMarker(Marker m) {
         mark=m;
+        circle.setCenter(m.getPosition());
     }
 
 
@@ -118,7 +146,7 @@ public class Player implements GameObject{
 
             @Override
             public String getCommand() {
-                return "createAmbush";
+                return "SetAmbush";
             }
         };
         Actions.add(act);

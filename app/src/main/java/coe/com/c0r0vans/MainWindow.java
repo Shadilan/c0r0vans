@@ -1,6 +1,7 @@
 package coe.com.c0r0vans;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
@@ -13,11 +14,14 @@ import android.widget.ImageView;
 
 import com.android.volley.Response;
 
+import com.google.android.gms.games.Game;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.Circle;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 
@@ -52,6 +56,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
     private ImageView connect_img;
     private int SendedRequest=0;
     private int clientZoom=18;
+    private Circle clickpos;
     @Override
     /**
      * Create form;
@@ -70,13 +75,14 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
         Log.d("PackageInfo", getApplicationContext().getPackageName());
         Log.d("PackageInfo", getPackageName());
         Log.d("InfoSend", "ActivityStarted");
-        PlayerInfo.setOnClickListener(new View.OnClickListener() {
+
+/*        PlayerInfo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(getApplicationContext(), RouteList.class);
                 startActivity(i);
             }
-        });
+        });*/
         mapFragment.getMapAsync(this);
         init();
         Log.d("LoginActivity","Start Login.");
@@ -86,9 +92,20 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
         }
 
     }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if (hasFocus && clickpos!=null){
+            clickpos.remove();
+            clickpos=null;
+        }
+    }
+
     /**
      * Make initialization.
      */
+
     private void init(){
         //init fields
         Objects=new ArrayList<>();
@@ -139,6 +156,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(target, clientZoom));
                 Log.d("MapViewTest", "Coord:" + location.getLatitude() + "x" + location.getLongitude());
                 player.getMarker().setPosition(target);
+                player.getCircle().setCenter(target);
             }
 
             @Override
@@ -163,42 +181,53 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                     //Проверить наличие массива JSON. Objects
                     if (response.has("Objects")) {
                         //Скопировать данные в массив для удаления
-                        ArrayList<GameObject> remObjects= new ArrayList<>(Objects);
-                        JSONArray JObj=response.getJSONArray("Objects");
-                        int leng=JObj.length();
+                        ArrayList<GameObject> remObjects = new ArrayList<>(Objects);
+                        JSONArray JObj = response.getJSONArray("Objects");
+                        int leng = JObj.length();
 
-                        for (int i=0;i<leng;i++){
-                            GameObject robj=null;
-                            for (GameObject obj:remObjects){
-                                if (obj.getGUID().equals(JObj.getJSONObject(i).getString("GUID"))){
-                                    robj=obj;
+                        for (int i = 0; i < leng; i++) {
+                            GameObject robj = null;
+                            for (GameObject obj : remObjects) {
+                                if (obj.getGUID().equals(JObj.getJSONObject(i).getString("GUID"))) {
+                                    robj = obj;
                                     break;
                                 }
                             }
-                            if (robj!=null) {
+                            if (robj != null) {
+                                Log.d("Debug info", "Exciting object:" + robj.getClass().toString() + " text:" + JObj.getJSONObject(i).toString());
                                 remObjects.remove(robj);
                                 robj.loadJSON(JObj.getJSONObject(i));
                             } else {
-                                if (JObj.getJSONObject(i).getString("TYPE").equals("PLAYER")) {
+                                if (JObj.getJSONObject(i).getString("Type").equals("Player")) {
+                                    Log.d("Debug info","Player Load:"+JObj.getJSONObject(i).toString());
                                     player.loadJSON(JObj.getJSONObject(i));
 
-                                } else if (JObj.getJSONObject(i).getString("TYPE").equals("CITY")) {
-                                    City city=new City(mMap,JObj.getJSONObject(i));
+                                } else if (JObj.getJSONObject(i).getString("Type").equals("City")) {
+                                    Log.d("Debug info","City Load:"+JObj.getJSONObject(i).toString());
+                                    City city = new City(mMap, JObj.getJSONObject(i));
                                     Objects.add(city);
-                                } else if (JObj.getJSONObject(i).getString("TYPE").equals("AMBUSH")) {
-                                    Ambush ambush=new Ambush(mMap);
-                                    ambush.loadJSON(JObj.getJSONObject(i));
+                                } else if (JObj.getJSONObject(i).getString("Type").equals("Ambush")) {
+                                    Log.d("Debug info", "Ambush Load:" + JObj.getJSONObject(i).toString());
+                                    Ambush ambush = new Ambush(mMap,JObj.getJSONObject(i));
+
                                     Objects.add(ambush);
-                                } else if (JObj.getJSONObject(i).getString("TYPE").equals("CARAVAN")) {
-                                    Log.d("Game Warning","Caravan object");
-                                } else if (JObj.getJSONObject(i).getString("TYPE").equals("SIGN")) {
-                                    Log.d("Game Warning","Sign object");
+                                } else if (JObj.getJSONObject(i).getString("Type").equals("Caravan")) {
+                                    Log.d("Debug info","Caravan Load:"+JObj.getJSONObject(i).toString());
+                                    Log.d("Game Warning", "Caravan object");
+                                } else if (JObj.getJSONObject(i).getString("Type").equals("Sign")) {
+                                    Log.d("Debug info","Sign Load:"+JObj.getJSONObject(i).toString());
+                                    Log.d("Game Warning", "Sign object");
                                 } else {
-                                    Log.d("Game Warning","Unknown object");
+                                    Log.d("Game Warning", "Unknown object");
                                 }
                             }
-                            Objects.removeAll(remObjects);
+
                         }
+                        for (GameObject obj:remObjects){
+                            obj.getMarker().remove();
+                            Log.d("Debug info", "Remove object:" + obj.getClass().toString() + " GUID:" + obj.getGUID() );
+                        }
+                        Objects.removeAll(remObjects);
                     }
                     SendedRequest = 0;
                     connect_img.setVisibility(View.INVISIBLE);
@@ -213,8 +242,8 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
             public void onResponse(JSONObject response) {
                 try {
                     if (!response.getString("Result").equalsIgnoreCase("Success")) {
-                        Log.d("Game Error:",response.getString("Error"));
-                        Log.d("Game Error:",response.getString("Message"));
+                        Log.d("Game Error:", response.getString("Error"));
+                        Log.d("Game Error:", response.getString("Message"));
                     }
                 } catch (JSONException e) {
                     Log.d("Unexped Error:", e.toString());
@@ -222,16 +251,42 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
 
             }
         });
+        mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
+            @Override
+            public void onMapLongClick(LatLng latLng) {
+                float[] distances=new float[1];
+                Location.distanceBetween(latLng.latitude, latLng.longitude, player.getMarker().getPosition().latitude, player.getMarker().getPosition().longitude, distances);
+                if (distances!=null && distances.length>0 && distances[0]<50) {
+                    Intent myIntent = new Intent(getApplicationContext(), ActionsActivity.class);
+                    SelectedObject.getInstance().setExecuter(player);
+                    SelectedObject.getInstance().setTarget(player);
+                    SelectedObject.getInstance().setPoint(latLng);
+                    CircleOptions circleOptions = new CircleOptions();
+                    circleOptions.center(latLng);
+                    circleOptions.radius(player.getAmbushRad());
+                    circleOptions.strokeColor(Color.RED);
+                    circleOptions.strokeWidth(2);
+                    clickpos = mMap.addCircle(circleOptions);
+                    startActivity(myIntent);
+                }
+            }
+        });
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
                 GameObject target = findObjectByMarker(marker);
-                Intent myIntent = new Intent(getApplicationContext(), ActionsActivity.class);
-                SelectedObject.getInstance().setExecuter(player);
-                SelectedObject.getInstance().setTarget(target);
-                startActivity(myIntent);
+                if (target!=null) {
+                    //float[] distances=new float[1];
+                    //Location.distanceBetween(marker.getPosition().latitude, marker.getPosition().longitude, player.getMarker().getPosition().latitude, player.getMarker().getPosition().longitude, distances);
+                    //if (distances!=null && distances.length>0 && distances[0]<100) {
+                    Intent myIntent = new Intent(getApplicationContext(), ActionsActivity.class);
+                    SelectedObject.getInstance().setExecuter(player);
+                    SelectedObject.getInstance().setTarget(target);
+                    SelectedObject.getInstance().setPoint(marker.getPosition());
+                    startActivity(myIntent);
+                }
+                //}
                 return false;
-
             }
         });
         mMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
@@ -263,12 +318,14 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
     private GameObject findObjectByMarker(Marker m){
         if (player.getMarker().equals(m)){
             return player;
-        }
+        } else
         for (GameObject obj:Objects){
             if (obj.getMarker().equals(m)){
+                Log.d("Debug info","Selected object:"+obj.getClass().toString());
                 return obj;
             }
         }
+        Log.d("Debug info","Object not found.");
         return  null;
     }
 

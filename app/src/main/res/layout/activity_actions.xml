@@ -25,16 +25,21 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@android:color/white"
+
                 android:id="@+id/TargetInfo"
                 android:minHeight="100dp"
                 android:maxHeight="100dp"
-                android:singleLine="false" />
+                android:singleLine="false"
+                android:longClickable="false"
+                android:enabled="true" />
         </LinearLayout>
 
         <HorizontalScrollView
-            android:layout_width="fill_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-             >
+            android:fillViewport="false"
+            android:layout_gravity="center_horizontal">
 
             <LinearLayout
                 android:orientation="horizontal"
@@ -49,6 +54,27 @@
                     android:layout_height="wrap_content"
                     android:minWidth="80dp"
                     android:minHeight="80dp"/>
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:minWidth="80dp"
+                    android:minHeight="80dp"
+                    android:id="@+id/button" />
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:minWidth="80dp"
+                    android:minHeight="80dp"
+                    android:id="@+id/button2" />
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:minWidth="80dp"
+                    android:minHeight="80dp"
+                    android:id="@+id/button3" />
             </LinearLayout>
         </HorizontalScrollView>
 
