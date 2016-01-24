@@ -14,7 +14,6 @@ import android.widget.ImageView;
 
 import com.android.volley.Response;
 
-import com.google.android.gms.games.Game;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -70,6 +69,13 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
         ImageLoader.Loader(this.getApplicationContext());
 //        ImageView Settings= (ImageView) findViewById(R.id.settings);
         ImageView PlayerInfo= (ImageView) findViewById(R.id.infoview);
+        PlayerInfo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(i);
+            }
+        });
         connect_img = (ImageView) findViewById(R.id.server_connect);
         ResourceString.getInstance(getApplicationContext());
         Log.d("PackageInfo", getApplicationContext().getPackageName());
@@ -256,7 +262,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
             public void onMapLongClick(LatLng latLng) {
                 float[] distances=new float[1];
                 Location.distanceBetween(latLng.latitude, latLng.longitude, player.getMarker().getPosition().latitude, player.getMarker().getPosition().longitude, distances);
-                if (distances!=null && distances.length>0 && distances[0]<50) {
+                if (distances.length>0 && distances[0]<50) {
                     Intent myIntent = new Intent(getApplicationContext(), ActionsActivity.class);
                     SelectedObject.getInstance().setExecuter(player);
                     SelectedObject.getInstance().setTarget(player);

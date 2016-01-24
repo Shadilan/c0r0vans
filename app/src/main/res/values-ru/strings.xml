@@ -4,7 +4,7 @@
     <string name="title_activity_main_window">к0р0ваны</string>
     <string name="login_window">Вход</string>
     <string name="action_window">Действия</string>
-    <string name="route_window">Маршруты</string>
+    <string name="route_window">Пути</string>
     <string name="begin">Начало:</string>
     <string name="end">Конец:</string>
     <string name="gold">Золото:</string>
@@ -16,10 +16,11 @@
     <string name="onroute">Прокладывает маршрут.</string>
     <string name="experience">Опыт:</string>
     <string name="level">Уровень:</string>
-    <string name="information">Информация</string>
-    <string name="upgrades">Улучшения</string>
+    <string name="information">Инфо</string>
+    <string name="upgrades">Умения</string>
     <string name="tnl">До следующего уровня:</string>
     <string name="ambushes">Засад:</string>
     <string name="ambushes_left">Засад осталось:</string>
     <string name="most_in">Самый богатый в </string>
+    <string name="title_activity_main">Информация</string>
 </resources>
