@@ -23,5 +23,6 @@
     <string name="ambushes_left">Ambushes left:</string>
     <string name="most_in">Most reach in</string>
     <string name="title_activity_main">Information</string>
+    <string name="ambush">Ambush</string>
 
 </resources>

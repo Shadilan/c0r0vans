@@ -14,6 +14,8 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import coe.com.c0r0vans.GameObjects.Ambush;
+import coe.com.c0r0vans.GameObjects.City;
 import coe.com.c0r0vans.GameObjects.ObjectAction;
 import coe.com.c0r0vans.GameObjects.Player;
 import coe.com.c0r0vans.GameObjects.SelectedObject;
@@ -31,19 +33,28 @@ public class ActionsActivity extends AppCompatActivity {
         infoView= (TextView) findViewById(R.id.TargetInfo);
         targetImage= (ImageView) findViewById(R.id.TargetImage);
 
+
     }
     @Override
     protected void onStart(){
         super.onStart();
 
         if (SelectedObject.getInstance().getTarget()!=null){
+
             if (SelectedObject.getInstance().getTarget() instanceof Player){
+                this.setTitle("");
                 targetImage.setVisibility(View.INVISIBLE);
                 infoView.setVisibility(View.INVISIBLE);
             } else
             {
                 targetImage.setVisibility(View.VISIBLE);
                 infoView.setVisibility(View.VISIBLE);
+            }
+            if (SelectedObject.getInstance().getTarget() instanceof Ambush){
+                this.setTitle(getResources().getString(R.string.ambush));
+            } else if (SelectedObject.getInstance().getTarget() instanceof City)
+            {
+                this.setTitle(((City)SelectedObject.getInstance().getTarget()).getCityName());
             }
             infoView.setText(SelectedObject.getInstance().getTarget().getInfo());
             targetImage.setImageBitmap(SelectedObject.getInstance().getTarget().getImage());

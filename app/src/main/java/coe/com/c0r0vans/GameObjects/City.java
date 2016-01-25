@@ -85,6 +85,7 @@ public class City implements GameObject{
         return "Name:"+CityName;
     }
 
+    public String getCityName(){return CityName;}
     @Override
     public ArrayList<ObjectAction> getActions() {
         ArrayList<ObjectAction> Actions=new ArrayList<>();
