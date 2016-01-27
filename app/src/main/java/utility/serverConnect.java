@@ -20,7 +20,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 /**
- * Объект обеспечивающий соединение с сервером и взаимодействие с сервером. Singleton.
+ * РћР±СЉРµРєС‚ РѕР±РµСЃРїРµС‡РёРІР°СЋС‰РёР№ СЃРѕРµРґРёРЅРµРЅРёРµ СЃ СЃРµСЂРІРµСЂРѕРј Рё РІР·Р°РёРјРѕРґРµР№СЃС‚РІРёРµ СЃ СЃРµСЂРІРµСЂРѕРј. Singleton.
  * @author Shadilan
  */
 public class serverConnect {
@@ -28,8 +28,8 @@ public class serverConnect {
     private static serverConnect instance;
 
     /**
-     * Получить объект
-     * @return Объект коненкта
+     * РџРѕР»СѓС‡РёС‚СЊ РѕР±СЉРµРєС‚
+     * @return РћР±СЉРµРєС‚ РєРѕРЅРµРЅРєС‚Р°
      */
     public static serverConnect getInstance(){
         if (instance ==null){
@@ -38,10 +38,10 @@ public class serverConnect {
         return instance;
     }
 
-    private String ServerAddres;//Адресс сервера
-    private Context context;    //Контекст приложения
-    private RequestQueue reqq;  //Очередь запросов
-    private String Token;       //Токен
+    private String ServerAddres;//РђРґСЂРµСЃСЃ СЃРµСЂРІРµСЂР°
+    private Context context;    //РљРѕРЅС‚РµРєСЃС‚ РїСЂРёР»РѕР¶РµРЅРёСЏ
+    private RequestQueue reqq;  //РћС‡РµСЂРµРґСЊ Р·Р°РїСЂРѕСЃРѕРІ
+    private String Token;       //РўРѕРєРµРЅ
 
     /**
      * Constructor
@@ -51,7 +51,7 @@ public class serverConnect {
     }
 
     /**
-     * Установка параметров коннекта. и запуск очереди.
+     * РЈСЃС‚Р°РЅРѕРІРєР° РїР°СЂР°РјРµС‚СЂРѕРІ РєРѕРЅРЅРµРєС‚Р°. Рё Р·Р°РїСѓСЃРє РѕС‡РµСЂРµРґРё.
      * @param serverAddres Address of server
      * @param ctx Application context
      */
@@ -67,7 +67,7 @@ public class serverConnect {
     }
 
     /**
-     * Проверка наличия доступа в интернет.
+     * РџСЂРѕРІРµСЂРєР° РЅР°Р»РёС‡РёСЏ РґРѕСЃС‚СѓРїР° РІ РёРЅС‚РµСЂРЅРµС‚.
      * @return Return true if connection exists
      */
     private boolean checkConnection(){
@@ -83,8 +83,8 @@ public class serverConnect {
     }
 
     //Listeners
-    private ArrayList<Response.Listener<JSONObject>> loginListeners;    //Отслеживание логинов
-    private ArrayList<Response.Listener<JSONObject>> remloginListeners; //Удаление листенов из списка
+    private ArrayList<Response.Listener<JSONObject>> loginListeners;    //РћС‚СЃР»РµР¶РёРІР°РЅРёРµ Р»РѕРіРёРЅРѕРІ
+    private ArrayList<Response.Listener<JSONObject>> remloginListeners; //РЈРґР°Р»РµРЅРёРµ Р»РёСЃС‚РµРЅРѕРІ РёР· СЃРїРёСЃРєР°
     /**
      * Add Login Listener to object
      * @param listener Listener to add
@@ -216,11 +216,11 @@ public class serverConnect {
      * @return true
      */
     public boolean ExecLogin(String Login, String Password){
-        Log.d("Debug info","el1");
+        Log.d("DebugВ info","el1");
         if (!checkConnection()) return false;
-        Log.d("Debug info","el2");
+        Log.d("DebugВ info","el2");
         String url=ServerAddres+"/login.jsp"+"?Login="+Login+"&Password="+Password;
-        Log.d("Debug info","Connect url:"+url);
+        Log.d("DebugВ info","Connect url:"+url);
         final JsonObjectRequest jsObjRequest = new JsonObjectRequest
                 (Request.Method.GET, url, null, new Response.Listener<JSONObject>(){
 
@@ -254,12 +254,12 @@ public class serverConnect {
         if (!checkConnection()) return false;
         if (Token==null) return false;
         String url=ServerAddres+"/getdata.jsp"+"?ReqName=ScanRange&Token="+Token+"&plat="+Lat+"&plng="+Lng;
-        Log.d("Debug info","Connect url:"+url);
+        Log.d("DebugВ info","Connect url:"+url);
         final JsonObjectRequest jsObjRequest = new JsonObjectRequest
                 (Request.Method.GET, url, null, new Response.Listener<JSONObject>(){
                     @Override
                     public void onResponse(JSONObject response) {
-                            //Todo Проверить что нет ошибки логина если ошибка есть то сбросить значение токена
+                            //Todo РџСЂРѕРІРµСЂРёС‚СЊ С‡С‚Рѕ РЅРµС‚ РѕС€РёР±РєРё Р»РѕРіРёРЅР° РµСЃР»Рё РѕС€РёР±РєР° РµСЃС‚СЊ С‚Рѕ СЃР±СЂРѕСЃРёС‚СЊ Р·РЅР°С‡РµРЅРёРµ С‚РѕРєРµРЅР°
                             doDataListeners(response);
                     }
                 }, new Response.ErrorListener() {

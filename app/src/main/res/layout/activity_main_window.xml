@@ -24,7 +24,7 @@
         android:minWidth="20dp"
         android:maxWidth="20dp"
         android:visibility="invisible"
-        android:layout_above="@+id/essageText"
+        android:layout_below="@+id/settings"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
     <ImageView
@@ -55,16 +55,10 @@
         android:minWidth="40dp"
         android:maxWidth="40dp"
         android:paddingLeft="10dp"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical|bottom"
-        android:src="@mipmap/show"
-        android:id="@+id/showchat"
-        android:layout_alignBottom="@+id/essageText"
-        android:layout_centerHorizontal="true" />
+        android:layout_alignTop="@+id/LevelAmount"
+        android:layout_alignLeft="@+id/server_connect"
+        android:layout_alignStart="@+id/server_connect" />
+
     <TextView android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="left|top"
@@ -107,13 +101,32 @@
         android:layout_marginTop="50dp"
         android:id="@+id/GoldAmount"
         />
-    <TextView android:layout_width="fill_parent"
+    <ImageView
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="left|bottom"
-        android:id="@+id/essageText"
+        android:layout_gravity="bottom"
+        android:src="@mipmap/show"
+        android:id="@+id/showchat"
+
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
+    <EditText
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/half_vertical"
+        android:inputType="textMultiLine"
+        android:ems="10"
+        android:id="@+id/chatBox"
+        android:text="--------------------------"
+        android:gravity="bottom"
+        android:editable="false"
+        android:minWidth="@dimen/activity_horizontal_margin"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:background="@android:color/white"
+        android:visibility="invisible" />
 
 
-    </RelativeLayout>
+</RelativeLayout>

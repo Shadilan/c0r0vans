@@ -6,10 +6,14 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceScreen;
 import android.support.v4.app.FragmentActivity;
 
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Display;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.android.volley.Response;
@@ -34,6 +38,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import coe.com.c0r0vans.GameObjects.Ambush;
+import coe.com.c0r0vans.GameObjects.Caravan;
 import coe.com.c0r0vans.GameObjects.City;
 import coe.com.c0r0vans.GameObjects.GameObject;
 import coe.com.c0r0vans.GameObjects.Player;
@@ -56,6 +61,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
     private int SendedRequest=0;
     private int clientZoom=18;
     private Circle clickpos;
+    private MainWindow main;
     @Override
     /**
      * Create form;
@@ -67,7 +73,32 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         ImageLoader.Loader(this.getApplicationContext());
-//        ImageView Settings= (ImageView) findViewById(R.id.settings);
+        ImageView showChat= (ImageView) findViewById(R.id.showchat);
+        main=this;
+        showChat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DisplayMetrics dm=new DisplayMetrics();
+                main.getWindowManager().getDefaultDisplay().getMetrics(dm);
+                Log.d("Debug disain","Clicked chat"+v.getY()+" "+v.getHeight()+" "+dm.heightPixels);
+                if (v.getY() > dm.heightPixels/2){
+                    //Открыть
+                    v.setY(getResources().getDimension(R.dimen.half_vertical));
+                    EditText txt= (EditText) findViewById(R.id.chatBox);
+                    txt.setVisibility(View.VISIBLE);
+                    Log.d("Debug disain", "Open chat:" + txt.getWidth() + " " + txt.getHeight());
+                } else
+                {
+                    //Закрыть
+                    v.setY(dm.heightPixels-v.getHeight()/2*3);
+                    EditText txt= (EditText) findViewById(R.id.chatBox);
+                    txt.setVisibility(View.INVISIBLE);
+                    Log.d("Debug disain", "Close chat:" + txt.getWidth()+" "+txt.getHeight());
+                }
+
+            }
+        });
+
         ImageView PlayerInfo= (ImageView) findViewById(R.id.infoview);
         PlayerInfo.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -160,6 +191,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
             public void onLocationChanged(Location location) {
                 LatLng target = new LatLng(location.getLatitude(), location.getLongitude());
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(target, clientZoom));
+                serverConnect.getInstance().RefreshData((int)(location.getLatitude()*1e6),(int)(location.getLongitude()*1e6));
                 Log.d("MapViewTest", "Coord:" + location.getLatitude() + "x" + location.getLongitude());
                 player.getMarker().setPosition(target);
                 player.getCircle().setCenter(target);
@@ -219,7 +251,8 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                                     Objects.add(ambush);
                                 } else if (JObj.getJSONObject(i).getString("Type").equals("Caravan")) {
                                     Log.d("Debug info","Caravan Load:"+JObj.getJSONObject(i).toString());
-                                    Log.d("Game Warning", "Caravan object");
+                                    Caravan caravan = new Caravan(mMap,JObj.getJSONObject(i));
+                                    Objects.add(caravan);
                                 } else if (JObj.getJSONObject(i).getString("Type").equals("Sign")) {
                                     Log.d("Debug info","Sign Load:"+JObj.getJSONObject(i).toString());
                                     Log.d("Game Warning", "Sign object");

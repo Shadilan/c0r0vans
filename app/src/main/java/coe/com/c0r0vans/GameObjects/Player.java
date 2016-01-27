@@ -150,8 +150,8 @@ public class Player implements GameObject{
             }
         };
         Actions.add(act);
-        if (Route>0) {
-            act = new ObjectAction() {
+        //if (Route>0) {
+            /*act = new ObjectAction() {
                 @Override
                 public Bitmap getImage() {
                     return ImageLoader.getImage("create_waypoint");
@@ -167,12 +167,12 @@ public class Player implements GameObject{
                     return "createWaypoint";
                 }
             };
-            Actions.add(act);
+            Actions.add(act);*/
 
             act = new ObjectAction() {
                 @Override
                 public Bitmap getImage() {
-                    return ImageLoader.getImage("remove_route");
+                    return ImageLoader.getImage("drop_route");
                 }
 
                 @Override
@@ -182,11 +182,11 @@ public class Player implements GameObject{
 
                 @Override
                 public String getCommand() {
-                    return "drop_route";
+                    return "DropUnfinishedRoute";
                 }
             };
             Actions.add(act);
-        }
+        //}
 
         return Actions;
     }

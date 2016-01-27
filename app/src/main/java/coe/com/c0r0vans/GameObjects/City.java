@@ -89,7 +89,7 @@ public class City implements GameObject{
     @Override
     public ArrayList<ObjectAction> getActions() {
         ArrayList<ObjectAction> Actions=new ArrayList<>();
-        /*
+
         ObjectAction act;
         //if (((Player)SelectedObject.getInstance().getExecuter()).getRoute()==0) {
             act = new ObjectAction() {
@@ -105,7 +105,7 @@ public class City implements GameObject{
 
                 @Override
                 public String getCommand() {
-                    return "createRoute";
+                    return "StartRoute";
                 }
             };
             Actions.add(act);
@@ -123,11 +123,11 @@ public class City implements GameObject{
 
                 @Override
                 public String getCommand() {
-                    return "finishRoute";
+                    return "FinishRoute";
                 }
             };
             Actions.add(act);
-        act = new ObjectAction() {
+        /*act = new ObjectAction() {
             @Override
             public Bitmap getImage() {
                 return ImageLoader.getImage("set_home");
@@ -143,9 +143,9 @@ public class City implements GameObject{
                 return "setHome";
             }
         };
-        Actions.add(act);
+        Actions.add(act);*/
         //}
-        */
+
         return Actions;
     }
 }

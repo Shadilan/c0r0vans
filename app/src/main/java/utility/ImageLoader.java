@@ -27,6 +27,7 @@ public class ImageLoader {
         images.put("marker",BitmapFactory.decodeResource(context.getResources(), R.mipmap.marker));
         images.put("city",BitmapFactory.decodeResource(context.getResources(), R.mipmap.city));
         images.put("ambush",BitmapFactory.decodeResource(context.getResources(), R.mipmap.ambush));
+        images.put("caravan",BitmapFactory.decodeResource(context.getResources(), R.mipmap.caravan));
         //Actions
             //City
         images.put("start_route",BitmapFactory.decodeResource(context.getResources(), R.mipmap.start_route));
@@ -36,7 +37,7 @@ public class ImageLoader {
             //Player
         images.put("create_ambush",BitmapFactory.decodeResource(context.getResources(), R.mipmap.ambush));
         images.put("create_waypoint",BitmapFactory.decodeResource(context.getResources(), R.mipmap.create_waypoint));
-        images.put("drop_route",BitmapFactory.decodeResource(context.getResources(), R.mipmap.remove_route));
+        images.put("drop_route",BitmapFactory.decodeResource(context.getResources(), R.mipmap.drop_route));
             //Ambush
         images.put("remove_ambush",BitmapFactory.decodeResource(context.getResources(), R.mipmap.rem_ambush));
         images.put("attack_ambush",BitmapFactory.decodeResource(context.getResources(), R.mipmap.rem_ambush));
