@@ -172,7 +172,8 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
      */
     private void setupMap(){
 
-            mMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
+            mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+        mMap.setBuildingsEnabled(false);
             mMap.getUiSettings().setScrollGesturesEnabled(false);
             mMap.getUiSettings().setTiltGesturesEnabled(false);
             mMap.getUiSettings().setMyLocationButtonEnabled(false);
