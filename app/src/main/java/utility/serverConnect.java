@@ -119,6 +119,42 @@ public class serverConnect {
             }
     }
 
+    private ArrayList<Response.Listener<JSONObject>> errorListeners;    //Отслеживание логинов
+    private ArrayList<Response.Listener<JSONObject>> removeErrorListeners; //Удаление листенов из списка
+    /**
+     * Add Login Listener to object
+     * @param listener Listener to add
+     */
+    public void addErrorListener(Response.Listener<JSONObject> listener){
+        if (errorListeners==null){
+            errorListeners=new ArrayList<>();
+        }
+        errorListeners.add(listener);
+    }
+
+    /**
+     * Remove LoginListener from object
+     * @param listener Listener to remove
+     */
+    public void removeErrorListener(Response.Listener<JSONObject> listener){
+        if (removeErrorListeners==null){
+            removeErrorListeners=new ArrayList<>();
+        }
+        removeErrorListeners.add(listener);
+    }
+
+    /**
+     * Exec Listeners on event
+     * @param response Response from server
+     */
+    private void doErrorListeners(JSONObject response){
+        if (removeErrorListeners!=null && removeErrorListeners.size()>0) errorListeners.removeAll(removeErrorListeners);
+        if (errorListeners !=null)
+            for (Response.Listener<JSONObject> listener:errorListeners){
+                listener.onResponse(response);
+            }
+    }
+
     private ArrayList<Response.Listener<JSONObject>> getDataListeners;
     private ArrayList<Response.Listener<JSONObject>> remgetDataListeners;
 
@@ -149,25 +185,21 @@ public class serverConnect {
      * @param response Response from server
      */
     private void doDataListeners(JSONObject response){
-        try {
-            if (response.getString("Result").equalsIgnoreCase("Error"))
-                if (response.getString("Code").equalsIgnoreCase("AccessDenied"))
-                {
-                    SharedPreferences sp = context.getSharedPreferences("SpiritProto", AppCompatActivity.MODE_PRIVATE);
+        Log.d("Debug info","do data listeners");
 
-                    String login=sp.getString("Login", "");
+        if (response.has("Error")){
+            Log.d("Debug info",response.toString());
+            doErrorListeners(response);
+        }
+        else {
+            if (remgetDataListeners != null && remgetDataListeners.size() > 0)
+                getDataListeners.removeAll(remgetDataListeners);
+            for (Response.Listener<JSONObject> listener : getDataListeners) {
+                listener.onResponse(response);
+            }
+        }
 
-                    String passw =sp.getString("Password", "");
-                    ExecLogin(login,passw);
-                } else Essages.instance.AddEssage(response.getString("Message"));
-            else
-            if (remgetDataListeners!=null && remgetDataListeners.size()>0) getDataListeners.removeAll(remgetDataListeners);
-        } catch (JSONException e) {
-            Essages.instance.AddEssage(e.toString());
-        }
-        for (Response.Listener<JSONObject> listener:getDataListeners){
-            listener.onResponse(response);
-        }
+
     }
 
     private ArrayList<Response.Listener<JSONObject>> actionListeners;
@@ -199,16 +231,25 @@ public class serverConnect {
      * Exec Listeners on event
      * @param response Response from server
      */
-    private void doActionListeners(JSONObject response){
-        if (remgetDataListeners!=null && remgetDataListeners.size()>0) actionListeners.removeAll(remactionListeners);
-        if (actionListeners!=null) {
-            for (Response.Listener<JSONObject> listener : actionListeners) {
-                listener.onResponse(response);
-            }
+    private void doActionListeners(JSONObject response) {
+
+        if (response.has("Error")) {
+            Log.d("Debug info", response.toString());
+            doErrorListeners(response);
         }
-        RefreshData(GPSInfo.getInstance().GetLat(), GPSInfo.getInstance().GetLng());
+        else {
+            if (remgetDataListeners != null && remgetDataListeners.size() > 0)
+                actionListeners.removeAll(remactionListeners);
+            if (actionListeners != null) {
+                for (Response.Listener<JSONObject> listener : actionListeners) {
+                    listener.onResponse(response);
+                }
+            }
+            RefreshData(GPSInfo.getInstance().GetLat(), GPSInfo.getInstance().GetLng());
+        }
+
     }
-    //UserActions
+        //UserActions
     /**
      *  Login and get Secure Token
      * @param Login Login of user
@@ -230,6 +271,7 @@ public class serverConnect {
                             Token=response.getString("Token");
                             doLoginListeners(response);
                         } catch (JSONException e) {
+                            doErrorListeners(formResponse(response.toString()));
                             e.printStackTrace();
                         }
                     }
@@ -242,7 +284,17 @@ public class serverConnect {
         reqq.add(jsObjRequest);
         return true;
     }
+    private JSONObject formResponse(String resp){
+        JSONObject result=new JSONObject();
+        try {
+            result.put("Error","Unexpected Response");
+            result.put("Message",resp);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
+        return result;
+    }
     /**
      * Get new data
      * @param Lat Latitude of position to get data
@@ -265,6 +317,7 @@ public class serverConnect {
                 }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        doErrorListeners(formResponse(error.toString()));
                         Log.d("Unexpected Error:", error.toString());
                     }
                 });
@@ -297,6 +350,7 @@ public class serverConnect {
                 }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        doErrorListeners(formResponse(error.toString()));
                         Log.d("Unexpected Error:", error.toString());
                     }
                 });

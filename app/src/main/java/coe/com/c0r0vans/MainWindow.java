@@ -1,5 +1,7 @@
 package coe.com.c0r0vans;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.location.Location;
@@ -80,20 +82,20 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
             public void onClick(View v) {
                 DisplayMetrics dm=new DisplayMetrics();
                 main.getWindowManager().getDefaultDisplay().getMetrics(dm);
-                Log.d("Debug disain","Clicked chat"+v.getY()+" "+v.getHeight()+" "+dm.heightPixels);
+
                 if (v.getY() > dm.heightPixels/2){
                     //Открыть
                     v.setY(getResources().getDimension(R.dimen.half_vertical));
                     EditText txt= (EditText) findViewById(R.id.chatBox);
                     txt.setVisibility(View.VISIBLE);
-                    Log.d("Debug disain", "Open chat:" + txt.getWidth() + " " + txt.getHeight());
+
                 } else
                 {
                     //Закрыть
                     v.setY(dm.heightPixels-v.getHeight()/2*3);
                     EditText txt= (EditText) findViewById(R.id.chatBox);
                     txt.setVisibility(View.INVISIBLE);
-                    Log.d("Debug disain", "Close chat:" + txt.getWidth()+" "+txt.getHeight());
+
                 }
 
             }
@@ -109,9 +111,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
         });
         connect_img = (ImageView) findViewById(R.id.server_connect);
         ResourceString.getInstance(getApplicationContext());
-        Log.d("PackageInfo", getApplicationContext().getPackageName());
-        Log.d("PackageInfo", getPackageName());
-        Log.d("InfoSend", "ActivityStarted");
+
 
 /*        PlayerInfo.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -122,7 +122,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
         });*/
         mapFragment.getMapAsync(this);
         init();
-        Log.d("LoginActivity","Start Login.");
+
         if (!serverConnect.getInstance().isLogin()) {
             Intent i = new Intent(getApplicationContext(), Login.class);
             startActivity(i);
@@ -193,7 +193,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                 LatLng target = new LatLng(location.getLatitude(), location.getLongitude());
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(target, clientZoom));
                 serverConnect.getInstance().RefreshData((int)(location.getLatitude()*1e6),(int)(location.getLongitude()*1e6));
-                Log.d("MapViewTest", "Coord:" + location.getLatitude() + "x" + location.getLongitude());
+
                 player.getMarker().setPosition(target);
                 player.getCircle().setCenter(target);
             }
@@ -233,29 +233,29 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                                 }
                             }
                             if (robj != null) {
-                                Log.d("Debug info", "Exciting object:" + robj.getClass().toString() + " text:" + JObj.getJSONObject(i).toString());
+
                                 remObjects.remove(robj);
                                 robj.loadJSON(JObj.getJSONObject(i));
                             } else {
                                 if (JObj.getJSONObject(i).getString("Type").equals("Player")) {
-                                    Log.d("Debug info","Player Load:"+JObj.getJSONObject(i).toString());
+
                                     player.loadJSON(JObj.getJSONObject(i));
 
                                 } else if (JObj.getJSONObject(i).getString("Type").equals("City")) {
-                                    Log.d("Debug info","City Load:"+JObj.getJSONObject(i).toString());
+
                                     City city = new City(mMap, JObj.getJSONObject(i));
                                     Objects.add(city);
                                 } else if (JObj.getJSONObject(i).getString("Type").equals("Ambush")) {
-                                    Log.d("Debug info", "Ambush Load:" + JObj.getJSONObject(i).toString());
-                                    Ambush ambush = new Ambush(mMap,JObj.getJSONObject(i));
+
+                                    Ambush ambush = new Ambush(mMap, JObj.getJSONObject(i));
 
                                     Objects.add(ambush);
                                 } else if (JObj.getJSONObject(i).getString("Type").equals("Caravan")) {
-                                    Log.d("Debug info","Caravan Load:"+JObj.getJSONObject(i).toString());
-                                    Caravan caravan = new Caravan(mMap,JObj.getJSONObject(i));
+
+                                    Caravan caravan = new Caravan(mMap, JObj.getJSONObject(i));
                                     Objects.add(caravan);
                                 } else if (JObj.getJSONObject(i).getString("Type").equals("Sign")) {
-                                    Log.d("Debug info","Sign Load:"+JObj.getJSONObject(i).toString());
+                                    Log.d("Debug info", "Sign Load:" + JObj.getJSONObject(i).toString());
                                     Log.d("Game Warning", "Sign object");
                                 } else {
                                     Log.d("Game Warning", "Unknown object");
@@ -263,9 +263,8 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                             }
 
                         }
-                        for (GameObject obj:remObjects){
+                        for (GameObject obj : remObjects) {
                             obj.getMarker().remove();
-                            Log.d("Debug info", "Remove object:" + obj.getClass().toString() + " GUID:" + obj.getGUID() );
                         }
                         Objects.removeAll(remObjects);
                     }
@@ -280,23 +279,16 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
 
             @Override
             public void onResponse(JSONObject response) {
-                try {
-                    if (!response.getString("Result").equalsIgnoreCase("Success")) {
-                        Log.d("Game Error:", response.getString("Error"));
-                        Log.d("Game Error:", response.getString("Message"));
-                    }
-                } catch (JSONException e) {
-                    Log.d("Unexped Error:", e.toString());
-                }
+                Log.d("Debug info","action Done:"+response.toString());
 
             }
         });
         mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
             @Override
             public void onMapLongClick(LatLng latLng) {
-                float[] distances=new float[1];
+                float[] distances = new float[1];
                 Location.distanceBetween(latLng.latitude, latLng.longitude, player.getMarker().getPosition().latitude, player.getMarker().getPosition().longitude, distances);
-                if (distances.length>0 && distances[0]<50) {
+                if (distances.length > 0 && distances[0] < 50) {
                     Intent myIntent = new Intent(getApplicationContext(), ActionsActivity.class);
                     SelectedObject.getInstance().setExecuter(player);
                     SelectedObject.getInstance().setTarget(player);
@@ -315,7 +307,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
             @Override
             public boolean onMarkerClick(Marker marker) {
                 GameObject target = findObjectByMarker(marker);
-                if (target!=null) {
+                if (target != null) {
                     //float[] distances=new float[1];
                     //Location.distanceBetween(marker.getPosition().latitude, marker.getPosition().longitude, player.getMarker().getPosition().latitude, player.getMarker().getPosition().longitude, distances);
                     //if (distances!=null && distances.length>0 && distances[0]<100) {
@@ -332,18 +324,50 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
         mMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
             @Override
             public void onCameraChange(CameraPosition cameraPosition) {
-                clientZoom= (int) cameraPosition.zoom;
-                if (clientZoom<16) {
-                    clientZoom=16;
-                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(GPSInfo.getInstance().GetLat()/1e6,GPSInfo.getInstance().GetLng()/1e6), clientZoom));
+                clientZoom = (int) cameraPosition.zoom;
+                if (clientZoom < 16) {
+                    clientZoom = 16;
+                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(GPSInfo.getInstance().GetLat() / 1e6, GPSInfo.getInstance().GetLng() / 1e6), clientZoom));
                 }
-                if (clientZoom>20) {
-                    clientZoom=20;
-                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(GPSInfo.getInstance().GetLat()/1e6,GPSInfo.getInstance().GetLng()/1e6), clientZoom));
+                if (clientZoom > 20) {
+                    clientZoom = 20;
+                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(GPSInfo.getInstance().GetLat() / 1e6, GPSInfo.getInstance().GetLng() / 1e6), clientZoom));
                 }
-                if (GPSInfo.getInstance().GetLat()!=cameraPosition.target.latitude*1e6||GPSInfo.getInstance().GetLng()!=cameraPosition.target.longitude*1e6){
-                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(GPSInfo.getInstance().GetLat()/1e6,GPSInfo.getInstance().GetLng()/1e6), clientZoom));
+                if (GPSInfo.getInstance().GetLat() != cameraPosition.target.latitude * 1e6 || GPSInfo.getInstance().GetLng() != cameraPosition.target.longitude * 1e6) {
+                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(GPSInfo.getInstance().GetLat() / 1e6, GPSInfo.getInstance().GetLng() / 1e6), clientZoom));
                 }
+
+            }
+        });
+
+        serverConnect.getInstance().addErrorListener(new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    Log.d("Debug info","Error Listener;");
+                    String errorText="";
+                    if (response.has("Error"))
+                        {errorText=response.getString("Error");}
+                    String errorMsg="";
+                    if (response.has("Message"))
+                    {errorMsg=response.getString("Message");}
+                    AlertDialog.Builder builder = new AlertDialog.Builder(MainWindow.this);
+                    builder.setTitle("Error")
+                            .setMessage(errorText+"\n"+errorMsg)
+                            .setIcon(R.mipmap.ic_launcher)
+                            .setCancelable(false)
+                            .setNegativeButton("ОК",
+                                    new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int id) {
+                                            dialog.cancel();
+                                        }
+                                    });
+                    AlertDialog alert = builder.create();
+                    alert.show();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
 
             }
         });
