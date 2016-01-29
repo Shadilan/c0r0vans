@@ -49,6 +49,7 @@ import coe.com.c0r0vans.GameObjects.SelectedObject;
 import utility.GPSInfo;
 import utility.ImageLoader;
 import utility.ResourceString;
+import utility.ServerListener;
 import utility.serverConnect;
 
 public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
@@ -192,7 +193,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
             public void onLocationChanged(Location location) {
                 LatLng target = new LatLng(location.getLatitude(), location.getLongitude());
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(target, clientZoom));
-                serverConnect.getInstance().RefreshData((int)(location.getLatitude()*1e6),(int)(location.getLongitude()*1e6));
+                serverConnect.getInstance().RefreshData((int) (location.getLatitude() * 1e6), (int) (location.getLongitude() * 1e6));
 
                 player.getMarker().setPosition(target);
                 player.getCircle().setCenter(target);
@@ -213,9 +214,14 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
 
             }
         });
-        serverConnect.getInstance().addDataListener(new Response.Listener<JSONObject>() {
+        serverConnect.getInstance().addListener(new ServerListener() {
             @Override
-            public void onResponse(JSONObject response) {
+            public void onLogin(JSONObject response) {
+
+            }
+
+            @Override
+            public void onRefresh(JSONObject response) {
                 try {
                     //Проверить наличие массива JSON. Objects
                     if (response.has("Objects")) {
@@ -274,15 +280,48 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                     e.printStackTrace();
                 }
             }
-        });
-        serverConnect.getInstance().addActionListener(new Response.Listener<JSONObject>() {
 
             @Override
-            public void onResponse(JSONObject response) {
-                Log.d("Debug info","action Done:"+response.toString());
+            public void onAction(JSONObject response) {
+                Log.d("Debug info", "action Done:" + response.toString());
+            }
+
+            @Override
+            public void onPlayerInfo(JSONObject response) {
 
             }
+
+            @Override
+            public void onError(JSONObject response) {
+                try {
+                    Log.d("Debug info", "Error Listener;");
+                    String errorText = "";
+                    if (response.has("Error")) {
+                        errorText = response.getString("Error");
+                    }
+                    String errorMsg = "";
+                    if (response.has("Message")) {
+                        errorMsg = response.getString("Message");
+                    }
+                    AlertDialog.Builder builder = new AlertDialog.Builder(MainWindow.this);
+                    builder.setTitle("Error")
+                            .setMessage(errorText + "\n" + errorMsg)
+                            .setIcon(R.mipmap.ic_launcher)
+                            .setCancelable(false)
+                            .setNegativeButton("ОК",
+                                    new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int id) {
+                                            dialog.cancel();
+                                        }
+                                    });
+                    AlertDialog alert = builder.create();
+                    alert.show();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
         });
+
         mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
             @Override
             public void onMapLongClick(LatLng latLng) {
@@ -340,37 +379,6 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
             }
         });
 
-        serverConnect.getInstance().addErrorListener(new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                try {
-                    Log.d("Debug info","Error Listener;");
-                    String errorText="";
-                    if (response.has("Error"))
-                        {errorText=response.getString("Error");}
-                    String errorMsg="";
-                    if (response.has("Message"))
-                    {errorMsg=response.getString("Message");}
-                    AlertDialog.Builder builder = new AlertDialog.Builder(MainWindow.this);
-                    builder.setTitle("Error")
-                            .setMessage(errorText+"\n"+errorMsg)
-                            .setIcon(R.mipmap.ic_launcher)
-                            .setCancelable(false)
-                            .setNegativeButton("ОК",
-                                    new DialogInterface.OnClickListener() {
-                                        public void onClick(DialogInterface dialog, int id) {
-                                            dialog.cancel();
-                                        }
-                                    });
-                    AlertDialog alert = builder.create();
-                    alert.show();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-
-            }
-        });
 
     }
 

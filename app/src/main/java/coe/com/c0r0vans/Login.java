@@ -18,6 +18,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import utility.GPSInfo;
+import utility.ServerListener;
 import utility.serverConnect;
 
 public class Login extends AppCompatActivity {
@@ -29,7 +30,7 @@ public class Login extends AppCompatActivity {
     private Boolean Connected=false;
     private Boolean Positioned=false;
     private LocationListener locationListener;
-    private Response.Listener<JSONObject> LoginListener;
+    private ServerListener LoginListener;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,10 +44,9 @@ public class Login extends AppCompatActivity {
         ConnectStatus= (ImageView)  this.findViewById(R.id.imgConnected);
         GPSInfo.getInstance(this.getApplicationContext());
         serverConnect.getInstance().connect(getResources().getString(R.string.serveradress), this.getApplicationContext());
-        LoginListener=new Response.Listener<JSONObject>(){
-
+        LoginListener=new ServerListener() {
             @Override
-            public void onResponse(JSONObject response) {
+            public void onLogin(JSONObject response) {
                 try {
                     Log.d("LoginView","Response:"+response.toString());
                     //Todo:Change to correct implementation.
@@ -66,8 +66,29 @@ public class Login extends AppCompatActivity {
                     e.printStackTrace();
                 }
             }
+
+            @Override
+            public void onRefresh(JSONObject response) {
+
+            }
+
+            @Override
+            public void onAction(JSONObject response) {
+
+            }
+
+            @Override
+            public void onPlayerInfo(JSONObject response) {
+
+            }
+
+            @Override
+            public void onError(JSONObject response) {
+
+            }
         };
-        serverConnect.getInstance().addLoginListener(LoginListener);
+        serverConnect.getInstance().addListener(LoginListener);
+
         Button loginButton = (Button) findViewById(R.id.LoginButton);
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -79,7 +100,6 @@ public class Login extends AppCompatActivity {
                 Log.d("Debug info","Test login1");
                 if (serverConnect.getInstance().ExecLogin(LoginField.getText().toString(), PasswordField.getText().toString()))
                     Log.d("Debug info","Login True");    else Log.d("Debug info","Login False");
-                ;
             }
         });
         locationListener =new LocationListener() {
@@ -112,7 +132,7 @@ public class Login extends AppCompatActivity {
         if (Connected && Positioned)
         {
             GPSInfo.getInstance().RemoveLocationListener(locationListener);
-            serverConnect.getInstance().removeLoginListener(LoginListener);
+            serverConnect.getInstance().removeListener(LoginListener);
             finish();
         }
     }

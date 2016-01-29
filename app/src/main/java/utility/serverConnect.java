@@ -46,7 +46,7 @@ public class serverConnect {
     /**
      * Constructor
      */
-    private serverConnect(){
+    protected serverConnect(){
 
     }
 
@@ -83,172 +83,25 @@ public class serverConnect {
     }
 
     //Listeners
-    private ArrayList<Response.Listener<JSONObject>> loginListeners;    //Отслеживание логинов
-    private ArrayList<Response.Listener<JSONObject>> remloginListeners; //Удаление листенов из списка
-    /**
-     * Add Login Listener to object
-     * @param listener Listener to add
-     */
-    public void addLoginListener(Response.Listener<JSONObject> listener){
-        if (loginListeners==null){
-            loginListeners=new ArrayList<>();
-        }
-        loginListeners.add(listener);
+    private ArrayList<ServerListener> listeners;
+    private ArrayList<ServerListener> remListeners;
+
+    public void addListener(ServerListener listener){
+        if (listeners==null) listeners=new ArrayList<>();
+        listeners.add(listener);
+    }
+    public void removeListener(ServerListener listener){
+        if (remListeners==null) remListeners=new ArrayList<>();
+        remListeners.add(listener);
     }
 
-    /**
-     * Remove LoginListener from object
-     * @param listener Listener to remove
-     */
-    public void removeLoginListener(Response.Listener<JSONObject> listener){
-        if (remloginListeners==null){
-            remloginListeners=new ArrayList<>();
+    public void clearListener(){
+        if (remListeners!=null && listeners!=null) {
+            listeners.removeAll(remListeners);
+            remListeners.clear();
         }
-        remloginListeners.add(listener);
     }
 
-    /**
-     * Exec Listeners on event
-     * @param response Response from server
-     */
-    private void doLoginListeners(JSONObject response){
-        if (remloginListeners!=null && remloginListeners.size()>0) loginListeners.removeAll(remloginListeners);
-        if (loginListeners !=null)
-            for (Response.Listener<JSONObject> listener:loginListeners){
-                listener.onResponse(response);
-            }
-    }
-
-    private ArrayList<Response.Listener<JSONObject>> errorListeners;    //Отслеживание логинов
-    private ArrayList<Response.Listener<JSONObject>> removeErrorListeners; //Удаление листенов из списка
-    /**
-     * Add Login Listener to object
-     * @param listener Listener to add
-     */
-    public void addErrorListener(Response.Listener<JSONObject> listener){
-        if (errorListeners==null){
-            errorListeners=new ArrayList<>();
-        }
-        errorListeners.add(listener);
-    }
-
-    /**
-     * Remove LoginListener from object
-     * @param listener Listener to remove
-     */
-    public void removeErrorListener(Response.Listener<JSONObject> listener){
-        if (removeErrorListeners==null){
-            removeErrorListeners=new ArrayList<>();
-        }
-        removeErrorListeners.add(listener);
-    }
-
-    /**
-     * Exec Listeners on event
-     * @param response Response from server
-     */
-    private void doErrorListeners(JSONObject response){
-        if (removeErrorListeners!=null && removeErrorListeners.size()>0) errorListeners.removeAll(removeErrorListeners);
-        if (errorListeners !=null)
-            for (Response.Listener<JSONObject> listener:errorListeners){
-                listener.onResponse(response);
-            }
-    }
-
-    private ArrayList<Response.Listener<JSONObject>> getDataListeners;
-    private ArrayList<Response.Listener<JSONObject>> remgetDataListeners;
-
-    /**
-     * Add getData Listener to object
-     * @param listener Listener to add
-     */
-    public void addDataListener(Response.Listener<JSONObject> listener){
-        if (getDataListeners==null){
-            getDataListeners=new ArrayList<>();
-        }
-        getDataListeners.add(listener);
-    }
-
-    /**
-     * Remove getData Listener from object
-     * @param listener Listener to remove
-     */
-    public void removeDataListener(Response.Listener<JSONObject> listener){
-        if (remgetDataListeners==null){
-            remgetDataListeners=new ArrayList<>();
-        }
-        remgetDataListeners.add(listener);
-    }
-
-    /**
-     * Exec Listeners on event
-     * @param response Response from server
-     */
-    private void doDataListeners(JSONObject response){
-        Log.d("Debug info","do data listeners");
-
-        if (response.has("Error")){
-            Log.d("Debug info",response.toString());
-            doErrorListeners(response);
-        }
-        else {
-            if (remgetDataListeners != null && remgetDataListeners.size() > 0)
-                getDataListeners.removeAll(remgetDataListeners);
-            for (Response.Listener<JSONObject> listener : getDataListeners) {
-                listener.onResponse(response);
-            }
-        }
-
-
-    }
-
-    private ArrayList<Response.Listener<JSONObject>> actionListeners;
-    private ArrayList<Response.Listener<JSONObject>> remactionListeners;
-
-    /**
-     * Add action Listener to object
-     * @param listener Listener to add
-     */
-    public void addActionListener(Response.Listener<JSONObject> listener){
-        if (actionListeners==null){
-            actionListeners=new ArrayList<>();
-        }
-        actionListeners.add(listener);
-    }
-
-    /**
-     * Remove getData Listener from object
-     * @param listener Listener to remove
-     */
-    public void removeActionDataListener(Response.Listener<JSONObject> listener){
-        if (remactionListeners==null){
-            remactionListeners=new ArrayList<>();
-        }
-        remactionListeners.add(listener);
-    }
-
-    /**
-     * Exec Listeners on event
-     * @param response Response from server
-     */
-    private void doActionListeners(JSONObject response) {
-
-        if (response.has("Error")) {
-            Log.d("Debug info", response.toString());
-            doErrorListeners(response);
-        }
-        else {
-            if (remgetDataListeners != null && remgetDataListeners.size() > 0)
-                actionListeners.removeAll(remactionListeners);
-            if (actionListeners != null) {
-                for (Response.Listener<JSONObject> listener : actionListeners) {
-                    listener.onResponse(response);
-                }
-            }
-            RefreshData(GPSInfo.getInstance().GetLat(), GPSInfo.getInstance().GetLng());
-        }
-
-    }
         //UserActions
     /**
      *  Login and get Secure Token
@@ -264,21 +117,26 @@ public class serverConnect {
         Log.d("Debug info","Connect url:"+url);
         final JsonObjectRequest jsObjRequest = new JsonObjectRequest
                 (Request.Method.GET, url, null, new Response.Listener<JSONObject>(){
-
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
-                            Token=response.getString("Token");
-                            doLoginListeners(response);
+                            clearListener();
+                            if (response.has("Error")){
+                                for (ServerListener l:listeners) l.onError(response);
+                            } else {
+                                Token = response.getString("Token");
+                                for (ServerListener l : listeners) l.onLogin(response);
+                            }
                         } catch (JSONException e) {
-                            doErrorListeners(formResponse(response.toString()));
-                            e.printStackTrace();
+                            for (ServerListener l:listeners) l.onError(formResponse(response.toString()));
                         }
+
                     }
                 }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Log.d("Ubnexpected Error",error.toString());
+                        for (ServerListener l:listeners) l.onError(formResponse(error.toString()));
                     }
                 });
         reqq.add(jsObjRequest);
@@ -311,14 +169,24 @@ public class serverConnect {
                 (Request.Method.GET, url, null, new Response.Listener<JSONObject>(){
                     @Override
                     public void onResponse(JSONObject response) {
-                            //Todo Проверить что нет ошибки логина если ошибка есть то сбросить значение токена
-                            doDataListeners(response);
+                        try {
+                            clearListener();
+                            if (response.has("Error")){
+                                for (ServerListener l:listeners) l.onError(response);
+                            } else {
+                                Token = response.getString("Token");
+                                for (ServerListener l : listeners) l.onRefresh(response);
+                            }
+                        } catch (JSONException e) {
+                            for (ServerListener l:listeners) l.onError(formResponse(response.toString()));
+                        }
+
                     }
                 }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        doErrorListeners(formResponse(error.toString()));
-                        Log.d("Unexpected Error:", error.toString());
+                        Log.d("Ubnexpected Error",error.toString());
+                        for (ServerListener l:listeners) l.onError(formResponse(error.toString()));
                     }
                 });
         reqq.add(jsObjRequest);
@@ -334,6 +202,7 @@ public class serverConnect {
      * @return true
      */
     public boolean ExecCommand(String Command, String Target, int Lat,int Lng , int TLat,int TLng){
+
         if (!checkConnection()) return false;
         if (Token==null) return false;
 
@@ -341,17 +210,26 @@ public class serverConnect {
         Log.d("Debug info","Connection url:"+url);
         final JsonObjectRequest jsObjRequest = new JsonObjectRequest
                 (Request.Method.GET, url, null, new Response.Listener<JSONObject>(){
-
                     @Override
                     public void onResponse(JSONObject response) {
-                        //TODO Add check token error if not login remove token
-                        doActionListeners(response);
+                        try {
+                            clearListener();
+                            if (response.has("Error")){
+                                for (ServerListener l:listeners) l.onError(response);
+                            } else {
+                                Token = response.getString("Token");
+                                for (ServerListener l : listeners) l.onAction(response);
+                            }
+                        } catch (JSONException e) {
+                            for (ServerListener l:listeners) l.onError(formResponse(response.toString()));
+                        }
+
                     }
                 }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        doErrorListeners(formResponse(error.toString()));
-                        Log.d("Unexpected Error:", error.toString());
+                        Log.d("Ubnexpected Error",error.toString());
+                        for (ServerListener l:listeners) l.onError(formResponse(error.toString()));
                     }
                 });
         reqq.add(jsObjRequest);
