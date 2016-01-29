@@ -78,35 +78,14 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
         ImageLoader.Loader(this.getApplicationContext());
         ImageView showChat= (ImageView) findViewById(R.id.showchat);
         main=this;
-        showChat.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                DisplayMetrics dm=new DisplayMetrics();
-                main.getWindowManager().getDefaultDisplay().getMetrics(dm);
 
-                if (v.getY() > dm.heightPixels/2){
-                    //Открыть
-                    v.setY(getResources().getDimension(R.dimen.half_vertical));
-                    EditText txt= (EditText) findViewById(R.id.chatBox);
-                    txt.setVisibility(View.VISIBLE);
-
-                } else
-                {
-                    //Закрыть
-                    v.setY(dm.heightPixels-v.getHeight()/2*3);
-                    EditText txt= (EditText) findViewById(R.id.chatBox);
-                    txt.setVisibility(View.INVISIBLE);
-
-                }
-
-            }
-        });
 
         ImageView PlayerInfo= (ImageView) findViewById(R.id.infoview);
         PlayerInfo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(getApplicationContext(), MainActivity.class);
+                SelectedObject.getInstance().setExecuter(player);
                 startActivity(i);
             }
         });

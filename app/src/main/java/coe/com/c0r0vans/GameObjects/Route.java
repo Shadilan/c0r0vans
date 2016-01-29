@@ -19,33 +19,35 @@ import utility.ResourceString;
 public class Route {
     private String GUID;
     private String StartName;
-    private String EndName;
-    private Number Gold;
-    private Number TimeToGo;
+    private String FinishName;
+    private String StartGUID;
+    private String FinishGUID;
+    private int Distance;
+    private int Lat;
+    private int Lng;
+
     public Route(){
 
     }
     public Route(JSONObject obj){
-        LoadJSON(obj);
-    }
-    public void LoadJSON(JSONObject obj){
         try {
-            GUID=obj.getString("GUID");
-            StartName=obj.getString("StartName");
-            EndName=obj.getString("FinishName");
-            Gold=obj.getInt("Gold");
-            TimeToGo=obj.getInt("Time");
+            LoadJSON(obj);
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
-    public String getInfo(){
-        return ResourceString.getInstance().getString("begin")+StartName+"\n"
-                +ResourceString.getInstance().getString("end")+EndName+"\n";
-                //+ResourceString.getInstance().getString("gold")+Gold+"\n"
-                //+ResourceString.getInstance().getString("time_to_go")+TimeToGo;
+    public void LoadJSON(JSONObject object) throws JSONException {
+        if (object.has("GUID")) GUID=object.getString("GUID");
+        if (object.has("StartName")) StartName=object.getString("StartName");
+        if (object.has("FinishName")) FinishName=object.getString("FinishName");
+        if (object.has("StartGUID")) StartGUID=object.getString("StartGUID");
+        if (object.has("FinishGUID")) FinishGUID=object.getString("FinishGUID");
+        if (object.has("Distance")) Distance=object.getInt("Distance");
+        if (object.has("Lat")) Lat=object.getInt("Lat");
+        if (object.has("Lng")) Lng=object.getInt("Lng");
     }
-    public String getGUID(){
-        return GUID;
-    }
+    public String getStartName(){return StartName;}
+    public String getFinishName(){return FinishName;}
+    public int getDistance(){return Distance;}
+    public String getGUID(){return GUID;}
 }

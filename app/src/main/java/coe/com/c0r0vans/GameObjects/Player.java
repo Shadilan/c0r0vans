@@ -12,6 +12,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -30,18 +31,30 @@ public class Player implements GameObject{
     private Marker mark;
     private Circle circle;
     private GoogleMap map;
+
+    //Fields
     private String GUID;
     private String Name;
-    private String City;
     private int Caravans=0;
-    private int Ambushes=0;
-    private int Route=0;
-    private int AmbushRad=30;
-    private int SeeDist=50;
-    public int getAmbushRad(){return AmbushRad;}
-    public int getRoute(){
-        return Route;
-    }
+    private int AmbushesMax=100;
+    private int AmbushesLeft=100;
+    private int Level=0;
+    private int TNL=0;
+    private int Exp=0;
+    private int MostIn=0;
+
+    private int AmbushRadius=30;
+    private int ActionDistance=50;
+
+    //Arrays
+    private ArrayList<Upgrade> Upgrades;
+    private ArrayList<Route> Routes;
+    private ArrayList<AmbushItem> Ambushes;
+    private int level;
+    private int exp;
+
+    public int getAmbushRad(){return AmbushRadius;}
+
     private int Gold=0;
 
 
@@ -55,30 +68,17 @@ public class Player implements GameObject{
         mark=mMap.addMarker(new MarkerOptions().position(new LatLng(GPSInfo.getInstance().GetLat() / 1E6, GPSInfo.getInstance().GetLng() / 1E6)));
         CircleOptions circleOptions=new CircleOptions();
         circleOptions.center(new LatLng(GPSInfo.getInstance().GetLat() / 1E6, GPSInfo.getInstance().GetLng() / 1E6));
-        circleOptions.radius(SeeDist);
+        circleOptions.radius(ActionDistance);
         circleOptions.strokeColor(Color.RED);
         circleOptions.strokeWidth(1);
         circle=mMap.addCircle(circleOptions);
         mark.setIcon(BitmapDescriptorFactory.fromBitmap(mimage));
         mark.setAnchor(0.5f, 0.5f);
+        Upgrades=new ArrayList<>();
+        Routes=new ArrayList<>();
+        Ambushes=new ArrayList<>();
     }
-    public Player(GoogleMap mMap,Marker m){
-        image= ImageLoader.getImage("hero");
-        Bitmap mimage= ImageLoader.getImage("marker");
-        map=mMap;
-        mark=m;
-        CircleOptions circleOptions=new CircleOptions();
-        circleOptions.center(new LatLng(GPSInfo.getInstance().GetLat() / 1E6, GPSInfo.getInstance().GetLng() / 1E6));
-        circleOptions.radius(100);
-        circleOptions.strokeColor(Color.RED);
-        circleOptions.strokeWidth(1);
-        circle=mMap.addCircle(circleOptions);
-        mark.setIcon(BitmapDescriptorFactory.fromBitmap(mimage));
-        mark.setAnchor(0.5f, 0.5f);
 
-
-
-    }
 
     @Override
     public Bitmap getImage() {
@@ -103,10 +103,33 @@ public class Player implements GameObject{
     @Override
     public void loadJSON(JSONObject obj) {
         try {
-            GUID=obj.getString("GUID");
-            Name=obj.getString("PlayerName");
-            Gold=obj.getInt("Gold");
-            City=obj.getString("City");
+            if (obj.has("GUID")) GUID=obj.getString("GUID");
+            if (obj.has("PlayerName")) Name=obj.getString("PlayerName");
+            if (obj.has("Level")) Level=obj.getInt("Level");
+            if (obj.has("TNL")) TNL=obj.getInt("TNL");
+            if (obj.has("Exp")) Exp=obj.getInt("Exp");
+            if (obj.has("Gold")) Gold=obj.getInt("Gold");
+            if (obj.has("Caravans")) Caravans=obj.getInt("Caravans");
+            if (obj.has("AmbushesMax")) AmbushesMax=obj.getInt("AmbushesMax");
+            if (obj.has("AmbushesLeft")) AmbushesLeft=obj.getInt("AmbushesLeft");
+            if (obj.has("MostIn")) MostIn=obj.getInt("MostIn");
+            if (obj.has("AmbushRadius")) AmbushRadius=obj.getInt("AmbushRadius");
+            if (obj.has("ActionDistance")) ActionDistance=obj.getInt("ActionDistance");
+            if (obj.has("Upgrades")){
+                JSONArray upg=obj.getJSONArray("Upgrades");
+                Upgrades.clear();
+                for (int i=0;i<upg.length();i++) Upgrades.add(new Upgrade(upg.getJSONObject(i)));
+            }
+            if (obj.has("Routes")){
+                JSONArray route=obj.getJSONArray("Routes");
+                Routes.clear();
+                for (int i=0;i<route.length();i++) Routes.add(new Route(route.getJSONObject(i)));
+            }
+            if (obj.has("Ambushes")){
+                JSONArray ambush=obj.getJSONArray("Ambushes");
+                Ambushes.clear();
+                for (int i=0;i<ambush.length();i++) Ambushes.add(new AmbushItem(ambush.getJSONObject(i)));
+            }
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -120,14 +143,9 @@ public class Player implements GameObject{
 
     @Override
     public String getInfo() {
-        String result= ResourceString.getInstance().getString("name")+this.Name+"\n"+
-                "Местожительства:"+this.City+"\n"+
+        return ResourceString.getInstance().getString("name")+this.Name+"\n"+
                 ResourceString.getInstance().getString("gold")+this.Gold+"\n"+
-                ResourceString.getInstance().getString("caravans")+this.Caravans+"\n"+
-                ResourceString.getInstance().getString("hirelings")+this.Ambushes+"\n"
-                ;
-        if (this.Route>0) result+="Прокладывает маршрут.";
-        return result;
+                ResourceString.getInstance().getString("caravans")+this.Caravans+"\n";
     }
 
     @Override
@@ -192,4 +210,44 @@ public class Player implements GameObject{
     }
 
 
+    public int getLevel() {
+        return Level;
+    }
+
+    public int getExp() {
+        return Exp;
+    }
+
+    public int getTNL() {
+        return TNL;
+    }
+
+    public int getGold() {
+        return Gold;
+    }
+
+
+    public int getCaravans() {
+        return Caravans;
+    }
+
+    public int getAmbushLeft() {
+        return AmbushesLeft;
+    }
+
+    public int getAmbushMax() {
+        return AmbushesMax;
+    }
+
+    public int getMostReachIn() {
+        return MostIn;
+    }
+
+    public ArrayList<Upgrade> getUpgrades() {
+        return Upgrades;
+    }
+
+    public ArrayList<Route> getRoutes() {
+        return Routes;
+    }
 }

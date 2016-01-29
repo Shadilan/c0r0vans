@@ -190,6 +190,7 @@
                 android:useDefaultMargins="true"
                 android:orientation="vertical"
                 android:columnOrderPreserved="true"
+                android:id="@+id/upgradeInfo"
                 android:rowOrderPreserved="true">
 
                 <ImageView
@@ -226,11 +227,13 @@
             <GridLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:rowCount="2"
-                android:columnCount="3"
+                android:rowCount="10"
+                android:columnCount="1"
                 android:rowOrderPreserved="true"
                 android:columnOrderPreserved="true"
-                android:useDefaultMargins="false">
+                android:id="@+id/routeInfo"
+                android:useDefaultMargins="false"
+                android:textAlignment="center">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
