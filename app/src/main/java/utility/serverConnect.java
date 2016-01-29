@@ -169,16 +169,11 @@ public class serverConnect {
                 (Request.Method.GET, url, null, new Response.Listener<JSONObject>(){
                     @Override
                     public void onResponse(JSONObject response) {
-                        try {
-                            clearListener();
-                            if (response.has("Error")){
-                                for (ServerListener l:listeners) l.onError(response);
-                            } else {
-                                Token = response.getString("Token");
-                                for (ServerListener l : listeners) l.onRefresh(response);
-                            }
-                        } catch (JSONException e) {
-                            for (ServerListener l:listeners) l.onError(formResponse(response.toString()));
+                        clearListener();
+                        if (response.has("Error")){
+                            for (ServerListener l:listeners) l.onError(response);
+                        } else {
+                            for (ServerListener l : listeners) l.onRefresh(response);
                         }
 
                     }
@@ -212,16 +207,11 @@ public class serverConnect {
                 (Request.Method.GET, url, null, new Response.Listener<JSONObject>(){
                     @Override
                     public void onResponse(JSONObject response) {
-                        try {
-                            clearListener();
-                            if (response.has("Error")){
-                                for (ServerListener l:listeners) l.onError(response);
-                            } else {
-                                Token = response.getString("Token");
-                                for (ServerListener l : listeners) l.onAction(response);
-                            }
-                        } catch (JSONException e) {
-                            for (ServerListener l:listeners) l.onError(formResponse(response.toString()));
+                        clearListener();
+                        if (response.has("Error")){
+                            for (ServerListener l:listeners) l.onError(response);
+                        } else {
+                            for (ServerListener l : listeners) l.onAction(response);
                         }
 
                     }
