@@ -14,9 +14,11 @@ import android.support.v4.app.FragmentActivity;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.android.volley.Response;
 
@@ -64,7 +66,9 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
     private int SendedRequest=0;
     private int clientZoom=18;
     private Circle clickpos;
-    private MainWindow main;
+    private TextView LogView;
+    private ImageView LogButton;
+
     @Override
     /**
      * Create form;
@@ -76,8 +80,11 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         ImageLoader.Loader(this.getApplicationContext());
-        ImageView showChat= (ImageView) findViewById(R.id.showchat);
-        main=this;
+
+
+        LogView= (TextView) findViewById(R.id.chatBox);
+        LogView.setHeight((int) (LogView.getTextSize() * 2));
+        LogButton= (ImageView) findViewById(R.id.showButton);
 
 
         ImageView PlayerInfo= (ImageView) findViewById(R.id.infoview);
@@ -93,13 +100,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
         ResourceString.getInstance(getApplicationContext());
 
 
-/*        PlayerInfo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(getApplicationContext(), RouteList.class);
-                startActivity(i);
-            }
-        });*/
+
         mapFragment.getMapAsync(this);
         init();
 
@@ -165,8 +166,28 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
     }
 
 
-    private void createListeners()
-    {
+    private void createListeners() {
+
+        LogButton.setOnClickListener(new View.OnClickListener() {
+            private boolean show = false;
+
+            @Override
+            public void onClick(View v) {
+                DisplayMetrics dm = new DisplayMetrics();
+                getWindowManager().getDefaultDisplay().getMetrics(dm);
+                if (show) {
+                    show = false;
+                    //LogView.setBackgroundColor(Color.WHITE);
+                    LogView.setHeight(dm.heightPixels / 2);
+                } else {
+                    show = true;
+                    //LogView.setBackgroundColor(Color.TRANSPARENT);
+                    LogView.setHeight((int) (LogView.getTextSize() * 2));
+                }
+            }
+        });
+
+
         GPSInfo.getInstance().AddLocationListener(new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
@@ -282,19 +303,9 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                     if (response.has("Message")) {
                         errorMsg = response.getString("Message");
                     }
-                    AlertDialog.Builder builder = new AlertDialog.Builder(MainWindow.this);
-                    builder.setTitle("Error")
-                            .setMessage(errorText + "\n" + errorMsg)
-                            .setIcon(R.mipmap.ic_launcher)
-                            .setCancelable(false)
-                            .setNegativeButton("ОК",
-                                    new DialogInterface.OnClickListener() {
-                                        public void onClick(DialogInterface dialog, int id) {
-                                            dialog.cancel();
-                                        }
-                                    });
-                    AlertDialog alert = builder.create();
-                    alert.show();
+                    if (errorMsg.equals("")) errorMsg=errorText;
+                    LogView.append("\n"+errorMsg);
+                    Log.d("Debug info", LogView.getText().toString());
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
