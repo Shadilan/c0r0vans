@@ -83,13 +83,13 @@ public class Caravan implements GameObject {
     public String getInfo() {
         return "Caravan";
     }
-
+    private ObjectAction dropRoute;
     @Override
     public ArrayList<ObjectAction> getActions() {
         ArrayList<ObjectAction> Actions=new ArrayList<>();
+        if (dropRoute==null)
 
-        ObjectAction act;
-        act = new ObjectAction() {
+        dropRoute = new ObjectAction() {
             @Override
             public Bitmap getImage() {
                 return ImageLoader.getImage("drop_route");
@@ -105,9 +105,8 @@ public class Caravan implements GameObject {
                 return "DropUnfinishedRoute";
             }
         };
-        Actions.add(act);
 
-
+        if (dropRoute.isEnabled())Actions.add(dropRoute);
         return Actions;
     }
 }

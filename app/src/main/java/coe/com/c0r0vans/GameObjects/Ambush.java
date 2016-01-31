@@ -78,27 +78,33 @@ public class Ambush implements GameObject {
         return "Это ЗАСАДА!!!";
     }
 
+    ObjectAction removeAmbush;
+
+
     @Override
     public ArrayList<ObjectAction> getActions() {
-        Log.d("Debug info","Ambush action request.");
         ArrayList<ObjectAction> Actions=new ArrayList<>();
-        ObjectAction act=new ObjectAction() {
-            @Override
-            public Bitmap getImage() {
-                return ImageLoader.getImage("remove_ambush");
-            }
+        if (removeAmbush==null){
+            removeAmbush = new ObjectAction() {
+                @Override
+                public Bitmap getImage() {
+                    return ImageLoader.getImage("remove_ambush");
+                }
 
-            @Override
-            public String getInfo() {
-                return "Убрать засаду.";
-            }
+                @Override
+                public String getInfo() {
+                    return "Убрать засаду.";
+                }
 
-            @Override
-            public String getCommand() {
-                return "DestroyAmbush";
-            }
-        };
-        Actions.add(act);
+                @Override
+                public String getCommand() {
+                    return "DestroyAmbush";
+                }
+            };
+
+        }
+        if (removeAmbush.isEnabled())Actions.add(removeAmbush);
+        Log.d("DebugAction", "removeAmbush look" + ":" + removeAmbush.isEnabled());
         return Actions;
     }
 

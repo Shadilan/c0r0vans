@@ -119,46 +119,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onPlayerInfo(JSONObject response) {
-                player.loadJSON(response);
-                ((TextView)findViewById(R.id.levelInfo)).setText(String.valueOf(player.getLevel()));
-                ((TextView)findViewById(R.id.expInfo)).setText(String.valueOf(player.getExp()));
-                ((TextView)findViewById(R.id.tnlInfo)).setText(String.valueOf(player.getTNL()));
-                ((TextView)findViewById(R.id.goldInfo)).setText(String.valueOf(player.getGold()));
-                ((TextView)findViewById(R.id.caravanInfo)).setText(String.valueOf(player.getCaravans()));
-                ((TextView)findViewById(R.id.ambushLeftInfo)).setText(String.valueOf(player.getAmbushLeft()));
-                ((TextView)findViewById(R.id.ambushSetInfo)).setText(String.valueOf(player.getAmbushMax()-player.getAmbushLeft()));
-                ((TextView)findViewById(R.id.mostReachIn)).setText(String.valueOf(player.getMostReachIn())+"км");
-
-                GridLayout gl= (GridLayout) findViewById(R.id.upgradeInfo);
-                gl.removeAllViews();
-                for (Upgrade u:player.getUpgrades()){
-                    ImageView iv=new ImageView(getApplicationContext());
-                    iv.setImageBitmap(u.getImage());
-                    gl.addView(iv);
-                    TextView info=new TextView(getApplicationContext());
-                    info.setSingleLine(false);
-                    info.setText(u.getDescription());
-                    info.setTextColor(Color.BLACK);
-
-                    gl.addView(info);
-                }
-                gl=(GridLayout) findViewById(R.id.routeInfo);
-
-                gl.removeAllViews();
-                for (Route r:player.getRoutes()){
-                    TextView info=new TextView(getApplicationContext());
-                    info.setSingleLine(true);
-                    info.setText(r.getStartName()+" - "+r.getDistance()+" - "+r.getFinishName());
-                    info.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                    info.setTextSize(15);
-                    info.setGravity(Gravity.CENTER);
-                    info.setTextColor(Color.BLACK);
-
-                    gl.addView(info);
-                }
-
-
-
+                loadFromPlayer();
             }
 
             @Override
@@ -166,8 +127,46 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+        loadFromPlayer();
     }
+    private void loadFromPlayer(){
+        ((TextView)findViewById(R.id.levelInfo)).setText(String.valueOf(player.getLevel()));
+        ((TextView)findViewById(R.id.expInfo)).setText(String.valueOf(player.getExp()));
+        ((TextView)findViewById(R.id.tnlInfo)).setText(String.valueOf(player.getTNL()));
+        ((TextView)findViewById(R.id.goldInfo)).setText(String.valueOf(player.getGold()));
+        ((TextView)findViewById(R.id.caravanInfo)).setText(String.valueOf(player.getCaravans()));
+        ((TextView)findViewById(R.id.ambushLeftInfo)).setText(String.valueOf(player.getAmbushLeft()));
+        ((TextView)findViewById(R.id.ambushSetInfo)).setText(String.valueOf(player.getAmbushMax()-player.getAmbushLeft()));
+        ((TextView)findViewById(R.id.mostReachIn)).setText(String.valueOf(player.getMostReachIn())+"км");
 
+        GridLayout gl= (GridLayout) findViewById(R.id.upgradeInfo);
+        gl.removeAllViews();
+        for (Upgrade u:player.getUpgrades()){
+            ImageView iv=new ImageView(getApplicationContext());
+            iv.setImageBitmap(u.getImage());
+            gl.addView(iv);
+            TextView info=new TextView(getApplicationContext());
+            info.setSingleLine(false);
+            info.setText(u.getDescription());
+            info.setTextColor(Color.BLACK);
+
+            gl.addView(info);
+        }
+        gl=(GridLayout) findViewById(R.id.routeInfo);
+
+        gl.removeAllViews();
+        for (Route r:player.getRoutes()){
+            TextView info=new TextView(getApplicationContext());
+            info.setSingleLine(true);
+            info.setText(r.getStartName()+" - "+r.getDistance()+" - "+r.getFinishName());
+            info.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            info.setTextSize(15);
+            info.setGravity(Gravity.CENTER);
+            info.setTextColor(Color.BLACK);
+
+            gl.addView(info);
+        }
+    }
     @Override
     protected void onResume() {
         super.onResume();

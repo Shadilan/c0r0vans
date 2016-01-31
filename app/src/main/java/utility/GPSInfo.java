@@ -23,6 +23,12 @@ public class GPSInfo {
         return instance;
     }
 
+
+    private int speed;
+    public int getSpeed(){
+
+        return speed;
+    }
     public static GPSInfo getInstance() {
         return instance;
     }
@@ -73,7 +79,7 @@ public class GPSInfo {
                 @Override
 
                 public void onLocationChanged(Location location) {
-
+                    speed = (int) (location.getSpeed()*60/1000);
                     lat = (int) (location.getLatitude() * 1000000);
                     lng = (int) (location.getLongitude() * 1000000);
 

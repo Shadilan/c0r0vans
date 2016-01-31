@@ -37,7 +37,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -63,8 +66,8 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
     private Handler myHandler = new Handler();
     private Timer refreshTimer;
     private ImageView connect_img;
-    private int SendedRequest=0;
-    private int clientZoom=18;
+    private int SendedRequest = 0;
+    private int clientZoom = 18;
     private Circle clickpos;
     private TextView LogView;
     private ImageView LogButton;
@@ -81,25 +84,12 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                 .findFragmentById(R.id.map);
         ImageLoader.Loader(this.getApplicationContext());
 
-
-        LogView= (TextView) findViewById(R.id.chatBox);
+        LogView = (TextView) findViewById(R.id.chatBox);
         LogView.setHeight((int) (LogView.getTextSize() * 2));
-        LogButton= (ImageView) findViewById(R.id.showButton);
+        LogButton = (ImageView) findViewById(R.id.showButton);
 
-
-        ImageView PlayerInfo= (ImageView) findViewById(R.id.infoview);
-        PlayerInfo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(getApplicationContext(), MainActivity.class);
-                SelectedObject.getInstance().setExecuter(player);
-                startActivity(i);
-            }
-        });
         connect_img = (ImageView) findViewById(R.id.server_connect);
         ResourceString.getInstance(getApplicationContext());
-
-
 
         mapFragment.getMapAsync(this);
         init();
@@ -108,15 +98,14 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
             Intent i = new Intent(getApplicationContext(), Login.class);
             startActivity(i);
         }
-
     }
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
-        if (hasFocus && clickpos!=null){
+        if (hasFocus && clickpos != null) {
             clickpos.remove();
-            clickpos=null;
+            clickpos = null;
         }
     }
 
@@ -124,14 +113,13 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
      * Make initialization.
      */
 
-    private void init(){
+    private void init() {
         //init fields
-        Objects=new ArrayList<>();
+        Objects = new ArrayList<>();
 
         ImageLoader.Loader(getApplicationContext());
         GPSInfo.getInstance(getApplicationContext());
         serverConnect.getInstance().connect(getResources().getString(R.string.serveradress), this.getApplicationContext());
-        serverConnect.getInstance().RefreshData(GPSInfo.getInstance().GetLat(), GPSInfo.getInstance().GetLng());
     }
 
     /**
@@ -143,7 +131,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         setupMap();
-        player=new Player(mMap);
+        player = new Player(mMap);
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(player.getMarker().getPosition(), 18));
         createListeners();
     }
@@ -151,22 +139,33 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
     /**
      * Setup map view
      */
-    private void setupMap(){
+    private DateFormat df = new SimpleDateFormat("dd.mm.yyyy HH:mm:ss");
+    private void setupMap() {
 
-            mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+        mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         mMap.setBuildingsEnabled(false);
-            mMap.getUiSettings().setScrollGesturesEnabled(false);
-            mMap.getUiSettings().setTiltGesturesEnabled(false);
-            mMap.getUiSettings().setMyLocationButtonEnabled(false);
-            mMap.getUiSettings().setZoomControlsEnabled(false);
-            mMap.getUiSettings().setZoomGesturesEnabled(true);
-            mMap.getUiSettings().setCompassEnabled(false);
-            mMap.getUiSettings().setMapToolbarEnabled(false);
-            mMap.getUiSettings().setIndoorLevelPickerEnabled(false);
+        mMap.getUiSettings().setScrollGesturesEnabled(false);
+        mMap.getUiSettings().setTiltGesturesEnabled(false);
+        mMap.getUiSettings().setMyLocationButtonEnabled(false);
+        mMap.getUiSettings().setZoomControlsEnabled(false);
+        mMap.getUiSettings().setZoomGesturesEnabled(true);
+        mMap.getUiSettings().setCompassEnabled(false);
+        mMap.getUiSettings().setMapToolbarEnabled(false);
+        mMap.getUiSettings().setIndoorLevelPickerEnabled(false);
     }
 
 
     private void createListeners() {
+        ImageView PlayerInfo = (ImageView) findViewById(R.id.infoview);
+        PlayerInfo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getApplicationContext(), MainActivity.class);
+                SelectedObject.getInstance().setExecuter(player);
+                startActivity(i);
+            }
+        });
+
 
         LogButton.setOnClickListener(new View.OnClickListener() {
             private boolean show = false;
@@ -193,7 +192,6 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
             public void onLocationChanged(Location location) {
                 LatLng target = new LatLng(location.getLatitude(), location.getLongitude());
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(target, clientZoom));
-                serverConnect.getInstance().RefreshData((int) (location.getLatitude() * 1e6), (int) (location.getLongitude() * 1e6));
 
                 player.getMarker().setPosition(target);
                 player.getCircle().setCenter(target);
@@ -288,7 +286,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
 
             @Override
             public void onPlayerInfo(JSONObject response) {
-
+                player.loadJSON(response);
             }
 
             @Override
@@ -303,8 +301,8 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                     if (response.has("Message")) {
                         errorMsg = response.getString("Message");
                     }
-                    if (errorMsg.equals("")) errorMsg=errorText;
-                    LogView.append("\n"+errorMsg);
+                    if (errorMsg.equals("")) errorMsg = errorText;
+                    LogView.append("\n" + df.format(new Date())+":"+ errorMsg);
                     Log.d("Debug info", LogView.getText().toString());
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -353,6 +351,22 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
         mMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
             @Override
             public void onCameraChange(CameraPosition cameraPosition) {
+                if (clientZoom!=(int)cameraPosition.zoom){
+                    if (clientZoom<16) clientZoom=16;
+                    if (clientZoom>20) clientZoom=20;
+/*                    int scale=100;
+                    switch (clientZoom)
+                    {
+                        case 17: scale=150;
+                            break;
+                        case 16: scale=200;
+                            break;
+                        case 19:scale=50;
+                            break;
+                        case 20:scale=25;
+                            break;
+                    }*/
+                }
                 clientZoom = (int) cameraPosition.zoom;
                 if (clientZoom < 16) {
                     clientZoom = 16;
@@ -374,65 +388,77 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
 
     /**
      * Return object by marker
+     *
      * @param m Marker
      * @return GameObject
      */
-    private GameObject findObjectByMarker(Marker m){
-        if (player.getMarker().equals(m)){
+    private GameObject findObjectByMarker(Marker m) {
+        if (player.getMarker().equals(m)) {
             return player;
         } else
-        for (GameObject obj:Objects){
-            if (obj.getMarker().equals(m)){
-                Log.d("Debug info","Selected object:"+obj.getClass().toString());
-                return obj;
+            for (GameObject obj : Objects) {
+                if (obj.getMarker().equals(m)) {
+                    Log.d("Debug info", "Selected object:" + obj.getClass().toString());
+                    return obj;
+                }
             }
-        }
-        Log.d("Debug info","Object not found.");
-        return  null;
+        Log.d("Debug info", "Object not found.");
+        return null;
     }
 
     /**
      * Start Timer to load data and other needs.
      */
-    private void StartTickTimer(){
-        refreshTimer = new Timer("RefreshData");
-
-        refreshTimer.schedule(new TimerTask() {
+    private void StartTickTimer() {
+        int delay = 1000;
+        if (serverConnect.getInstance().isLogin() && !firstRun) {
+            if (GPSInfo.getInstance().getSpeed() < 30) delay = 40000;
+            else if (GPSInfo.getInstance().getSpeed() > 30) delay = 20000;
+        }
+        Log.d("DebugCall", "postDelayed");
+        myHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                myHandler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        Tick();
-                    }
-                });
+                Tick();
             }
-        }, 1000 );
+        }, delay);
+
     }
 
     /**
      * Timed action on tick;
      */
-    private void Tick(){
-        if (Math.random()*60>56) {
-            SendedRequest++;
-            if (SendedRequest>1) connect_img.setVisibility(View.VISIBLE);
-            serverConnect.getInstance().RefreshData(GPSInfo.getInstance().GetLat(), GPSInfo.getInstance().GetLng());
+    private boolean firstRun = true;
 
-        }
-        StartTickTimer();
-
+    private void Tick() {
+        Log.d("Debug info","Time to refresh");
+        if (serverConnect.getInstance().isLogin() && this.hasWindowFocus())
+            if (firstRun) {
+                serverConnect.getInstance().RefreshData(GPSInfo.getInstance().GetLat(), GPSInfo.getInstance().GetLng());
+                serverConnect.getInstance().getPlayerInfo();
+                firstRun = false;
+            } else {
+                SendedRequest++;
+                if (SendedRequest > 1) connect_img.setVisibility(View.VISIBLE);
+                serverConnect.getInstance().RefreshData(GPSInfo.getInstance().GetLat(), GPSInfo.getInstance().GetLng());
+            }
+        if (job) StartTickTimer();
     }
+    private boolean job=true;
+
+
+
     @Override
     protected void onPause(){
         super.onPause();
-        refreshTimer.cancel();
-        refreshTimer.purge();
-        refreshTimer=null;
+        job=false;
+
     }
     @Override
-    protected void onResume(){
+    protected void onResume() {
         super.onResume();
+        Log.d("DebugCall", "ResumeCall");
+        job=true;
         StartTickTimer();
 
     }

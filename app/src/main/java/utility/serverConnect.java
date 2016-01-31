@@ -18,6 +18,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Queue;
+
+import coe.com.c0r0vans.GameObjects.ObjectAction;
 
 /**
  * Объект обеспечивающий соединение с сервером и взаимодействие с сервером. Singleton.
@@ -56,14 +60,9 @@ public class serverConnect {
      * @param ctx Application context
      */
     public void connect(String serverAddres,Context ctx){
-        Log.d("Debug info!",serverAddres);
-            ServerAddres = serverAddres;
-            Log.d("Debug info!!",ServerAddres);
-            context = ctx;
-            Log.d("Debug info!",ctx.toString());
-            reqq = Volley.newRequestQueue(context);
-            Log.d("Debug info!","TTT");
-
+        ServerAddres = serverAddres;
+        context = ctx;
+        reqq = Volley.newRequestQueue(context);
     }
 
     /**
@@ -71,14 +70,10 @@ public class serverConnect {
      * @return Return true if connection exists
      */
     private boolean checkConnection(){
-        Log.d("Debug info","c1");
         if (context==null) return false;
-        Log.d("Debug info","c2");
         ConnectivityManager connMgr = (ConnectivityManager)
                 instance.context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        Log.d("Debug info","c3");
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
-        Log.d("Debug info","c4");
         return networkInfo != null && networkInfo.isConnected();
     }
 
@@ -110,9 +105,7 @@ public class serverConnect {
      * @return true
      */
     public boolean ExecLogin(String Login, String Password){
-        Log.d("Debug info","el1");
         if (!checkConnection()) return false;
-        Log.d("Debug info","el2");
         String url=ServerAddres+"/login.jsp"+"?Login="+Login+"&Password="+Password;
         Log.d("Debug info","Connect url:"+url);
         final JsonObjectRequest jsObjRequest = new JsonObjectRequest
@@ -169,14 +162,21 @@ public class serverConnect {
                 (Request.Method.GET, url, null, new Response.Listener<JSONObject>(){
                     @Override
                     public void onResponse(JSONObject response) {
+                        Log.d("DebugAction","Step4");
                         clearListener();
                         if (response.has("Error")){
                             for (ServerListener l:listeners) l.onError(response);
                         } else {
                             for (ServerListener l : listeners) l.onRefresh(response);
                         }
-
+                        if (lockedActions!=null) {
+                            for (ObjectAction act : lockedActions) {
+                                act.setEnable(true);
+                            }
+                            lockedActions.clear();
+                        }
                     }
+
                 }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
@@ -188,43 +188,58 @@ public class serverConnect {
         return true;
     }
 
+    private ArrayList<ObjectAction> lockedActions;
+
     /**
      * Exec simple action
-     * @param Command Action
+     * @param action Action
      * @param Target Target GUID
      * @param Lat Latitude of player
      * @param Lng Longtitude of player
      * @return true
      */
-    public boolean ExecCommand(String Command, String Target, int Lat,int Lng , int TLat,int TLng){
-
+    public boolean ExecCommand(final ObjectAction action, String Target, int Lat,int Lng , int TLat,int TLng){
+        Log.d("DebugAction","Step1");
         if (!checkConnection()) return false;
         if (Token==null) return false;
 
-        String url=ServerAddres+"/getdata.jsp"+"?Token="+Token+"&ReqName="+Command+"&plat="+Lat+"&plng="+Lng+"&TGUID="+Target+"&lat="+TLat+"&lng="+TLng;
-        Log.d("Debug info","Connection url:"+url);
-        final JsonObjectRequest jsObjRequest = new JsonObjectRequest
-                (Request.Method.GET, url, null, new Response.Listener<JSONObject>(){
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        clearListener();
-                        if (response.has("Error")){
-                            for (ServerListener l:listeners) l.onError(response);
-                        } else {
-                            for (ServerListener l : listeners) l.onAction(response);
-                        }
+        String url=ServerAddres+"/getdata.jsp"+"?Token="+Token+"&ReqName="+action.getCommand()+"&plat="+Lat+"&plng="+Lng+"&TGUID="+Target+"&lat="+TLat+"&lng="+TLng;
+        Log.d("Debug info", "Connection url:" + url);
 
-                    }
-                }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.d("Ubnexpected Error",error.toString());
-                        for (ServerListener l:listeners) l.onError(formResponse(error.toString()));
-                    }
-                });
+        if (lockedActions==null) lockedActions=new ArrayList<>();
+
+        lockedActions.add(action);
+        action.setEnable(false);
+
+        Response.Listener<JSONObject> l=new Response.Listener<JSONObject>(){
+            @Override
+            public void onResponse(JSONObject response) {
+                Log.d("DebugAction","Step3");
+                clearListener();
+                if (response.has("Error")){
+                    for (ServerListener l:listeners) l.onError(response);
+                } else {
+                    for (ServerListener l : listeners) l.onAction(response);
+                }
+
+            }
+        };
+
+        Response.ErrorListener le=new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("Ubnexpected Error",error.toString());
+                for (ServerListener l:listeners) l.onError(formResponse(error.toString()));
+            }
+        };
+
+        final JsonObjectRequest jsObjRequest = new JsonObjectRequest
+                (Request.Method.GET, url, null, l, le);
         reqq.add(jsObjRequest);
+        RefreshData(Lat, Lng);
         return true;
     }
+
 
 
     public boolean getPlayerInfo(){
@@ -234,25 +249,29 @@ public class serverConnect {
 
         String url=ServerAddres+"/getdata.jsp"+"?Token="+Token+"&ReqName=GetPlayerInfo";
         Log.d("Debug info","Connection url:"+url);
-        final JsonObjectRequest jsObjRequest = new JsonObjectRequest
-                (Request.Method.GET, url, null, new Response.Listener<JSONObject>(){
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        clearListener();
-                        if (response.has("Error")){
-                            for (ServerListener l:listeners) l.onError(response);
-                        } else {
-                            for (ServerListener l : listeners) l.onPlayerInfo(response);
-                        }
+        Response.Listener<JSONObject> l=new Response.Listener<JSONObject>(){
+            @Override
+            public void onResponse(JSONObject response) {
+                clearListener();
+                if (response.has("Error")){
+                    for (ServerListener l:listeners) l.onError(response);
+                } else {
+                    for (ServerListener l : listeners) l.onPlayerInfo(response);
+                }
 
-                    }
-                }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.d("Ubnexpected Error",error.toString());
-                        for (ServerListener l:listeners) l.onError(formResponse(error.toString()));
-                    }
-                });
+            }
+        };
+        Response.ErrorListener le=new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("Ubnexpected Error",error.toString());
+                for (ServerListener l:listeners) l.onError(formResponse(error.toString()));
+            }
+        };
+
+
+        final JsonObjectRequest jsObjRequest = new JsonObjectRequest
+                (Request.Method.GET, url, null,l , le);
         reqq.add(jsObjRequest);
         return true;
     }

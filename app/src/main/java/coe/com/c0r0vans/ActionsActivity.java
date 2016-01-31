@@ -12,6 +12,8 @@ import android.widget.LinearLayout;
 
 import android.widget.TextView;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 
 import coe.com.c0r0vans.GameObjects.Ambush;
@@ -20,6 +22,7 @@ import coe.com.c0r0vans.GameObjects.ObjectAction;
 import coe.com.c0r0vans.GameObjects.Player;
 import coe.com.c0r0vans.GameObjects.SelectedObject;
 import utility.GPSInfo;
+import utility.ServerListener;
 import utility.serverConnect;
 
 public class ActionsActivity extends AppCompatActivity {
@@ -32,7 +35,32 @@ public class ActionsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_actions);
         infoView= (TextView) findViewById(R.id.TargetInfo);
         targetImage= (ImageView) findViewById(R.id.TargetImage);
+        serverConnect.getInstance().addListener(new ServerListener() {
+            @Override
+            public void onLogin(JSONObject response) {
 
+            }
+
+            @Override
+            public void onRefresh(JSONObject response) {
+                reloadActions();
+            }
+
+            @Override
+            public void onAction(JSONObject response) {
+
+            }
+
+            @Override
+            public void onPlayerInfo(JSONObject response) {
+
+            }
+
+            @Override
+            public void onError(JSONObject response) {
+
+            }
+        });
 
     }
     @Override
@@ -56,30 +84,33 @@ public class ActionsActivity extends AppCompatActivity {
             {
                 this.setTitle(((City)SelectedObject.getInstance().getTarget()).getCityName());
             }
-            infoView.setText(SelectedObject.getInstance().getTarget().getInfo());
-            targetImage.setImageBitmap(SelectedObject.getInstance().getTarget().getImage());
-            actions=SelectedObject.getInstance().getTarget().getActions();
-            LinearLayout ActionTable= (LinearLayout) findViewById(R.id.ActionList);
-            ActionTable.removeAllViews();
-            for (ObjectAction act:actions){
-                CommandButton btn=new CommandButton(this,act.getCommand());
-                btn.setMinimumWidth(80);
-                btn.setMinimumWidth(80);
-                btn.setMaxWidth(80);
-                btn.setMaxHeight(80);
-                btn.setImageBitmap(act.getImage());
+            reloadActions();
 
-                btn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        serverConnect.getInstance().ExecCommand(((CommandButton) v).getCommand(), SelectedObject.getInstance().getTarget().getGUID(), GPSInfo.getInstance().GetLat(), GPSInfo.getInstance().GetLng(),(int)(SelectedObject.getInstance().getPoint().latitude*1E6),(int)(SelectedObject.getInstance().getPoint().longitude*1E6));
-                        finish();
-                    }
-                });
+        }
+    }
+    private void reloadActions(){
+        infoView.setText(SelectedObject.getInstance().getTarget().getInfo());
+        targetImage.setImageBitmap(SelectedObject.getInstance().getTarget().getImage());
+        actions=SelectedObject.getInstance().getTarget().getActions();
+        LinearLayout ActionTable= (LinearLayout) findViewById(R.id.ActionList);
+        ActionTable.removeAllViews();
+        for (ObjectAction act:actions){
+            CommandButton btn=new CommandButton(this,act);
+            btn.setMinimumWidth(80);
+            btn.setMinimumWidth(80);
+            btn.setMaxWidth(80);
+            btn.setMaxHeight(80);
+            btn.setImageBitmap(act.getImage());
 
-                ActionTable.addView(btn);
-            }
+            btn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    serverConnect.getInstance().ExecCommand(((CommandButton) v).getAction(), SelectedObject.getInstance().getTarget().getGUID(), GPSInfo.getInstance().GetLat(), GPSInfo.getInstance().GetLng(),(int)(SelectedObject.getInstance().getPoint().latitude*1E6),(int)(SelectedObject.getInstance().getPoint().longitude*1E6));
+                    finish();
+                }
+            });
 
+            ActionTable.addView(btn);
         }
     }
     private class CommandButton extends ImageButton{
@@ -87,13 +118,13 @@ public class ActionsActivity extends AppCompatActivity {
         public CommandButton(Context context) {
             super(context);
         }
-        public CommandButton(Context context,String Command) {
+        public CommandButton(Context context,ObjectAction action) {
             super(context);
-            this.Command=Command;
+            this.action=action;
         }
-        private String Command;
-        public String getCommand(){
-            return Command;
+        private ObjectAction action;
+        public ObjectAction getAction(){
+            return action;
         }
     }
 }

@@ -148,10 +148,12 @@ public class Player implements GameObject{
                 ResourceString.getInstance().getString("caravans")+this.Caravans+"\n";
     }
 
+    private  ObjectAction createAmbush;
+    private ObjectAction dropRoute;
     @Override
     public ArrayList<ObjectAction> getActions() {
         ArrayList<ObjectAction> Actions=new ArrayList<>();
-        ObjectAction act=new ObjectAction() {
+        if (createAmbush==null) createAmbush=new ObjectAction() {
             @Override
             public Bitmap getImage() {
                 return ImageLoader.getImage("create_ambush");
@@ -167,27 +169,10 @@ public class Player implements GameObject{
                 return "SetAmbush";
             }
         };
-        Actions.add(act);
-        //if (Route>0) {
-            /*act = new ObjectAction() {
-                @Override
-                public Bitmap getImage() {
-                    return ImageLoader.getImage("create_waypoint");
-                }
+        if (createAmbush.isEnabled()) Actions.add(createAmbush);
 
-                @Override
-                public String getInfo() {
-                    return "Создать точку маршрута.";
-                }
 
-                @Override
-                public String getCommand() {
-                    return "createWaypoint";
-                }
-            };
-            Actions.add(act);*/
-
-            act = new ObjectAction() {
+        if (dropRoute==null) dropRoute = new ObjectAction() {
                 @Override
                 public Bitmap getImage() {
                     return ImageLoader.getImage("drop_route");
@@ -203,8 +188,8 @@ public class Player implements GameObject{
                     return "DropUnfinishedRoute";
                 }
             };
-            Actions.add(act);
-        //}
+        if (dropRoute.isEnabled()) Actions.add(dropRoute);
+
 
         return Actions;
     }
