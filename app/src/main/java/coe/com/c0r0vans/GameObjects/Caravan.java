@@ -35,6 +35,7 @@ public class Caravan implements GameObject {
 
         mark=map.addMarker(new MarkerOptions().position(new LatLng(Lat / 1e6, Lng / 1e6)));
         mark.setIcon(BitmapDescriptorFactory.fromBitmap(getImage()));
+        mark.setAnchor(0.5f,0.5f);
         loadJSON(obj);
 
 

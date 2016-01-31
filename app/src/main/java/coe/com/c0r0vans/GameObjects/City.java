@@ -36,6 +36,7 @@ public class City implements GameObject{
 
         mark=map.addMarker(new MarkerOptions().position(new LatLng(Lat / 1e6, Lng / 1e6)));
         mark.setIcon(BitmapDescriptorFactory.fromBitmap(getImage()));
+        mark.setAnchor(0.5f,1);
         loadJSON(obj);
 
 
@@ -56,6 +57,7 @@ public class City implements GameObject{
     public void setMarker(Marker m) {
         mark=m;
         m.setIcon(BitmapDescriptorFactory.fromBitmap(image));
+        mark.setAnchor(0.5f,1);
     }
 
     @Override
@@ -66,6 +68,7 @@ public class City implements GameObject{
             int Lng=obj.getInt("Lng");
             if (mark==null) {
                 setMarker(map.addMarker(new MarkerOptions().position(new LatLng(Lat / 1e6, Lng / 1e6))));
+
             } else {
                 mark.setPosition(new LatLng(Lat / 1e6, Lng / 1e6));
             }

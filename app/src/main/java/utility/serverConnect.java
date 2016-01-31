@@ -221,6 +221,7 @@ public class serverConnect {
                 } else {
                     for (ServerListener l : listeners) l.onAction(response);
                 }
+                RefreshData(GPSInfo.getInstance().GetLat(), GPSInfo.getInstance().GetLng());
 
             }
         };
@@ -236,7 +237,6 @@ public class serverConnect {
         final JsonObjectRequest jsObjRequest = new JsonObjectRequest
                 (Request.Method.GET, url, null, l, le);
         reqq.add(jsObjRequest);
-        RefreshData(Lat, Lng);
         return true;
     }
 

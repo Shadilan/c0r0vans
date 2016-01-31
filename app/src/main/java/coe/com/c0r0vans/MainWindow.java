@@ -412,6 +412,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
     private void StartTickTimer() {
         int delay = 1000;
         if (serverConnect.getInstance().isLogin() && !firstRun) {
+            Log.d("Debug info","Speed:"+GPSInfo.getInstance().getSpeed());
             if (GPSInfo.getInstance().getSpeed() < 30) delay = 40000;
             else if (GPSInfo.getInstance().getSpeed() > 30) delay = 20000;
         }

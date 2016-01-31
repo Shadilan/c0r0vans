@@ -35,6 +35,7 @@ public class Ambush implements GameObject {
         this.map=map;
         loadJSON(obj);
         mark.setIcon(BitmapDescriptorFactory.fromBitmap(getImage()));
+        mark.setAnchor(0.5f, 1);
     }
     @Override
     public Bitmap getImage() {
@@ -49,6 +50,7 @@ public class Ambush implements GameObject {
     @Override
     public void setMarker(Marker m) {
         mark=m;
+        mark.setAnchor(0.5f,1);
     }
 
     @Override
