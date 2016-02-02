@@ -51,7 +51,8 @@ public class serverConnect {
      * Constructor
      */
     protected serverConnect(){
-
+        listenersMap=new HashMap<>();
+        errorMap=new HashMap<>();
     }
 
     /**
@@ -63,6 +64,7 @@ public class serverConnect {
         ServerAddres = serverAddres;
         context = ctx;
         reqq = Volley.newRequestQueue(context);
+
     }
 
     /**
@@ -189,6 +191,9 @@ public class serverConnect {
     }
 
     private ArrayList<ObjectAction> lockedActions;
+    private HashMap<Response.Listener<JSONObject>,ObjectAction> listenersMap;
+    private HashMap<Response.ErrorListener,ObjectAction> errorMap;
+
 
     /**
      * Exec simple action
@@ -199,7 +204,7 @@ public class serverConnect {
      * @return true
      */
     public boolean ExecCommand(final ObjectAction action, String Target, int Lat,int Lng , int TLat,int TLng){
-        Log.d("DebugAction","Step1");
+        Log.d("DebugAction", "Step1");
         if (!checkConnection()) return false;
         if (Token==null) return false;
 
@@ -209,20 +214,20 @@ public class serverConnect {
         if (lockedActions==null) lockedActions=new ArrayList<>();
 
         lockedActions.add(action);
-        action.setEnable(false);
+        action.preAction();
 
         Response.Listener<JSONObject> l=new Response.Listener<JSONObject>(){
             @Override
             public void onResponse(JSONObject response) {
-                Log.d("DebugAction","Step3");
                 clearListener();
                 if (response.has("Error")){
                     for (ServerListener l:listeners) l.onError(response);
+                    if (listenersMap.get(this)!=null) listenersMap.get(this).postError();
                 } else {
                     for (ServerListener l : listeners) l.onAction(response);
+                    if (listenersMap.get(this)!=null) listenersMap.get(this).postAction();
+                    RefreshData(GPSInfo.getInstance().GetLat(), GPSInfo.getInstance().GetLng());
                 }
-                RefreshData(GPSInfo.getInstance().GetLat(), GPSInfo.getInstance().GetLng());
-
             }
         };
 
@@ -231,9 +236,11 @@ public class serverConnect {
             public void onErrorResponse(VolleyError error) {
                 Log.d("Ubnexpected Error",error.toString());
                 for (ServerListener l:listeners) l.onError(formResponse(error.toString()));
+                if (errorMap.get(this)!=null) errorMap.get(this).postError();
             }
         };
-
+        listenersMap.put(l,action);
+        errorMap.put(le,action);
         final JsonObjectRequest jsObjRequest = new JsonObjectRequest
                 (Request.Method.GET, url, null, l, le);
         reqq.add(jsObjRequest);

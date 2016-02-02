@@ -47,17 +47,19 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end|top"
-        android:src="@mipmap/setings"
-        android:id="@+id/settings"
         android:padding="10dp"
         android:minHeight="40dp"
         android:maxHeight="40dp"
         android:minWidth="40dp"
         android:maxWidth="40dp"
         android:paddingLeft="10dp"
+        android:src="@mipmap/setings"
+        android:id="@+id/settings"
+
         android:layout_alignTop="@+id/LevelAmount"
         android:layout_alignLeft="@+id/server_connect"
-        android:layout_alignStart="@+id/server_connect" />
+        android:layout_alignStart="@+id/server_connect"
+        android:nestedScrollingEnabled="false" />
 
     <TextView android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -101,6 +103,22 @@
         android:layout_marginTop="50dp"
         android:id="@+id/GoldAmount"
         />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|top"
+        android:padding="10dp"
+        android:minHeight="40dp"
+        android:maxHeight="40dp"
+        android:minWidth="40dp"
+        android:maxWidth="40dp"
+        android:paddingLeft="10dp"
+        android:id="@+id/zoomButton"
+        android:src="@mipmap/zoombutton"
+        android:layout_above="@+id/scrollView"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 
     <ScrollView
         android:layout_width="match_parent"

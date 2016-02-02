@@ -153,7 +153,7 @@ public class Player implements GameObject{
     @Override
     public ArrayList<ObjectAction> getActions() {
         ArrayList<ObjectAction> Actions=new ArrayList<>();
-        if (createAmbush==null) createAmbush=new ObjectAction() {
+        if (createAmbush==null) createAmbush=new ObjectAction(this) {
             @Override
             public Bitmap getImage() {
                 return ImageLoader.getImage("create_ambush");
@@ -168,11 +168,26 @@ public class Player implements GameObject{
             public String getCommand() {
                 return "SetAmbush";
             }
+
+            @Override
+            public void preAction() {
+
+            }
+
+            @Override
+            public void postAction() {
+
+            }
+
+            @Override
+            public void postError() {
+
+            }
         };
         if (createAmbush.isEnabled()) Actions.add(createAmbush);
 
 
-        if (dropRoute==null) dropRoute = new ObjectAction() {
+        if (dropRoute==null) dropRoute = new ObjectAction(this) {
                 @Override
                 public Bitmap getImage() {
                     return ImageLoader.getImage("drop_route");
@@ -187,7 +202,22 @@ public class Player implements GameObject{
                 public String getCommand() {
                     return "DropUnfinishedRoute";
                 }
-            };
+
+            @Override
+            public void preAction() {
+
+            }
+
+            @Override
+            public void postAction() {
+
+            }
+
+            @Override
+            public void postError() {
+
+            }
+        };
         if (dropRoute.isEnabled()) Actions.add(dropRoute);
 
 

@@ -67,7 +67,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
     private Timer refreshTimer;
     private ImageView connect_img;
     private int SendedRequest = 0;
-    private int clientZoom = 18;
+    private int clientZoom = 17;
     private Circle clickpos;
     private TextView LogView;
     private ImageView LogButton;
@@ -148,7 +148,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
         mMap.getUiSettings().setTiltGesturesEnabled(false);
         mMap.getUiSettings().setMyLocationButtonEnabled(false);
         mMap.getUiSettings().setZoomControlsEnabled(false);
-        mMap.getUiSettings().setZoomGesturesEnabled(true);
+        mMap.getUiSettings().setZoomGesturesEnabled(false);
         mMap.getUiSettings().setCompassEnabled(false);
         mMap.getUiSettings().setMapToolbarEnabled(false);
         mMap.getUiSettings().setIndoorLevelPickerEnabled(false);
@@ -302,7 +302,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                         errorMsg = response.getString("Message");
                     }
                     if (errorMsg.equals("")) errorMsg = errorText;
-                    LogView.append("\n" + df.format(new Date())+":"+ errorMsg);
+                    LogView.append("\n" + df.format(new Date()) + ":" + errorMsg);
                     Log.d("Debug info", LogView.getText().toString());
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -351,38 +351,27 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
         mMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
             @Override
             public void onCameraChange(CameraPosition cameraPosition) {
-                if (clientZoom!=(int)cameraPosition.zoom){
-                    if (clientZoom<16) clientZoom=16;
-                    if (clientZoom>20) clientZoom=20;
-/*                    int scale=100;
-                    switch (clientZoom)
-                    {
-                        case 17: scale=150;
-                            break;
-                        case 16: scale=200;
-                            break;
-                        case 19:scale=50;
-                            break;
-                        case 20:scale=25;
-                            break;
-                    }*/
-                }
-                clientZoom = (int) cameraPosition.zoom;
-                if (clientZoom < 16) {
-                    clientZoom = 16;
-                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(GPSInfo.getInstance().GetLat() / 1e6, GPSInfo.getInstance().GetLng() / 1e6), clientZoom));
-                }
-                if (clientZoom > 20) {
-                    clientZoom = 20;
-                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(GPSInfo.getInstance().GetLat() / 1e6, GPSInfo.getInstance().GetLng() / 1e6), clientZoom));
-                }
                 if (GPSInfo.getInstance().GetLat() != cameraPosition.target.latitude * 1e6 || GPSInfo.getInstance().GetLng() != cameraPosition.target.longitude * 1e6) {
                     mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(GPSInfo.getInstance().GetLat() / 1e6, GPSInfo.getInstance().GetLng() / 1e6), clientZoom));
                 }
 
             }
         });
+        ImageView zoomButton= (ImageView) findViewById(R.id.zoomButton);
+        zoomButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switch (clientZoom){
+                    case 16:clientZoom=17;
+                        break;
+                    case 17:clientZoom=18;
+                        break;
+                    case 18:clientZoom=16;
 
+                }
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(GPSInfo.getInstance().GetLat() / 1e6, GPSInfo.getInstance().GetLng() / 1e6), clientZoom));
+            }
+        });
 
     }
 

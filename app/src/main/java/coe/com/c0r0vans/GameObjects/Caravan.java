@@ -35,7 +35,7 @@ public class Caravan implements GameObject {
 
         mark=map.addMarker(new MarkerOptions().position(new LatLng(Lat / 1e6, Lng / 1e6)));
         mark.setIcon(BitmapDescriptorFactory.fromBitmap(getImage()));
-        mark.setAnchor(0.5f,0.5f);
+        mark.setAnchor(0.5f, 0.5f);
         loadJSON(obj);
 
 
@@ -90,7 +90,7 @@ public class Caravan implements GameObject {
         ArrayList<ObjectAction> Actions=new ArrayList<>();
         if (dropRoute==null)
 
-        dropRoute = new ObjectAction() {
+        dropRoute = new ObjectAction(this) {
             @Override
             public Bitmap getImage() {
                 return ImageLoader.getImage("drop_route");
@@ -104,6 +104,22 @@ public class Caravan implements GameObject {
             @Override
             public String getCommand() {
                 return "DropUnfinishedRoute";
+            }
+
+            @Override
+            public void preAction() {
+                setEnable(false);
+                owner.getMarker().setVisible(false);
+            }
+
+            @Override
+            public void postAction() {
+                owner.getMarker().remove();
+            }
+
+            @Override
+            public void postError() {
+                owner.getMarker().setVisible(true);
             }
         };
 

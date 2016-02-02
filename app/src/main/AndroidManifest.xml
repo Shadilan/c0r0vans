@@ -22,6 +22,7 @@
 
         <activity
             android:name=".MainWindow"
+            android:screenOrientation="sensorPortrait"
             android:label="@string/title_activity_main_window" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -37,6 +38,7 @@
         <activity
             android:name=".ActionsActivity"
             android:label=""
+            android:screenOrientation="sensorPortrait"
             android:theme="@style/MyDialogTheme" >
         </activity>
         <!--
@@ -55,7 +57,9 @@
             android:name=".MainActivity"
             android:label="@string/title_activity_main"
             android:parentActivityName=".MainWindow"
+            android:screenOrientation="sensorPortrait"
             android:theme="@style/Theme.AppCompat.Light.Dialog" >
+
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="coe.com.c0r0vans.MainWindow" />

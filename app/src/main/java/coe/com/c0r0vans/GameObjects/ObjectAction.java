@@ -9,9 +9,16 @@ import android.util.Log;
  * Информация о действиях
  */
 public abstract class ObjectAction {
+    public ObjectAction(GameObject owner){
+        this.owner=owner;
+    }
+    protected GameObject owner;
     public abstract Bitmap getImage();
     public abstract String getInfo();
     public abstract String getCommand();
+    public abstract void preAction();
+    public abstract void postAction();
+    public abstract void postError();
     protected boolean enabled=true;
     public void setEnable(boolean flag){
         Log.d("DebugAction",getCommand()+":"+flag);

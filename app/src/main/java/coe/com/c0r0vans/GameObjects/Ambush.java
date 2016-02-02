@@ -87,12 +87,11 @@ public class Ambush implements GameObject {
     public ArrayList<ObjectAction> getActions() {
         ArrayList<ObjectAction> Actions=new ArrayList<>();
         if (removeAmbush==null){
-            removeAmbush = new ObjectAction() {
+            removeAmbush = new ObjectAction(this) {
                 @Override
                 public Bitmap getImage() {
                     return ImageLoader.getImage("remove_ambush");
                 }
-
                 @Override
                 public String getInfo() {
                     return "Убрать засаду.";
@@ -101,6 +100,21 @@ public class Ambush implements GameObject {
                 @Override
                 public String getCommand() {
                     return "DestroyAmbush";
+                }
+
+                @Override
+                public void preAction() {
+                    owner.getMarker().setVisible(false);
+                }
+
+                @Override
+                public void postAction() {
+                    owner.getMarker().remove();
+                }
+
+                @Override
+                public void postError() {
+                    owner.getMarker().setVisible(true);
                 }
             };
 

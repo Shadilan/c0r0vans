@@ -57,7 +57,7 @@ public class City implements GameObject{
     public void setMarker(Marker m) {
         mark=m;
         m.setIcon(BitmapDescriptorFactory.fromBitmap(image));
-        mark.setAnchor(0.5f,1);
+        mark.setAnchor(0.5f, 1);
     }
 
     @Override
@@ -97,7 +97,7 @@ public class City implements GameObject{
         ArrayList<ObjectAction> Actions=new ArrayList<>();
 
         if (startRoute==null)
-            startRoute = new ObjectAction() {
+            startRoute = new ObjectAction(this) {
                 @Override
                 public Bitmap getImage() {
                     return ImageLoader.getImage("start_route");
@@ -112,11 +112,26 @@ public class City implements GameObject{
                 public String getCommand() {
                     return "StartRoute";
                 }
+
+                @Override
+                public void preAction() {
+
+                }
+
+                @Override
+                public void postAction() {
+
+                }
+
+                @Override
+                public void postError() {
+
+                }
             };
         if (startRoute.isEnabled()) Actions.add(startRoute);
 
         if (finishRoute==null)
-        finishRoute = new ObjectAction() {
+        finishRoute = new ObjectAction(this) {
                 @Override
                 public Bitmap getImage() {
                     return ImageLoader.getImage("end_route");
@@ -131,7 +146,22 @@ public class City implements GameObject{
                 public String getCommand() {
                     return "FinishRoute";
                 }
-            };
+
+            @Override
+            public void preAction() {
+
+            }
+
+            @Override
+            public void postAction() {
+
+            }
+
+            @Override
+            public void postError() {
+
+            }
+        };
         if (finishRoute.isEnabled()) Actions.add(finishRoute);
         return Actions;
     }
