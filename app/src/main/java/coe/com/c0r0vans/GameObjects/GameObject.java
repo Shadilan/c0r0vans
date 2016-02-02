@@ -12,49 +12,52 @@ import java.util.ArrayList;
  * @author Shadilan
  */
 public interface GameObject {
-
+      int ICON_SMALL=16;
+      int ICON_MEDIUM=17;
+      int ICON_LARGE=18;
     /**
      * Return image of object
      * @return Image to draw object
      */
-    public Bitmap getImage();
+     Bitmap getImage();
 
     /**
      * Return mapMarker seted to object
      * @return mapMarker
      */
-    public Marker getMarker();
+     Marker getMarker();
 
     /**
      * Set marker of object on map
      * @param m Marker of object
      */
-    public void setMarker(Marker m);
+     void setMarker(Marker m);
 
     /**
      * Load object from JSON
      * @param obj JSON to Load
      */
-    public void loadJSON(JSONObject obj);
+     void loadJSON(JSONObject obj);
 
     /**
      * Actions to do on remove object
      */
-    public void RemoveObject();
+     void RemoveObject();
 
     /**
      * Generate Info about object
      * @return info about object
      */
-    public String getInfo();
+     String getInfo();
 
     /**
      * Get Action list
      * @return ArrayList of Actions for object
      */
-    public ArrayList<ObjectAction> getActions();
+     ArrayList<ObjectAction> getActions();
 
-    public String getGUID();
+     String getGUID();
 
+     void changeMarkerSize(int Type);
 
 }

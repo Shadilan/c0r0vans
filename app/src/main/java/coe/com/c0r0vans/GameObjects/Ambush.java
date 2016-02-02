@@ -14,6 +14,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import coe.com.c0r0vans.R;
 import utility.ImageLoader;
 
 /**
@@ -34,7 +35,7 @@ public class Ambush implements GameObject {
         Log.d("Debug info","Ambush loaded.");
         this.map=map;
         loadJSON(obj);
-        mark.setIcon(BitmapDescriptorFactory.fromBitmap(getImage()));
+        changeMarkerSize((int) map.getCameraPosition().zoom);
         mark.setAnchor(0.5f, 1);
     }
     @Override
@@ -61,7 +62,7 @@ public class Ambush implements GameObject {
             int Lng=obj.getInt("Lng");
             if (mark==null) {
                 setMarker(map.addMarker(new MarkerOptions().position(new LatLng(Lat / 1e6, Lng / 1e6))));
-                mark.setIcon(BitmapDescriptorFactory.fromBitmap(getImage()));
+                changeMarkerSize((int) map.getCameraPosition().zoom);
             } else {
                 mark.setPosition(new LatLng(Lat / 1e6, Lng / 1e6));
             }
@@ -127,5 +128,17 @@ public class Ambush implements GameObject {
     @Override
     public String getGUID() {
         return GUID;
+    }
+
+    @Override
+    public void changeMarkerSize(int Type) {
+        switch (Type){
+            case GameObject.ICON_SMALL: mark.setIcon(BitmapDescriptorFactory.fromResource(R.mipmap.ambush_s));
+                break;
+            case GameObject.ICON_MEDIUM: mark.setIcon(BitmapDescriptorFactory.fromResource(R.mipmap.ambush_m));
+                break;
+            case GameObject.ICON_LARGE: mark.setIcon(BitmapDescriptorFactory.fromResource(R.mipmap.ambush));
+                break;
+        }
     }
 }

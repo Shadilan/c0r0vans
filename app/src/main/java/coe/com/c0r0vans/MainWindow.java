@@ -287,6 +287,13 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
             @Override
             public void onPlayerInfo(JSONObject response) {
                 player.loadJSON(response);
+                TextView am= (TextView) findViewById(R.id.levelAmount);
+                am.setText(String.valueOf(player.getLevel()));
+                am= (TextView) findViewById(R.id.expAmount);
+                am.setText(String.valueOf(player.getExp()));
+                am= (TextView) findViewById(R.id.goldAmount);
+                am.setText(String.valueOf(player.getGold()));
+
             }
 
             @Override
@@ -369,6 +376,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                     case 18:clientZoom=16;
 
                 }
+                for (GameObject obj:Objects) obj.changeMarkerSize(clientZoom);
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(GPSInfo.getInstance().GetLat() / 1e6, GPSInfo.getInstance().GetLng() / 1e6), clientZoom));
             }
         });

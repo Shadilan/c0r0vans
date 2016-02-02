@@ -18,6 +18,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import coe.com.c0r0vans.R;
 import utility.GPSInfo;
 import utility.ImageLoader;
 import utility.ResourceString;
@@ -61,6 +62,12 @@ public class Player implements GameObject{
     public String getGUID(){
         return GUID;
     }
+
+    @Override
+    public void changeMarkerSize(int Type) {
+        mark.setIcon(BitmapDescriptorFactory.fromResource(R.mipmap.marker));
+    }
+
     public Player(GoogleMap mMap){
         image= ImageLoader.getImage("hero");
         Bitmap mimage= ImageLoader.getImage("marker");
@@ -72,7 +79,7 @@ public class Player implements GameObject{
         circleOptions.strokeColor(Color.RED);
         circleOptions.strokeWidth(1);
         circle=mMap.addCircle(circleOptions);
-        mark.setIcon(BitmapDescriptorFactory.fromBitmap(mimage));
+        changeMarkerSize((int) map.getCameraPosition().zoom);
         mark.setAnchor(0.5f, 0.5f);
         Upgrades=new ArrayList<>();
         Routes=new ArrayList<>();

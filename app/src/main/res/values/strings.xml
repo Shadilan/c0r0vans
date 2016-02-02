@@ -24,5 +24,6 @@
     <string name="most_in">Most reach in</string>
     <string name="title_activity_main">Information</string>
     <string name="ambush">Ambush</string>
+    <string name="google_app_id" translatable="false">111416</string>
 
 </resources>

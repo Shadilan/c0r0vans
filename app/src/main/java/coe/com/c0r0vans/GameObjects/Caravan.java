@@ -13,6 +13,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import coe.com.c0r0vans.R;
 import utility.ImageLoader;
 
 /**
@@ -34,7 +35,7 @@ public class Caravan implements GameObject {
         image= ImageLoader.getImage("caravan");
 
         mark=map.addMarker(new MarkerOptions().position(new LatLng(Lat / 1e6, Lng / 1e6)));
-        mark.setIcon(BitmapDescriptorFactory.fromBitmap(getImage()));
+        changeMarkerSize((int) map.getCameraPosition().zoom);
         mark.setAnchor(0.5f, 0.5f);
         loadJSON(obj);
 
@@ -55,7 +56,7 @@ public class Caravan implements GameObject {
     @Override
     public void setMarker(Marker m) {
         mark=m;
-        m.setIcon(BitmapDescriptorFactory.fromBitmap(image));
+        changeMarkerSize((int) map.getCameraPosition().zoom);
     }
 
     @Override
@@ -125,5 +126,16 @@ public class Caravan implements GameObject {
 
         if (dropRoute.isEnabled())Actions.add(dropRoute);
         return Actions;
+    }
+    @Override
+    public void changeMarkerSize(int Type) {
+        switch (Type){
+            case GameObject.ICON_SMALL: mark.setIcon(BitmapDescriptorFactory.fromResource(R.mipmap.caravan_s));
+                break;
+            case GameObject.ICON_MEDIUM: mark.setIcon(BitmapDescriptorFactory.fromResource(R.mipmap.caravan_m));
+                break;
+            case GameObject.ICON_LARGE: mark.setIcon(BitmapDescriptorFactory.fromResource(R.mipmap.caravan));
+                break;
+        }
     }
 }

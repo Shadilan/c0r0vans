@@ -13,6 +13,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import coe.com.c0r0vans.R;
 import utility.ImageLoader;
 
 /**
@@ -35,7 +36,7 @@ public class City implements GameObject{
         image=ImageLoader.getImage("city");
 
         mark=map.addMarker(new MarkerOptions().position(new LatLng(Lat / 1e6, Lng / 1e6)));
-        mark.setIcon(BitmapDescriptorFactory.fromBitmap(getImage()));
+        changeMarkerSize((int) map.getCameraPosition().zoom);
         mark.setAnchor(0.5f,1);
         loadJSON(obj);
 
@@ -56,7 +57,7 @@ public class City implements GameObject{
     @Override
     public void setMarker(Marker m) {
         mark=m;
-        m.setIcon(BitmapDescriptorFactory.fromBitmap(image));
+        changeMarkerSize((int) map.getCameraPosition().zoom);
         mark.setAnchor(0.5f, 1);
     }
 
@@ -164,5 +165,16 @@ public class City implements GameObject{
         };
         if (finishRoute.isEnabled()) Actions.add(finishRoute);
         return Actions;
+    }
+    @Override
+    public void changeMarkerSize(int Type) {
+        switch (Type){
+            case GameObject.ICON_SMALL: mark.setIcon(BitmapDescriptorFactory.fromResource(R.mipmap.city_s));
+                break;
+            case GameObject.ICON_MEDIUM: mark.setIcon(BitmapDescriptorFactory.fromResource(R.mipmap.city_m));
+                break;
+            case GameObject.ICON_LARGE: mark.setIcon(BitmapDescriptorFactory.fromResource(R.mipmap.city));
+                break;
+        }
     }
 }
