@@ -408,21 +408,24 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
      */
     private void StartTickTimer() {
         int delay = 1000;
+
         if (serverConnect.getInstance().isLogin() && !firstRun) {
             Log.d("Debug info","Speed:"+GPSInfo.getInstance().getSpeed());
             if (GPSInfo.getInstance().getSpeed() < 30) delay = 40000;
             else if (GPSInfo.getInstance().getSpeed() > 30) delay = 20000;
+
         }
         Log.d("DebugCall", "postDelayed");
-        myHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                Tick();
-            }
-        }, delay);
+        Log.d("Debug info","Delay:"+delay);
+        myHandler.postDelayed(myRunable, delay);
 
     }
-
+    Runnable myRunable=new Runnable() {
+        @Override
+        public void run() {
+            Tick();
+        }
+    };
     /**
      * Timed action on tick;
      */
@@ -449,6 +452,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
     @Override
     protected void onPause(){
         super.onPause();
+        myHandler.removeCallbacks(myRunable);
         job=false;
 
     }
