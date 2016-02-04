@@ -136,11 +136,12 @@ public class MainActivity extends AppCompatActivity {
         ((TextView)findViewById(R.id.goldInfo)).setText(String.valueOf(player.getGold()));
         ((TextView)findViewById(R.id.caravanInfo)).setText(String.valueOf(player.getCaravans()));
         ((TextView)findViewById(R.id.ambushLeftInfo)).setText(String.valueOf(player.getAmbushLeft()));
-        ((TextView)findViewById(R.id.ambushSetInfo)).setText(String.valueOf(player.getAmbushMax()-player.getAmbushLeft()));
-        ((TextView)findViewById(R.id.mostReachIn)).setText(String.valueOf(player.getMostReachIn())+"км");
+        ((TextView)findViewById(R.id.ambushSetInfo)).setText(String.valueOf(player.getAmbushMax() - player.getAmbushLeft()));
+        ((TextView)findViewById(R.id.mostReachIn)).setText(String.valueOf(player.getMostReachIn()) + "км");
 
         GridLayout gl= (GridLayout) findViewById(R.id.upgradeInfo);
         gl.removeAllViews();
+        gl.setRowCount(player.getUpgrades().size());
         for (Upgrade u:player.getUpgrades()){
             ImageView iv=new ImageView(getApplicationContext());
             iv.setImageBitmap(u.getImage());
@@ -152,9 +153,11 @@ public class MainActivity extends AppCompatActivity {
 
             gl.addView(info);
         }
+
         gl=(GridLayout) findViewById(R.id.routeInfo);
 
         gl.removeAllViews();
+        gl.setRowCount(player.getRoutes().size());
         for (Route r:player.getRoutes()){
             TextView info=new TextView(getApplicationContext());
             info.setSingleLine(true);
@@ -166,6 +169,7 @@ public class MainActivity extends AppCompatActivity {
 
             gl.addView(info);
         }
+
     }
     @Override
     protected void onResume() {

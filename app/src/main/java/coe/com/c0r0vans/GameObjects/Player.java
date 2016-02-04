@@ -3,6 +3,7 @@ package coe.com.c0r0vans.GameObjects;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.media.Image;
+import android.util.Log;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -125,7 +126,13 @@ public class Player implements GameObject{
             if (obj.has("Upgrades")){
                 JSONArray upg=obj.getJSONArray("Upgrades");
                 Upgrades.clear();
-                for (int i=0;i<upg.length();i++) Upgrades.add(new Upgrade(upg.getJSONObject(i)));
+                Log.d("DebugInfo", "Length" + upg.length());
+                for (int i=0;i<upg.length();i++) {
+                    Upgrades.add(new Upgrade(upg.getJSONObject(i)));
+
+                }
+                Log.d("DebugInfo", "ULength" + Upgrades.size());
+
             }
             if (obj.has("Routes")){
                 JSONArray route=obj.getJSONArray("Routes");
