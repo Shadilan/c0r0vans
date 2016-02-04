@@ -24,6 +24,7 @@ public class Ambush implements GameObject {
     private Marker mark;
     private String OwnerName;
     private String GUID;
+    private boolean isOwner;
     private GoogleMap map;
 
     public  Ambush(GoogleMap map){
@@ -60,6 +61,7 @@ public class Ambush implements GameObject {
             GUID=obj.getString("GUID");
             int Lat=obj.getInt("Lat");
             int Lng=obj.getInt("Lng");
+            if (obj.has("Owner")) isOwner=obj.getBoolean("Owner");
             if (mark==null) {
                 setMarker(map.addMarker(new MarkerOptions().position(new LatLng(Lat / 1e6, Lng / 1e6))));
                 changeMarkerSize((int) map.getCameraPosition().zoom);
@@ -78,7 +80,9 @@ public class Ambush implements GameObject {
 
     @Override
     public String getInfo() {
-        return "Это ЗАСАДА!!!";
+        if (isOwner)
+        return "Ваша верные войны ждут тут вражеских контрабандистов в Засаде.";
+        else return "Засада ожидает здесь не осторожных караванщиков.";
     }
 
     ObjectAction removeAmbush;
@@ -132,13 +136,28 @@ public class Ambush implements GameObject {
 
     @Override
     public void changeMarkerSize(int Type) {
-        switch (Type){
-            case GameObject.ICON_SMALL: mark.setIcon(BitmapDescriptorFactory.fromResource(R.mipmap.ambush_s));
-                break;
-            case GameObject.ICON_MEDIUM: mark.setIcon(BitmapDescriptorFactory.fromResource(R.mipmap.ambush_m));
-                break;
-            case GameObject.ICON_LARGE: mark.setIcon(BitmapDescriptorFactory.fromResource(R.mipmap.ambush));
-                break;
+        if (isOwner)
+        {
+            switch (Type){
+                case GameObject.ICON_SMALL: mark.setIcon(BitmapDescriptorFactory.fromResource(R.mipmap.ambush_self_s));
+                    break;
+                case GameObject.ICON_MEDIUM: mark.setIcon(BitmapDescriptorFactory.fromResource(R.mipmap.ambush_self_m));
+                    break;
+                case GameObject.ICON_LARGE: mark.setIcon(BitmapDescriptorFactory.fromResource(R.mipmap.ambush_self));
+                    break;
+            }
+        } else {
+            switch (Type) {
+                case GameObject.ICON_SMALL:
+                    mark.setIcon(BitmapDescriptorFactory.fromResource(R.mipmap.ambush_s));
+                    break;
+                case GameObject.ICON_MEDIUM:
+                    mark.setIcon(BitmapDescriptorFactory.fromResource(R.mipmap.ambush_m));
+                    break;
+                case GameObject.ICON_LARGE:
+                    mark.setIcon(BitmapDescriptorFactory.fromResource(R.mipmap.ambush));
+                    break;
+            }
         }
     }
 }

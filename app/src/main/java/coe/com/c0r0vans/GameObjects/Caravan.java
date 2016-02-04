@@ -24,6 +24,7 @@ public class Caravan implements GameObject {
     private String GUID;
     private Bitmap image;
     private GoogleMap map;
+    private boolean isOwner=false;
     public String getGUID() {
         return GUID;
     }
@@ -65,11 +66,13 @@ public class Caravan implements GameObject {
             GUID=obj.getString("GUID");
             int Lat=obj.getInt("Lat");
             int Lng=obj.getInt("Lng");
+            if (obj.has("Owner")) isOwner=obj.getBoolean("Owner");
             if (mark==null) {
                 setMarker(map.addMarker(new MarkerOptions().position(new LatLng(Lat / 1e6, Lng / 1e6))));
             } else {
                 mark.setPosition(new LatLng(Lat / 1e6, Lng / 1e6));
             }
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -83,7 +86,9 @@ public class Caravan implements GameObject {
 
     @Override
     public String getInfo() {
-        return "Caravan";
+
+        if (isOwner) return "Ваш караван направляется к цели, готовясь принести вам золото.";
+            else return "Чейто караван, проезжает звеня не ВАШИМ золотом.";
     }
     private ObjectAction dropRoute;
     @Override

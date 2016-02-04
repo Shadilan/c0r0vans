@@ -13,6 +13,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.android.gms.maps.model.Circle;
+
 import org.w3c.dom.Text;
 
 import java.util.ArrayList;
@@ -51,7 +53,7 @@ public class ActionView extends LinearLayout {
     private LinearLayout ActionList;
     private ArrayList<ObjectAction> actions;
     private ImageButton close;
-
+    public Circle clickpos;
 
     private TextView    title;
     HorizontalScrollView horizontalScrollView;
@@ -78,6 +80,10 @@ public class ActionView extends LinearLayout {
     }
 
     public void HideView(){
+        if (clickpos!=null){
+            clickpos.remove();
+            clickpos=null;
+        }
         this.setVisibility(GONE);
     }
     public void ShowView(){
@@ -99,7 +105,7 @@ public class ActionView extends LinearLayout {
         } else if (SelectedObject.getInstance().getTarget() instanceof Ambush)
         {
             title.setText("Засада");
-            ObjectDesc.setText("Засада ожидает здесь не осторожных караванщиков.");
+            ObjectDesc.setText(SelectedObject.getInstance().getTarget().getInfo());
         } else if (SelectedObject.getInstance().getTarget() instanceof Caravan)
         {
             title.setText("Караван");

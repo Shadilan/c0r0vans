@@ -26,7 +26,7 @@ public class ImageLoader {
         images.put("hero",BitmapFactory.decodeResource(context.getResources(), R.mipmap.hero));
         images.put("marker",BitmapFactory.decodeResource(context.getResources(), R.mipmap.marker));
         images.put("city",BitmapFactory.decodeResource(context.getResources(), R.mipmap.city));
-        images.put("ambush",BitmapFactory.decodeResource(context.getResources(), R.mipmap.ambush));
+        images.put("ambush",BitmapFactory.decodeResource(context.getResources(), R.mipmap.ambush_img));
         images.put("caravan",BitmapFactory.decodeResource(context.getResources(), R.mipmap.caravan));
         //Actions
             //City

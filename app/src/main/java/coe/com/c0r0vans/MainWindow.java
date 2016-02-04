@@ -68,7 +68,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
     private ImageView connect_img;
     private int SendedRequest = 0;
     private int clientZoom = 17;
-    private Circle clickpos;
+
     private TextView LogView;
     private ImageView LogButton;
 
@@ -100,14 +100,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
         }
     }
 
-    @Override
-    public void onWindowFocusChanged(boolean hasFocus) {
-        super.onWindowFocusChanged(hasFocus);
-        if (hasFocus && clickpos != null) {
-            clickpos.remove();
-            clickpos = null;
-        }
-    }
+
 
     /**
      * Make initialization.
@@ -323,7 +316,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                 float[] distances = new float[1];
                 Location.distanceBetween(latLng.latitude, latLng.longitude, player.getMarker().getPosition().latitude, player.getMarker().getPosition().longitude, distances);
                 if (distances.length > 0 && distances[0] < 50) {
-                    //Intent myIntent = new Intent(getApplicationContext(), ActionsActivity.class);
+
                     SelectedObject.getInstance().setExecuter(player);
                     SelectedObject.getInstance().setTarget(player);
                     SelectedObject.getInstance().setPoint(latLng);
@@ -332,8 +325,11 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                     circleOptions.radius(player.getAmbushRad());
                     circleOptions.strokeColor(Color.RED);
                     circleOptions.strokeWidth(2);
-                    clickpos = mMap.addCircle(circleOptions);
-                    //startActivity(myIntent);
+                    ActionView actionView=(ActionView) findViewById(R.id.actionView);
+
+
+                    actionView.clickpos = mMap.addCircle(circleOptions);
+                    actionView.ShowView();
                 }
             }
         });
