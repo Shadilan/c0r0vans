@@ -3,7 +3,6 @@ package coe.com.c0r0vans;
 import android.content.Context;
 import android.graphics.Color;
 import android.util.AttributeSet;
-import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -14,8 +13,13 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 
+import coe.com.c0r0vans.GameObjects.Ambush;
+import coe.com.c0r0vans.GameObjects.Caravan;
+import coe.com.c0r0vans.GameObjects.City;
 import coe.com.c0r0vans.GameObjects.ObjectAction;
 import coe.com.c0r0vans.GameObjects.Player;
 import coe.com.c0r0vans.GameObjects.SelectedObject;
@@ -30,79 +34,57 @@ public class ActionView extends LinearLayout {
 
     public ActionView(Context context) {
         super(context);
-
+        init();
     }
 
     public ActionView(Context context, AttributeSet attrs) {
         super(context, attrs);
-
+        init();
     }
 
     public ActionView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-
+        init();
     }
-    private boolean needInit=true;
     private ImageView ObjectImage;
     private TextView ObjectDesc;
     private LinearLayout ActionList;
     private ArrayList<ObjectAction> actions;
-    private Button close;
-    private LinearLayout cont;
+    private ImageButton close;
+
+
+    private TextView    title;
     HorizontalScrollView horizontalScrollView;
     public void init(){
-        this.setOrientation(VERTICAL);
-        close=new Button(this.getContext());
+        inflate(getContext(), R.layout.actions_layout, this);
 
-        close.setText("X");
-        close.setGravity(Gravity.RIGHT);
+    }
+
+    @Override
+    protected void onFinishInflate() {
+        super.onFinishInflate();
+        title= (TextView) findViewById(R.id.actionTitle);
+        close= (ImageButton) findViewById(R.id.closeButton);
         close.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 HideView();
             }
         });
-        this.addView(close);
-        this.setBackgroundColor(Color.TRANSPARENT);
-        cont=new LinearLayout(this.getContext());
-        cont.setOrientation(HORIZONTAL);
-        this.addView(cont);
-        ObjectImage=new ImageView(getContext());
-        cont.addView(ObjectImage);
-        ObjectDesc=new TextView(this.getContext());
-        ObjectDesc.setSingleLine(false);
-        ObjectDesc.setBackgroundColor(Color.WHITE);
-        cont.addView(ObjectDesc);
-        horizontalScrollView=new HorizontalScrollView(this.getContext());
 
-        this.addView(horizontalScrollView);
-        ActionList=new LinearLayout(this.getContext());
-
-
-        horizontalScrollView.addView(ActionList);
-
+        ObjectImage= (ImageView) findViewById(R.id.TargetImage);
+        ObjectDesc= (TextView) findViewById(R.id.TargetInfo);
+        ActionList= (LinearLayout) findViewById(R.id.ActionList);
     }
-    ViewGroup.LayoutParams fullWrap=new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-    ViewGroup.LayoutParams heightWrap=new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-    private void setLayout(){
-        close.setLayoutParams(fullWrap);
-        cont.setLayoutParams(heightWrap);
-        ObjectImage.setLayoutParams(fullWrap);
-        horizontalScrollView.setLayoutParams(heightWrap);
-        ActionList.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-        ActionList.setGravity(Gravity.CENTER_HORIZONTAL);
-    }
+
     public void HideView(){
         this.setVisibility(GONE);
     }
     public void ShowView(){
-        if (needInit){
-            init();
-            needInit=false;
-        }
+
         this.setVisibility(VISIBLE);
         if (SelectedObject.getInstance().getTarget() instanceof Player){
-
+            title.setText("");
             ObjectImage.setVisibility(View.INVISIBLE);
             ObjectDesc.setVisibility(View.INVISIBLE);
         } else
@@ -110,13 +92,24 @@ public class ActionView extends LinearLayout {
             ObjectImage.setVisibility(View.VISIBLE);
             ObjectDesc.setVisibility(View.VISIBLE);
         }
+        if (SelectedObject.getInstance().getTarget() instanceof City)
+        {
+            title.setText(((City) SelectedObject.getInstance().getTarget()).getCityName());
+            ObjectDesc.setText(SelectedObject.getInstance().getTarget().getInfo());
+        } else if (SelectedObject.getInstance().getTarget() instanceof Ambush)
+        {
+            title.setText("Засада");
+            ObjectDesc.setText("Засада ожидает здесь не осторожных караванщиков.");
+        } else if (SelectedObject.getInstance().getTarget() instanceof Caravan)
+        {
+            title.setText("Караван");
+            ObjectDesc.setText(SelectedObject.getInstance().getTarget().getInfo());
+        }
+
         ObjectImage.setImageBitmap(SelectedObject.getInstance().getTarget().getImage());
-        ObjectDesc.setText(SelectedObject.getInstance().getTarget().getInfo());
-        ObjectDesc.setWidth(this.getWidth() - 5 - ObjectImage.getWidth());
-        ObjectDesc.setX(ObjectImage.getWidth() + 2);
-        ObjectDesc.setHeight(ObjectImage.getHeight());
+
         reloadActions();
-        setLayout();
+
     }
     private void reloadActions(){
         actions=SelectedObject.getInstance().getTarget().getActions();

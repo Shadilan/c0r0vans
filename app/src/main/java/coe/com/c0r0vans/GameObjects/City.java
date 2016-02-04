@@ -23,6 +23,7 @@ public class City implements GameObject{
     private Marker mark;
     private String GUID;
     private String CityName;
+    private String upgrade;
     private Bitmap image;
     private GoogleMap map;
     public String getGUID() {
@@ -73,6 +74,8 @@ public class City implements GameObject{
             } else {
                 mark.setPosition(new LatLng(Lat / 1e6, Lng / 1e6));
             }
+            if (obj.has("Name")) CityName=obj.getString("Name");
+            if (obj.has("UpgradeType")) upgrade=obj.getString("UpgradeType");
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -86,7 +89,7 @@ public class City implements GameObject{
 
     @Override
     public String getInfo() {
-        return "Name:"+CityName;
+        return "В городе можно приобрести "+upgrade;
     }
 
     public String getCityName(){return CityName;}

@@ -323,7 +323,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                 float[] distances = new float[1];
                 Location.distanceBetween(latLng.latitude, latLng.longitude, player.getMarker().getPosition().latitude, player.getMarker().getPosition().longitude, distances);
                 if (distances.length > 0 && distances[0] < 50) {
-                    Intent myIntent = new Intent(getApplicationContext(), ActionsActivity.class);
+                    //Intent myIntent = new Intent(getApplicationContext(), ActionsActivity.class);
                     SelectedObject.getInstance().setExecuter(player);
                     SelectedObject.getInstance().setTarget(player);
                     SelectedObject.getInstance().setPoint(latLng);
@@ -333,7 +333,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                     circleOptions.strokeColor(Color.RED);
                     circleOptions.strokeWidth(2);
                     clickpos = mMap.addCircle(circleOptions);
-                    startActivity(myIntent);
+                    //startActivity(myIntent);
                 }
             }
         });
@@ -464,5 +464,16 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
         job=true;
         StartTickTimer();
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (((ActionView) findViewById(R.id.actionView)).getVisibility()==View.VISIBLE)
+        {
+            ((ActionView) findViewById(R.id.actionView)).setVisibility(View.GONE);
+        } else
+        {
+            super.onBackPressed();
+        }
     }
 }
