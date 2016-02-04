@@ -275,6 +275,15 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
             @Override
             public void onAction(JSONObject response) {
                 Log.d("Debug info", "action Done:" + response.toString());
+                if (response.has("Result")) {
+                    try {
+                        LogView.append("\n"  + df.format(new Date()) + ":"+ response.getString("Message"));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                } else
+                    LogView.append("\n"  + df.format(new Date()) + ":"+ "Ok.");
+
             }
 
             @Override
@@ -464,9 +473,9 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
 
     @Override
     public void onBackPressed() {
-        if (((ActionView) findViewById(R.id.actionView)).getVisibility()==View.VISIBLE)
+        if (findViewById(R.id.actionView).getVisibility()==View.VISIBLE)
         {
-            ((ActionView) findViewById(R.id.actionView)).setVisibility(View.GONE);
+            findViewById(R.id.actionView).setVisibility(View.GONE);
         } else
         {
             super.onBackPressed();
