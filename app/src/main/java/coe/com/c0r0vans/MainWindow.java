@@ -345,11 +345,12 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                     //float[] distances=new float[1];
                     //Location.distanceBetween(marker.getPosition().latitude, marker.getPosition().longitude, player.getMarker().getPosition().latitude, player.getMarker().getPosition().longitude, distances);
                     //if (distances!=null && distances.length>0 && distances[0]<100) {
-                    Intent myIntent = new Intent(getApplicationContext(), ActionsActivity.class);
+                    //Intent myIntent = new Intent(getApplicationContext(), ActionsActivity.class);
                     SelectedObject.getInstance().setExecuter(player);
                     SelectedObject.getInstance().setTarget(target);
                     SelectedObject.getInstance().setPoint(marker.getPosition());
-                    startActivity(myIntent);
+                    ((ActionView) findViewById(R.id.actionView)).ShowView();
+                    //startActivity(myIntent);
                 }
                 //}
                 return false;

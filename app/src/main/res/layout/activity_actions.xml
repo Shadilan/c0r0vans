@@ -32,7 +32,8 @@
                 android:maxHeight="100dp"
                 android:singleLine="false"
                 android:longClickable="false"
-                android:enabled="true" />
+                android:enabled="true"
+                android:gravity="right" />
         </LinearLayout>
 
         <HorizontalScrollView
