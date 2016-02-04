@@ -96,6 +96,7 @@ public class City implements GameObject{
 
     private ObjectAction startRoute;
     private ObjectAction finishRoute;
+    private ObjectAction butUpgrade;
     @Override
     public ArrayList<ObjectAction> getActions() {
         ArrayList<ObjectAction> Actions=new ArrayList<>();
@@ -167,6 +168,40 @@ public class City implements GameObject{
             }
         };
         if (finishRoute.isEnabled()) Actions.add(finishRoute);
+
+        if (butUpgrade==null)
+            butUpgrade = new ObjectAction(this) {
+                @Override
+                public Bitmap getImage() {
+                    return ImageLoader.getImage("buy_item");
+                }
+
+                @Override
+                public String getInfo() {
+                    return "Купить апгрейд "+upgrade;
+                }
+
+                @Override
+                public String getCommand() {
+                    return "BuyUpgrade";
+                }
+
+                @Override
+                public void preAction() {
+
+                }
+
+                @Override
+                public void postAction() {
+
+                }
+
+                @Override
+                public void postError() {
+
+                }
+            };
+        Actions.add(butUpgrade);
         return Actions;
     }
     @Override
