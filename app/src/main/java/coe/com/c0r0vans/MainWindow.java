@@ -184,7 +184,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
             @Override
             public void onLocationChanged(Location location) {
                 LatLng target = new LatLng(location.getLatitude(), location.getLongitude());
-                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(target, clientZoom));
+                mMap.animateCamera(CameraUpdateFactory.newLatLng(target));
 
                 player.getMarker().setPosition(target);
                 player.getCircle().setCenter(target);
@@ -277,23 +277,23 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                 Log.d("Debug info", "action Done:" + response.toString());
                 if (response.has("Result")) {
                     try {
-                        LogView.append("\n"  + df.format(new Date()) + ":"+ response.getString("Message"));
+                        LogView.append("\n" + df.format(new Date()) + ":" + response.getString("Message"));
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
                 } else
-                    LogView.append("\n"  + df.format(new Date()) + ":"+ "Ok.");
+                    LogView.append("\n" + df.format(new Date()) + ":" + "Ok.");
 
             }
 
             @Override
             public void onPlayerInfo(JSONObject response) {
                 player.loadJSON(response);
-                TextView am= (TextView) findViewById(R.id.levelAmount);
+                TextView am = (TextView) findViewById(R.id.levelAmount);
                 am.setText(String.valueOf(player.getLevel()));
-                am= (TextView) findViewById(R.id.expAmount);
+                am = (TextView) findViewById(R.id.expAmount);
                 am.setText(String.valueOf(player.getExp()));
-                am= (TextView) findViewById(R.id.goldAmount);
+                am = (TextView) findViewById(R.id.goldAmount);
                 am.setText(String.valueOf(player.getGold()));
 
             }
@@ -334,7 +334,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                     circleOptions.radius(player.getAmbushRad());
                     circleOptions.strokeColor(Color.RED);
                     circleOptions.strokeWidth(2);
-                    ActionView actionView=(ActionView) findViewById(R.id.actionView);
+                    ActionView actionView = (ActionView) findViewById(R.id.actionView);
 
 
                     actionView.clickpos = mMap.addCircle(circleOptions);
@@ -347,29 +347,16 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
             public boolean onMarkerClick(Marker marker) {
                 GameObject target = findObjectByMarker(marker);
                 if (target != null) {
-                    //float[] distances=new float[1];
-                    //Location.distanceBetween(marker.getPosition().latitude, marker.getPosition().longitude, player.getMarker().getPosition().latitude, player.getMarker().getPosition().longitude, distances);
-                    //if (distances!=null && distances.length>0 && distances[0]<100) {
-                    //Intent myIntent = new Intent(getApplicationContext(), ActionsActivity.class);
                     SelectedObject.getInstance().setExecuter(player);
                     SelectedObject.getInstance().setTarget(target);
                     SelectedObject.getInstance().setPoint(marker.getPosition());
                     ((ActionView) findViewById(R.id.actionView)).ShowView();
-                    //startActivity(myIntent);
                 }
                 //}
                 return false;
             }
         });
-        mMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
-            @Override
-            public void onCameraChange(CameraPosition cameraPosition) {
-                if (GPSInfo.getInstance().GetLat() != cameraPosition.target.latitude * 1e6 || GPSInfo.getInstance().GetLng() != cameraPosition.target.longitude * 1e6) {
-                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(GPSInfo.getInstance().GetLat() / 1e6, GPSInfo.getInstance().GetLng() / 1e6), clientZoom));
-                }
 
-            }
-        });
         ImageView zoomButton= (ImageView) findViewById(R.id.zoomButton);
         zoomButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -383,7 +370,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
 
                 }
                 for (GameObject obj:Objects) obj.changeMarkerSize(clientZoom);
-                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(GPSInfo.getInstance().GetLat() / 1e6, GPSInfo.getInstance().GetLng() / 1e6), clientZoom));
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(GPSInfo.getInstance().GetLat() / 1e6, GPSInfo.getInstance().GetLng() / 1e6), clientZoom));
             }
         });
 
