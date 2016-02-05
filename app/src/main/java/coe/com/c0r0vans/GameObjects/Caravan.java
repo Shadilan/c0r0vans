@@ -115,7 +115,7 @@ public class Caravan implements GameObject {
             @Override
             public void preAction() {
                 setEnable(false);
-                owner.getMarker().setVisible(false);
+                //owner.getMarker().setVisible(false);
             }
 
             @Override
@@ -129,7 +129,7 @@ public class Caravan implements GameObject {
             }
         };
 
-        if (dropRoute.isEnabled())Actions.add(dropRoute);
+        if (dropRoute.isEnabled() && isOwner)Actions.add(dropRoute);
         return Actions;
     }
     @Override

@@ -6,6 +6,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -141,14 +142,16 @@ public class MainActivity extends AppCompatActivity {
 
         GridLayout gl= (GridLayout) findViewById(R.id.upgradeInfo);
         gl.removeAllViews();
-        gl.setRowCount(player.getUpgrades().size());
+        gl.setRowCount(player.getUpgrades().size()*2);
+
         for (Upgrade u:player.getUpgrades()){
             ImageView iv=new ImageView(getApplicationContext());
+            Log.d("DebugInfo","Upg show:"+u.getDescription());
             iv.setImageBitmap(u.getImage());
             gl.addView(iv);
             TextView info=new TextView(getApplicationContext());
             info.setSingleLine(false);
-            info.setText(u.getDescription());
+            info.setText(u.getName()+"\n"+u.getDescription());
             info.setTextColor(Color.BLACK);
 
             gl.addView(info);

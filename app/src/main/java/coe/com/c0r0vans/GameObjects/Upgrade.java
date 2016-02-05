@@ -35,5 +35,8 @@ public class Upgrade {
     public String getDescription(){
         return "Уровень "+Level+"\n"+Description;
     }
+    public String getName(){
+        return Name;
+    }
 
 }
