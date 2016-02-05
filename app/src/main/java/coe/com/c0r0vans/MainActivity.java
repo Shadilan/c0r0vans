@@ -18,10 +18,13 @@ import android.widget.TextView;
 
 import org.json.JSONObject;
 
+import coe.com.c0r0vans.GameObjects.CommandButton;
 import coe.com.c0r0vans.GameObjects.Player;
 import coe.com.c0r0vans.GameObjects.Route;
 import coe.com.c0r0vans.GameObjects.SelectedObject;
 import coe.com.c0r0vans.GameObjects.Upgrade;
+import utility.GPSInfo;
+import utility.ImageLoader;
 import utility.ServerListener;
 import utility.serverConnect;
 
@@ -146,12 +149,12 @@ public class MainActivity extends AppCompatActivity {
 
         for (Upgrade u:player.getUpgrades()){
             ImageView iv=new ImageView(getApplicationContext());
-            Log.d("DebugInfo","Upg show:"+u.getDescription());
+            Log.d("DebugInfo", "Upg show:" + u.getDescription());
             iv.setImageBitmap(u.getImage());
             gl.addView(iv);
             TextView info=new TextView(getApplicationContext());
             info.setSingleLine(false);
-            info.setText(u.getName()+"\n"+u.getDescription());
+            info.setText(u.getName() + "\n" + u.getDescription());
             info.setTextColor(Color.BLACK);
 
             gl.addView(info);
@@ -160,16 +163,28 @@ public class MainActivity extends AppCompatActivity {
         gl=(GridLayout) findViewById(R.id.routeInfo);
 
         gl.removeAllViews();
-        gl.setRowCount(player.getRoutes().size());
+        gl.setRowCount(player.getRoutes().size()*2);
         for (Route r:player.getRoutes()){
             TextView info=new TextView(getApplicationContext());
             info.setSingleLine(true);
-            info.setText(r.getStartName()+" - "+r.getDistance()+" - "+r.getFinishName());
+            info.setText(r.getStartName() + " - " + r.getDistance() + " - " + r.getFinishName());
             info.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
             info.setTextSize(15);
             info.setGravity(Gravity.CENTER);
             info.setTextColor(Color.BLACK);
 
+
+            CommandButton remove=new CommandButton(this.getApplicationContext(),r.getAction(),r.getGUID());
+            remove.setImageBitmap(ImageLoader.getImage("closebutton"));
+            remove.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    CommandButton  button= (CommandButton) v;
+                    serverConnect.getInstance().ExecCommand(button.getAction(),button.getGuid(),0,0,0,0);
+                    v.setVisibility(View.GONE);
+                }
+            });
+            gl.addView(remove);
             gl.addView(info);
         }
 
@@ -180,4 +195,5 @@ public class MainActivity extends AppCompatActivity {
         serverConnect.getInstance().getPlayerInfo();
 
     }
+
 }

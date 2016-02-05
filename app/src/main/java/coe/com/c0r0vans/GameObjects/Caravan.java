@@ -129,7 +129,7 @@ public class Caravan implements GameObject {
             }
         };
 
-        if (dropRoute.isEnabled() && isOwner)Actions.add(dropRoute);
+        //if (dropRoute.isEnabled() && isOwner && false)Actions.add(dropRoute);
         return Actions;
     }
     @Override

@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import coe.com.c0r0vans.GameObjects.Ambush;
 import coe.com.c0r0vans.GameObjects.Caravan;
 import coe.com.c0r0vans.GameObjects.City;
+import coe.com.c0r0vans.GameObjects.CommandButton;
 import coe.com.c0r0vans.GameObjects.ObjectAction;
 import coe.com.c0r0vans.GameObjects.Player;
 import coe.com.c0r0vans.GameObjects.SelectedObject;
@@ -30,7 +31,8 @@ import utility.GPSInfo;
 import utility.serverConnect;
 
 /**
- * Created by Shadilan on 04.02.2016.
+ * @author Shadilan
+ * Компонент для отображения действий
  */
 public class ActionView extends LinearLayout {
 
@@ -136,18 +138,5 @@ public class ActionView extends LinearLayout {
             ActionList.addView(btn);
         }
     }
-    private class CommandButton extends ImageButton {
 
-        public CommandButton(Context context) {
-            super(context);
-        }
-        public CommandButton(Context context,ObjectAction action) {
-            super(context);
-            this.action=action;
-        }
-        private ObjectAction action;
-        public ObjectAction getAction(){
-            return action;
-        }
-    }
 }

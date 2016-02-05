@@ -234,42 +234,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:rowCount="10"
-                android:columnCount="1"
+                android:columnCount="2"
                 android:rowOrderPreserved="true"
                 android:columnOrderPreserved="true"
                 android:id="@+id/routeInfo"
                 android:useDefaultMargins="false"
-                android:textAlignment="center">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Новгород"
-                    android:layout_gravity="left" />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="640км"
-                    android:layout_gravity="center_horizontal" />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Ростов"
-                    android:layout_gravity="right" />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Ростов"
-                    android:layout_gravity="left" />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="300км"
-                    android:layout_gravity="center_horizontal" />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Суздаль"
-                    android:layout_gravity="right" />
+                android:textAlignment="center"
+                android:alignmentMode="alignBounds">
+
             </GridLayout>
         </ScrollView>
     </LinearLayout>

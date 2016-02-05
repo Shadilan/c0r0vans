@@ -232,7 +232,7 @@ public class Player implements GameObject{
 
             }
         };
-        if (dropRoute.isEnabled()) Actions.add(dropRoute);
+        //if (false) Actions.add(dropRoute);
 
 
         return Actions;

@@ -21,6 +21,8 @@ public class ImageLoader {
      * @param context Application Context
      */
     public static void Loader(Context context){
+        //Buttons
+        images.put("closebutton",BitmapFactory.decodeResource(context.getResources(), R.mipmap.closebutton));
         //Markers
         images.put("android",BitmapFactory.decodeResource(context.getResources(), R.mipmap.ic_launcher));
         images.put("hero",BitmapFactory.decodeResource(context.getResources(), R.mipmap.hero));
