@@ -353,7 +353,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                     ((ActionView) findViewById(R.id.actionView)).ShowView();
                 }
                 //}
-                return false;
+                return true;
             }
         });
 

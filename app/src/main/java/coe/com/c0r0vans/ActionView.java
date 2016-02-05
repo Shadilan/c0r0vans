@@ -2,6 +2,9 @@ package coe.com.c0r0vans;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.location.Location;
+import android.location.LocationListener;
+import android.os.Bundle;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
@@ -79,6 +82,7 @@ public class ActionView extends LinearLayout {
         ObjectImage= (ImageView) findViewById(R.id.TargetImage);
         ObjectDesc= (TextView) findViewById(R.id.TargetInfo);
         ActionList= (LinearLayout) findViewById(R.id.ActionList);
+
     }
 
     public void HideView(){
@@ -88,6 +92,7 @@ public class ActionView extends LinearLayout {
         }
         this.setVisibility(GONE);
     }
+    LocationListener locationListener;
     public void ShowView(){
 
         this.setVisibility(VISIBLE);
@@ -117,6 +122,49 @@ public class ActionView extends LinearLayout {
         ObjectImage.setImageBitmap(SelectedObject.getInstance().getTarget().getImage());
 
         reloadActions();
+        float[] distances = new float[1];
+        Location.distanceBetween(SelectedObject.getInstance().getTarget().getMarker().getPosition().latitude,
+                SelectedObject.getInstance().getTarget().getMarker().getPosition().longitude,
+                SelectedObject.getInstance().getExecuter().getMarker().getPosition().latitude,
+                SelectedObject.getInstance().getExecuter().getMarker().getPosition().longitude, distances);
+        if (distances.length > 0 && distances[0] < 50) {
+            ActionList.setVisibility(VISIBLE);
+        } else {
+            ActionList.setVisibility(GONE);
+        }
+        if (locationListener==null) {
+            locationListener = new LocationListener() {
+                @Override
+                public void onLocationChanged(Location location) {
+                    float[] distances = new float[1];
+                    Location.distanceBetween(SelectedObject.getInstance().getTarget().getMarker().getPosition().latitude,
+                            SelectedObject.getInstance().getTarget().getMarker().getPosition().longitude,
+                            SelectedObject.getInstance().getExecuter().getMarker().getPosition().latitude,
+                            SelectedObject.getInstance().getExecuter().getMarker().getPosition().longitude, distances);
+                    if (distances.length > 0 && distances[0] < 50) {
+                        ActionList.setVisibility(VISIBLE);
+                    } else {
+                        ActionList.setVisibility(GONE);
+                    }
+                }
+
+                @Override
+                public void onStatusChanged(String provider, int status, Bundle extras) {
+
+                }
+
+                @Override
+                public void onProviderEnabled(String provider) {
+
+                }
+
+                @Override
+                public void onProviderDisabled(String provider) {
+
+                }
+            };
+            GPSInfo.getInstance().AddLocationListener(locationListener);
+        }
 
     }
     private void reloadActions(){
