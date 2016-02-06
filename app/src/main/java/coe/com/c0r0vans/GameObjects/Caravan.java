@@ -88,7 +88,7 @@ public class Caravan implements GameObject {
     public String getInfo() {
 
         if (isOwner) return "Ваш караван направляется к цели, готовясь принести вам золото.";
-            else return "Чейто караван, проезжает звеня не ВАШИМ золотом.";
+            else return "Чейто караван проезжает, звеня не ВАШИМ золотом.";
     }
     private ObjectAction dropRoute;
     @Override

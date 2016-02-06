@@ -329,15 +329,21 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                     SelectedObject.getInstance().setExecuter(player);
                     SelectedObject.getInstance().setTarget(player);
                     SelectedObject.getInstance().setPoint(latLng);
-                    CircleOptions circleOptions = new CircleOptions();
-                    circleOptions.center(latLng);
-                    circleOptions.radius(player.getAmbushRad());
-                    circleOptions.strokeColor(Color.RED);
-                    circleOptions.strokeWidth(2);
+
                     ActionView actionView = (ActionView) findViewById(R.id.actionView);
+                    if (actionView.clickpos!=null){
+                        actionView.clickpos.setCenter(latLng);
+                        actionView.clickpos.setRadius(player.getAmbushRad());
+                    } else{
+                        CircleOptions circleOptions = new CircleOptions();
+                        circleOptions.center(latLng);
+                        circleOptions.radius(player.getAmbushRad());
+                        circleOptions.strokeColor(Color.RED);
+                        circleOptions.strokeWidth(2);
+                        actionView.clickpos = mMap.addCircle(circleOptions);
+                    }
 
 
-                    actionView.clickpos = mMap.addCircle(circleOptions);
                     actionView.ShowView();
                 }
             }
