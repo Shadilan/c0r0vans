@@ -31,14 +31,10 @@ public class Caravan implements GameObject {
 
     public Caravan(GoogleMap map,JSONObject obj) throws JSONException {
         this.map=map;
-        int Lat=obj.getInt("Lat");
-        int Lng=obj.getInt("Lng");
         image= ImageLoader.getImage("caravan");
-
-        mark=map.addMarker(new MarkerOptions().position(new LatLng(Lat / 1e6, Lng / 1e6)));
-        changeMarkerSize((int) map.getCameraPosition().zoom);
-        mark.setAnchor(0.5f, 0.5f);
         loadJSON(obj);
+        mark.setAnchor(0.5f, 0.5f);
+
 
 
     }
