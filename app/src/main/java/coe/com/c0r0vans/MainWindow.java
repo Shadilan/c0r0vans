@@ -339,8 +339,10 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                         circleOptions.center(latLng);
                         circleOptions.radius(player.getAmbushRad());
                         circleOptions.strokeColor(Color.RED);
-                        circleOptions.strokeWidth(2);
+                        circleOptions.strokeWidth(1);
+
                         actionView.clickpos = mMap.addCircle(circleOptions);
+
                     }
 
 

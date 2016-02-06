@@ -1,10 +1,13 @@
 package coe.com.c0r0vans.GameObjects;
 
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.util.Log;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.Circle;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -26,6 +29,8 @@ public class Ambush implements GameObject {
     private String GUID;
     private boolean isOwner;
     private GoogleMap map;
+    private int radius=30;
+    private Circle zone;
 
     public  Ambush(GoogleMap map){
         this.map=map;
@@ -61,13 +66,29 @@ public class Ambush implements GameObject {
             GUID=obj.getString("GUID");
             int Lat=obj.getInt("Lat");
             int Lng=obj.getInt("Lng");
+            LatLng latlng=new LatLng(Lat / 1e6, Lng / 1e6);
             if (obj.has("Owner")) isOwner=obj.getBoolean("Owner");
+            if (obj.has("Radius")) radius=obj.getInt("Radius");
+
             if (mark==null) {
                 setMarker(map.addMarker(new MarkerOptions().position(new LatLng(Lat / 1e6, Lng / 1e6))));
                 changeMarkerSize((int) map.getCameraPosition().zoom);
             } else {
-                mark.setPosition(new LatLng(Lat / 1e6, Lng / 1e6));
+                mark.setPosition(latlng);
             }
+            if (zone==null){
+                CircleOptions circleOptions = new CircleOptions();
+                circleOptions.center(latlng);
+                circleOptions.radius(radius);
+                circleOptions.strokeColor(Color.RED);
+                circleOptions.strokeWidth(1);
+                zone = map.addCircle(circleOptions);
+            } else
+            {
+                zone.setCenter(latlng);
+                zone.setRadius(radius);
+            }
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -75,7 +96,7 @@ public class Ambush implements GameObject {
 
     @Override
     public void RemoveObject() {
-        mark.remove();
+        mark.remove();zone.remove();
     }
 
     @Override

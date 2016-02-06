@@ -77,8 +77,8 @@ public class Player implements GameObject{
         CircleOptions circleOptions=new CircleOptions();
         circleOptions.center(new LatLng(GPSInfo.getInstance().GetLat() / 1E6, GPSInfo.getInstance().GetLng() / 1E6));
         circleOptions.radius(ActionDistance);
-        circleOptions.strokeColor(Color.RED);
-        circleOptions.strokeWidth(1);
+        circleOptions.strokeColor(Color.YELLOW);
+        circleOptions.strokeWidth(5);
         circle=mMap.addCircle(circleOptions);
         changeMarkerSize((int) map.getCameraPosition().zoom);
         mark.setAnchor(0.5f, 0.5f);

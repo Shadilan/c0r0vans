@@ -75,6 +75,7 @@
                 android:orientation="horizontal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
                 android:id="@+id/ActionList"
                 android:minHeight="80dp"
                 android:minWidth="80dp"
