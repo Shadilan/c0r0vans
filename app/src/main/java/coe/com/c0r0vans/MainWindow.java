@@ -1,5 +1,6 @@
 package coe.com.c0r0vans;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -52,13 +53,14 @@ import coe.com.c0r0vans.GameObjects.Player;
 import coe.com.c0r0vans.GameObjects.SelectedObject;
 
 import utility.GPSInfo;
+import utility.GameSettings;
 import utility.ImageLoader;
 import utility.ResourceString;
 import utility.ServerListener;
 import utility.serverConnect;
 
 public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
-
+    private static final int SETTINGS_CALL = 393;
     private GoogleMap mMap;
     private Player player;
     private ArrayList<GameObject> Objects;
@@ -112,6 +114,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
 
         ImageLoader.Loader(getApplicationContext());
         GPSInfo.getInstance(getApplicationContext());
+        GameSettings.init(getApplicationContext());
         serverConnect.getInstance().connect(getResources().getString(R.string.serveradress), this.getApplicationContext());
     }
 
@@ -159,6 +162,15 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
             }
         });
 
+        ImageView Settings = (ImageView) findViewById(R.id.settings);
+        Settings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getApplicationContext(), Settings.class);
+                startActivityForResult(i, SETTINGS_CALL);
+
+            }
+        });
 
         LogButton.setOnClickListener(new View.OnClickListener() {
             private boolean show = false;
@@ -474,6 +486,26 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
         } else
         {
             super.onBackPressed();
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case (SETTINGS_CALL): {
+                if (resultCode == Activity.RESULT_OK) {
+                    for (GameObject o:Objects){
+                        if (o instanceof Ambush){
+                            ((Ambush) o).showRadius();
+                        } else if (o instanceof City)
+                        {
+                            ((City) o).showRadius();
+                        }
+                    }
+                }
+                break;
+            }
         }
     }
 }

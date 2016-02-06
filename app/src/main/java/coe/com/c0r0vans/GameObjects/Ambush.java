@@ -18,6 +18,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 import coe.com.c0r0vans.R;
+import utility.GameSettings;
 import utility.ImageLoader;
 
 /**
@@ -88,6 +89,7 @@ public class Ambush implements GameObject {
                 zone.setCenter(latlng);
                 zone.setRadius(radius);
             }
+            showRadius();
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -210,6 +212,15 @@ public class Ambush implements GameObject {
                     mark.setIcon(BitmapDescriptorFactory.fromResource(R.mipmap.ambush));
                     break;
             }
+        }
+    }
+    public void showRadius(){
+        String opt= GameSettings.getInstance().get("SHOW_AMBUSH_RADIUS");
+        if (opt.equals("Y")){
+            zone.setVisible(true);
+        } else
+        {
+            zone.setVisible(false);
         }
     }
 }
