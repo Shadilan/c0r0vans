@@ -127,7 +127,7 @@ public class ActionView extends LinearLayout {
                 SelectedObject.getInstance().getTarget().getMarker().getPosition().longitude,
                 SelectedObject.getInstance().getExecuter().getMarker().getPosition().latitude,
                 SelectedObject.getInstance().getExecuter().getMarker().getPosition().longitude, distances);
-        if (distances.length > 0 && distances[0] < 50) {
+        if (distances.length > 0 && distances[0] < ((Player)SelectedObject.getInstance().getExecuter()).getActionDistance()) {
             ActionList.setVisibility(VISIBLE);
         } else {
             ActionList.setVisibility(GONE);
@@ -141,7 +141,7 @@ public class ActionView extends LinearLayout {
                             SelectedObject.getInstance().getTarget().getMarker().getPosition().longitude,
                             SelectedObject.getInstance().getExecuter().getMarker().getPosition().latitude,
                             SelectedObject.getInstance().getExecuter().getMarker().getPosition().longitude, distances);
-                    if (distances.length > 0 && distances[0] < 50) {
+                    if (distances.length > 0 && distances[0] < ((Player)SelectedObject.getInstance().getExecuter()).getActionDistance()) {
                         ActionList.setVisibility(VISIBLE);
                     } else {
                         ActionList.setVisibility(GONE);

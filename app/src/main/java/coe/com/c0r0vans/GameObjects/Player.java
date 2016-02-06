@@ -123,6 +123,7 @@ public class Player implements GameObject{
             if (obj.has("MostIn")) MostIn=obj.getInt("MostIn");
             if (obj.has("AmbushRadius")) AmbushRadius=obj.getInt("AmbushRadius");
             if (obj.has("ActionDistance")) ActionDistance=obj.getInt("ActionDistance");
+            circle.setRadius(ActionDistance);
             if (obj.has("Upgrades")){
                 JSONArray upg=obj.getJSONArray("Upgrades");
                 Upgrades.clear();
@@ -279,4 +280,5 @@ public class Player implements GameObject{
     public ArrayList<Route> getRoutes() {
         return Routes;
     }
+    public int getActionDistance(){return ActionDistance;}
 }

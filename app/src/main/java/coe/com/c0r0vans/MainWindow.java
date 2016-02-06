@@ -324,7 +324,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
             public void onMapLongClick(LatLng latLng) {
                 float[] distances = new float[1];
                 Location.distanceBetween(latLng.latitude, latLng.longitude, player.getMarker().getPosition().latitude, player.getMarker().getPosition().longitude, distances);
-                if (distances.length > 0 && distances[0] < 50) {
+                if (distances.length > 0 && distances[0] < player.getActionDistance()) {
 
                     SelectedObject.getInstance().setExecuter(player);
                     SelectedObject.getInstance().setTarget(player);
