@@ -17,6 +17,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import coe.com.c0r0vans.GameSound;
 import coe.com.c0r0vans.R;
 import utility.GameSettings;
 import utility.ImageLoader;
@@ -133,6 +134,7 @@ public class Ambush implements GameObject {
 
                 @Override
                 public void preAction() {
+                    GameSound.playSound(GameSound.KILL_SOUND);
                     owner.getMarker().setVisible(false);zone.setVisible(false);
                 }
 
@@ -163,18 +165,20 @@ public class Ambush implements GameObject {
                     }
 
                     @Override
+
                     public void preAction() {
-                        owner.getMarker().setVisible(false);
+                        GameSound.playSound(GameSound.KILL_SOUND);
+                        owner.getMarker().setVisible(false);zone.setVisible(false);
                     }
 
                     @Override
                     public void postAction() {
-                        owner.getMarker().remove();
+                        owner.RemoveObject();
                     }
 
                     @Override
                     public void postError() {
-                        owner.getMarker().setVisible(true);
+                        owner.getMarker().setVisible(true);zone.setVisible(true);
                     }
                 };
 

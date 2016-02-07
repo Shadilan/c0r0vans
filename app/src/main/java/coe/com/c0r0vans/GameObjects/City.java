@@ -16,6 +16,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import coe.com.c0r0vans.GameSound;
 import coe.com.c0r0vans.R;
 import utility.GameSettings;
 import utility.ImageLoader;
@@ -143,7 +144,7 @@ public class City implements GameObject{
 
                 @Override
                 public void preAction() {
-
+                    GameSound.playSound(GameSound.START_ROUTE_SOUND);
                 }
 
                 @Override
@@ -177,7 +178,7 @@ public class City implements GameObject{
 
             @Override
             public void preAction() {
-
+                GameSound.playSound(GameSound.FINISH_ROUTE_SOUND);
             }
 
             @Override
@@ -211,7 +212,7 @@ public class City implements GameObject{
 
                 @Override
                 public void preAction() {
-
+                    GameSound.playSound(GameSound.BUY_SOUND);
                 }
 
                 @Override

@@ -10,7 +10,7 @@ import android.os.Build;
 import utility.GameSettings;
 
 /**
- * Created by Shadilan on 07.02.2016.
+ * @author Shadilan
  */
 public class GameSound {
     private static GameSound instance;
@@ -40,9 +40,18 @@ public class GameSound {
     }
     private int MUSIC;
     public static int SET_AMBUSH;
+    public static int BUY_SOUND;
+    public static int KILL_SOUND;
+    public static int START_ROUTE_SOUND;
+    public static int FINISH_ROUTE_SOUND;
     private void loadSamples(){
         MUSIC=soundPool.load(context,R.raw.drums,0);
         SET_AMBUSH=soundPool.load(context,R.raw.set_ambush,0);
+        BUY_SOUND=soundPool.load(context,R.raw.coins,0);
+        KILL_SOUND=soundPool.load(context,R.raw.kill,0);
+        START_ROUTE_SOUND=soundPool.load(context,R.raw.writing,0);
+        FINISH_ROUTE_SOUND=soundPool.load(context,R.raw.horse,0);
+
     }
     private SoundPool buildSoundPool() {
         SoundPool soundPool;
@@ -57,7 +66,7 @@ public class GameSound {
                     .setAudioAttributes(audioAttributes)
                     .build();
         } else {
-            audioManager = (AudioManager) context.getSystemService(context.AUDIO_SERVICE);
+            audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
             float actVolume = (float) audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
             float maxVolume = (float) audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
             volume = actVolume / maxVolume;

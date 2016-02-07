@@ -112,6 +112,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
         GPSInfo.getInstance(getApplicationContext());
         GameSettings.init(getApplicationContext());
         GameSound.init(getApplicationContext());
+        GameSound.setVolumeControlStream(this);
         serverConnect.getInstance().connect(getResources().getString(R.string.serveradress), this.getApplicationContext());
     }
 
