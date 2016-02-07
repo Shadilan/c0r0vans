@@ -134,7 +134,7 @@ public class Ambush implements GameObject {
 
                 @Override
                 public void preAction() {
-                    GameSound.playSound(GameSound.KILL_SOUND);
+                    GameSound.playSound(GameSound.REMOVE_AMBUSH);
                     owner.getMarker().setVisible(false);zone.setVisible(false);
                 }
 

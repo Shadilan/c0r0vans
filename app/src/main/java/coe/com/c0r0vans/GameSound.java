@@ -44,6 +44,7 @@ public class GameSound {
     public static int KILL_SOUND;
     public static int START_ROUTE_SOUND;
     public static int FINISH_ROUTE_SOUND;
+    public static int REMOVE_AMBUSH;
     private void loadSamples(){
         MUSIC=soundPool.load(context,R.raw.drums,0);
         SET_AMBUSH=soundPool.load(context,R.raw.set_ambush,0);
@@ -51,6 +52,7 @@ public class GameSound {
         KILL_SOUND=soundPool.load(context,R.raw.kill,0);
         START_ROUTE_SOUND=soundPool.load(context,R.raw.writing,0);
         FINISH_ROUTE_SOUND=soundPool.load(context,R.raw.horse,0);
+        REMOVE_AMBUSH=soundPool.load(context,R.raw.remove_ambush,0);
 
     }
     private SoundPool buildSoundPool() {
