@@ -133,17 +133,17 @@ public class Ambush implements GameObject {
 
                 @Override
                 public void preAction() {
-                    owner.getMarker().setVisible(false);
+                    owner.getMarker().setVisible(false);zone.setVisible(false);
                 }
 
                 @Override
                 public void postAction() {
-                    owner.getMarker().remove();
+                    owner.RemoveObject();
                 }
 
                 @Override
                 public void postError() {
-                    owner.getMarker().setVisible(true);
+                    owner.getMarker().setVisible(true);zone.setVisible(true);
                 }
             };
             else

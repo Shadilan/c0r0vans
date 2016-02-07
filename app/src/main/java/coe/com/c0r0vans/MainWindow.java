@@ -1,40 +1,33 @@
 package coe.com.c0r0vans;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
+
 import android.content.Intent;
 import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationListener;
-import android.media.AudioAttributes;
-import android.media.AudioManager;
-import android.media.SoundPool;
-import android.os.Build;
+
 import android.os.Bundle;
 import android.os.Handler;
-import android.preference.PreferenceScreen;
+
 import android.support.v4.app.FragmentActivity;
 
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.Display;
-import android.view.MotionEvent;
+
 import android.view.View;
-import android.widget.EditText;
+
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.android.volley.Response;
 
-import com.google.android.gms.games.Game;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.CameraPosition;
-import com.google.android.gms.maps.model.Circle;
+
 import com.google.android.gms.maps.model.CircleOptions;
+import com.google.android.gms.maps.model.GroundOverlayOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 
@@ -44,11 +37,9 @@ import org.json.JSONObject;
 
 
 import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Timer;
-import java.util.TimerTask;
+
 
 import coe.com.c0r0vans.GameObjects.Ambush;
 import coe.com.c0r0vans.GameObjects.Caravan;
@@ -69,19 +60,13 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
     private GoogleMap mMap;
     private Player player;
     private ArrayList<GameObject> Objects;
-    //private int SetupDone=0;
     private Handler myHandler = new Handler();
-    private Timer refreshTimer;
     private ImageView connect_img;
     private int SendedRequest = 0;
     private int clientZoom = 17;
 
     private TextView LogView;
     private ImageView LogButton;
-
-    private int music=-1;
-    private int music_stream=-1;
-    float volume;
 
 
 
@@ -147,7 +132,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
     /**
      * Setup map view
      */
-    private DateFormat df = new SimpleDateFormat("dd.mm.yyyy HH:mm:ss");
+    private DateFormat df = DateFormat.getDateInstance();
     private void setupMap() {
 
         mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
@@ -160,6 +145,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
         mMap.getUiSettings().setCompassEnabled(false);
         mMap.getUiSettings().setMapToolbarEnabled(false);
         mMap.getUiSettings().setIndoorLevelPickerEnabled(false);
+        GroundOverlayOptions go=new GroundOverlayOptions();
     }
 
 
@@ -285,7 +271,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
 
                         }
                         for (GameObject obj : remObjects) {
-                            obj.getMarker().remove();
+                            obj.RemoveObject();
                         }
                         Objects.removeAll(remObjects);
                     }
