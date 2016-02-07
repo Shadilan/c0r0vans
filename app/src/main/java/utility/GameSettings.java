@@ -43,11 +43,12 @@ public class GameSettings extends HashMap<String,String>{
     }
 
     public void save(){
-        SharedPreferences sp=ctx.getSharedPreferences("corovan",Context.MODE_PRIVATE);
+        SharedPreferences sp=ctx.getSharedPreferences("settings", Context.MODE_PRIVATE);
         SharedPreferences.Editor ed=sp.edit();
         for (String key:instance.keySet()){
             ed.putString(key,instance.get(key));
         }
         ed.apply();
+        ed.commit();
     }
 }

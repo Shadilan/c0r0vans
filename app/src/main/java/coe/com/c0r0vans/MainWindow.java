@@ -7,6 +7,10 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationListener;
+import android.media.AudioAttributes;
+import android.media.AudioManager;
+import android.media.SoundPool;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceScreen;
@@ -73,6 +77,37 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
 
     private TextView LogView;
     private ImageView LogButton;
+    private SoundPool soundPool;
+    private int music=-1;
+    private int music_stream=-1;
+    float volume;
+
+    private SoundPool buildSoundPool() {
+        SoundPool soundPool;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            AudioAttributes audioAttributes = new AudioAttributes.Builder()
+                    .setUsage(AudioAttributes.USAGE_GAME)
+                    .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                    .build();
+
+            soundPool = new SoundPool.Builder()
+                    .setMaxStreams(25)
+                    .setAudioAttributes(audioAttributes)
+                    .build();
+        } else {
+            AudioManager audioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
+            float actVolume = (float) audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+            float maxVolume = (float) audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
+             volume = actVolume / maxVolume;
+
+            this.setVolumeControlStream(AudioManager.STREAM_MUSIC);
+
+            int counter = 0;
+
+            soundPool = new SoundPool(10, AudioManager.STREAM_MUSIC, 0);
+        }
+        return soundPool;
+    }
 
     @Override
     /**
@@ -92,6 +127,17 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
 
         connect_img = (ImageView) findViewById(R.id.server_connect);
         ResourceString.getInstance(getApplicationContext());
+
+        soundPool =buildSoundPool();
+        soundPool.setOnLoadCompleteListener(new SoundPool.OnLoadCompleteListener() {
+            @Override
+            public void onLoadComplete(SoundPool soundPool, int sampleId, int status) {
+                if (sampleId==music){
+                    if (GameSettings.getInstance().get("MUSIC_ON").equals("Y")) music_stream=soundPool.play(music, 1, 1, 1, -1, 1);
+                }
+            }
+        });
+        music=soundPool.load(getApplicationContext(),R.raw.drums,1);
 
         mapFragment.getMapAsync(this);
         init();
@@ -467,6 +513,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
         super.onPause();
         myHandler.removeCallbacks(myRunable);
         job=false;
+        if (music_stream!=-1) soundPool.pause(music_stream);
 
     }
     @Override
@@ -475,7 +522,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
         Log.d("DebugCall", "ResumeCall");
         job=true;
         StartTickTimer();
-
+        if (music_stream!=-1) soundPool.resume(music_stream);
     }
 
     @Override
@@ -506,6 +553,12 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                 }
                 break;
             }
+        }
+        if (GameSettings.getInstance().get("MUSIC_ON").equals("Y") && music_stream==-1){
+            music_stream=soundPool.play(music,1,1,1,-1,1);
+        } else if (!GameSettings.getInstance().get("MUSIC_ON").equals("Y") && music_stream!=-1){
+            soundPool.stop(music_stream);
+            music_stream=-1;
         }
     }
 }
