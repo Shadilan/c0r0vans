@@ -19,6 +19,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import coe.com.c0r0vans.GameSound;
 import coe.com.c0r0vans.R;
 import utility.GPSInfo;
 import utility.ImageLoader;
@@ -186,7 +187,7 @@ public class Player implements GameObject{
 
             @Override
             public void preAction() {
-
+                GameSound.playSound(GameSound.SET_AMBUSH);
             }
 
             @Override
