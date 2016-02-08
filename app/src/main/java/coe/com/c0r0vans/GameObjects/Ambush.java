@@ -34,6 +34,7 @@ public class Ambush implements GameObject {
     private GoogleMap map;
     private int radius=30;
     private Circle zone;
+    private boolean ready=true;
 
     public  Ambush(GoogleMap map){
         this.map=map;
@@ -72,6 +73,7 @@ public class Ambush implements GameObject {
             LatLng latlng=new LatLng(Lat / 1e6, Lng / 1e6);
             if (obj.has("Owner")) isOwner=obj.getBoolean("Owner");
             if (obj.has("Radius")) radius=obj.getInt("Radius");
+            if (obj.has("Ready")) ready=obj.getBoolean("Ready");
 
             if (mark==null) {
                 setMarker(map.addMarker(new MarkerOptions().position(new LatLng(Lat / 1e6, Lng / 1e6))));
@@ -197,7 +199,16 @@ public class Ambush implements GameObject {
 
     @Override
     public void changeMarkerSize(int Type) {
-        if (isOwner)
+        if (!ready){
+            switch (Type){
+                case GameObject.ICON_SMALL: mark.setIcon(BitmapDescriptorFactory.fromResource(R.mipmap.ambushbuild_s));
+                    break;
+                case GameObject.ICON_MEDIUM: mark.setIcon(BitmapDescriptorFactory.fromResource(R.mipmap.ambushbuild_m));
+                    break;
+                case GameObject.ICON_LARGE: mark.setIcon(BitmapDescriptorFactory.fromResource(R.mipmap.ambushbuild));
+                    break;
+            }
+        } else if (isOwner)
         {
             switch (Type){
                 case GameObject.ICON_SMALL: mark.setIcon(BitmapDescriptorFactory.fromResource(R.mipmap.ambush_self_s));
