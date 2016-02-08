@@ -134,12 +134,13 @@ public class Ambush implements GameObject {
 
                 @Override
                 public void preAction() {
-                    GameSound.playSound(GameSound.REMOVE_AMBUSH);
+
                     owner.getMarker().setVisible(false);zone.setVisible(false);
                 }
 
                 @Override
                 public void postAction() {
+                    GameSound.playSound(GameSound.REMOVE_AMBUSH);
                     owner.RemoveObject();
                 }
 
@@ -167,12 +168,13 @@ public class Ambush implements GameObject {
                     @Override
 
                     public void preAction() {
-                        GameSound.playSound(GameSound.KILL_SOUND);
+
                         owner.getMarker().setVisible(false);zone.setVisible(false);
                     }
 
                     @Override
                     public void postAction() {
+                        GameSound.playSound(GameSound.KILL_SOUND);
                         owner.RemoveObject();
                     }
 

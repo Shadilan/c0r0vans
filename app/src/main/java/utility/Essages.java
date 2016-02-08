@@ -4,124 +4,39 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.widget.TextView;
 
+import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * @author Shadilan
  *         Class to show messages that system return
  */
 public class Essages {
-    public static Essages instance = new Essages();
-    private ArrayList<Essage> essageList;
+    private static TextView target;
 
-    /**
-     * Constructor
-     */
-    public Essages() {
-        essageList = new ArrayList<>();
+
+    public static void setTarget(TextView target){
+        Essages.target=target;
     }
+    private static DateFormat df = DateFormat.getDateTimeInstance();
 
     /**
      * Add Text to list
      *
-     * @param Text Text to add
+     * @param text Text to add
      */
-    public void AddEssage(String Text) {
-        essageList.add(new Essage(Text, 30));
+    public static void addEssage(String text) {
+        target.append("\n" + df.format(new Date()) + ":" + text);
     }
 
-    /**
-     * Decrease all essage counts
-     */
-    public void Tick() {
-        ArrayList<Essage> remList = new ArrayList<>();
-        for (Essage essage : essageList) {
-            if (essage.Tick() < 0) {
-                remList.add(essage);
-            }
-        }
-        essageList.removeAll(remList);
-    }
-
-    /**
-     * Return list of essage as Image
-     *
-     * @return Image of essage
-     */
-    public Bitmap getEssagesImg() {
-        Bitmap result = Bitmap.createBitmap(400, essageList.size() * 10 + 10, Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(result);
-
-        Paint mPaint = new Paint();
-        mPaint.setColor(Color.YELLOW);
-        int i = 0;
-        for (Essage essage : essageList) {
-            i++;
-            canvas.drawText(essage.getText(), 0, i * 10, mPaint);
-        }
-        return result;
 
 
-    }
 
-    /**
-     * Return essage list as strings
-     *
-     * @return String ArrayList
-     */
-    public ArrayList<String> getEssages() {
-        ArrayList<String> essageStrings = new ArrayList<>();
-        for (Essage essage : essageList) {
 
-            essageStrings.add(essage.getText());
-        }
-        return essageStrings;
-    }
-    public String getEssagesText() {
-        String result="";
-        for (Essage essage : essageList) {
 
-            result+=essage.getText()+"\n";
-        }
-        return result;
-    }
-    public int getEssagesLines(){
-        return essageList.size();
-    }
 
-    class Essage {
-        private String Text;
-        private int Count;
 
-        /**
-         * Constructor
-         *
-         * @param Text  Text
-         * @param Count Life count
-         */
-        public Essage(String Text, int Count) {
-            this.Text = Text;
-            this.Count = Count;
-        }
-
-        /**
-         * Return text
-         *
-         * @return String
-         */
-        public String getText() {
-            return Text;
-        }
-
-        /**
-         * Decrease Life count and return new count
-         *
-         * @return Life count
-         */
-        public int Tick() {
-            Count--;
-            return Count;
-        }
-    }
 }

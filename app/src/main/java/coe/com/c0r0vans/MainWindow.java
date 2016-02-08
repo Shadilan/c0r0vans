@@ -48,6 +48,7 @@ import coe.com.c0r0vans.GameObjects.GameObject;
 import coe.com.c0r0vans.GameObjects.Player;
 import coe.com.c0r0vans.GameObjects.SelectedObject;
 
+import utility.Essages;
 import utility.GPSInfo;
 import utility.GameSettings;
 import utility.ImageLoader;
@@ -84,6 +85,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
 
         LogView = (TextView) findViewById(R.id.chatBox);
         LogView.setHeight((int) (LogView.getTextSize() * 2));
+        Essages.setTarget(LogView);
         LogButton = (ImageView) findViewById(R.id.showButton);
 
         connect_img = (ImageView) findViewById(R.id.server_connect);
@@ -133,7 +135,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
     /**
      * Setup map view
      */
-    private DateFormat df = DateFormat.getDateInstance();
+
     private void setupMap() {
 
         mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
@@ -285,16 +287,15 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
 
             @Override
             public void onAction(JSONObject response) {
-                Log.d("Debug info", "action Done:" + response.toString());
                 if (response.has("Result")) {
                     try {
-                        LogView.append("\n" + df.format(new Date()) + ":" + response.getString("Message"));
+                        Essages.addEssage(response.getString("Result"));
+                        if (response.has("Message")) Essages.addEssage(response.getString("Message"));
+
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-                } else
-                    LogView.append("\n" + df.format(new Date()) + ":" + "Ok.");
-
+                }
             }
 
             @Override
@@ -322,8 +323,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                         errorMsg = response.getString("Message");
                     }
                     if (errorMsg.equals("")) errorMsg = errorText;
-                    LogView.append("\n" + df.format(new Date()) + ":" + errorMsg);
-                    Log.d("Debug info", LogView.getText().toString());
+                    Essages.addEssage(errorMsg);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
