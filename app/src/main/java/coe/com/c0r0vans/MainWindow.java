@@ -299,7 +299,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                 am.setText(String.valueOf(player.getExp()));
                 am = (TextView) findViewById(R.id.goldAmount);
                 am.setText(String.valueOf(player.getGold()));
-
+                timeToPlayerRefresh=6;
             }
 
             @Override
@@ -414,7 +414,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
     private void StartTickTimer() {
         int delay = 1000;
 
-        if (serverConnect.getInstance().isLogin() && !firstRun) {
+        if (serverConnect.getInstance().isLogin() && (timeToPlayerRefresh!=-1)) {
             Log.d("Debug info","Speed:"+GPSInfo.getInstance().getSpeed());
             if (GPSInfo.getInstance().getSpeed() < 30) delay = 40000;
             else if (GPSInfo.getInstance().getSpeed() > 30) delay = 20000;
@@ -434,18 +434,19 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
     /**
      * Timed action on tick;
      */
-    private boolean firstRun = true;
 
+    int timeToPlayerRefresh=-1;
     private void Tick() {
         Log.d("Debug info","Time to refresh");
         if (serverConnect.getInstance().isLogin() && this.hasWindowFocus())
-            if (firstRun) {
+            if (timeToPlayerRefresh<1) {
                 serverConnect.getInstance().RefreshData(GPSInfo.getInstance().GetLat(), GPSInfo.getInstance().GetLng());
                 serverConnect.getInstance().getPlayerInfo();
-                firstRun = false;
+                timeToPlayerRefresh = 6;
             } else {
                 SendedRequest++;
                 if (SendedRequest > 1) connect_img.setVisibility(View.VISIBLE);
+                timeToPlayerRefresh--;
                 serverConnect.getInstance().RefreshData(GPSInfo.getInstance().GetLat(), GPSInfo.getInstance().GetLng());
             }
         if (job) StartTickTimer();
