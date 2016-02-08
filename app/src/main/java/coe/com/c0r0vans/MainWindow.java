@@ -287,15 +287,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
 
             @Override
             public void onAction(JSONObject response) {
-                if (response.has("Result")) {
-                    try {
-                        Essages.addEssage(response.getString("Result"));
-                        if (response.has("Message")) Essages.addEssage(response.getString("Message"));
 
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
             }
 
             @Override

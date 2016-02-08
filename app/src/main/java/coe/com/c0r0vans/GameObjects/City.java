@@ -18,8 +18,10 @@ import java.util.ArrayList;
 
 import coe.com.c0r0vans.GameSound;
 import coe.com.c0r0vans.R;
+import utility.Essages;
 import utility.GameSettings;
 import utility.ImageLoader;
+import utility.serverConnect;
 
 /**
  * @author Shadilan
@@ -150,6 +152,8 @@ public class City implements GameObject{
                 @Override
                 public void postAction() {
 
+                    Essages.addEssage("Начат маршрут в город " + CityName);
+                    serverConnect.getInstance().getPlayerInfo();
                 }
 
                 @Override
@@ -183,7 +187,9 @@ public class City implements GameObject{
 
             @Override
             public void postAction() {
-
+                Essages.addEssage("Завершен маршрут в город "+CityName);
+                serverConnect.getInstance().getPlayerInfo();
+                serverConnect.getInstance().RefreshCurrent();
             }
 
             @Override
@@ -217,7 +223,8 @@ public class City implements GameObject{
 
                 @Override
                 public void postAction() {
-
+                    serverConnect.getInstance().getPlayerInfo();
+                    Essages.addEssage("Улучшение "+upgrade+" куплено.");
                 }
 
                 @Override
@@ -247,5 +254,9 @@ public class City implements GameObject{
         {
             zone.setVisible(false);
         }
+    }
+
+    public String getUpgrade() {
+        return upgrade;
     }
 }

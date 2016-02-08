@@ -14,7 +14,9 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 import coe.com.c0r0vans.R;
+import utility.Essages;
 import utility.ImageLoader;
+import utility.serverConnect;
 
 /**
  * Caravan Object
@@ -105,18 +107,20 @@ public class Caravan implements GameObject {
 
             @Override
             public String getCommand() {
-                return "DropUnfinishedRoute";
+                return "DropRoute";
             }
 
             @Override
             public void preAction() {
                 setEnable(false);
-                //owner.getMarker().setVisible(false);
+                owner.getMarker().setVisible(false);
             }
 
             @Override
             public void postAction() {
-                owner.getMarker().remove();
+                owner.RemoveObject();
+                serverConnect.getInstance().RefreshCurrent();
+                Essages.addEssage("Караван из распущен.");
             }
 
             @Override

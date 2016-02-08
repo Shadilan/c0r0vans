@@ -11,6 +11,8 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import coe.com.c0r0vans.GameSound;
+import utility.Essages;
 import utility.ImageLoader;
 import utility.ResourceString;
 import utility.serverConnect;
@@ -89,12 +91,13 @@ public class Route implements GameObject{
 
             @Override
             public void preAction() {
-
+                GameSound.playSound(GameSound.START_ROUTE_SOUND);
             }
-
+            //Todo: Another sound;
             @Override
             public void postAction() {
                 serverConnect.getInstance().getPlayerInfo();
+                Essages.addEssage("Караван из "+getStartName()+" в "+getFinishName()+" отменен.");
             }
 
             @Override

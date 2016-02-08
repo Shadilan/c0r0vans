@@ -21,9 +21,11 @@ import java.util.ArrayList;
 
 import coe.com.c0r0vans.GameSound;
 import coe.com.c0r0vans.R;
+import utility.Essages;
 import utility.GPSInfo;
 import utility.ImageLoader;
 import utility.ResourceString;
+import utility.serverConnect;
 
 /**
  * @author Shadilan
@@ -193,6 +195,8 @@ public class Player implements GameObject{
             @Override
             public void postAction() {
 
+                serverConnect.getInstance().RefreshCurrent();
+                Essages.addEssage("Засада установлена.");
             }
 
             @Override
@@ -221,12 +225,13 @@ public class Player implements GameObject{
 
             @Override
             public void preAction() {
-
+                GameSound.playSound(GameSound.START_ROUTE_SOUND);
             }
 
             @Override
             public void postAction() {
-
+                serverConnect.getInstance().getPlayerInfo();
+                Essages.addEssage("Незаконченый маршрут отменен.");
             }
 
             @Override

@@ -189,6 +189,10 @@ public class serverConnect {
         reqq.add(jsObjRequest);
         return true;
     }
+    public boolean RefreshCurrent(){
+        RefreshData(GPSInfo.getInstance().GetLat(),GPSInfo.getInstance().GetLng());
+        return true;
+    }
 
     private ArrayList<ObjectAction> lockedActions;
     private HashMap<Response.Listener<JSONObject>,ObjectAction> listenersMap;
@@ -225,7 +229,6 @@ public class serverConnect {
                 } else {
                     for (ServerListener l : listeners) l.onAction(response);
                     if (listenersMap.get(this)!=null) listenersMap.get(this).postAction();
-                    RefreshData(GPSInfo.getInstance().GetLat(), GPSInfo.getInstance().GetLng());
                 }
             }
         };
