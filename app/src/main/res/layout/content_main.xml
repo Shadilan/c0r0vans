@@ -17,26 +17,35 @@
         android:id="@+id/Tabs"
         android:layout_alignParentBottom="false">
 
-        <Button
+        <ToggleButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/information"
             android:id="@+id/playerInfoButton"
-            android:layout_gravity="left" />
+            android:layout_gravity="left"
+            android:focusable="true"
+            android:clickable="true"
+            android:textOff="@string/information"
+            android:textOn="@string/information"
+            android:checked="true" />
 
-        <Button
+        <ToggleButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/upgrades"
             android:id="@+id/upgradeInfoButton"
-            android:layout_gravity="center_horizontal" />
+            android:layout_gravity="center_horizontal"
+            android:textOff="@string/upgrades"
+            android:textOn="@string/upgrades" />
 
-        <Button
+        <ToggleButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/route_window"
             android:id="@+id/routeInfoButton"
-            android:layout_gravity="right" />
+            android:layout_gravity="right"
+            android:textOff="@string/route_window"
+            android:textOn="@string/route_window" />
     </LinearLayout>
 
     <LinearLayout

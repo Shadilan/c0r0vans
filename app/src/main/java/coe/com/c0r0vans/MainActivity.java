@@ -15,6 +15,7 @@ import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import org.json.JSONObject;
 
@@ -46,9 +47,9 @@ public class MainActivity extends AppCompatActivity {
 
         player= (Player) SelectedObject.getInstance().getExecuter();
 
-        final Button playerInfo= (Button) findViewById(R.id.playerInfoButton);
-        Button upgradeInfo= (Button) findViewById(R.id.upgradeInfoButton);
-        Button routeInfo= (Button) findViewById(R.id.routeInfoButton);
+        ToggleButton playerInfo= (ToggleButton) findViewById(R.id.playerInfoButton);
+        ToggleButton upgradeInfo= (ToggleButton) findViewById(R.id.upgradeInfoButton);
+        ToggleButton routeInfo= (ToggleButton) findViewById(R.id.routeInfoButton);
 
         playerInfo.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -60,12 +61,12 @@ public class MainActivity extends AppCompatActivity {
                 t= (LinearLayout) findViewById(R.id.routeLayout);
                 t.setVisibility(View.INVISIBLE);
 
-                Button b= (Button) findViewById(R.id.playerInfoButton);
-                b.setSelected(true);
-                b= (Button) findViewById(R.id.upgradeInfoButton);
-                b.setSelected(false);
-                b= (Button) findViewById(R.id.routeInfoButton);
-                b.setSelected(false);
+                ToggleButton b= (ToggleButton) findViewById(R.id.playerInfoButton);
+                b.setChecked(true);
+                b= (ToggleButton) findViewById(R.id.upgradeInfoButton);
+                b.setChecked(false);
+                b= (ToggleButton) findViewById(R.id.routeInfoButton);
+                b.setChecked(false);
             }
         });
 
@@ -79,12 +80,12 @@ public class MainActivity extends AppCompatActivity {
                 t = (LinearLayout) findViewById(R.id.routeLayout);
                 t.setVisibility(View.INVISIBLE);
 
-                Button b = (Button) findViewById(R.id.playerInfoButton);
-                b.setSelected(false);
-                b = (Button) findViewById(R.id.upgradeInfoButton);
-                b.setSelected(true);
-                b = (Button) findViewById(R.id.routeInfoButton);
-                b.setSelected(false);
+                ToggleButton b = (ToggleButton) findViewById(R.id.playerInfoButton);
+                b.setChecked(false);
+                b = (ToggleButton) findViewById(R.id.upgradeInfoButton);
+                b.setChecked(true);
+                b = (ToggleButton) findViewById(R.id.routeInfoButton);
+                b.setChecked(false);
             }
         });
         routeInfo.setOnClickListener(new View.OnClickListener() {
@@ -97,12 +98,12 @@ public class MainActivity extends AppCompatActivity {
                 t = (LinearLayout) findViewById(R.id.routeLayout);
                 t.setVisibility(View.VISIBLE);
 
-                Button b = (Button) findViewById(R.id.playerInfoButton);
-                b.setSelected(false);
-                b = (Button) findViewById(R.id.upgradeInfoButton);
-                b.setSelected(false);
-                b = (Button) findViewById(R.id.routeInfoButton);
-                b.setSelected(true);
+                ToggleButton b = (ToggleButton) findViewById(R.id.playerInfoButton);
+                b.setChecked(false);
+                b = (ToggleButton) findViewById(R.id.upgradeInfoButton);
+                b.setChecked(false);
+                b = (ToggleButton) findViewById(R.id.routeInfoButton);
+                b.setChecked(true);
             }
         });
         serverConnect.getInstance().addListener(new ServerListener() {
