@@ -386,7 +386,8 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                     case 17:clientZoom=18;
                         break;
                     case 18:clientZoom=16;
-
+                        break;
+                    default: clientZoom=16;
                 }
                 for (GameObject obj:Objects) obj.changeMarkerSize(clientZoom);
                 mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(GPSInfo.getInstance().GetLat() / 1e6, GPSInfo.getInstance().GetLng() / 1e6), clientZoom));
