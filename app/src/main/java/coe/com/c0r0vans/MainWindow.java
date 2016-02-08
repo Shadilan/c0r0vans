@@ -195,7 +195,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
             @Override
             public void onLocationChanged(Location location) {
                 LatLng target = new LatLng(location.getLatitude(), location.getLongitude());
-                mMap.animateCamera(CameraUpdateFactory.newLatLng(target));
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(target, clientZoom));
 
                 player.getMarker().setPosition(target);
                 player.getCircle().setCenter(target);
