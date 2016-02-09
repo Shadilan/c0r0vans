@@ -17,10 +17,11 @@ public class Settings extends AppCompatActivity {
     Button apply_button;
     Button cancel_button;
     CheckBox ambushRad;
+    CheckBox caravanRoute;
     CheckBox cityRad;
     CheckBox soundOn;
     CheckBox musicOn;
-    CheckBox caravanRoute;
+    CheckBox netDebug;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,6 +33,7 @@ public class Settings extends AppCompatActivity {
         cityRad= (CheckBox) findViewById(R.id.cityRad);
         soundOn= (CheckBox) findViewById(R.id.soundOn);
         musicOn=(CheckBox) findViewById(R.id.musicOn);
+        netDebug=(CheckBox) findViewById(R.id.netLogOn);
         cancel_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -48,6 +50,7 @@ public class Settings extends AppCompatActivity {
                 GameSettings.getInstance().put("SHOW_CARAVAN_ROUTE", caravanRoute.isChecked() ? "Y" : "N");
                 GameSettings.getInstance().put("MUSIC_ON", musicOn.isChecked() ? "Y" : "N");
                 GameSettings.getInstance().put("SOUND_ON", soundOn.isChecked() ? "Y" : "N");
+                GameSettings.getInstance().put("NET_DEBUG", netDebug.isChecked() ? "Y" : "N");
                 GameSettings.getInstance().save();
                 Intent resultIntent = new Intent();
                 setResult(Activity.RESULT_OK, resultIntent);
@@ -64,5 +67,6 @@ public class Settings extends AppCompatActivity {
         caravanRoute.setChecked("Y".equals(GameSettings.getInstance().get("SHOW_CARAVAN_ROUTE")));
         musicOn.setChecked("Y".equals(GameSettings.getInstance().get("MUSIC_ON")));
         soundOn.setChecked("Y".equals(GameSettings.getInstance().get("SOUND_ON")));
+        netDebug.setChecked("Y".equals(GameSettings.getInstance().get("NET_DEBUG")));
     }
 }
