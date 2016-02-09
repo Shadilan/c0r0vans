@@ -244,6 +244,9 @@ public class City implements GameObject{
                 break;
             case GameObject.ICON_LARGE: mark.setIcon(BitmapDescriptorFactory.fromResource(R.mipmap.city));
                 break;
+            default:mark.setIcon(BitmapDescriptorFactory.fromResource(R.mipmap.city));
+                Essages.addEssage("Ваш зум не корректен.");
+                break;
         }
     }
     public void showRadius(){

@@ -142,6 +142,8 @@ public class Caravan implements GameObject {
                 break;
             case GameObject.ICON_LARGE: mark.setIcon(BitmapDescriptorFactory.fromResource(R.mipmap.caravan));
                 break;
+            default: mark.setIcon(BitmapDescriptorFactory.fromResource(R.mipmap.caravan));
+                Essages.addEssage("Ваш зум не корректен.");
         } else
             switch (Type){
                 case GameObject.ICON_SMALL: mark.setIcon(BitmapDescriptorFactory.fromResource(R.mipmap.caravan_e_s));
@@ -150,6 +152,8 @@ public class Caravan implements GameObject {
                     break;
                 case GameObject.ICON_LARGE: mark.setIcon(BitmapDescriptorFactory.fromResource(R.mipmap.caravan_e));
                     break;
+                default:mark.setIcon(BitmapDescriptorFactory.fromResource(R.mipmap.caravan_e));
+                    Essages.addEssage("Ваш зум не корректен.");
             }
 
     }

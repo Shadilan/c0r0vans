@@ -207,6 +207,8 @@ public class Ambush implements GameObject {
                     break;
                 case GameObject.ICON_LARGE: mark.setIcon(BitmapDescriptorFactory.fromResource(R.mipmap.ambushbuild));
                     break;
+                default:mark.setIcon(BitmapDescriptorFactory.fromResource(R.mipmap.ambushbuild));
+                    Essages.addEssage("Ваш зум не корректен.");
             }
         } else if (isOwner)
         {
@@ -217,6 +219,8 @@ public class Ambush implements GameObject {
                     break;
                 case GameObject.ICON_LARGE: mark.setIcon(BitmapDescriptorFactory.fromResource(R.mipmap.ambush_self));
                     break;
+                default: mark.setIcon(BitmapDescriptorFactory.fromResource(R.mipmap.ambush_self));
+                    Essages.addEssage("Ваш зум не корректен.");
             }
         } else {
             switch (Type) {
@@ -229,6 +233,8 @@ public class Ambush implements GameObject {
                 case GameObject.ICON_LARGE:
                     mark.setIcon(BitmapDescriptorFactory.fromResource(R.mipmap.ambush));
                     break;
+                default: mark.setIcon(BitmapDescriptorFactory.fromResource(R.mipmap.ambush));
+                    Essages.addEssage("Ваш зум не корректен");
             }
         }
     }
