@@ -39,6 +39,7 @@ public class GameSettings extends HashMap<String,String>{
         put("SHOW_CITY_RADIUS","Y");
         put("MUSIC_ON","N");
         put("SOUND_ON","N");
+        put("SHOW_CARAVAN_ROUTE","N");
         save();
     }
 

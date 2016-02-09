@@ -33,6 +33,7 @@ public class City implements GameObject{
     private int Level=0;
     private int radius=100;
     private String upgrade;
+    private String upgradeName;
     private Bitmap image;
     private GoogleMap map;
     private Circle zone;
@@ -87,6 +88,7 @@ public class City implements GameObject{
             }
             if (obj.has("Name")) CityName=obj.getString("Name");
             if (obj.has("UpgradeType")) upgrade=obj.getString("UpgradeType");
+            if (obj.has("UpgradeName")) upgradeName=obj.getString("UpgradeName");
             if (obj.has("Level")) Level=obj.getInt("Level");
             if (obj.has("Radius")) radius=obj.getInt("Radius");
             if (zone==null){
@@ -115,7 +117,7 @@ public class City implements GameObject{
 
     @Override
     public String getInfo() {
-        return "Это город "+ Level+" уровня. В городе можно приобрести "+upgrade;
+        return "Это город "+ Level+" уровня. В городе можно приобрести \""+upgradeName+"\"";
     }
 
     public String getCityName(){return (CityName+" lv."+Level) ;}

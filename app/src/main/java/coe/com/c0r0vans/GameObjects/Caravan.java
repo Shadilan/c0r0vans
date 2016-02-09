@@ -1,12 +1,15 @@
 package coe.com.c0r0vans.GameObjects;
 
 import android.graphics.Bitmap;
+import android.graphics.Color;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -15,6 +18,7 @@ import java.util.ArrayList;
 
 import coe.com.c0r0vans.R;
 import utility.Essages;
+import utility.GameSettings;
 import utility.ImageLoader;
 import utility.serverConnect;
 
@@ -26,6 +30,11 @@ public class Caravan implements GameObject {
     private String GUID;
     private Bitmap image;
     private GoogleMap map;
+    private LatLng start;
+    private LatLng finish;
+    private String startName;
+    private String finishName;
+    private Polyline route;
     private boolean isOwner=false;
     public String getGUID() {
         return GUID;
@@ -64,17 +73,60 @@ public class Caravan implements GameObject {
             GUID=obj.getString("GUID");
             int Lat=obj.getInt("Lat");
             int Lng=obj.getInt("Lng");
+            LatLng latlng=new LatLng(Lat / 1e6, Lng / 1e6);
             if (obj.has("Owner")) isOwner=obj.getBoolean("Owner");
+            if (obj.has("StartName")) startName=obj.getString("StartName");
+            if (obj.has("FinishName")) finishName=obj.getString("FinishName");
+            if (obj.has("StartLat") && obj.has("StartLng")){
+                double lat=obj.getInt("StartLat")/1e6;
+                double lng=obj.getInt("StartLng")/1e6;
+                start=new LatLng(lat,lng);
+            } else start=null;
+            if (obj.has("FinishLat") && obj.has("FinishLng")){
+                double lat=obj.getInt("FinishLat")/1e6;
+                double lng=obj.getInt("FinishLng")/1e6;
+                finish=new LatLng(lat,lng);
+            } else finish=null;
+
             if (mark==null) {
-                setMarker(map.addMarker(new MarkerOptions().position(new LatLng(Lat / 1e6, Lng / 1e6))));
+                setMarker(map.addMarker(new MarkerOptions().position(latlng)));
             } else {
                 mark.setPosition(new LatLng(Lat / 1e6, Lng / 1e6));
             }
+            if (route==null && start!=null && finish!=null){
+                PolylineOptions options=new PolylineOptions();
+
+                if (isOwner) {
+                    options.width(2);
+                    options.color(Color.BLUE);
+
+                /*else {
+                    options.width(4);
+                    options.color(Color.RED);
+                }*/
+                    options.add(start);
+                    options.add(finish);
+                    route = map.addPolyline(options);
+                }
+
+            }
+            showRoute();
 
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
+    }
+
+    public void showRoute(){
+        String opt= GameSettings.getInstance().get("SHOW_CARAVAN_ROUTE");
+        if (opt==null) opt="N";
+        if (opt.equals("Y") && route!=null){
+            route.setVisible(true);
+        } else if (route!=null)
+        {
+            route.setVisible(false);
+        }
     }
 
     @Override
@@ -85,7 +137,7 @@ public class Caravan implements GameObject {
     @Override
     public String getInfo() {
 
-        if (isOwner) return "Ваш караван направляется к цели, готовясь принести вам золото.";
+        if (isOwner) return "Ваш караван направляется из города "+startName+" в город "+finishName +", готовясь принести вам золото.";
             else return "Чейто караван проезжает, звеня не ВАШИМ золотом.";
     }
     private ObjectAction dropRoute;

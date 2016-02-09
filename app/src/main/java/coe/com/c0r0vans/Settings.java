@@ -20,6 +20,7 @@ public class Settings extends AppCompatActivity {
     CheckBox cityRad;
     CheckBox soundOn;
     CheckBox musicOn;
+    CheckBox caravanRoute;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,6 +28,7 @@ public class Settings extends AppCompatActivity {
         apply_button= (Button) findViewById(R.id.apply);
         cancel_button= (Button) findViewById(R.id.cancel);
         ambushRad= (CheckBox) findViewById(R.id.ambushRad);
+        caravanRoute= (CheckBox) findViewById(R.id.routeShow);
         cityRad= (CheckBox) findViewById(R.id.cityRad);
         soundOn= (CheckBox) findViewById(R.id.soundOn);
         musicOn=(CheckBox) findViewById(R.id.musicOn);
@@ -43,6 +45,7 @@ public class Settings extends AppCompatActivity {
             public void onClick(View v) {
                 GameSettings.getInstance().put("SHOW_AMBUSH_RADIUS",ambushRad.isChecked()? "Y" : "N");
                 GameSettings.getInstance().put("SHOW_CITY_RADIUS", cityRad.isChecked() ? "Y" : "N");
+                GameSettings.getInstance().put("SHOW_CARAVAN_ROUTE", caravanRoute.isChecked() ? "Y" : "N");
                 GameSettings.getInstance().put("MUSIC_ON", musicOn.isChecked() ? "Y" : "N");
                 GameSettings.getInstance().put("SOUND_ON", soundOn.isChecked() ? "Y" : "N");
                 GameSettings.getInstance().save();
@@ -56,9 +59,10 @@ public class Settings extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        ambushRad.setChecked(GameSettings.getInstance().get("SHOW_AMBUSH_RADIUS").equals("Y"));
-        cityRad.setChecked(GameSettings.getInstance().get("SHOW_CITY_RADIUS").equals("Y"));
-        musicOn.setChecked(GameSettings.getInstance().get("MUSIC_ON").equals("Y"));
-        soundOn.setChecked(GameSettings.getInstance().get("SOUND_ON").equals("Y"));
+        ambushRad.setChecked("Y".equals(GameSettings.getInstance().get("SHOW_AMBUSH_RADIUS")));
+        cityRad.setChecked("Y".equals(GameSettings.getInstance().get("SHOW_CITY_RADIUS")));
+        caravanRoute.setChecked("Y".equals(GameSettings.getInstance().get("SHOW_CARAVAN_ROUTE")));
+        musicOn.setChecked("Y".equals(GameSettings.getInstance().get("MUSIC_ON")));
+        soundOn.setChecked("Y".equals(GameSettings.getInstance().get("SOUND_ON")));
     }
 }

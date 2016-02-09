@@ -108,7 +108,7 @@ public class Ambush implements GameObject {
     @Override
     public String getInfo() {
         if (isOwner)
-        return "Ваша верные войны ждут тут вражеских контрабандистов в Засаде.";
+        return "Ваши верные войны ждут здесь вражеских контрабандистов в Засаде.";
         else return "Засада ожидает здесь не осторожных караванщиков.";
     }
 
