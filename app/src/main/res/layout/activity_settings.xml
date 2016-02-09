@@ -137,10 +137,38 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="@string/settings_graphics"
+                android:id="@+id/textView15"
+                android:textStyle="bold"
+                android:layout_below="@+id/textView11"
+                android:layout_centerHorizontal="true" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="@string/settings_graphics_tilt"
+                android:id="@+id/textView16"
+                android:layout_alignBottom="@+id/useTilt"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true" />
+
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/useTilt"
+                android:checked="false"
+                android:layout_below="@+id/textView15"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="@string/settings_debug"
                 android:id="@+id/textView13"
                 android:textStyle="bold"
-                android:layout_below="@+id/textView11"
+                android:layout_below="@+id/textView16"
                 android:layout_centerHorizontal="true" />
             <TextView
                 android:layout_width="wrap_content"

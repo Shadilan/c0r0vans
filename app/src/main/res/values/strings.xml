@@ -36,5 +36,7 @@
     <string name="settings_show_routes">Show trade routes</string>
     <string name="settings_debug">Debug</string>
     <string name="settings_debug_net">Log net message</string>
+    <string name="settings_graphics">Graphics</string>
+    <string name="settings_graphics_tilt">Isometric</string>
 
 </resources>

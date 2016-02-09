@@ -40,7 +40,9 @@ public class GameSettings extends HashMap<String,String>{
         put("MUSIC_ON","N");
         put("SOUND_ON","N");
         put("SHOW_CARAVAN_ROUTE","N");
+        put("USE_TILT","N");
         put("NET_DEBUG","N");
+
         save();
     }
 

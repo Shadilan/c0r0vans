@@ -26,6 +26,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.GroundOverlayOptions;
 import com.google.android.gms.maps.model.LatLng;
@@ -129,7 +130,21 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
         setupMap();
         player = new Player(mMap);
 
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(player.getMarker().getPosition(), clientZoom));
+        //mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(player.getMarker().getPosition(), clientZoom));
+        if ("Y".equals(GameSettings.getInstance().get("USE_TILT")))
+            mMap.moveCamera(CameraUpdateFactory.newCameraPosition(
+                    new CameraPosition.Builder()
+                            .target(player.getMarker().getPosition())
+                            .tilt(60)
+                            .zoom(clientZoom)
+                            .build()));
+        else
+        mMap.moveCamera(CameraUpdateFactory.newCameraPosition(
+                new CameraPosition.Builder()
+                        .target(player.getMarker().getPosition())
+                        .tilt(0)
+                        .zoom(clientZoom)
+                        .build()));
         createListeners();
     }
 
@@ -505,6 +520,21 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                 break;
             }
         }
+        if ("Y".equals(GameSettings.getInstance().get("USE_TILT")))
+            mMap.moveCamera(CameraUpdateFactory.newCameraPosition(
+                    new CameraPosition.Builder()
+                            .target(player.getMarker().getPosition())
+                            .tilt(60)
+                            .zoom(clientZoom)
+                            .build()));
+        else
+            mMap.moveCamera(CameraUpdateFactory.newCameraPosition(
+                    new CameraPosition.Builder()
+                            .target(player.getMarker().getPosition())
+                            .tilt(0)
+                            .zoom(clientZoom)
+                            .build()));
         GameSound.updateSettings();
+
     }
 }
