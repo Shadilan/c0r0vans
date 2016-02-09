@@ -41,8 +41,9 @@ public class ImageLoader {
         images.put("create_waypoint",BitmapFactory.decodeResource(context.getResources(), R.mipmap.create_waypoint));
         images.put("drop_route",BitmapFactory.decodeResource(context.getResources(), R.mipmap.drop_route));
             //Ambush
-        images.put("remove_ambush",BitmapFactory.decodeResource(context.getResources(), R.mipmap.rem_ambush));
+        images.put("remove_ambush",BitmapFactory.decodeResource(context.getResources(), R.mipmap.dismiss));
         images.put("attack_ambush",BitmapFactory.decodeResource(context.getResources(), R.mipmap.rem_ambush));
+
             //Route
         images.put("remove_route",BitmapFactory.decodeResource(context.getResources(), R.mipmap.remove_route));
 

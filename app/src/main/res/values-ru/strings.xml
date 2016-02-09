@@ -34,5 +34,5 @@
     <string name="setings_cancel">Отменить</string>
     <string name="settings_show_routes">Торговые маршруты</string>
     <string name="settings_debug">Отладка</string>
-    <string name="settings_debug_net">Логирование сообщений сети</string>
+    <string name="settings_debug_net">Сеть</string>
 </resources>

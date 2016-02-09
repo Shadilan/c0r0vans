@@ -156,7 +156,7 @@ public class Ambush implements GameObject {
                 removeAmbush = new ObjectAction(this) {
                     @Override
                     public Bitmap getImage() {
-                        return ImageLoader.getImage("remove_ambush");
+                        return ImageLoader.getImage("attack_ambush");
                     }
                     @Override
                     public String getInfo() {
