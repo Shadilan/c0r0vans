@@ -441,6 +441,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
         myHandler.postDelayed(myRunable, delay);
 
     }
+
     Runnable myRunable=new Runnable() {
         @Override
         public void run() {

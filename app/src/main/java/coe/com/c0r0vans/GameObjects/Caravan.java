@@ -36,6 +36,7 @@ public class Caravan implements GameObject {
     private String finishName;
     private Polyline route;
     private boolean isOwner=false;
+    private double speed=20;
     public String getGUID() {
         return GUID;
     }
@@ -77,6 +78,7 @@ public class Caravan implements GameObject {
             if (obj.has("Owner")) isOwner=obj.getBoolean("Owner");
             if (obj.has("StartName")) startName=obj.getString("StartName");
             if (obj.has("FinishName")) finishName=obj.getString("FinishName");
+            if (obj.has("Speed")) speed=obj.getDouble("Speed");
             if (obj.has("StartLat") && obj.has("StartLng")){
                 double lat=obj.getInt("StartLat")/1e6;
                 double lng=obj.getInt("StartLng")/1e6;
@@ -137,7 +139,8 @@ public class Caravan implements GameObject {
     @Override
     public String getInfo() {
 
-        if (isOwner) return "Ваш караван направляется из города "+startName+" в город "+finishName +", готовясь принести вам золото.";
+        if (isOwner) if (speed>0) return "Ваш караван направляется из города "+startName+" в город "+finishName +", готовясь принести вам золото.";
+        else return "Ваш караван направляется из города "+finishName+" в город "+startName +", готовясь принести вам золото.";
             else return "Чейто караван проезжает, звеня не ВАШИМ золотом.";
     }
     private ObjectAction dropRoute;
