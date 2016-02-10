@@ -63,27 +63,29 @@
         </LinearLayout>
 
         <HorizontalScrollView
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fillViewport="false"
             android:layout_gravity="center_horizontal"
+            android:measureAllChildren="false"
             android:layout_below="@+id/infoLaout"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true">
+            android:layout_centerHorizontal="true">
 
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
                 android:id="@+id/ActionList"
                 android:minHeight="80dp"
                 android:minWidth="80dp"
-                >
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true">
                 <Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:minWidth="80dp"
-                    android:minHeight="80dp"/>
+                    android:minHeight="80dp" />
 
             </LinearLayout>
         </HorizontalScrollView>

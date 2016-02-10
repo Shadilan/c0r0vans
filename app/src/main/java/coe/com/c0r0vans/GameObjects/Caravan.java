@@ -1,12 +1,15 @@
 package coe.com.c0r0vans.GameObjects;
 
 import android.graphics.Bitmap;
+import android.graphics.Color;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -14,7 +17,10 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 import coe.com.c0r0vans.R;
+import utility.Essages;
+import utility.GameSettings;
 import utility.ImageLoader;
+import utility.serverConnect;
 
 /**
  * Caravan Object
@@ -24,21 +30,23 @@ public class Caravan implements GameObject {
     private String GUID;
     private Bitmap image;
     private GoogleMap map;
+    private LatLng start;
+    private LatLng finish;
+    private String startName;
+    private String finishName;
+    private Polyline route;
     private boolean isOwner=false;
+    private double speed=20;
     public String getGUID() {
         return GUID;
     }
 
     public Caravan(GoogleMap map,JSONObject obj) throws JSONException {
         this.map=map;
-        int Lat=obj.getInt("Lat");
-        int Lng=obj.getInt("Lng");
         image= ImageLoader.getImage("caravan");
-
-        mark=map.addMarker(new MarkerOptions().position(new LatLng(Lat / 1e6, Lng / 1e6)));
-        changeMarkerSize((int) map.getCameraPosition().zoom);
-        mark.setAnchor(0.5f, 0.5f);
         loadJSON(obj);
+        mark.setAnchor(0.5f, 0.5f);
+
 
 
     }
@@ -66,17 +74,61 @@ public class Caravan implements GameObject {
             GUID=obj.getString("GUID");
             int Lat=obj.getInt("Lat");
             int Lng=obj.getInt("Lng");
+            LatLng latlng=new LatLng(Lat / 1e6, Lng / 1e6);
             if (obj.has("Owner")) isOwner=obj.getBoolean("Owner");
+            if (obj.has("StartName")) startName=obj.getString("StartName");
+            if (obj.has("FinishName")) finishName=obj.getString("FinishName");
+            if (obj.has("Speed")) speed=obj.getDouble("Speed");
+            if (obj.has("StartLat") && obj.has("StartLng")){
+                double lat=obj.getInt("StartLat")/1e6;
+                double lng=obj.getInt("StartLng")/1e6;
+                start=new LatLng(lat,lng);
+            } else start=null;
+            if (obj.has("FinishLat") && obj.has("FinishLng")){
+                double lat=obj.getInt("FinishLat")/1e6;
+                double lng=obj.getInt("FinishLng")/1e6;
+                finish=new LatLng(lat,lng);
+            } else finish=null;
+
             if (mark==null) {
-                setMarker(map.addMarker(new MarkerOptions().position(new LatLng(Lat / 1e6, Lng / 1e6))));
+                setMarker(map.addMarker(new MarkerOptions().position(latlng)));
             } else {
                 mark.setPosition(new LatLng(Lat / 1e6, Lng / 1e6));
             }
+            if (route==null && start!=null && finish!=null){
+                PolylineOptions options=new PolylineOptions();
+
+                if (isOwner) {
+                    options.width(2);
+                    options.color(Color.BLUE);
+
+                /*else {
+                    options.width(4);
+                    options.color(Color.RED);
+                }*/
+                    options.add(start);
+                    options.add(finish);
+                    route = map.addPolyline(options);
+                }
+
+            }
+            showRoute();
 
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
+    }
+
+    public void showRoute(){
+        String opt= GameSettings.getInstance().get("SHOW_CARAVAN_ROUTE");
+        if (opt==null) opt="N";
+        if (opt.equals("Y") && route!=null){
+            route.setVisible(true);
+        } else if (route!=null)
+        {
+            route.setVisible(false);
+        }
     }
 
     @Override
@@ -87,8 +139,9 @@ public class Caravan implements GameObject {
     @Override
     public String getInfo() {
 
-        if (isOwner) return "Ваш караван направляется к цели, готовясь принести вам золото.";
-            else return "Чейто караван, проезжает звеня не ВАШИМ золотом.";
+        if (isOwner) if (speed>0) return "Ваш караван направляется из города "+startName+" в город "+finishName +", готовясь принести вам золото.";
+        else return "Ваш караван направляется из города "+finishName+" в город "+startName +", готовясь принести вам золото.";
+            else return "Чейто караван проезжает, звеня не ВАШИМ золотом.";
     }
     private ObjectAction dropRoute;
     @Override
@@ -109,18 +162,20 @@ public class Caravan implements GameObject {
 
             @Override
             public String getCommand() {
-                return "DropUnfinishedRoute";
+                return "DropRoute";
             }
 
             @Override
             public void preAction() {
                 setEnable(false);
-                //owner.getMarker().setVisible(false);
+                owner.getMarker().setVisible(false);
             }
 
             @Override
             public void postAction() {
-                owner.getMarker().remove();
+                owner.RemoveObject();
+                serverConnect.getInstance().RefreshCurrent();
+                Essages.addEssage("Караван из распущен.");
             }
 
             @Override
@@ -129,11 +184,12 @@ public class Caravan implements GameObject {
             }
         };
 
-        if (dropRoute.isEnabled() && isOwner)Actions.add(dropRoute);
+        //if (dropRoute.isEnabled() && isOwner && false)Actions.add(dropRoute);
         return Actions;
     }
     @Override
     public void changeMarkerSize(int Type) {
+        if (isOwner)
         switch (Type){
             case GameObject.ICON_SMALL: mark.setIcon(BitmapDescriptorFactory.fromResource(R.mipmap.caravan_s));
                 break;
@@ -141,6 +197,19 @@ public class Caravan implements GameObject {
                 break;
             case GameObject.ICON_LARGE: mark.setIcon(BitmapDescriptorFactory.fromResource(R.mipmap.caravan));
                 break;
-        }
+            default: mark.setIcon(BitmapDescriptorFactory.fromResource(R.mipmap.caravan));
+                Essages.addEssage("Ваш зум не корректен.");
+        } else
+            switch (Type){
+                case GameObject.ICON_SMALL: mark.setIcon(BitmapDescriptorFactory.fromResource(R.mipmap.caravan_e_s));
+                    break;
+                case GameObject.ICON_MEDIUM: mark.setIcon(BitmapDescriptorFactory.fromResource(R.mipmap.caravan_e_m));
+                    break;
+                case GameObject.ICON_LARGE: mark.setIcon(BitmapDescriptorFactory.fromResource(R.mipmap.caravan_e));
+                    break;
+                default:mark.setIcon(BitmapDescriptorFactory.fromResource(R.mipmap.caravan_e));
+                    Essages.addEssage("Ваш зум не корректен.");
+            }
+
     }
 }

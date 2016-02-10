@@ -1,9 +1,12 @@
 package coe.com.c0r0vans.GameObjects;
 
 import android.graphics.Bitmap;
+import android.graphics.Color;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.Circle;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -13,8 +16,12 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import coe.com.c0r0vans.GameSound;
 import coe.com.c0r0vans.R;
+import utility.Essages;
+import utility.GameSettings;
 import utility.ImageLoader;
+import utility.serverConnect;
 
 /**
  * @author Shadilan
@@ -23,9 +30,13 @@ public class City implements GameObject{
     private Marker mark;
     private String GUID;
     private String CityName;
+    private int Level=0;
+    private int radius=100;
     private String upgrade;
+    private String upgradeName;
     private Bitmap image;
     private GoogleMap map;
+    private Circle zone;
     public String getGUID() {
         return GUID;
     }
@@ -68,14 +79,31 @@ public class City implements GameObject{
             GUID=obj.getString("GUID");
             int Lat=obj.getInt("Lat");
             int Lng=obj.getInt("Lng");
+            LatLng latlng=new LatLng(Lat / 1e6, Lng / 1e6);
             if (mark==null) {
-                setMarker(map.addMarker(new MarkerOptions().position(new LatLng(Lat / 1e6, Lng / 1e6))));
+                setMarker(map.addMarker(new MarkerOptions().position(latlng)));
 
             } else {
-                mark.setPosition(new LatLng(Lat / 1e6, Lng / 1e6));
+                mark.setPosition(latlng);
             }
             if (obj.has("Name")) CityName=obj.getString("Name");
             if (obj.has("UpgradeType")) upgrade=obj.getString("UpgradeType");
+            if (obj.has("UpgradeName")) upgradeName=obj.getString("UpgradeName");
+            if (obj.has("Level")) Level=obj.getInt("Level");
+            if (obj.has("Radius")) radius=obj.getInt("Radius");
+            if (zone==null){
+                CircleOptions circleOptions = new CircleOptions();
+                circleOptions.center(latlng);
+                circleOptions.radius(radius);
+                circleOptions.strokeColor(Color.BLUE);
+                circleOptions.strokeWidth(1);
+                zone = map.addCircle(circleOptions);
+            } else
+            {
+                zone.setCenter(latlng);
+                zone.setRadius(radius);
+            }
+            showRadius();
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -89,10 +117,10 @@ public class City implements GameObject{
 
     @Override
     public String getInfo() {
-        return "В городе можно приобрести "+upgrade;
+        return "Это город "+ Level+" уровня. В городе можно приобрести \""+upgradeName+"\"";
     }
 
-    public String getCityName(){return CityName;}
+    public String getCityName(){return (CityName+" lv."+Level) ;}
 
     private ObjectAction startRoute;
     private ObjectAction finishRoute;
@@ -120,12 +148,14 @@ public class City implements GameObject{
 
                 @Override
                 public void preAction() {
-
+                    GameSound.playSound(GameSound.START_ROUTE_SOUND);
                 }
 
                 @Override
                 public void postAction() {
 
+                    Essages.addEssage("Начат маршрут в город " + CityName);
+                    serverConnect.getInstance().getPlayerInfo();
                 }
 
                 @Override
@@ -154,12 +184,14 @@ public class City implements GameObject{
 
             @Override
             public void preAction() {
-
+                GameSound.playSound(GameSound.FINISH_ROUTE_SOUND);
             }
 
             @Override
             public void postAction() {
-
+                Essages.addEssage("Завершен маршрут в город "+CityName);
+                serverConnect.getInstance().getPlayerInfo();
+                serverConnect.getInstance().RefreshCurrent();
             }
 
             @Override
@@ -188,12 +220,13 @@ public class City implements GameObject{
 
                 @Override
                 public void preAction() {
-
+                    GameSound.playSound(GameSound.BUY_SOUND);
                 }
 
                 @Override
                 public void postAction() {
-
+                    serverConnect.getInstance().getPlayerInfo();
+                    Essages.addEssage("Улучшение "+upgrade+" куплено.");
                 }
 
                 @Override
@@ -213,6 +246,22 @@ public class City implements GameObject{
                 break;
             case GameObject.ICON_LARGE: mark.setIcon(BitmapDescriptorFactory.fromResource(R.mipmap.city));
                 break;
+            default:mark.setIcon(BitmapDescriptorFactory.fromResource(R.mipmap.city));
+                Essages.addEssage("Ваш зум не корректен.");
+                break;
         }
+    }
+    public void showRadius(){
+        String opt= GameSettings.getInstance().get("SHOW_CITY_RADIUS");
+        if (opt.equals("Y")){
+            zone.setVisible(true);
+        } else
+        {
+            zone.setVisible(false);
+        }
+    }
+
+    public String getUpgrade() {
+        return upgrade;
     }
 }

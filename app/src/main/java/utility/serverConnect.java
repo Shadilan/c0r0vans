@@ -22,6 +22,7 @@ import java.util.HashMap;
 import java.util.Queue;
 
 import coe.com.c0r0vans.GameObjects.ObjectAction;
+import coe.com.c0r0vans.Settings;
 
 /**
  * Объект обеспечивающий соединение с сервером и взаимодействие с сервером. Singleton.
@@ -109,7 +110,8 @@ public class serverConnect {
     public boolean ExecLogin(String Login, String Password){
         if (!checkConnection()) return false;
         String url=ServerAddres+"/login.jsp"+"?Login="+Login+"&Password="+Password;
-        Log.d("Debug info","Connect url:"+url);
+        if ("Y".equals(GameSettings.getInstance().get("NET_DEBUG"))) Essages.addEssage("Net:"+url);
+        Log.d("Debug info", "Connect url:" + url);
         final JsonObjectRequest jsObjRequest = new JsonObjectRequest
                 (Request.Method.GET, url, null, new Response.Listener<JSONObject>(){
                     @Override
@@ -159,7 +161,8 @@ public class serverConnect {
         if (!checkConnection()) return false;
         if (Token==null) return false;
         String url=ServerAddres+"/getdata.jsp"+"?ReqName=ScanRange&Token="+Token+"&plat="+Lat+"&plng="+Lng;
-        Log.d("Debug info","Connect url:"+url);
+        Log.d("Debug info", "Connect url:" + url);
+        if ("Y".equals(GameSettings.getInstance().get("NET_DEBUG"))) Essages.addEssage("Net:"+url);
         final JsonObjectRequest jsObjRequest = new JsonObjectRequest
                 (Request.Method.GET, url, null, new Response.Listener<JSONObject>(){
                     @Override
@@ -189,6 +192,10 @@ public class serverConnect {
         reqq.add(jsObjRequest);
         return true;
     }
+    public boolean RefreshCurrent(){
+        RefreshData(GPSInfo.getInstance().GetLat(),GPSInfo.getInstance().GetLng());
+        return true;
+    }
 
     private ArrayList<ObjectAction> lockedActions;
     private HashMap<Response.Listener<JSONObject>,ObjectAction> listenersMap;
@@ -203,14 +210,13 @@ public class serverConnect {
      * @param Lng Longtitude of player
      * @return true
      */
-    public boolean ExecCommand(final ObjectAction action, String Target, int Lat,int Lng , int TLat,int TLng){
+    public boolean ExecCommand(ObjectAction action, String Target, int Lat,int Lng , int TLat,int TLng){
         Log.d("DebugAction", "Step1");
         if (!checkConnection()) return false;
         if (Token==null) return false;
-
         String url=ServerAddres+"/getdata.jsp"+"?Token="+Token+"&ReqName="+action.getCommand()+"&plat="+Lat+"&plng="+Lng+"&TGUID="+Target+"&lat="+TLat+"&lng="+TLng;
         Log.d("Debug info", "Connection url:" + url);
-
+        if ("Y".equals(GameSettings.getInstance().get("NET_DEBUG"))) Essages.addEssage("Net:"+url);
         if (lockedActions==null) lockedActions=new ArrayList<>();
 
         lockedActions.add(action);
@@ -226,7 +232,6 @@ public class serverConnect {
                 } else {
                     for (ServerListener l : listeners) l.onAction(response);
                     if (listenersMap.get(this)!=null) listenersMap.get(this).postAction();
-                    RefreshData(GPSInfo.getInstance().GetLat(), GPSInfo.getInstance().GetLng());
                 }
             }
         };
@@ -255,7 +260,8 @@ public class serverConnect {
         if (Token==null) return false;
 
         String url=ServerAddres+"/getdata.jsp"+"?Token="+Token+"&ReqName=GetPlayerInfo";
-        Log.d("Debug info","Connection url:"+url);
+        Log.d("Debug info", "Connection url:" + url);
+        if ("Y".equals(GameSettings.getInstance().get("NET_DEBUG"))) Essages.addEssage("Net:"+url);
         Response.Listener<JSONObject> l=new Response.Listener<JSONObject>(){
             @Override
             public void onResponse(JSONObject response) {

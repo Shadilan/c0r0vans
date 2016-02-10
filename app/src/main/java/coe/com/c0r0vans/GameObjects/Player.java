@@ -19,10 +19,13 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import coe.com.c0r0vans.GameSound;
 import coe.com.c0r0vans.R;
+import utility.Essages;
 import utility.GPSInfo;
 import utility.ImageLoader;
 import utility.ResourceString;
+import utility.serverConnect;
 
 /**
  * @author Shadilan
@@ -77,8 +80,8 @@ public class Player implements GameObject{
         CircleOptions circleOptions=new CircleOptions();
         circleOptions.center(new LatLng(GPSInfo.getInstance().GetLat() / 1E6, GPSInfo.getInstance().GetLng() / 1E6));
         circleOptions.radius(ActionDistance);
-        circleOptions.strokeColor(Color.RED);
-        circleOptions.strokeWidth(1);
+        circleOptions.strokeColor(Color.parseColor("#D08D2E"));
+        circleOptions.strokeWidth(5);
         circle=mMap.addCircle(circleOptions);
         changeMarkerSize((int) map.getCameraPosition().zoom);
         mark.setAnchor(0.5f, 0.5f);
@@ -123,6 +126,7 @@ public class Player implements GameObject{
             if (obj.has("MostIn")) MostIn=obj.getInt("MostIn");
             if (obj.has("AmbushRadius")) AmbushRadius=obj.getInt("AmbushRadius");
             if (obj.has("ActionDistance")) ActionDistance=obj.getInt("ActionDistance");
+            circle.setRadius(ActionDistance);
             if (obj.has("Upgrades")){
                 JSONArray upg=obj.getJSONArray("Upgrades");
                 Upgrades.clear();
@@ -185,12 +189,14 @@ public class Player implements GameObject{
 
             @Override
             public void preAction() {
-
+                GameSound.playSound(GameSound.SET_AMBUSH);
             }
 
             @Override
             public void postAction() {
 
+                serverConnect.getInstance().RefreshCurrent();
+                Essages.addEssage("Засада установлена.");
             }
 
             @Override
@@ -219,12 +225,13 @@ public class Player implements GameObject{
 
             @Override
             public void preAction() {
-
+                GameSound.playSound(GameSound.START_ROUTE_SOUND);
             }
 
             @Override
             public void postAction() {
-
+                serverConnect.getInstance().getPlayerInfo();
+                Essages.addEssage("Незаконченый маршрут отменен.");
             }
 
             @Override
@@ -232,7 +239,7 @@ public class Player implements GameObject{
 
             }
         };
-        if (dropRoute.isEnabled()) Actions.add(dropRoute);
+        //if (false) Actions.add(dropRoute);
 
 
         return Actions;
@@ -279,4 +286,5 @@ public class Player implements GameObject{
     public ArrayList<Route> getRoutes() {
         return Routes;
     }
+    public int getActionDistance(){return ActionDistance;}
 }

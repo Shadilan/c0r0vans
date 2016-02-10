@@ -24,4 +24,17 @@
     <string name="most_in">Самый богатый в </string>
     <string name="title_activity_main">Информация</string>
     <string name="ambush">Засада</string>
+    <string name="settings_display">Настройки отображения</string>
+    <string name="settings_ambush_radius">Радиус засады</string>
+    <string name="settings_city_radius">Радиус обороны города</string>
+    <string name="setings_media">Медиа настройки</string>
+    <string name="settings_music">Музыка</string>
+    <string name="settings_sound">Звук</string>
+    <string name="setings_apply">Применить</string>
+    <string name="setings_cancel">Отменить</string>
+    <string name="settings_show_routes">Торговые маршруты</string>
+    <string name="settings_debug">Отладка</string>
+    <string name="settings_debug_net">Сеть</string>
+    <string name="settings_graphics">Графика</string>
+    <string name="settings_graphics_tilt">Изометрия</string>
 </resources>

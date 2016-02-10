@@ -15,13 +15,17 @@ import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import org.json.JSONObject;
 
+import coe.com.c0r0vans.GameObjects.CommandButton;
 import coe.com.c0r0vans.GameObjects.Player;
 import coe.com.c0r0vans.GameObjects.Route;
 import coe.com.c0r0vans.GameObjects.SelectedObject;
 import coe.com.c0r0vans.GameObjects.Upgrade;
+import utility.GPSInfo;
+import utility.ImageLoader;
 import utility.ServerListener;
 import utility.serverConnect;
 
@@ -30,22 +34,14 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.content_main);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
 
         player= (Player) SelectedObject.getInstance().getExecuter();
 
-        final Button playerInfo= (Button) findViewById(R.id.playerInfoButton);
-        Button upgradeInfo= (Button) findViewById(R.id.upgradeInfoButton);
-        Button routeInfo= (Button) findViewById(R.id.routeInfoButton);
+        ToggleButton playerInfo= (ToggleButton) findViewById(R.id.playerInfoButton);
+        ToggleButton upgradeInfo= (ToggleButton) findViewById(R.id.upgradeInfoButton);
+        ToggleButton routeInfo= (ToggleButton) findViewById(R.id.routeInfoButton);
 
         playerInfo.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -57,12 +53,12 @@ public class MainActivity extends AppCompatActivity {
                 t= (LinearLayout) findViewById(R.id.routeLayout);
                 t.setVisibility(View.INVISIBLE);
 
-                Button b= (Button) findViewById(R.id.playerInfoButton);
-                b.setSelected(true);
-                b= (Button) findViewById(R.id.upgradeInfoButton);
-                b.setSelected(false);
-                b= (Button) findViewById(R.id.routeInfoButton);
-                b.setSelected(false);
+                ToggleButton b= (ToggleButton) findViewById(R.id.playerInfoButton);
+                b.setChecked(true);
+                b= (ToggleButton) findViewById(R.id.upgradeInfoButton);
+                b.setChecked(false);
+                b= (ToggleButton) findViewById(R.id.routeInfoButton);
+                b.setChecked(false);
             }
         });
 
@@ -76,12 +72,12 @@ public class MainActivity extends AppCompatActivity {
                 t = (LinearLayout) findViewById(R.id.routeLayout);
                 t.setVisibility(View.INVISIBLE);
 
-                Button b = (Button) findViewById(R.id.playerInfoButton);
-                b.setSelected(false);
-                b = (Button) findViewById(R.id.upgradeInfoButton);
-                b.setSelected(true);
-                b = (Button) findViewById(R.id.routeInfoButton);
-                b.setSelected(false);
+                ToggleButton b = (ToggleButton) findViewById(R.id.playerInfoButton);
+                b.setChecked(false);
+                b = (ToggleButton) findViewById(R.id.upgradeInfoButton);
+                b.setChecked(true);
+                b = (ToggleButton) findViewById(R.id.routeInfoButton);
+                b.setChecked(false);
             }
         });
         routeInfo.setOnClickListener(new View.OnClickListener() {
@@ -94,12 +90,12 @@ public class MainActivity extends AppCompatActivity {
                 t = (LinearLayout) findViewById(R.id.routeLayout);
                 t.setVisibility(View.VISIBLE);
 
-                Button b = (Button) findViewById(R.id.playerInfoButton);
-                b.setSelected(false);
-                b = (Button) findViewById(R.id.upgradeInfoButton);
-                b.setSelected(false);
-                b = (Button) findViewById(R.id.routeInfoButton);
-                b.setSelected(true);
+                ToggleButton b = (ToggleButton) findViewById(R.id.playerInfoButton);
+                b.setChecked(false);
+                b = (ToggleButton) findViewById(R.id.upgradeInfoButton);
+                b.setChecked(false);
+                b = (ToggleButton) findViewById(R.id.routeInfoButton);
+                b.setChecked(true);
             }
         });
         serverConnect.getInstance().addListener(new ServerListener() {
@@ -146,12 +142,12 @@ public class MainActivity extends AppCompatActivity {
 
         for (Upgrade u:player.getUpgrades()){
             ImageView iv=new ImageView(getApplicationContext());
-            Log.d("DebugInfo","Upg show:"+u.getDescription());
+            Log.d("DebugInfo", "Upg show:" + u.getDescription());
             iv.setImageBitmap(u.getImage());
             gl.addView(iv);
             TextView info=new TextView(getApplicationContext());
             info.setSingleLine(false);
-            info.setText(u.getName()+"\n"+u.getDescription());
+            info.setText(u.getName() + "\n" + u.getDescription());
             info.setTextColor(Color.BLACK);
 
             gl.addView(info);
@@ -160,16 +156,28 @@ public class MainActivity extends AppCompatActivity {
         gl=(GridLayout) findViewById(R.id.routeInfo);
 
         gl.removeAllViews();
-        gl.setRowCount(player.getRoutes().size());
+        gl.setRowCount(player.getRoutes().size()*2);
         for (Route r:player.getRoutes()){
             TextView info=new TextView(getApplicationContext());
             info.setSingleLine(true);
-            info.setText(r.getStartName()+" - "+r.getDistance()+" - "+r.getFinishName());
+            info.setText(r.getStartName() + " - " + r.getDistance() + " - " + r.getFinishName());
             info.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
             info.setTextSize(15);
             info.setGravity(Gravity.CENTER);
             info.setTextColor(Color.BLACK);
 
+
+            CommandButton remove=new CommandButton(this.getApplicationContext(),r.getAction(),r.getGUID());
+            remove.setImageBitmap(ImageLoader.getImage("closebutton"));
+            remove.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    CommandButton  button= (CommandButton) v;
+                    serverConnect.getInstance().ExecCommand(button.getAction(),button.getGuid(),0,0,0,0);
+                    v.setVisibility(View.GONE);
+                }
+            });
+            gl.addView(remove);
             gl.addView(info);
         }
 
@@ -180,4 +188,5 @@ public class MainActivity extends AppCompatActivity {
         serverConnect.getInstance().getPlayerInfo();
 
     }
+
 }
