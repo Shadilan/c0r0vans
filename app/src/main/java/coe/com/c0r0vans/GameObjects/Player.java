@@ -286,5 +286,6 @@ public class Player implements GameObject{
     public ArrayList<Route> getRoutes() {
         return Routes;
     }
+    public ArrayList<AmbushItem> getAmbushes() {return Ambushes;}
     public int getActionDistance(){return ActionDistance;}
 }

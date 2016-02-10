@@ -1,6 +1,7 @@
 package coe.com.c0r0vans;
 
 import android.graphics.Color;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -17,8 +18,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import org.json.JSONObject;
 
+import coe.com.c0r0vans.GameObjects.AmbushItem;
 import coe.com.c0r0vans.GameObjects.CommandButton;
 import coe.com.c0r0vans.GameObjects.Player;
 import coe.com.c0r0vans.GameObjects.Route;
@@ -42,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
         ToggleButton playerInfo= (ToggleButton) findViewById(R.id.playerInfoButton);
         ToggleButton upgradeInfo= (ToggleButton) findViewById(R.id.upgradeInfoButton);
         ToggleButton routeInfo= (ToggleButton) findViewById(R.id.routeInfoButton);
-
+        ToggleButton ambushInfo= (ToggleButton) findViewById(R.id.ambushInfoButton);
         playerInfo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -52,12 +56,16 @@ public class MainActivity extends AppCompatActivity {
                 t.setVisibility(View.INVISIBLE);
                 t= (LinearLayout) findViewById(R.id.routeLayout);
                 t.setVisibility(View.INVISIBLE);
+                t = (LinearLayout) findViewById(R.id.ambushLayout);
+                t.setVisibility(View.INVISIBLE);
 
                 ToggleButton b= (ToggleButton) findViewById(R.id.playerInfoButton);
                 b.setChecked(true);
                 b= (ToggleButton) findViewById(R.id.upgradeInfoButton);
                 b.setChecked(false);
                 b= (ToggleButton) findViewById(R.id.routeInfoButton);
+                b.setChecked(false);
+                b = (ToggleButton) findViewById(R.id.ambushInfoButton);
                 b.setChecked(false);
             }
         });
@@ -71,12 +79,16 @@ public class MainActivity extends AppCompatActivity {
                 t.setVisibility(View.VISIBLE);
                 t = (LinearLayout) findViewById(R.id.routeLayout);
                 t.setVisibility(View.INVISIBLE);
+                t = (LinearLayout) findViewById(R.id.ambushLayout);
+                t.setVisibility(View.INVISIBLE);
 
                 ToggleButton b = (ToggleButton) findViewById(R.id.playerInfoButton);
                 b.setChecked(false);
                 b = (ToggleButton) findViewById(R.id.upgradeInfoButton);
                 b.setChecked(true);
                 b = (ToggleButton) findViewById(R.id.routeInfoButton);
+                b.setChecked(false);
+                b = (ToggleButton) findViewById(R.id.ambushInfoButton);
                 b.setChecked(false);
             }
         });
@@ -89,12 +101,39 @@ public class MainActivity extends AppCompatActivity {
                 t.setVisibility(View.INVISIBLE);
                 t = (LinearLayout) findViewById(R.id.routeLayout);
                 t.setVisibility(View.VISIBLE);
+                t = (LinearLayout) findViewById(R.id.ambushLayout);
+                t.setVisibility(View.INVISIBLE);
 
                 ToggleButton b = (ToggleButton) findViewById(R.id.playerInfoButton);
                 b.setChecked(false);
                 b = (ToggleButton) findViewById(R.id.upgradeInfoButton);
                 b.setChecked(false);
                 b = (ToggleButton) findViewById(R.id.routeInfoButton);
+                b.setChecked(true);
+                b = (ToggleButton) findViewById(R.id.ambushInfoButton);
+                b.setChecked(false);
+            }
+        });
+
+        ambushInfo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LinearLayout t = (LinearLayout) findViewById(R.id.informationLayout);
+                t.setVisibility(View.INVISIBLE);
+                t = (LinearLayout) findViewById(R.id.upgradeLayout);
+                t.setVisibility(View.INVISIBLE);
+                t = (LinearLayout) findViewById(R.id.routeLayout);
+                t.setVisibility(View.INVISIBLE);
+                t = (LinearLayout) findViewById(R.id.ambushLayout);
+                t.setVisibility(View.VISIBLE);
+
+                ToggleButton b = (ToggleButton) findViewById(R.id.playerInfoButton);
+                b.setChecked(false);
+                b = (ToggleButton) findViewById(R.id.upgradeInfoButton);
+                b.setChecked(false);
+                b = (ToggleButton) findViewById(R.id.routeInfoButton);
+                b.setChecked(false);
+                b = (ToggleButton) findViewById(R.id.ambushInfoButton);
                 b.setChecked(true);
             }
         });
@@ -138,7 +177,7 @@ public class MainActivity extends AppCompatActivity {
 
         GridLayout gl= (GridLayout) findViewById(R.id.upgradeInfo);
         gl.removeAllViews();
-        gl.setRowCount(player.getUpgrades().size()*2);
+        gl.setRowCount(player.getUpgrades().size() * 2);
 
         for (Upgrade u:player.getUpgrades()){
             ImageView iv=new ImageView(getApplicationContext());
@@ -161,6 +200,37 @@ public class MainActivity extends AppCompatActivity {
             TextView info=new TextView(getApplicationContext());
             info.setSingleLine(true);
             info.setText(r.getStartName() + " - " + r.getDistance() + " - " + r.getFinishName());
+            info.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            info.setTextSize(15);
+            info.setGravity(Gravity.CENTER);
+            info.setTextColor(Color.BLACK);
+
+
+            CommandButton remove=new CommandButton(this.getApplicationContext(),r.getAction(),r.getGUID());
+            remove.setImageBitmap(ImageLoader.getImage("closebutton"));
+            remove.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    CommandButton button = (CommandButton) v;
+                    serverConnect.getInstance().ExecCommand(button.getAction(), button.getGuid(), 0, 0, 0, 0);
+                    v.setVisibility(View.GONE);
+                }
+            });
+            gl.addView(remove);
+            gl.addView(info);
+        }
+        gl=(GridLayout) findViewById(R.id.ambushInfo);
+
+        gl.removeAllViews();
+        gl.setRowCount(player.getAmbushes().size()*2);
+        for (AmbushItem r:player.getAmbushes()){
+            TextView info=new TextView(getApplicationContext());
+            info.setSingleLine(true);
+            float[] distances = new float[1];
+            LatLng rLatLng=r.getLatLng();
+            Location.distanceBetween(player.getMarker().getPosition().latitude, player.getMarker().getPosition().longitude, rLatLng.latitude, rLatLng.longitude, distances);
+
+            info.setText("Засада в "+ ((int)distances[0])+" м");
             info.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
             info.setTextSize(15);
             info.setGravity(Gravity.CENTER);

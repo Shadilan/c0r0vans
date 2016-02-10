@@ -8,6 +8,8 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.util.ArrayList;
 
 /**
@@ -154,4 +156,5 @@ public class GPSInfo {
     public int GetLng(){
         return lng;
     }
+    public LatLng getLatLng(){return new LatLng(lat/1e6,lng/1e6);}
 }
