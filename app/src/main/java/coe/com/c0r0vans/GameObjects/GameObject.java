@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 
 import com.google.android.gms.maps.model.Marker;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -37,7 +38,7 @@ public interface GameObject {
      * Load object from JSON
      * @param obj JSON to Load
      */
-     void loadJSON(JSONObject obj);
+     void loadJSON(JSONObject obj) throws JSONException;
 
     /**
      * Actions to do on remove object

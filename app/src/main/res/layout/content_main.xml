@@ -9,7 +9,7 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:showIn="@layout/activity_main" tools:context="coe.com.c0r0vans.MainActivity">
 
-    <LinearLayout
+    <HorizontalScrollView
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -17,14 +17,19 @@
         android:id="@+id/Tabs"
         android:layout_alignParentBottom="false">
 
+    <GridLayout
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/TabsG"
+        android:rowCount="1"
+        android:columnCount="4">
+
         <ToggleButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/information"
             android:id="@+id/playerInfoButton"
-            android:layout_gravity="left"
-            android:focusable="true"
-            android:clickable="true"
             android:textOff="@string/information"
             android:textOn="@string/information"
             android:checked="true" />
@@ -34,7 +39,6 @@
             android:layout_height="wrap_content"
             android:text="@string/upgrades"
             android:id="@+id/upgradeInfoButton"
-            android:layout_gravity="center_horizontal"
             android:textOff="@string/upgrades"
             android:textOn="@string/upgrades" />
 
@@ -43,11 +47,17 @@
             android:layout_height="wrap_content"
             android:text="@string/route_window"
             android:id="@+id/routeInfoButton"
-            android:layout_gravity="right"
             android:textOff="@string/route_window"
             android:textOn="@string/route_window" />
-    </LinearLayout>
-
+        <ToggleButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Засады"
+            android:id="@+id/ambushInfoButton"
+            android:textOff="Засады"
+            android:textOn="Засады" />
+    </GridLayout>
+</HorizontalScrollView>
     <LinearLayout
                     android:id="@+id/informationLayout"
                     android:layout_width="match_parent"
@@ -247,6 +257,36 @@
                 android:rowOrderPreserved="true"
                 android:columnOrderPreserved="true"
                 android:id="@+id/routeInfo"
+                android:useDefaultMargins="false"
+                android:textAlignment="center"
+                android:alignmentMode="alignBounds">
+
+            </GridLayout>
+        </ScrollView>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ambushLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:visibility="invisible"
+        android:layout_below="@+id/Tabs"
+        android:layout_alignParentBottom="true">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/scrollView4" >
+
+            <GridLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:rowCount="10"
+                android:columnCount="2"
+                android:rowOrderPreserved="true"
+                android:columnOrderPreserved="true"
+                android:id="@+id/ambushInfo"
                 android:useDefaultMargins="false"
                 android:textAlignment="center"
                 android:alignmentMode="alignBounds">

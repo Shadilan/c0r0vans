@@ -23,6 +23,7 @@ public class Settings extends AppCompatActivity {
     CheckBox musicOn;
     CheckBox netDebug;
     CheckBox useTilt;
+    CheckBox gpsOn;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,6 +37,7 @@ public class Settings extends AppCompatActivity {
         musicOn=(CheckBox) findViewById(R.id.musicOn);
         netDebug=(CheckBox) findViewById(R.id.netLogOn);
         useTilt=(CheckBox) findViewById(R.id.useTilt);
+        gpsOn=(CheckBox) findViewById(R.id.gpsOn);
         cancel_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -54,6 +56,7 @@ public class Settings extends AppCompatActivity {
                 GameSettings.getInstance().put("SOUND_ON", soundOn.isChecked() ? "Y" : "N");
                 GameSettings.getInstance().put("USE_TILT", useTilt.isChecked() ? "Y" : "N");
                 GameSettings.getInstance().put("NET_DEBUG", netDebug.isChecked() ? "Y" : "N");
+                GameSettings.getInstance().put("GPS_ON_BACK", gpsOn.isChecked() ? "Y" : "N");
                 GameSettings.getInstance().save();
                 Intent resultIntent = new Intent();
                 setResult(Activity.RESULT_OK, resultIntent);
@@ -72,5 +75,6 @@ public class Settings extends AppCompatActivity {
         soundOn.setChecked("Y".equals(GameSettings.getInstance().get("SOUND_ON")));
         useTilt.setChecked("Y".equals(GameSettings.getInstance().get("USE_TILT")));
         netDebug.setChecked("Y".equals(GameSettings.getInstance().get("NET_DEBUG")));
+        gpsOn.setChecked("Y".equals(GameSettings.getInstance().get("GPS_ON_BACK")));
     }
 }

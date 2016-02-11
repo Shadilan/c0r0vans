@@ -6,6 +6,9 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.util.Log;
+
+import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
 
@@ -64,64 +67,73 @@ public class GPSInfo {
     private GPSInfo(Context mContext) {
         locationManager = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
         //Criteria criteria = new Criteria();
+        locationListener=new LocationListener() {
+            @Override
+
+            public void onLocationChanged(Location location) {
+                speed = (int) (location.getSpeed()*60/1000);
+                lat = (int) (location.getLatitude() * 1000000);
+                lng = (int) (location.getLongitude() * 1000000);
+
+                //RequestUpdate(location.getProvider());
+                if (locationListeners !=null){
+                    if (locationListenersRem !=null) locationListeners.removeAll(locationListenersRem);
+                    for (LocationListener ll:locationListeners){
+                        ll.onLocationChanged(location);
+                    }
+                }
+            }
+
+            @Override
+            public void onStatusChanged(String provider, int status, Bundle extras) {
+                if (locationListeners !=null){
+                    if (locationListenersRem !=null) locationListeners.removeAll(locationListenersRem);
+                    for (LocationListener ll:locationListeners){
+                        ll.onStatusChanged(provider,status,extras);
+                    }
+                }
+            }
+
+            @Override
+            public void onProviderEnabled(String provider) {
+                if (locationListeners !=null){
+                    if (locationListenersRem !=null) locationListeners.removeAll(locationListenersRem);
+                    for (LocationListener ll:locationListeners){
+                        ll.onProviderEnabled(provider);
+                    }
+                }
+            }
+
+            @Override
+            public void onProviderDisabled(String provider) {
+                if (locationListeners !=null){
+                    if (locationListenersRem !=null) locationListeners.removeAll(locationListenersRem);
+                    for (LocationListener ll:locationListeners){
+                        ll.onProviderDisabled(provider);
+                    }
+                }
+            }
+        };
+        onGPS();
+    }
+    public void onGPS(){
         for (String prov : locationManager.getAllProviders()) {
             RequestUpdate(prov);
         }
     }
-
+    public void offGPS(){
+        locationManager.removeUpdates(locationListener);
+    }
     /**
      * Request coordinate uppdate on target provider
      * @param prov provider of GPS Data
      */
+    LocationListener locationListener;
     public void RequestUpdate(String prov) {
+
         try {
-            locationManager.requestLocationUpdates(prov, 1000, 0, new LocationListener() {
-                @Override
 
-                public void onLocationChanged(Location location) {
-                    speed = (int) (location.getSpeed()*60/1000);
-                    lat = (int) (location.getLatitude() * 1000000);
-                    lng = (int) (location.getLongitude() * 1000000);
-
-                    //RequestUpdate(location.getProvider());
-                    if (locationListeners !=null){
-                        if (locationListenersRem !=null) locationListeners.removeAll(locationListenersRem);
-                        for (LocationListener ll:locationListeners){
-                            ll.onLocationChanged(location);
-                        }
-                    }
-                }
-
-                @Override
-                public void onStatusChanged(String provider, int status, Bundle extras) {
-                    if (locationListeners !=null){
-                        if (locationListenersRem !=null) locationListeners.removeAll(locationListenersRem);
-                        for (LocationListener ll:locationListeners){
-                            ll.onStatusChanged(provider,status,extras);
-                        }
-                    }
-                }
-
-                @Override
-                public void onProviderEnabled(String provider) {
-                    if (locationListeners !=null){
-                        if (locationListenersRem !=null) locationListeners.removeAll(locationListenersRem);
-                        for (LocationListener ll:locationListeners){
-                            ll.onProviderEnabled(provider);
-                        }
-                    }
-                }
-
-                @Override
-                public void onProviderDisabled(String provider) {
-                    if (locationListeners !=null){
-                        if (locationListenersRem !=null) locationListeners.removeAll(locationListenersRem);
-                        for (LocationListener ll:locationListeners){
-                            ll.onProviderDisabled(provider);
-                        }
-                    }
-                }
-            });
+            locationManager.requestLocationUpdates(prov, 5000, 1, locationListener);
         } catch (SecurityException e)
         {
             e.printStackTrace();
@@ -144,4 +156,5 @@ public class GPSInfo {
     public int GetLng(){
         return lng;
     }
+    public LatLng getLatLng(){return new LatLng(lat/1e6,lng/1e6);}
 }

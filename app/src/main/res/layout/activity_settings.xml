@@ -13,7 +13,8 @@
         android:id="@+id/scrollView4"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true">
+        android:layout_alignParentTop="true"
+        android:layout_above="@+id/cancel">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -160,7 +161,33 @@
                 android:layout_below="@+id/textView15"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="GPS"
+                android:id="@+id/textView17"
+                android:textStyle="bold"
+                android:layout_below="@+id/textView16"
+                android:layout_centerHorizontal="true" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="GPS в фоне"
+                android:id="@+id/textView18"
+                android:layout_alignBottom="@+id/gpsOn"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true" />
 
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/gpsOn"
+                android:checked="false"
+                android:layout_below="@+id/textView17"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -168,7 +195,7 @@
                 android:text="@string/settings_debug"
                 android:id="@+id/textView13"
                 android:textStyle="bold"
-                android:layout_below="@+id/textView16"
+                android:layout_below="@+id/textView18"
                 android:layout_centerHorizontal="true" />
             <TextView
                 android:layout_width="wrap_content"

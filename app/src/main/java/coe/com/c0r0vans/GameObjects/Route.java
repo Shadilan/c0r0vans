@@ -102,7 +102,7 @@ public class Route implements GameObject{
 
             @Override
             public void postError() {
-
+                serverConnect.getInstance().getPlayerInfo();
             }
         };
     }

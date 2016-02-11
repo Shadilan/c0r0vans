@@ -2,6 +2,7 @@ package coe.com.c0r0vans;
 
 import android.app.Activity;
 
+import android.app.Fragment;
 import android.content.Intent;
 import android.graphics.Color;
 import android.location.Location;
@@ -15,8 +16,10 @@ import android.support.v4.app.FragmentActivity;
 import android.util.DisplayMetrics;
 import android.util.Log;
 
+import android.view.MotionEvent;
 import android.view.View;
 
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -161,10 +164,12 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
         mMap.getUiSettings().setMyLocationButtonEnabled(false);
         mMap.getUiSettings().setZoomControlsEnabled(false);
         mMap.getUiSettings().setZoomGesturesEnabled(false);
+        mMap.getUiSettings().setRotateGesturesEnabled(true);
         mMap.getUiSettings().setCompassEnabled(false);
         mMap.getUiSettings().setMapToolbarEnabled(false);
         mMap.getUiSettings().setIndoorLevelPickerEnabled(false);
-        GroundOverlayOptions go=new GroundOverlayOptions();
+        bearing=mMap.getCameraPosition().bearing;
+
     }
 
 
@@ -315,7 +320,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                 am.setText(String.valueOf(player.getExp()));
                 am = (TextView) findViewById(R.id.goldAmount);
                 am.setText(String.valueOf(player.getGold()));
-                timeToPlayerRefresh=6;
+                timeToPlayerRefresh = 6;
             }
 
             @Override
@@ -350,10 +355,10 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                     SelectedObject.getInstance().setPoint(latLng);
 
                     ActionView actionView = (ActionView) findViewById(R.id.actionView);
-                    if (actionView.clickpos!=null){
+                    if (actionView.clickpos != null) {
                         actionView.clickpos.setCenter(latLng);
                         actionView.clickpos.setRadius(player.getAmbushRad());
-                    } else{
+                    } else {
                         CircleOptions circleOptions = new CircleOptions();
                         circleOptions.center(latLng);
                         circleOptions.radius(player.getAmbushRad());
@@ -373,6 +378,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
             @Override
             public boolean onMarkerClick(Marker marker) {
                 GameObject target = findObjectByMarker(marker);
+                if (target instanceof Player) return false;
                 if (target != null) {
                     SelectedObject.getInstance().setExecuter(player);
                     SelectedObject.getInstance().setTarget(target);
@@ -383,6 +389,19 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                 return true;
             }
         });
+        mMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
+            float bearing = mMap.getCameraPosition().bearing;
+
+            @Override
+            public void onCameraChange(CameraPosition cameraPosition) {
+                if (cameraPosition.bearing != bearing) {
+                    mMap.moveCamera(CameraUpdateFactory.newLatLng(player.getMarker().getPosition()));
+                    bearing = cameraPosition.bearing;
+                }
+            }
+        });
+        //Trick for self rotate;
+
 
         ImageView zoomButton= (ImageView) findViewById(R.id.zoomButton);
         zoomButton.setOnClickListener(new View.OnClickListener() {
@@ -403,7 +422,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
         });
 
     }
-
+    private float bearing=0;
     /**
      * Return object by marker
      *
@@ -478,6 +497,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
         myHandler.removeCallbacks(myRunable);
         job=false;
         GameSound.stopMusic();
+        if (!"Y".equals(GameSettings.getInstance().get("GPS_ON_BACK"))) GPSInfo.getInstance().offGPS();
 
     }
     @Override
@@ -487,6 +507,8 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
         job=true;
         StartTickTimer();
         GameSound.playMusic();
+        //if (!"Y".equals(GameSettings.getInstance().get("GPS_ON_BACK")))
+            GPSInfo.getInstance().onGPS();
     }
 
     @Override

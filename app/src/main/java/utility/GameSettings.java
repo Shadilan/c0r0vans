@@ -42,6 +42,7 @@ public class GameSettings extends HashMap<String,String>{
         put("SHOW_CARAVAN_ROUTE","N");
         put("USE_TILT","N");
         put("NET_DEBUG","N");
+        put("GPS_ON_BACK","N");
 
         save();
     }

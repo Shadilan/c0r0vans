@@ -18,6 +18,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import utility.GPSInfo;
+import utility.GameSettings;
 import utility.ServerListener;
 import utility.serverConnect;
 
@@ -137,4 +138,9 @@ public class Login extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (!"Y".equals(GameSettings.getInstance().get("GPS_ON_BACK"))) GPSInfo.getInstance().onGPS();
+    }
 }
