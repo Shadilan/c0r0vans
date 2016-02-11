@@ -163,7 +163,8 @@ public class City implements GameObject{
 
                 }
             };
-        if (startRoute.isEnabled()) Actions.add(startRoute);
+        Player player= (Player) SelectedObject.getInstance().getExecuter();
+        if (startRoute.isEnabled() && player.getCurrentRoute().equals("")) Actions.add(startRoute);
 
         if (finishRoute==null)
         finishRoute = new ObjectAction(this) {
@@ -199,7 +200,7 @@ public class City implements GameObject{
 
             }
         };
-        if (finishRoute.isEnabled()) Actions.add(finishRoute);
+        if (finishRoute.isEnabled()&& !player.getCurrentRoute().equals("")) Actions.add(finishRoute);
 
         if (butUpgrade==null)
             butUpgrade = new ObjectAction(this) {

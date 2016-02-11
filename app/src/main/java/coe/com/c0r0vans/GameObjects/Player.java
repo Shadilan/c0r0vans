@@ -55,8 +55,8 @@ public class Player implements GameObject{
     private ArrayList<Upgrade> Upgrades;
     private ArrayList<Route> Routes;
     private ArrayList<AmbushItem> Ambushes;
-    private int level;
-    private int exp;
+
+    private String currentRoute="";
 
     public int getAmbushRad(){return AmbushRadius;}
 
@@ -88,6 +88,38 @@ public class Player implements GameObject{
         Upgrades=new ArrayList<>();
         Routes=new ArrayList<>();
         Ambushes=new ArrayList<>();
+        if (dropRoute==null) dropRoute = new ObjectAction(this) {
+            @Override
+            public Bitmap getImage() {
+                return ImageLoader.getImage("drop_route");
+            }
+
+            @Override
+            public String getInfo() {
+                return "Сбросить маршрут.";
+            }
+
+            @Override
+            public String getCommand() {
+                return "DropUnfinishedRoute";
+            }
+
+            @Override
+            public void preAction() {
+                GameSound.playSound(GameSound.START_ROUTE_SOUND);
+            }
+
+            @Override
+            public void postAction() {
+                serverConnect.getInstance().getPlayerInfo();
+                Essages.addEssage("Незаконченый маршрут отменен.");
+            }
+
+            @Override
+            public void postError() {
+
+            }
+        };
     }
 
 
@@ -139,9 +171,15 @@ public class Player implements GameObject{
 
             }
             if (obj.has("Routes")){
+                currentRoute="";
                 JSONArray route=obj.getJSONArray("Routes");
                 Routes.clear();
-                for (int i=0;i<route.length();i++) Routes.add(new Route(route.getJSONObject(i)));
+                for (int i=0;i<route.length();i++) {
+                    Route routeObj=new Route(route.getJSONObject(i));
+                    if (routeObj.getFinishName().equals("null")) currentRoute=routeObj.getStartName();
+                    else Routes.add(new Route(route.getJSONObject(i)));
+
+                }
             }
             if (obj.has("Ambushes")){
                 JSONArray ambush=obj.getJSONArray("Ambushes");
@@ -288,4 +326,6 @@ public class Player implements GameObject{
     }
     public ArrayList<AmbushItem> getAmbushes() {return Ambushes;}
     public int getActionDistance(){return ActionDistance;}
+    public String getCurrentRoute(){return currentRoute;}
+    public ObjectAction getDropRoute(){return dropRoute;}
 }

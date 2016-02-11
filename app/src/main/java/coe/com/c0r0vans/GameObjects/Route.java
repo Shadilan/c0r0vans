@@ -33,6 +33,7 @@ public class Route implements GameObject{
     public Route(){
 
     }
+
     public Route(JSONObject obj){
             loadJSON(obj);
     }
