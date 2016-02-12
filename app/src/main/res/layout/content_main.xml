@@ -219,18 +219,7 @@
                 android:id="@+id/upgradeInfo"
                 android:rowOrderPreserved="true">
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@mipmap/up_speed"
-                    android:id="@+id/imageView" />
-                <TextView
-                    android:layout_width="200dp"
-                    android:layout_height="wrap_content"
-                    android:singleLine="false"
-                    android:text="Уровень 1.\nУвеличивает скорость каравана на 1%.   "
-                    android:layout_gravity="fill_horizontal|right"
-                    android:typeface="normal" />
+                
 
 
             </GridLayout>
