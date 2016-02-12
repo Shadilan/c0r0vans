@@ -163,7 +163,8 @@ public class City implements GameObject{
 
                 }
             };
-        if (startRoute.isEnabled()) Actions.add(startRoute);
+        Player player= (Player) SelectedObject.getInstance().getExecuter();
+        if (startRoute.isEnabled() && player.getCurrentRoute().equals("")) Actions.add(startRoute);
 
         if (finishRoute==null)
         finishRoute = new ObjectAction(this) {
@@ -199,7 +200,7 @@ public class City implements GameObject{
 
             }
         };
-        if (finishRoute.isEnabled()) Actions.add(finishRoute);
+        if (finishRoute.isEnabled()&& !player.getCurrentRoute().equals("")) Actions.add(finishRoute);
 
         if (butUpgrade==null)
             butUpgrade = new ObjectAction(this) {
@@ -240,13 +241,13 @@ public class City implements GameObject{
     @Override
     public void changeMarkerSize(int Type) {
         switch (Type){
-            case GameObject.ICON_SMALL: mark.setIcon(BitmapDescriptorFactory.fromResource(R.mipmap.city_s));
+            case GameObject.ICON_SMALL: mark.setIcon(ImageLoader.getDescritor("city_s"));
                 break;
-            case GameObject.ICON_MEDIUM: mark.setIcon(BitmapDescriptorFactory.fromResource(R.mipmap.city_m));
+            case GameObject.ICON_MEDIUM: mark.setIcon(ImageLoader.getDescritor("city_m"));
                 break;
-            case GameObject.ICON_LARGE: mark.setIcon(BitmapDescriptorFactory.fromResource(R.mipmap.city));
+            case GameObject.ICON_LARGE: mark.setIcon(ImageLoader.getDescritor("city"));
                 break;
-            default:mark.setIcon(BitmapDescriptorFactory.fromResource(R.mipmap.city));
+            default:mark.setIcon(ImageLoader.getDescritor("city"));
                 Essages.addEssage("Ваш зум не корректен.");
                 break;
         }

@@ -199,42 +199,51 @@ public class Ambush implements GameObject {
 
     @Override
     public void changeMarkerSize(int Type) {
-        if (!ready){
-            switch (Type){
-                case GameObject.ICON_SMALL: mark.setIcon(BitmapDescriptorFactory.fromResource(R.mipmap.ambushbuild_s));
-                    break;
-                case GameObject.ICON_MEDIUM: mark.setIcon(BitmapDescriptorFactory.fromResource(R.mipmap.ambushbuild_m));
-                    break;
-                case GameObject.ICON_LARGE: mark.setIcon(BitmapDescriptorFactory.fromResource(R.mipmap.ambushbuild));
-                    break;
-                default:mark.setIcon(BitmapDescriptorFactory.fromResource(R.mipmap.ambushbuild));
-                    Essages.addEssage("Ваш зум не корректен.");
-            }
-        } else if (isOwner)
-        {
-            switch (Type){
-                case GameObject.ICON_SMALL: mark.setIcon(BitmapDescriptorFactory.fromResource(R.mipmap.ambush_self_s));
-                    break;
-                case GameObject.ICON_MEDIUM: mark.setIcon(BitmapDescriptorFactory.fromResource(R.mipmap.ambush_self_m));
-                    break;
-                case GameObject.ICON_LARGE: mark.setIcon(BitmapDescriptorFactory.fromResource(R.mipmap.ambush_self));
-                    break;
-                default: mark.setIcon(BitmapDescriptorFactory.fromResource(R.mipmap.ambush_self));
-                    Essages.addEssage("Ваш зум не корректен.");
-            }
-        } else {
-            switch (Type) {
-                case GameObject.ICON_SMALL:
-                    mark.setIcon(BitmapDescriptorFactory.fromResource(R.mipmap.ambush_s));
-                    break;
-                case GameObject.ICON_MEDIUM:
-                    mark.setIcon(BitmapDescriptorFactory.fromResource(R.mipmap.ambush_m));
-                    break;
-                case GameObject.ICON_LARGE:
-                    mark.setIcon(BitmapDescriptorFactory.fromResource(R.mipmap.ambush));
-                    break;
-                default: mark.setIcon(BitmapDescriptorFactory.fromResource(R.mipmap.ambush));
-                    Essages.addEssage("Ваш зум не корректен");
+        if (mark!=null) {
+            if (!ready) {
+                switch (Type) {
+                    case GameObject.ICON_SMALL:
+                        mark.setIcon(ImageLoader.getDescritor("ambushbuild_s"));
+                        break;
+                    case GameObject.ICON_MEDIUM:
+                        mark.setIcon(ImageLoader.getDescritor("ambushbuild_m"));
+                        break;
+                    case GameObject.ICON_LARGE:
+                        mark.setIcon(ImageLoader.getDescritor("ambushbuild"));
+                        break;
+                    default:
+                        mark.setIcon(ImageLoader.getDescritor("ambushbuild"));
+                }
+            } else if (isOwner) {
+                switch (Type) {
+                    case GameObject.ICON_SMALL:
+                        mark.setIcon(ImageLoader.getDescritor("ambush_self_s"));
+                        break;
+                    case GameObject.ICON_MEDIUM:
+                        mark.setIcon(ImageLoader.getDescritor("ambush_self_m"));
+                        break;
+                    case GameObject.ICON_LARGE:
+                        mark.setIcon(ImageLoader.getDescritor("ambush_self"));
+                        break;
+                    default:
+                        mark.setIcon(ImageLoader.getDescritor("ambush_self"));
+                        Essages.addEssage("Ваш зум не корректен.");
+                }
+            } else {
+                switch (Type) {
+                    case GameObject.ICON_SMALL:
+                        mark.setIcon(ImageLoader.getDescritor("ambush_s"));
+                        break;
+                    case GameObject.ICON_MEDIUM:
+                        mark.setIcon(ImageLoader.getDescritor("ambush_m"));
+                        break;
+                    case GameObject.ICON_LARGE:
+                        mark.setIcon(ImageLoader.getDescritor("ambush"));
+                        break;
+                    default:
+                        mark.setIcon(ImageLoader.getDescritor("ambush"));
+                        Essages.addEssage("Ваш зум не корректен");
+                }
             }
         }
     }

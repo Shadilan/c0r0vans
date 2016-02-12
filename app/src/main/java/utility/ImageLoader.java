@@ -4,6 +4,9 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+
 import coe.com.c0r0vans.R;
 import java.util.HashMap;
 
@@ -15,30 +18,31 @@ import java.util.HashMap;
 public class ImageLoader {
     //private static ImageLoader instance;
     private static HashMap<String,Bitmap> images=new HashMap<>();
-
+    private static HashMap<String,BitmapDescriptor> descriptors = new HashMap<>();
     /**
      * Load images on start;
      * @param context Application Context
      */
     public static void Loader(Context context){
+        images.put("android", BitmapFactory.decodeResource(context.getResources(), R.mipmap.ic_launcher));
         //Buttons
-        images.put("closebutton",BitmapFactory.decodeResource(context.getResources(), R.mipmap.closebutton));
+        images.put("closebutton", BitmapFactory.decodeResource(context.getResources(), R.mipmap.closebutton));
         //Markers
-        images.put("android",BitmapFactory.decodeResource(context.getResources(), R.mipmap.ic_launcher));
-        images.put("hero",BitmapFactory.decodeResource(context.getResources(), R.mipmap.hero));
-        images.put("marker",BitmapFactory.decodeResource(context.getResources(), R.mipmap.marker));
-        images.put("city",BitmapFactory.decodeResource(context.getResources(), R.mipmap.city));
-        images.put("ambush",BitmapFactory.decodeResource(context.getResources(), R.mipmap.ambush_img));
-        images.put("caravan",BitmapFactory.decodeResource(context.getResources(), R.mipmap.caravan));
+        createMarker(context, R.mipmap.marker, "marker");
+        createMarker(context, R.mipmap.city, "city");
+        createMarker(context, R.mipmap.ambush, "ambush");
+        createMarker(context, R.mipmap.caravan, "caravan");
+        createMarker(context, R.mipmap.caravan_e, "caravan_e");
+        createMarker(context, R.mipmap.ambush_self, "ambush_self");
+        createMarker(context, R.mipmap.ambushbuild, "ambushbuild");
+
         //Actions
             //City
         images.put("start_route",BitmapFactory.decodeResource(context.getResources(), R.mipmap.start_route));
         images.put("end_route",BitmapFactory.decodeResource(context.getResources(), R.mipmap.end_route));
         images.put("buy_item",BitmapFactory.decodeResource(context.getResources(), R.mipmap.buy_item));
-        images.put("set_home",BitmapFactory.decodeResource(context.getResources(), R.mipmap.set_home));
             //Player
-        images.put("create_ambush",BitmapFactory.decodeResource(context.getResources(), R.mipmap.ambush));
-        images.put("create_waypoint",BitmapFactory.decodeResource(context.getResources(), R.mipmap.create_waypoint));
+        images.put("create_ambush",BitmapFactory.decodeResource(context.getResources(), R.mipmap.ambush_img));
         images.put("drop_route",BitmapFactory.decodeResource(context.getResources(), R.mipmap.drop_route));
             //Ambush
         images.put("remove_ambush",BitmapFactory.decodeResource(context.getResources(), R.mipmap.dismiss));
@@ -46,6 +50,14 @@ public class ImageLoader {
 
             //Route
         images.put("remove_route",BitmapFactory.decodeResource(context.getResources(), R.mipmap.remove_route));
+
+        //Skills
+        images.put("speed",BitmapFactory.decodeResource(context.getResources(), R.mipmap.up_speed));
+        images.put("set_ambushes",BitmapFactory.decodeResource(context.getResources(), R.mipmap.ambushbuild));
+        images.put("ambushes",BitmapFactory.decodeResource(context.getResources(), R.mipmap.ambush_img));
+        images.put("cargo",BitmapFactory.decodeResource(context.getResources(), R.mipmap.caravan));
+        images.put("bargain",BitmapFactory.decodeResource(context.getResources(), R.mipmap.buy_item));
+        images.put("paladin",BitmapFactory.decodeResource(context.getResources(), R.mipmap.rem_ambush));
 
 
     }
@@ -57,5 +69,12 @@ public class ImageLoader {
      */
     public static Bitmap getImage(String name){
         return images.get(name);
+    }
+    public static BitmapDescriptor getDescritor(String name) {return  descriptors.get(name);}
+    private static void createMarker(Context context,int resource,String name){
+        Bitmap b=BitmapFactory.decodeResource(context.getResources(), resource);
+        descriptors.put(name, BitmapDescriptorFactory.fromBitmap(b));
+        descriptors.put(name+"_m",BitmapDescriptorFactory.fromBitmap(Bitmap.createScaledBitmap(b, (int) (b.getWidth() * 0.5), (int) (b.getHeight() * 0.5), false)));
+        descriptors.put(name + "_s", BitmapDescriptorFactory.fromBitmap(Bitmap.createScaledBitmap(b, (int) (b.getWidth() * 0.5), (int) (b.getHeight() * 0.5), false)));
     }
 }

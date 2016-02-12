@@ -195,7 +195,31 @@ public class MainActivity extends AppCompatActivity {
         gl=(GridLayout) findViewById(R.id.routeInfo);
 
         gl.removeAllViews();
-        gl.setRowCount(player.getRoutes().size()*2);
+        gl.setRowCount(player.getRoutes().size()*2+2);
+        if (!player.getCurrentRoute().equals("")){
+            TextView info=new TextView(getApplicationContext());
+            info.setSingleLine(true);
+            info.setText(String.valueOf(player.getCurrentRoute()) + "↝");
+            info.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            info.setTextSize(15);
+            info.setGravity(Gravity.CENTER);
+            info.setTextColor(Color.BLACK);
+
+
+            CommandButton remove=new CommandButton(this.getApplicationContext(),player.getDropRoute(),"");
+            remove.setImageBitmap(ImageLoader.getImage("closebutton"));
+            remove.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    CommandButton button = (CommandButton) v;
+                    serverConnect.getInstance().ExecCommand(button.getAction(), button.getGuid(), 0, 0, 0, 0);
+                    v.setVisibility(View.GONE);
+                }
+            });
+            gl.addView(remove);
+            gl.addView(info);
+
+        }
         for (Route r:player.getRoutes()){
             TextView info=new TextView(getApplicationContext());
             info.setSingleLine(true);

@@ -191,23 +191,23 @@ public class Caravan implements GameObject {
     public void changeMarkerSize(int Type) {
         if (isOwner)
         switch (Type){
-            case GameObject.ICON_SMALL: mark.setIcon(BitmapDescriptorFactory.fromResource(R.mipmap.caravan_s));
+            case GameObject.ICON_SMALL: mark.setIcon(ImageLoader.getDescritor("caravan_s"));
                 break;
-            case GameObject.ICON_MEDIUM: mark.setIcon(BitmapDescriptorFactory.fromResource(R.mipmap.caravan_m));
+            case GameObject.ICON_MEDIUM: mark.setIcon(ImageLoader.getDescritor("caravan_m"));
                 break;
-            case GameObject.ICON_LARGE: mark.setIcon(BitmapDescriptorFactory.fromResource(R.mipmap.caravan));
+            case GameObject.ICON_LARGE: mark.setIcon(ImageLoader.getDescritor("caravan"));
                 break;
-            default: mark.setIcon(BitmapDescriptorFactory.fromResource(R.mipmap.caravan));
+            default: mark.setIcon(ImageLoader.getDescritor("caravan"));
                 Essages.addEssage("Ваш зум не корректен.");
         } else
             switch (Type){
-                case GameObject.ICON_SMALL: mark.setIcon(BitmapDescriptorFactory.fromResource(R.mipmap.caravan_e_s));
+                case GameObject.ICON_SMALL: mark.setIcon(ImageLoader.getDescritor("caravan_e_s"));
                     break;
-                case GameObject.ICON_MEDIUM: mark.setIcon(BitmapDescriptorFactory.fromResource(R.mipmap.caravan_e_m));
+                case GameObject.ICON_MEDIUM: mark.setIcon(ImageLoader.getDescritor("caravan_e_m"));
                     break;
-                case GameObject.ICON_LARGE: mark.setIcon(BitmapDescriptorFactory.fromResource(R.mipmap.caravan_e));
+                case GameObject.ICON_LARGE: mark.setIcon(ImageLoader.getDescritor("caravan_e"));
                     break;
-                default:mark.setIcon(BitmapDescriptorFactory.fromResource(R.mipmap.caravan_e));
+                default:mark.setIcon(ImageLoader.getDescritor("caravan_e"));
                     Essages.addEssage("Ваш зум не корректен.");
             }
 
