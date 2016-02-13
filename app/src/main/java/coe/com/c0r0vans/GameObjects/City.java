@@ -157,6 +157,8 @@ public class City implements GameObject{
                 public void postAction() {
 
                     Essages.addEssage("Начат маршрут в город " + CityName);
+                    Player player= (Player) SelectedObject.getInstance().getExecuter();
+                    if (player.getCurrentRoute().equals("")) player.setCurrentRoute("?");
                     serverConnect.getInstance().getPlayerInfo();
                 }
 
@@ -178,6 +180,7 @@ public class City implements GameObject{
                 @Override
                 public String getInfo() {
                     return "Закончить маршрут на этом городе и запустить караван.";
+
                 }
 
                 @Override
@@ -193,6 +196,8 @@ public class City implements GameObject{
             @Override
             public void postAction() {
                 Essages.addEssage("Завершен маршрут в город "+CityName);
+                Player player= (Player) SelectedObject.getInstance().getExecuter();
+                if (!player.getCurrentRoute().equals("")) player.setCurrentRoute("");
                 serverConnect.getInstance().getPlayerInfo();
                 serverConnect.getInstance().RefreshCurrent();
             }

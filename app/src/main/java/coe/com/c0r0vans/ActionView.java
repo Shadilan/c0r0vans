@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import com.google.android.gms.maps.model.Circle;
 
+import org.json.JSONObject;
 import org.w3c.dom.Text;
 
 import java.util.ArrayList;
@@ -31,6 +32,7 @@ import coe.com.c0r0vans.GameObjects.Player;
 import coe.com.c0r0vans.GameObjects.SelectedObject;
 import coe.com.c0r0vans.R;
 import utility.GPSInfo;
+import utility.ServerListener;
 import utility.serverConnect;
 
 /**
@@ -120,7 +122,39 @@ public class ActionView extends LinearLayout {
         }
 
         ObjectImage.setImageBitmap(SelectedObject.getInstance().getTarget().getImage());
+        serverConnect.getInstance().addListener(new ServerListener() {
+            @Override
+            public void onLogin(JSONObject response) {
 
+            }
+
+            @Override
+            public void onRefresh(JSONObject response) {
+
+            }
+
+            @Override
+            public void onAction(JSONObject response) {
+                if (getVisibility()==VISIBLE){
+                    reloadActions();
+                }
+            }
+
+            @Override
+            public void onPlayerInfo(JSONObject response) {
+
+            }
+
+            @Override
+            public void onError(JSONObject response) {
+
+            }
+
+            @Override
+            public void onMessage(JSONObject response) {
+
+            }
+        });
         reloadActions();
         float[] distances = new float[1];
         Location.distanceBetween(SelectedObject.getInstance().getTarget().getMarker().getPosition().latitude,

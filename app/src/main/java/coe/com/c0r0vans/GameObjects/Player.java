@@ -328,4 +328,8 @@ public class Player implements GameObject{
     public int getActionDistance(){return ActionDistance;}
     public String getCurrentRoute(){return currentRoute;}
     public ObjectAction getDropRoute(){return dropRoute;}
+
+    public void setCurrentRoute(String currentRoute) {
+        this.currentRoute = currentRoute;
+    }
 }
