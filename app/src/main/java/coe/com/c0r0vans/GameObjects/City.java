@@ -118,7 +118,7 @@ public class City implements GameObject{
     @Override
     public String getInfo() {
         String tushkan="";
-        if (Math.random()*100<5) tushkan="У стен города следы непонятного зверя.";
+        if (Math.random()*1000<3) tushkan="У стен города следы непонятного зверя.";
         return "Это город "+ Level+" уровня. В городе можно приобрести \""+upgradeName+"\"."+tushkan;
     }
 
