@@ -100,9 +100,9 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
         mapFragment.getMapAsync(this);
         init();
 
-        if (!serverConnect.getInstance().isLogin()) {
-            Intent i = new Intent(getApplicationContext(), Login.class);
-            startActivity(i);
+        if (serverConnect.getInstance().isLogin()) {
+            LoginView lv= (LoginView) findViewById(R.id.loginView);
+            lv.hide();
         }
     }
 
@@ -186,8 +186,8 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
             public void onClick(View v) {
                 InfoLayout info = (InfoLayout) findViewById(R.id.informationView);
                 info.Show();
-                //Intent i = new Intent(getApplicationContext(), MainActivity.class);
-                //startActivity(i);
+
+
             }
         });
 

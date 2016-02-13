@@ -1,28 +1,30 @@
 package coe.com.c0r0vans;
 
-
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.location.Location;
 import android.location.LocationListener;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
-
-import com.android.volley.Response;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import utility.GPSInfo;
-import utility.GameSettings;
 import utility.ServerListener;
 import utility.serverConnect;
 
-public class Login extends AppCompatActivity {
+/**
+ * Created by Shadilan on 13.02.2016.
+ */
+public class LoginView extends RelativeLayout {
     SharedPreferences sp;
     private TextView LoginField;
     private TextView PasswordField;
@@ -32,24 +34,45 @@ public class Login extends AppCompatActivity {
     private Boolean Positioned=false;
     private LocationListener locationListener;
     private ServerListener LoginListener;
+
+    public LoginView(Context context) {
+        super(context);
+        init();
+    }
+
+    public LoginView(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        init();
+    }
+
+    public LoginView(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+        init();
+    }
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login_main);
-        sp = this.getApplicationContext().getSharedPreferences("SpiritProto", AppCompatActivity.MODE_PRIVATE);
+    protected void onFinishInflate() {
+        super.onFinishInflate();
+        afterInit();
+    }
+
+    private void init(){
+        inflate(getContext(), R.layout.activity_login_main, this);
+    }
+    private void afterInit(){
+        sp = getContext().getSharedPreferences("SpiritProto", AppCompatActivity.MODE_PRIVATE);
         LoginField= (TextView)  this.findViewById(R.id.LoginField);
         LoginField.setText(sp.getString("Login", ""));
         PasswordField=(TextView) this.findViewById(R.id.PasswordField);
         PasswordField.setText(sp.getString("Password", ""));
         GPSStatus= (ImageView)  this.findViewById(R.id.imgGPS);
         ConnectStatus= (ImageView)  this.findViewById(R.id.imgConnected);
-        GPSInfo.getInstance(this.getApplicationContext());
-        serverConnect.getInstance().connect(getResources().getString(R.string.serveradress), this.getApplicationContext());
+        GPSInfo.getInstance(this.getContext());
+        serverConnect.getInstance().connect(getResources().getString(R.string.serveradress), this.getContext());
         LoginListener=new ServerListener() {
             @Override
             public void onLogin(JSONObject response) {
                 try {
-                    Log.d("LoginView","Response:"+response.toString());
+                    Log.d("LoginView", "Response:" + response.toString());
                     //Todo:Change to correct implementation.
                     //String token=response.getString("Token");
                     String token=response.getString("Token");
@@ -132,20 +155,20 @@ public class Login extends AppCompatActivity {
             }
         };
         GPSInfo.getInstance().AddLocationListener(locationListener);
-        //loginButton = (Button) this.findViewById(R.id.LoginButton);
     }
+
     private void checkReadyToRun(){
         if (Connected && Positioned)
         {
             GPSInfo.getInstance().RemoveLocationListener(locationListener);
             serverConnect.getInstance().removeListener(LoginListener);
-            finish();
+            hide();
         }
     }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if (!"Y".equals(GameSettings.getInstance().get("GPS_ON_BACK"))) GPSInfo.getInstance().onGPS();
+    public void show(){
+        setVisibility(VISIBLE);
+    }
+    public void hide(){
+        setVisibility(GONE);
     }
 }

@@ -102,7 +102,7 @@ public class MessageNotification {
                                 context,
                                 0,
                                 new Intent(context, MainWindow.class),
-                                PendingIntent.FLAG_UPDATE_CURRENT))
+                                PendingIntent.FLAG_IMMUTABLE))
 
                         // Show expanded text content on devices running Android 4.1 or
                         // later.
