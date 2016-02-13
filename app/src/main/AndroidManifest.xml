@@ -12,10 +12,10 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
         android:allowBackup="true"
@@ -60,11 +60,12 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="coe.com.c0r0vans.MainWindow" />
         </activity>
-        <activity android:name=".Settings"
+        <activity
+            android:name=".Settings"
             android:label="@string/title_activity_main"
             android:parentActivityName=".MainWindow"
             android:screenOrientation="sensorPortrait"
-            android:theme="@style/Theme.AppCompat.Light.Dialog"   >
+            android:theme="@style/Theme.AppCompat.Light.Dialog" >
         </activity>
     </application>
 

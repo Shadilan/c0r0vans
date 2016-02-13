@@ -162,6 +162,11 @@ public class MainActivity extends AppCompatActivity {
             public void onError(JSONObject response) {
 
             }
+
+            @Override
+            public void onMessage(JSONObject response) {
+
+            }
         });
         loadFromPlayer();
     }

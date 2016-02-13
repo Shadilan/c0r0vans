@@ -87,6 +87,11 @@ public class Login extends AppCompatActivity {
             public void onError(JSONObject response) {
 
             }
+
+            @Override
+            public void onMessage(JSONObject response) {
+
+            }
         };
         serverConnect.getInstance().addListener(LoginListener);
 

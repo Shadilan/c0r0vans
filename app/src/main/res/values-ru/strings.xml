@@ -37,4 +37,8 @@
     <string name="settings_debug_net">Сеть</string>
     <string name="settings_graphics">Графика</string>
     <string name="settings_graphics_tilt">Изометрия</string>
+    <string name="action_reply">ответить</string>
+    <string name="action_share">поделится</string>
+    <string name="message_notification_placeholder_text_template">-</string>
+    <string name="message_notification_title_template">Сообщение: %1$s</string>
 </resources>
