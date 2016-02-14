@@ -230,12 +230,14 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                             new CameraPosition.Builder()
                                     .target(target)
                                     .tilt(60)
+                                    .bearing(mMap.getCameraPosition().bearing)
                                     .zoom(clientZoom)
                                     .build()));
                 else
                     mMap.animateCamera(CameraUpdateFactory.newCameraPosition(
                             new CameraPosition.Builder()
                                     .target(target)
+                                    .bearing(mMap.getCameraPosition().bearing)
                                     .tilt(0)
                                     .zoom(clientZoom)
                                     .build()));
