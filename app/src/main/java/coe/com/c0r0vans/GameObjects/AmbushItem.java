@@ -24,6 +24,7 @@ public class AmbushItem implements GameObject{
     private String Name;
     private int Lat;
     private int Lng;
+    private int progress=0;
     public AmbushItem(){
 
     }
@@ -40,6 +41,7 @@ public class AmbushItem implements GameObject{
         if (object.has("Name")) Name=object.getString("Name");
         if (object.has("Lat")) Lat=object.getInt("Lat");
         if (object.has("Lng")) Lng=object.getInt("Lng");
+        if (object.has("Progress")) progress=object.getInt("Progress");
         cancelAmbush=new ObjectAction(this) {
             @Override
             public Bitmap getImage() {
@@ -110,6 +112,11 @@ public class AmbushItem implements GameObject{
     @Override
     public void changeMarkerSize(int Type) {
 
+    }
+
+    @Override
+    public int getProgress() {
+        return progress;
     }
 
     public LatLng getLatLng(){return new LatLng(Lat/1e6,Lng/1e6);}

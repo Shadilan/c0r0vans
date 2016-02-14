@@ -14,6 +14,7 @@ import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.model.Circle;
@@ -120,6 +121,16 @@ public class ActionView extends LinearLayout {
             title.setText("Караван");
             ObjectDesc.setText(SelectedObject.getInstance().getTarget().getInfo());
         }
+        ProgressBar progressBar= (ProgressBar) findViewById(R.id.progressBar);
+        if (SelectedObject.getInstance().getTarget().getProgress()==0) {
+            progressBar.setVisibility(GONE);
+
+        } else
+        {
+            progressBar.setVisibility(VISIBLE);
+            progressBar.setProgress(SelectedObject.getInstance().getTarget().getProgress());
+        }
+
 
         ObjectImage.setImageBitmap(SelectedObject.getInstance().getTarget().getImage());
         serverConnect.getInstance().addListener(new ServerListener() {

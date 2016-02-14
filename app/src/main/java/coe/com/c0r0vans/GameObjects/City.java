@@ -37,6 +37,7 @@ public class City implements GameObject{
     private Bitmap image;
     private GoogleMap map;
     private Circle zone;
+    private int progress=0;
     public String getGUID() {
         return GUID;
     }
@@ -91,6 +92,7 @@ public class City implements GameObject{
             if (obj.has("UpgradeName")) upgradeName=obj.getString("UpgradeName");
             if (obj.has("Level")) Level=obj.getInt("Level");
             if (obj.has("Radius")) radius=obj.getInt("Radius");
+            if (obj.has("Progress")) progress=obj.getInt("Progress");
             if (zone==null){
                 CircleOptions circleOptions = new CircleOptions();
                 circleOptions.center(latlng);
@@ -119,7 +121,7 @@ public class City implements GameObject{
     public String getInfo() {
         String tushkan="";
         if (Math.random()*1000<3) tushkan="У стен города следы непонятного зверя.";
-        return "Это город "+ Level+" уровня. В городе можно приобрести \""+upgradeName+"\"."+tushkan;
+        return "Это город "+ Level+" уровня.\n В городе можно приобрести \""+upgradeName+"\".\n" + tushkan;
     }
 
     public String getCityName(){return (CityName+" lv."+Level) ;}
@@ -259,6 +261,12 @@ public class City implements GameObject{
                 break;
         }
     }
+
+    @Override
+    public int getProgress() {
+        return progress;
+    }
+
     public void showRadius(){
         String opt= GameSettings.getInstance().get("SHOW_CITY_RADIUS");
         if (opt.equals("Y")){

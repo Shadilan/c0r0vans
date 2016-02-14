@@ -60,5 +60,6 @@ public interface GameObject {
      String getGUID();
 
      void changeMarkerSize(int Type);
+    int getProgress();
 
 }

@@ -130,6 +130,11 @@ public class Route implements GameObject{
 
     }
 
+    @Override
+    public int getProgress() {
+        return 0;
+    }
+
     private ObjectAction dropRoute;
     public ObjectAction getAction(){
       return dropRoute;

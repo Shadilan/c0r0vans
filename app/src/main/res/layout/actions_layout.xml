@@ -28,12 +28,27 @@
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true" />
     </RelativeLayout>
-        <LinearLayout
+
+    <ProgressBar
+        style="@style/myProgressBarHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/progressBar"
+
+        android:layout_below="@+id/relativeLayout"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:max="100"
+        android:progress="50"
+        android:background="@color/colorControls" />
+    <LinearLayout
             android:orientation="horizontal"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/relativeLayout"
-            android:id="@+id/infoLaout">
+        android:id="@+id/infoLaout"
+        android:layout_below="@+id/progressBar"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -60,7 +75,7 @@
                 android:layout_alignParentStart="true"
                 android:gravity="top|left" />
 
-        </LinearLayout>
+    </LinearLayout>
 
         <HorizontalScrollView
             android:layout_width="wrap_content"

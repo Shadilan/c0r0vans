@@ -4,12 +4,15 @@ import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.SeekBar;
 
 import com.google.android.gms.games.Game;
 
+import utility.GPSInfo;
 import utility.GameSettings;
 
 public class Settings extends AppCompatActivity {
@@ -24,6 +27,7 @@ public class Settings extends AppCompatActivity {
     CheckBox netDebug;
     CheckBox useTilt;
     CheckBox gpsOn;
+    SeekBar gpsRate;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,6 +42,7 @@ public class Settings extends AppCompatActivity {
         netDebug=(CheckBox) findViewById(R.id.netLogOn);
         useTilt=(CheckBox) findViewById(R.id.useTilt);
         gpsOn=(CheckBox) findViewById(R.id.gpsOn);
+        gpsRate=(SeekBar) findViewById(R.id.gpsRate);
         cancel_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -57,9 +62,13 @@ public class Settings extends AppCompatActivity {
                 GameSettings.getInstance().put("USE_TILT", useTilt.isChecked() ? "Y" : "N");
                 GameSettings.getInstance().put("NET_DEBUG", netDebug.isChecked() ? "Y" : "N");
                 GameSettings.getInstance().put("GPS_ON_BACK", gpsOn.isChecked() ? "Y" : "N");
+                GameSettings.getInstance().put("GPS_RATE", String.valueOf(gpsRate.getProgress() + 1));
+
                 GameSettings.getInstance().save();
                 Intent resultIntent = new Intent();
                 setResult(Activity.RESULT_OK, resultIntent);
+                GPSInfo.getInstance().offGPS();
+                GPSInfo.getInstance().onGPS();
                 finish();
             }
         });
@@ -76,5 +85,11 @@ public class Settings extends AppCompatActivity {
         useTilt.setChecked("Y".equals(GameSettings.getInstance().get("USE_TILT")));
         netDebug.setChecked("Y".equals(GameSettings.getInstance().get("NET_DEBUG")));
         gpsOn.setChecked("Y".equals(GameSettings.getInstance().get("GPS_ON_BACK")));
+        int refreshRate=3;
+        if (GameSettings.getInstance().get("GPS_RATE")!=null){
+            String strRate=GameSettings.getInstance().get("GPS_RATE");
+            refreshRate=Integer.parseInt(strRate)-1;
+        }
+        gpsRate.setProgress(refreshRate);
     }
 }

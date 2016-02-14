@@ -213,4 +213,9 @@ public class Caravan implements GameObject {
             }
 
     }
+
+    @Override
+    public int getProgress() {
+        return 0;
+    }
 }

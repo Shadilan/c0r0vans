@@ -88,7 +88,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         ImageLoader.Loader(this.getApplicationContext());
-
+        GameSettings.init(getApplicationContext());
         LogView = (TextView) findViewById(R.id.chatBox);
         LogView.setHeight((int) (LogView.getTextSize() * 2));
         Essages.setTarget(LogView);
@@ -118,7 +118,6 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
 
         ImageLoader.Loader(getApplicationContext());
         GPSInfo.getInstance(getApplicationContext());
-        GameSettings.init(getApplicationContext());
         GameSound.init(getApplicationContext());
         GameSound.setVolumeControlStream(this);
         messages=new MessageMap();

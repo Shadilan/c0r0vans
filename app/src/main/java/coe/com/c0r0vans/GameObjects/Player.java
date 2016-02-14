@@ -72,6 +72,11 @@ public class Player implements GameObject{
         mark.setIcon(BitmapDescriptorFactory.fromResource(R.mipmap.marker));
     }
 
+    @Override
+    public int getProgress() {
+        return (Exp*100/TNL);
+    }
+
     public Player(GoogleMap mMap){
         image= ImageLoader.getImage("hero");
         Bitmap mimage= ImageLoader.getImage("marker");

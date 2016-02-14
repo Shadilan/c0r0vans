@@ -43,6 +43,7 @@ public class GameSettings extends HashMap<String,String>{
         put("USE_TILT","N");
         put("NET_DEBUG","N");
         put("GPS_ON_BACK","N");
+        put("GPS_REATE","3");
 
         save();
     }
