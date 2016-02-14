@@ -225,7 +225,20 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
             @Override
             public void onLocationChanged(Location location) {
                 LatLng target = new LatLng(location.getLatitude(), location.getLongitude());
-                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(target, clientZoom));
+                if ("Y".equals(GameSettings.getInstance().get("USE_TILT")))
+                    mMap.animateCamera(CameraUpdateFactory.newCameraPosition(
+                            new CameraPosition.Builder()
+                                    .target(target)
+                                    .tilt(60)
+                                    .zoom(clientZoom)
+                                    .build()));
+                else
+                    mMap.animateCamera(CameraUpdateFactory.newCameraPosition(
+                            new CameraPosition.Builder()
+                                    .target(target)
+                                    .tilt(0)
+                                    .zoom(clientZoom)
+                                    .build()));
 
                 player.getMarker().setPosition(target);
                 player.getCircle().setCenter(target);

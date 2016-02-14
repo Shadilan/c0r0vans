@@ -126,6 +126,7 @@ public class LoginView extends RelativeLayout {
                 editor.putString("Login", LoginField.getText().toString());
                 editor.putString("Password", PasswordField.getText().toString());
                 editor.apply();
+
                 Log.d("Debug info","Test login1");
                 if (serverConnect.getInstance().ExecLogin(LoginField.getText().toString(), PasswordField.getText().toString()))
                     Log.d("Debug info","Login True");    else Log.d("Debug info","Login False");
