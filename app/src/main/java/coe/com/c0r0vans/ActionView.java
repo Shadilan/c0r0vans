@@ -122,13 +122,13 @@ public class ActionView extends LinearLayout {
             ObjectDesc.setText(SelectedObject.getInstance().getTarget().getInfo());
         }
         ProgressBar progressBar= (ProgressBar) findViewById(R.id.progressBar);
-        if (SelectedObject.getInstance().getTarget().getProgress()==0) {
-            progressBar.setVisibility(GONE);
+        if (SelectedObject.getInstance().getTarget() instanceof City) {
+            progressBar.setVisibility(VISIBLE);
+            progressBar.setProgress(SelectedObject.getInstance().getTarget().getProgress());
 
         } else
         {
-            progressBar.setVisibility(VISIBLE);
-            progressBar.setProgress(SelectedObject.getInstance().getTarget().getProgress());
+            progressBar.setVisibility(GONE);
         }
 
 
