@@ -75,14 +75,15 @@ public class LoginView extends RelativeLayout {
                     Log.d("LoginView", "Response:" + response.toString());
                     //Todo:Change to correct implementation.
                     //String token=response.getString("Token");
-                    String token=response.getString("Token");
+                    String token=null;
+                    if (response.has("Token")) token=response.getString("Token");
                     if (!(token ==null)) {
                         ConnectStatus.setVisibility(View.VISIBLE);
                         Connected=true;
                     }
                     else{
-                        Log.d("Appplication Errors",response.getString("Error"));
-                        Log.d("Appplication Errors", response.getString("Message"));
+                        TextView errorText= (TextView) findViewById(R.id.errorText);
+                        errorText.setText(response.getString("Error") + ":" + response.getString("Message"));
                     }
                     checkReadyToRun();
 
@@ -108,7 +109,16 @@ public class LoginView extends RelativeLayout {
 
             @Override
             public void onError(JSONObject response) {
+                TextView errorText= (TextView) findViewById(R.id.errorText);
+                try {
+                    String result="";
 
+                    if (response.has("Error")) result=response.getString("Error");
+                    if (response.has("Message")) result=result+" "+response.getString("Message");
+                    errorText.setText(result);
+                } catch (JSONException e) {
+                    errorText.setText(response.toString());
+                }
             }
 
             @Override
@@ -126,7 +136,8 @@ public class LoginView extends RelativeLayout {
                 editor.putString("Login", LoginField.getText().toString());
                 editor.putString("Password", PasswordField.getText().toString());
                 editor.apply();
-
+                TextView errorText= (TextView) findViewById(R.id.errorText);
+                errorText.setText("");
                 Log.d("Debug info","Test login1");
                 if (serverConnect.getInstance().ExecLogin(LoginField.getText().toString(), PasswordField.getText().toString()))
                     Log.d("Debug info","Login True");    else Log.d("Debug info","Login False");
