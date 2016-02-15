@@ -128,7 +128,7 @@ public class ActionView extends LinearLayout {
 
         } else
         {
-            progressBar.setVisibility(GONE);
+            progressBar.setVisibility(INVISIBLE);
         }
 
 
@@ -175,7 +175,7 @@ public class ActionView extends LinearLayout {
         if (distances.length > 0 && distances[0] < ((Player)SelectedObject.getInstance().getExecuter()).getActionDistance()) {
             ActionList.setVisibility(VISIBLE);
         } else {
-            ActionList.setVisibility(GONE);
+            ActionList.setVisibility(INVISIBLE);
         }
         if (locationListener==null) {
             locationListener = new LocationListener() {
@@ -189,7 +189,7 @@ public class ActionView extends LinearLayout {
                     if (distances.length > 0 && distances[0] < ((Player)SelectedObject.getInstance().getExecuter()).getActionDistance()) {
                         ActionList.setVisibility(VISIBLE);
                     } else {
-                        ActionList.setVisibility(GONE);
+                        ActionList.setVisibility(INVISIBLE);
                     }
                 }
 
