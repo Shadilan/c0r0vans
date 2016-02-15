@@ -168,9 +168,8 @@
         android:layout_height="wrap_content"
         android:id="@+id/actionView"
         android:gravity="center"
-        android:layout_above="@+id/scrollView"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
         android:visibility="invisible" />
 
 <coe.com.c0r0vans.InfoLayout

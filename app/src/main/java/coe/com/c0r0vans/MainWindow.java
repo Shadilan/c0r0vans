@@ -374,7 +374,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                 }
             }
         });
-        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+        /*mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
             public void onMapClick(LatLng latLng) {
                 float[] distances = new float[1];
@@ -404,7 +404,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                     actionView.ShowView();
                 }
             }
-        });
+        });*/
         mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
             @Override
             public void onMapLongClick(LatLng latLng) {
