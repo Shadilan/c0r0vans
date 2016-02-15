@@ -283,7 +283,7 @@ public class InfoLayout extends RelativeLayout {
             LatLng rLatLng=r.getLatLng();
             Location.distanceBetween(player.getMarker().getPosition().latitude, player.getMarker().getPosition().longitude, rLatLng.latitude, rLatLng.longitude, distances);
 
-            info.setText("Засада в "+ ((int)distances[0])+" м");
+            info.setText(r.getName());
             info.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
             info.setTextSize(15);
             info.setGravity(Gravity.CENTER);

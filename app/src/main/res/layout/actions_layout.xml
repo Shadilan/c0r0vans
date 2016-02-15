@@ -16,6 +16,9 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:id="@+id/actionTitle"
+            android:singleLine="false"
+            android:textSize="16dp"
+
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true" />
 
