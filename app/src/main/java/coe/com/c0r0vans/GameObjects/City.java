@@ -152,15 +152,15 @@ public class City implements GameObject{
 
                 @Override
                 public void preAction() {
-                    GameSound.playSound(GameSound.START_ROUTE_SOUND);
+                    Player player= (Player) SelectedObject.getInstance().getExecuter();
+                    player.setRouteStart(false);
                 }
 
                 @Override
                 public void postAction() {
-
+                    GameSound.playSound(GameSound.START_ROUTE_SOUND);
                     Essages.addEssage("Начат маршрут в город " + CityName);
-                    Player player= (Player) SelectedObject.getInstance().getExecuter();
-                    if (player.getCurrentRoute().equals("")) player.setCurrentRoute("?");
+
                     serverConnect.getInstance().getPlayerInfo();
                 }
 
@@ -170,7 +170,7 @@ public class City implements GameObject{
                 }
             };
         Player player= (Player) SelectedObject.getInstance().getExecuter();
-        if (startRoute.isEnabled() && player.getCurrentRoute().equals("")) Actions.add(startRoute);
+        if (startRoute.isEnabled() && player.getRouteStart()) Actions.add(startRoute);
 
         if (finishRoute==null)
         finishRoute = new ObjectAction(this) {
@@ -192,14 +192,14 @@ public class City implements GameObject{
 
             @Override
             public void preAction() {
-                GameSound.playSound(GameSound.FINISH_ROUTE_SOUND);
+                Player player= (Player) SelectedObject.getInstance().getExecuter();
+                player.setRouteStart(true);
             }
 
             @Override
             public void postAction() {
                 Essages.addEssage("Завершен маршрут в город "+CityName);
-                Player player= (Player) SelectedObject.getInstance().getExecuter();
-                if (!player.getCurrentRoute().equals("")) player.setCurrentRoute("");
+                GameSound.playSound(GameSound.FINISH_ROUTE_SOUND);
                 serverConnect.getInstance().getPlayerInfo();
                 serverConnect.getInstance().RefreshCurrent();
             }
@@ -209,7 +209,7 @@ public class City implements GameObject{
 
             }
         };
-        if (finishRoute.isEnabled()&& !player.getCurrentRoute().equals("")) Actions.add(finishRoute);
+        if (finishRoute.isEnabled()&& !player.getRouteStart()) Actions.add(finishRoute);
 
         if (butUpgrade==null)
             butUpgrade = new ObjectAction(this) {
@@ -230,11 +230,12 @@ public class City implements GameObject{
 
                 @Override
                 public void preAction() {
-                    GameSound.playSound(GameSound.BUY_SOUND);
+
                 }
 
                 @Override
                 public void postAction() {
+                    GameSound.playSound(GameSound.BUY_SOUND);
                     serverConnect.getInstance().getPlayerInfo();
                     Essages.addEssage("Улучшение "+upgrade+" куплено.");
                 }

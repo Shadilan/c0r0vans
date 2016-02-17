@@ -146,9 +146,11 @@ public class LoginView extends RelativeLayout {
         locationListener =new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
-                GPSStatus.setVisibility(View.VISIBLE);
-                Positioned=true;
-                checkReadyToRun();
+                if (GPSInfo.getInstance().GetLat()!=-1 && GPSInfo.getInstance().GetLng()!=-1) {
+                    GPSStatus.setVisibility(View.VISIBLE);
+                    Positioned = true;
+                    checkReadyToRun();
+                }
             }
 
             @Override
