@@ -168,9 +168,26 @@
         android:layout_height="wrap_content"
         android:id="@+id/actionView"
         android:gravity="center"
-        android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
         android:visibility="invisible" />
 
-
+<coe.com.c0r0vans.InfoLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/informationView"
+    android:gravity="center"
+    android:layout_centerHorizontal="true"
+    android:layout_centerVertical="true"
+    android:visibility="gone"
+    />
+    <coe.com.c0r0vans.LoginView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/loginView"
+        android:gravity="center"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:visibility="visible"
+        />
 </RelativeLayout>

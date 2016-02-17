@@ -138,9 +138,10 @@ public class Caravan implements GameObject {
 
     @Override
     public String getInfo() {
-
-        if (isOwner) if (speed>0) return "Ваш караван направляется из города "+startName+" в город "+finishName +", готовясь принести вам золото.";
-        else return "Ваш караван направляется из города "+finishName+" в город "+startName +", готовясь принести вам золото.";
+        String tushkan="";
+        if (Math.random()*1000<3) tushkan="На крыше видна тень кого-то невидимого.";
+        if (isOwner) if (speed>0) return "Ваш караван направляется из города "+startName+" в город "+finishName +", готовясь принести вам золото."+tushkan;
+        else return "Ваш караван направляется из города "+finishName+" в город "+startName +", готовясь принести вам золото."+tushkan;
             else return "Чейто караван проезжает, звеня не ВАШИМ золотом.";
     }
     private ObjectAction dropRoute;
@@ -211,5 +212,10 @@ public class Caravan implements GameObject {
                     Essages.addEssage("Ваш зум не корректен.");
             }
 
+    }
+
+    @Override
+    public int getProgress() {
+        return 0;
     }
 }

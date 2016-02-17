@@ -14,10 +14,12 @@ import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.model.Circle;
 
+import org.json.JSONObject;
 import org.w3c.dom.Text;
 
 import java.util.ArrayList;
@@ -31,6 +33,7 @@ import coe.com.c0r0vans.GameObjects.Player;
 import coe.com.c0r0vans.GameObjects.SelectedObject;
 import coe.com.c0r0vans.R;
 import utility.GPSInfo;
+import utility.ServerListener;
 import utility.serverConnect;
 
 /**
@@ -111,16 +114,58 @@ public class ActionView extends LinearLayout {
             ObjectDesc.setText(SelectedObject.getInstance().getTarget().getInfo());
         } else if (SelectedObject.getInstance().getTarget() instanceof Ambush)
         {
-            title.setText("Засада");
+            title.setText(((Ambush) SelectedObject.getInstance().getTarget()).getName());
             ObjectDesc.setText(SelectedObject.getInstance().getTarget().getInfo());
         } else if (SelectedObject.getInstance().getTarget() instanceof Caravan)
         {
             title.setText("Караван");
             ObjectDesc.setText(SelectedObject.getInstance().getTarget().getInfo());
         }
+        ProgressBar progressBar= (ProgressBar) findViewById(R.id.progressBar);
+        if (SelectedObject.getInstance().getTarget() instanceof City) {
+            progressBar.setVisibility(VISIBLE);
+            progressBar.setProgress(SelectedObject.getInstance().getTarget().getProgress());
+
+        } else
+        {
+            progressBar.setVisibility(INVISIBLE);
+        }
+
 
         ObjectImage.setImageBitmap(SelectedObject.getInstance().getTarget().getImage());
+        serverConnect.getInstance().addListener(new ServerListener() {
+            @Override
+            public void onLogin(JSONObject response) {
 
+            }
+
+            @Override
+            public void onRefresh(JSONObject response) {
+
+            }
+
+            @Override
+            public void onAction(JSONObject response) {
+                if (getVisibility()==VISIBLE){
+                    reloadActions();
+                }
+            }
+
+            @Override
+            public void onPlayerInfo(JSONObject response) {
+
+            }
+
+            @Override
+            public void onError(JSONObject response) {
+
+            }
+
+            @Override
+            public void onMessage(JSONObject response) {
+
+            }
+        });
         reloadActions();
         float[] distances = new float[1];
         Location.distanceBetween(SelectedObject.getInstance().getTarget().getMarker().getPosition().latitude,
@@ -130,7 +175,7 @@ public class ActionView extends LinearLayout {
         if (distances.length > 0 && distances[0] < ((Player)SelectedObject.getInstance().getExecuter()).getActionDistance()) {
             ActionList.setVisibility(VISIBLE);
         } else {
-            ActionList.setVisibility(GONE);
+            ActionList.setVisibility(INVISIBLE);
         }
         if (locationListener==null) {
             locationListener = new LocationListener() {
@@ -144,7 +189,7 @@ public class ActionView extends LinearLayout {
                     if (distances.length > 0 && distances[0] < ((Player)SelectedObject.getInstance().getExecuter()).getActionDistance()) {
                         ActionList.setVisibility(VISIBLE);
                     } else {
-                        ActionList.setVisibility(GONE);
+                        ActionList.setVisibility(INVISIBLE);
                     }
                 }
 

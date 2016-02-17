@@ -10,6 +10,8 @@ import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+import coe.com.c0r0vans.MessageNotification;
+
 /**
  * @author Shadilan
  *         Class to show messages that system return
@@ -30,6 +32,10 @@ public class Essages {
      */
     public static void addEssage(String text) {
         target.append("\n" + df.format(new Date()) + ":" + text);
+    }
+    public static void addEssage(Date time,String text) {
+        target.append("\n" + df.format(time) + ":" + text);
+        MessageNotification.notify(text,1);
     }
 
 

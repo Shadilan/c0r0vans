@@ -12,10 +12,10 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
         android:allowBackup="true"
@@ -25,6 +25,7 @@
         android:theme="@style/AppTheme" >
         <activity
             android:name=".MainWindow"
+            android:launchMode="singleTask"
             android:label="@string/title_activity_main_window"
             android:screenOrientation="sensorPortrait" >
             <intent-filter>
@@ -32,11 +33,6 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        <activity
-            android:name=".Login"
-            android:label="@string/login_window"
-            android:theme="@style/Theme.AppCompat.Light.Dialog" >
         </activity>
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
@@ -51,20 +47,11 @@
             android:value="AIzaSyAneP9YQLzXNYHcKpJ2LkFOrgJHhp2_WiY" />
 
         <activity
-            android:name=".MainActivity"
+            android:name=".Settings"
             android:label="@string/title_activity_main"
             android:parentActivityName=".MainWindow"
             android:screenOrientation="sensorPortrait"
             android:theme="@style/Theme.AppCompat.Light.Dialog" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="coe.com.c0r0vans.MainWindow" />
-        </activity>
-        <activity android:name=".Settings"
-            android:label="@string/title_activity_main"
-            android:parentActivityName=".MainWindow"
-            android:screenOrientation="sensorPortrait"
-            android:theme="@style/Theme.AppCompat.Light.Dialog"   >
         </activity>
     </application>
 

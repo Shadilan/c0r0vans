@@ -288,6 +288,40 @@ public class serverConnect {
         reqq.add(jsObjRequest);
         return true;
     }
+    public boolean getMessage(){
+
+        if (!checkConnection()) return false;
+        if (Token==null) return false;
+
+        String url=ServerAddres+"/getdata.jsp"+"?Token="+Token+"&ReqName=GetMessage";
+        Log.d("Debug info", "Connection url:" + url);
+        if ("Y".equals(GameSettings.getInstance().get("NET_DEBUG"))) Essages.addEssage("Net:"+url);
+        Response.Listener<JSONObject> l=new Response.Listener<JSONObject>(){
+            @Override
+            public void onResponse(JSONObject response) {
+                clearListener();
+                if (response.has("Error")){
+                    for (ServerListener l:listeners) l.onError(response);
+                } else {
+                    for (ServerListener l : listeners) l.onMessage(response);
+                }
+
+            }
+        };
+        Response.ErrorListener le=new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("Ubnexpected Error",error.toString());
+                for (ServerListener l:listeners) l.onError(formResponse(error.toString()));
+            }
+        };
+
+
+        final JsonObjectRequest jsObjRequest = new JsonObjectRequest
+                (Request.Method.GET, url, null,l , le);
+        reqq.add(jsObjRequest);
+        return true;
+    }
     /**
      * Check if we have Token
      * @return true if we have token otherwise false;

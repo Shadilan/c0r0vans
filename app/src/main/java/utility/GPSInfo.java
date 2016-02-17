@@ -59,13 +59,15 @@ public class GPSInfo {
 
     }
 
-
+    Context context;
     /**
      * Constructor
      * @param mContext Application context
      */
+
     private GPSInfo(Context mContext) {
         locationManager = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
+        context=mContext;
         //Criteria criteria = new Criteria();
         locationListener=new LocationListener() {
             @Override
@@ -124,16 +126,20 @@ public class GPSInfo {
     public void offGPS(){
         locationManager.removeUpdates(locationListener);
     }
+    LocationListener locationListener;
     /**
      * Request coordinate uppdate on target provider
      * @param prov provider of GPS Data
      */
-    LocationListener locationListener;
+
     public void RequestUpdate(String prov) {
-
+        int refreshRate=3000;
+        if (GameSettings.getInstance()==null) GameSettings.init(context);
+        if (GameSettings.getInstance().get("GPS_REFRESH")!=null){
+            refreshRate=Integer.getInteger(GameSettings.getInstance().get("GPS_REFRESH"))*1000;
+        }
         try {
-
-            locationManager.requestLocationUpdates(prov, 5000, 1, locationListener);
+            locationManager.requestLocationUpdates(prov, refreshRate, 1, locationListener);
         } catch (SecurityException e)
         {
             e.printStackTrace();

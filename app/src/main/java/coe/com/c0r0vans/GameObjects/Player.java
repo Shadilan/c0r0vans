@@ -72,6 +72,11 @@ public class Player implements GameObject{
         mark.setIcon(BitmapDescriptorFactory.fromResource(R.mipmap.marker));
     }
 
+    @Override
+    public int getProgress() {
+        return (Exp*100/TNL);
+    }
+
     public Player(GoogleMap mMap){
         image= ImageLoader.getImage("hero");
         Bitmap mimage= ImageLoader.getImage("marker");
@@ -328,4 +333,8 @@ public class Player implements GameObject{
     public int getActionDistance(){return ActionDistance;}
     public String getCurrentRoute(){return currentRoute;}
     public ObjectAction getDropRoute(){return dropRoute;}
+
+    public void setCurrentRoute(String currentRoute) {
+        this.currentRoute = currentRoute;
+    }
 }
