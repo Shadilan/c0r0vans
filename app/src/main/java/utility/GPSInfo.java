@@ -74,8 +74,10 @@ public class GPSInfo {
 
             public void onLocationChanged(Location location) {
                 speed = (int) (location.getSpeed()*60/1000);
-                lat = (int) (location.getLatitude() * 1000000);
-                lng = (int) (location.getLongitude() * 1000000);
+                if (location.getLongitude()!=-1 && location.getLatitude()!=-1) {
+                    lat = (int) (location.getLatitude() * 1000000);
+                    lng = (int) (location.getLongitude() * 1000000);
+                }
 
                 //RequestUpdate(location.getProvider());
                 if (locationListeners !=null){
