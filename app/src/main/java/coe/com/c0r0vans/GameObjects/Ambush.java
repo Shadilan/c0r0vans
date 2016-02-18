@@ -88,8 +88,9 @@ public class Ambush implements GameObject {
                 CircleOptions circleOptions = new CircleOptions();
                 circleOptions.center(latlng);
                 circleOptions.radius(radius);
-                circleOptions.strokeColor(Color.RED);
-                circleOptions.strokeWidth(1);
+                if (isOwner) circleOptions.strokeColor(Color.BLUE);
+                else circleOptions.strokeColor(Color.RED);
+                circleOptions.strokeWidth(2);
                 zone = map.addCircle(circleOptions);
             } else
             {
