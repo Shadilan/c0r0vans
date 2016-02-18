@@ -18,6 +18,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import utility.GPSInfo;
+import utility.GameSettings;
 import utility.ServerListener;
 import utility.serverConnect;
 
@@ -54,7 +55,7 @@ public class LoginView extends RelativeLayout {
         super.onFinishInflate();
         afterInit();
     }
-
+    Button loginButton;
     private void init(){
         inflate(getContext(), R.layout.activity_login_main, this);
     }
@@ -85,8 +86,9 @@ public class LoginView extends RelativeLayout {
                         TextView errorText= (TextView) findViewById(R.id.errorText);
                         errorText.setText(response.getString("Error") + ":" + response.getString("Message"));
                     }
-                    checkReadyToRun();
 
+                    checkReadyToRun();
+                    loginButton.setText("Login");
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -115,6 +117,7 @@ public class LoginView extends RelativeLayout {
 
                     if (response.has("Error")) result=response.getString("Error");
                     if (response.has("Message")) result=result+" "+response.getString("Message");
+                    loginButton.setText("Login");
                     errorText.setText(result);
                 } catch (JSONException e) {
                     errorText.setText(response.toString());
@@ -128,7 +131,7 @@ public class LoginView extends RelativeLayout {
         };
         serverConnect.getInstance().addListener(LoginListener);
 
-        Button loginButton = (Button) findViewById(R.id.LoginButton);
+        loginButton = (Button) findViewById(R.id.LoginButton);
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -138,11 +141,15 @@ public class LoginView extends RelativeLayout {
                 editor.apply();
                 TextView errorText= (TextView) findViewById(R.id.errorText);
                 errorText.setText("");
+                loginButton.setText("Login...");
                 Log.d("Debug info","Test login1");
                 if (serverConnect.getInstance().ExecLogin(LoginField.getText().toString(), PasswordField.getText().toString()))
                     Log.d("Debug info","Login True");    else Log.d("Debug info","Login False");
             }
         });
+        if ("Y".equals(GameSettings.getInstance().get("AUTO_LOGIN")) && !LoginField.getText().equals("")){
+            loginButton.callOnClick();
+        }
         locationListener =new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {

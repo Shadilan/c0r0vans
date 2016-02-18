@@ -28,6 +28,7 @@ public class Settings extends AppCompatActivity {
     CheckBox useTilt;
     CheckBox gpsOn;
     SeekBar gpsRate;
+    CheckBox autoLogin;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,6 +44,7 @@ public class Settings extends AppCompatActivity {
         useTilt=(CheckBox) findViewById(R.id.useTilt);
         gpsOn=(CheckBox) findViewById(R.id.gpsOn);
         gpsRate=(SeekBar) findViewById(R.id.gpsRate);
+        autoLogin=(CheckBox) findViewById(R.id.autoLogin);
         cancel_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -63,7 +65,7 @@ public class Settings extends AppCompatActivity {
                 GameSettings.getInstance().put("NET_DEBUG", netDebug.isChecked() ? "Y" : "N");
                 GameSettings.getInstance().put("GPS_ON_BACK", gpsOn.isChecked() ? "Y" : "N");
                 GameSettings.getInstance().put("GPS_RATE", String.valueOf(gpsRate.getProgress() + 1));
-
+                GameSettings.getInstance().put("AUTO_LOGIN", autoLogin.isChecked() ? "Y" : "N");
                 GameSettings.getInstance().save();
                 Intent resultIntent = new Intent();
                 setResult(Activity.RESULT_OK, resultIntent);
@@ -91,5 +93,6 @@ public class Settings extends AppCompatActivity {
             refreshRate=Integer.parseInt(strRate)-1;
         }
         gpsRate.setProgress(refreshRate);
+        autoLogin.setChecked("Y".equals(GameSettings.getInstance().get("AUTO_LOGIN")));
     }
 }

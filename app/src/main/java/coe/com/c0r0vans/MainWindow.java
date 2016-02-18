@@ -374,37 +374,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                 }
             }
         });
-        /*mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
-            @Override
-            public void onMapClick(LatLng latLng) {
-                float[] distances = new float[1];
-                Location.distanceBetween(latLng.latitude, latLng.longitude, player.getMarker().getPosition().latitude, player.getMarker().getPosition().longitude, distances);
-                if (distances.length > 0 && distances[0] < player.getActionDistance()) {
 
-                    SelectedObject.getInstance().setExecuter(player);
-                    SelectedObject.getInstance().setTarget(player);
-                    SelectedObject.getInstance().setPoint(latLng);
-
-                    ActionView actionView = (ActionView) findViewById(R.id.actionView);
-                    if (actionView.clickpos != null) {
-                        actionView.clickpos.setCenter(latLng);
-                        actionView.clickpos.setRadius(player.getAmbushRad());
-                    } else {
-                        CircleOptions circleOptions = new CircleOptions();
-                        circleOptions.center(latLng);
-                        circleOptions.radius(player.getAmbushRad());
-                        circleOptions.strokeColor(Color.RED);
-                        circleOptions.strokeWidth(1);
-
-                        actionView.clickpos = mMap.addCircle(circleOptions);
-
-                    }
-
-
-                    actionView.ShowView();
-                }
-            }
-        });*/
         mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
             @Override
             public void onMapLongClick(LatLng latLng) {
@@ -515,7 +485,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
     private void StartTickTimer() {
         int delay = 1000;
 
-        if (serverConnect.getInstance().isLogin() && (timeToPlayerRefresh!=-1)) {
+        if (serverConnect.getInstance().isLogin() && (timeToPlayerRefresh!=-1) && GPSInfo.getInstance().GetLat()!=-1 && GPSInfo.getInstance().GetLng()!=-1) {
             Log.d("Debug info","Speed:"+GPSInfo.getInstance().getSpeed());
             if (GPSInfo.getInstance().getSpeed() < 30) delay = 40000;
             else if (GPSInfo.getInstance().getSpeed() > 30) delay = 20000;
@@ -540,7 +510,8 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
     int timeToPlayerRefresh=-1;
     private void Tick() {
         Log.d("Debug info","Time to refresh");
-        if (serverConnect.getInstance().isLogin() && this.hasWindowFocus())
+        if (serverConnect.getInstance().isLogin() && this.hasWindowFocus()
+                && GPSInfo.getInstance().GetLat()!=-1 && GPSInfo.getInstance().GetLng()!=-1)
             if (timeToPlayerRefresh<1) {
                 serverConnect.getInstance().RefreshData(GPSInfo.getInstance().GetLat(), GPSInfo.getInstance().GetLng());
                 serverConnect.getInstance().getPlayerInfo();
@@ -552,7 +523,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                 timeToPlayerRefresh--;
                 serverConnect.getInstance().RefreshData(GPSInfo.getInstance().GetLat(), GPSInfo.getInstance().GetLng());
             }
-        if (job) StartTickTimer();
+        StartTickTimer();
     }
     private Runnable messageRequest=new Runnable() {
         @Override
@@ -570,7 +541,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
     protected void onPause(){
         super.onPause();
         myHandler.removeCallbacks(myRunable);
-        job=false;
+
         MessageNotification.appActive=false;
         GameSound.stopMusic();
         if (!"Y".equals(GameSettings.getInstance().get("GPS_ON_BACK"))) GPSInfo.getInstance().offGPS();
