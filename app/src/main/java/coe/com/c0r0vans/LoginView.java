@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.location.Location;
 import android.location.LocationListener;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.AttributeSet;
@@ -132,7 +133,7 @@ public class LoginView extends RelativeLayout {
         serverConnect.getInstance().addListener(LoginListener);
 
         loginButton = (Button) findViewById(R.id.LoginButton);
-        loginButton.setOnClickListener(new View.OnClickListener() {
+        loginButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 SharedPreferences.Editor editor = sp.edit();
@@ -147,8 +148,12 @@ public class LoginView extends RelativeLayout {
                     Log.d("Debug info","Login True");    else Log.d("Debug info","Login False");
             }
         });
+        //Если настройки не инициализированы инициализируем их.
+        if (GameSettings.getInstance()==null) GameSettings.init(getContext());
         if ("Y".equals(GameSettings.getInstance().get("AUTO_LOGIN")) && !LoginField.getText().equals("")){
-            loginButton.callOnClick();
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1) {
+                loginButton.callOnClick();
+            }
         }
         locationListener =new LocationListener() {
             @Override

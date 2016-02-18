@@ -557,6 +557,9 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
         GameSound.playMusic();
         //if (!"Y".equals(GameSettings.getInstance().get("GPS_ON_BACK")))
             GPSInfo.getInstance().onGPS();
+        if (serverConnect.getInstance().isLogin() && this.hasWindowFocus()
+                && GPSInfo.getInstance().GetLat()!=-1 && GPSInfo.getInstance().GetLng()!=-1)
+            serverConnect.getInstance().RefreshCurrent();
     }
 
     @Override
