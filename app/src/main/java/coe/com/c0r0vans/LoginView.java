@@ -150,10 +150,16 @@ public class LoginView extends RelativeLayout {
         });
         //Если настройки не инициализированы инициализируем их.
         if (GameSettings.getInstance()==null) GameSettings.init(getContext());
-        if ("Y".equals(GameSettings.getInstance().get("AUTO_LOGIN")) && !LoginField.getText().equals("")){
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1) {
-                loginButton.callOnClick();
+        try {
+            if ("Y".equals(GameSettings.getInstance().get("AUTO_LOGIN")) && !LoginField.getText().equals("")) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1) {
+                    loginButton.callOnClick();
+                }
             }
+        } catch (Exception e)
+        {
+            TextView errorText= (TextView) findViewById(R.id.errorText);
+            errorText.setText(e.toString());
         }
         locationListener =new LocationListener() {
             @Override
