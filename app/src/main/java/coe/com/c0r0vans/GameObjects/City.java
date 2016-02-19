@@ -115,6 +115,7 @@ public class City implements GameObject{
     @Override
     public void RemoveObject() {
         mark.remove();
+        if (zone!=null) zone.remove();
     }
 
     @Override

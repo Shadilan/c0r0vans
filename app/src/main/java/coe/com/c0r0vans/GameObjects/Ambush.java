@@ -106,7 +106,8 @@ public class Ambush implements GameObject {
 
     @Override
     public void RemoveObject() {
-        mark.remove();zone.remove();
+        mark.remove();
+        if (zone!=null) zone.remove();
     }
 
     @Override

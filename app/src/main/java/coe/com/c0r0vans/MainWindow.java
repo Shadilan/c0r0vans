@@ -154,7 +154,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                         .build()));
         createListeners();
     }
-
+    boolean isListenersDone=false;
     /**
      * Setup map view
      */
@@ -178,6 +178,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
 
 
     private void createListeners() {
+        if (isListenersDone) return;
         SelectedObject.getInstance().setExecuter(player);
         ImageView PlayerInfo = (ImageView) findViewById(R.id.infoview);
         PlayerInfo.setOnClickListener(new View.OnClickListener() {
@@ -199,7 +200,24 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
 
             }
         });
-
+        Settings.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                //ForceSync
+                //Remove all Objects
+                for (GameObject obj : Objects) {
+                    obj.RemoveObject();
+                }
+                Objects.removeAll(Objects);
+                //Run Refresh
+                serverConnect.getInstance().RefreshCurrent();
+                //Run Player
+                serverConnect.getInstance().getPlayerInfo();
+                //RunGetMessage
+                serverConnect.getInstance().getMessage();
+                return true;
+            }
+        });
         LogButton.setOnClickListener(new View.OnClickListener() {
             private boolean show = false;
 
@@ -456,6 +474,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                 mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(GPSInfo.getInstance().GetLat() / 1e6, GPSInfo.getInstance().GetLng() / 1e6), clientZoom));
             }
         });
+        isListenersDone=true;
 
     }
     private float bearing=0;
@@ -529,7 +548,9 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
         @Override
         public void run() {
             if (serverConnect.getInstance().isLogin()) serverConnect.getInstance().getMessage();
+            myHandler.removeCallbacks(messageRequest);
             myHandler.postDelayed(messageRequest, 60000);
+
         }
     };
 

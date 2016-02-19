@@ -179,6 +179,7 @@ public class Player implements GameObject{
             if (obj.has("Routes")){
                 currentRoute="";
                 JSONArray route=obj.getJSONArray("Routes");
+
                 Routes.clear();
                 for (int i=0;i<route.length();i++) {
                     Route routeObj=new Route(route.getJSONObject(i));
