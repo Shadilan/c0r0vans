@@ -31,11 +31,14 @@ public class Essages {
      * @param text Text to add
      */
     public static void addEssage(String text) {
+        if (target!=null)
         target.append("\n" + df.format(new Date()) + ":" + text);
     }
     public static void addEssage(Date time,String text) {
-        target.append("\n" + df.format(time) + ":" + text);
-        MessageNotification.notify(text,1);
+        if (target!=null) {
+            target.append("\n" + df.format(time) + ":" + text);
+            MessageNotification.notify(text, 1);
+        }
     }
 
 
