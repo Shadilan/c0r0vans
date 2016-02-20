@@ -134,6 +134,7 @@ public class Caravan implements GameObject {
     @Override
     public void RemoveObject() {
         mark.remove();
+        if (route!=null)        route.remove();
     }
 
     @Override
@@ -217,5 +218,8 @@ public class Caravan implements GameObject {
     @Override
     public int getProgress() {
         return 0;
+    }
+    public boolean getIsOwner(){
+        return isOwner;
     }
 }

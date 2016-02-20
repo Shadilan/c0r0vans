@@ -47,6 +47,7 @@ public class Player implements GameObject{
     private int TNL=0;
     private int Exp=0;
     private int MostIn=0;
+    private boolean routeStart=false;
 
     private int AmbushRadius=30;
     private int ActionDistance=50;
@@ -178,6 +179,7 @@ public class Player implements GameObject{
             if (obj.has("Routes")){
                 currentRoute="";
                 JSONArray route=obj.getJSONArray("Routes");
+
                 Routes.clear();
                 for (int i=0;i<route.length();i++) {
                     Route routeObj=new Route(route.getJSONObject(i));
@@ -191,7 +193,8 @@ public class Player implements GameObject{
                 Ambushes.clear();
                 for (int i=0;i<ambush.length();i++) Ambushes.add(new AmbushItem(ambush.getJSONObject(i)));
             }
-
+            if (currentRoute.equals("")) routeStart=true;
+            else routeStart=false;
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -232,12 +235,12 @@ public class Player implements GameObject{
 
             @Override
             public void preAction() {
-                GameSound.playSound(GameSound.SET_AMBUSH);
+
             }
 
             @Override
             public void postAction() {
-
+                GameSound.playSound(GameSound.SET_AMBUSH);
                 serverConnect.getInstance().RefreshCurrent();
                 Essages.addEssage("Засада установлена.");
             }
@@ -268,11 +271,12 @@ public class Player implements GameObject{
 
             @Override
             public void preAction() {
-                GameSound.playSound(GameSound.START_ROUTE_SOUND);
+
             }
 
             @Override
             public void postAction() {
+                GameSound.playSound(GameSound.START_ROUTE_SOUND);
                 serverConnect.getInstance().getPlayerInfo();
                 Essages.addEssage("Незаконченый маршрут отменен.");
             }
@@ -336,5 +340,13 @@ public class Player implements GameObject{
 
     public void setCurrentRoute(String currentRoute) {
         this.currentRoute = currentRoute;
+    }
+
+    public void setRouteStart(boolean routeStart) {
+        this.routeStart = routeStart;
+    }
+
+    public boolean getRouteStart() {
+        return routeStart;
     }
 }

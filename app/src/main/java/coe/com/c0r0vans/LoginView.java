@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.location.Location;
 import android.location.LocationListener;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.AttributeSet;
@@ -18,6 +19,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import utility.GPSInfo;
+import utility.GameSettings;
 import utility.ServerListener;
 import utility.serverConnect;
 
@@ -54,7 +56,7 @@ public class LoginView extends RelativeLayout {
         super.onFinishInflate();
         afterInit();
     }
-
+    Button loginButton;
     private void init(){
         inflate(getContext(), R.layout.activity_login_main, this);
     }
@@ -85,8 +87,9 @@ public class LoginView extends RelativeLayout {
                         TextView errorText= (TextView) findViewById(R.id.errorText);
                         errorText.setText(response.getString("Error") + ":" + response.getString("Message"));
                     }
-                    checkReadyToRun();
 
+                    checkReadyToRun();
+                    loginButton.setText("Login");
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -115,6 +118,7 @@ public class LoginView extends RelativeLayout {
 
                     if (response.has("Error")) result=response.getString("Error");
                     if (response.has("Message")) result=result+" "+response.getString("Message");
+                    loginButton.setText("Login");
                     errorText.setText(result);
                 } catch (JSONException e) {
                     errorText.setText(response.toString());
@@ -128,8 +132,8 @@ public class LoginView extends RelativeLayout {
         };
         serverConnect.getInstance().addListener(LoginListener);
 
-        Button loginButton = (Button) findViewById(R.id.LoginButton);
-        loginButton.setOnClickListener(new View.OnClickListener() {
+        loginButton = (Button) findViewById(R.id.LoginButton);
+        loginButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 SharedPreferences.Editor editor = sp.edit();
@@ -138,17 +142,33 @@ public class LoginView extends RelativeLayout {
                 editor.apply();
                 TextView errorText= (TextView) findViewById(R.id.errorText);
                 errorText.setText("");
+                loginButton.setText("Login...");
                 Log.d("Debug info","Test login1");
                 if (serverConnect.getInstance().ExecLogin(LoginField.getText().toString(), PasswordField.getText().toString()))
                     Log.d("Debug info","Login True");    else Log.d("Debug info","Login False");
             }
         });
+        //Если настройки не инициализированы инициализируем их.
+        if (GameSettings.getInstance()==null) GameSettings.init(getContext());
+        try {
+            if ("Y".equals(GameSettings.getInstance().get("AUTO_LOGIN")) && !LoginField.getText().equals("")) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1) {
+                    loginButton.callOnClick();
+                }
+            }
+        } catch (Exception e)
+        {
+            TextView errorText= (TextView) findViewById(R.id.errorText);
+            errorText.setText(e.toString());
+        }
         locationListener =new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
-                GPSStatus.setVisibility(View.VISIBLE);
-                Positioned=true;
-                checkReadyToRun();
+                if (GPSInfo.getInstance().GetLat()!=-1 && GPSInfo.getInstance().GetLng()!=-1) {
+                    GPSStatus.setVisibility(View.VISIBLE);
+                    Positioned = true;
+                    checkReadyToRun();
+                }
             }
 
             @Override

@@ -60,11 +60,12 @@ public class AmbushItem implements GameObject{
 
             @Override
             public void preAction() {
-                GameSound.playSound(GameSound.START_ROUTE_SOUND);
+
             }
             //Todo: Another sound;
             @Override
             public void postAction() {
+                GameSound.playSound(GameSound.START_ROUTE_SOUND);
                 serverConnect.getInstance().getPlayerInfo();
                 Essages.addEssage("Засада распущена");
             }

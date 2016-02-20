@@ -88,8 +88,9 @@ public class Ambush implements GameObject {
                 CircleOptions circleOptions = new CircleOptions();
                 circleOptions.center(latlng);
                 circleOptions.radius(radius);
-                circleOptions.strokeColor(Color.RED);
-                circleOptions.strokeWidth(1);
+                if (isOwner) circleOptions.strokeColor(Color.BLUE);
+                else circleOptions.strokeColor(Color.RED);
+                circleOptions.strokeWidth(2);
                 zone = map.addCircle(circleOptions);
             } else
             {
@@ -105,7 +106,8 @@ public class Ambush implements GameObject {
 
     @Override
     public void RemoveObject() {
-        mark.remove();zone.remove();
+        mark.remove();
+        if (zone!=null) zone.remove();
     }
 
     @Override
@@ -140,12 +142,13 @@ public class Ambush implements GameObject {
 
                 @Override
                 public void preAction() {
-                    GameSound.playSound(GameSound.REMOVE_AMBUSH);
+
                     owner.getMarker().setVisible(false);zone.setVisible(false);
                 }
 
                 @Override
                 public void postAction() {
+                    GameSound.playSound(GameSound.REMOVE_AMBUSH);
                     Essages.addEssage("Засада распущена");
                     owner.RemoveObject();
                 }
@@ -174,12 +177,13 @@ public class Ambush implements GameObject {
                     @Override
 
                     public void preAction() {
-                        GameSound.playSound(GameSound.KILL_SOUND);
+
                         owner.getMarker().setVisible(false);zone.setVisible(false);
                     }
 
                     @Override
                     public void postAction() {
+                        GameSound.playSound(GameSound.KILL_SOUND);
                         Essages.addEssage("Разбойники уничтожены.");
                         owner.RemoveObject();
                     }
@@ -266,4 +270,7 @@ public class Ambush implements GameObject {
         }
     }
     public String getName(){return name;}
+    public boolean getIsOwner(){
+        return isOwner;
+    }
 }
