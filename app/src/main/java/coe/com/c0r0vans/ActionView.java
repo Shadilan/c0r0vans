@@ -62,6 +62,7 @@ public class ActionView extends LinearLayout {
     private ArrayList<ObjectAction> actions;
     private ImageButton close;
     public Circle clickpos;
+    public Circle clickPoint;
 
     private TextView    title;
     HorizontalScrollView horizontalScrollView;
@@ -92,6 +93,10 @@ public class ActionView extends LinearLayout {
         if (clickpos!=null){
             clickpos.remove();
             clickpos=null;
+        }
+        if (clickPoint!=null){
+            clickPoint.remove();
+            clickPoint=null;
         }
         this.setVisibility(GONE);
     }

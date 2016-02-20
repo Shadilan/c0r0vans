@@ -408,6 +408,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                     if (actionView.clickpos != null) {
                         actionView.clickpos.setCenter(latLng);
                         actionView.clickpos.setRadius(player.getAmbushRad());
+
                     } else {
                         CircleOptions circleOptions = new CircleOptions();
                         circleOptions.center(latLng);
@@ -417,6 +418,17 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
 
                         actionView.clickpos = mMap.addCircle(circleOptions);
 
+                    }
+                    if (actionView.clickPoint != null) {
+                        actionView.clickPoint.setCenter(latLng);
+                    } else {
+                        CircleOptions circleOptions = new CircleOptions();
+                        circleOptions.center(latLng);
+                        circleOptions.radius(1);
+                        circleOptions.strokeColor(Color.RED);
+                        circleOptions.strokeWidth(5);
+
+                        actionView.clickPoint = mMap.addCircle(circleOptions);
                     }
 
 
@@ -453,7 +465,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                 for (GameObject o : Objects) {
                     if (o instanceof Ambush) {
                         Location.distanceBetween(o.getMarker().getPosition().latitude, o.getMarker().getPosition().longitude, player.getMarker().getPosition().latitude, player.getMarker().getPosition().longitude, distances);
-                        if ((distances.length > 0 && distances[0] < player.getActionDistance()*3) || ((Ambush)o).getIsOwner()) {
+                        if ((distances.length > 0 && distances[0] < player.getActionDistance() * 3) || ((Ambush) o).getIsOwner()) {
                             o.getMarker().setVisible(true);
                         } else o.getMarker().setVisible(false);
                     }/* else if (o instanceof Caravan) {
