@@ -270,4 +270,7 @@ public class Ambush implements GameObject {
         }
     }
     public String getName(){return name;}
+    public boolean getIsOwner(){
+        return isOwner;
+    }
 }

@@ -219,4 +219,7 @@ public class Caravan implements GameObject {
     public int getProgress() {
         return 0;
     }
+    public boolean getIsOwner(){
+        return isOwner;
+    }
 }
