@@ -67,10 +67,10 @@ public class Settings extends AppCompatActivity {
                 GameSettings.getInstance().put("GPS_RATE", String.valueOf(gpsRate.getProgress() + 1));
                 GameSettings.getInstance().put("AUTO_LOGIN", autoLogin.isChecked() ? "Y" : "N");
                 GameSettings.getInstance().save();
-                Intent resultIntent = new Intent();
-                setResult(Activity.RESULT_OK, resultIntent);
                 GPSInfo.getInstance().offGPS();
                 GPSInfo.getInstance().onGPS();
+                Intent resultIntent = new Intent();
+                setResult(Activity.RESULT_OK, resultIntent);
                 finish();
             }
         });

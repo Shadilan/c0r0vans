@@ -453,15 +453,15 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                 for (GameObject o : Objects) {
                     if (o instanceof Ambush) {
                         Location.distanceBetween(o.getMarker().getPosition().latitude, o.getMarker().getPosition().longitude, player.getMarker().getPosition().latitude, player.getMarker().getPosition().longitude, distances);
-                        if ((distances.length > 0 && distances[0] < player.getActionDistance()*3) || ((Caravan)o).getIsOwner()) {
+                        if ((distances.length > 0 && distances[0] < player.getActionDistance()*3) || ((Ambush)o).getIsOwner()) {
                             o.getMarker().setVisible(true);
                         } else o.getMarker().setVisible(false);
-                    } else if (o instanceof Caravan) {
+                    }/* else if (o instanceof Caravan) {
                         Location.distanceBetween(o.getMarker().getPosition().latitude, o.getMarker().getPosition().longitude, player.getMarker().getPosition().latitude, player.getMarker().getPosition().longitude, distances);
                         if ((distances.length > 0 && distances[0] < player.getActionDistance()*3) || ((Caravan)o).getIsOwner()) {
                             o.getMarker().setVisible(true);
                         } else o.getMarker().setVisible(false);
-                    }
+                    }*/
                 }
             }
         });
@@ -614,10 +614,14 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
         super.onActivityResult(requestCode, resultCode, data);
+
         switch (requestCode) {
             case (SETTINGS_CALL): {
+
                 if (resultCode == Activity.RESULT_OK) {
+
                     for (GameObject o:Objects){
                         if (o instanceof Ambush){
                             ((Ambush) o).showRadius();
@@ -629,25 +633,29 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                             ((Caravan) o).showRoute();
                         }
                     }
+
+                    if ("Y".equals(GameSettings.getInstance().get("USE_TILT")))
+                        mMap.moveCamera(CameraUpdateFactory.newCameraPosition(
+                                new CameraPosition.Builder()
+                                        .target(player.getMarker().getPosition())
+                                        .tilt(60)
+                                        .zoom(clientZoom)
+                                        .build()));
+                    else
+                        mMap.moveCamera(CameraUpdateFactory.newCameraPosition(
+                                new CameraPosition.Builder()
+                                        .target(player.getMarker().getPosition())
+                                        .tilt(0)
+                                        .zoom(clientZoom)
+                                        .build()));
+
+                    GameSound.updateSettings();
+
                 }
                 break;
             }
         }
-        if ("Y".equals(GameSettings.getInstance().get("USE_TILT")))
-            mMap.moveCamera(CameraUpdateFactory.newCameraPosition(
-                    new CameraPosition.Builder()
-                            .target(player.getMarker().getPosition())
-                            .tilt(60)
-                            .zoom(clientZoom)
-                            .build()));
-        else
-            mMap.moveCamera(CameraUpdateFactory.newCameraPosition(
-                    new CameraPosition.Builder()
-                            .target(player.getMarker().getPosition())
-                            .tilt(0)
-                            .zoom(clientZoom)
-                            .build()));
-        GameSound.updateSettings();
+
 
     }
 }
