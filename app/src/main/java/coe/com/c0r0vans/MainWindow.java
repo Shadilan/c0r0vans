@@ -459,19 +459,19 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                 }
                 float[] distances = new float[1];
 
-                for (GameObject o : Objects) {
+                /*for (GameObject o : Objects) {
                     if (o instanceof Ambush) {
                         Location.distanceBetween(o.getMarker().getPosition().latitude, o.getMarker().getPosition().longitude, player.getMarker().getPosition().latitude, player.getMarker().getPosition().longitude, distances);
                         if ((distances.length > 0 && distances[0] > player.getActionDistance() * 3) || !(((Ambush) o).getIsOwner())) {
                             o.setVisibility(false);
                         } else o.getMarker().setVisible(true);
-                    }/* else if (o instanceof Caravan) {
+                    }*//* else if (o instanceof Caravan) {
                         Location.distanceBetween(o.getMarker().getPosition().latitude, o.getMarker().getPosition().longitude, player.getMarker().getPosition().latitude, player.getMarker().getPosition().longitude, distances);
                         if ((distances.length > 0 && distances[0] < player.getActionDistance()*3) || ((Caravan)o).getIsOwner()) {
                             o.getMarker().setVisible(true);
                         } else o.getMarker().setVisible(false);
-                    }*/
-                }
+                    }*//*
+                }*/
             }
         });
         //Trick for self rotate;
