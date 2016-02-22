@@ -269,6 +269,12 @@ public class City implements GameObject{
         return progress;
     }
 
+    @Override
+    public void setVisibility(boolean visibility) {
+        mark.setVisible(visibility);
+        zone.setVisible(visibility);
+    }
+
     public void showRadius(){
         String opt= GameSettings.getInstance().get("SHOW_CITY_RADIUS");
         if (opt.equals("Y")){

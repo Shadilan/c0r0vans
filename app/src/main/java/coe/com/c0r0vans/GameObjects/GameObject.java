@@ -62,5 +62,5 @@ public interface GameObject {
      void changeMarkerSize(int Type);
     int getProgress();
 
-
+    void setVisibility(boolean visibility);
 }

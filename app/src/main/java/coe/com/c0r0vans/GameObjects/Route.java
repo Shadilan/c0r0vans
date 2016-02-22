@@ -136,6 +136,11 @@ public class Route implements GameObject{
         return 0;
     }
 
+    @Override
+    public void setVisibility(boolean visibility) {
+
+    }
+
     private ObjectAction dropRoute;
     public ObjectAction getAction(){
       return dropRoute;

@@ -2,7 +2,6 @@ package coe.com.c0r0vans;
 
 import android.app.Activity;
 
-import android.app.Fragment;
 import android.content.Intent;
 import android.graphics.Color;
 import android.location.Location;
@@ -16,10 +15,10 @@ import android.support.v4.app.FragmentActivity;
 import android.util.DisplayMetrics;
 import android.util.Log;
 
-import android.view.MotionEvent;
+
 import android.view.View;
 
-import android.widget.FrameLayout;
+
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -31,7 +30,6 @@ import com.google.android.gms.maps.SupportMapFragment;
 
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.CircleOptions;
-import com.google.android.gms.maps.model.GroundOverlayOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 
@@ -40,16 +38,15 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 
-import java.text.DateFormat;
+
 import java.util.ArrayList;
-import java.util.Date;
+
 
 
 import coe.com.c0r0vans.GameObjects.Ambush;
 import coe.com.c0r0vans.GameObjects.Caravan;
 import coe.com.c0r0vans.GameObjects.City;
 import coe.com.c0r0vans.GameObjects.GameObject;
-import coe.com.c0r0vans.GameObjects.Message;
 import coe.com.c0r0vans.GameObjects.MessageMap;
 import coe.com.c0r0vans.GameObjects.Player;
 import coe.com.c0r0vans.GameObjects.SelectedObject;
@@ -172,7 +169,6 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
         mMap.getUiSettings().setCompassEnabled(false);
         mMap.getUiSettings().setMapToolbarEnabled(false);
         mMap.getUiSettings().setIndoorLevelPickerEnabled(false);
-        bearing=mMap.getCameraPosition().bearing;
 
     }
 
@@ -208,7 +204,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                 for (GameObject obj : Objects) {
                     obj.RemoveObject();
                 }
-                Objects.removeAll(Objects);
+                Objects.clear();
                 //Run Refresh
                 serverConnect.getInstance().RefreshCurrent();
                 //Run Player
@@ -465,9 +461,9 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                 for (GameObject o : Objects) {
                     if (o instanceof Ambush) {
                         Location.distanceBetween(o.getMarker().getPosition().latitude, o.getMarker().getPosition().longitude, player.getMarker().getPosition().latitude, player.getMarker().getPosition().longitude, distances);
-                        if ((distances.length > 0 && distances[0] < player.getActionDistance() * 3) || ((Ambush) o).getIsOwner()) {
-                            o.getMarker().setVisible(true);
-                        } else o.getMarker().setVisible(false);
+                        if ((distances.length > 0 && distances[0] > player.getActionDistance() * 3) || !(((Ambush) o).getIsOwner())) {
+                            o.setVisibility(false);
+                        } else o.getMarker().setVisible(true);
                     }/* else if (o instanceof Caravan) {
                         Location.distanceBetween(o.getMarker().getPosition().latitude, o.getMarker().getPosition().longitude, player.getMarker().getPosition().latitude, player.getMarker().getPosition().longitude, distances);
                         if ((distances.length > 0 && distances[0] < player.getActionDistance()*3) || ((Caravan)o).getIsOwner()) {
@@ -504,7 +500,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
         isListenersDone=true;
 
     }
-    private float bearing=0;
+
     /**
      * Return object by marker
      *
@@ -581,9 +577,6 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
         }
     };
 
-    private boolean job=true;
-
-
 
     @Override
     protected void onPause(){
@@ -599,7 +592,6 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
     protected void onResume() {
         super.onResume();
         Log.d("DebugCall", "ResumeCall");
-        job=true;
         MessageNotification.appActive=true;
         StartTickTimer();
         GameSound.playMusic();

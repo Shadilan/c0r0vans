@@ -78,6 +78,12 @@ public class Player implements GameObject{
         return (Exp*100/TNL);
     }
 
+    @Override
+    public void setVisibility(boolean visibility) {
+        mark.setVisible(visibility);
+        circle.setVisible(visibility);
+    }
+
     public Player(GoogleMap mMap){
         image= ImageLoader.getImage("hero");
         Bitmap mimage= ImageLoader.getImage("marker");

@@ -219,6 +219,12 @@ public class Caravan implements GameObject {
     public int getProgress() {
         return 0;
     }
+
+    @Override
+    public void setVisibility(boolean visibility) {
+        mark.setVisible(visibility);
+    }
+
     public boolean getIsOwner(){
         return isOwner;
     }

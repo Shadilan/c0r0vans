@@ -260,6 +260,12 @@ public class Ambush implements GameObject {
         return progress;
     }
 
+    @Override
+    public void setVisibility(boolean visibility) {
+        zone.setVisible(visibility);
+        mark.setVisible(visibility);
+    }
+
     public void showRadius(){
         String opt= GameSettings.getInstance().get("SHOW_AMBUSH_RADIUS");
         if (opt.equals("Y")){
@@ -273,4 +279,5 @@ public class Ambush implements GameObject {
     public boolean getIsOwner(){
         return isOwner;
     }
+
 }
