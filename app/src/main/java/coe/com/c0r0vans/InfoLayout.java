@@ -27,6 +27,7 @@ import coe.com.c0r0vans.GameObjects.Route;
 import coe.com.c0r0vans.GameObjects.SelectedObject;
 import coe.com.c0r0vans.GameObjects.Upgrade;
 import utility.ImageLoader;
+import utility.InfoLine;
 import utility.ServerListener;
 import utility.serverConnect;
 
@@ -206,7 +207,8 @@ public class InfoLayout extends RelativeLayout {
 
         GridLayout gl= (GridLayout) findViewById(R.id.upgradeInfo);
         gl.removeAllViews();
-        gl.setRowCount(player.getUpgrades().size() * 2);
+
+        gl.setRowCount(player.getUpgrades().size()*2);
 
         for (Upgrade u:player.getUpgrades()){
             ImageView iv=new ImageView(getContext());
@@ -221,87 +223,40 @@ public class InfoLayout extends RelativeLayout {
             gl.addView(info);
         }
 
-        gl=(GridLayout) findViewById(R.id.routeInfo);
+        LinearLayout ll=(LinearLayout) findViewById(R.id.routeInfo);
 
-        gl.removeAllViews();
-        gl.setRowCount(player.getRoutes().size() * 2 + 2);
+        ll.removeAllViews();
         if (!player.getCurrentRoute().equals("")){
-            TextView info=new TextView(getContext());
-            info.setSingleLine(true);
-            info.setText(String.valueOf(player.getCurrentRoute()) + "↝");
-            info.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            info.setTextSize(15);
-            info.setGravity(Gravity.CENTER);
-            info.setTextColor(Color.BLACK);
-
-
-            CommandButton remove=new CommandButton(this.getContext(),player.getDropRoute(),"");
-            remove.setImageBitmap(ImageLoader.getImage("closebutton"));
-            remove.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    CommandButton button = (CommandButton) v;
-                    serverConnect.getInstance().ExecCommand(button.getAction(), button.getGuid(), 0, 0, 0, 0);
-                    v.setVisibility(View.GONE);
-                }
-            });
-            gl.addView(remove);
-            gl.addView(info);
-
+            InfoLine line=new InfoLine(getContext());
+            ll.addView(line);
+            line.setLabelText(String.valueOf(player.getCurrentRoute()) + "↝");
+            line.setOnRemoveClick(player.getDropRoute());
+            line.setTarget("");
         }
         for (Route r:player.getRoutes()){
-            TextView info=new TextView(getContext());
-            info.setSingleLine(true);
-            info.setText(r.getStartName() + " - " + r.getDistance() + " - " + r.getFinishName());
-            info.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            info.setTextSize(15);
-            info.setGravity(Gravity.CENTER);
-            info.setTextColor(Color.BLACK);
+            InfoLine line=new InfoLine(getContext());
+            ll.addView(line);
+            line.setLabelText(r.getStartName() + " - " + r.getDistance() + " - " + r.getFinishName());
+            line.setOnRemoveClick(r.getAction());
+            line.setTarget(r.getGUID());
 
-
-            CommandButton remove=new CommandButton(this.getContext(),r.getAction(),r.getGUID());
-            remove.setImageBitmap(ImageLoader.getImage("closebutton"));
-            remove.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    CommandButton button = (CommandButton) v;
-                    serverConnect.getInstance().ExecCommand(button.getAction(), button.getGuid(), 0, 0, 0, 0);
-                    v.setVisibility(View.GONE);
-                }
-            });
-            gl.addView(remove);
-            gl.addView(info);
         }
-        gl=(GridLayout) findViewById(R.id.ambushInfo);
+        ll=(LinearLayout) findViewById(R.id.ambushInfo);
 
-        gl.removeAllViews();
-        gl.setRowCount(player.getAmbushes().size() * 2);
+        ll.removeAllViews();
         for (AmbushItem r:player.getAmbushes()){
+            InfoLine line=new InfoLine(getContext());
+            float[] distances = new float[1];
+            //LatLng rLatLng=r.getLatLng();
+            //Location.distanceBetween(player.getMarker().getPosition().latitude, player.getMarker().getPosition().longitude, rLatLng.latitude, rLatLng.longitude, distances);
+
+            line.setLabelText(r.getName());
+            line.setOnRemoveClick(r.getAction());
+            line.setTarget(r.getGUID());
+            ll.addView(line);
+
             TextView info=new TextView(getContext());
             info.setSingleLine(true);
-            float[] distances = new float[1];
-            LatLng rLatLng=r.getLatLng();
-            Location.distanceBetween(player.getMarker().getPosition().latitude, player.getMarker().getPosition().longitude, rLatLng.latitude, rLatLng.longitude, distances);
-
-            info.setText(r.getName());
-            info.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            info.setTextSize(15);
-            info.setGravity(Gravity.CENTER);
-            info.setTextColor(Color.BLACK);
-
-
-            CommandButton remove=new CommandButton(this.getContext(),r.getAction(),r.getGUID());
-            remove.setImageBitmap(ImageLoader.getImage("closebutton"));
-            remove.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    CommandButton  button= (CommandButton) v;
-                    serverConnect.getInstance().ExecCommand(button.getAction(),button.getGuid(),0,0,0,0);
-                    v.setVisibility(View.GONE);
-                }
-            });
-            gl.addView(remove);
-            gl.addView(info);
         }
 
     }

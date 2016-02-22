@@ -248,19 +248,13 @@
             android:layout_height="match_parent"
             android:id="@+id/scrollView2" >
 
-            <GridLayout
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:rowCount="10"
-                android:columnCount="2"
-                android:rowOrderPreserved="true"
-                android:columnOrderPreserved="true"
                 android:id="@+id/routeInfo"
-                android:useDefaultMargins="false"
-                android:textAlignment="center"
-                android:alignmentMode="alignBounds">
-
-            </GridLayout>
+                android:alignmentMode="alignBounds"
+                android:orientation="vertical">
+            </LinearLayout>
         </ScrollView>
     </LinearLayout>
 
@@ -278,19 +272,13 @@
             android:layout_height="match_parent"
             android:id="@+id/scrollView4" >
 
-            <GridLayout
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:rowCount="10"
-                android:columnCount="2"
-                android:rowOrderPreserved="true"
-                android:columnOrderPreserved="true"
                 android:id="@+id/ambushInfo"
-                android:useDefaultMargins="false"
-                android:textAlignment="center"
-                android:alignmentMode="alignBounds">
+                android:orientation="vertical">
 
-            </GridLayout>
+            </LinearLayout>
         </ScrollView>
     </LinearLayout>
 
