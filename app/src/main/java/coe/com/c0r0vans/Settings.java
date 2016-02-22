@@ -29,6 +29,7 @@ public class Settings extends AppCompatActivity {
     CheckBox gpsOn;
     SeekBar gpsRate;
     CheckBox autoLogin;
+    CheckBox netErrorLog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,6 +46,7 @@ public class Settings extends AppCompatActivity {
         gpsOn=(CheckBox) findViewById(R.id.gpsOn);
         gpsRate=(SeekBar) findViewById(R.id.gpsRate);
         autoLogin=(CheckBox) findViewById(R.id.autoLogin);
+        netErrorLog= (CheckBox) findViewById(R.id.netErrorLogOn);
         cancel_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -66,6 +68,7 @@ public class Settings extends AppCompatActivity {
                 GameSettings.getInstance().put("GPS_ON_BACK", gpsOn.isChecked() ? "Y" : "N");
                 GameSettings.getInstance().put("GPS_RATE", String.valueOf(gpsRate.getProgress() + 1));
                 GameSettings.getInstance().put("AUTO_LOGIN", autoLogin.isChecked() ? "Y" : "N");
+                GameSettings.getInstance().put("SHOW_NETWORK_ERROR", netErrorLog.isChecked() ? "Y" : "N");
                 GameSettings.getInstance().save();
                 GPSInfo.getInstance().offGPS();
                 GPSInfo.getInstance().onGPS();
@@ -87,6 +90,7 @@ public class Settings extends AppCompatActivity {
         useTilt.setChecked("Y".equals(GameSettings.getInstance().get("USE_TILT")));
         netDebug.setChecked("Y".equals(GameSettings.getInstance().get("NET_DEBUG")));
         gpsOn.setChecked("Y".equals(GameSettings.getInstance().get("GPS_ON_BACK")));
+        netErrorLog.setChecked("Y".equals(GameSettings.getInstance().get("SHOW_NETWORK_ERROR")));
         int refreshRate=3;
         if (GameSettings.getInstance().get("GPS_RATE")!=null){
             String strRate=GameSettings.getInstance().get("GPS_RATE");

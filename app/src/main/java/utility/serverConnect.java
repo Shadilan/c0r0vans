@@ -110,7 +110,7 @@ public class serverConnect {
     public boolean ExecLogin(String Login, String Password){
         if (!checkConnection()) return false;
         String url=ServerAddres+"/login.jsp"+"?Login="+Login+"&Password="+Password;
-        if ("Y".equals(GameSettings.getInstance().get("NET_DEBUG"))) Essages.addEssage("Net:"+url);
+        //if ("Y".equals(GameSettings.getInstance().get("NET_DEBUG"))) Essages.addEssage("Net:"+url);
         Log.d("Debug info", "Connect url:" + url);
         final JsonObjectRequest jsObjRequest = new JsonObjectRequest
                 (Request.Method.GET, url, null, new Response.Listener<JSONObject>(){
@@ -132,7 +132,6 @@ public class serverConnect {
                 }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Log.d("Ubnexpected Error",error.toString());
                         for (ServerListener l:listeners) l.onError(formResponse(error.toString()));
                     }
                 });
@@ -279,6 +278,7 @@ public class serverConnect {
             public void onErrorResponse(VolleyError error) {
                 Log.d("Ubnexpected Error",error.toString());
                 for (ServerListener l:listeners) l.onError(formResponse(error.toString()));
+                //if ("Y".equals(GameSettings.getInstance().get("SHOW_NETWORK_ERROR"))) Essages.addEssage(error.toString());
             }
         };
 
@@ -312,6 +312,7 @@ public class serverConnect {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.d("Ubnexpected Error",error.toString());
+                //if ("Y".equals(GameSettings.getInstance().get("SHOW_NETWORK_ERROR"))) Essages.addEssage(error.toString());
                 for (ServerListener l:listeners) l.onError(formResponse(error.toString()));
             }
         };
