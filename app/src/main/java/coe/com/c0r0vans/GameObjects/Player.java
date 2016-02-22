@@ -174,7 +174,6 @@ public class Player implements GameObject{
             if (obj.has("Upgrades")){
                 JSONArray upg=obj.getJSONArray("Upgrades");
                 Upgrades.clear();
-                Log.d("DebugInfo", "Length" + upg.length());
                 for (int i=0;i<upg.length();i++) {
                     Upgrades.add(new Upgrade(upg.getJSONObject(i)));
 
@@ -185,12 +184,14 @@ public class Player implements GameObject{
             if (obj.has("Routes")){
                 currentRoute="";
                 JSONArray route=obj.getJSONArray("Routes");
-
+                for (Route routel:Routes){
+                    routel.RemoveObject();
+                }
                 Routes.clear();
                 for (int i=0;i<route.length();i++) {
-                    Route routeObj=new Route(route.getJSONObject(i));
+                    Route routeObj=new Route(route.getJSONObject(i),map);
                     if (routeObj.getFinishName().equals("null")) currentRoute=routeObj.getStartName();
-                    else Routes.add(new Route(route.getJSONObject(i)));
+                    else Routes.add(routeObj);
 
                 }
             }
@@ -354,5 +355,12 @@ public class Player implements GameObject{
 
     public boolean getRouteStart() {
         return routeStart;
+    }
+    public void showRoute(){
+        if (Routes!=null){
+            for (Route route:Routes){
+                route.showRoute();
+            }
+        }
     }
 }

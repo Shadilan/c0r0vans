@@ -633,11 +633,9 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                         } else if (o instanceof City)
                         {
                             ((City) o).showRadius();
-                        } else if (o instanceof Caravan)
-                        {
-                            ((Caravan) o).showRoute();
                         }
                     }
+                    player.showRoute();
 
                     if ("Y".equals(GameSettings.getInstance().get("USE_TILT")))
                         mMap.moveCamera(CameraUpdateFactory.newCameraPosition(

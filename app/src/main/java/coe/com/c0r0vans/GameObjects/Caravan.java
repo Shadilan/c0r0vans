@@ -34,7 +34,7 @@ public class Caravan implements GameObject {
     private LatLng finish;
     private String startName;
     private String finishName;
-    private Polyline route;
+
     private boolean isOwner=false;
     private double speed=20;
     public String getGUID() {
@@ -95,46 +95,17 @@ public class Caravan implements GameObject {
             } else {
                 mark.setPosition(new LatLng(Lat / 1e6, Lng / 1e6));
             }
-            if (route==null && start!=null && finish!=null){
-                PolylineOptions options=new PolylineOptions();
 
-                if (isOwner) {
-                    options.width(2);
-                    options.color(Color.BLUE);
 
-                /*else {
-                    options.width(4);
-                    options.color(Color.RED);
-                }*/
-                    options.add(start);
-                    options.add(finish);
-                    route = map.addPolyline(options);
-                }
-
-            }
-            showRoute();
 
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
     }
-
-    public void showRoute(){
-        String opt= GameSettings.getInstance().get("SHOW_CARAVAN_ROUTE");
-        if (opt==null) opt="N";
-        if (opt.equals("Y") && route!=null){
-            route.setVisible(true);
-        } else if (route!=null)
-        {
-            route.setVisible(false);
-        }
-    }
-
     @Override
     public void RemoveObject() {
         mark.remove();
-        if (route!=null)        route.remove();
     }
 
     @Override

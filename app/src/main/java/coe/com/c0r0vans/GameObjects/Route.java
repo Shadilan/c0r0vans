@@ -1,10 +1,15 @@
 package coe.com.c0r0vans.GameObjects;
 
 import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.util.Log;
 
+import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -13,6 +18,7 @@ import java.util.ArrayList;
 
 import coe.com.c0r0vans.GameSound;
 import utility.Essages;
+import utility.GameSettings;
 import utility.ImageLoader;
 import utility.ResourceString;
 import utility.serverConnect;
@@ -29,6 +35,10 @@ public class Route implements GameObject{
     private int Distance;
     private int Lat;
     private int Lng;
+    private LatLng StartPoint;
+    private LatLng FinishPoint;
+    private GoogleMap map;
+    private Polyline line;
 
     public Route(){
 
@@ -36,6 +46,10 @@ public class Route implements GameObject{
 
     public Route(JSONObject obj){
             loadJSON(obj);
+    }
+    public Route(JSONObject obj,GoogleMap map){
+        this.map=map;
+        loadJSON(obj);
     }
 
 
@@ -57,7 +71,14 @@ public class Route implements GameObject{
     public void setMarker(Marker m) {
 
     }
+    public void showRoute(){
 
+        if (line!=null)
+        {
+            line.setVisible("Y".equals(GameSettings.getInstance().get("SHOW_CARAVAN_ROUTE")));
+
+        }
+    }
     @Override
     public void loadJSON(JSONObject obj) {
         try {
@@ -69,6 +90,21 @@ public class Route implements GameObject{
             if (obj.has("Distance")) Distance = obj.getInt("Distance");
             if (obj.has("Lat")) Lat = obj.getInt("Lat");
             if (obj.has("Lng")) Lng = obj.getInt("Lng");
+            if (obj.has("StartLat") && obj.has("StartLng")) StartPoint = new LatLng(obj.getInt("StartLat")/1e6,obj.getInt("StartLng")/1e6);
+            if (obj.has("FinishLat") && obj.has("FinishLng")) FinishPoint = new LatLng(obj.getInt("FinishLat")/1e6,obj.getInt("FinishLng")/1e6);
+            if (StartPoint!=null && FinishPoint!=null) {
+                PolylineOptions options = new PolylineOptions();
+                options.width(2);
+                options.color(Color.BLUE);
+                options.add(StartPoint);
+                options.add(FinishPoint);
+                if (map!=null) {
+                    line = map.addPolyline(options);
+                    //Log.d("RouteTest","Line draw");
+                    showRoute();
+
+                }
+            }
         }
         catch (JSONException e) {
             e.printStackTrace();
@@ -111,7 +147,7 @@ public class Route implements GameObject{
 
     @Override
     public void RemoveObject() {
-
+        if (line!=null) line.remove();
     }
 
     @Override
