@@ -59,6 +59,10 @@ public class Player implements GameObject{
 
     private String currentRoute="";
 
+    public Player() {
+        init();
+    }
+
     public int getAmbushRad(){return AmbushRadius;}
 
     private int Gold=0;
@@ -85,18 +89,11 @@ public class Player implements GameObject{
     }
 
     public Player(GoogleMap mMap){
+        setMap(mMap);
+        init();
+    }
+    public void init(){
         image= ImageLoader.getImage("hero");
-        Bitmap mimage= ImageLoader.getImage("marker");
-        map=mMap;
-        mark=mMap.addMarker(new MarkerOptions().position(new LatLng(GPSInfo.getInstance().GetLat() / 1E6, GPSInfo.getInstance().GetLng() / 1E6)));
-        CircleOptions circleOptions=new CircleOptions();
-        circleOptions.center(new LatLng(GPSInfo.getInstance().GetLat() / 1E6, GPSInfo.getInstance().GetLng() / 1E6));
-        circleOptions.radius(ActionDistance);
-        circleOptions.strokeColor(Color.parseColor("#D08D2E"));
-        circleOptions.strokeWidth(5);
-        circle=mMap.addCircle(circleOptions);
-        changeMarkerSize((int) map.getCameraPosition().zoom);
-        mark.setAnchor(0.5f, 0.5f);
         Upgrades=new ArrayList<>();
         Routes=new ArrayList<>();
         Ambushes=new ArrayList<>();
@@ -133,7 +130,6 @@ public class Player implements GameObject{
             }
         };
     }
-
 
     @Override
     public Bitmap getImage() {
@@ -200,11 +196,11 @@ public class Player implements GameObject{
                 Ambushes.clear();
                 for (int i=0;i<ambush.length();i++) Ambushes.add(new AmbushItem(ambush.getJSONObject(i)));
             }
-            if (currentRoute.equals("")) routeStart=true;
-            else routeStart=false;
+            routeStart = currentRoute.equals("");
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        change(OnGameObjectChange.EXTERNAL);
     }
 
     @Override
@@ -347,10 +343,12 @@ public class Player implements GameObject{
 
     public void setCurrentRoute(String currentRoute) {
         this.currentRoute = currentRoute;
+        change(OnGameObjectChange.PLAYER);
     }
 
     public void setRouteStart(boolean routeStart) {
         this.routeStart = routeStart;
+        change(OnGameObjectChange.PLAYER);
     }
 
     public boolean getRouteStart() {
@@ -362,5 +360,40 @@ public class Player implements GameObject{
                 route.showRoute();
             }
         }
+    }
+
+    private ArrayList<OnGameObjectChange> onChangeList;
+    private ArrayList<OnGameObjectChange> removeOnChangeList;
+    public void addOnChange(OnGameObjectChange onGameObjectChange){
+        if (onChangeList==null) onChangeList=new ArrayList<>();
+        onChangeList.add(onGameObjectChange);
+    }
+    public void removeOnChange(OnGameObjectChange onGameObjectChange){
+        if (removeOnChangeList==null) removeOnChangeList=new ArrayList<>();
+        removeOnChangeList.add(onGameObjectChange);
+    }
+    public void change(int type){
+        if (onChangeList==null) return;
+        if (removeOnChangeList!=null && removeOnChangeList.size()>0){
+            onChangeList.removeAll(removeOnChangeList);
+            removeOnChangeList.clear();
+        }
+        for (OnGameObjectChange ev:onChangeList){
+            ev.change(type);
+        }
+    }
+
+    public void setMap(GoogleMap map) {
+        this.map = map;
+
+        mark=map.addMarker(new MarkerOptions().position(new LatLng(GPSInfo.getInstance().GetLat() / 1E6, GPSInfo.getInstance().GetLng() / 1E6)));
+        CircleOptions circleOptions=new CircleOptions();
+        circleOptions.center(new LatLng(GPSInfo.getInstance().GetLat() / 1E6, GPSInfo.getInstance().GetLng() / 1E6));
+        circleOptions.radius(ActionDistance);
+        circleOptions.strokeColor(Color.parseColor("#D08D2E"));
+        circleOptions.strokeWidth(5);
+        circle=map.addCircle(circleOptions);
+        changeMarkerSize((int) map.getCameraPosition().zoom);
+        mark.setAnchor(0.5f, 0.5f);
     }
 }

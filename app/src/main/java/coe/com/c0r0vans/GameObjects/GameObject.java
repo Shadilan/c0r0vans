@@ -63,4 +63,5 @@ public interface GameObject {
     int getProgress();
 
     void setVisibility(boolean visibility);
+
 }

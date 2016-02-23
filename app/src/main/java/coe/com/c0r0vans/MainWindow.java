@@ -48,6 +48,7 @@ import coe.com.c0r0vans.GameObjects.Caravan;
 import coe.com.c0r0vans.GameObjects.City;
 import coe.com.c0r0vans.GameObjects.GameObject;
 import coe.com.c0r0vans.GameObjects.MessageMap;
+import coe.com.c0r0vans.GameObjects.OnGameObjectChange;
 import coe.com.c0r0vans.GameObjects.Player;
 import coe.com.c0r0vans.GameObjects.SelectedObject;
 
@@ -80,6 +81,8 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
      */
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        player=new Player();
+        SelectedObject.getInstance().setExecuter(player);
         setContentView(R.layout.activity_main_window);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -88,6 +91,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
         GameSettings.init(getApplicationContext());
         LogView = (TextView) findViewById(R.id.chatBox);
         LogView.setHeight((int) (LogView.getTextSize() * 2));
+
         Essages.setTarget(LogView);
         LogButton = (ImageView) findViewById(R.id.showButton);
 
@@ -132,7 +136,8 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         setupMap();
-        player = new Player(mMap);
+        player.setMap(mMap);// = new Player(mMap);
+
 
         //mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(player.getMarker().getPosition(), clientZoom));
         if ("Y".equals(GameSettings.getInstance().get("USE_TILT")))
@@ -175,7 +180,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
 
     private void createListeners() {
         if (isListenersDone) return;
-        SelectedObject.getInstance().setExecuter(player);
+
         ImageView PlayerInfo = (ImageView) findViewById(R.id.infoview);
         PlayerInfo.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -349,12 +354,6 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
             @Override
             public void onPlayerInfo(JSONObject response) {
                 player.loadJSON(response);
-                TextView am = (TextView) findViewById(R.id.levelAmount);
-                am.setText(String.valueOf(player.getLevel()));
-                am = (TextView) findViewById(R.id.expAmount);
-                am.setText(String.valueOf(player.getExp()));
-                am = (TextView) findViewById(R.id.goldAmount);
-                am.setText(String.valueOf(player.getGold()));
                 timeToPlayerRefresh = 6;
             }
 
@@ -397,7 +396,6 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                 Location.distanceBetween(latLng.latitude, latLng.longitude, player.getMarker().getPosition().latitude, player.getMarker().getPosition().longitude, distances);
                 if (distances.length > 0 && distances[0] < player.getActionDistance()) {
 
-                    SelectedObject.getInstance().setExecuter(player);
                     SelectedObject.getInstance().setTarget(player);
                     SelectedObject.getInstance().setPoint(latLng);
 
@@ -439,7 +437,6 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                 GameObject target = findObjectByMarker(marker);
                 if (target instanceof Player) return false;
                 if (target != null) {
-                    SelectedObject.getInstance().setExecuter(player);
                     SelectedObject.getInstance().setTarget(target);
                     SelectedObject.getInstance().setPoint(marker.getPosition());
                     ((ActionView) findViewById(R.id.actionView)).ShowView();
@@ -458,24 +455,9 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                     bearing = cameraPosition.bearing;
                 }
                 float[] distances = new float[1];
-
-                /*for (GameObject o : Objects) {
-                    if (o instanceof Ambush) {
-                        Location.distanceBetween(o.getMarker().getPosition().latitude, o.getMarker().getPosition().longitude, player.getMarker().getPosition().latitude, player.getMarker().getPosition().longitude, distances);
-                        if ((distances.length > 0 && distances[0] > player.getActionDistance() * 3) || !(((Ambush) o).getIsOwner())) {
-                            o.setVisibility(false);
-                        } else o.getMarker().setVisible(true);
-                    }*//* else if (o instanceof Caravan) {
-                        Location.distanceBetween(o.getMarker().getPosition().latitude, o.getMarker().getPosition().longitude, player.getMarker().getPosition().latitude, player.getMarker().getPosition().longitude, distances);
-                        if ((distances.length > 0 && distances[0] < player.getActionDistance()*3) || ((Caravan)o).getIsOwner()) {
-                            o.getMarker().setVisible(true);
-                        } else o.getMarker().setVisible(false);
-                    }*//*
-                }*/
             }
-        });
-        //Trick for self rotate;
 
+            });
 
         ImageView zoomButton= (ImageView) findViewById(R.id.zoomButton);
         zoomButton.setOnClickListener(new View.OnClickListener() {
@@ -496,6 +478,23 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                 }
                 for (GameObject obj : Objects) obj.changeMarkerSize(clientZoom);
                 mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(GPSInfo.getInstance().GetLat() / 1e6, GPSInfo.getInstance().GetLng() / 1e6), clientZoom));
+            }
+        });
+        player.addOnChange(new OnGameObjectChange() {
+            @Override
+            public void change(int ChangeType) {
+
+                if (ChangeType != OnGameObjectChange.EXTERNAL) return;
+                TextView am = (TextView) findViewById(R.id.levelAmount);
+                am.setText(String.valueOf(player.getLevel()));
+                am = (TextView) findViewById(R.id.expAmount);
+                am.setText(String.valueOf(player.getExp()));
+                am = (TextView) findViewById(R.id.goldAmount);
+                am.setText(String.valueOf(player.getGold()));
+                ImageView btn= (ImageView) findViewById(R.id.infoview);
+                if ("".equals(player.getCurrentRoute())) btn.setImageResource(R.mipmap.info);
+                else btn.setImageResource(R.mipmap.info_route);
+                ((InfoLayout)findViewById(R.id.informationView)).loadFromPlayer();
             }
         });
         isListenersDone=true;

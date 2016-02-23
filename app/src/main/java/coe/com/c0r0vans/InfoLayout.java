@@ -2,12 +2,10 @@ package coe.com.c0r0vans;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.location.Location;
+
 import android.util.AttributeSet;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.GridLayout;
 import android.widget.ImageView;
@@ -16,19 +14,14 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
-import com.google.android.gms.maps.model.LatLng;
-
-import org.json.JSONObject;
 
 import coe.com.c0r0vans.GameObjects.AmbushItem;
-import coe.com.c0r0vans.GameObjects.CommandButton;
+import coe.com.c0r0vans.GameObjects.OnGameObjectChange;
 import coe.com.c0r0vans.GameObjects.Player;
 import coe.com.c0r0vans.GameObjects.Route;
 import coe.com.c0r0vans.GameObjects.SelectedObject;
 import coe.com.c0r0vans.GameObjects.Upgrade;
-import utility.ImageLoader;
 import utility.InfoLine;
-import utility.ServerListener;
 import utility.serverConnect;
 
 /**
@@ -161,40 +154,10 @@ public class InfoLayout extends RelativeLayout {
                 b.setChecked(true);
             }
         });
-        serverConnect.getInstance().addListener(new ServerListener() {
-            @Override
-            public void onLogin(JSONObject response) {
 
-            }
-
-            @Override
-            public void onRefresh(JSONObject response) {
-
-            }
-
-            @Override
-            public void onAction(JSONObject response) {
-
-            }
-
-            @Override
-            public void onPlayerInfo(JSONObject response) {
-                loadFromPlayer();
-            }
-
-            @Override
-            public void onError(JSONObject response) {
-
-            }
-
-            @Override
-            public void onMessage(JSONObject response) {
-
-            }
-        });
     }
 
-    private void loadFromPlayer(){
+    public void loadFromPlayer(){
         if (player==null) player=(Player) SelectedObject.getInstance().getExecuter();
         ((TextView)findViewById(R.id.levelInfo)).setText(String.valueOf(player.getLevel()));
         ((TextView)findViewById(R.id.expInfo)).setText(String.valueOf(player.getExp()));
@@ -246,9 +209,7 @@ public class InfoLayout extends RelativeLayout {
         ll.removeAllViews();
         for (AmbushItem r:player.getAmbushes()){
             InfoLine line=new InfoLine(getContext());
-            float[] distances = new float[1];
-            //LatLng rLatLng=r.getLatLng();
-            //Location.distanceBetween(player.getMarker().getPosition().latitude, player.getMarker().getPosition().longitude, rLatLng.latitude, rLatLng.longitude, distances);
+            //float[] distances = new float[1];
 
             line.setLabelText(r.getName());
             line.setOnRemoveClick(r.getAction());
