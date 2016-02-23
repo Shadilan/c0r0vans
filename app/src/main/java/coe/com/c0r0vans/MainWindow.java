@@ -512,7 +512,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
             return player;
         } else
             for (GameObject obj : Objects) {
-                if (obj.getMarker().equals(m)) {
+                if (obj.getMarker()!=null && obj.getMarker().equals(m)) {
                     Log.d("Debug info", "Selected object:" + obj.getClass().toString());
                     return obj;
                 }

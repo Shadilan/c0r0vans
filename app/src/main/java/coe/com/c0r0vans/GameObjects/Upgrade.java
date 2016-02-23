@@ -17,6 +17,7 @@ public class Upgrade {
     private String Name;
     private String Description;
     private int nextCost=0;
+    private int Cost=0;
 
     public void loadJSON(JSONObject object) throws JSONException {
         if (object.has("Type")) Type=object.getString("Type");
@@ -25,6 +26,7 @@ public class Upgrade {
         if (object.has("Description")) Description=object.getString("Description");
 
         if (object.has("NextCost")) nextCost=object.getInt("NextCost");
+        if (object.has("Cost")) Cost=object.getInt("Cost");
     }
     public Upgrade(JSONObject object){
         try {
@@ -43,5 +45,7 @@ public class Upgrade {
     public String getName(){
         return Name;
     }
+    public String getType() {return Type;}
+    public int getCost(){return Cost;}
 
 }

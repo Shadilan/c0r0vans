@@ -18,6 +18,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import coe.com.c0r0vans.GameSound;
 import coe.com.c0r0vans.R;
@@ -48,6 +49,7 @@ public class Player extends GameObject {
 
     //Arrays
     private ArrayList<Upgrade> Upgrades;
+    private HashMap<String,Upgrade> NextUpgrades;
     private ArrayList<Route> Routes;
     private ArrayList<AmbushItem> Ambushes;
 
@@ -65,6 +67,7 @@ public class Player extends GameObject {
     public void init(){
         image= ImageLoader.getImage("hero");
         Upgrades=new ArrayList<>();
+        NextUpgrades=new HashMap<>();
         Routes=new ArrayList<>();
         Ambushes=new ArrayList<>();
         if (dropRoute==null) dropRoute = new ObjectAction(this) {
@@ -184,6 +187,16 @@ public class Player extends GameObject {
                 JSONArray ambush=obj.getJSONArray("Ambushes");
                 Ambushes.clear();
                 for (int i=0;i<ambush.length();i++) Ambushes.add(new AmbushItem(ambush.getJSONObject(i)));
+            }
+            if (obj.has("NextUpgrades")){
+                JSONArray nextUpgrade=obj.getJSONArray("NextUpgrades");
+                NextUpgrades.clear();
+
+                for (int i=0;i<nextUpgrade.length();i++) {
+                    Upgrade nUp=new Upgrade(nextUpgrade.getJSONObject(i));
+                    NextUpgrades.put(nUp.getType(), nUp);
+
+                }
             }
             routeStart = currentRoute.equals("");
         } catch (JSONException e) {
@@ -370,6 +383,11 @@ public class Player extends GameObject {
         for (OnGameObjectChange ev:onChangeList){
             ev.change(type);
         }
+    }
+    public Upgrade getNextUpgrade(String type){
+        Log.d("NextUp",type+" "+NextUpgrades.size());
+
+        return NextUpgrades.get(type);
     }
 
     public void setMap(GoogleMap map) {
