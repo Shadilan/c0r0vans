@@ -90,8 +90,16 @@ public class Route implements GameObject{
             if (obj.has("Distance")) Distance = obj.getInt("Distance");
             if (obj.has("Lat")) Lat = obj.getInt("Lat");
             if (obj.has("Lng")) Lng = obj.getInt("Lng");
-            if (obj.has("StartLat") && obj.has("StartLng")) StartPoint = new LatLng(obj.getInt("StartLat")/1e6,obj.getInt("StartLng")/1e6);
-            if (obj.has("FinishLat") && obj.has("FinishLng")) FinishPoint = new LatLng(obj.getInt("FinishLat")/1e6,obj.getInt("FinishLng")/1e6);
+            if (obj.has("StartLat") && obj.has("StartLng")) {
+                if (!(obj.getInt("StartLat")==0 && obj.getInt("StartLng")==0))
+                    StartPoint = new LatLng(obj.getInt("StartLat")/1e6,obj.getInt("StartLng")/1e6);
+
+            }
+            if (obj.has("FinishLat") && obj.has("FinishLng")) {
+                if (!(obj.getInt("FinishLat")==0 && obj.getInt("FinishLng")==0))
+                    FinishPoint = new LatLng(obj.getInt("FinishLat") / 1e6, obj.getInt("FinishLng") / 1e6);
+
+            }
             if (StartPoint!=null && FinishPoint!=null) {
                 PolylineOptions options = new PolylineOptions();
                 options.width(2);

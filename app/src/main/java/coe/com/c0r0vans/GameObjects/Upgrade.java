@@ -16,11 +16,15 @@ public class Upgrade {
     private Number Level;
     private String Name;
     private String Description;
+    private int nextCost=0;
+
     public void loadJSON(JSONObject object) throws JSONException {
         if (object.has("Type")) Type=object.getString("Type");
         if (object.has("Level")) Level=object.getInt("Level");
         if (object.has("Name")) Name=object.getString("Name");
         if (object.has("Description")) Description=object.getString("Description");
+
+        if (object.has("NextCost")) nextCost=object.getInt("NextCost");
     }
     public Upgrade(JSONObject object){
         try {
@@ -29,6 +33,7 @@ public class Upgrade {
             e.printStackTrace();
         }
     }
+    public int getNextCost(){return nextCost;}
     public Bitmap getImage(){
         return ImageLoader.getImage(Type);
     }
