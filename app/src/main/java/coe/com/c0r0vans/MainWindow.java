@@ -4,6 +4,7 @@ import android.app.Activity;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Point;
 import android.location.Location;
 import android.location.LocationListener;
 
@@ -174,6 +175,13 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
         mMap.getUiSettings().setCompassEnabled(false);
         mMap.getUiSettings().setMapToolbarEnabled(false);
         mMap.getUiSettings().setIndoorLevelPickerEnabled(false);
+        if ("Y".equals(GameSettings.getInstance().get("VIEW_PADDING"))){
+            Point point=new Point();
+            getWindowManager().getDefaultDisplay().getSize(point);
+            mMap.setPadding(0,point.y*1/2,0,40);
+        } else mMap.setPadding(0,0,0,40);
+
+
 
     }
 
@@ -650,7 +658,11 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                                         .tilt(0)
                                         .zoom(clientZoom)
                                         .build()));
-
+                    if ("Y".equals(GameSettings.getInstance().get("VIEW_PADDING"))){
+                        Point point=new Point();
+                        getWindowManager().getDefaultDisplay().getSize(point);
+                        mMap.setPadding(0,point.y*1/2,0,40);
+                    } else mMap.setPadding(0, 0, 0, 40);
                     GameSound.updateSettings();
 
                 }

@@ -46,7 +46,7 @@ public class GameSettings extends HashMap<String,String>{
         put("GPS_REATE","3");
         put("AUTO_LOGIN","N");
         put("SHOW_NETWORK_ERROR","N");
-
+        put("VIEW_PADDING","N");
         save();
     }
 

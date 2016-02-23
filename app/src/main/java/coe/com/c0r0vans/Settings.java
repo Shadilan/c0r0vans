@@ -30,6 +30,7 @@ public class Settings extends AppCompatActivity {
     SeekBar gpsRate;
     CheckBox autoLogin;
     CheckBox netErrorLog;
+    CheckBox usePadding;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,6 +48,7 @@ public class Settings extends AppCompatActivity {
         gpsRate=(SeekBar) findViewById(R.id.gpsRate);
         autoLogin=(CheckBox) findViewById(R.id.autoLogin);
         netErrorLog= (CheckBox) findViewById(R.id.netErrorLogOn);
+        usePadding= (CheckBox) findViewById(R.id.usePadding);
         cancel_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -69,6 +71,8 @@ public class Settings extends AppCompatActivity {
                 GameSettings.getInstance().put("GPS_RATE", String.valueOf(gpsRate.getProgress() + 1));
                 GameSettings.getInstance().put("AUTO_LOGIN", autoLogin.isChecked() ? "Y" : "N");
                 GameSettings.getInstance().put("SHOW_NETWORK_ERROR", netErrorLog.isChecked() ? "Y" : "N");
+                GameSettings.getInstance().put("VIEW_PADDING", usePadding.isChecked() ? "Y" : "N");
+
                 GameSettings.getInstance().save();
                 GPSInfo.getInstance().offGPS();
                 GPSInfo.getInstance().onGPS();
@@ -91,6 +95,7 @@ public class Settings extends AppCompatActivity {
         netDebug.setChecked("Y".equals(GameSettings.getInstance().get("NET_DEBUG")));
         gpsOn.setChecked("Y".equals(GameSettings.getInstance().get("GPS_ON_BACK")));
         netErrorLog.setChecked("Y".equals(GameSettings.getInstance().get("SHOW_NETWORK_ERROR")));
+        usePadding.setChecked("Y".equals(GameSettings.getInstance().get("VIEW_PADDING")));
         int refreshRate=3;
         if (GameSettings.getInstance().get("GPS_RATE")!=null){
             String strRate=GameSettings.getInstance().get("GPS_RATE");
