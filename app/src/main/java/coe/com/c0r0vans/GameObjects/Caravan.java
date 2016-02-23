@@ -25,11 +25,7 @@ import utility.serverConnect;
 /**
  * Caravan Object
  */
-public class Caravan implements GameObject {
-    private Marker mark;
-    private String GUID;
-    private Bitmap image;
-    private GoogleMap map;
+public class Caravan extends GameObject {
     private LatLng start;
     private LatLng finish;
     private String startName;
@@ -37,30 +33,14 @@ public class Caravan implements GameObject {
 
     private boolean isOwner=false;
     private double speed=20;
-    public String getGUID() {
-        return GUID;
-    }
 
     public Caravan(GoogleMap map,JSONObject obj) throws JSONException {
         this.map=map;
         image= ImageLoader.getImage("caravan");
         loadJSON(obj);
         mark.setAnchor(0.5f, 0.5f);
-
-
-
     }
 
-
-    @Override
-    public Bitmap getImage() {
-        return image;
-    }
-
-    @Override
-    public Marker getMarker() {
-        return mark;
-    }
 
     @Override
     public void setMarker(Marker m) {
@@ -102,10 +82,6 @@ public class Caravan implements GameObject {
             e.printStackTrace();
         }
 
-    }
-    @Override
-    public void RemoveObject() {
-        mark.remove();
     }
 
     @Override
@@ -184,16 +160,6 @@ public class Caravan implements GameObject {
                     Essages.addEssage("Ваш зум не корректен.");
             }
 
-    }
-
-    @Override
-    public int getProgress() {
-        return 0;
-    }
-
-    @Override
-    public void setVisibility(boolean visibility) {
-        mark.setVisible(visibility);
     }
 
     public boolean getIsOwner(){

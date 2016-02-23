@@ -2,7 +2,7 @@ package coe.com.c0r0vans.GameObjects;
 
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.media.Image;
+
 import android.util.Log;
 
 import com.google.android.gms.maps.GoogleMap;
@@ -30,16 +30,10 @@ import utility.serverConnect;
 /**
  * @author Shadilan
  */
-public class Player implements GameObject{
+public class Player extends GameObject {
 
-    private Bitmap image;
-    private Marker mark;
-    private Circle circle;
-    private GoogleMap map;
 
     //Fields
-    private String GUID;
-    private String Name;
     private int Caravans=0;
     private int AmbushesMax=100;
     private int AmbushesLeft=100;
@@ -63,35 +57,11 @@ public class Player implements GameObject{
         init();
     }
 
-    public int getAmbushRad(){return AmbushRadius;}
-
-    private int Gold=0;
-
-
-    public String getGUID(){
-        return GUID;
-    }
-
-    @Override
-    public void changeMarkerSize(int Type) {
-        mark.setIcon(BitmapDescriptorFactory.fromResource(R.mipmap.marker));
-    }
-
-    @Override
-    public int getProgress() {
-        return (Exp*100/TNL);
-    }
-
-    @Override
-    public void setVisibility(boolean visibility) {
-        mark.setVisible(visibility);
-        circle.setVisible(visibility);
-    }
-
     public Player(GoogleMap mMap){
         setMap(mMap);
         init();
     }
+
     public void init(){
         image= ImageLoader.getImage("hero");
         Upgrades=new ArrayList<>();
@@ -131,10 +101,29 @@ public class Player implements GameObject{
         };
     }
 
+    public int getAmbushRad(){return AmbushRadius;}
+
+    private int Gold=0;
     @Override
-    public Bitmap getImage() {
-        return image;
+    public void changeMarkerSize(int Type) {
+        mark.setIcon(BitmapDescriptorFactory.fromResource(R.mipmap.marker));
     }
+
+    @Override
+    public int getProgress() {
+        return (Exp*100/TNL);
+    }
+
+    @Override
+    public void setVisibility(boolean visibility) {
+        mark.setVisible(visibility);
+        circle.setVisible(visibility);
+    }
+
+
+
+
+
 
     @Override
     public Marker getMarker() {

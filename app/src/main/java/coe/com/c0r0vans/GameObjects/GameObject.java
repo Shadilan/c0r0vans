@@ -2,6 +2,9 @@ package coe.com.c0r0vans.GameObjects;
 
 import android.graphics.Bitmap;
 
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.Marker;
 
 import org.json.JSONException;
@@ -9,59 +12,123 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import coe.com.c0r0vans.R;
+
 /**
  * @author Shadilan
  */
-public interface GameObject {
-      int ICON_SMALL=16;
-      int ICON_MEDIUM=17;
-      int ICON_LARGE=18;
+public class GameObject {
+     public static final int ICON_SMALL = 16;
+    public static final int ICON_MEDIUM = 17;
+    public static final int ICON_LARGE = 18;
+
+
+    protected Bitmap image;
+    protected Marker mark;
+    protected Circle circle;
+    protected GoogleMap map;
+
+
+    protected String GUID="";
+    protected String Name="";
+
+    protected int progress=0;
+
+    public String getGUID() {
+        return GUID;
+    }
+
     /**
      * Return image of object
+     *
      * @return Image to draw object
      */
-     Bitmap getImage();
+    public Bitmap getImage() {
+        return image;
+    }
 
     /**
      * Return mapMarker seted to object
+     *
      * @return mapMarker
      */
-     Marker getMarker();
+    public Marker getMarker() {
+        return mark;
+    }
 
     /**
      * Set marker of object on map
+     *
      * @param m Marker of object
      */
-     void setMarker(Marker m);
+    public void setMarker(Marker m) {
+        mark = m;
+    }
+
+    ;
 
     /**
      * Load object from JSON
+     *
      * @param obj JSON to Load
      */
-     void loadJSON(JSONObject obj) throws JSONException;
+    public void loadJSON(JSONObject obj) throws JSONException {
+
+    }
+
+    ;
 
     /**
      * Actions to do on remove object
      */
-     void RemoveObject();
+    public void RemoveObject() {
+        if (mark!=null)
+        mark.remove();
+    }
+
+    ;
 
     /**
      * Generate Info about object
+     *
      * @return info about object
      */
-     String getInfo();
+    public String getInfo() {
+        return "";
+    }
+
+    ;
 
     /**
      * Get Action list
+     *
      * @return ArrayList of Actions for object
      */
-     ArrayList<ObjectAction> getActions();
+    public  ArrayList<ObjectAction> getActions() {
+        return null;
+    }
 
-     String getGUID();
+    ;
 
-     void changeMarkerSize(int Type);
-    int getProgress();
 
-    void setVisibility(boolean visibility);
+    public void changeMarkerSize(int Type) {
+        mark.setIcon(BitmapDescriptorFactory.fromResource(R.mipmap.marker));
+    }
 
+    public int getProgress() {
+        return progress;
+    }
+
+    ;
+
+    public void setVisibility(boolean visibility) {
+        if (mark!=null) mark.setVisible(false);
+    }
+
+    ;
+
+    public void setMap(GoogleMap map) {
+        this.map = map;
+    }
+    public String getName(){return Name;}
 }

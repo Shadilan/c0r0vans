@@ -26,21 +26,14 @@ import utility.serverConnect;
 /**
  * @author Shadilan
  */
-public class City implements GameObject{
-    private Marker mark;
-    private String GUID;
-    private String CityName;
+public class City extends GameObject{
     private int Level=0;
     private int radius=100;
     private String upgrade;
     private String upgradeName;
-    private Bitmap image;
-    private GoogleMap map;
+
     private Circle zone;
-    private int progress=0;
-    public String getGUID() {
-        return GUID;
-    }
+
 
     public City(GoogleMap map,JSONObject obj) throws JSONException {
         this.map=map;
@@ -56,16 +49,6 @@ public class City implements GameObject{
 
     }
 
-
-    @Override
-    public Bitmap getImage() {
-        return image;
-    }
-
-    @Override
-    public Marker getMarker() {
-        return mark;
-    }
 
     @Override
     public void setMarker(Marker m) {
@@ -87,7 +70,7 @@ public class City implements GameObject{
             } else {
                 mark.setPosition(latlng);
             }
-            if (obj.has("Name")) CityName=obj.getString("Name");
+            if (obj.has("Name")) Name=obj.getString("Name");
             if (obj.has("UpgradeType")) upgrade=obj.getString("UpgradeType");
             if (obj.has("UpgradeName")) upgradeName=obj.getString("UpgradeName");
             if (obj.has("Level")) Level=obj.getInt("Level");
@@ -126,7 +109,7 @@ public class City implements GameObject{
         return "Это город "+ Level+" уровня.\n В городе можно приобрести \""+upgradeName+"\".\n" + tushkan;
     }
 
-    public String getCityName(){return (CityName+" lv."+Level) ;}
+    public String getCityName(){return (Name+" lv."+Level) ;}
 
     private ObjectAction startRoute;
     private ObjectAction finishRoute;
@@ -161,7 +144,7 @@ public class City implements GameObject{
                 @Override
                 public void postAction() {
                     GameSound.playSound(GameSound.START_ROUTE_SOUND);
-                    Essages.addEssage("Начат маршрут в город " + CityName);
+                    Essages.addEssage("Начат маршрут в город " + Name);
 
                     serverConnect.getInstance().getPlayerInfo();
                 }
@@ -200,7 +183,7 @@ public class City implements GameObject{
 
             @Override
             public void postAction() {
-                Essages.addEssage("Завершен маршрут в город "+CityName);
+                Essages.addEssage("Завершен маршрут в город "+Name);
                 GameSound.playSound(GameSound.FINISH_ROUTE_SOUND);
                 serverConnect.getInstance().getPlayerInfo();
                 serverConnect.getInstance().RefreshCurrent();
@@ -265,10 +248,6 @@ public class City implements GameObject{
         }
     }
 
-    @Override
-    public int getProgress() {
-        return progress;
-    }
 
     @Override
     public void setVisibility(boolean visibility) {

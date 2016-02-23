@@ -19,12 +19,10 @@ import utility.serverConnect;
  * @author Shadilan
  * Элемент списка засад
  */
-public class AmbushItem implements GameObject{
-    private String GUID;
-    private String Name;
+public class AmbushItem extends GameObject{
     private int Lat;
     private int Lng;
-    private int progress=0;
+
     public AmbushItem(){
 
     }
@@ -76,54 +74,7 @@ public class AmbushItem implements GameObject{
             }
         };
     }
-    public String getName(){return Name;}
 
-    @Override
-    public Bitmap getImage() {
-        return null;
-    }
-
-    @Override
-    public Marker getMarker() {
-        return null;
-    }
-
-    @Override
-    public void setMarker(Marker m) {
-
-    }
-
-    @Override
-    public void RemoveObject() {
-
-    }
-
-    @Override
-    public String getInfo() {
-        return null;
-    }
-
-    @Override
-    public ArrayList<ObjectAction> getActions() {
-        return null;
-    }
-
-    public String getGUID(){return GUID;}
-
-    @Override
-    public void changeMarkerSize(int Type) {
-
-    }
-
-    @Override
-    public int getProgress() {
-        return progress;
-    }
-
-    @Override
-    public void setVisibility(boolean visibility) {
-
-    }
 
     public LatLng getLatLng(){return new LatLng(Lat/1e6,Lng/1e6);}
     public ObjectAction getAction(){

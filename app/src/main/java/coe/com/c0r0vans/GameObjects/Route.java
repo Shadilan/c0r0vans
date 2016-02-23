@@ -26,8 +26,7 @@ import utility.serverConnect;
 /**
  * @author Shadilan
  */
-public class Route implements GameObject{
-    private String GUID;
+public class Route extends GameObject{
     private String StartName;
     private String FinishName;
     private String StartGUID;
@@ -37,7 +36,7 @@ public class Route implements GameObject{
     private int Lng;
     private LatLng StartPoint;
     private LatLng FinishPoint;
-    private GoogleMap map;
+
     private Polyline line;
 
     public Route(){
@@ -57,26 +56,11 @@ public class Route implements GameObject{
     public String getFinishName(){return FinishName;}
     public int getDistance(){return Distance;}
 
-    @Override
-    public Bitmap getImage() {
-        return null;
-    }
 
-    @Override
-    public Marker getMarker() {
-        return null;
-    }
-
-    @Override
-    public void setMarker(Marker m) {
-
-    }
     public void showRoute(){
-
         if (line!=null)
         {
             line.setVisible("Y".equals(GameSettings.getInstance().get("SHOW_CARAVAN_ROUTE")));
-
         }
     }
     @Override
@@ -161,28 +145,6 @@ public class Route implements GameObject{
     @Override
     public String getInfo() {
         return "Маршрут";
-    }
-
-    @Override
-    public ArrayList<ObjectAction> getActions() {
-        return null;
-    }
-
-    public String getGUID(){return GUID;}
-
-    @Override
-    public void changeMarkerSize(int Type) {
-
-    }
-
-    @Override
-    public int getProgress() {
-        return 0;
-    }
-
-    @Override
-    public void setVisibility(boolean visibility) {
-
     }
 
     private ObjectAction dropRoute;

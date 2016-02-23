@@ -23,10 +23,12 @@ import utility.Essages;
 import utility.GameSettings;
 import utility.ImageLoader;
 
+import static coe.com.c0r0vans.GameObjects.GameObject.ICON_SMALL;
+
 /**
  * @author Shadilan
  */
-public class Ambush implements GameObject {
+public class Ambush extends GameObject {
     private Marker mark;
     private String OwnerName;
     private String GUID;
@@ -34,7 +36,7 @@ public class Ambush implements GameObject {
     private GoogleMap map;
     private int radius=30;
     private Circle zone;
-    private int progress=0;
+
     private String name="Засада";
     private boolean ready=true;
 
@@ -55,10 +57,6 @@ public class Ambush implements GameObject {
         return ImageLoader.getImage("ambush");
     }
 
-    @Override
-    public Marker getMarker() {
-        return mark;
-    }
 
     @Override
     public void setMarker(Marker m) {
@@ -199,10 +197,6 @@ public class Ambush implements GameObject {
         return Actions;
     }
 
-    @Override
-    public String getGUID() {
-        return GUID;
-    }
 
     @Override
     public void changeMarkerSize(int Type) {
@@ -255,10 +249,7 @@ public class Ambush implements GameObject {
         }
     }
 
-    @Override
-    public int getProgress() {
-        return progress;
-    }
+
 
     @Override
     public void setVisibility(boolean visibility) {
@@ -275,7 +266,6 @@ public class Ambush implements GameObject {
             zone.setVisible(false);
         }
     }
-    public String getName(){return name;}
     public boolean getIsOwner(){
         return isOwner;
     }
