@@ -48,6 +48,7 @@ import coe.com.c0r0vans.GameObjects.Caravan;
 import coe.com.c0r0vans.GameObjects.City;
 import coe.com.c0r0vans.GameObjects.GameObject;
 import coe.com.c0r0vans.GameObjects.MessageMap;
+import coe.com.c0r0vans.GameObjects.OnGameObjectChange;
 import coe.com.c0r0vans.GameObjects.Player;
 import coe.com.c0r0vans.GameObjects.SelectedObject;
 
