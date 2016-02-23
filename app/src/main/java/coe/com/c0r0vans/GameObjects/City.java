@@ -240,7 +240,7 @@ public class City extends GameObject{
                 }
             };
         Upgrade up=((Player) SelectedObject.getInstance().getExecuter()).getNextUpgrade(upgrade);
-        if (up==null || (up!=null && up.getReqCityLev()>=Level)) Actions.add(butUpgrade);
+        if (up==null || (up!=null && up.getReqCityLev()<=Level)) Actions.add(butUpgrade);
         return Actions;
     }
     @Override

@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import coe.com.c0r0vans.GameSound;
+import coe.com.c0r0vans.OnGameObjectChange;
 import coe.com.c0r0vans.R;
 import utility.Essages;
 import utility.GPSInfo;
