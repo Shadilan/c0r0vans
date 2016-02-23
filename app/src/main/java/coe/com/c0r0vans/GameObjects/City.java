@@ -43,7 +43,7 @@ public class City extends GameObject{
 
         mark=map.addMarker(new MarkerOptions().position(new LatLng(Lat / 1e6, Lng / 1e6)));
         changeMarkerSize((int) map.getCameraPosition().zoom);
-        mark.setAnchor(0.5f,1);
+        mark.setAnchor(0.5f, 1);
         loadJSON(obj);
 
 
@@ -106,9 +106,14 @@ public class City extends GameObject{
         String tushkan="";
         if (Math.random()*1000<3) tushkan="У стен города следы непонятного зверя.";
         Upgrade up=((Player) SelectedObject.getInstance().getExecuter()).getNextUpgrade(upgrade);
-        if (up!=null)
-        return "Это город "+ Level+" уровня.\n В городе можно приобрести улучшение \""+up.getName()+"\" за "+
-                up.getCost()+" золота.\n" +"Эффект:"+up.getDescription()+tushkan;
+        if (up!=null) {
+            String need="!Нужен уровень города:"+up.getReqCityLev();
+            if (up.getReqCityLev()>Level) return "Это город " + Level + " уровня.\n В городе можно приобрести улучшение \"" + up.getName() + "\" за " +
+                    up.getCost() + " золота.\n" + need;
+            else
+            return "Это город " + Level + " уровня.\n В городе можно приобрести улучшение \"" + up.getName() + "\" за " +
+                    up.getCost() + " золота.\n" + "Эффект:" + up.getDescription() + tushkan;
+        }
         else return "Это город "+ Level+" уровня.\n В городе можно приобрести улучшение \""+upgradeName+"\". "
                 +tushkan;
     }
@@ -234,7 +239,8 @@ public class City extends GameObject{
 
                 }
             };
-        Actions.add(butUpgrade);
+        Upgrade up=((Player) SelectedObject.getInstance().getExecuter()).getNextUpgrade(upgrade);
+        if (up==null || (up!=null && up.getReqCityLev()>=Level)) Actions.add(butUpgrade);
         return Actions;
     }
     @Override

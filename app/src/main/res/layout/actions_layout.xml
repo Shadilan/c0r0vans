@@ -69,7 +69,7 @@
 
                 android:id="@+id/TargetInfo"
                 android:minHeight="100dp"
-                android:maxHeight="100dp"
+
                 android:singleLine="false"
                 android:longClickable="false"
                 android:enabled="true"
