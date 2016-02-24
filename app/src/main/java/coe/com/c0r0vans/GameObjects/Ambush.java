@@ -29,15 +29,13 @@ import static coe.com.c0r0vans.GameObjects.GameObject.ICON_SMALL;
  * @author Shadilan
  */
 public class Ambush extends GameObject {
-    private Marker mark;
-    private String OwnerName;
-    private String GUID;
+
+
     private boolean isOwner;
-    private GoogleMap map;
     private int radius=30;
     private Circle zone;
 
-    private String name="Засада";
+    protected String Name="Засада";
     private boolean ready=true;
 
     public  Ambush(GoogleMap map){
@@ -75,7 +73,7 @@ public class Ambush extends GameObject {
             if (obj.has("Radius")) radius=obj.getInt("Radius");
             if (obj.has("Ready")) ready=obj.getBoolean("Ready");
             if (obj.has("Progress")) progress=obj.getInt("Progress");
-            if (obj.has("Name")) name=obj.getString("Name");
+            if (obj.has("Name")) Name=obj.getString("Name");
             if (mark==null) {
                 setMarker(map.addMarker(new MarkerOptions().position(new LatLng(Lat / 1e6, Lng / 1e6))));
                 changeMarkerSize((int) map.getCameraPosition().zoom);
