@@ -19,6 +19,7 @@ public class Upgrade {
     private int nextCost=0;
     private int Cost=0;
     private int reqCityLev=0;
+    private int level;
 
     public void loadJSON(JSONObject object) throws JSONException {
         if (object.has("Type")) Type=object.getString("Type");
@@ -50,4 +51,7 @@ public class Upgrade {
     public int getCost(){return Cost;}
     public int getReqCityLev(){return reqCityLev;}
 
+    public int getLevel() {
+        return level;
+    }
 }

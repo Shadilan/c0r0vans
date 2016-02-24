@@ -105,14 +105,19 @@ public class City extends GameObject{
     public String getInfo() {
         String tushkan="";
         if (Math.random()*1000<3) tushkan="У стен города следы непонятного зверя.";
-        Upgrade up=((Player) SelectedObject.getInstance().getExecuter()).getNextUpgrade(upgrade);
+        Player player=(Player) SelectedObject.getInstance().getExecuter();
+        Upgrade up=player.getNextUpgrade(upgrade);
         if (up!=null) {
             String need="!Нужен уровень города:"+up.getReqCityLev();
-            if (up.getReqCityLev()>Level) return "Это город " + Level + " уровня.\n В городе можно приобрести улучшение \"" + up.getName() + "\" за " +
-                    up.getCost() + " золота.\n" + need;
-            else
+
+            String dop="";
+            if (up.getReqCityLev()>Level) dop="Требуется уровень города "+ up.getReqCityLev()+"\n";
+            else if (up.getCost()>player.getGold()) dop="Нужно больше золота!"+ up.getCost() +" золота!\n";
+            else if (up.getLevel()>player.getLevel()-1) dop="Вы недостаточно опытны!\n";
+            else dop="Эффект:" + up.getDescription()+"\n";
+
             return "Это город " + Level + " уровня.\n В городе можно приобрести улучшение \"" + up.getName() + "\" за " +
-                    up.getCost() + " золота.\n" + "Эффект:" + up.getDescription() + tushkan;
+                    up.getCost() + " золота.\n" + dop + tushkan;
         }
         else return "Это город "+ Level+" уровня.\n В городе можно приобрести улучшение \""+upgradeName+"\". "
                 +tushkan;
@@ -240,7 +245,7 @@ public class City extends GameObject{
                 }
             };
         Upgrade up=((Player) SelectedObject.getInstance().getExecuter()).getNextUpgrade(upgrade);
-        if (up==null || (up!=null && up.getReqCityLev()<=Level)) Actions.add(butUpgrade);
+        if (up==null || (up!=null && (up.getReqCityLev()<=Level && up.getCost()<=player.getGold() && up.getLevel()<player.getLevel() ))) Actions.add(butUpgrade);
         return Actions;
     }
     @Override
