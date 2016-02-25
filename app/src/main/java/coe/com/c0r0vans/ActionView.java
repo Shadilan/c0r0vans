@@ -119,7 +119,7 @@ public class ActionView extends LinearLayout {
             ObjectDesc.setText(SelectedObject.getInstance().getTarget().getInfo());
         } else if (SelectedObject.getInstance().getTarget() instanceof Ambush)
         {
-            title.setText(((Ambush) SelectedObject.getInstance().getTarget()).getName());
+            title.setText(SelectedObject.getInstance().getTarget().getName());
             ObjectDesc.setText(SelectedObject.getInstance().getTarget().getInfo());
         } else if (SelectedObject.getInstance().getTarget() instanceof Caravan)
         {

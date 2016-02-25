@@ -35,7 +35,6 @@ public class Ambush extends GameObject {
     private int radius=30;
     private Circle zone;
 
-    protected String Name="Засада";
     private boolean ready=true;
 
     public  Ambush(GoogleMap map){
@@ -73,7 +72,7 @@ public class Ambush extends GameObject {
             if (obj.has("Radius")) radius=obj.getInt("Radius");
             if (obj.has("Ready")) ready=obj.getBoolean("Ready");
             if (obj.has("Progress")) progress=obj.getInt("Progress");
-            if (obj.has("Name")) Name=obj.getString("Name");
+            if (obj.has("Name")) Name="Засада "+obj.getString("Name");
             if (mark==null) {
                 setMarker(map.addMarker(new MarkerOptions().position(new LatLng(Lat / 1e6, Lng / 1e6))));
                 changeMarkerSize((int) map.getCameraPosition().zoom);

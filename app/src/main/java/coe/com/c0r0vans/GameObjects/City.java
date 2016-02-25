@@ -236,7 +236,10 @@ public class City extends GameObject{
                 public void postAction() {
                     GameSound.playSound(GameSound.BUY_SOUND);
                     serverConnect.getInstance().getPlayerInfo();
-                    Essages.addEssage("Улучшение "+upgrade+" куплено.");
+                    Player player= (Player) SelectedObject.getInstance().getExecuter();
+                    Upgrade up=((Player) SelectedObject.getInstance().getExecuter()).getNextUpgrade(upgrade);
+                    if (up!=null ) Essages.addEssage("Улучшение "+up.getName()+" куплено.");
+                    else Essages.addEssage("Улучшение "+upgrade+" куплено.");
                 }
 
                 @Override

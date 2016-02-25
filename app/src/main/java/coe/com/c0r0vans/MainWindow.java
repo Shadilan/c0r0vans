@@ -139,6 +139,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
         player.setMap(mMap);// = new Player(mMap);
 
 
+
         //mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(player.getMarker().getPosition(), clientZoom));
         if ("Y".equals(GameSettings.getInstance().get("USE_TILT")))
             mMap.moveCamera(CameraUpdateFactory.newCameraPosition(
@@ -174,6 +175,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
         mMap.getUiSettings().setCompassEnabled(false);
         mMap.getUiSettings().setMapToolbarEnabled(false);
         mMap.getUiSettings().setIndoorLevelPickerEnabled(false);
+
         if ("Y".equals(GameSettings.getInstance().get("VIEW_PADDING"))){
             Point point=new Point();
             getWindowManager().getDefaultDisplay().getSize(point);
