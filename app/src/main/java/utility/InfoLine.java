@@ -1,30 +1,36 @@
 package utility;
 
 import android.content.Context;
-import android.location.Location;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
+import com.google.android.gms.maps.model.LatLng;
 
 import coe.com.c0r0vans.GameObjects.ObjectAction;
+import coe.com.c0r0vans.GameObjects.ShowHideForm;
+import coe.com.c0r0vans.MyGoogleMap;
 import coe.com.c0r0vans.R;
 
 
 /**
  * Created by Shadilan on 22.02.2016.
  */
-public class InfoLine extends LinearLayout {
+public class InfoLine extends RelativeLayout {
     private TextView labelText;
     private ImageButton removeButton;
     private ObjectAction removeAction;
+    private ImageButton showButton;
     private String target;
     private String labelString;
+    private LatLng point;
+    private ShowHideForm parentForm;
 
+    public void setParentForm(ShowHideForm form){
+        parentForm=form;
+    }
     public void setLabelText(String text){
         labelString=text;
 
@@ -34,6 +40,10 @@ public class InfoLine extends LinearLayout {
         }
 
 
+    }
+    public void setPoint(LatLng point){
+        this.point=point;
+        showButton.setVisibility(VISIBLE);
     }
     public void setTarget(String guid){
         target=guid;
@@ -78,8 +88,19 @@ public class InfoLine extends LinearLayout {
         removeButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                serverConnect.getInstance().ExecCommand(removeAction,target,0,0,0,0);
+                serverConnect.getInstance().ExecCommand(removeAction, target, 0, 0, 0, 0);
                 removeButton.setVisibility(INVISIBLE);
+
+            }
+        });
+        showButton= (ImageButton) findViewById(R.id.showButton);
+        showButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (point!=null) {
+                    MyGoogleMap.showPoint(point);
+                    if (parentForm!=null) parentForm.Hide();
+                }
             }
         });
 

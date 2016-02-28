@@ -11,7 +11,7 @@
     android:layout_height="match_parent" android:id="@+id/map"
     android:name="com.google.android.gms.maps.SupportMapFragment"
 
-    />
+    tools:layout="@layout/abc_screen_simple" />
 
 
     <ImageView
@@ -163,6 +163,14 @@
                 android:focusable="true" />
         </LinearLayout>
     </ScrollView>
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/showPosButton"
+        android:layout_above="@+id/zoomButton"
+        android:layout_centerHorizontal="true"
+        android:visibility="invisible"
+        android:src="@mipmap/showbutton" />
 
     <coe.com.c0r0vans.ActionView
         android:layout_width="match_parent"
@@ -182,13 +190,15 @@
     android:layout_centerVertical="true"
     android:visibility="gone"
     />
-    <coe.com.c0r0vans.LoginView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/loginView"
-        android:gravity="center"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:visibility="visible"
-        />
+
+
+        <coe.com.c0r0vans.LoginView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/loginView"
+            android:gravity="center"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:visibility="visible"
+            />
 </RelativeLayout>

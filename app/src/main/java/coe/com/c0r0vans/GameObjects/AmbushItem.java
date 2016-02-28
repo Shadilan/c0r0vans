@@ -3,12 +3,9 @@ package coe.com.c0r0vans.GameObjects;
 import android.graphics.Bitmap;
 
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.ArrayList;
 
 import coe.com.c0r0vans.GameSound;
 import utility.Essages;
@@ -79,5 +76,9 @@ public class AmbushItem extends GameObject{
     public LatLng getLatLng(){return new LatLng(Lat/1e6,Lng/1e6);}
     public ObjectAction getAction(){
         return cancelAmbush;
+    }
+    public LatLng getPoint(){
+        LatLng result=new LatLng(Lat/1e6,Lng/1e6);
+        return result;
     }
 }

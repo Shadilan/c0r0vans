@@ -10,6 +10,7 @@ import android.support.v4.app.FragmentActivity;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -113,6 +114,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
         Point size=new Point();
         getWindowManager().getDefaultDisplay().getSize(size);
         MyGoogleMap.init(googleMap, size.y);
+        MyGoogleMap.setShowpointButton((ImageButton) findViewById(R.id.showPosButton));
         Player.getPlayer().setMap(MyGoogleMap.getMap());
         createListeners();
     }
@@ -311,7 +313,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
             @Override
             public boolean onMarkerClick(Marker marker) {
                 GameObject target = findObjectByMarker(marker);
-                if (target instanceof Player) return false;
+                if (target==null || target instanceof Player) return false;
                 if (target != null) {
                     SelectedObject.getInstance().setTarget(target);
                     SelectedObject.getInstance().setPoint(marker.getPosition());

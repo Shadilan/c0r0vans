@@ -2,25 +2,19 @@ package coe.com.c0r0vans.GameObjects;
 
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.util.Log;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-
 import coe.com.c0r0vans.GameSound;
 import utility.Essages;
 import utility.GameSettings;
 import utility.ImageLoader;
-import utility.ResourceString;
 import utility.serverConnect;
 
 /**
@@ -150,5 +144,9 @@ public class Route extends GameObject{
     private ObjectAction dropRoute;
     public ObjectAction getAction(){
       return dropRoute;
+    }
+    public LatLng getPoint(){
+        LatLng result=new LatLng(Lat/1e6,Lng/1e6);
+        return result;
     }
 }

@@ -16,6 +16,7 @@ import android.widget.ToggleButton;
 import coe.com.c0r0vans.GameObjects.AmbushItem;
 import coe.com.c0r0vans.GameObjects.Player;
 import coe.com.c0r0vans.GameObjects.Route;
+import coe.com.c0r0vans.GameObjects.ShowHideForm;
 import coe.com.c0r0vans.GameObjects.Upgrade;
 import utility.InfoLine;
 import utility.serverConnect;
@@ -23,7 +24,7 @@ import utility.serverConnect;
 /**
  * Информация об игроке
  */
-public class InfoLayout extends RelativeLayout {
+public class InfoLayout extends RelativeLayout implements ShowHideForm{
 
     public InfoLayout(Context context) {
         super(context);
@@ -198,6 +199,7 @@ public class InfoLayout extends RelativeLayout {
             line.setLabelText(r.getStartName() + " - " + r.getDistance() + " - " + r.getFinishName());
             line.setOnRemoveClick(r.getAction());
             line.setTarget(r.getGUID());
+            //line.setPoint(r.getPoint());
 
         }
         ll=(LinearLayout) findViewById(R.id.ambushInfo);
@@ -210,10 +212,13 @@ public class InfoLayout extends RelativeLayout {
             line.setLabelText(r.getName());
             line.setOnRemoveClick(r.getAction());
             line.setTarget(r.getGUID());
+            line.setPoint(r.getPoint());
+            line.setParentForm(this);
             ll.addView(line);
 
             TextView info=new TextView(getContext());
             info.setSingleLine(true);
+
         }
 
     }
