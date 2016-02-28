@@ -2,7 +2,6 @@ package coe.com.c0r0vans.GameObjects;
 
 import android.graphics.Bitmap;
 import android.graphics.Color;
-
 import android.util.Log;
 
 import com.google.android.gms.maps.GoogleMap;
@@ -21,6 +20,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import coe.com.c0r0vans.GameSound;
+import coe.com.c0r0vans.MyGoogleMap;
 import coe.com.c0r0vans.OnGameObjectChange;
 import coe.com.c0r0vans.R;
 import utility.Essages;
@@ -33,7 +33,13 @@ import utility.serverConnect;
  * @author Shadilan
  */
 public class Player extends GameObject {
-
+    private static Player player;
+    public static void instance(){
+        player=new Player();
+    }
+    public static Player getPlayer(){
+        return player;
+    }
 
     //Fields
     private int Caravans=0;
@@ -44,6 +50,7 @@ public class Player extends GameObject {
     private int Exp=0;
     private int MostIn=0;
     private boolean routeStart=false;
+    private int Gold=0;
 
     private int AmbushRadius=30;
     private int ActionDistance=50;
@@ -57,11 +64,6 @@ public class Player extends GameObject {
     private String currentRoute="";
 
     public Player() {
-        init();
-    }
-
-    public Player(GoogleMap mMap){
-        setMap(mMap);
         init();
     }
 
@@ -97,7 +99,6 @@ public class Player extends GameObject {
                 serverConnect.getInstance().getPlayerInfo();
                 Essages.addEssage("Незаконченый маршрут отменен.");
             }
-
             @Override
             public void postError() {
 
@@ -105,17 +106,17 @@ public class Player extends GameObject {
         };
     }
 
-    public int getAmbushRad(){return AmbushRadius;}
+    public int getAmbushRad(){return player.AmbushRadius;}
 
-    private int Gold=0;
+
     @Override
     public void changeMarkerSize(int Type) {
-        mark.setIcon(BitmapDescriptorFactory.fromResource(R.mipmap.marker));
+        player.mark.setIcon(BitmapDescriptorFactory.fromResource(R.mipmap.marker));
     }
 
     @Override
     public int getProgress() {
-        return (Exp*100/TNL);
+        return (player.Exp*100/player.TNL);
     }
 
     @Override
@@ -401,7 +402,7 @@ public class Player extends GameObject {
         circleOptions.strokeColor(Color.parseColor("#D08D2E"));
         circleOptions.strokeWidth(5);
         circle=map.addCircle(circleOptions);
-        changeMarkerSize((int) map.getCameraPosition().zoom);
+        changeMarkerSize(MyGoogleMap.getClientZoom());
         mark.setAnchor(0.5f, 0.5f);
     }
 }

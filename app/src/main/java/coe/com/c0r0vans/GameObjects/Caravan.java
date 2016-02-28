@@ -1,24 +1,19 @@
 package coe.com.c0r0vans.GameObjects;
 
 import android.graphics.Bitmap;
-import android.graphics.Color;
 
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.model.Polyline;
-import com.google.android.gms.maps.model.PolylineOptions;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-import coe.com.c0r0vans.R;
+import coe.com.c0r0vans.MyGoogleMap;
 import utility.Essages;
-import utility.GameSettings;
 import utility.ImageLoader;
 import utility.serverConnect;
 
@@ -45,7 +40,7 @@ public class Caravan extends GameObject {
     @Override
     public void setMarker(Marker m) {
         mark=m;
-        changeMarkerSize((int) map.getCameraPosition().zoom);
+        changeMarkerSize(MyGoogleMap.getClientZoom());
     }
 
     @Override

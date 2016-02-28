@@ -2,7 +2,6 @@ package coe.com.c0r0vans;
 
 import android.content.Context;
 import android.graphics.Color;
-
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
@@ -14,11 +13,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
-
 import coe.com.c0r0vans.GameObjects.AmbushItem;
 import coe.com.c0r0vans.GameObjects.Player;
 import coe.com.c0r0vans.GameObjects.Route;
-import coe.com.c0r0vans.GameObjects.SelectedObject;
 import coe.com.c0r0vans.GameObjects.Upgrade;
 import utility.InfoLine;
 import utility.serverConnect;
@@ -27,7 +24,7 @@ import utility.serverConnect;
  * Информация об игроке
  */
 public class InfoLayout extends RelativeLayout {
-    Player player;
+
     public InfoLayout(Context context) {
         super(context);
         init();
@@ -51,7 +48,7 @@ public class InfoLayout extends RelativeLayout {
         afterInit();
     }
     private void afterInit(){
-        player= (Player) SelectedObject.getInstance().getExecuter();
+
         Button backButton= (Button) findViewById(R.id.back_button);
         backButton.setOnClickListener(new OnClickListener() {
             @Override
@@ -157,22 +154,22 @@ public class InfoLayout extends RelativeLayout {
     }
 
     public void loadFromPlayer(){
-        if (player==null) player=(Player) SelectedObject.getInstance().getExecuter();
-        ((TextView)findViewById(R.id.levelInfo)).setText(String.valueOf(player.getLevel()));
-        ((TextView)findViewById(R.id.expInfo)).setText(String.valueOf(player.getExp()));
-        ((TextView)findViewById(R.id.tnlInfo)).setText(String.valueOf(player.getTNL()));
-        ((TextView)findViewById(R.id.goldInfo)).setText(String.valueOf(player.getGold()));
-        ((TextView)findViewById(R.id.caravanInfo)).setText(String.valueOf(player.getCaravans()));
-        ((TextView)findViewById(R.id.ambushLeftInfo)).setText(String.valueOf(player.getAmbushLeft()));
-        ((TextView)findViewById(R.id.ambushSetInfo)).setText(String.valueOf(player.getAmbushMax() - player.getAmbushLeft()));
-        ((TextView)findViewById(R.id.mostReachIn)).setText(String.valueOf(player.getMostReachIn()) + "км");
+
+        ((TextView)findViewById(R.id.levelInfo)).setText(String.valueOf(Player.getPlayer().getLevel()));
+        ((TextView)findViewById(R.id.expInfo)).setText(String.valueOf(Player.getPlayer().getExp()));
+        ((TextView)findViewById(R.id.tnlInfo)).setText(String.valueOf(Player.getPlayer().getTNL()));
+        ((TextView)findViewById(R.id.goldInfo)).setText(String.valueOf(Player.getPlayer().getGold()));
+        ((TextView)findViewById(R.id.caravanInfo)).setText(String.valueOf(Player.getPlayer().getCaravans()));
+        ((TextView)findViewById(R.id.ambushLeftInfo)).setText(String.valueOf(Player.getPlayer().getAmbushLeft()));
+        ((TextView)findViewById(R.id.ambushSetInfo)).setText(String.valueOf(Player.getPlayer().getAmbushMax() - Player.getPlayer().getAmbushLeft()));
+        ((TextView)findViewById(R.id.mostReachIn)).setText(String.valueOf(Player.getPlayer().getMostReachIn()) + "км");
 
         GridLayout gl= (GridLayout) findViewById(R.id.upgradeInfo);
         gl.removeAllViews();
 
-        gl.setRowCount(player.getUpgrades().size()*2);
+        gl.setRowCount(Player.getPlayer().getUpgrades().size()*2);
 
-        for (Upgrade u:player.getUpgrades()){
+        for (Upgrade u:Player.getPlayer().getUpgrades()){
             ImageView iv=new ImageView(getContext());
             Log.d("DebugInfo", "Upg show:" + u.getDescription());
             iv.setImageBitmap(u.getImage());
@@ -188,14 +185,14 @@ public class InfoLayout extends RelativeLayout {
         LinearLayout ll=(LinearLayout) findViewById(R.id.routeInfo);
 
         ll.removeAllViews();
-        if (!player.getCurrentRoute().equals("")){
+        if (!Player.getPlayer().getCurrentRoute().equals("")){
             InfoLine line=new InfoLine(getContext());
             ll.addView(line);
-            line.setLabelText(String.valueOf(player.getCurrentRoute()) + "↝");
-            line.setOnRemoveClick(player.getDropRoute());
+            line.setLabelText(String.valueOf(Player.getPlayer().getCurrentRoute()) + "↝");
+            line.setOnRemoveClick(Player.getPlayer().getDropRoute());
             line.setTarget("");
         }
-        for (Route r:player.getRoutes()){
+        for (Route r:Player.getPlayer().getRoutes()){
             InfoLine line=new InfoLine(getContext());
             ll.addView(line);
             line.setLabelText(r.getStartName() + " - " + r.getDistance() + " - " + r.getFinishName());
@@ -206,7 +203,7 @@ public class InfoLayout extends RelativeLayout {
         ll=(LinearLayout) findViewById(R.id.ambushInfo);
 
         ll.removeAllViews();
-        for (AmbushItem r:player.getAmbushes()){
+        for (AmbushItem r:Player.getPlayer().getAmbushes()){
             InfoLine line=new InfoLine(getContext());
             //float[] distances = new float[1];
 

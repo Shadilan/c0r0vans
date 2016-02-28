@@ -1,25 +1,60 @@
 package coe.com.c0r0vans.GameObjects;
 
+import android.graphics.Color;
+
+import com.google.android.gms.maps.model.Circle;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
+
+import coe.com.c0r0vans.MyGoogleMap;
 
 /**
  * @author Shadilan
  */
 public class SelectedObject {
     private static SelectedObject instance;
-    private GameObject executer;
-    public GameObject getExecuter(){
-        return executer;
-    }
-    public void setExecuter(GameObject executer){
-        this.executer=executer;
-    }
     private GameObject target;
     public GameObject getTarget(){
         return target;
     }
     private LatLng point;
-    public void setPoint(LatLng point){this.point=point;}
+    Circle clickpos;
+    Circle clickPoint;
+    public void setPoint(LatLng point){
+        this.point=point;
+        if (clickpos != null) {
+            clickpos.setCenter(point);
+            clickpos.setRadius(Player.getPlayer().getAmbushRad());
+
+        } else {
+            CircleOptions circleOptions = new CircleOptions();
+            circleOptions.center(point);
+            circleOptions.radius(Player.getPlayer().getAmbushRad());
+            circleOptions.strokeColor(Color.RED);
+            circleOptions.strokeWidth(1);
+
+            clickpos = MyGoogleMap.getMap().addCircle(circleOptions);
+
+        }
+        if (clickPoint != null) {
+            clickPoint.setCenter(point);
+        } else {
+            CircleOptions circleOptions = new CircleOptions();
+            circleOptions.center(point);
+            circleOptions.radius(1);
+            circleOptions.strokeColor(Color.RED);
+            circleOptions.strokeWidth(5);
+
+            clickPoint = MyGoogleMap.getMap().addCircle(circleOptions);
+        }
+        clickPoint.setVisible(true);
+        clickpos.setVisible(true);
+
+    }
+    public void hidePoint(){
+        if (clickpos!=null) clickpos.setVisible(false);
+        if (clickPoint!=null) clickPoint.setVisible(false);
+    }
     public LatLng getPoint(){return point;}
     public void setTarget(GameObject target){
         this.target=target;

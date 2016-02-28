@@ -5,7 +5,6 @@ import android.graphics.Color;
 import android.util.Log;
 
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
@@ -18,12 +17,10 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 import coe.com.c0r0vans.GameSound;
-import coe.com.c0r0vans.R;
+import coe.com.c0r0vans.MyGoogleMap;
 import utility.Essages;
 import utility.GameSettings;
 import utility.ImageLoader;
-
-import static coe.com.c0r0vans.GameObjects.GameObject.ICON_SMALL;
 
 /**
  * @author Shadilan
@@ -46,7 +43,7 @@ public class Ambush extends GameObject {
         Log.d("Debug info","Ambush loaded.");
         this.map=map;
         loadJSON(obj);
-        changeMarkerSize((int) map.getCameraPosition().zoom);
+        changeMarkerSize(MyGoogleMap.getClientZoom());
         mark.setAnchor(0.5f, 1);
     }
     @Override
@@ -75,7 +72,7 @@ public class Ambush extends GameObject {
             if (obj.has("Name")) Name="Засада "+obj.getString("Name");
             if (mark==null) {
                 setMarker(map.addMarker(new MarkerOptions().position(new LatLng(Lat / 1e6, Lng / 1e6))));
-                changeMarkerSize((int) map.getCameraPosition().zoom);
+                changeMarkerSize(MyGoogleMap.getClientZoom());
             } else {
                 mark.setPosition(latlng);
             }

@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 
@@ -56,6 +55,13 @@ public class MessageNotification {
         final Bitmap picture = BitmapFactory.decodeResource(res, R.mipmap.ic_launcher);
 
         final String title = "Уведомление";
+        long[] vibra=new long[4];
+        vibra[0]=100l;
+        vibra[1]=10l;
+        vibra[2]=1000l;
+        vibra[3]=10000l;
+
+
 
         final NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
 
@@ -68,6 +74,8 @@ public class MessageNotification {
                 .setSmallIcon(R.mipmap.ic_launcher_s)
                 .setContentTitle(title)
                 .setContentText(exampleString)
+
+                .setVibrate(vibra)
 
                         // All fields below this line are optional.
 

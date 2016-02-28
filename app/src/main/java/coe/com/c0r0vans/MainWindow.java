@@ -1,36 +1,21 @@
 package coe.com.c0r0vans;
 
 import android.app.Activity;
-
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.Point;
 import android.location.Location;
-import android.location.LocationListener;
-
 import android.os.Bundle;
 import android.os.Handler;
-
 import android.support.v4.app.FragmentActivity;
-
 import android.util.DisplayMetrics;
 import android.util.Log;
-
-
 import android.view.View;
-
-
 import android.widget.ImageView;
 import android.widget.TextView;
 
-
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-
-import com.google.android.gms.maps.model.CameraPosition;
-import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 
@@ -38,11 +23,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-
-
 import java.util.ArrayList;
-
-
 
 import coe.com.c0r0vans.GameObjects.Ambush;
 import coe.com.c0r0vans.GameObjects.Caravan;
@@ -51,7 +32,6 @@ import coe.com.c0r0vans.GameObjects.GameObject;
 import coe.com.c0r0vans.GameObjects.MessageMap;
 import coe.com.c0r0vans.GameObjects.Player;
 import coe.com.c0r0vans.GameObjects.SelectedObject;
-
 import utility.Essages;
 import utility.GPSInfo;
 import utility.GameSettings;
@@ -62,13 +42,10 @@ import utility.serverConnect;
 
 public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
     private static final int SETTINGS_CALL = 393;
-    private GoogleMap mMap;
-    private Player player;
     private ArrayList<GameObject> Objects;
     private Handler myHandler = new Handler();
     private ImageView connect_img;
     private int SendedRequest = 0;
-    private int clientZoom = 17;
     private MessageMap messages;
     private TextView LogView;
     private ImageView LogButton;
@@ -81,8 +58,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
      */
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        player=new Player();
-        SelectedObject.getInstance().setExecuter(player);
+        Player.instance();
         setContentView(R.layout.activity_main_window);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -134,58 +110,16 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
      */
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
-        setupMap();
-        player.setMap(mMap);// = new Player(mMap);
-
-
-
-        //mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(player.getMarker().getPosition(), clientZoom));
-        if ("Y".equals(GameSettings.getInstance().get("USE_TILT")))
-            mMap.moveCamera(CameraUpdateFactory.newCameraPosition(
-                    new CameraPosition.Builder()
-                            .target(player.getMarker().getPosition())
-                            .tilt(60)
-                            .zoom(clientZoom)
-                            .build()));
-        else
-        mMap.moveCamera(CameraUpdateFactory.newCameraPosition(
-                new CameraPosition.Builder()
-                        .target(player.getMarker().getPosition())
-                        .tilt(0)
-                        .zoom(clientZoom)
-                        .build()));
+        Point size=new Point();
+        getWindowManager().getDefaultDisplay().getSize(size);
+        MyGoogleMap.init(googleMap, size.y);
+        Player.getPlayer().setMap(MyGoogleMap.getMap());
         createListeners();
     }
     boolean isListenersDone=false;
     /**
      * Setup map view
      */
-
-    private void setupMap() {
-
-        mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-        mMap.setBuildingsEnabled(false);
-        mMap.getUiSettings().setScrollGesturesEnabled(false);
-        mMap.getUiSettings().setTiltGesturesEnabled(false);
-        mMap.getUiSettings().setMyLocationButtonEnabled(false);
-        mMap.getUiSettings().setZoomControlsEnabled(false);
-        mMap.getUiSettings().setZoomGesturesEnabled(false);
-        mMap.getUiSettings().setRotateGesturesEnabled(true);
-        mMap.getUiSettings().setCompassEnabled(false);
-        mMap.getUiSettings().setMapToolbarEnabled(false);
-        mMap.getUiSettings().setIndoorLevelPickerEnabled(false);
-
-        if ("Y".equals(GameSettings.getInstance().get("VIEW_PADDING"))){
-            Point point=new Point();
-            getWindowManager().getDefaultDisplay().getSize(point);
-            mMap.setPadding(0,point.y*1/2,0,40);
-        } else mMap.setPadding(0,0,0,40);
-
-
-
-    }
-
 
     private void createListeners() {
         if (isListenersDone) return;
@@ -248,46 +182,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
         });
 
 
-        GPSInfo.getInstance().AddLocationListener(new LocationListener() {
-            @Override
-            public void onLocationChanged(Location location) {
-                LatLng target = new LatLng(location.getLatitude(), location.getLongitude());
-                if ("Y".equals(GameSettings.getInstance().get("USE_TILT")))
-                    mMap.animateCamera(CameraUpdateFactory.newCameraPosition(
-                            new CameraPosition.Builder()
-                                    .target(target)
-                                    .tilt(60)
-                                    .bearing(mMap.getCameraPosition().bearing)
-                                    .zoom(clientZoom)
-                                    .build()));
-                else
-                    mMap.animateCamera(CameraUpdateFactory.newCameraPosition(
-                            new CameraPosition.Builder()
-                                    .target(target)
-                                    .bearing(mMap.getCameraPosition().bearing)
-                                    .tilt(0)
-                                    .zoom(clientZoom)
-                                    .build()));
 
-                player.getMarker().setPosition(target);
-                player.getCircle().setCenter(target);
-            }
-
-            @Override
-            public void onStatusChanged(String provider, int status, Bundle extras) {
-
-            }
-
-            @Override
-            public void onProviderEnabled(String provider) {
-
-            }
-
-            @Override
-            public void onProviderDisabled(String provider) {
-
-            }
-        });
         serverConnect.getInstance().addListener(new ServerListener() {
             @Override
             public void onLogin(JSONObject response) {
@@ -319,20 +214,20 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                             } else {
                                 if (JObj.getJSONObject(i).getString("Type").equals("Player")) {
 
-                                    player.loadJSON(JObj.getJSONObject(i));
+                                    Player.getPlayer().loadJSON(JObj.getJSONObject(i));
 
                                 } else if (JObj.getJSONObject(i).getString("Type").equals("City")) {
 
-                                    City city = new City(mMap, JObj.getJSONObject(i));
+                                    City city = new City(MyGoogleMap.getMap(), JObj.getJSONObject(i));
                                     Objects.add(city);
                                 } else if (JObj.getJSONObject(i).getString("Type").equals("Ambush")) {
 
-                                    Ambush ambush = new Ambush(mMap, JObj.getJSONObject(i));
+                                    Ambush ambush = new Ambush(MyGoogleMap.getMap(), JObj.getJSONObject(i));
 
                                     Objects.add(ambush);
                                 } else if (JObj.getJSONObject(i).getString("Type").equals("Caravan")) {
 
-                                    Caravan caravan = new Caravan(mMap, JObj.getJSONObject(i));
+                                    Caravan caravan = new Caravan(MyGoogleMap.getMap(), JObj.getJSONObject(i));
                                     Objects.add(caravan);
                                 } else if (JObj.getJSONObject(i).getString("Type").equals("Sign")) {
                                     Log.d("Debug info", "Sign Load:" + JObj.getJSONObject(i).toString());
@@ -362,7 +257,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
 
             @Override
             public void onPlayerInfo(JSONObject response) {
-                player.loadJSON(response);
+                Player.getPlayer().loadJSON(response);
                 timeToPlayerRefresh = 6;
             }
 
@@ -379,7 +274,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                         errorMsg = response.getString("Message");
                     }
                     if (errorMsg.equals("")) errorMsg = errorText;
-                    if (!"Unexpected Response".equals(errorText)||"Y".equals(GameSettings.getInstance().get("SHOW_NETWORK_ERROR")))
+                    if (!"Unexpected Response".equals(errorText) || "Y".equals(GameSettings.getInstance().get("SHOW_NETWORK_ERROR")))
                         Essages.addEssage(errorMsg);
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -398,49 +293,21 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
             }
         });
 
-        mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
+        MyGoogleMap.getMap().setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
             @Override
             public void onMapLongClick(LatLng latLng) {
                 float[] distances = new float[1];
-                Location.distanceBetween(latLng.latitude, latLng.longitude, player.getMarker().getPosition().latitude, player.getMarker().getPosition().longitude, distances);
-                if (distances.length > 0 && distances[0] < player.getActionDistance()) {
+                Location.distanceBetween(latLng.latitude, latLng.longitude, Player.getPlayer().getMarker().getPosition().latitude, Player.getPlayer().getMarker().getPosition().longitude, distances);
+                if (distances.length > 0 && distances[0] < Player.getPlayer().getActionDistance()) {
 
-                    SelectedObject.getInstance().setTarget(player);
+                    SelectedObject.getInstance().setTarget(Player.getPlayer());
                     SelectedObject.getInstance().setPoint(latLng);
-
                     ActionView actionView = (ActionView) findViewById(R.id.actionView);
-                    if (actionView.clickpos != null) {
-                        actionView.clickpos.setCenter(latLng);
-                        actionView.clickpos.setRadius(player.getAmbushRad());
-
-                    } else {
-                        CircleOptions circleOptions = new CircleOptions();
-                        circleOptions.center(latLng);
-                        circleOptions.radius(player.getAmbushRad());
-                        circleOptions.strokeColor(Color.RED);
-                        circleOptions.strokeWidth(1);
-
-                        actionView.clickpos = mMap.addCircle(circleOptions);
-
-                    }
-                    if (actionView.clickPoint != null) {
-                        actionView.clickPoint.setCenter(latLng);
-                    } else {
-                        CircleOptions circleOptions = new CircleOptions();
-                        circleOptions.center(latLng);
-                        circleOptions.radius(1);
-                        circleOptions.strokeColor(Color.RED);
-                        circleOptions.strokeWidth(5);
-
-                        actionView.clickPoint = mMap.addCircle(circleOptions);
-                    }
-
-
                     actionView.ShowView();
                 }
             }
         });
-        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+        MyGoogleMap.getMap().setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
                 GameObject target = findObjectByMarker(marker);
@@ -454,56 +321,29 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                 return true;
             }
         });
-        mMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
-            float bearing = mMap.getCameraPosition().bearing;
-
-            @Override
-            public void onCameraChange(CameraPosition cameraPosition) {
-                if (cameraPosition.bearing != bearing) {
-                    mMap.moveCamera(CameraUpdateFactory.newLatLng(player.getMarker().getPosition()));
-                    bearing = cameraPosition.bearing;
-                }
-                float[] distances = new float[1];
-            }
-
-            });
-
         ImageView zoomButton= (ImageView) findViewById(R.id.zoomButton);
         zoomButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                switch (clientZoom) {
-                    case 16:
-                        clientZoom = 17;
-                        break;
-                    case 17:
-                        clientZoom = 18;
-                        break;
-                    case 18:
-                        clientZoom = 16;
-                        break;
-                    default:
-                        clientZoom = 16;
-                }
-                for (GameObject obj : Objects) obj.changeMarkerSize(clientZoom);
-                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(GPSInfo.getInstance().GetLat() / 1e6, GPSInfo.getInstance().GetLng() / 1e6), clientZoom));
+                MyGoogleMap.switchZoom();
+                for (GameObject obj : Objects) obj.changeMarkerSize(MyGoogleMap.getClientZoom());
             }
         });
-        player.addOnChange(new OnGameObjectChange() {
+        Player.getPlayer().addOnChange(new OnGameObjectChange() {
             @Override
             public void change(int ChangeType) {
 
                 if (ChangeType != OnGameObjectChange.EXTERNAL) return;
                 TextView am = (TextView) findViewById(R.id.levelAmount);
-                am.setText(String.valueOf(player.getLevel()));
+                am.setText(String.valueOf(Player.getPlayer().getLevel()));
                 am = (TextView) findViewById(R.id.expAmount);
-                am.setText(String.valueOf(player.getExp()));
+                am.setText(String.valueOf(Player.getPlayer().getExp()));
                 am = (TextView) findViewById(R.id.goldAmount);
-                am.setText(String.valueOf(player.getGold()));
-                ImageView btn= (ImageView) findViewById(R.id.infoview);
-                if ("".equals(player.getCurrentRoute())) btn.setImageResource(R.mipmap.info);
+                am.setText(String.valueOf(Player.getPlayer().getGold()));
+                ImageView btn = (ImageView) findViewById(R.id.infoview);
+                if ("".equals(Player.getPlayer().getCurrentRoute())) btn.setImageResource(R.mipmap.info);
                 else btn.setImageResource(R.mipmap.info_route);
-                ((InfoLayout)findViewById(R.id.informationView)).loadFromPlayer();
+                ((InfoLayout) findViewById(R.id.informationView)).loadFromPlayer();
             }
         });
         isListenersDone=true;
@@ -517,8 +357,8 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
      * @return GameObject
      */
     private GameObject findObjectByMarker(Marker m) {
-        if (player.getMarker().equals(m)) {
-            return player;
+        if (Player.getPlayer().getMarker().equals(m)) {
+            return Player.getPlayer();
         } else
             for (GameObject obj : Objects) {
                 if (obj.getMarker()!=null && obj.getMarker().equals(m)) {
@@ -643,27 +483,9 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                             ((City) o).showRadius();
                         }
                     }
-                    player.showRoute();
+                    Player.getPlayer().showRoute();
 
-                    if ("Y".equals(GameSettings.getInstance().get("USE_TILT")))
-                        mMap.moveCamera(CameraUpdateFactory.newCameraPosition(
-                                new CameraPosition.Builder()
-                                        .target(player.getMarker().getPosition())
-                                        .tilt(60)
-                                        .zoom(clientZoom)
-                                        .build()));
-                    else
-                        mMap.moveCamera(CameraUpdateFactory.newCameraPosition(
-                                new CameraPosition.Builder()
-                                        .target(player.getMarker().getPosition())
-                                        .tilt(0)
-                                        .zoom(clientZoom)
-                                        .build()));
-                    if ("Y".equals(GameSettings.getInstance().get("VIEW_PADDING"))){
-                        Point point=new Point();
-                        getWindowManager().getDefaultDisplay().getSize(point);
-                        mMap.setPadding(0,point.y*1/2,0,40);
-                    } else mMap.setPadding(0, 0, 0, 40);
+
                     GameSound.updateSettings();
 
                 }

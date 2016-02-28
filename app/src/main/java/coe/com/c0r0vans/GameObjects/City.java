@@ -4,7 +4,6 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
@@ -17,7 +16,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 import coe.com.c0r0vans.GameSound;
-import coe.com.c0r0vans.R;
+import coe.com.c0r0vans.MyGoogleMap;
 import utility.Essages;
 import utility.GameSettings;
 import utility.ImageLoader;
@@ -42,7 +41,7 @@ public class City extends GameObject{
         image=ImageLoader.getImage("city");
 
         mark=map.addMarker(new MarkerOptions().position(new LatLng(Lat / 1e6, Lng / 1e6)));
-        changeMarkerSize((int) map.getCameraPosition().zoom);
+        changeMarkerSize(MyGoogleMap.getClientZoom());
         mark.setAnchor(0.5f, 1);
         loadJSON(obj);
 
@@ -53,7 +52,7 @@ public class City extends GameObject{
     @Override
     public void setMarker(Marker m) {
         mark=m;
-        changeMarkerSize((int) map.getCameraPosition().zoom);
+        changeMarkerSize(MyGoogleMap.getClientZoom());
         mark.setAnchor(0.5f, 1);
     }
 
@@ -105,15 +104,15 @@ public class City extends GameObject{
     public String getInfo() {
         String tushkan="";
         if (Math.random()*1000<3) tushkan="У стен города следы непонятного зверя.";
-        Player player=(Player) SelectedObject.getInstance().getExecuter();
-        Upgrade up=player.getNextUpgrade(upgrade);
+
+        Upgrade up=Player.getPlayer().getNextUpgrade(upgrade);
         if (up!=null) {
             String need="!Нужен уровень города:"+up.getReqCityLev();
 
-            String dop="";
+            String dop;
             if (up.getReqCityLev()>Level) dop="Требуется уровень города "+ up.getReqCityLev()+"\n";
-            else if (up.getCost()>player.getGold()) dop="Нужно больше золота!"+ up.getCost() +" золота!\n";
-            else if (up.getLevel()>player.getLevel()-1) dop="Вы недостаточно опытны!\n";
+            else if (up.getCost()>Player.getPlayer().getGold()) dop="Нужно больше золота!"+ up.getCost() +" золота!\n";
+            else if (up.getLevel()>Player.getPlayer().getLevel()-1) dop="Вы недостаточно опытны!\n";
             else dop="Эффект:" + up.getDescription()+"\n";
 
             return "Это город " + Level + " уровня.\n В городе можно приобрести улучшение \"" + up.getName() + "\" за " +
@@ -151,8 +150,7 @@ public class City extends GameObject{
 
                 @Override
                 public void preAction() {
-                    Player player= (Player) SelectedObject.getInstance().getExecuter();
-                    player.setRouteStart(false);
+                    Player.getPlayer().setRouteStart(false);
                 }
 
                 @Override
@@ -168,8 +166,8 @@ public class City extends GameObject{
 
                 }
             };
-        Player player= (Player) SelectedObject.getInstance().getExecuter();
-        if (startRoute.isEnabled() && player.getRouteStart()) Actions.add(startRoute);
+
+        if (startRoute.isEnabled() && Player.getPlayer().getRouteStart()) Actions.add(startRoute);
 
         if (finishRoute==null)
         finishRoute = new ObjectAction(this) {
@@ -191,8 +189,7 @@ public class City extends GameObject{
 
             @Override
             public void preAction() {
-                Player player= (Player) SelectedObject.getInstance().getExecuter();
-                player.setRouteStart(true);
+                Player.getPlayer().setRouteStart(true);
             }
 
             @Override
@@ -208,7 +205,7 @@ public class City extends GameObject{
 
             }
         };
-        if (finishRoute.isEnabled()&& !player.getRouteStart()) Actions.add(finishRoute);
+        if (finishRoute.isEnabled()&& !Player.getPlayer().getRouteStart()) Actions.add(finishRoute);
 
         if (butUpgrade==null)
             butUpgrade = new ObjectAction(this) {
@@ -236,8 +233,8 @@ public class City extends GameObject{
                 public void postAction() {
                     GameSound.playSound(GameSound.BUY_SOUND);
                     serverConnect.getInstance().getPlayerInfo();
-                    Player player= (Player) SelectedObject.getInstance().getExecuter();
-                    Upgrade up=((Player) SelectedObject.getInstance().getExecuter()).getNextUpgrade(upgrade);
+
+                    Upgrade up=Player.getPlayer().getNextUpgrade(upgrade);
                     if (up!=null ) Essages.addEssage("Улучшение "+up.getName()+" куплено.");
                     else Essages.addEssage("Улучшение "+upgrade+" куплено.");
                 }
@@ -247,8 +244,9 @@ public class City extends GameObject{
 
                 }
             };
-        Upgrade up=((Player) SelectedObject.getInstance().getExecuter()).getNextUpgrade(upgrade);
-        if (up==null || (up!=null && (up.getReqCityLev()<=Level && up.getCost()<=player.getGold() && up.getLevel()<player.getLevel() ))) Actions.add(butUpgrade);
+        Upgrade up=Player.getPlayer().getNextUpgrade(upgrade);
+        if (up==null || (up.getReqCityLev()<=Level && up.getCost()<=Player.getPlayer().getGold() && up.getLevel()<Player.getPlayer().getLevel() ))
+            Actions.add(butUpgrade);
         return Actions;
     }
     @Override

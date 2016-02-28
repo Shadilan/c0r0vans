@@ -1,15 +1,11 @@
 package coe.com.c0r0vans;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
 import android.util.AttributeSet;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -17,10 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.google.android.gms.maps.model.Circle;
-
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -31,7 +24,6 @@ import coe.com.c0r0vans.GameObjects.CommandButton;
 import coe.com.c0r0vans.GameObjects.ObjectAction;
 import coe.com.c0r0vans.GameObjects.Player;
 import coe.com.c0r0vans.GameObjects.SelectedObject;
-import coe.com.c0r0vans.R;
 import utility.GPSInfo;
 import utility.ServerListener;
 import utility.serverConnect;
@@ -61,8 +53,6 @@ public class ActionView extends LinearLayout {
     private LinearLayout ActionList;
     private ArrayList<ObjectAction> actions;
     private ImageButton close;
-    public Circle clickpos;
-    public Circle clickPoint;
 
     private TextView    title;
     HorizontalScrollView horizontalScrollView;
@@ -90,14 +80,7 @@ public class ActionView extends LinearLayout {
     }
 
     public void HideView(){
-        if (clickpos!=null){
-            clickpos.remove();
-            clickpos=null;
-        }
-        if (clickPoint!=null){
-            clickPoint.remove();
-            clickPoint=null;
-        }
+        SelectedObject.getInstance().hidePoint();
         this.setVisibility(GONE);
     }
     LocationListener locationListener;
@@ -175,9 +158,9 @@ public class ActionView extends LinearLayout {
         float[] distances = new float[1];
         Location.distanceBetween(SelectedObject.getInstance().getTarget().getMarker().getPosition().latitude,
                 SelectedObject.getInstance().getTarget().getMarker().getPosition().longitude,
-                SelectedObject.getInstance().getExecuter().getMarker().getPosition().latitude,
-                SelectedObject.getInstance().getExecuter().getMarker().getPosition().longitude, distances);
-        if (distances.length > 0 && distances[0] < ((Player)SelectedObject.getInstance().getExecuter()).getActionDistance()) {
+                Player.getPlayer().getMarker().getPosition().latitude,
+                Player.getPlayer().getMarker().getPosition().longitude, distances);
+        if (distances.length > 0 && distances[0] < (Player.getPlayer().getActionDistance())) {
             ActionList.setVisibility(VISIBLE);
         } else {
             ActionList.setVisibility(INVISIBLE);
@@ -189,9 +172,9 @@ public class ActionView extends LinearLayout {
                     float[] distances = new float[1];
                     Location.distanceBetween(SelectedObject.getInstance().getTarget().getMarker().getPosition().latitude,
                             SelectedObject.getInstance().getTarget().getMarker().getPosition().longitude,
-                            SelectedObject.getInstance().getExecuter().getMarker().getPosition().latitude,
-                            SelectedObject.getInstance().getExecuter().getMarker().getPosition().longitude, distances);
-                    if (distances.length > 0 && distances[0] < ((Player)SelectedObject.getInstance().getExecuter()).getActionDistance()) {
+                            Player.getPlayer().getMarker().getPosition().latitude,
+                            Player.getPlayer().getMarker().getPosition().longitude, distances);
+                    if (distances.length > 0 && distances[0] < (Player.getPlayer().getActionDistance())) {
                         ActionList.setVisibility(VISIBLE);
                     } else {
                         ActionList.setVisibility(INVISIBLE);
