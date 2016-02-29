@@ -29,6 +29,7 @@ public class MyGoogleMap{
     private static boolean moveFixed=true;
     private static Marker targetMarker;
     private static ImageButton showpointButton;
+    static float bearing = 0;
     public static void init(GoogleMap mMap,int Height){
         map=mMap;
         windowHeight=Height;
@@ -56,6 +57,8 @@ public class MyGoogleMap{
         map.getUiSettings().setCompassEnabled(false);
         map.getUiSettings().setMapToolbarEnabled(false);
         map.getUiSettings().setIndoorLevelPickerEnabled(false);
+
+        bearing=map.getCameraPosition().bearing;
 
         if ("Y".equals(GameSettings.getInstance().get("VIEW_PADDING"))){
             Point point=new Point();
@@ -92,14 +95,15 @@ public class MyGoogleMap{
 
 
         map.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
-            float bearing = map.getCameraPosition().bearing;
+
 
             @Override
             public void onCameraChange(CameraPosition cameraPosition) {
                 if (cameraPosition.bearing != bearing) {
+                    bearing = cameraPosition.bearing;
                     if (moveFixed) moveCamera(GPSInfo.getInstance().getLatLng());
                     else moveCamera(targetPoint);
-                    bearing = cameraPosition.bearing;
+
                 }
             }
 
@@ -150,6 +154,7 @@ public class MyGoogleMap{
                             .target(target)
                             .tilt(60)
                             .zoom(clientZoom)
+                            .bearing(bearing)
                             .build()));
         else
             map.moveCamera(CameraUpdateFactory.newCameraPosition(
@@ -157,6 +162,7 @@ public class MyGoogleMap{
                             .target(target)
                             .tilt(0)
                             .zoom(clientZoom)
+                            .bearing(bearing)
                             .build()));
     }
     private static LatLng targetPoint;
