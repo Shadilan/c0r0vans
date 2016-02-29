@@ -4,6 +4,7 @@ package utility;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -47,7 +48,31 @@ public class GameSettings extends HashMap<String,String>{
         put("AUTO_LOGIN","N");
         put("SHOW_NETWORK_ERROR","N");
         put("VIEW_PADDING","N");
+        put("BEARING","0");
+        put("ZOOM","18");
         save();
+    }
+    public static float getBearing(){
+        float result =0;
+        String bearing=instance.get("BEARING");
+        if (bearing!=null) result=Float.parseFloat(bearing);
+        return result;
+    }
+    public static int getZoom(){
+        int result=18;
+        String zoom=instance.get("ZOOM");
+        Log.d("Clientzoom", "Get zoom " + zoom);
+        if (zoom!=null) result=Integer.parseInt(zoom);
+        return result;
+    }
+    public static void setBearing(float bearing){
+        instance.put("BEARING", String.valueOf(bearing));
+        instance.save();
+    }
+    public static void setZoom(int zoom){
+        instance.put("ZOOM", String.valueOf(zoom));
+        Log.d("Clientzoom", "Set zoom " + zoom);
+        instance.save();
     }
 
     public void save(){

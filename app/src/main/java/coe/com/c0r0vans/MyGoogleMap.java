@@ -1,9 +1,9 @@
 package coe.com.c0r0vans;
 
-import android.graphics.Point;
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 
@@ -18,6 +18,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import coe.com.c0r0vans.GameObjects.Player;
 import utility.GPSInfo;
 import utility.GameSettings;
+import utility.serverConnect;
 
 /**
  * @author Shadilan
@@ -34,6 +35,7 @@ public class MyGoogleMap{
         map=mMap;
         windowHeight=Height;
         setupMap();
+
     }
     public static void setShowpointButton(ImageButton button){
         showpointButton=button;
@@ -58,13 +60,12 @@ public class MyGoogleMap{
         map.getUiSettings().setMapToolbarEnabled(false);
         map.getUiSettings().setIndoorLevelPickerEnabled(false);
 
-        bearing=map.getCameraPosition().bearing;
+        //bearing=map.getCameraPosition().bearing;
 
-        if ("Y".equals(GameSettings.getInstance().get("VIEW_PADDING"))){
-            Point point=new Point();
+        bearing=GameSettings.getBearing();
+        clientZoom=GameSettings.getZoom();
+        changeSettings();
 
-            map.setPadding(0,windowHeight/2,0,40);
-        } else map.setPadding(0,0,0,40);
 
         GPSInfo.getInstance().AddLocationListener(new LocationListener() {
             @Override
@@ -101,6 +102,8 @@ public class MyGoogleMap{
             public void onCameraChange(CameraPosition cameraPosition) {
                 if (cameraPosition.bearing != bearing) {
                     bearing = cameraPosition.bearing;
+                    Log.d("Test rotate","Rotation");
+                    GameSettings.setBearing(bearing);
                     if (moveFixed) moveCamera(GPSInfo.getInstance().getLatLng());
                     else moveCamera(targetPoint);
 
@@ -130,6 +133,7 @@ public class MyGoogleMap{
             default:
                 clientZoom = 16;
         }
+        GameSettings.setZoom(clientZoom);
         if (moveFixed) moveCamera(GPSInfo.getInstance().getLatLng());
         else moveCamera(targetPoint);
 
@@ -152,34 +156,42 @@ public class MyGoogleMap{
             map.moveCamera(CameraUpdateFactory.newCameraPosition(
                     new CameraPosition.Builder()
                             .target(target)
+                            .bearing(map.getCameraPosition().bearing)
                             .tilt(60)
                             .zoom(clientZoom)
-                            .bearing(bearing)
                             .build()));
         else
             map.moveCamera(CameraUpdateFactory.newCameraPosition(
                     new CameraPosition.Builder()
                             .target(target)
+                            .bearing(map.getCameraPosition().bearing)
                             .tilt(0)
                             .zoom(clientZoom)
-                            .bearing(bearing)
                             .build()));
     }
     private static LatLng targetPoint;
     public static void showPoint(LatLng point){
         moveFixed=false;
         targetPoint=point;
-        targetMarker.setPosition(point);
-        targetMarker.setVisible(true);
+        if (targetMarker!=null){
+            targetMarker.setPosition(point);
+            targetMarker.setVisible(true);
+        }
+
         if (showpointButton!=null) showpointButton.setVisibility(View.VISIBLE);
+        serverConnect.getInstance().RefreshData((int)(point.latitude*1e6),(int) (point.longitude*1e6));
         moveCamera(point);
     }
     public static void stopShowPoint() {
         moveFixed=true;
         moveCamera(GPSInfo.getInstance().getLatLng());
-        targetMarker.setVisible(false);
+        if (targetMarker!=null) targetMarker.setVisible(false);
         if (showpointButton!=null) showpointButton.setVisibility(View.INVISIBLE);
+        serverConnect.getInstance().RefreshCurrent();
 
     }
 
+    public static boolean isMoveFixed() {
+        return moveFixed;
+    }
 }

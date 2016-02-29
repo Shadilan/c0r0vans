@@ -406,7 +406,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
         if (serverConnect.getInstance().isLogin() && this.hasWindowFocus()
                 && GPSInfo.getInstance().GetLat()!=-1 && GPSInfo.getInstance().GetLng()!=-1)
             if (timeToPlayerRefresh<1) {
-                serverConnect.getInstance().RefreshData(GPSInfo.getInstance().GetLat(), GPSInfo.getInstance().GetLng());
+                serverConnect.getInstance().RefreshData((int)(MyGoogleMap.getMap().getCameraPosition().target.latitude*1e6), (int)(MyGoogleMap.getMap().getCameraPosition().target.longitude*1e6));
                 serverConnect.getInstance().getPlayerInfo();
 
                 timeToPlayerRefresh = 6;
@@ -414,7 +414,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                 SendedRequest++;
                 if (SendedRequest > 1) connect_img.setVisibility(View.VISIBLE);
                 timeToPlayerRefresh--;
-                serverConnect.getInstance().RefreshData(GPSInfo.getInstance().GetLat(), GPSInfo.getInstance().GetLng());
+                serverConnect.getInstance().RefreshData((int)(MyGoogleMap.getMap().getCameraPosition().target.latitude*1e6), (int)(MyGoogleMap.getMap().getCameraPosition().target.longitude*1e6));
             }
         StartTickTimer();
     }
@@ -461,7 +461,10 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
         } else if (findViewById(R.id.actionView).getVisibility()==View.VISIBLE)
         {
             findViewById(R.id.actionView).setVisibility(View.GONE);
-        } else
+        } else if (!MyGoogleMap.isMoveFixed()){
+            MyGoogleMap.stopShowPoint();
+        }
+        else
         {
             super.onBackPressed();
         }
@@ -486,7 +489,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                         }
                     }
                     Player.getPlayer().showRoute();
-
+                    MyGoogleMap.changeSettings();
 
                     GameSound.updateSettings();
 
