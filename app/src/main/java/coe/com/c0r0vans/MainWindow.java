@@ -66,6 +66,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                 .findFragmentById(R.id.map);
         ImageLoader.Loader(this.getApplicationContext());
         GameSettings.init(getApplicationContext());
+
         LogView = (TextView) findViewById(R.id.chatBox);
         LogView.setHeight((int) (LogView.getTextSize() * 2));
 
@@ -98,7 +99,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
         GPSInfo.getInstance(getApplicationContext());
         GameSound.init(getApplicationContext());
         GameSound.setVolumeControlStream(this);
-        messages=new MessageMap();
+        messages=new MessageMap(getApplicationContext());
         MessageNotification.init(getApplicationContext());
         messageRequest.run();
         serverConnect.getInstance().connect(getResources().getString(R.string.serveradress), this.getApplicationContext());
@@ -469,7 +470,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
             super.onBackPressed();
         }
     }
-
+    static Bundle outState;
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 

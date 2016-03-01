@@ -1,5 +1,8 @@
 package coe.com.c0r0vans.GameObjects;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -13,6 +16,18 @@ import utility.Essages;
  * Контейнер сообщений
  */
 public class MessageMap extends HashMap<String,Message>{
+    Context ctx;
+    Boolean loaded;
+    public MessageMap(Context ctx){
+        this.ctx=ctx;
+        SharedPreferences sp=ctx.getSharedPreferences("MESSAGES",Context.MODE_PRIVATE);
+        try {
+            String sptext=sp.getString("Messages", "");
+            loadJSON(new JSONObject(sptext));
+        } catch (JSONException e) {
+            Essages.addEssage("Error Loading:"+ e.toString());
+        }
+    }
     public boolean put(Message message){
         if (this.get(message.getGUID())!=null) return false;
         else put(message.getGUID(),message);
@@ -28,6 +43,24 @@ public class MessageMap extends HashMap<String,Message>{
                     Essages.addEssage(message.getTime(),message.getMessage());
                 }
             }
+            if (jsonArray.length()>0){
+                SharedPreferences sp=ctx.getSharedPreferences("MESSAGES",Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor =sp.edit();
+                editor.putString("Messages", getJSON().toString());
+                editor.apply();
+                editor.commit();
+
+
+            }
         }
+    }
+    private JSONObject getJSON() throws JSONException {
+        JSONObject resultM=new JSONObject();
+        JSONArray result=new JSONArray();
+        for (Message o:this.values()){
+            result.put(o.getJSON());
+        }
+        resultM.put("Messages",result);
+        return resultM;
     }
 }
