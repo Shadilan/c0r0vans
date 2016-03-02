@@ -31,7 +31,7 @@ public class Essages {
         if (target!=null) {
 
             EssageLine line=new EssageLine(target.getContext());
-            line.setText(df.format(new Date()) + ":" + text);
+            line.setText(text);
             line.setParentForm(target);
             target.addView(line);
         }
@@ -39,7 +39,7 @@ public class Essages {
     public static void addEssage(Date time,String text) {
         if (target!=null) {
             EssageLine line=new EssageLine(target.getContext());
-            line.setText(df.format(time) + ":" + text);
+            line.setText(time,text);
             line.setParentForm(target);
             target.addView(line);
 

@@ -1,5 +1,7 @@
 package coe.com.c0r0vans.GameObjects;
 
+import android.util.Log;
+
 import com.google.android.gms.maps.model.LatLng;
 
 import org.json.JSONException;
@@ -35,7 +37,11 @@ public class Message {
         if (jsonObject.has("Time")) time=new Date(jsonObject.getLong("Time"));
         if (jsonObject.has("TargetLat")) lat=jsonObject.getInt("TargetLat");
         if (jsonObject.has("TargetLng")) lng=jsonObject.getInt("TargetLng");
-        if (lat!=0 && lng!=0) target=new LatLng((int)(lat/1e6),(int)(lng/1e6));
+
+        if (lat!=0 && lng!=0) {
+            target=new LatLng((double)lat/1e6,(double)lng/1e6);
+            Log.d("tttt", String.valueOf(lat));
+        }
 
     }
     public JSONObject getJSON() throws JSONException {
