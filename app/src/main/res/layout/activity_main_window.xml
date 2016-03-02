@@ -119,22 +119,20 @@
         android:paddingLeft="10dp"
         android:id="@+id/zoomButton"
         android:src="@mipmap/zoombutton"
-        android:layout_above="@+id/scrollView"
+        android:layout_above="@+id/chatGroup"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/scrollView"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true">
+
 
         <LinearLayout
             android:orientation="vertical"
+            android:id="@+id/chatGroup"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true">
 
             <ImageView
                 android:layout_width="match_parent"
@@ -147,22 +145,25 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/imageView2"
                 android:src="@color/colorControls" />
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:color/white"
+                android:id="@+id/scrollView"
+                >
 
-            <TextView
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/chatBox"
-                android:textSize="12dp"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
                 android:scrollbarAlwaysDrawVerticalTrack="true"
-                android:singleLine="false"
                 android:gravity="bottom"
                 android:background="@android:color/white"
-                android:focusable="true" />
-        </LinearLayout>
+                android:focusable="true"
+                android:orientation="vertical" />
+
     </ScrollView>
+        </LinearLayout>
     <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

@@ -12,6 +12,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.GoogleMap;
@@ -48,7 +50,8 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
     private ImageView connect_img;
     private int SendedRequest = 0;
     private MessageMap messages;
-    private TextView LogView;
+    private LinearLayout LogView;
+    private ScrollView scrollView;
     private ImageView LogButton;
 
 
@@ -67,8 +70,11 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
         ImageLoader.Loader(this.getApplicationContext());
         GameSettings.init(getApplicationContext());
 
-        LogView = (TextView) findViewById(R.id.chatBox);
-        LogView.setHeight((int) (LogView.getTextSize() * 2));
+        LogView = (LinearLayout) findViewById(R.id.chatBox);
+        scrollView= (ScrollView) findViewById(R.id.scrollView);
+        scrollView.getLayoutParams().height=40;
+
+
 
         Essages.setTarget(LogView);
         LogButton = (ImageView) findViewById(R.id.showButton);
@@ -175,11 +181,13 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                 if (show) {
                     show = false;
                     //LogView.setBackgroundColor(Color.WHITE);
-                    LogView.setHeight(dm.heightPixels / 2);
+                    scrollView.getLayoutParams().height=dm.heightPixels / 2;
+                    scrollView.requestLayout();
                 } else {
                     show = true;
                     //LogView.setBackgroundColor(Color.TRANSPARENT);
-                    LogView.setHeight((int) (LogView.getTextSize() * 2));
+                    scrollView.getLayoutParams().height=40;
+                    scrollView.requestLayout();
                 }
             }
         });

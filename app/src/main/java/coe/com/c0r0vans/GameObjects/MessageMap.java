@@ -40,7 +40,7 @@ public class MessageMap extends HashMap<String,Message>{
             for (int i=0;i<jsonArray.length();i++){
                 Message message=new Message(jsonArray.getJSONObject(i));
                 if (put(message)){
-                    Essages.addEssage(message.getTime(),message.getMessage());
+                    Essages.addEssage(message);
                 }
             }
             if (jsonArray.length()>0){
