@@ -30,7 +30,8 @@ public class MessageMap extends HashMap<String,Message>{
     }
     public boolean put(Message message){
         if (this.get(message.getGUID())!=null) return false;
-        else put(message.getGUID(),message);
+        message.setParent(this);
+        put(message.getGUID(),message);
         return true;
     }
     public void loadJSON(JSONObject jsonObject) throws JSONException {
@@ -44,15 +45,16 @@ public class MessageMap extends HashMap<String,Message>{
                 }
             }
             if (jsonArray.length()>0){
-                SharedPreferences sp=ctx.getSharedPreferences("MESSAGES",Context.MODE_PRIVATE);
-                SharedPreferences.Editor editor =sp.edit();
-                editor.putString("Messages", getJSON().toString());
-                editor.apply();
-                editor.commit();
-
-
+                save();
             }
         }
+    }
+    private void save() throws JSONException {
+        SharedPreferences sp=ctx.getSharedPreferences("MESSAGES",Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor =sp.edit();
+        editor.putString("Messages", getJSON().toString());
+        editor.apply();
+        editor.commit();
     }
     private JSONObject getJSON() throws JSONException {
         JSONObject resultM=new JSONObject();
@@ -62,5 +64,16 @@ public class MessageMap extends HashMap<String,Message>{
         }
         resultM.put("Messages",result);
         return resultM;
+    }
+
+    @Override
+    public Message remove(Object key) {
+        Message m =super.remove(key);
+        try {
+            save();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return m;
     }
 }

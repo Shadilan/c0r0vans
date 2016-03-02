@@ -25,7 +25,9 @@ public class EssageLine extends LinearLayout{
     private LatLng point;
     private LinearLayout parentForm;
     private EssageLine current;
+    private Message msg;
     private static DateFormat df = DateFormat.getDateTimeInstance();
+
 
     public void setParentForm(LinearLayout form){
         parentForm=form; removeButton.setVisibility(VISIBLE);
@@ -40,6 +42,7 @@ public class EssageLine extends LinearLayout{
         if (showButton!=null && point!=null) showButton.setVisibility(VISIBLE);
         txt=df.format(text.getTime()) + ":" + text.getMessage();
         if (this.text!=null) this.text.setText(txt);
+        msg=text;
         Log.d("tttt",txt);
     }
 
@@ -86,7 +89,9 @@ public class EssageLine extends LinearLayout{
         removeButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 parentForm.removeView(current);
+                msg.remove();
             }
         });
         showButton= (ImageButton) findViewById(R.id.showButton);

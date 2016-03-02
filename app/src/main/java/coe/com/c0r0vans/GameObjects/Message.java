@@ -18,6 +18,10 @@ public class Message {
     private String state;
     private LatLng target;
     private Date time;
+    private MessageMap parent;
+    public void remove(){
+        if (parent!=null) parent.remove(GUID);
+    }
     public Message(JSONObject jsonObject) throws JSONException {
         loadJSON(jsonObject);
     }
@@ -29,8 +33,8 @@ public class Message {
         if (jsonObject.has("Type")) type=jsonObject.getString("Type");
         if (jsonObject.has("State")) state=jsonObject.getString("State");
         if (jsonObject.has("Time")) time=new Date(jsonObject.getLong("Time"));
-        if (jsonObject.has("Lat")) lat=jsonObject.getInt("Lat");
-        if (jsonObject.has("Lng")) lng=jsonObject.getInt("Lat");
+        if (jsonObject.has("TargetLat")) lat=jsonObject.getInt("TargetLat");
+        if (jsonObject.has("TargetLng")) lng=jsonObject.getInt("TargetLng");
         if (lat!=0 && lng!=0) target=new LatLng((int)(lat/1e6),(int)(lng/1e6));
 
     }
@@ -42,8 +46,8 @@ public class Message {
         if (state!=null)result.put("State",state);
         if (time!=null)result.put("Time",time.getTime());
         if (target!=null) {
-            result.put("Lat", (int) (target.latitude * 1e6));
-            result.put("Lng", (int) (target.longitude * 1e6));
+            result.put("TargetLat", (int) (target.latitude * 1e6));
+            result.put("TargetLng", (int) (target.longitude * 1e6));
         }
         return result;
     }
@@ -60,4 +64,8 @@ public class Message {
     }
 
     public LatLng getTarget(){ return target;}
+
+    public void setParent(MessageMap parent) {
+        this.parent = parent;
+    }
 }

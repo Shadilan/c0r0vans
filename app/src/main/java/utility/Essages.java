@@ -52,6 +52,8 @@ public class Essages {
             EssageLine line=new EssageLine(target.getContext());
             line.setText(msg);
             line.setParentForm(target);
+            target.addView(line);
+            MessageNotification.notify(msg.getMessage(), 1);
         }
     }
 
