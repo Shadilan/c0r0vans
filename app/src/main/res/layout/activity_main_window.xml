@@ -169,7 +169,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/showPosButton"
-        android:layout_above="@+id/zoomButton"
+        android:layout_below="@id/goldAmount"
         android:layout_centerHorizontal="true"
         android:visibility="invisible"
         android:src="@mipmap/showbutton" />
