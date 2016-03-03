@@ -134,7 +134,7 @@ public class ActionView extends LinearLayout {
 
             @Override
             public void onAction(JSONObject response) {
-                if (getVisibility()==VISIBLE){
+                if (getVisibility() == VISIBLE) {
                     reloadActions();
                 }
             }
@@ -155,16 +155,7 @@ public class ActionView extends LinearLayout {
             }
         });
         reloadActions();
-        float[] distances = new float[1];
-        Location.distanceBetween(SelectedObject.getInstance().getTarget().getMarker().getPosition().latitude,
-                SelectedObject.getInstance().getTarget().getMarker().getPosition().longitude,
-                Player.getPlayer().getMarker().getPosition().latitude,
-                Player.getPlayer().getMarker().getPosition().longitude, distances);
-        if (distances.length > 0 && distances[0] < (Player.getPlayer().getActionDistance())) {
-            ActionList.setVisibility(VISIBLE);
-        } else {
-            ActionList.setVisibility(INVISIBLE);
-        }
+
         if (locationListener==null) {
             locationListener = new LocationListener() {
                 @Override
@@ -174,10 +165,10 @@ public class ActionView extends LinearLayout {
                             SelectedObject.getInstance().getTarget().getMarker().getPosition().longitude,
                             Player.getPlayer().getMarker().getPosition().latitude,
                             Player.getPlayer().getMarker().getPosition().longitude, distances);
-                    if (distances.length > 0 && distances[0] < (Player.getPlayer().getActionDistance())) {
-                        ActionList.setVisibility(VISIBLE);
-                    } else {
-                        ActionList.setVisibility(INVISIBLE);
+                    if (distances.length > 0 && distances[0] < (Player.getPlayer().getActionDistance()) && !inZone) {
+                        reloadActions();
+                    } else if (distances.length > 0 && distances[0] > (Player.getPlayer().getActionDistance()) && inZone) {
+                        reloadActions();
                     }
                 }
 
@@ -200,8 +191,16 @@ public class ActionView extends LinearLayout {
         }
 
     }
+    boolean inZone=false;
     private void reloadActions(){
-        actions=SelectedObject.getInstance().getTarget().getActions();
+        boolean inZone=false;
+        float[] distances = new float[1];
+        Location.distanceBetween(SelectedObject.getInstance().getTarget().getMarker().getPosition().latitude,
+                SelectedObject.getInstance().getTarget().getMarker().getPosition().longitude,
+                Player.getPlayer().getMarker().getPosition().latitude,
+                Player.getPlayer().getMarker().getPosition().longitude, distances);
+        inZone = distances.length > 0 && distances[0] < (Player.getPlayer().getActionDistance());
+        actions=SelectedObject.getInstance().getTarget().getActions(inZone);
 
         ActionList.removeAllViews();
         for (ObjectAction act:actions){

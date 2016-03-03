@@ -32,6 +32,7 @@ public class EssageLine extends LinearLayout{
 
     public void setParentForm(LinearLayout form){
         parentForm=form; removeButton.setVisibility(VISIBLE);
+
     }
     public void setText(String text){
         txt=df.format(new Date()) + ":" + text;
@@ -94,7 +95,6 @@ public class EssageLine extends LinearLayout{
         removeButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 parentForm.removeView(current);
                 if (msg!=null) msg.remove();
             }
@@ -110,6 +110,10 @@ public class EssageLine extends LinearLayout{
         });
 
         if (point!=null) showButton.setVisibility(VISIBLE);
-        if (parentForm!=null) removeButton.setVisibility(VISIBLE);
+        if (parentForm!=null) {
+            removeButton.setVisibility(VISIBLE);
+        }
+
+
     }
 }

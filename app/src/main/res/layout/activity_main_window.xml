@@ -151,6 +151,7 @@
                 android:background="@android:color/white"
                 android:layout_gravity="bottom"
                 android:id="@+id/scrollView"
+
                 >
 
             <LinearLayout

@@ -10,9 +10,9 @@ import android.widget.TextView;
 import com.google.android.gms.maps.model.LatLng;
 
 import coe.com.c0r0vans.GameObjects.ObjectAction;
-import coe.com.c0r0vans.GameObjects.ShowHideForm;
 import coe.com.c0r0vans.MyGoogleMap;
 import coe.com.c0r0vans.R;
+import coe.com.c0r0vans.ShowHideForm;
 
 
 /**

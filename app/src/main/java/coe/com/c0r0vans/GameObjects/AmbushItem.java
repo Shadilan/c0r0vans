@@ -74,7 +74,7 @@ public class AmbushItem extends GameObject{
 
 
     public LatLng getLatLng(){return new LatLng(Lat/1e6,Lng/1e6);}
-    public ObjectAction getAction(){
+    public ObjectAction getAction(boolean inZone){
         return cancelAmbush;
     }
     public LatLng getPoint(){

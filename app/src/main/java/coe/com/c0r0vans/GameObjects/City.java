@@ -128,9 +128,9 @@ public class City extends GameObject{
     private ObjectAction finishRoute;
     private ObjectAction butUpgrade;
     @Override
-    public ArrayList<ObjectAction> getActions() {
+    public ArrayList<ObjectAction> getActions(boolean inZone) {
         ArrayList<ObjectAction> Actions=new ArrayList<>();
-
+        if (!inZone) return Actions;
         if (startRoute==null)
             startRoute = new ObjectAction(this) {
                 @Override

@@ -113,7 +113,7 @@ public class Ambush extends GameObject {
 
 
     @Override
-    public ArrayList<ObjectAction> getActions() {
+    public ArrayList<ObjectAction> getActions(boolean inZone) {
         ArrayList<ObjectAction> Actions=new ArrayList<>();
         if (removeAmbush==null){
             if (isOwner)
@@ -187,7 +187,7 @@ public class Ambush extends GameObject {
                 };
 
         }
-        if (removeAmbush.isEnabled())Actions.add(removeAmbush);
+        if ((isOwner || inZone) && removeAmbush.isEnabled()) Actions.add(removeAmbush);
         return Actions;
     }
 

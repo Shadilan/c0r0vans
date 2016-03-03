@@ -142,7 +142,7 @@ public class Route extends GameObject{
     }
 
     private ObjectAction dropRoute;
-    public ObjectAction getAction(){
+    public ObjectAction getAction( boolean inZone){
       return dropRoute;
     }
     public LatLng getPoint(){

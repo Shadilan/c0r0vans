@@ -27,6 +27,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import coe.com.c0r0vans.GameObjects.Ambush;
 import coe.com.c0r0vans.GameObjects.Caravan;
@@ -45,7 +46,7 @@ import utility.serverConnect;
 
 public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
     private static final int SETTINGS_CALL = 393;
-    private ArrayList<GameObject> Objects;
+    private HashMap<String,GameObject> Objects;
     private Handler myHandler = new Handler();
     private ImageView connect_img;
     private int SendedRequest = 0;
@@ -99,7 +100,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
 
     private void init() {
         //init fields
-        Objects = new ArrayList<>();
+        Objects = new HashMap<>();
 
         ImageLoader.Loader(getApplicationContext());
         GPSInfo.getInstance(getApplicationContext());
@@ -158,7 +159,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
             public boolean onLongClick(View v) {
                 //ForceSync
                 //Remove all Objects
-                for (GameObject obj : Objects) {
+                for (GameObject obj : Objects.values()) {
                     obj.RemoveObject();
                 }
                 Objects.clear();
@@ -183,6 +184,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                     //LogView.setBackgroundColor(Color.WHITE);
                     scrollView.getLayoutParams().height=dm.heightPixels / 2;
                     scrollView.requestLayout();
+
                 } else {
                     show = true;
                     //LogView.setBackgroundColor(Color.TRANSPARENT);
@@ -206,7 +208,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                     //Проверить наличие массива JSON. Objects
                     if (response.has("Objects")) {
                         //Скопировать данные в массив для удаления
-                        ArrayList<GameObject> remObjects = new ArrayList<>(Objects);
+                        ArrayList<GameObject> remObjects = new ArrayList<>(Objects.values());
                         JSONArray JObj = response.getJSONArray("Objects");
                         int leng = JObj.length();
 
@@ -230,16 +232,16 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                                 } else if (JObj.getJSONObject(i).getString("Type").equals("City")) {
 
                                     City city = new City(MyGoogleMap.getMap(), JObj.getJSONObject(i));
-                                    Objects.add(city);
+                                    Objects.put(city.getGUID(), city);
                                 } else if (JObj.getJSONObject(i).getString("Type").equals("Ambush")) {
 
                                     Ambush ambush = new Ambush(MyGoogleMap.getMap(), JObj.getJSONObject(i));
 
-                                    Objects.add(ambush);
+                                    Objects.put(ambush.getGUID(), ambush);
                                 } else if (JObj.getJSONObject(i).getString("Type").equals("Caravan")) {
 
                                     Caravan caravan = new Caravan(MyGoogleMap.getMap(), JObj.getJSONObject(i));
-                                    Objects.add(caravan);
+                                    Objects.put(caravan.getGUID(), caravan);
                                 } else if (JObj.getJSONObject(i).getString("Type").equals("Sign")) {
                                     Log.d("Debug info", "Sign Load:" + JObj.getJSONObject(i).toString());
                                     Log.d("Game Warning", "Sign object");
@@ -252,7 +254,10 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                         for (GameObject obj : remObjects) {
                             obj.RemoveObject();
                         }
-                        Objects.removeAll(remObjects);
+                        for (GameObject o:remObjects){
+                            Objects.remove(o.getGUID());
+                        }
+
                     }
                     SendedRequest = 0;
                     connect_img.setVisibility(View.INVISIBLE);
@@ -337,7 +342,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
             @Override
             public void onClick(View v) {
                 MyGoogleMap.switchZoom();
-                for (GameObject obj : Objects) obj.changeMarkerSize(MyGoogleMap.getClientZoom());
+                for (GameObject obj : Objects.values()) obj.changeMarkerSize(MyGoogleMap.getClientZoom());
             }
         });
         Player.getPlayer().addOnChange(new OnGameObjectChange() {
@@ -371,7 +376,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
         if (Player.getPlayer().getMarker().equals(m)) {
             return Player.getPlayer();
         } else
-            for (GameObject obj : Objects) {
+            for (GameObject obj : Objects.values()) {
                 if (obj.getMarker()!=null && obj.getMarker().equals(m)) {
                     Log.d("Debug info", "Selected object:" + obj.getClass().toString());
                     return obj;
@@ -489,7 +494,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
 
                 if (resultCode == Activity.RESULT_OK) {
 
-                    for (GameObject o:Objects){
+                    for (GameObject o:Objects.values()){
                         if (o instanceof Ambush){
                             ((Ambush) o).showRadius();
                         } else if (o instanceof City)

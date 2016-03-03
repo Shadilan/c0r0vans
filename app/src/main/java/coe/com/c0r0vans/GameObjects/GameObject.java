@@ -65,8 +65,6 @@ public class GameObject {
         mark = m;
     }
 
-    ;
-
     /**
      * Load object from JSON
      *
@@ -76,8 +74,6 @@ public class GameObject {
 
     }
 
-    ;
-
     /**
      * Actions to do on remove object
      */
@@ -85,8 +81,6 @@ public class GameObject {
         if (mark!=null)
         mark.remove();
     }
-
-    ;
 
     /**
      * Generate Info about object
@@ -97,18 +91,14 @@ public class GameObject {
         return "";
     }
 
-    ;
-
     /**
      * Get Action list
      *
      * @return ArrayList of Actions for object
      */
-    public  ArrayList<ObjectAction> getActions() {
+    public  ArrayList<ObjectAction> getActions(boolean inZone) {
         return null;
     }
-
-    ;
 
 
     public void changeMarkerSize(int Type) {
@@ -119,13 +109,9 @@ public class GameObject {
         return progress;
     }
 
-    ;
-
     public void setVisibility(boolean visibility) {
         if (mark!=null) mark.setVisible(false);
     }
-
-    ;
 
     public void setMap(GoogleMap map) {
         this.map = map;

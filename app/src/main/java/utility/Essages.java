@@ -29,19 +29,20 @@ public class Essages {
      */
     public static void addEssage(String text) {
         if (target!=null) {
-
             EssageLine line=new EssageLine(target.getContext());
             line.setText(text);
             line.setParentForm(target);
-            target.addView(line);
+            target.addView(line, 0);
+
         }
     }
     public static void addEssage(Date time,String text) {
         if (target!=null) {
+
             EssageLine line=new EssageLine(target.getContext());
-            line.setText(time,text);
+            line.setText(time, text);
             line.setParentForm(target);
-            target.addView(line);
+            target.addView(line, 0);
 
             MessageNotification.notify(text, 1);
 
@@ -52,7 +53,7 @@ public class Essages {
             EssageLine line=new EssageLine(target.getContext());
             line.setText(msg);
             line.setParentForm(target);
-            target.addView(line);
+            target.addView(line, 0);
             MessageNotification.notify(msg.getMessage(), 1);
         }
     }

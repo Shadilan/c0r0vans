@@ -16,7 +16,6 @@ import android.widget.ToggleButton;
 import coe.com.c0r0vans.GameObjects.AmbushItem;
 import coe.com.c0r0vans.GameObjects.Player;
 import coe.com.c0r0vans.GameObjects.Route;
-import coe.com.c0r0vans.GameObjects.ShowHideForm;
 import coe.com.c0r0vans.GameObjects.Upgrade;
 import utility.InfoLine;
 import utility.serverConnect;
@@ -197,7 +196,7 @@ public class InfoLayout extends RelativeLayout implements ShowHideForm{
             InfoLine line=new InfoLine(getContext());
             ll.addView(line);
             line.setLabelText(r.getStartName() + " - " + r.getDistance() + " - " + r.getFinishName());
-            line.setOnRemoveClick(r.getAction());
+            line.setOnRemoveClick(r.getAction(true));
             line.setTarget(r.getGUID());
             //line.setPoint(r.getPoint());
 
@@ -210,7 +209,7 @@ public class InfoLayout extends RelativeLayout implements ShowHideForm{
             //float[] distances = new float[1];
 
             line.setLabelText(r.getName());
-            line.setOnRemoveClick(r.getAction());
+            line.setOnRemoveClick(r.getAction(true));
             line.setTarget(r.getGUID());
             line.setPoint(r.getPoint());
             line.setParentForm(this);

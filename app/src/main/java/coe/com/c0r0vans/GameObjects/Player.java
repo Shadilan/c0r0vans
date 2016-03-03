@@ -222,7 +222,7 @@ public class Player extends GameObject {
     private  ObjectAction createAmbush;
     private ObjectAction dropRoute;
     @Override
-    public ArrayList<ObjectAction> getActions() {
+    public ArrayList<ObjectAction> getActions(boolean inZone) {
         ArrayList<ObjectAction> Actions=new ArrayList<>();
         if (createAmbush==null) createAmbush=new ObjectAction(this) {
             @Override
