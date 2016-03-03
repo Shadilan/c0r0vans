@@ -42,7 +42,6 @@ public class City extends GameObject{
 
         mark=map.addMarker(new MarkerOptions().position(new LatLng(Lat / 1e6, Lng / 1e6)));
         changeMarkerSize(MyGoogleMap.getClientZoom());
-        mark.setAnchor(0.5f, 1);
         loadJSON(obj);
 
 
@@ -53,7 +52,7 @@ public class City extends GameObject{
     public void setMarker(Marker m) {
         mark=m;
         changeMarkerSize(MyGoogleMap.getClientZoom());
-        mark.setAnchor(0.5f, 1);
+
     }
 
     @Override
@@ -262,6 +261,8 @@ public class City extends GameObject{
                 Essages.addEssage("Ваш зум не корректен.");
                 break;
         }
+        if ("Y".equals(GameSettings.getInstance().get("USE_TILT")))mark.setAnchor(0.5f,1f);
+        else mark.setAnchor(0.5f,0.5f);
     }
 
 

@@ -148,6 +148,7 @@ public class MyGoogleMap{
         if ("Y".equals(GameSettings.getInstance().get("VIEW_PADDING"))){
             map.setPadding(0,windowHeight/2,0,40);
         } else map.setPadding(0, 0, 0, 40);
+
     }
     private static void moveCamera(LatLng target){
         if (target==null) target=GPSInfo.getInstance().getLatLng();

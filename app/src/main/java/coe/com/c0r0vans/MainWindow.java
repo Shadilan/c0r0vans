@@ -501,9 +501,11 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                         {
                             ((City) o).showRadius();
                         }
+                        o.changeMarkerSize(MyGoogleMap.getClientZoom());
                     }
                     Player.getPlayer().showRoute();
                     MyGoogleMap.changeSettings();
+
 
                     GameSound.updateSettings();
 

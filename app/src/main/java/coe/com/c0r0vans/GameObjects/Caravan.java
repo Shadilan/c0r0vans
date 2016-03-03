@@ -15,6 +15,7 @@ import java.util.ArrayList;
 
 import coe.com.c0r0vans.MyGoogleMap;
 import utility.Essages;
+import utility.GameSettings;
 import utility.ImageLoader;
 import utility.serverConnect;
 
@@ -34,7 +35,7 @@ public class Caravan extends GameObject {
         this.map=map;
         image= ImageLoader.getImage("caravan");
         loadJSON(obj);
-        mark.setAnchor(0.5f, 0.5f);
+
     }
 
 
@@ -165,7 +166,8 @@ public class Caravan extends GameObject {
                 default:mark.setIcon(ImageLoader.getDescritor("caravan_e"));
                     Essages.addEssage("Ваш зум не корректен.");
             }
-
+        if ("Y".equals(GameSettings.getInstance().get("USE_TILT")))mark.setAnchor(0.5f,1f);
+            else mark.setAnchor(0.5f,0.5f);
     }
 
     public boolean getIsOwner(){

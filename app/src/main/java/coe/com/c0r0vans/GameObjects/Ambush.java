@@ -44,7 +44,7 @@ public class Ambush extends GameObject {
         this.map=map;
         loadJSON(obj);
         changeMarkerSize(MyGoogleMap.getClientZoom());
-        mark.setAnchor(0.5f, 1);
+
     }
     @Override
     public Bitmap getImage() {
@@ -241,6 +241,8 @@ public class Ambush extends GameObject {
                 }
             }
         }
+        if ("Y".equals(GameSettings.getInstance().get("USE_TILT")))mark.setAnchor(0.5f,1f);
+        else mark.setAnchor(0.5f,0.5f);
     }
 
 
