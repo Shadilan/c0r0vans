@@ -68,11 +68,29 @@ public class MyGoogleMap{
 
 
         GPSInfo.getInstance().AddLocationListener(new LocationListener() {
+            float oldBearing=0f;
             @Override
             public void onLocationChanged(Location location) {
+                float curBearing=map.getCameraPosition().bearing;
+                boolean trackBearing="Y".equals(GameSettings.getInstance().get("TRACK_BEARING"));
+                Log.d("tttt","hasBearing"+location.hasBearing());
+                Log.d("tttt","hasAccuracy"+location.hasAccuracy());
+                Log.d("tttt","getAccuracy"+location.getAccuracy());
+
+                if (trackBearing && location.hasBearing() && location.hasAccuracy() && location.getAccuracy()<20)
+                {
+                    if (Math.round(oldBearing/90)==Math.round(location.getBearing()/90)) {
+                        bearing=location.getBearing();
+                        curBearing=bearing;
+                        Log.d("tttt","Bearing"+curBearing);
+                    }
+                    //ChangeBearing;
+                    Log.d("tttt","oldBearing"+oldBearing);
+                    oldBearing=location.getBearing();
+                }
                 LatLng target = new LatLng(location.getLatitude(), location.getLongitude());
                 if (moveFixed) {
-                    moveCamera(target);
+                    moveCamera(target,curBearing);
                 }
                 Player.getPlayer().getMarker().setPosition(target);
                 Player.getPlayer().getCircle().setCenter(target);
@@ -166,6 +184,26 @@ public class MyGoogleMap{
                     new CameraPosition.Builder()
                             .target(target)
                             .bearing(map.getCameraPosition().bearing)
+                            .tilt(0)
+                            .zoom(clientZoom)
+                            .build()));
+    }
+    private static void moveCamera(LatLng target,float cbearing){
+        if (target==null) target=GPSInfo.getInstance().getLatLng();
+        if ("Y".equals(GameSettings.getInstance().get("USE_TILT")))
+
+            map.moveCamera(CameraUpdateFactory.newCameraPosition(
+                    new CameraPosition.Builder()
+                            .target(target)
+                            .bearing(cbearing)
+                            .tilt(60)
+                            .zoom(clientZoom)
+                            .build()));
+        else
+            map.moveCamera(CameraUpdateFactory.newCameraPosition(
+                    new CameraPosition.Builder()
+                            .target(target)
+                            .bearing(cbearing)
                             .tilt(0)
                             .zoom(clientZoom)
                             .build()));

@@ -28,6 +28,7 @@ public class Settings extends AppCompatActivity {
     CheckBox autoLogin;
     CheckBox netErrorLog;
     CheckBox usePadding;
+    CheckBox trackBearing;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,6 +47,8 @@ public class Settings extends AppCompatActivity {
         autoLogin=(CheckBox) findViewById(R.id.autoLogin);
         netErrorLog= (CheckBox) findViewById(R.id.netErrorLogOn);
         usePadding= (CheckBox) findViewById(R.id.usePadding);
+        trackBearing= (CheckBox) findViewById(R.id.trackBearing);
+
         cancel_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -69,6 +72,7 @@ public class Settings extends AppCompatActivity {
                 GameSettings.getInstance().put("AUTO_LOGIN", autoLogin.isChecked() ? "Y" : "N");
                 GameSettings.getInstance().put("SHOW_NETWORK_ERROR", netErrorLog.isChecked() ? "Y" : "N");
                 GameSettings.getInstance().put("VIEW_PADDING", usePadding.isChecked() ? "Y" : "N");
+                GameSettings.getInstance().put("TRACK_BEARING", trackBearing.isChecked() ? "Y" : "N");
 
                 GameSettings.getInstance().save();
                 GPSInfo.getInstance().offGPS();
@@ -93,6 +97,7 @@ public class Settings extends AppCompatActivity {
         gpsOn.setChecked("Y".equals(GameSettings.getInstance().get("GPS_ON_BACK")));
         netErrorLog.setChecked("Y".equals(GameSettings.getInstance().get("SHOW_NETWORK_ERROR")));
         usePadding.setChecked("Y".equals(GameSettings.getInstance().get("VIEW_PADDING")));
+        trackBearing.setChecked("Y".equals(GameSettings.getInstance().get("TRACK_BEARING")));
         int refreshRate=3;
         if (GameSettings.getInstance().get("GPS_RATE")!=null){
             String strRate=GameSettings.getInstance().get("GPS_RATE");

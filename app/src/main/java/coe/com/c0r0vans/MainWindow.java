@@ -342,7 +342,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
             @Override
             public void onClick(View v) {
                 MyGoogleMap.switchZoom();
-                for (GameObject obj : Objects.values()) obj.changeMarkerSize(MyGoogleMap.getClientZoom());
+                for (GameObject obj : Objects.values()) if (obj.getMarker()!=null) obj.changeMarkerSize(MyGoogleMap.getClientZoom());
             }
         });
         Player.getPlayer().addOnChange(new OnGameObjectChange() {

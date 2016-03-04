@@ -48,6 +48,7 @@ public class GameSettings extends HashMap<String,String>{
         put("AUTO_LOGIN","N");
         put("SHOW_NETWORK_ERROR","N");
         put("VIEW_PADDING","N");
+        put("TRACK_BEARING","N");
         put("BEARING","0");
         put("ZOOM","18");
         save();

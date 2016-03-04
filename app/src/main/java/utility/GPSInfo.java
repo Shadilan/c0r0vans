@@ -6,7 +6,6 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -65,6 +64,7 @@ public class GPSInfo {
      * @param mContext Application context
      */
 
+
     private GPSInfo(Context mContext) {
         locationManager = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
         context=mContext;
@@ -73,6 +73,7 @@ public class GPSInfo {
             @Override
 
             public void onLocationChanged(Location location) {
+
                 speed = (int) (location.getSpeed()*60/1000);
                 if (location.getLongitude()!=-1 && location.getLatitude()!=-1) {
                     lat = (int) (location.getLatitude() * 1000000);
