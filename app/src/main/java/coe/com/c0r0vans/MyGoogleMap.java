@@ -77,7 +77,7 @@ public class MyGoogleMap{
                 Log.d("tttt","hasAccuracy"+location.hasAccuracy());
                 Log.d("tttt","getAccuracy"+location.getAccuracy());
 
-                if (trackBearing && location.hasBearing() && location.hasAccuracy() && location.getAccuracy()<20)
+                if (trackBearing && location.hasBearing() && location.hasAccuracy() && location.getAccuracy()<20 && location.getSpeed()>2)
                 {
                     if (Math.round(oldBearing/90)==Math.round(location.getBearing()/90)) {
                         bearing=location.getBearing();
