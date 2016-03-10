@@ -70,21 +70,26 @@ public class GPSInfo {
         context=mContext;
         //Criteria criteria = new Criteria();
         locationListener=new LocationListener() {
+            float accur=1000;
             @Override
-
             public void onLocationChanged(Location location) {
+                boolean doEvent=true;
+                if (location.hasAccuracy() && location.getAccuracy()>accur) doEvent=false;
+                accur=location.getAccuracy();
+                if (doEvent) {
+                    speed = (int) (location.getSpeed() * 60 / 1000);
+                    if (location.getLongitude() != -1 && location.getLatitude() != -1) {
+                        lat = (int) (location.getLatitude() * 1000000);
+                        lng = (int) (location.getLongitude() * 1000000);
+                    }
 
-                speed = (int) (location.getSpeed()*60/1000);
-                if (location.getLongitude()!=-1 && location.getLatitude()!=-1) {
-                    lat = (int) (location.getLatitude() * 1000000);
-                    lng = (int) (location.getLongitude() * 1000000);
-                }
-
-                //RequestUpdate(location.getProvider());
-                if (locationListeners !=null){
-                    if (locationListenersRem !=null) locationListeners.removeAll(locationListenersRem);
-                    for (LocationListener ll:locationListeners){
-                        ll.onLocationChanged(location);
+                    //RequestUpdate(location.getProvider());
+                    if (locationListeners != null) {
+                        if (locationListenersRem != null)
+                            locationListeners.removeAll(locationListenersRem);
+                        for (LocationListener ll : locationListeners) {
+                            ll.onLocationChanged(location);
+                        }
                     }
                 }
             }
