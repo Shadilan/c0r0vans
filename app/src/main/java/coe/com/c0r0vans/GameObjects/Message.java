@@ -37,7 +37,7 @@ public class Message {
         if (jsonObject.has("Time")) time=new Date(jsonObject.getLong("Time"));
         if (jsonObject.has("TargetLat")) lat=jsonObject.getInt("TargetLat");
         if (jsonObject.has("TargetLng")) lng=jsonObject.getInt("TargetLng");
-
+        Log.d("tttt",type);
         if (lat!=0 && lng!=0) {
             target=new LatLng((double)lat/1e6,(double)lng/1e6);
             Log.d("tttt", String.valueOf(lat));

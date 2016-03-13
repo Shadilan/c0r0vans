@@ -74,7 +74,7 @@ public class GPSInfo {
             @Override
             public void onLocationChanged(Location location) {
                 boolean doEvent=true;
-                if (location.hasAccuracy() && location.getAccuracy()>accur) doEvent=false;
+                if (location.hasAccuracy() && location.getAccuracy()>accur+5) doEvent=false;
                 accur=location.getAccuracy();
                 if (doEvent) {
                     speed = (int) (location.getSpeed() * 60 / 1000);
