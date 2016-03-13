@@ -9,6 +9,8 @@ import android.util.Log;
 import java.util.HashMap;
 import java.util.Map;
 
+import coe.com.c0r0vans.GameObjects.GameObject;
+
 /**
  * @author Shadilan
  * НАстройки приложения
@@ -59,18 +61,18 @@ public class GameSettings extends HashMap<String,String>{
         if (bearing!=null) result=Float.parseFloat(bearing);
         return result;
     }
-    public static int getZoom(){
-        int result=18;
+    public static float getZoom(){
+        float result= GameObject.ICON_MEDIUM;
         String zoom=instance.get("ZOOM");
         Log.d("Clientzoom", "Get zoom " + zoom);
-        if (zoom!=null) result=Integer.parseInt(zoom);
+        if (zoom!=null) result=Float.parseFloat(zoom);
         return result;
     }
     public static void setBearing(float bearing){
         instance.put("BEARING", String.valueOf(bearing));
         instance.save();
     }
-    public static void setZoom(int zoom){
+    public static void setZoom(float zoom){
         instance.put("ZOOM", String.valueOf(zoom));
         Log.d("Clientzoom", "Set zoom " + zoom);
         instance.save();

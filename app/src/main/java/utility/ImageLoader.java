@@ -7,8 +7,9 @@ import android.graphics.BitmapFactory;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 
-import coe.com.c0r0vans.R;
 import java.util.HashMap;
+
+import coe.com.c0r0vans.R;
 
 
 /**
@@ -35,6 +36,7 @@ public class ImageLoader {
         createMarker(context, R.mipmap.caravan_e, "caravan_e");
         createMarker(context, R.mipmap.ambush_self, "ambush_self");
         createMarker(context, R.mipmap.ambushbuild, "ambushbuild");
+        createMarker(context, R.mipmap.ambushbuild, "ambushbuild_self");
 
         //Actions
             //City
@@ -73,8 +75,8 @@ public class ImageLoader {
     public static BitmapDescriptor getDescritor(String name) {return  descriptors.get(name);}
     private static void createMarker(Context context,int resource,String name){
         Bitmap b=BitmapFactory.decodeResource(context.getResources(), resource);
-        descriptors.put(name, BitmapDescriptorFactory.fromBitmap(b));
-        descriptors.put(name+"_m",BitmapDescriptorFactory.fromBitmap(Bitmap.createScaledBitmap(b, (int) (b.getWidth() * 0.75), (int) (b.getHeight() * 0.75), false)));
-        descriptors.put(name + "_s", BitmapDescriptorFactory.fromBitmap(Bitmap.createScaledBitmap(b, (int) (b.getWidth() * 0.5), (int) (b.getHeight() * 0.5), false)));
+        descriptors.put(name, BitmapDescriptorFactory.fromBitmap(Bitmap.createScaledBitmap(b, (int) (b.getWidth() * 0.75), (int) (b.getHeight() * 0.75), false)));
+        descriptors.put(name+"_m",BitmapDescriptorFactory.fromBitmap(Bitmap.createScaledBitmap(b, (int) (b.getWidth() * 0.5), (int) (b.getHeight() * 0.5), false)));
+        descriptors.put(name + "_s", BitmapDescriptorFactory.fromBitmap(Bitmap.createScaledBitmap(b, (int) (b.getWidth() * 0.25), (int) (b.getHeight() * 0.25), false)));
     }
 }

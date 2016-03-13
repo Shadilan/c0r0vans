@@ -249,20 +249,14 @@ public class City extends GameObject{
         return Actions;
     }
     @Override
-    public void changeMarkerSize(int Type) {
-        switch (Type){
-            case GameObject.ICON_SMALL: mark.setIcon(ImageLoader.getDescritor("city_s"));
-                break;
-            case GameObject.ICON_MEDIUM: mark.setIcon(ImageLoader.getDescritor("city_m"));
-                break;
-            case GameObject.ICON_LARGE: mark.setIcon(ImageLoader.getDescritor("city"));
-                break;
-            default:mark.setIcon(ImageLoader.getDescritor("city"));
-                Essages.addEssage("Ваш зум не корректен.");
-                break;
+    public void changeMarkerSize(float Type) {
+        if (mark!=null) {
+            String markname = "city";
+            markname = markname + GameObject.zoomToPostfix(Type);
+            mark.setIcon(ImageLoader.getDescritor(markname));
+            if ("Y".equals(GameSettings.getInstance().get("USE_TILT"))) mark.setAnchor(0.5f, 1f);
+            else mark.setAnchor(0.5f, 0.5f);
         }
-        if ("Y".equals(GameSettings.getInstance().get("USE_TILT")))mark.setAnchor(0.5f,1f);
-        else mark.setAnchor(0.5f,0.5f);
     }
 
 

@@ -15,6 +15,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import coe.com.c0r0vans.GameObjects.GameObject;
 import coe.com.c0r0vans.GameObjects.Player;
 import utility.GPSInfo;
 import utility.GameSettings;
@@ -26,17 +27,28 @@ import utility.serverConnect;
 public class MyGoogleMap{
     private static GoogleMap map;
     private static int windowHeight=800;
-    private static int clientZoom = 17;
+    private static float clientZoom = GameObject.ICON_MEDIUM;
     private static boolean moveFixed=true;
     private static Marker targetMarker;
     private static ImageButton showpointButton;
     static float bearing = 0;
+
+    /**
+     * Инициализация карты
+     * @param mMap переменная карты
+     * @param Height размер по вертикали экнара карты
+     */
     public static void init(GoogleMap mMap,int Height){
         map=mMap;
         windowHeight=Height;
         setupMap();
 
     }
+
+    /**
+     * Инициализация кнопки фиксации местоположения
+     * @param button
+     */
     public static void setShowpointButton(ImageButton button){
         showpointButton=button;
         showpointButton.setOnClickListener(new View.OnClickListener() {
@@ -47,6 +59,9 @@ public class MyGoogleMap{
         });
     }
 
+    /**
+     * Настройка карты
+     */
     private static  void setupMap(){
         map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         map.setBuildingsEnabled(false);
@@ -133,82 +148,93 @@ public class MyGoogleMap{
         ).position(new LatLng(0,0)).visible(false);
         targetMarker=map.addMarker(mo);
     }
+
+    /**
+     * Получить объект карты
+     * @return объект карты
+     */
     public static GoogleMap getMap(){
         return map;
     }
 
+    /**
+     * Изменить зум карты
+     */
     public static void switchZoom() {
-        switch (clientZoom) {
-            case 16:
-                clientZoom = 17;
-                break;
-            case 17:
-                clientZoom = 18;
-                break;
-            case 18:
-                clientZoom = 16;
-                break;
-            default:
-                clientZoom = 16;
-        }
+        if (clientZoom==GameObject.ICON_SMALL)
+                clientZoom = GameObject.ICON_MEDIUM;
+        else if (clientZoom==GameObject.ICON_MEDIUM)
+            clientZoom = GameObject.ICON_LARGE;
+        else if (clientZoom==GameObject.ICON_LARGE)
+            clientZoom = GameObject.ICON_SMALL;
+        else clientZoom = GameObject.ICON_SMALL;
         GameSettings.setZoom(clientZoom);
         if (moveFixed) moveCamera(GPSInfo.getInstance().getLatLng());
         else moveCamera(targetPoint);
 
     }
 
-    public static int getClientZoom() {
+    /**
+     *
+     * @return Текущий зум
+     */
+    public static float getClientZoom() {
         return clientZoom;
     }
+
+    /**
+     * Перечитать настройки
+     */
     public static void changeSettings(){
         stopShowPoint();
         moveCamera(map.getCameraPosition().target);
+
+    }
+
+    /**
+     * Изменить местоположение камеры
+     * @param target
+     */
+    private static void moveCamera(LatLng target){
+        moveCamera(target, map.getCameraPosition().bearing);
+    }
+
+    /**
+     * Изменить местоположение камеры
+     * @param target
+     * @param cbearing Угол поворота
+     */
+    private static void moveCamera(LatLng target,float cbearing){
+
+        if (target==null) target=GPSInfo.getInstance().getLatLng();
+        if ("Y".equals(GameSettings.getInstance().get("USE_TILT"))) {
+
+            map.moveCamera(CameraUpdateFactory.newCameraPosition(
+                    new CameraPosition.Builder()
+                            .target(target)
+                            .bearing(cbearing)
+                            .tilt(60)
+                            .zoom(clientZoom)
+                            .build()));
+        }
+        else
+            map.moveCamera(CameraUpdateFactory.newCameraPosition(
+                    new CameraPosition.Builder()
+                            .target(target)
+                            .bearing(cbearing)
+                            .tilt(0)
+                            .zoom(clientZoom)
+                            .build()));
         if ("Y".equals(GameSettings.getInstance().get("VIEW_PADDING"))){
             map.setPadding(0,windowHeight/2,0,40);
         } else map.setPadding(0, 0, 0, 40);
-
-    }
-    private static void moveCamera(LatLng target){
-        if (target==null) target=GPSInfo.getInstance().getLatLng();
-        if ("Y".equals(GameSettings.getInstance().get("USE_TILT")))
-
-            map.moveCamera(CameraUpdateFactory.newCameraPosition(
-                    new CameraPosition.Builder()
-                            .target(target)
-                            .bearing(map.getCameraPosition().bearing)
-                            .tilt(60)
-                            .zoom(clientZoom)
-                            .build()));
-        else
-            map.moveCamera(CameraUpdateFactory.newCameraPosition(
-                    new CameraPosition.Builder()
-                            .target(target)
-                            .bearing(map.getCameraPosition().bearing)
-                            .tilt(0)
-                            .zoom(clientZoom)
-                            .build()));
-    }
-    private static void moveCamera(LatLng target,float cbearing){
-        if (target==null) target=GPSInfo.getInstance().getLatLng();
-        if ("Y".equals(GameSettings.getInstance().get("USE_TILT")))
-
-            map.moveCamera(CameraUpdateFactory.newCameraPosition(
-                    new CameraPosition.Builder()
-                            .target(target)
-                            .bearing(cbearing)
-                            .tilt(60)
-                            .zoom(clientZoom)
-                            .build()));
-        else
-            map.moveCamera(CameraUpdateFactory.newCameraPosition(
-                    new CameraPosition.Builder()
-                            .target(target)
-                            .bearing(cbearing)
-                            .tilt(0)
-                            .zoom(clientZoom)
-                            .build()));
     }
     private static LatLng targetPoint;
+
+    /**
+     * ОФиксировать точку в координатах
+     * @param point
+     */
     public static void showPoint(LatLng point){
         moveFixed=false;
         targetPoint=point;
@@ -221,6 +247,10 @@ public class MyGoogleMap{
         serverConnect.getInstance().RefreshData((int)(point.latitude*1e6),(int) (point.longitude*1e6));
         moveCamera(point);
     }
+
+    /**
+     * Отменить фиксациюточки в координатах
+     */
     public static void stopShowPoint() {
         moveFixed=true;
         moveCamera(GPSInfo.getInstance().getLatLng());

@@ -18,10 +18,20 @@ import coe.com.c0r0vans.R;
  * @author Shadilan
  */
 public class GameObject {
-     public static final int ICON_SMALL = 16;
-    public static final int ICON_MEDIUM = 17;
-    public static final int ICON_LARGE = 18;
-
+     public static final float ICON_SMALL = 15;
+    public static final float ICON_MEDIUM = 16;
+    public static final float ICON_LARGE = 17;
+    public static String zoomToPostfix(float zoom){
+        String result="_m";
+        if (zoom==GameObject.ICON_SMALL)
+            result = "_s";
+        else if (zoom==GameObject.ICON_MEDIUM)
+            result = "_m";
+        else if (zoom==GameObject.ICON_LARGE)
+            result = "";
+        else result = "_m";
+        return result;
+    }
 
     protected Bitmap image;
     protected Marker mark;
@@ -101,7 +111,7 @@ public class GameObject {
     }
 
 
-    public void changeMarkerSize(int Type) {
+    public void changeMarkerSize(float Type) {
         mark.setIcon(BitmapDescriptorFactory.fromResource(R.mipmap.marker));
     }
 

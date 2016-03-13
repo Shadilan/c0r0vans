@@ -193,59 +193,17 @@ public class Ambush extends GameObject {
 
 
     @Override
-    public void changeMarkerSize(int Type) {
-        if (mark!=null) {
-            if (!ready) {
-                switch (Type) {
-                    case GameObject.ICON_SMALL:
-                        mark.setIcon(ImageLoader.getDescritor("ambushbuild_s"));
-                        break;
-                    case GameObject.ICON_MEDIUM:
-                        mark.setIcon(ImageLoader.getDescritor("ambushbuild_m"));
-                        break;
-                    case GameObject.ICON_LARGE:
-                        mark.setIcon(ImageLoader.getDescritor("ambushbuild"));
-                        break;
-                    default:
-                        mark.setIcon(ImageLoader.getDescritor("ambushbuild"));
-                }
-            } else if (isOwner) {
-                switch (Type) {
-                    case GameObject.ICON_SMALL:
-                        mark.setIcon(ImageLoader.getDescritor("ambush_self_s"));
-                        break;
-                    case GameObject.ICON_MEDIUM:
-                        mark.setIcon(ImageLoader.getDescritor("ambush_self_m"));
-                        break;
-                    case GameObject.ICON_LARGE:
-                        mark.setIcon(ImageLoader.getDescritor("ambush_self"));
-                        break;
-                    default:
-                        mark.setIcon(ImageLoader.getDescritor("ambush_self"));
-                        Essages.addEssage("Ваш зум не корректен.");
-                }
-            } else {
-                switch (Type) {
-                    case GameObject.ICON_SMALL:
-                        mark.setIcon(ImageLoader.getDescritor("ambush_s"));
-                        break;
-                    case GameObject.ICON_MEDIUM:
-                        mark.setIcon(ImageLoader.getDescritor("ambush_m"));
-                        break;
-                    case GameObject.ICON_LARGE:
-                        mark.setIcon(ImageLoader.getDescritor("ambush"));
-                        break;
-                    default:
-                        mark.setIcon(ImageLoader.getDescritor("ambush"));
-                        Essages.addEssage("Ваш зум не корректен");
-                }
-            }
+    public void changeMarkerSize(float Type) {
+        if (mark != null) {
+            String markname = "ambush";
+            if (!ready) markname = markname + "build";
+            if (isOwner) markname = markname + "_self";
+            markname = markname + GameObject.zoomToPostfix(Type);
+            mark.setIcon(ImageLoader.getDescritor(markname));
+            if ("Y".equals(GameSettings.getInstance().get("USE_TILT"))) mark.setAnchor(0.5f, 1f);
+            else mark.setAnchor(0.5f, 0.5f);
         }
-        if ("Y".equals(GameSettings.getInstance().get("USE_TILT")))mark.setAnchor(0.5f,1f);
-        else mark.setAnchor(0.5f,0.5f);
     }
-
-
 
     @Override
     public void setVisibility(boolean visibility) {

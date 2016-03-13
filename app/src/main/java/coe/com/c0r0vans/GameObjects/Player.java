@@ -110,7 +110,7 @@ public class Player extends GameObject {
 
 
     @Override
-    public void changeMarkerSize(int Type) {
+    public void changeMarkerSize(float Type) {
         player.mark.setIcon(BitmapDescriptorFactory.fromResource(R.mipmap.marker));
     }
 

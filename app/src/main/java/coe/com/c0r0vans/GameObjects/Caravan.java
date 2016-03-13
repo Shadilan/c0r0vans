@@ -144,30 +144,15 @@ public class Caravan extends GameObject {
         return Actions;
     }
     @Override
-    public void changeMarkerSize(int Type) {
-        if (isOwner)
-        switch (Type){
-            case GameObject.ICON_SMALL: mark.setIcon(ImageLoader.getDescritor("caravan_s"));
-                break;
-            case GameObject.ICON_MEDIUM: mark.setIcon(ImageLoader.getDescritor("caravan_m"));
-                break;
-            case GameObject.ICON_LARGE: mark.setIcon(ImageLoader.getDescritor("caravan"));
-                break;
-            default: mark.setIcon(ImageLoader.getDescritor("caravan"));
-                Essages.addEssage("Ваш зум не корректен.");
-        } else
-            switch (Type){
-                case GameObject.ICON_SMALL: mark.setIcon(ImageLoader.getDescritor("caravan_e_s"));
-                    break;
-                case GameObject.ICON_MEDIUM: mark.setIcon(ImageLoader.getDescritor("caravan_e_m"));
-                    break;
-                case GameObject.ICON_LARGE: mark.setIcon(ImageLoader.getDescritor("caravan_e"));
-                    break;
-                default:mark.setIcon(ImageLoader.getDescritor("caravan_e"));
-                    Essages.addEssage("Ваш зум не корректен.");
-            }
-        if ("Y".equals(GameSettings.getInstance().get("USE_TILT")))mark.setAnchor(0.5f,1f);
-            else mark.setAnchor(0.5f,0.5f);
+    public void changeMarkerSize(float Type) {
+        if (mark!=null) {
+            String markname = "caravan";
+            if (!isOwner) markname = markname + "_e";
+            markname = markname + GameObject.zoomToPostfix(Type);
+            mark.setIcon(ImageLoader.getDescritor(markname));
+            if ("Y".equals(GameSettings.getInstance().get("USE_TILT"))) mark.setAnchor(0.5f, 1f);
+            else mark.setAnchor(0.5f, 0.5f);
+        }
     }
 
     public boolean getIsOwner(){
