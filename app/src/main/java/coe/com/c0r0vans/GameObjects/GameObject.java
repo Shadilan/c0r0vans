@@ -113,6 +113,7 @@ public class GameObject {
 
     public void changeMarkerSize(float Type) {
         mark.setIcon(BitmapDescriptorFactory.fromResource(R.mipmap.marker));
+        mark.setVisible(false);
     }
 
     public int getProgress() {
@@ -120,7 +121,7 @@ public class GameObject {
     }
 
     public void setVisibility(boolean visibility) {
-        if (mark!=null) mark.setVisible(false);
+        if (mark!=null) mark.setVisible(visibility);
     }
 
     public void setMap(GoogleMap map) {

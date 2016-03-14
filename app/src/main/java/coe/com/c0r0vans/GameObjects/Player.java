@@ -121,7 +121,7 @@ public class Player extends GameObject {
 
     @Override
     public void setVisibility(boolean visibility) {
-        mark.setVisible(visibility);
+        mark.setVisible(false);
         circle.setVisible(visibility);
     }
 
@@ -134,7 +134,7 @@ public class Player extends GameObject {
     public Marker getMarker() {
         return mark;
     }
-
+    private Circle circle2;
     public Circle getCircle(){
         return circle;
     }
@@ -142,6 +142,7 @@ public class Player extends GameObject {
     public void setMarker(Marker m) {
         mark=m;
         circle.setCenter(m.getPosition());
+        circle2.setCenter(m.getPosition());
     }
 
 
@@ -402,7 +403,14 @@ public class Player extends GameObject {
         circleOptions.strokeColor(Color.parseColor("#D08D2E"));
         circleOptions.strokeWidth(5);
         circle=map.addCircle(circleOptions);
+        circleOptions=new CircleOptions();
+        circleOptions.center(new LatLng(GPSInfo.getInstance().GetLat() / 1E6, GPSInfo.getInstance().GetLng() / 1E6));
+        circleOptions.radius(5);
+        circleOptions.strokeColor(Color.parseColor("#FF0000"));
+        circleOptions.strokeWidth(5);
+        circle2=map.addCircle(circleOptions);
         changeMarkerSize(MyGoogleMap.getClientZoom());
         mark.setAnchor(0.5f, 0.5f);
+        mark.setVisible(false);
     }
 }
