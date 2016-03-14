@@ -252,10 +252,14 @@ public class City extends GameObject{
     public void changeMarkerSize(float Type) {
         if (mark!=null) {
             String markname = "city";
+            int lvl=(this.Level+1)/2;
+            if (lvl==0) lvl=1;
+            markname = markname + "_"+lvl;
             markname = markname + GameObject.zoomToPostfix(Type);
             mark.setIcon(ImageLoader.getDescritor(markname));
-            if ("Y".equals(GameSettings.getInstance().get("USE_TILT"))) mark.setAnchor(0.5f, 1f);
-            else mark.setAnchor(0.5f, 0.5f);
+            //if ("Y".equals(GameSettings.getInstance().get("USE_TILT"))) mark.setAnchor(0.5f, 1f);
+            //else
+            mark.setAnchor(0.5f, 0.5f);
         }
     }
 

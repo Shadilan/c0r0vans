@@ -30,7 +30,16 @@ public class ImageLoader {
         images.put("closebutton", BitmapFactory.decodeResource(context.getResources(), R.mipmap.closebutton));
         //Markers
         createMarker(context, R.mipmap.marker, "marker");
-        createMarker(context, R.mipmap.city, "city");
+        createMarker(context, R.mipmap.city_1, "city_1");
+        createMarker(context, R.mipmap.city_2, "city_2");
+        createMarker(context, R.mipmap.city_3, "city_3");
+        createMarker(context, R.mipmap.city_4, "city_4");
+        createMarker(context, R.mipmap.city_5, "city_5");
+        createMarker(context, R.mipmap.city_6, "city_6");
+        createMarker(context, R.mipmap.city_7, "city_7");
+        createMarker(context, R.mipmap.city_8, "city_8");
+        createMarker(context, R.mipmap.city_9, "city_9");
+        createMarker(context, R.mipmap.city_10, "city_10");
         createMarker(context, R.mipmap.ambush, "ambush");
         createMarker(context, R.mipmap.caravan, "caravan");
         createMarker(context, R.mipmap.caravan_e, "caravan_e");
@@ -75,7 +84,7 @@ public class ImageLoader {
     public static BitmapDescriptor getDescritor(String name) {return  descriptors.get(name);}
     private static void createMarker(Context context,int resource,String name){
         Bitmap b=BitmapFactory.decodeResource(context.getResources(), resource);
-        descriptors.put(name, BitmapDescriptorFactory.fromBitmap(Bitmap.createScaledBitmap(b, (int) (b.getWidth() * 0.75), (int) (b.getHeight() * 0.75), false)));
+        descriptors.put(name, BitmapDescriptorFactory.fromBitmap(Bitmap.createScaledBitmap(b, b.getWidth() * 1, b.getHeight() * 1, false)));
         descriptors.put(name+"_m",BitmapDescriptorFactory.fromBitmap(Bitmap.createScaledBitmap(b, (int) (b.getWidth() * 0.5), (int) (b.getHeight() * 0.5), false)));
         descriptors.put(name + "_s", BitmapDescriptorFactory.fromBitmap(Bitmap.createScaledBitmap(b, (int) (b.getWidth() * 0.25), (int) (b.getHeight() * 0.25), false)));
     }
