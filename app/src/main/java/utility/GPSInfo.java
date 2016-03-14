@@ -77,7 +77,7 @@ public class GPSInfo {
                 if (location.hasAccuracy() && location.getAccuracy()>accur+5) doEvent=false;
                 accur=location.getAccuracy();
                 if (doEvent) {
-                    speed = (int) (location.getSpeed() * 60 / 1000);
+                    speed = (int) (location.getSpeed() * 60 *60 / 1000);
                     if (location.getLongitude() != -1 && location.getLatitude() != -1) {
                         lat = (int) (location.getLatitude() * 1000000);
                         lng = (int) (location.getLongitude() * 1000000);
