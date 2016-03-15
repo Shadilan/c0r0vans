@@ -123,6 +123,7 @@ public class Player extends GameObject {
     public void setVisibility(boolean visibility) {
         mark.setVisible(false);
         circle.setVisible(visibility);
+        circle2.setVisible(visibility);
     }
 
 

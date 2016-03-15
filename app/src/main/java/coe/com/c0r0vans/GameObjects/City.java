@@ -62,18 +62,19 @@ public class City extends GameObject{
             int Lat=obj.getInt("Lat");
             int Lng=obj.getInt("Lng");
             LatLng latlng=new LatLng(Lat / 1e6, Lng / 1e6);
-            if (mark==null) {
-                setMarker(map.addMarker(new MarkerOptions().position(latlng)));
 
-            } else {
-                mark.setPosition(latlng);
-            }
             if (obj.has("Name")) Name=obj.getString("Name");
             if (obj.has("UpgradeType")) upgrade=obj.getString("UpgradeType");
             if (obj.has("UpgradeName")) upgradeName=obj.getString("UpgradeName");
             if (obj.has("Level")) Level=obj.getInt("Level");
             if (obj.has("Radius")) radius=obj.getInt("Radius");
             if (obj.has("Progress")) progress=obj.getInt("Progress");
+            if (mark==null) {
+                setMarker(map.addMarker(new MarkerOptions().position(latlng)));
+
+            } else {
+                mark.setPosition(latlng);
+            }
             if (zone==null){
                 CircleOptions circleOptions = new CircleOptions();
                 circleOptions.center(latlng);
@@ -86,6 +87,7 @@ public class City extends GameObject{
                 zone.setCenter(latlng);
                 zone.setRadius(radius);
             }
+
             showRadius();
         } catch (JSONException e) {
             e.printStackTrace();
