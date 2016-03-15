@@ -107,8 +107,7 @@ public class MyGoogleMap{
                 if (moveFixed) {
                     moveCamera(target,curBearing);
                 }
-                Player.getPlayer().getMarker().setPosition(target);
-                Player.getPlayer().getCircle().setCenter(target);
+                Player.getPlayer().setPosition(target);
             }
 
             @Override

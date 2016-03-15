@@ -139,11 +139,35 @@ public class Player extends GameObject {
     public Circle getCircle(){
         return circle;
     }
+    public void setPosition(LatLng target){
+        if (mark!=null) mark.setPosition(target);
+        if (circle!=null) circle.setCenter(target);
+        if (circle2!=null) circle2.setCenter(target);
+    }
     @Override
     public void setMarker(Marker m) {
         mark=m;
-        circle.setCenter(m.getPosition());
-        circle2.setCenter(m.getPosition());
+        if (circle!=null) circle.setCenter(m.getPosition());
+        else
+        {
+            CircleOptions circleOptions=new CircleOptions();
+            circleOptions.center(m.getPosition());
+            circleOptions.radius(ActionDistance);
+            circleOptions.strokeColor(Color.parseColor("#D08D2E"));
+            circleOptions.strokeWidth(5);
+            circle=map.addCircle(circleOptions);
+
+        }
+        if (circle2!=null) circle2.setCenter(m.getPosition());
+        else
+        {
+            CircleOptions circleOptions=new CircleOptions();
+            circleOptions.center(m.getPosition());
+            circleOptions.radius(5);
+            circleOptions.strokeColor(Color.parseColor("#FF0000"));
+            circleOptions.strokeWidth(5);
+            circle2=map.addCircle(circleOptions);
+        }
     }
 
 
