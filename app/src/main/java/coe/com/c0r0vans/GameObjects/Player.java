@@ -34,6 +34,8 @@ import utility.serverConnect;
  */
 public class Player extends GameObject {
     private static Player player;
+    private int race=0;
+
     public static void instance(){
         player=new Player();
     }
@@ -186,6 +188,7 @@ public class Player extends GameObject {
             if (obj.has("MostIn")) MostIn=obj.getInt("MostIn");
             if (obj.has("AmbushRadius")) AmbushRadius=obj.getInt("AmbushRadius");
             if (obj.has("ActionDistance")) ActionDistance=obj.getInt("ActionDistance");
+            if (obj.has("Race")) race=obj.getInt("Race");
             circle.setRadius(ActionDistance);
             if (obj.has("Upgrades")){
                 JSONArray upg=obj.getJSONArray("Upgrades");
@@ -437,5 +440,10 @@ public class Player extends GameObject {
         changeMarkerSize(MyGoogleMap.getClientZoom());
         mark.setAnchor(0.5f, 0.5f);
         mark.setVisible(false);
+    }
+
+    public int getRace() {
+        Log.d("tttt","Race:"+race);
+        return race;
     }
 }

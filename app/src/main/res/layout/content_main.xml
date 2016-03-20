@@ -76,7 +76,7 @@
 
                     <GridLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:columnCount="2"
                         android:rowCount="9"
                         android:columnOrderPreserved="true"
@@ -195,10 +195,15 @@
                             android:textSize="20dp"/>
 
 
-
                     </GridLayout>
 
-                </LinearLayout>
+        <ImageView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/factionSymbol"
+            android:layout_gravity="center_horizontal" />
+
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/upgradeLayout"

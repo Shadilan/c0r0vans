@@ -1,10 +1,8 @@
 package utility;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import com.android.volley.Request;
@@ -19,10 +17,8 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Queue;
 
 import coe.com.c0r0vans.GameObjects.ObjectAction;
-import coe.com.c0r0vans.Settings;
 
 /**
  * Объект обеспечивающий соединение с сервером и взаимодействие с сервером. Singleton.
@@ -329,5 +325,46 @@ public class serverConnect {
      */
     public boolean isLogin(){
         return Token != null;
+    }
+
+    public boolean setRace(int race){
+
+        if (!checkConnection()) return false;
+        if (Token==null) return false;
+
+        String url=ServerAddres+"/getdata.jsp"+"?Token="+Token+"&ReqName=SetRace&Race="+race;
+        Log.d("Debug info", "Connection url:" + url);
+        if ("Y".equals(GameSettings.getInstance().get("NET_DEBUG"))) Essages.addEssage("Net:"+url);
+        Response.Listener<JSONObject> l=new Response.Listener<JSONObject>(){
+            @Override
+            public void onResponse(JSONObject response) {
+                clearListener();
+                if (response.has("Error")){
+                    for (ServerListener l:listeners) l.onError(response);
+                } else {
+                    getPlayerInfo();
+                    if (response.has("Result")) try {
+                        Log.d("Debug info",response.getString("Result"));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+            }
+        };
+        Response.ErrorListener le=new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("Ubnexpected Error",error.toString());
+                for (ServerListener l:listeners) l.onError(formResponse(error.toString()));
+                //if ("Y".equals(GameSettings.getInstance().get("SHOW_NETWORK_ERROR"))) Essages.addEssage(error.toString());
+            }
+        };
+
+
+        final JsonObjectRequest jsObjRequest = new JsonObjectRequest
+                (Request.Method.GET, url, null,l , le);
+        reqq.add(jsObjRequest);
+        return true;
     }
 }

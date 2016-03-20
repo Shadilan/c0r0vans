@@ -274,6 +274,10 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
             @Override
             public void onPlayerInfo(JSONObject response) {
                 Player.getPlayer().loadJSON(response);
+                if (Player.getPlayer().getRace()<1 || Player.getPlayer().getRace()>3)
+                {
+                    ((ChooseFaction) findViewById(R.id.chooseFaction)).show();
+                }
                 timeToPlayerRefresh = 6;
             }
 
@@ -515,5 +519,17 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
         }
 
 
+    }
+    public void firstFactionClick(View v){
+        Log.d("tttt", "First Faction");
+        ((ChooseFaction)findViewById(R.id.chooseFaction)).hide();
+    }
+    public void secondFactionClick(View v){
+        Log.d("tttt","Second Faction");
+        ((ChooseFaction)findViewById(R.id.chooseFaction)).hide();
+    }
+    public void thirdFactionClick(View v){
+        Log.d("tttt", "Third Faction");
+        ((ChooseFaction)findViewById(R.id.chooseFaction)).hide();
     }
 }

@@ -20,6 +20,7 @@ public class Message {
     private String state;
     private LatLng target;
     private Date time;
+    public boolean notify=true;
     private MessageMap parent;
     public void remove(){
         if (parent!=null) parent.remove(GUID);
@@ -37,6 +38,7 @@ public class Message {
         if (jsonObject.has("Time")) time=new Date(jsonObject.getLong("Time"));
         if (jsonObject.has("TargetLat")) lat=jsonObject.getInt("TargetLat");
         if (jsonObject.has("TargetLng")) lng=jsonObject.getInt("TargetLng");
+        if (jsonObject.has("notify")) notify=jsonObject.getBoolean("notify"); else notify=true;
         Log.d("tttt",type);
         if (lat!=0 && lng!=0) {
             target=new LatLng((double)lat/1e6,(double)lng/1e6);
@@ -51,6 +53,7 @@ public class Message {
         if (type!=null)result.put("Type",type);
         if (state!=null)result.put("State",state);
         if (time!=null)result.put("Time",time.getTime());
+        result.put("notify",false);
         if (target!=null) {
             result.put("TargetLat", (int) (target.latitude * 1e6));
             result.put("TargetLng", (int) (target.longitude * 1e6));

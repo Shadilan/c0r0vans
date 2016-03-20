@@ -219,6 +219,16 @@ public class InfoLayout extends RelativeLayout implements ShowHideForm{
             info.setSingleLine(true);
 
         }
+        if (Player.getPlayer().getRace()==1){
+            ImageView img= (ImageView) findViewById(R.id.factionSymbol);
+            img.setImageResource(R.mipmap.guild);
+        }else if (Player.getPlayer().getRace()==2){
+            ImageView img= (ImageView) findViewById(R.id.factionSymbol);
+            img.setImageResource(R.mipmap.alliance);
+        }else if (Player.getPlayer().getRace()==3){
+            ImageView img= (ImageView) findViewById(R.id.factionSymbol);
+            img.setImageResource(R.mipmap.legue);
+        }
 
     }
     public void Show(){

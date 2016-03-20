@@ -30,6 +30,10 @@ public class City extends GameObject{
     private int radius=100;
     private String upgrade;
     private String upgradeName;
+    private int influence1=0;
+    private int influence2=0;
+    private int influence3=0;
+
 
     private Circle zone;
 
@@ -69,6 +73,9 @@ public class City extends GameObject{
             if (obj.has("Level")) Level=obj.getInt("Level");
             if (obj.has("Radius")) radius=obj.getInt("Radius");
             if (obj.has("Progress")) progress=obj.getInt("Progress");
+            if (obj.has("Influence1")) influence1=obj.getInt("Influence1");
+            if (obj.has("Influence2")) influence1=obj.getInt("Influence2");
+            if (obj.has("Influence3")) influence1=obj.getInt("Influence3");
             if (mark==null) {
                 setMarker(map.addMarker(new MarkerOptions().position(latlng)));
 
