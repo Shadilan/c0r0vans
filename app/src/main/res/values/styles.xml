@@ -28,4 +28,29 @@
         <item name="android:maxHeight">48dp</item>
 
         </style>
+
+    <style name="FactionSelected">
+        <item name="android:capitalize">characters</item>
+        <item name="android:typeface">monospace</item>
+        <item name="android:shadowDx">1.2</item>
+        <item name="android:shadowDy">1.2</item>
+        <item name="android:shadowRadius">2</item>
+        <item name="android:gravity" >center</item>
+        <item name="android:layout_margin" >3dp</item>
+        <item name="android:background">#000000</item>
+        <item name="android:shadowColor" >#7b000000</item>
+    </style>
+    <style name="FactionUnSelected">
+        <item name="android:capitalize">characters</item>
+        <item name="android:typeface">monospace</item>
+        <item name="android:shadowDx">1.2</item>
+        <item name="android:shadowDy">1.2</item>
+        <item name="android:shadowRadius">2</item>
+        <item name="android:gravity" >center</item>
+        <item name="android:layout_margin" >3dp</item>
+        <item name="android:background">#ffffff</item>
+        <item name="android:shadowColor" >#7b000000</item>
+    </style>
+
+
 </resources>

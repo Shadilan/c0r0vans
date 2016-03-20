@@ -1,7 +1,6 @@
 package coe.com.c0r0vans;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.Button;
@@ -37,11 +36,11 @@ public class ChooseFaction extends RelativeLayout {
             @Override
             public void onClick(View v) {
                 ImageButton btn= (ImageButton) findViewById(R.id.firstFaction);
-                btn.setBackgroundColor(Color.BLACK);
+                btn.setBackgroundResource(R.drawable.factionsel);
                 btn= (ImageButton) findViewById(R.id.secondFaction);
-                btn.setBackgroundColor(Color.WHITE);
+                btn.setBackgroundResource(R.drawable.faction);
                 btn= (ImageButton) findViewById(R.id.thirdFaction);
-                btn.setBackgroundColor(Color.WHITE);
+                btn.setBackgroundResource(R.drawable.faction);
                 TextView txt= (TextView) findViewById(R.id.factionName);
                 txt.setText(R.string.guild_name);
                 txt= (TextView) findViewById(R.id.factionDesc);
@@ -54,11 +53,11 @@ public class ChooseFaction extends RelativeLayout {
             @Override
             public void onClick(View v) {
                 ImageButton btn= (ImageButton) findViewById(R.id.firstFaction);
-                btn.setBackgroundColor(Color.WHITE);
+                btn.setBackgroundResource(R.drawable.faction);
                 btn= (ImageButton) findViewById(R.id.secondFaction);
-                btn.setBackgroundColor(Color.BLACK);
+                btn.setBackgroundResource(R.drawable.factionsel);
                 btn= (ImageButton) findViewById(R.id.thirdFaction);
-                btn.setBackgroundColor(Color.WHITE);
+                btn.setBackgroundResource(R.drawable.faction);
                 TextView txt= (TextView) findViewById(R.id.factionName);
                 txt.setText(R.string.alliance_name);
                 txt= (TextView) findViewById(R.id.factionDesc);
@@ -71,11 +70,11 @@ public class ChooseFaction extends RelativeLayout {
             @Override
             public void onClick(View v) {
                 ImageButton btn= (ImageButton) findViewById(R.id.firstFaction);
-                btn.setBackgroundColor(Color.WHITE);
+                btn.setBackgroundResource(R.drawable.faction);
                 btn= (ImageButton) findViewById(R.id.secondFaction);
-                btn.setBackgroundColor(Color.WHITE);
+                btn.setBackgroundResource(R.drawable.faction);
                 btn= (ImageButton) findViewById(R.id.thirdFaction);
-                btn.setBackgroundColor(Color.BLACK);
+                btn.setBackgroundResource(R.drawable.factionsel);
                 TextView txt= (TextView) findViewById(R.id.factionName);
                 txt.setText(R.string.legue_name);
                 txt= (TextView) findViewById(R.id.factionDesc);
