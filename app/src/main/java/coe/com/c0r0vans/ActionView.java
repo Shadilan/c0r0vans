@@ -193,7 +193,7 @@ public class ActionView extends LinearLayout {
     }
     boolean inZone=false;
     private void reloadActions(){
-        boolean inZone=false;
+        boolean inZone;
         float[] distances = new float[1];
         Location.distanceBetween(SelectedObject.getInstance().getTarget().getMarker().getPosition().latitude,
                 SelectedObject.getInstance().getTarget().getMarker().getPosition().longitude,

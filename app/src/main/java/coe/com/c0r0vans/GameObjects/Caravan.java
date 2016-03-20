@@ -28,7 +28,7 @@ public class Caravan extends GameObject {
     private String startName;
     private String finishName;
 
-    private boolean isOwner=false;
+    private int faction=0;
     private double speed=20;
 
     public Caravan(GoogleMap map,JSONObject obj) throws JSONException {
@@ -52,7 +52,7 @@ public class Caravan extends GameObject {
             int Lat=obj.getInt("Lat");
             int Lng=obj.getInt("Lng");
             LatLng latlng=new LatLng(Lat / 1e6, Lng / 1e6);
-            if (obj.has("Owner")) isOwner=obj.getBoolean("Owner");
+            if (obj.has("Owner")) faction=obj.getInt("Owner");
             if (obj.has("StartName")) startName=obj.getString("StartName");
             if (obj.has("FinishName")) finishName=obj.getString("FinishName");
             if (obj.has("Speed")) speed=obj.getDouble("Speed");
@@ -95,7 +95,7 @@ public class Caravan extends GameObject {
     public String getInfo() {
         String tushkan="";
         if (Math.random()*1000<3) tushkan="На крыше видна тень кого-то невидимого.";
-        if (isOwner) if (speed>0) return "Ваш караван направляется из города "+startName+" в город "+finishName +", готовясь принести вам золото."+tushkan;
+        if (faction==0) if (speed>0) return "Ваш караван направляется из города "+startName+" в город "+finishName +", готовясь принести вам золото."+tushkan;
         else return "Ваш караван направляется из города "+finishName+" в город "+startName +", готовясь принести вам золото."+tushkan;
             else return "Чейто караван проезжает, звеня не ВАШИМ золотом.";
     }
@@ -147,7 +147,7 @@ public class Caravan extends GameObject {
     public void changeMarkerSize(float Type) {
         if (mark!=null) {
             String markname = "caravan";
-            if (!isOwner) markname = markname + "_e";
+            markname=markname+"_"+faction;
             markname = markname + GameObject.zoomToPostfix(Type);
             mark.setIcon(ImageLoader.getDescritor(markname));
             if ("Y".equals(GameSettings.getInstance().get("USE_TILT"))) mark.setAnchor(0.5f, 1f);
@@ -155,7 +155,7 @@ public class Caravan extends GameObject {
         }
     }
 
-    public boolean getIsOwner(){
-        return isOwner;
+    public int getIsOwner(){
+        return faction;
     }
 }

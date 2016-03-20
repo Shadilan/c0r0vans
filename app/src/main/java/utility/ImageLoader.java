@@ -40,12 +40,22 @@ public class ImageLoader {
         createMarker(context, R.mipmap.city_8, "city_8");
         createMarker(context, R.mipmap.city_9, "city_9");
         createMarker(context, R.mipmap.city_10, "city_10");
-        createMarker(context, R.mipmap.ambush, "ambush");
-        createMarker(context, R.mipmap.caravan, "caravan");
-        createMarker(context, R.mipmap.caravan_e, "caravan_e");
-        createMarker(context, R.mipmap.ambush_self, "ambush_self");
-        createMarker(context, R.mipmap.ambushbuild, "ambushbuild");
-        createMarker(context, R.mipmap.ambushbuild, "ambushbuild_self");
+        createMarker(context, R.mipmap.ambush, "ambush_0");
+        createMarker(context, R.mipmap.ambush, "ambush_1");
+        createMarker(context, R.mipmap.ambush, "ambush_2");
+        createMarker(context, R.mipmap.ambush, "ambush_3");
+        createMarker(context, R.mipmap.ambush, "ambush_4");
+        createMarker(context, R.mipmap.ambushbuild, "ambush_build_0");
+        createMarker(context, R.mipmap.ambushbuild, "ambush_build_1");
+        createMarker(context, R.mipmap.ambushbuild, "ambush_build_2");
+        createMarker(context, R.mipmap.ambushbuild, "ambush_build_3");
+        createMarker(context, R.mipmap.ambushbuild, "ambush_build_4");
+        createMarker(context, R.mipmap.caravan, "caravan_0");
+        createMarker(context, R.mipmap.caravan, "caravan_1");
+        createMarker(context, R.mipmap.caravan, "caravan_2");
+        createMarker(context, R.mipmap.caravan, "caravan_3");
+        createMarker(context, R.mipmap.caravan, "caravan_4");
+
 
         //Actions
             //City

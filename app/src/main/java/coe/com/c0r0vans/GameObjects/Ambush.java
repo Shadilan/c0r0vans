@@ -28,7 +28,7 @@ import utility.ImageLoader;
 public class Ambush extends GameObject {
 
 
-    private boolean isOwner;
+    private int faction;
     private int radius=30;
     private Circle zone;
 
@@ -65,7 +65,8 @@ public class Ambush extends GameObject {
             int Lat=obj.getInt("Lat");
             int Lng=obj.getInt("Lng");
             LatLng latlng=new LatLng(Lat / 1e6, Lng / 1e6);
-            if (obj.has("Owner")) isOwner=obj.getBoolean("Owner");
+            if (obj.has("Owner")) faction=obj.getInt("Owner");
+            if (faction<0 ||faction>4) faction=4;
             if (obj.has("Radius")) radius=obj.getInt("Radius");
             if (obj.has("Ready")) ready=obj.getBoolean("Ready");
             if (obj.has("Progress")) progress=obj.getInt("Progress");
@@ -80,8 +81,22 @@ public class Ambush extends GameObject {
                 CircleOptions circleOptions = new CircleOptions();
                 circleOptions.center(latlng);
                 circleOptions.radius(radius);
-                if (isOwner) circleOptions.strokeColor(Color.BLUE);
-                else circleOptions.strokeColor(Color.RED);
+                switch (faction){
+                    case 0:
+                        circleOptions.strokeColor(Color.BLUE);
+                        break;
+                    case 1:
+                        circleOptions.strokeColor(Color.MAGENTA);
+                        break;
+                    case 2:
+                        circleOptions.strokeColor(Color.RED);
+                        break;
+                    case 3:
+                        circleOptions.strokeColor(Color.YELLOW);
+                        break;
+                    default:
+                        circleOptions.strokeColor(Color.GREEN);
+                }
                 circleOptions.strokeWidth(2);
                 zone = map.addCircle(circleOptions);
             } else
@@ -104,7 +119,7 @@ public class Ambush extends GameObject {
 
     @Override
     public String getInfo() {
-        if (isOwner)
+        if (faction==0)
         return "Ваши верные войны ждут здесь вражеских контрабандистов в Засаде.";
         else return "Засада ожидает здесь не осторожных караванщиков.";
     }
@@ -116,7 +131,7 @@ public class Ambush extends GameObject {
     public ArrayList<ObjectAction> getActions(boolean inZone) {
         ArrayList<ObjectAction> Actions=new ArrayList<>();
         if (removeAmbush==null){
-            if (isOwner)
+            if (faction==0)
             removeAmbush = new ObjectAction(this) {
                 @Override
                 public Bitmap getImage() {
@@ -150,7 +165,7 @@ public class Ambush extends GameObject {
                     owner.getMarker().setVisible(true);zone.setVisible(true);
                 }
             };
-            else
+            else if (faction!=Player.getPlayer().getRace())
                 removeAmbush = new ObjectAction(this) {
                     @Override
                     public Bitmap getImage() {
@@ -187,7 +202,7 @@ public class Ambush extends GameObject {
                 };
 
         }
-        if ((isOwner || inZone) && removeAmbush.isEnabled()) Actions.add(removeAmbush);
+        if ((faction==0 || inZone) && removeAmbush.isEnabled()) Actions.add(removeAmbush);
         return Actions;
     }
 
@@ -196,8 +211,8 @@ public class Ambush extends GameObject {
     public void changeMarkerSize(float Type) {
         if (mark != null) {
             String markname = "ambush";
-            if (!ready) markname = markname + "build";
-            if (isOwner) markname = markname + "_self";
+            if (!ready) markname = markname + "_build";
+            markname = markname + "_"+faction;
             markname = markname + GameObject.zoomToPostfix(Type);
             mark.setIcon(ImageLoader.getDescritor(markname));
             if ("Y".equals(GameSettings.getInstance().get("USE_TILT"))) mark.setAnchor(0.5f, 1f);
@@ -220,8 +235,8 @@ public class Ambush extends GameObject {
             zone.setVisible(false);
         }
     }
-    public boolean getIsOwner(){
-        return isOwner;
+    public int getIsOwner(){
+        return faction;
     }
 
 }
