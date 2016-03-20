@@ -147,6 +147,7 @@ public class Caravan extends GameObject {
     public void changeMarkerSize(float Type) {
         if (mark!=null) {
             String markname = "caravan";
+            if (faction<0 || faction>4) faction=4;
             markname=markname+"_"+faction;
             markname = markname + GameObject.zoomToPostfix(Type);
             mark.setIcon(ImageLoader.getDescritor(markname));

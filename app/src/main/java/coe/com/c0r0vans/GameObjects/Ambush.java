@@ -214,6 +214,7 @@ public class Ambush extends GameObject {
             if (!ready) markname = markname + "_build";
             markname = markname + "_"+faction;
             markname = markname + GameObject.zoomToPostfix(Type);
+            Log.d("tttt",markname);
             mark.setIcon(ImageLoader.getDescritor(markname));
             if ("Y".equals(GameSettings.getInstance().get("USE_TILT"))) mark.setAnchor(0.5f, 1f);
             else mark.setAnchor(0.5f, 0.5f);
