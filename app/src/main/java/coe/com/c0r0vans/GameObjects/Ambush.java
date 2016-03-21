@@ -32,7 +32,7 @@ public class Ambush extends GameObject {
     private int radius=30;
     private Circle zone;
 
-    private boolean ready=true;
+    private int ready=0;
 
     public  Ambush(GoogleMap map){
         this.map=map;
@@ -68,7 +68,7 @@ public class Ambush extends GameObject {
             if (obj.has("Owner")) faction=obj.getInt("Owner");
             if (faction<0 ||faction>4) faction=4;
             if (obj.has("Radius")) radius=obj.getInt("Radius");
-            if (obj.has("Ready")) ready=obj.getBoolean("Ready");
+            if (obj.has("Ready")) ready=obj.getInt("Ready");
             if (obj.has("Progress")) progress=obj.getInt("Progress");
             if (obj.has("Name")) Name="Засада "+obj.getString("Name");
             if (mark==null) {
@@ -119,9 +119,34 @@ public class Ambush extends GameObject {
 
     @Override
     public String getInfo() {
-        if (faction==0)
-        return "Ваши верные войны ждут здесь вражеских контрабандистов в Засаде.";
-        else return "Засада ожидает здесь не осторожных караванщиков.";
+        if (faction==0) {
+            if (ready < 0)
+                return "Ваши верные войны разбивают здесь засаду. Работать еще " + (ready * -1) + " минут.";
+            else if (ready / 60 > 2)
+                return "Ваши верные войны ждут здесь вражеских контрабандистов в Засаде. Стоят уже" + (Math.round(ready / 60)) + "часов.";
+            else if (ready / 60 / 24 > 2)
+                return "Ваши верные войны ждут здесь вражеских контрабандистов в Засаде. Стоят уже" + (Math.round(ready / 60 / 24)) + "дней.";
+            else return "Ваши верные войны ждут здесь вражеских контрабандистов в Засаде.";
+        }
+        else if (faction==Player.getPlayer().getRace()){
+            if (ready < 0)
+                return "Ваши соратники разбивают здесь засаду. Работать еще " + (ready * -1) + " минут.";
+            else if (ready / 60 > 2)
+                return "Ваши соратники ждут здесь вражеских контрабандистов в Засаде. По виду стоят уже " + (Math.round(ready / 60)) + "часов.";
+            else if (ready / 60 / 24 > 2)
+                return "Ваши соратники ждут здесь вражеских контрабандистов в Засаде. По виду стоят уже" + (Math.round(ready / 60 / 24)) + "дней.";
+            else return "Ваши соратники ждут здесь вражеских контрабандистов в Засаде.";
+        } else {
+            if (ready < 0)
+                return "Ваши соратники разбивают здесь засаду. Работать еще " + (ready * -1) + " минут.";
+            else if (ready / 60 > 2)
+                return "Засада ожидает здесь не осторожных караванщиков. По виду стоят уже " + (Math.round(ready / 60)) + "часов.";
+            else if (ready / 60 / 24 > 2)
+                return "Ваши соратники ждут здесь вражеских контрабандистов в Засаде. По виду стоят уже " + (Math.round(ready / 60 / 24)) + "дней.";
+            else return "Ваши соратники ждут здесь вражеских контрабандистов в Засаде.";
+        }
+
+
     }
 
     ObjectAction removeAmbush;
@@ -211,7 +236,7 @@ public class Ambush extends GameObject {
     public void changeMarkerSize(float Type) {
         if (mark != null) {
             String markname = "ambush";
-            if (!ready) markname = markname + "_build";
+            if (ready<0) markname = markname + "_build";
             if (faction==0) markname=markname+"_"+faction+Player.getPlayer().getRace();
             else markname = markname + "_"+faction;
             markname = markname + GameObject.zoomToPostfix(Type);
