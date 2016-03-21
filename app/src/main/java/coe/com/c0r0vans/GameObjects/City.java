@@ -45,10 +45,7 @@ public class City extends GameObject{
         image=ImageLoader.getImage("city");
 
         mark=map.addMarker(new MarkerOptions().position(new LatLng(Lat / 1e6, Lng / 1e6)));
-        changeMarkerSize(MyGoogleMap.getClientZoom());
         loadJSON(obj);
-
-
     }
 
 
@@ -81,6 +78,7 @@ public class City extends GameObject{
 
             } else {
                 mark.setPosition(latlng);
+                changeMarkerSize(MyGoogleMap.getClientZoom());
             }
             if (zone==null){
                 CircleOptions circleOptions = new CircleOptions();
