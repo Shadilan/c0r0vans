@@ -202,7 +202,7 @@ public class Ambush extends GameObject {
                 };
 
         }
-        if ((faction==0 || inZone) && removeAmbush.isEnabled()) Actions.add(removeAmbush);
+        if ((faction==0 || inZone) && removeAmbush.isEnabled() && faction!=Player.getPlayer().getRace()) Actions.add(removeAmbush);
         return Actions;
     }
 
@@ -212,7 +212,8 @@ public class Ambush extends GameObject {
         if (mark != null) {
             String markname = "ambush";
             if (!ready) markname = markname + "_build";
-            markname = markname + "_"+faction;
+            if (faction==0) markname=markname+"_"+faction+Player.getPlayer().getRace();
+            else markname = markname + "_"+faction;
             markname = markname + GameObject.zoomToPostfix(Type);
             Log.d("tttt",markname);
             mark.setIcon(ImageLoader.getDescritor(markname));

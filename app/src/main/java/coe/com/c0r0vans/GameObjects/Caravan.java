@@ -148,7 +148,8 @@ public class Caravan extends GameObject {
         if (mark!=null) {
             String markname = "caravan";
             if (faction<0 || faction>4) faction=4;
-            markname=markname+"_"+faction;
+            if (faction==0) markname=markname+"_"+faction+Player.getPlayer().getRace();
+            else markname=markname+"_"+faction;
             markname = markname + GameObject.zoomToPostfix(Type);
             mark.setIcon(ImageLoader.getDescritor(markname));
             if ("Y".equals(GameSettings.getInstance().get("USE_TILT"))) mark.setAnchor(0.5f, 1f);

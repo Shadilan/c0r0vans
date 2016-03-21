@@ -489,7 +489,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
         }
         else
         {
-            super.onBackPressed();
+           Essages.addEssage("Для выхода из приложения используйте кнопку Home.");
         }
     }
     static Bundle outState;
