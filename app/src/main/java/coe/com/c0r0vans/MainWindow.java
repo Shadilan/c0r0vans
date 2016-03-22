@@ -119,12 +119,17 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
      */
     @Override
     public void onMapReady(GoogleMap googleMap) {
+        try{
         Point size=new Point();
         getWindowManager().getDefaultDisplay().getSize(size);
         MyGoogleMap.init(googleMap, size.y);
         MyGoogleMap.setShowpointButton((ImageButton) findViewById(R.id.showPosButton));
         Player.getPlayer().setMap(MyGoogleMap.getMap());
         createListeners();
+        }
+        catch (Exception e){
+            Essages.addEssage("Resume UNEXPECTED:"+e.toString());
+        }
     }
     boolean isListenersDone=false;
     /**
@@ -400,12 +405,16 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
      */
     private void StartTickTimer() {
         int delay = 1000;
+        try {
+            if (serverConnect.getInstance().isLogin() && (timeToPlayerRefresh != -1) && GPSInfo.getInstance().GetLat() != -1 && GPSInfo.getInstance().GetLng() != -1) {
+                Log.d("Debug info", "Speed:" + GPSInfo.getInstance().getSpeed());
+                if (GPSInfo.getInstance().getSpeed() < 30) delay = 40000;
+                else if (GPSInfo.getInstance().getSpeed() > 30) delay = 20000;
 
-        if (serverConnect.getInstance().isLogin() && (timeToPlayerRefresh!=-1) && GPSInfo.getInstance().GetLat()!=-1 && GPSInfo.getInstance().GetLng()!=-1) {
-            Log.d("Debug info","Speed:"+GPSInfo.getInstance().getSpeed());
-            if (GPSInfo.getInstance().getSpeed() < 30) delay = 40000;
-            else if (GPSInfo.getInstance().getSpeed() > 30) delay = 20000;
-
+            }
+        }
+        catch (Exception e){
+            Essages.addEssage("TickTimer UNEXPECTED:"+e.toString());
         }
         Log.d("DebugCall", "postDelayed");
         Log.d("Debug info","Delay:"+delay);
@@ -425,20 +434,25 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
 
     int timeToPlayerRefresh=-1;
     private void Tick() {
-        Log.d("Debug info","Time to refresh");
-        if (serverConnect.getInstance().isLogin() && this.hasWindowFocus()
-                && GPSInfo.getInstance().GetLat()!=-1 && GPSInfo.getInstance().GetLng()!=-1)
-            if (timeToPlayerRefresh<1) {
-                serverConnect.getInstance().RefreshData((int)(MyGoogleMap.getMap().getCameraPosition().target.latitude*1e6), (int)(MyGoogleMap.getMap().getCameraPosition().target.longitude*1e6));
-                serverConnect.getInstance().getPlayerInfo();
+        try {
+            Log.d("Debug info", "Time to refresh");
+            if (serverConnect.getInstance().isLogin() && this.hasWindowFocus()
+                    && GPSInfo.getInstance().GetLat() != -1 && GPSInfo.getInstance().GetLng() != -1)
+                if (timeToPlayerRefresh < 1) {
+                    serverConnect.getInstance().RefreshData((int) (MyGoogleMap.getMap().getCameraPosition().target.latitude * 1e6), (int) (MyGoogleMap.getMap().getCameraPosition().target.longitude * 1e6));
+                    serverConnect.getInstance().getPlayerInfo();
 
-                timeToPlayerRefresh = 6;
-            } else {
-                SendedRequest++;
-                if (SendedRequest > 1) connect_img.setVisibility(View.VISIBLE);
-                timeToPlayerRefresh--;
-                serverConnect.getInstance().RefreshData((int)(MyGoogleMap.getMap().getCameraPosition().target.latitude*1e6), (int)(MyGoogleMap.getMap().getCameraPosition().target.longitude*1e6));
-            }
+                    timeToPlayerRefresh = 6;
+                } else {
+                    SendedRequest++;
+                    if (SendedRequest > 1) connect_img.setVisibility(View.VISIBLE);
+                    timeToPlayerRefresh--;
+                    serverConnect.getInstance().RefreshData((int) (MyGoogleMap.getMap().getCameraPosition().target.latitude * 1e6), (int) (MyGoogleMap.getMap().getCameraPosition().target.longitude * 1e6));
+                }
+        }
+        catch (Exception e){
+            Essages.addEssage("Tick UNEXPECTED:"+e.toString());
+        }
         StartTickTimer();
     }
     private Runnable messageRequest=new Runnable() {
@@ -465,15 +479,20 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
     @Override
     protected void onResume() {
         super.onResume();
-        Log.d("DebugCall", "ResumeCall");
-        MessageNotification.appActive=true;
-        StartTickTimer();
-        GameSound.playMusic();
-        //if (!"Y".equals(GameSettings.getInstance().get("GPS_ON_BACK")))
+        try {
+            Log.d("DebugCall", "ResumeCall");
+            MessageNotification.appActive = true;
+            StartTickTimer();
+            GameSound.playMusic();
+            //if (!"Y".equals(GameSettings.getInstance().get("GPS_ON_BACK")))
             GPSInfo.getInstance().onGPS();
-        if (serverConnect.getInstance().isLogin() && this.hasWindowFocus()
-                && GPSInfo.getInstance().GetLat()!=-1 && GPSInfo.getInstance().GetLng()!=-1)
-            serverConnect.getInstance().RefreshCurrent();
+            if (serverConnect.getInstance().isLogin() && this.hasWindowFocus()
+                    && GPSInfo.getInstance().GetLat() != -1 && GPSInfo.getInstance().GetLng() != -1)
+                serverConnect.getInstance().RefreshCurrent();
+        }
+        catch (Exception e){
+            Essages.addEssage("Resume UNEXPECTED:"+e.toString());
+        }
     }
 
     @Override
@@ -492,49 +511,40 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
            Essages.addEssage("Для выхода из приложения используйте кнопку Home.");
         }
     }
-    static Bundle outState;
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
         super.onActivityResult(requestCode, resultCode, data);
+        try {
+            switch (requestCode) {
+                case (SETTINGS_CALL): {
 
-        switch (requestCode) {
-            case (SETTINGS_CALL): {
+                    if (resultCode == Activity.RESULT_OK) {
 
-                if (resultCode == Activity.RESULT_OK) {
-
-                    for (GameObject o:Objects.values()){
-                        if (o instanceof Ambush){
-                            ((Ambush) o).showRadius();
-                        } else if (o instanceof City)
-                        {
-                            ((City) o).showRadius();
+                        for (GameObject o : Objects.values()) {
+                            if (o instanceof Ambush) {
+                                ((Ambush) o).showRadius();
+                            } else if (o instanceof City) {
+                                ((City) o).showRadius();
+                            }
+                            o.changeMarkerSize(MyGoogleMap.getClientZoom());
                         }
-                        o.changeMarkerSize(MyGoogleMap.getClientZoom());
+                        Player.getPlayer().showRoute();
+                        MyGoogleMap.changeSettings();
+
+
+                        GameSound.updateSettings();
+
                     }
-                    Player.getPlayer().showRoute();
-                    MyGoogleMap.changeSettings();
-
-
-                    GameSound.updateSettings();
-
+                    break;
                 }
-                break;
             }
+        }
+        catch (Exception e){
+            Essages.addEssage("Activity Result UNEXPECTED:"+e.toString());
         }
 
 
     }
-    public void firstFactionClick(View v){
-        Log.d("tttt", "First Faction");
-        ((ChooseFaction)findViewById(R.id.chooseFaction)).hide();
-    }
-    public void secondFactionClick(View v){
-        Log.d("tttt","Second Faction");
-        ((ChooseFaction)findViewById(R.id.chooseFaction)).hide();
-    }
-    public void thirdFactionClick(View v){
-        Log.d("tttt", "Third Faction");
-        ((ChooseFaction)findViewById(R.id.chooseFaction)).hide();
-    }
+
 }

@@ -114,6 +114,7 @@ public class serverConnect {
                     public void onResponse(JSONObject response) {
                         try {
                             clearListener();
+
                             if (response.has("Error")){
                                 for (ServerListener l:listeners) l.onError(response);
                             } else {
@@ -122,13 +123,22 @@ public class serverConnect {
                             }
                         } catch (JSONException e) {
                             for (ServerListener l:listeners) l.onError(formResponse(response.toString()));
+                        } catch (Exception e)
+                        {
+                            Essages.addEssage("Login UE:"+e.toString());
                         }
 
                     }
                 }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        for (ServerListener l:listeners) l.onError(formResponse(error.toString()));
+                        try {
+                            for (ServerListener l : listeners)
+                                l.onError(formResponse(error.toString()));
+                        } catch (Exception e)
+                        {
+                            Essages.addEssage("Login Error UE:"+e.toString());
+                        }
                     }
                 });
         reqq.add(jsObjRequest);
@@ -162,26 +172,36 @@ public class serverConnect {
                 (Request.Method.GET, url, null, new Response.Listener<JSONObject>(){
                     @Override
                     public void onResponse(JSONObject response) {
-                        Log.d("DebugAction","Step4");
-                        clearListener();
-                        if (response.has("Error")){
-                            for (ServerListener l:listeners) l.onError(response);
-                        } else {
-                            for (ServerListener l : listeners) l.onRefresh(response);
-                        }
-                        if (lockedActions!=null) {
-                            for (ObjectAction act : lockedActions) {
-                                act.setEnable(true);
+                        try {
+
+                            clearListener();
+                            if (response.has("Error")) {
+                                for (ServerListener l : listeners) l.onError(response);
+                            } else {
+                                for (ServerListener l : listeners) l.onRefresh(response);
                             }
-                            lockedActions.clear();
+                            if (lockedActions != null) {
+                                for (ObjectAction act : lockedActions) {
+                                    act.setEnable(true);
+                                }
+                                lockedActions.clear();
+                            }
+                        }  catch (Exception e)
+                        {
+                            Essages.addEssage("Refresh UE:"+e.toString());
                         }
                     }
 
                 }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Log.d("Ubnexpected Error",error.toString());
-                        for (ServerListener l:listeners) l.onError(formResponse(error.toString()));
+                        try {
+                            for (ServerListener l : listeners)
+                                l.onError(formResponse(error.toString()));
+                        } catch (Exception e)
+                        {
+                            Essages.addEssage("Refresh Error UE:"+e.toString());
+                        }
                     }
                 });
         reqq.add(jsObjRequest);
@@ -220,13 +240,19 @@ public class serverConnect {
         Response.Listener<JSONObject> l=new Response.Listener<JSONObject>(){
             @Override
             public void onResponse(JSONObject response) {
-                clearListener();
-                if (response.has("Error")){
-                    for (ServerListener l:listeners) l.onError(response);
-                    if (listenersMap.get(this)!=null) listenersMap.get(this).postError();
-                } else {
-                    for (ServerListener l : listeners) l.onAction(response);
-                    if (listenersMap.get(this)!=null) listenersMap.get(this).postAction();
+                try {
+                    clearListener();
+
+                    if (response.has("Error")) {
+                        for (ServerListener l : listeners) l.onError(response);
+                        if (listenersMap.get(this) != null) listenersMap.get(this).postError();
+                    } else {
+                        for (ServerListener l : listeners) l.onAction(response);
+                        if (listenersMap.get(this) != null) listenersMap.get(this).postAction();
+                    }
+                } catch (Exception e)
+                {
+                    Essages.addEssage("Command UE:"+e.toString());
                 }
             }
         };
@@ -234,9 +260,13 @@ public class serverConnect {
         Response.ErrorListener le=new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.d("Ubnexpected Error",error.toString());
-                for (ServerListener l:listeners) l.onError(formResponse(error.toString()));
-                if (errorMap.get(this)!=null) errorMap.get(this).postError();
+                try {
+                    for (ServerListener l : listeners) l.onError(formResponse(error.toString()));
+                    if (errorMap.get(this) != null) errorMap.get(this).postError();
+                } catch (Exception e)
+                {
+                    Essages.addEssage("Command Error UE:"+e.toString());
+                }
             }
         };
         listenersMap.put(l,action);
@@ -260,11 +290,16 @@ public class serverConnect {
         Response.Listener<JSONObject> l=new Response.Listener<JSONObject>(){
             @Override
             public void onResponse(JSONObject response) {
-                clearListener();
-                if (response.has("Error")){
-                    for (ServerListener l:listeners) l.onError(response);
-                } else {
-                    for (ServerListener l : listeners) l.onPlayerInfo(response);
+                try {
+                    clearListener();
+                    if (response.has("Error")) {
+                        for (ServerListener l : listeners) l.onError(response);
+                    } else {
+                        for (ServerListener l : listeners) l.onPlayerInfo(response);
+                    }
+                } catch (Exception e)
+                {
+                    Essages.addEssage("PlayerInfo UE:"+e.toString());
                 }
 
             }
@@ -272,9 +307,12 @@ public class serverConnect {
         Response.ErrorListener le=new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.d("Ubnexpected Error",error.toString());
-                for (ServerListener l:listeners) l.onError(formResponse(error.toString()));
-                //if ("Y".equals(GameSettings.getInstance().get("SHOW_NETWORK_ERROR"))) Essages.addEssage(error.toString());
+                try {
+                    for (ServerListener l : listeners) l.onError(formResponse(error.toString()));
+                } catch (Exception e)
+                {
+                    Essages.addEssage("Player Info UE:"+e.toString());
+                }
             }
         };
 
@@ -295,11 +333,16 @@ public class serverConnect {
         Response.Listener<JSONObject> l=new Response.Listener<JSONObject>(){
             @Override
             public void onResponse(JSONObject response) {
-                clearListener();
-                if (response.has("Error")){
-                    for (ServerListener l:listeners) l.onError(response);
-                } else {
-                    for (ServerListener l : listeners) l.onMessage(response);
+                try {
+                    clearListener();
+                    if (response.has("Error")) {
+                        for (ServerListener l : listeners) l.onError(response);
+                    } else {
+                        for (ServerListener l : listeners) l.onMessage(response);
+                    }
+                }  catch (Exception e)
+                {
+                    Essages.addEssage("Message UE:"+e.toString());
                 }
 
             }
@@ -307,9 +350,12 @@ public class serverConnect {
         Response.ErrorListener le=new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.d("Ubnexpected Error",error.toString());
-                //if ("Y".equals(GameSettings.getInstance().get("SHOW_NETWORK_ERROR"))) Essages.addEssage(error.toString());
-                for (ServerListener l:listeners) l.onError(formResponse(error.toString()));
+                try {
+                    for (ServerListener l : listeners) l.onError(formResponse(error.toString()));
+                } catch (Exception e)
+                {
+                    Essages.addEssage("Message error UE:"+e.toString());
+                }
             }
         };
 
@@ -338,16 +384,21 @@ public class serverConnect {
         Response.Listener<JSONObject> l=new Response.Listener<JSONObject>(){
             @Override
             public void onResponse(JSONObject response) {
-                clearListener();
-                if (response.has("Error")){
-                    for (ServerListener l:listeners) l.onError(response);
-                } else {
-                    getPlayerInfo();
-                    if (response.has("Result")) try {
-                        Log.d("Debug info",response.getString("Result"));
-                    } catch (JSONException e) {
-                        e.printStackTrace();
+                try {
+                    clearListener();
+                    if (response.has("Error")) {
+                        for (ServerListener l : listeners) l.onError(response);
+                    } else {
+                        getPlayerInfo();
+                        if (response.has("Result")) try {
+                            Log.d("Debug info", response.getString("Result"));
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
+                }  catch (Exception e)
+                {
+                    Essages.addEssage("SetRace UE:"+e.toString());
                 }
 
             }
@@ -355,9 +406,13 @@ public class serverConnect {
         Response.ErrorListener le=new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.d("Ubnexpected Error",error.toString());
-                for (ServerListener l:listeners) l.onError(formResponse(error.toString()));
-                //if ("Y".equals(GameSettings.getInstance().get("SHOW_NETWORK_ERROR"))) Essages.addEssage(error.toString());
+                try {
+                    for (ServerListener l : listeners) l.onError(formResponse(error.toString()));
+                }  catch (Exception e)
+                {
+                    Essages.addEssage("SetRaceE UE:"+e.toString());
+                }
+
             }
         };
 
