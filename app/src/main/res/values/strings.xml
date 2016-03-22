@@ -41,15 +41,7 @@
 
     <string name="message_notification_title_template">Message: %1$s</string>
 
-    <!-- TODO: remove this placeholder text -->
-    <string name="message_notification_placeholder_text_template">You said %1$s and lorem ipsum
-        dolor sit amet, consectetur adipiscing elit. Etiam non enim magna. Morbi dictum, velit vel
-        semper venenatis, magna odio volutpat velit, at ullamcorper nulla lacus sed turpis.
-        Pellentesque vitae metus elit, nec tincidunt tellus. Integer sed nisl sem, ullamcorper
-        ornare lacus. Duis ac mauris sed massa congue volutpat. Donec sed erat sit amet turpis
-        viverra rhoncus sit amet nec magna. Donec lacinia ligula at libero volutpat volutpat nec nec
-        tortor.
-    </string>
+
 
     <string name="action_share">Share</string>
     <string name="action_reply">Reply</string>
@@ -59,5 +51,5 @@
     <string name="alliance_name">Цеховой альянс</string>
     <string name="legue_name">Лига независимых купцов</string>
     <string name="legue_text">Независимые купцы существовали всегда. В поисках выгоды они все время продумывали новые торговые маршруты, сокращали издержки и повышали привлекательность своей продукции для покупателя. Однако конкуренция на рынке не была честной - и Гильдия и Альянс использовали свое влияние для создания неблагоприятных условий успешным купцам. Для защиты своих интересов независимые купцы создали Лигу. Не обладая монопольным положением ни в одной отрасли Лига уверенно чувствует себя во всех областях. Умение Лиги работать с покупателями и максимизировать свою прибыль позволяет ей конкурировать с Гильдией и Альянсом в их традиционных сферах влияния. В настоящее время все три организации обладают примерно равным влиянием и потенциалом.</string>
-
+    <string name="version" translatable="false">1.2.2a</string>
 </resources>
