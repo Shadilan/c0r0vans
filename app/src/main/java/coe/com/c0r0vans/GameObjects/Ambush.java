@@ -55,7 +55,7 @@ public class Ambush extends GameObject {
     @Override
     public void setMarker(Marker m) {
         mark=m;
-        mark.setAnchor(0.5f,1);
+        mark.setAnchor(0.5f, 1);
     }
 
     @Override
@@ -155,79 +155,91 @@ public class Ambush extends GameObject {
     @Override
     public ArrayList<ObjectAction> getActions(boolean inZone) {
         ArrayList<ObjectAction> Actions=new ArrayList<>();
-        if (removeAmbush==null){
-            if (faction==0)
-            removeAmbush = new ObjectAction(this) {
-                @Override
-                public Bitmap getImage() {
-                    return ImageLoader.getImage("remove_ambush");
-                }
-                @Override
-                public String getInfo() {
-                    return "Убрать засаду.";
-                }
+        try {
+            if (removeAmbush == null) {
+                if (faction == 0)
+                    removeAmbush = new ObjectAction(this) {
+                        @Override
+                        public Bitmap getImage() {
+                            return ImageLoader.getImage("remove_ambush");
+                        }
 
-                @Override
-                public String getCommand() {
-                    return "CancelAmbush";
-                }
+                        @Override
+                        public String getInfo() {
+                            return "Убрать засаду.";
+                        }
 
-                @Override
-                public void preAction() {
+                        @Override
+                        public String getCommand() {
+                            return "CancelAmbush";
+                        }
 
-                    owner.getMarker().setVisible(false);zone.setVisible(false);
-                }
+                        @Override
+                        public void preAction() {
 
-                @Override
-                public void postAction() {
-                    GameSound.playSound(GameSound.REMOVE_AMBUSH);
-                    Essages.addEssage("Засада распущена");
-                    owner.RemoveObject();
-                }
+                            owner.getMarker().setVisible(false);
+                            zone.setVisible(false);
+                        }
 
-                @Override
-                public void postError() {
-                    owner.getMarker().setVisible(true);zone.setVisible(true);
-                }
-            };
-            else if (faction!=Player.getPlayer().getRace())
-                removeAmbush = new ObjectAction(this) {
-                    @Override
-                    public Bitmap getImage() {
-                        return ImageLoader.getImage("attack_ambush");
-                    }
-                    @Override
-                    public String getInfo() {
-                        return "Убрать засаду.";
-                    }
+                        @Override
+                        public void postAction() {
+                            GameSound.playSound(GameSound.REMOVE_AMBUSH);
+                            Essages.addEssage("Засада распущена");
+                            owner.RemoveObject();
+                        }
 
-                    @Override
-                    public String getCommand() {
-                        return "DestroyAmbush";
-                    }
+                        @Override
+                        public void postError() {
+                            owner.getMarker().setVisible(true);
+                            zone.setVisible(true);
+                        }
+                    };
+                else if (faction != Player.getPlayer().getRace())
+                    removeAmbush = new ObjectAction(this) {
+                        @Override
+                        public Bitmap getImage() {
+                            return ImageLoader.getImage("attack_ambush");
+                        }
 
-                    @Override
+                        @Override
+                        public String getInfo() {
+                            return "Убрать засаду.";
+                        }
 
-                    public void preAction() {
+                        @Override
+                        public String getCommand() {
+                            return "DestroyAmbush";
+                        }
 
-                        owner.getMarker().setVisible(false);zone.setVisible(false);
-                    }
+                        @Override
 
-                    @Override
-                    public void postAction() {
-                        GameSound.playSound(GameSound.KILL_SOUND);
-                        Essages.addEssage("Разбойники уничтожены.");
-                        owner.RemoveObject();
-                    }
+                        public void preAction() {
 
-                    @Override
-                    public void postError() {
-                        owner.getMarker().setVisible(true);zone.setVisible(true);
-                    }
-                };
+                            owner.getMarker().setVisible(false);
+                            zone.setVisible(false);
+                        }
 
+                        @Override
+                        public void postAction() {
+                            GameSound.playSound(GameSound.KILL_SOUND);
+                            Essages.addEssage("Разбойники уничтожены.");
+                            owner.RemoveObject();
+                        }
+
+                        @Override
+                        public void postError() {
+                            owner.getMarker().setVisible(true);
+                            zone.setVisible(true);
+                        }
+                    };
+
+            }
+            if ((faction == 0 || inZone) && removeAmbush!=null && removeAmbush.isEnabled())
+                Actions.add(removeAmbush);
         }
-        if ((faction==0 || inZone) && removeAmbush.isEnabled() && faction!=Player.getPlayer().getRace()) Actions.add(removeAmbush);
+        catch (Exception e) {
+            Essages.addEssage(e.toString());
+        }
         return Actions;
     }
 
