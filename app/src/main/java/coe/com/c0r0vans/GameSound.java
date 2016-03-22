@@ -61,6 +61,7 @@ public class GameSound {
             AudioAttributes audioAttributes = new AudioAttributes.Builder()
                     .setUsage(AudioAttributes.USAGE_GAME)
                     .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                    .setLegacyStreamType(AudioManager.STREAM_MUSIC)
                     .build();
 
             soundPool = new SoundPool.Builder()
