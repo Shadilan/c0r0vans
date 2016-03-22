@@ -54,7 +54,17 @@ public class Essages {
             line.setText(msg);
             line.setParentForm(target);
             target.addView(line, 0);
+
             MessageNotification.notify(msg.getMessage(), 1);
+        }
+    }
+    public static void addEssage(Message msg,boolean loaded){
+        if (target!=null){
+            EssageLine line=new EssageLine(target.getContext());
+            line.setText(msg);
+            line.setParentForm(target);
+            target.addView(line, 0);
+            if (!loaded) MessageNotification.notify(msg.getMessage(), 1);
         }
     }
 

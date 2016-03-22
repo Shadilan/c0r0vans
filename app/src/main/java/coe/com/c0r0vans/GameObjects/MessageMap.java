@@ -17,9 +17,10 @@ import utility.Essages;
  */
 public class MessageMap extends HashMap<String,Message>{
     Context ctx;
-    Boolean loaded;
+    Boolean load=false;
     public MessageMap(Context ctx){
         this.ctx=ctx;
+        load=true;
         SharedPreferences sp=ctx.getSharedPreferences("MESSAGES",Context.MODE_PRIVATE);
         try {
             String sptext=sp.getString("Messages", "");
@@ -27,6 +28,7 @@ public class MessageMap extends HashMap<String,Message>{
         } catch (JSONException e) {
             Essages.addEssage("Error Loading:"+ e.toString());
         }
+        load=false;
     }
     public boolean put(Message message){
         if (this.get(message.getGUID())!=null) return false;
@@ -41,7 +43,7 @@ public class MessageMap extends HashMap<String,Message>{
             for (int i=0;i<jsonArray.length();i++){
                 Message message=new Message(jsonArray.getJSONObject(i));
                 if (put(message)){
-                    Essages.addEssage(message);
+                    Essages.addEssage(message,load);
                 }
             }
             if (jsonArray.length()>0){
