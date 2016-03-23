@@ -337,12 +337,10 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
             public boolean onMarkerClick(Marker marker) {
                 GameObject target = findObjectByMarker(marker);
                 if (target==null || target instanceof Player) return false;
-                if (target != null) {
+
                     SelectedObject.getInstance().setTarget(target);
                     SelectedObject.getInstance().setPoint(marker.getPosition());
                     ((ActionView) findViewById(R.id.actionView)).ShowView();
-                }
-                //}
                 return true;
             }
         });
@@ -439,8 +437,9 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
             if (serverConnect.getInstance().isLogin() && this.hasWindowFocus()
                     && GPSInfo.getInstance().GetLat() != -1 && GPSInfo.getInstance().GetLng() != -1)
                 if (timeToPlayerRefresh < 1) {
-                    serverConnect.getInstance().RefreshData((int) (MyGoogleMap.getMap().getCameraPosition().target.latitude * 1e6), (int) (MyGoogleMap.getMap().getCameraPosition().target.longitude * 1e6));
                     serverConnect.getInstance().getPlayerInfo();
+                    serverConnect.getInstance().RefreshData((int) (MyGoogleMap.getMap().getCameraPosition().target.latitude * 1e6), (int) (MyGoogleMap.getMap().getCameraPosition().target.longitude * 1e6));
+
 
                     timeToPlayerRefresh = 6;
                 } else {
