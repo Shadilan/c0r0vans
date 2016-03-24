@@ -117,7 +117,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
             float oldBearing=0;
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                Essages.addEssage("MotionEvent"+event.getActionMasked());
+
                 if (event.getActionMasked()==MotionEvent.ACTION_DOWN){
                     //Зафиксировать позицию и время
                     oldPos=new Point((int)event.getX(),(int)event.getY());
