@@ -225,9 +225,9 @@ public class MyGoogleMap{
                             .zoom(clientZoom)
                             .target(target)
                             .build()));
-        /*if ("Y".equals(GameSettings.getInstance().get("VIEW_PADDING"))) {
+        if ("Y".equals(GameSettings.getInstance().get("VIEW_PADDING"))) {
             map.setPadding(0,windowHeight/2,0,40);
-        } else map.setPadding(0, 0, 0, 40);*/
+        } else map.setPadding(0, 0, 0, 40);
     }
     private static LatLng targetPoint;
 
