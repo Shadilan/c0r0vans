@@ -1,7 +1,6 @@
 package coe.com.c0r0vans.GameObjects;
 
 import android.graphics.Bitmap;
-import android.location.Location;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
@@ -73,15 +72,7 @@ public class Caravan extends GameObject {
                 mark.setPosition(latlng);
             }
             mark.setVisible(true);
-            float[] distances = new float[1];
-            if (finish!=null) {
-                Location.distanceBetween(latlng.latitude, latlng.longitude, finish.latitude, finish.longitude, distances);
-                if (distances.length > 0 && distances[0] < 50) mark.setVisible(false);
-            }
-            if (start!=null) {
-                Location.distanceBetween(latlng.latitude, latlng.longitude, start.latitude, start.longitude, distances);
-                if (distances.length > 0 && distances[0] < 50) mark.setVisible(false);
-            }
+
 
 
 
