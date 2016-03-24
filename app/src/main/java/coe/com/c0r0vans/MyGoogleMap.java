@@ -127,7 +127,7 @@ public class MyGoogleMap{
         });
 
 
-        /*map.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
+        map.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
 
 
             @Override
@@ -142,7 +142,7 @@ public class MyGoogleMap{
                 }
             }
 
-        });*/
+        });
 
         MarkerOptions mo=new MarkerOptions().anchor(0.5f,0.5f).icon(BitmapDescriptorFactory.fromResource(R.mipmap.closebutton)
         ).position(new LatLng(0,0)).visible(false);
@@ -205,10 +205,6 @@ public class MyGoogleMap{
      * @param cbearing Угол поворота
      */
     private static void moveCamera(LatLng target,float cbearing){
-        /*VisibleRegion visibleRegion = map.getProjection().getVisibleRegion();
-        LatLngBounds mapLatLngBound = visibleRegion.latLngBounds;
-
-        map.moveCamera(CameraUpdateFactory.newLatLng(mapLatLngBound.getCenter()));*/
         bearing = cbearing;
         GameSettings.setBearing(bearing);
 
@@ -232,9 +228,9 @@ public class MyGoogleMap{
                             .target(target)
                             .build()));
 
-        if ("Y".equals(GameSettings.getInstance().get("VIEW_PADDING"))) {
+        /*if ("Y".equals(GameSettings.getInstance().get("VIEW_PADDING"))) {
             map.setPadding(0, windowHeight / 2, 0, 40);
-        } else map.setPadding(0, 0, 0, 40);
+        } else map.setPadding(0, 0, 0, 40);*/
     }
     private static LatLng targetPoint;
 
