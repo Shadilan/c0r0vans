@@ -175,7 +175,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                         f1=p1;
                         f2=p2;
                     }else
-                    if (Math.abs(oldPos.x-event.getX())<20 && Math.abs(oldPos.y-event.getY())<20 && (new Date().getTime())-tm>1000){
+                    if (Math.abs(oldPos.x-event.getX())<20 && Math.abs(oldPos.y-event.getY())<20 && (new Date().getTime())-tm>800){
                         //Ambush
                         LatLng latLng=MyGoogleMap.getMap().getProjection().fromScreenLocation(oldPos);
                         float[] distances = new float[1];
