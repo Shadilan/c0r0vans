@@ -12,10 +12,8 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.model.VisibleRegion;
 
 import coe.com.c0r0vans.GameObjects.GameObject;
 import coe.com.c0r0vans.GameObjects.Player;
@@ -207,10 +205,10 @@ public class MyGoogleMap{
      * @param cbearing Угол поворота
      */
     private static void moveCamera(LatLng target,float cbearing){
-        VisibleRegion visibleRegion = map.getProjection().getVisibleRegion();
+        /*VisibleRegion visibleRegion = map.getProjection().getVisibleRegion();
         LatLngBounds mapLatLngBound = visibleRegion.latLngBounds;
 
-        map.moveCamera(CameraUpdateFactory.newLatLng(mapLatLngBound.getCenter()));
+        map.moveCamera(CameraUpdateFactory.newLatLng(mapLatLngBound.getCenter()));*/
         bearing = cbearing;
         GameSettings.setBearing(bearing);
 
