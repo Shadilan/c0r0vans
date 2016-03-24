@@ -205,29 +205,29 @@ public class MyGoogleMap{
      * @param cbearing Угол поворота
      */
     private static void moveCamera(LatLng target,float cbearing){
-        map.setPadding(0, 0, 0, 0);
+        //map.setPadding(0, 0, 0, 0);
         if (target==null) target=GPSInfo.getInstance().getLatLng();
         if ("Y".equals(GameSettings.getInstance().get("USE_TILT"))) {
 
             map.moveCamera(CameraUpdateFactory.newCameraPosition(
                     new CameraPosition.Builder()
-                            .target(target)
                             .bearing(cbearing)
                             .tilt(60)
                             .zoom(clientZoom)
+                            .target(target)
                             .build()));
         }
         else
             map.moveCamera(CameraUpdateFactory.newCameraPosition(
                     new CameraPosition.Builder()
-                            .target(target)
                             .bearing(cbearing)
                             .tilt(0)
                             .zoom(clientZoom)
+                            .target(target)
                             .build()));
-        if ("Y".equals(GameSettings.getInstance().get("VIEW_PADDING"))) {
+        /*if ("Y".equals(GameSettings.getInstance().get("VIEW_PADDING"))) {
             map.setPadding(0,windowHeight/2,0,40);
-        } else map.setPadding(0, 0, 0, 40);
+        } else map.setPadding(0, 0, 0, 40);*/
     }
     private static LatLng targetPoint;
 
