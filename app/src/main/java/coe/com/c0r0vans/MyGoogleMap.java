@@ -12,8 +12,10 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.VisibleRegion;
 
 import coe.com.c0r0vans.GameObjects.GameObject;
 import coe.com.c0r0vans.GameObjects.Player;
@@ -127,7 +129,7 @@ public class MyGoogleMap{
         });
 
 
-        map.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
+        /*map.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
 
 
             @Override
@@ -142,7 +144,7 @@ public class MyGoogleMap{
                 }
             }
 
-        });
+        });*/
 
         MarkerOptions mo=new MarkerOptions().anchor(0.5f,0.5f).icon(BitmapDescriptorFactory.fromResource(R.mipmap.closebutton)
         ).position(new LatLng(0,0)).visible(false);
@@ -207,6 +209,9 @@ public class MyGoogleMap{
     private static void moveCamera(LatLng target,float cbearing){
         bearing = cbearing;
         GameSettings.setBearing(bearing);
+        if ("Y".equals(GameSettings.getInstance().get("VIEW_PADDING"))) {
+            map.setPadding(0, windowHeight / 2, 0, 40);
+        } else map.setPadding(0, 0, 0, 40);
         if (target==null) target=GPSInfo.getInstance().getLatLng();
         if ("Y".equals(GameSettings.getInstance().get("USE_TILT"))) {
 
@@ -226,9 +231,11 @@ public class MyGoogleMap{
                             .zoom(clientZoom)
                             .target(target)
                             .build()));
-        if ("Y".equals(GameSettings.getInstance().get("VIEW_PADDING"))) {
-            map.setPadding(0, windowHeight / 2, 0, 40);
-        } else map.setPadding(0, 0, 0, 40);
+
+        VisibleRegion visibleRegion = map.getProjection().getVisibleRegion();
+        LatLngBounds mapLatLngBound = visibleRegion.latLngBounds;
+
+        map.moveCamera(CameraUpdateFactory.newLatLng(mapLatLngBound.getCenter()));
     }
     private static LatLng targetPoint;
 
