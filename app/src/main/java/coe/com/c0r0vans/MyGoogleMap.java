@@ -263,4 +263,8 @@ public class MyGoogleMap{
     public static boolean isMoveFixed() {
         return moveFixed;
     }
+
+    public static void rotate(float angle) {
+        moveCamera(map.getCameraPosition().target, map.getCameraPosition().bearing+angle);
+    }
 }

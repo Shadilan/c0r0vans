@@ -2,7 +2,6 @@ package coe.com.c0r0vans;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.gesture.Gesture;
 import android.graphics.Point;
 import android.location.Location;
 import android.os.Bundle;
@@ -115,6 +114,10 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
             long tm=-1;
             Point oldPos;
             float oldBearing=0;
+            Point f1;
+            Point f2;
+            int firstId;
+            int secondId;
             @Override
             public boolean onTouch(View v, MotionEvent event) {
 
@@ -126,17 +129,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                 } else if (event.getActionMasked()==MotionEvent.ACTION_UP){
                     //Проверить лонгтап
                     if (Math.abs(oldPos.x-event.getX())<20 && Math.abs(oldPos.y-event.getY())<20 && (new Date().getTime())-tm>1500){
-                        //Ambush
-                        LatLng latLng=MyGoogleMap.getMap().getProjection().fromScreenLocation(oldPos);
-                        float[] distances = new float[1];
-                        Location.distanceBetween(latLng.latitude, latLng.longitude, Player.getPlayer().getMarker().getPosition().latitude, Player.getPlayer().getMarker().getPosition().longitude, distances);
-                        if (distances.length > 0 && distances[0] < Player.getPlayer().getActionDistance()) {
-
-                            SelectedObject.getInstance().setTarget(Player.getPlayer());
-                            SelectedObject.getInstance().setPoint(latLng);
-                            ActionView actionView = (ActionView) findViewById(R.id.actionView);
-                            actionView.ShowView();
-                        }
+                        tm=-1;
                     } else if (Math.abs(oldPos.x-event.getX())<20 && Math.abs(oldPos.y-event.getY())<20)
                     {
                         int distance=50;
@@ -161,22 +154,60 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                     {
                         SelectedObject.getInstance().hidePoint();
                     }
+                    f1=null;
+                    f2=null;
 
                     //иначе найти маркер
-                } else if (event.getActionMasked()==MotionEvent.ACTION_MOVE) {
-                    if (Math.abs(oldPos.x-event.getX())<20 && Math.abs(oldPos.y-event.getY())<20 && (new Date().getTime())-tm>1500){
+                }else if (event.getActionMasked()==MotionEvent.ACTION_POINTER_DOWN){
+                    firstId=event.getPointerId(0);
+                    secondId=event.getPointerId(event.getActionIndex());
+
+                    f1=new Point((int)event.getX(0),(int)event.getY(0));
+                    f2=new Point((int)event.getX(event.getActionIndex()),(int)event.getY(event.getActionIndex()));
+                }
+                else if (event.getActionMasked()==MotionEvent.ACTION_MOVE) {
+                    if (f1!=null && f2!=null && event.getPointerCount()==2)
+                    {
+                        Point p1= new Point((int) event.getX(event.findPointerIndex(firstId)),(int) event.getY(event.findPointerIndex(firstId)));
+                        Point p2= new Point((int) event.getX(event.findPointerIndex(secondId)),(int) event.getY(event.findPointerIndex(secondId)));
+                        double angle=getAngle(f1,f2)-getAngle(p1,p2);
+                        MyGoogleMap.rotate((float) angle);
+                        f1=p1;
+                        f2=p2;
+                    }else
+                    if (Math.abs(oldPos.x-event.getX())<20 && Math.abs(oldPos.y-event.getY())<20 && (new Date().getTime())-tm>1000){
                         //Ambush
                         LatLng latLng=MyGoogleMap.getMap().getProjection().fromScreenLocation(oldPos);
                         float[] distances = new float[1];
                         Location.distanceBetween(latLng.latitude, latLng.longitude, Player.getPlayer().getMarker().getPosition().latitude, Player.getPlayer().getMarker().getPosition().longitude, distances);
                         if (distances.length > 0 && distances[0] < Player.getPlayer().getActionDistance()) {
+
+                            SelectedObject.getInstance().setTarget(Player.getPlayer());
                             SelectedObject.getInstance().setPoint(latLng);
+                            ActionView actionView = (ActionView) findViewById(R.id.actionView);
+                            actionView.ShowView();
                         }
                     }
                     //Проверить поворот
                 }
 
                 return true;
+            }
+            private double getAngle(Point a,Point b)
+            {
+                double dx = b.x - a.x;
+                // Minus to correct for coord re-mapping
+                double dy = -(b.y - a.y);
+
+                double inRads = Math.atan2(dy,dx);
+
+                // We need to map to coord system when 0 degree is at 3 O'clock, 270 at 12 O'clock
+                if (inRads < 0)
+                    inRads = Math.abs(inRads);
+                else
+                    inRads = 2*Math.PI - inRads;
+
+                return Math.toDegrees(inRads);
             }
         });
 
