@@ -83,29 +83,29 @@ public class MyGoogleMap{
 
 
         GPSInfo.getInstance().AddLocationListener(new LocationListener() {
-            float oldBearing=0f;
+            float oldBearing = 0f;
+
             @Override
             public void onLocationChanged(Location location) {
-                float curBearing=map.getCameraPosition().bearing;
-                boolean trackBearing="Y".equals(GameSettings.getInstance().get("TRACK_BEARING"));
-                Log.d("tttt","hasBearing"+location.hasBearing());
-                Log.d("tttt","hasAccuracy"+location.hasAccuracy());
-                Log.d("tttt","getAccuracy"+location.getAccuracy());
+                float curBearing = map.getCameraPosition().bearing;
+                boolean trackBearing = "Y".equals(GameSettings.getInstance().get("TRACK_BEARING"));
+                Log.d("tttt", "hasBearing" + location.hasBearing());
+                Log.d("tttt", "hasAccuracy" + location.hasAccuracy());
+                Log.d("tttt", "getAccuracy" + location.getAccuracy());
 
-                if (trackBearing && location.hasBearing() && location.hasAccuracy() && location.getAccuracy()<20 && location.getSpeed()*60*60/1000>5)
-                {
-                    if (Math.round(oldBearing/90)==Math.round(location.getBearing()/90)) {
-                        bearing=location.getBearing();
-                        curBearing=bearing;
-                        Log.d("tttt","Bearing"+curBearing);
+                if (trackBearing && location.hasBearing() && location.hasAccuracy() && location.getAccuracy() < 20 && location.getSpeed() * 60 * 60 / 1000 > 5) {
+                    if (Math.round(oldBearing / 90) == Math.round(location.getBearing() / 90)) {
+                        bearing = location.getBearing();
+                        curBearing = bearing;
+                        Log.d("tttt", "Bearing" + curBearing);
                     }
                     //ChangeBearing;
-                    Log.d("tttt","oldBearing"+oldBearing);
-                    oldBearing=location.getBearing();
+                    Log.d("tttt", "oldBearing" + oldBearing);
+                    oldBearing = location.getBearing();
                 }
                 LatLng target = new LatLng(location.getLatitude(), location.getLongitude());
                 if (moveFixed) {
-                    moveCamera(target,curBearing);
+                    moveCamera(target, curBearing);
                 }
                 Player.getPlayer().setPosition(target);
             }
@@ -127,14 +127,14 @@ public class MyGoogleMap{
         });
 
 
-        /*map.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
+        map.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
 
 
             @Override
             public void onCameraChange(CameraPosition cameraPosition) {
                 if (cameraPosition.bearing != bearing) {
                     bearing = cameraPosition.bearing;
-                    Log.d("Test rotate","Rotation");
+                    Log.d("Test rotate", "Rotation");
                     GameSettings.setBearing(bearing);
                     if (moveFixed) moveCamera(GPSInfo.getInstance().getLatLng());
                     else moveCamera(targetPoint);
@@ -142,7 +142,7 @@ public class MyGoogleMap{
                 }
             }
 
-        });*/
+        });
 
         MarkerOptions mo=new MarkerOptions().anchor(0.5f,0.5f).icon(BitmapDescriptorFactory.fromResource(R.mipmap.closebutton)
         ).position(new LatLng(0,0)).visible(false);
@@ -205,7 +205,6 @@ public class MyGoogleMap{
      * @param cbearing Угол поворота
      */
     private static void moveCamera(LatLng target,float cbearing){
-        map.setPadding(0, 0, 0, 0);
         bearing = cbearing;
         GameSettings.setBearing(bearing);
         if (target==null) target=GPSInfo.getInstance().getLatLng();
@@ -267,7 +266,8 @@ public class MyGoogleMap{
     }
 
     public static void rotate(float angle) {
-        if (!moveFixed) moveCamera(targetMarker.getPosition(),map.getCameraPosition().bearing+angle);
-        else moveCamera(Player.getPlayer().getMarker().getPosition(), map.getCameraPosition().bearing+angle);
+        /*if (!moveFixed) moveCamera(targetMarker.getPosition(),map.getCameraPosition().bearing+angle);
+        else moveCamera(Player.getPlayer().getMarker().getPosition(), map.getCameraPosition().bearing+angle);*/
+        moveCamera(map.getCameraPosition().target, map.getCameraPosition().bearing+angle);
     }
 }
