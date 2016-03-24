@@ -207,11 +207,13 @@ public class MyGoogleMap{
      * @param cbearing Угол поворота
      */
     private static void moveCamera(LatLng target,float cbearing){
+        VisibleRegion visibleRegion = map.getProjection().getVisibleRegion();
+        LatLngBounds mapLatLngBound = visibleRegion.latLngBounds;
+
+        map.moveCamera(CameraUpdateFactory.newLatLng(mapLatLngBound.getCenter()));
         bearing = cbearing;
         GameSettings.setBearing(bearing);
-        if ("Y".equals(GameSettings.getInstance().get("VIEW_PADDING"))) {
-            map.setPadding(0, windowHeight / 2, 0, 40);
-        } else map.setPadding(0, 0, 0, 40);
+
         if (target==null) target=GPSInfo.getInstance().getLatLng();
         if ("Y".equals(GameSettings.getInstance().get("USE_TILT"))) {
 
@@ -232,10 +234,9 @@ public class MyGoogleMap{
                             .target(target)
                             .build()));
 
-        VisibleRegion visibleRegion = map.getProjection().getVisibleRegion();
-        LatLngBounds mapLatLngBound = visibleRegion.latLngBounds;
-
-        map.moveCamera(CameraUpdateFactory.newLatLng(mapLatLngBound.getCenter()));
+        if ("Y".equals(GameSettings.getInstance().get("VIEW_PADDING"))) {
+            map.setPadding(0, windowHeight / 2, 0, 40);
+        } else map.setPadding(0, 0, 0, 40);
     }
     private static LatLng targetPoint;
 
