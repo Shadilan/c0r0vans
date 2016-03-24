@@ -205,6 +205,9 @@ public class MyGoogleMap{
      * @param cbearing Угол поворота
      */
     private static void moveCamera(LatLng target,float cbearing){
+        map.setPadding(0, 0, 0, 0);
+        bearing = cbearing;
+        GameSettings.setBearing(bearing);
         if (target==null) target=GPSInfo.getInstance().getLatLng();
         if ("Y".equals(GameSettings.getInstance().get("USE_TILT"))) {
 
