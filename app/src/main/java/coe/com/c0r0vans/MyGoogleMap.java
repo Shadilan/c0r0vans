@@ -267,7 +267,7 @@ public class MyGoogleMap{
     }
 
     public static void rotate(float angle) {
-        if (moveFixed) moveCamera(targetMarker.getPosition(),map.getCameraPosition().bearing+angle);
+        if (!moveFixed) moveCamera(targetMarker.getPosition(),map.getCameraPosition().bearing+angle);
         else moveCamera(Player.getPlayer().getMarker().getPosition(), map.getCameraPosition().bearing+angle);
     }
 }
