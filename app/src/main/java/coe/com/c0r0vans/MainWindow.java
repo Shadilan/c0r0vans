@@ -121,6 +121,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                 if (event.getActionMasked()==MotionEvent.ACTION_DOWN){
                     //Зафиксировать позицию и время
                     oldPos=new Point((int)event.getX(),(int)event.getY());
+
                     tm=new Date().getTime();
                 } else if (event.getActionMasked()==MotionEvent.ACTION_UP){
                     //Проверить лонгтап
@@ -156,10 +157,22 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                             SelectedObject.getInstance().setPoint(target.getMarker().getPosition());
                             ((ActionView) findViewById(R.id.actionView)).ShowView();
                         }
+                    } else
+                    {
+                        SelectedObject.getInstance().hidePoint();
                     }
 
                     //иначе найти маркер
                 } else if (event.getActionMasked()==MotionEvent.ACTION_MOVE) {
+                    if (Math.abs(oldPos.x-event.getX())<20 && Math.abs(oldPos.y-event.getY())<20 && (new Date().getTime())-tm>1500){
+                        //Ambush
+                        LatLng latLng=MyGoogleMap.getMap().getProjection().fromScreenLocation(oldPos);
+                        float[] distances = new float[1];
+                        Location.distanceBetween(latLng.latitude, latLng.longitude, Player.getPlayer().getMarker().getPosition().latitude, Player.getPlayer().getMarker().getPosition().longitude, distances);
+                        if (distances.length > 0 && distances[0] < Player.getPlayer().getActionDistance()) {
+                            SelectedObject.getInstance().setPoint(latLng);
+                        }
+                    }
                     //Проверить поворот
                 }
 
