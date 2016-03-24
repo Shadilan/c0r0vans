@@ -2,6 +2,7 @@ package coe.com.c0r0vans;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.gesture.Gesture;
 import android.graphics.Point;
 import android.location.Location;
 import android.os.Bundle;
@@ -9,6 +10,8 @@ import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -27,6 +30,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 
 import coe.com.c0r0vans.GameObjects.Ambush;
@@ -54,7 +58,8 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
     private LinearLayout LogView;
     private ScrollView scrollView;
     private ImageView LogButton;
-
+    private View touchView;
+    private GestureDetector gestureDetector;
 
 
     @Override
@@ -74,6 +79,92 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
         LogView = (LinearLayout) findViewById(R.id.chatBox);
         scrollView= (ScrollView) findViewById(R.id.scrollView);
         scrollView.getLayoutParams().height=40;
+        touchView=findViewById(R.id.touchView);
+        gestureDetector=new GestureDetector(getApplicationContext(), new GestureDetector.OnGestureListener() {
+            @Override
+            public boolean onDown(MotionEvent e) {
+                return false;
+            }
+
+            @Override
+            public void onShowPress(MotionEvent e) {
+
+            }
+
+            @Override
+            public boolean onSingleTapUp(MotionEvent e) {
+                return false;
+            }
+
+            @Override
+            public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+                return false;
+            }
+
+            @Override
+            public void onLongPress(MotionEvent e) {
+
+            }
+
+            @Override
+            public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+                return false;
+            }
+        });
+        touchView.setOnTouchListener(new View.OnTouchListener() {
+            long tm=-1;
+            Point oldPos;
+            float oldBearing=0;
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getActionMasked()==MotionEvent.ACTION_DOWN){
+                    //Зафиксировать позицию и время
+                    oldPos=new Point((int)event.getX(),(int)event.getY());
+                    tm=new Date().getTime();
+                } else if (event.getActionMasked()==MotionEvent.ACTION_UP){
+                    //Проверить лонгтап
+                    if (Math.abs(oldPos.x-event.getX())<20 && Math.abs(oldPos.y-event.getY())<20 && (new Date().getTime())-tm>1500){
+                        //Ambush
+                        LatLng latLng=MyGoogleMap.getMap().getProjection().fromScreenLocation(oldPos);
+                        float[] distances = new float[1];
+                        Location.distanceBetween(latLng.latitude, latLng.longitude, Player.getPlayer().getMarker().getPosition().latitude, Player.getPlayer().getMarker().getPosition().longitude, distances);
+                        if (distances.length > 0 && distances[0] < Player.getPlayer().getActionDistance()) {
+
+                            SelectedObject.getInstance().setTarget(Player.getPlayer());
+                            SelectedObject.getInstance().setPoint(latLng);
+                            ActionView actionView = (ActionView) findViewById(R.id.actionView);
+                            actionView.ShowView();
+                        }
+                    } else if (Math.abs(oldPos.x-event.getX())<20 && Math.abs(oldPos.y-event.getY())<20)
+                    {
+                        int distance=50;
+                        GameObject target=null;
+                        //Marker
+                        for (GameObject o:Objects.values()){
+                            Point p=MyGoogleMap.getMap().getProjection().toScreenLocation(o.getMarker().getPosition());
+                            int calc= (int) Math.sqrt(Math.pow(p.x-oldPos.x,2)+Math.pow(p.y-oldPos.y,2));
+                            if (!(o instanceof Player || o instanceof Caravan) && calc<distance) {
+                                target=o;
+                                distance=calc;
+                            }
+                        }
+                        if (target!=null)
+                        {
+
+                            SelectedObject.getInstance().setTarget(target);
+                            SelectedObject.getInstance().setPoint(target.getMarker().getPosition());
+                            ((ActionView) findViewById(R.id.actionView)).ShowView();
+                        }
+                    }
+
+                    //иначе найти маркер
+                } else if (event.getActionMasked()==MotionEvent.ACTION_MOVE) {
+                    //Проверить поворот
+                }
+
+                return true;
+            }
+        });
 
 
 

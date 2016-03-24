@@ -12,7 +12,12 @@
     android:name="com.google.android.gms.maps.SupportMapFragment"
 
     tools:layout="@layout/abc_screen_simple" />
-
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:id="@+id/touchView"
+        android:clickable="true"
+        />
 
     <ImageView
         android:layout_width="wrap_content"

@@ -143,6 +143,7 @@ public class MyGoogleMap{
             }
 
         });
+
         MarkerOptions mo=new MarkerOptions().anchor(0.5f,0.5f).icon(BitmapDescriptorFactory.fromResource(R.mipmap.closebutton)
         ).position(new LatLng(0,0)).visible(false);
         targetMarker=map.addMarker(mo);
