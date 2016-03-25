@@ -77,7 +77,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
 
         LogView = (LinearLayout) findViewById(R.id.chatBox);
         scrollView= (ScrollView) findViewById(R.id.scrollView);
-        scrollView.getLayoutParams().height=40;
+        scrollView.getLayoutParams().height=60;
         touchView=findViewById(R.id.touchView);
         gestureDetector=new GestureDetector(getApplicationContext(), new GestureDetector.OnGestureListener() {
             @Override
@@ -330,7 +330,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                 } else {
                     show = true;
                     //LogView.setBackgroundColor(Color.TRANSPARENT);
-                    scrollView.getLayoutParams().height=40;
+                    scrollView.getLayoutParams().height=60;
                     scrollView.requestLayout();
                 }
             }
