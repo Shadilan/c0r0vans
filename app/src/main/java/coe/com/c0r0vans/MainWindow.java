@@ -138,7 +138,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                         for (GameObject o:Objects.values()){
                             Point p=MyGoogleMap.getMap().getProjection().toScreenLocation(o.getMarker().getPosition());
                             int calc= (int) Math.sqrt(Math.pow(p.x-oldPos.x,2)+Math.pow(p.y-oldPos.y,2));
-                            if (!(o instanceof Player || o instanceof Caravan) && calc<distance) {
+                            if (!(o instanceof Player || o instanceof Caravan) && calc<distance && o.getMarker().isVisible()) {
                                 target=o;
                                 distance=calc;
                             }
