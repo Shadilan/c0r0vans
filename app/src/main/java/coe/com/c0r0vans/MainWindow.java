@@ -9,7 +9,6 @@ import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageButton;
@@ -22,7 +21,6 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -58,7 +56,6 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
     private ScrollView scrollView;
     private ImageView LogButton;
     private View touchView;
-    private GestureDetector gestureDetector;
 
 
     @Override
@@ -79,41 +76,11 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
         scrollView= (ScrollView) findViewById(R.id.scrollView);
         scrollView.getLayoutParams().height=60;
         touchView=findViewById(R.id.touchView);
-        gestureDetector=new GestureDetector(getApplicationContext(), new GestureDetector.OnGestureListener() {
-            @Override
-            public boolean onDown(MotionEvent e) {
-                return false;
-            }
 
-            @Override
-            public void onShowPress(MotionEvent e) {
-
-            }
-
-            @Override
-            public boolean onSingleTapUp(MotionEvent e) {
-                return false;
-            }
-
-            @Override
-            public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-                return false;
-            }
-
-            @Override
-            public void onLongPress(MotionEvent e) {
-
-            }
-
-            @Override
-            public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-                return false;
-            }
-        });
         touchView.setOnTouchListener(new View.OnTouchListener() {
             long tm=-1;
             Point oldPos;
-            float oldBearing=0;
+            //float oldBearing=0;
             Point f1;
             Point f2;
             int firstId;
@@ -324,13 +291,13 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                 if (show) {
                     show = false;
                     //LogView.setBackgroundColor(Color.WHITE);
-                    scrollView.getLayoutParams().height=dm.heightPixels / 2;
+                    scrollView.getLayoutParams().height = dm.heightPixels / 2;
                     scrollView.requestLayout();
 
                 } else {
                     show = true;
                     //LogView.setBackgroundColor(Color.TRANSPARENT);
-                    scrollView.getLayoutParams().height=60;
+                    scrollView.getLayoutParams().height = 60;
                     scrollView.requestLayout();
                 }
             }
@@ -396,7 +363,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                         for (GameObject obj : remObjects) {
                             obj.RemoveObject();
                         }
-                        for (GameObject o:remObjects){
+                        for (GameObject o : remObjects) {
                             Objects.remove(o.getGUID());
                         }
 
@@ -416,8 +383,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
             @Override
             public void onPlayerInfo(JSONObject response) {
                 Player.getPlayer().loadJSON(response);
-                if (Player.getPlayer().getRace()<1 || Player.getPlayer().getRace()>3)
-                {
+                if (Player.getPlayer().getRace() < 1 || Player.getPlayer().getRace() > 3) {
                     ((ChooseFaction) findViewById(R.id.chooseFaction)).show();
                 }
                 timeToPlayerRefresh = 6;
@@ -455,7 +421,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
             }
         });
 
-        MyGoogleMap.getMap().setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
+        /*MyGoogleMap.getMap().setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
             @Override
             public void onMapLongClick(LatLng latLng) {
                 float[] distances = new float[1];
@@ -468,8 +434,8 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                     actionView.ShowView();
                 }
             }
-        });
-        MyGoogleMap.getMap().setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+        });*/
+        /*MyGoogleMap.getMap().setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
                 GameObject target = findObjectByMarker(marker);
@@ -480,7 +446,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                     ((ActionView) findViewById(R.id.actionView)).ShowView();
                 return true;
             }
-        });
+        });*/
         ImageView zoomButton= (ImageView) findViewById(R.id.zoomButton);
         zoomButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -521,7 +487,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
      * @param m Marker
      * @return GameObject
      */
-    private GameObject findObjectByMarker(Marker m) {
+    /*private GameObject findObjectByMarker(Marker m) {
         if (Player.getPlayer().getMarker().equals(m)) {
             return Player.getPlayer();
         } else
@@ -533,7 +499,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
             }
         Log.d("Debug info", "Object not found.");
         return null;
-    }
+    }*/
 
     /**
      * Start Timer to load data and other needs.

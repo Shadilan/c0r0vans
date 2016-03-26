@@ -1,8 +1,12 @@
 package coe.com.c0r0vans.GameObjects;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.util.AttributeSet;
 import android.util.Log;
+import android.view.View;
+import android.widget.RelativeLayout;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -19,6 +23,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import coe.com.c0r0vans.ActionView;
 import coe.com.c0r0vans.GameSound;
 import coe.com.c0r0vans.MyGoogleMap;
 import coe.com.c0r0vans.OnGameObjectChange;
@@ -138,9 +143,9 @@ public class Player extends GameObject {
         return mark;
     }
     private Circle circle2;
-    public Circle getCircle(){
+    /*public Circle getCircle(){
         return circle;
-    }
+    }*/
     public void setPosition(LatLng target){
         if (mark!=null) mark.setPosition(target);
         if (circle!=null) circle.setCenter(target);
@@ -248,87 +253,8 @@ public class Player extends GameObject {
                 ResourceString.getInstance().getString("caravans")+this.Caravans+"\n";
     }
 
-    private  ObjectAction createAmbush;
+    //private  ObjectAction createAmbush;
     private ObjectAction dropRoute;
-    @Override
-    public ArrayList<ObjectAction> getActions(boolean inZone) {
-        ArrayList<ObjectAction> Actions=new ArrayList<>();
-        if (createAmbush==null) createAmbush=new ObjectAction(this) {
-            @Override
-            public Bitmap getImage() {
-                return ImageLoader.getImage("create_ambush");
-            }
-
-            @Override
-            public String getInfo() {
-                return "Если рядом с засадой будет проходить караван, то он будет перехвачен и направлен влаедльцу засады.";
-            }
-
-            @Override
-            public String getCommand() {
-                return "SetAmbush";
-            }
-
-            @Override
-            public void preAction() {
-
-            }
-
-            @Override
-            public void postAction() {
-                GameSound.playSound(GameSound.SET_AMBUSH);
-                serverConnect.getInstance().RefreshCurrent();
-                Essages.addEssage("Засада установлена.");
-            }
-
-            @Override
-            public void postError() {
-
-            }
-        };
-        if (createAmbush.isEnabled()) Actions.add(createAmbush);
-
-
-        if (dropRoute==null) dropRoute = new ObjectAction(this) {
-                @Override
-                public Bitmap getImage() {
-                    return ImageLoader.getImage("drop_route");
-                }
-
-                @Override
-                public String getInfo() {
-                    return "Сбросить маршрут.";
-                }
-
-                @Override
-                public String getCommand() {
-                    return "DropUnfinishedRoute";
-                }
-
-            @Override
-            public void preAction() {
-
-            }
-
-            @Override
-            public void postAction() {
-                GameSound.playSound(GameSound.START_ROUTE_SOUND);
-                serverConnect.getInstance().getPlayerInfo();
-                Essages.addEssage("Незаконченый маршрут отменен.");
-            }
-
-            @Override
-            public void postError() {
-
-            }
-        };
-        //if (false) Actions.add(dropRoute);
-
-
-        return Actions;
-    }
-
-
     public int getLevel() {
         return Level;
     }
@@ -374,10 +300,10 @@ public class Player extends GameObject {
     public String getCurrentRoute(){return currentRoute;}
     public ObjectAction getDropRoute(){return dropRoute;}
 
-    public void setCurrentRoute(String currentRoute) {
+    /*public void setCurrentRoute(String currentRoute) {
         this.currentRoute = currentRoute;
         change(OnGameObjectChange.PLAYER);
-    }
+    }*/
 
     public void setRouteStart(boolean routeStart) {
         this.routeStart = routeStart;
@@ -401,10 +327,10 @@ public class Player extends GameObject {
         if (onChangeList==null) onChangeList=new ArrayList<>();
         onChangeList.add(onGameObjectChange);
     }
-    public void removeOnChange(OnGameObjectChange onGameObjectChange){
+    /*public void removeOnChange(OnGameObjectChange onGameObjectChange){
         if (removeOnChangeList==null) removeOnChangeList=new ArrayList<>();
         removeOnChangeList.add(onGameObjectChange);
-    }
+    }*/
     public void change(int type){
         if (onChangeList==null) return;
         if (removeOnChangeList!=null && removeOnChangeList.size()>0){
@@ -445,5 +371,102 @@ public class Player extends GameObject {
     public int getRace() {
         Log.d("tttt","Race:"+race);
         return race;
+    }
+
+    @Override
+    public RelativeLayout getObjectView(Context context) {
+        return new ambushCreate(context);
+
+    }
+    class ambushCreate extends RelativeLayout implements GameObjectView{
+
+        public ambushCreate(Context context) {
+            super(context);
+            init();
+        }
+
+        public ambushCreate(Context context, AttributeSet attrs) {
+            super(context, attrs);
+            init();
+        }
+
+        public ambushCreate(Context context, AttributeSet attrs, int defStyleAttr) {
+            super(context, attrs, defStyleAttr);
+            init();
+        }
+        private void init(){
+            inflate(this.getContext(),R.layout.longtap_layout,this);
+            findViewById(R.id.longtapClose).setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    close();
+                }
+            });
+            createAmbush=new ObjectAction(Player.getPlayer()) {
+                @Override
+                public Bitmap getImage() {
+                    return ImageLoader.getImage("create_ambush");
+                }
+
+                @Override
+                public String getInfo() {
+                    return "Создание засады";
+                }
+
+                @Override
+                public String getCommand() {
+                    return "SetAmbush";
+                }
+
+                @Override
+                public void preAction() {
+
+                }
+
+                @Override
+                public void postAction() {
+                    serverConnect.getInstance().RefreshCurrent();
+                    GameSound.playSound(GameSound.SET_AMBUSH);
+                    Essages.addEssage("Засада создана.");
+
+                }
+
+                @Override
+                public void postError() {
+
+                }
+            };
+            findViewById(R.id.createAmbushAction).setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    serverConnect.getInstance().ExecCommand(createAmbush, Player.getPlayer().getGUID(),
+                            GPSInfo.getInstance().GetLat(), GPSInfo.getInstance().GetLng(),
+                            (int) (SelectedObject.getInstance().getPoint().latitude * 1e6),
+                            (int) (SelectedObject.getInstance().getPoint().longitude * 1e6)
+                    );
+                    close();
+                }
+            });
+        }
+        ObjectAction createAmbush;
+
+
+        @Override
+        public void updateInZone(boolean inZone) {
+            if (inZone) findViewById(R.id.createAmbushAction).setVisibility(VISIBLE);
+            else findViewById(R.id.createAmbushAction).setVisibility(INVISIBLE);
+        }
+
+        @Override
+        public void close() {
+            this.setVisibility(GONE);
+            actionView.HideView();
+
+        }
+        ActionView actionView;
+        @Override
+        public void setContainer(ActionView av) {
+            actionView=av;
+        }
     }
 }

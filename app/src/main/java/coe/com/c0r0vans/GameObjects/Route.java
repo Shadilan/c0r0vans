@@ -33,13 +33,11 @@ public class Route extends GameObject{
 
     private Polyline line;
 
-    public Route(){
 
-    }
 
-    public Route(JSONObject obj){
+    /*public Route(JSONObject obj){
             loadJSON(obj);
-    }
+    }*/
     public Route(JSONObject obj,GoogleMap map){
         this.map=map;
         loadJSON(obj);
@@ -142,11 +140,11 @@ public class Route extends GameObject{
     }
 
     private ObjectAction dropRoute;
-    public ObjectAction getAction( boolean inZone){
-      return dropRoute;
-    }
+
     public LatLng getPoint(){
-        LatLng result=new LatLng(Lat/1e6,Lng/1e6);
-        return result;
+        return new LatLng(Lat/1e6,Lng/1e6);
+    }
+    public ObjectAction getAction( boolean inZone){
+        return dropRoute;
     }
 }

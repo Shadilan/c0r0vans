@@ -5,7 +5,7 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:background="@android:color/transparent"
     android:layout_height="wrap_content">
-    <RelativeLayout
+    <!--<RelativeLayout
         android:orientation="horizontal"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -25,7 +25,7 @@
         <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/closeButton"
+            android:id="@+id/closeActionButton"
             android:src="@mipmap/closebutton"
             android:layout_alignBottom="@+id/actionTitle"
             android:layout_alignParentRight="true"
@@ -106,7 +106,7 @@
                     android:minHeight="80dp" />
 
             </LinearLayout>
-        </HorizontalScrollView>
+        </HorizontalScrollView>-->
 
 
 </RelativeLayout>

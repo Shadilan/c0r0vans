@@ -1,7 +1,14 @@
 package coe.com.c0r0vans.GameObjects;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.util.AttributeSet;
+import android.util.Log;
+import android.view.View;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.Circle;
@@ -13,11 +20,12 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-
+import coe.com.c0r0vans.ActionView;
 import coe.com.c0r0vans.GameSound;
 import coe.com.c0r0vans.MyGoogleMap;
+import coe.com.c0r0vans.R;
 import utility.Essages;
+import utility.GPSInfo;
 import utility.GameSettings;
 import utility.ImageLoader;
 import utility.serverConnect;
@@ -30,9 +38,9 @@ public class City extends GameObject{
     private int radius=100;
     private String upgrade;
     private String upgradeName;
-    private int influence1=0;
-    private int influence2=0;
-    private int influence3=0;
+    private long influence1=0;
+    private long influence2=0;
+    private long influence3=0;
 
 
     private Circle zone;
@@ -70,9 +78,10 @@ public class City extends GameObject{
             if (obj.has("Level")) Level=obj.getInt("Level");
             if (obj.has("Radius")) radius=obj.getInt("Radius");
             if (obj.has("Progress")) progress=obj.getInt("Progress");
-            if (obj.has("Influence1")) influence1=obj.getInt("Influence1");
-            if (obj.has("Influence2")) influence1=obj.getInt("Influence2");
-            if (obj.has("Influence3")) influence1=obj.getInt("Influence3");
+            if (obj.has("Influence1")) influence1=obj.getLong("Influence1");
+            if (obj.has("Influence2")) influence2=obj.getLong("Influence2");
+            if (obj.has("Influence3")) influence3=obj.getLong("Influence3");
+            Log.d("tttt","Influence1:"+influence1);
             if (mark==null) {
                 setMarker(map.addMarker(new MarkerOptions().position(latlng)));
 
@@ -113,7 +122,6 @@ public class City extends GameObject{
 
         Upgrade up=Player.getPlayer().getNextUpgrade(upgrade);
         if (up!=null) {
-            String need="!Нужен уровень города:"+up.getReqCityLev();
 
             String dop;
             if (up.getReqCityLev()>Level) dop="Требуется уровень города "+ up.getReqCityLev()+"\n";
@@ -127,18 +135,142 @@ public class City extends GameObject{
         else return "Это город "+ Level+" уровня.\n В городе можно приобрести улучшение \""+upgradeName+"\". "
                 +tushkan;
     }
+    public String getSkillInfo() {
+        Upgrade up=Player.getPlayer().getNextUpgrade(upgrade);
+        if (up!=null) {
+            String dop;
+            if (up.getReqCityLev()>Level) dop="Требуется уровень города "+ up.getReqCityLev()+"\n";
+            else if (up.getCost()>Player.getPlayer().getGold()) dop="Нужно больше золота!"+ up.getCost() +" золота!\n";
+            else if (up.getLevel()>Player.getPlayer().getLevel()-1) dop="Вы недостаточно опытны!\n";
+            else dop="Эффект:" + up.getDescription()+"\n";
 
+            return up.getName() + "\" за " +
+                    up.getCost() + " золота.\n" + dop;
+        }
+        else return upgradeName+"\". "
+                ;
+    }
+    public boolean upgradeAvaible(){
+        Upgrade up=Player.getPlayer().getNextUpgrade(upgrade);
+        return !((up == null)
+                || (up.getReqCityLev() > Level)
+                || (up.getCost() > Player.getPlayer().getGold())
+                || (up.getLevel() > Player.getPlayer().getLevel() - 1));
+    }
     public String getCityName(){return (Name+" lv."+Level) ;}
 
-    private ObjectAction startRoute;
-    private ObjectAction finishRoute;
-    private ObjectAction butUpgrade;
+
     @Override
-    public ArrayList<ObjectAction> getActions(boolean inZone) {
-        ArrayList<ObjectAction> Actions=new ArrayList<>();
-        if (!inZone) return Actions;
-        if (startRoute==null)
-            startRoute = new ObjectAction(this) {
+    public void changeMarkerSize(float Type) {
+        if (mark!=null) {
+            String markname = "city";
+            int lvl=(this.Level+1)/2;
+            if (lvl==0) lvl=1;
+            markname = markname + "_"+lvl;
+            markname = markname + GameObject.zoomToPostfix(Type);
+            mark.setIcon(ImageLoader.getDescritor(markname));
+            //if ("Y".equals(GameSettings.getInstance().get("USE_TILT"))) mark.setAnchor(0.5f, 1f);
+            //else
+            mark.setAnchor(0.5f, 0.5f);
+        }
+    }
+
+
+    @Override
+    public void setVisibility(boolean visibility) {
+        mark.setVisible(visibility);
+        zone.setVisible(visibility);
+    }
+
+    public void showRadius(){
+        String opt= GameSettings.getInstance().get("SHOW_CITY_RADIUS");
+        if (opt.equals("Y")){
+            zone.setVisible(true);
+        } else
+        {
+            zone.setVisible(false);
+        }
+    }
+
+    public long getInfluence1() {
+        return influence1;
+    }
+
+    public long getInfluence2() {
+        return influence2;
+    }
+
+    public long getInfluence3() {
+        return influence3;
+    }
+
+    private class CityWindow extends RelativeLayout implements  GameObjectView{
+        City city;
+        public CityWindow(Context context) {
+            super(context);
+            init();
+        }
+
+        public CityWindow(Context context, AttributeSet attrs) {
+            super(context, attrs);
+            init();
+        }
+
+        public CityWindow(Context context, AttributeSet attrs, int defStyleAttr) {
+            super(context, attrs, defStyleAttr);
+            init();
+        }
+        public void init(){
+            inflate(this.getContext(), R.layout.city_layout,this);
+            Log.d("tttt","Wind1");
+        }
+        boolean loaded=true;
+
+
+        public void setCity(City city){
+            Log.d("tttt","Wind2");
+            this.city=city;
+            if (loaded) applyCity();
+        }
+        ObjectAction buyAction;
+        ObjectAction startRouteAction;
+        ObjectAction endRouteAction;
+
+        private void applyCity() {
+            Log.d("tttt", "Wind4");
+
+            findViewById(R.id.closeActionButton).setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    close();
+                }
+            });
+            ((TextView) findViewById(R.id.cityName)).setText(city.getCityName());
+
+            long sum = city.getInfluence1() + city.getInfluence2() + city.getInfluence3();
+            if (sum == 0) sum = 1;//TODO Хрень какаято
+
+            int inf1 = Math.round(city.getInfluence1() * 100 / sum );
+            int inf2 = Math.round(city.getInfluence2() * 100/ sum );
+            int inf3 = Math.round(city.getInfluence3() * 100/ sum );
+            int maxInf = Math.max(Math.max(Math.max(inf1, inf2), inf3), 1);
+            //TODO: Добавить текст
+            Log.d("tttt","Inf"+city.getInfluence1()+" Inf%" + inf1 +" Sum:"+sum);
+            ProgressBar progressBar = (ProgressBar) findViewById(R.id.GuildInf);
+            progressBar.setProgress(inf1);
+            progressBar.setMax(100);
+            progressBar = (ProgressBar) findViewById(R.id.AllianceInf);
+            progressBar.setProgress(inf2);
+            progressBar.setMax(100);
+            progressBar = (ProgressBar) findViewById(R.id.LigaInf);
+            progressBar.setProgress(inf3);
+            progressBar.setMax(100);
+            progressBar = (ProgressBar) findViewById(R.id.cityExp);
+            progressBar.setMax(100);
+            progressBar.setProgress(city.getProgress());
+            ((TextView) findViewById(R.id.skillDesc)).setText(city.getSkillInfo());
+            findViewById(R.id.buyUpgrade).setEnabled(city.upgradeAvaible());
+            startRouteAction = new ObjectAction(city) {
                 @Override
                 public Bitmap getImage() {
                     return ImageLoader.getImage("start_route");
@@ -173,10 +305,22 @@ public class City extends GameObject{
                 }
             };
 
-        if (startRoute.isEnabled() && Player.getPlayer().getRouteStart()) Actions.add(startRoute);
+            findViewById(R.id.buyUpgrade).setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    serverConnect.getInstance().ExecCommand(startRouteAction,
+                            city.getGUID(),
+                            GPSInfo.getInstance().GetLat(),
+                            GPSInfo.getInstance().GetLng(),
+                            (int) (city.getMarker().getPosition().latitude * 1e6),
+                            (int) (city.getMarker().getPosition().longitude * 1e6));
+                    close();
+                }
 
-        if (finishRoute==null)
-        finishRoute = new ObjectAction(this) {
+
+            });
+
+            endRouteAction = new ObjectAction(city) {
                 @Override
                 public Bitmap getImage() {
                     return ImageLoader.getImage("end_route");
@@ -193,28 +337,39 @@ public class City extends GameObject{
                     return "FinishRoute";
                 }
 
-            @Override
-            public void preAction() {
-                Player.getPlayer().setRouteStart(true);
-            }
+                @Override
+                public void preAction() {
+                    Player.getPlayer().setRouteStart(true);
+                }
 
-            @Override
-            public void postAction() {
-                Essages.addEssage("Завершен маршрут в город "+Name);
-                GameSound.playSound(GameSound.FINISH_ROUTE_SOUND);
-                serverConnect.getInstance().getPlayerInfo();
-                serverConnect.getInstance().RefreshCurrent();
-            }
+                @Override
+                public void postAction() {
+                    Essages.addEssage("Завершен маршрут в город " + Name);
+                    GameSound.playSound(GameSound.FINISH_ROUTE_SOUND);
+                    serverConnect.getInstance().getPlayerInfo();
+                    serverConnect.getInstance().RefreshCurrent();
+                }
 
-            @Override
-            public void postError() {
+                @Override
+                public void postError() {
 
-            }
-        };
-        if (finishRoute.isEnabled()&& !Player.getPlayer().getRouteStart()) Actions.add(finishRoute);
+                }
+            };
+            findViewById(R.id.buyUpgrade).setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    serverConnect.getInstance().ExecCommand(buyAction,
+                            city.getGUID(),
+                            GPSInfo.getInstance().GetLat(),
+                            GPSInfo.getInstance().GetLng(),
+                            (int) (city.getMarker().getPosition().latitude * 1e6),
+                            (int) (city.getMarker().getPosition().longitude * 1e6));
+                    close();
+                }
 
-        if (butUpgrade==null)
-            butUpgrade = new ObjectAction(this) {
+            });
+
+            buyAction = new ObjectAction(city) {
                 @Override
                 public Bitmap getImage() {
                     return ImageLoader.getImage("buy_item");
@@ -222,7 +377,7 @@ public class City extends GameObject{
 
                 @Override
                 public String getInfo() {
-                    return "Купить апгрейд "+upgrade;
+                    return "Купить апгрейд " + upgrade;
                 }
 
                 @Override
@@ -240,9 +395,9 @@ public class City extends GameObject{
                     GameSound.playSound(GameSound.BUY_SOUND);
                     serverConnect.getInstance().getPlayerInfo();
 
-                    Upgrade up=Player.getPlayer().getNextUpgrade(upgrade);
-                    if (up!=null ) Essages.addEssage("Улучшение "+up.getName()+" куплено.");
-                    else Essages.addEssage("Улучшение "+upgrade+" куплено.");
+                    Upgrade up = Player.getPlayer().getNextUpgrade(upgrade);
+                    if (up != null) Essages.addEssage("Улучшение " + up.getName() + " куплено.");
+                    else Essages.addEssage("Улучшение " + upgrade + " куплено.");
                 }
 
                 @Override
@@ -250,44 +405,49 @@ public class City extends GameObject{
 
                 }
             };
-        Upgrade up=Player.getPlayer().getNextUpgrade(upgrade);
-        if (up==null || (up.getReqCityLev()<=Level && up.getCost()<=Player.getPlayer().getGold() && up.getLevel()<Player.getPlayer().getLevel() ))
-            Actions.add(butUpgrade);
-        return Actions;
-    }
-    @Override
-    public void changeMarkerSize(float Type) {
-        if (mark!=null) {
-            String markname = "city";
-            int lvl=(this.Level+1)/2;
-            if (lvl==0) lvl=1;
-            markname = markname + "_"+lvl;
-            markname = markname + GameObject.zoomToPostfix(Type);
-            mark.setIcon(ImageLoader.getDescritor(markname));
-            //if ("Y".equals(GameSettings.getInstance().get("USE_TILT"))) mark.setAnchor(0.5f, 1f);
-            //else
-            mark.setAnchor(0.5f, 0.5f);
+            findViewById(R.id.buyUpgrade).setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    serverConnect.getInstance().ExecCommand(endRouteAction,
+                            city.getGUID(),
+                            GPSInfo.getInstance().GetLat(),
+                            GPSInfo.getInstance().GetLng(),
+                            (int) (city.getMarker().getPosition().latitude * 1e6),
+                            (int) (city.getMarker().getPosition().longitude * 1e6));
+                    close();
+                }
+            });
+
+        }
+        public void updateInZone(boolean inZone){
+            if (inZone) {
+                findViewById(R.id.startRoute).setVisibility(INVISIBLE);
+                findViewById(R.id.finishRoute).setVisibility(INVISIBLE);
+                if (Player.getPlayer().getRouteStart()) findViewById(R.id.startRoute).setVisibility(VISIBLE);
+                if (!Player.getPlayer().getRouteStart()) findViewById(R.id.finishRoute).setVisibility(VISIBLE);
+                if (city.upgradeAvaible()) findViewById(R.id.buyUpgrade).setVisibility(VISIBLE);
+            }
+            else
+            {
+                findViewById(R.id.startRoute).setVisibility(GONE);
+                findViewById(R.id.finishRoute).setVisibility(GONE);
+                findViewById(R.id.buyUpgrade).setVisibility(GONE);
+            }
+        }
+        public void close(){
+            this.setVisibility(GONE);
+            city=null;
+            actionView.HideView();
+        }
+        ActionView actionView;
+        @Override
+        public void setContainer(ActionView av) {
+            actionView=av;
         }
     }
-
-
-    @Override
-    public void setVisibility(boolean visibility) {
-        mark.setVisible(visibility);
-        zone.setVisible(visibility);
-    }
-
-    public void showRadius(){
-        String opt= GameSettings.getInstance().get("SHOW_CITY_RADIUS");
-        if (opt.equals("Y")){
-            zone.setVisible(true);
-        } else
-        {
-            zone.setVisible(false);
-        }
-    }
-
-    public String getUpgrade() {
-        return upgrade;
+    public RelativeLayout getObjectView(Context context){
+        CityWindow result=new CityWindow(context);
+        result.setCity(this);
+        return result;
     }
 }

@@ -1,6 +1,8 @@
 package coe.com.c0r0vans.GameObjects;
 
+import android.content.Context;
 import android.graphics.Bitmap;
+import android.widget.RelativeLayout;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -22,7 +24,7 @@ public class GameObject {
     public static final float ICON_MEDIUM = 16;
     public static final float ICON_LARGE = 17;
     public static String zoomToPostfix(float zoom){
-        String result="_m";
+        String result;
         if (zoom==GameObject.ICON_SMALL)
             result = "_s";
         else if (zoom==GameObject.ICON_MEDIUM)
@@ -128,4 +130,7 @@ public class GameObject {
         this.map = map;
     }
     public String getName(){return Name;}
+    public RelativeLayout getObjectView(Context context){
+        return null;
+    }
 }

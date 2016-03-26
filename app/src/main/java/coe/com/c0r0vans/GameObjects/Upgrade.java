@@ -13,7 +13,6 @@ import utility.ImageLoader;
  */
 public class Upgrade {
     private String Type;
-    private Number Level;
     private String Name;
     private String Description;
     private int nextCost=0;
@@ -23,7 +22,7 @@ public class Upgrade {
 
     public void loadJSON(JSONObject object) throws JSONException {
         if (object.has("Type")) Type=object.getString("Type");
-        if (object.has("Level")) Level=object.getInt("Level");
+        if (object.has("Level")) level=object.getInt("Level");
         if (object.has("Name")) Name=object.getString("Name");
         if (object.has("Description")) Description=object.getString("Description");
         if (object.has("ReqCityLev")) reqCityLev=object.getInt("ReqCityLev");
@@ -37,12 +36,12 @@ public class Upgrade {
             e.printStackTrace();
         }
     }
-    public int getNextCost(){return nextCost;}
+    //public int getNextCost(){return nextCost;}
     public Bitmap getImage(){
         return ImageLoader.getImage(Type);
     }
     public String getDescription(){
-        return "Уровень "+Level+"\n"+Description;
+        return "Уровень "+level+"\n"+Description;
     }
     public String getName(){
         return Name;

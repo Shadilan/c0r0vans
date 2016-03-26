@@ -1,7 +1,5 @@
 package coe.com.c0r0vans.GameObjects;
 
-import android.graphics.Bitmap;
-
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -10,13 +8,9 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-
 import coe.com.c0r0vans.MyGoogleMap;
-import utility.Essages;
 import utility.GameSettings;
 import utility.ImageLoader;
-import utility.serverConnect;
 
 /**
  * Caravan Object
@@ -91,49 +85,7 @@ public class Caravan extends GameObject {
             else return "Чейто караван проезжает, звеня не ВАШИМ золотом.";
     }
     private ObjectAction dropRoute;
-    @Override
-    public ArrayList<ObjectAction> getActions(boolean inZone) {
-        ArrayList<ObjectAction> Actions=new ArrayList<>();
-        if (dropRoute==null)
 
-        dropRoute = new ObjectAction(this) {
-            @Override
-            public Bitmap getImage() {
-                return ImageLoader.getImage("drop_route");
-            }
-
-            @Override
-            public String getInfo() {
-                return "Сбросить маршрут.";
-            }
-
-            @Override
-            public String getCommand() {
-                return "DropRoute";
-            }
-
-            @Override
-            public void preAction() {
-                setEnable(false);
-                owner.getMarker().setVisible(false);
-            }
-
-            @Override
-            public void postAction() {
-                owner.RemoveObject();
-                serverConnect.getInstance().RefreshCurrent();
-                Essages.addEssage("Караван из распущен.");
-            }
-
-            @Override
-            public void postError() {
-                owner.getMarker().setVisible(true);
-            }
-        };
-
-        //if (dropRoute.isEnabled() && isOwner && false)Actions.add(dropRoute);
-        return Actions;
-    }
     @Override
     public void changeMarkerSize(float Type) {
         if (mark!=null) {

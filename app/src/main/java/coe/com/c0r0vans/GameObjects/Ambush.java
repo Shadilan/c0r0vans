@@ -1,8 +1,15 @@
 package coe.com.c0r0vans.GameObjects;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.util.AttributeSet;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.Circle;
@@ -14,13 +21,15 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-
+import coe.com.c0r0vans.ActionView;
 import coe.com.c0r0vans.GameSound;
 import coe.com.c0r0vans.MyGoogleMap;
+import coe.com.c0r0vans.R;
 import utility.Essages;
+import utility.GPSInfo;
 import utility.GameSettings;
 import utility.ImageLoader;
+import utility.serverConnect;
 
 /**
  * @author Shadilan
@@ -34,10 +43,6 @@ public class Ambush extends GameObject {
 
     private int ready=0;
 
-    public  Ambush(GoogleMap map){
-        this.map=map;
-
-    }
     public  Ambush(GoogleMap map,JSONObject obj)
     {
         Log.d("Debug info","Ambush loaded.");
@@ -153,98 +158,6 @@ public class Ambush extends GameObject {
 
 
     @Override
-    public ArrayList<ObjectAction> getActions(boolean inZone) {
-        ArrayList<ObjectAction> Actions=new ArrayList<>();
-        try {
-            if (removeAmbush == null) {
-                if (faction == 0)
-                    removeAmbush = new ObjectAction(this) {
-                        @Override
-                        public Bitmap getImage() {
-                            return ImageLoader.getImage("remove_ambush");
-                        }
-
-                        @Override
-                        public String getInfo() {
-                            return "Убрать засаду.";
-                        }
-
-                        @Override
-                        public String getCommand() {
-                            return "CancelAmbush";
-                        }
-
-                        @Override
-                        public void preAction() {
-
-                            owner.getMarker().setVisible(false);
-                            zone.setVisible(false);
-                        }
-
-                        @Override
-                        public void postAction() {
-                            GameSound.playSound(GameSound.REMOVE_AMBUSH);
-                            Essages.addEssage("Засада распущена");
-                            owner.RemoveObject();
-                        }
-
-                        @Override
-                        public void postError() {
-                            owner.getMarker().setVisible(true);
-                            zone.setVisible(true);
-                        }
-                    };
-                else if (faction != Player.getPlayer().getRace())
-                    removeAmbush = new ObjectAction(this) {
-                        @Override
-                        public Bitmap getImage() {
-                            return ImageLoader.getImage("attack_ambush");
-                        }
-
-                        @Override
-                        public String getInfo() {
-                            return "Убрать засаду.";
-                        }
-
-                        @Override
-                        public String getCommand() {
-                            return "DestroyAmbush";
-                        }
-
-                        @Override
-
-                        public void preAction() {
-
-                            owner.getMarker().setVisible(false);
-                            zone.setVisible(false);
-                        }
-
-                        @Override
-                        public void postAction() {
-                            GameSound.playSound(GameSound.KILL_SOUND);
-                            Essages.addEssage("Разбойники уничтожены.");
-                            owner.RemoveObject();
-                        }
-
-                        @Override
-                        public void postError() {
-                            owner.getMarker().setVisible(true);
-                            zone.setVisible(true);
-                        }
-                    };
-
-            }
-            if ((faction == 0 || inZone) && removeAmbush!=null && removeAmbush.isEnabled())
-                Actions.add(removeAmbush);
-        }
-        catch (Exception e) {
-            Essages.addEssage(e.toString());
-        }
-        return Actions;
-    }
-
-
-    @Override
     public void changeMarkerSize(float Type) {
         if (mark != null) {
             String markname = "ambush";
@@ -252,7 +165,6 @@ public class Ambush extends GameObject {
             if (faction==0) markname=markname+"_"+faction+Player.getPlayer().getRace();
             else markname = markname + "_"+faction;
             markname = markname + GameObject.zoomToPostfix(Type);
-            Log.d("tttt",markname);
             mark.setIcon(ImageLoader.getDescritor(markname));
             if ("Y".equals(GameSettings.getInstance().get("USE_TILT"))) mark.setAnchor(0.5f, 1f);
             else mark.setAnchor(0.5f, 0.5f);
@@ -274,8 +186,208 @@ public class Ambush extends GameObject {
             zone.setVisible(false);
         }
     }
-    public int getIsOwner(){
+    public int getFaction() {
         return faction;
     }
 
+    class AmbushLayout extends RelativeLayout implements GameObjectView{
+
+        public AmbushLayout(Context context) {
+            super(context);
+            init();
+        }
+
+        public AmbushLayout(Context context, AttributeSet attrs) {
+            super(context, attrs);
+            init();
+        }
+
+        public AmbushLayout(Context context, AttributeSet attrs, int defStyleAttr) {
+            super(context, attrs, defStyleAttr);
+            init();
+        }
+        private void init(){
+            inflate(this.getContext(),R.layout.ambush_layout,this);
+        }
+        Ambush ambush;
+        boolean loaded=true;
+
+
+
+        public void setAmbush(Ambush ambush){
+            this.ambush=ambush;
+            if (loaded){
+                applyAmbush();
+            }
+        }
+        private ObjectAction removeAction;
+        private void applyAmbush() {
+            int f=ambush.getFaction();
+            if (f==0) f=Player.getPlayer().getRace();
+            if (f<1 || f>4) f=4;
+            switch (f) {
+                case 3:
+                    ((ImageView)findViewById(R.id.ambushFaction)).setImageResource(R.mipmap.liga_small);
+                    break;
+                case 2:
+                    ((ImageView)findViewById(R.id.ambushFaction)).setImageResource(R.mipmap.alliance_small);
+                    break;
+                case 1:
+                    ((ImageView)findViewById(R.id.ambushFaction)).setImageResource(R.mipmap.guild_small);
+                    break;
+                default:
+                    ((ImageView)findViewById(R.id.ambushFaction)).setImageResource(R.mipmap.neutral_small);
+                    break;
+            }
+            ((TextView)findViewById(R.id.ambushDesc)).setText(ambush.getInfo());
+            ImageButton removeButton=(ImageButton)findViewById(R.id.ambushActionBtn);
+            if (ambush.getFaction()==0)
+            {
+                removeButton.setImageResource(R.mipmap.dismiss);
+                removeAction = new ObjectAction(ambush) {
+                    @Override
+                    public Bitmap getImage() {
+                        return ImageLoader.getImage("remove_ambush");
+                    }
+
+                    @Override
+                    public String getInfo() {
+                        return "Убрать засаду.";
+                    }
+
+                    @Override
+                    public String getCommand() {
+                        return "CancelAmbush";
+                    }
+
+                    @Override
+                    public void preAction() {
+
+                        owner.getMarker().setVisible(false);
+                        zone.setVisible(false);
+                    }
+
+                    @Override
+                    public void postAction() {
+                        GameSound.playSound(GameSound.REMOVE_AMBUSH);
+                        Essages.addEssage("Засада распущена");
+                        owner.RemoveObject();
+                    }
+
+                    @Override
+                    public void postError() {
+                        owner.getMarker().setVisible(true);
+                        zone.setVisible(true);
+                    }
+                };
+                removeButton.setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        serverConnect.getInstance().ExecCommand(removeAction,
+                                ambush.getGUID(),
+                                GPSInfo.getInstance().GetLat(),
+                                GPSInfo.getInstance().GetLng(),
+                                (int)(ambush.getMarker().getPosition().latitude*1e6),
+                                (int)(ambush.getMarker().getPosition().longitude*1e6));
+                        close();
+                    }
+
+                });
+            } else if(ambush.getFaction()==Player.getPlayer().getRace()){
+                removeButton.setEnabled(false);
+            } else{
+                removeButton.setImageResource(R.mipmap.rem_ambush);
+                removeAction = new ObjectAction(ambush) {
+                    @Override
+                    public Bitmap getImage() {
+                        return ImageLoader.getImage("attack_ambush");
+                    }
+
+                    @Override
+                    public String getInfo() {
+                        return "Убрать засаду.";
+                    }
+
+                    @Override
+                    public String getCommand() {
+                        return "DestroyAmbush";
+                    }
+
+                    @Override
+
+                    public void preAction() {
+
+                        owner.getMarker().setVisible(false);
+                        zone.setVisible(false);
+                    }
+
+                    @Override
+                    public void postAction() {
+                        GameSound.playSound(GameSound.KILL_SOUND);
+                        Essages.addEssage("Разбойники уничтожены.");
+                        owner.RemoveObject();
+                    }
+
+                    @Override
+                    public void postError() {
+                        owner.getMarker().setVisible(true);
+                        zone.setVisible(true);
+                    }
+                };
+
+            }
+            removeButton.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    serverConnect.getInstance().ExecCommand(removeAction,
+                            ambush.getGUID(),
+                            GPSInfo.getInstance().GetLat(),
+                            GPSInfo.getInstance().GetLng(),
+                            (int)(ambush.getMarker().getPosition().latitude*1e6),
+                            (int)(ambush.getMarker().getPosition().longitude*1e6));
+                    close();
+                }
+
+            });
+            removeButton.setVisibility(INVISIBLE);
+            findViewById(R.id.closeActionButton).setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    close();
+                }
+            });
+        }
+
+        @Override
+        public void updateInZone(boolean inZone) {
+            ImageButton removeButton=(ImageButton)findViewById(R.id.ambushActionBtn);
+            if (ambush.getFaction()==0)
+            {
+
+                removeButton.setVisibility(VISIBLE);
+
+            } else if(ambush.getFaction()==Player.getPlayer().getRace()){
+                removeButton.setVisibility(GONE);
+            } else{
+                if (inZone) removeButton.setVisibility(VISIBLE);
+                else removeButton.setVisibility(GONE);
+
+            }
+        }
+
+        @Override
+        public void close() {
+            actionView.HideView();
+        }
+        ActionView actionView;
+        @Override
+        public void setContainer(ActionView av) {
+            actionView=av;
+        }
+    }
+    public RelativeLayout getObjectView(Context context){
+        AmbushLayout result=new AmbushLayout(context);
+        result.setAmbush(this);
+        return result;
+    }
 }
