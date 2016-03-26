@@ -159,9 +159,9 @@ public class InfoLayout extends RelativeLayout implements ShowHideForm{
         NumberFormat nf=NumberFormat.getInstance();
         nf.setGroupingUsed(true);
         ((TextView)findViewById(R.id.levelInfo)).setText(String.valueOf(Player.getPlayer().getLevel()));
-        ((TextView)findViewById(R.id.expInfo)).setText(nf.format(String.valueOf(Player.getPlayer().getExp())));
-        ((TextView)findViewById(R.id.tnlInfo)).setText(nf.format(String.valueOf(Player.getPlayer().getTNL())));
-        ((TextView)findViewById(R.id.goldInfo)).setText(nf.format(String.valueOf(Player.getPlayer().getGold())));
+        ((TextView)findViewById(R.id.expInfo)).setText(nf.format(Player.getPlayer().getExp()));
+        ((TextView)findViewById(R.id.tnlInfo)).setText(nf.format(Player.getPlayer().getTNL()));
+        ((TextView)findViewById(R.id.goldInfo)).setText(nf.format(Player.getPlayer().getGold()));
         ((TextView)findViewById(R.id.caravanInfo)).setText(String.valueOf(Player.getPlayer().getCaravans()));
         ((TextView)findViewById(R.id.ambushLeftInfo)).setText(String.valueOf(Player.getPlayer().getAmbushLeft()));
         ((TextView)findViewById(R.id.ambushSetInfo)).setText(String.valueOf(Player.getPlayer().getAmbushMax() - Player.getPlayer().getAmbushLeft()));
