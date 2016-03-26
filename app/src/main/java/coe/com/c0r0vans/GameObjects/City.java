@@ -248,7 +248,7 @@ public class City extends GameObject{
             ((TextView) findViewById(R.id.cityName)).setText(city.getCityName());
 
             long sum = city.getInfluence1() + city.getInfluence2() + city.getInfluence3();
-            if (sum == 0) sum = 1;//TODO Хрень какаято
+            if (sum == 0) sum = 1;
 
             int inf1 = Math.round(city.getInfluence1() * 100 / sum );
             int inf2 = Math.round(city.getInfluence2() * 100/ sum );
@@ -295,12 +295,12 @@ public class City extends GameObject{
                 public void postAction() {
                     GameSound.playSound(GameSound.START_ROUTE_SOUND);
                     Essages.addEssage("Начат маршрут в город " + Name);
-
                     serverConnect.getInstance().getPlayerInfo();
                 }
 
                 @Override
                 public void postError() {
+                    Player.getPlayer().setRouteStart(true);
 
                 }
             };
@@ -352,6 +352,7 @@ public class City extends GameObject{
 
                 @Override
                 public void postError() {
+                    Player.getPlayer().setRouteStart(false);
 
                 }
             };
@@ -398,6 +399,7 @@ public class City extends GameObject{
                     Upgrade up = Player.getPlayer().getNextUpgrade(upgrade);
                     if (up != null) Essages.addEssage("Улучшение " + up.getName() + " куплено.");
                     else Essages.addEssage("Улучшение " + upgrade + " куплено.");
+                    serverConnect.getInstance().getPlayerInfo();
                 }
 
                 @Override
