@@ -27,7 +27,7 @@
         android:layout_above="@+id/ambushActionBtn"
         android:layout_toEndOf="@+id/ambushFaction"
         android:layout_toStartOf="@+id/closeActionButton"
-        android:background="@android:color/white"
+        android:background="@drawable/layouts"
         />
 
     <ImageButton
