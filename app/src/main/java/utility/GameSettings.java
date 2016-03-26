@@ -87,8 +87,14 @@ public class GameSettings extends HashMap<String,String>{
     }
     public static int getFaction(){
         String oldFaction=instance.get("PLAYER_FACTION");
-        if ("".equals(oldFaction)) oldFaction="0";
-        return Integer.parseInt(oldFaction);
+        if ("".equals(oldFaction)||oldFaction ==null) oldFaction="0";
+        int result=0;
+        try{
+            result=Integer.parseInt(oldFaction);
+        } catch (Exception e){
+            Log.d("ShitHapens","oldFaction "+oldFaction);
+        }
+        return result;
     }
 
     public void save(){
