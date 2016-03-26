@@ -359,7 +359,7 @@ public class City extends GameObject{
             findViewById(R.id.finishRoute).setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    serverConnect.getInstance().ExecCommand(buyAction,
+                    serverConnect.getInstance().ExecCommand(endRouteAction,
                             city.getGUID(),
                             GPSInfo.getInstance().GetLat(),
                             GPSInfo.getInstance().GetLng(),
@@ -410,7 +410,7 @@ public class City extends GameObject{
             findViewById(R.id.buyUpgrade).setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    serverConnect.getInstance().ExecCommand(endRouteAction,
+                    serverConnect.getInstance().ExecCommand(buyAction,
                             city.getGUID(),
                             GPSInfo.getInstance().GetLat(),
                             GPSInfo.getInstance().GetLng(),
