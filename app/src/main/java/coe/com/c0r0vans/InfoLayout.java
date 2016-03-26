@@ -13,6 +13,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
+import java.text.NumberFormat;
+
 import coe.com.c0r0vans.GameObjects.AmbushItem;
 import coe.com.c0r0vans.GameObjects.Player;
 import coe.com.c0r0vans.GameObjects.Route;
@@ -154,11 +156,12 @@ public class InfoLayout extends RelativeLayout implements ShowHideForm{
     }
 
     public void loadFromPlayer(){
-
+        NumberFormat nf=NumberFormat.getInstance();
+        nf.setGroupingUsed(true);
         ((TextView)findViewById(R.id.levelInfo)).setText(String.valueOf(Player.getPlayer().getLevel()));
-        ((TextView)findViewById(R.id.expInfo)).setText(String.valueOf(Player.getPlayer().getExp()));
-        ((TextView)findViewById(R.id.tnlInfo)).setText(String.valueOf(Player.getPlayer().getTNL()));
-        ((TextView)findViewById(R.id.goldInfo)).setText(String.valueOf(Player.getPlayer().getGold()));
+        ((TextView)findViewById(R.id.expInfo)).setText(nf.format(String.valueOf(Player.getPlayer().getExp())));
+        ((TextView)findViewById(R.id.tnlInfo)).setText(nf.format(String.valueOf(Player.getPlayer().getTNL())));
+        ((TextView)findViewById(R.id.goldInfo)).setText(nf.format(String.valueOf(Player.getPlayer().getGold())));
         ((TextView)findViewById(R.id.caravanInfo)).setText(String.valueOf(Player.getPlayer().getCaravans()));
         ((TextView)findViewById(R.id.ambushLeftInfo)).setText(String.valueOf(Player.getPlayer().getAmbushLeft()));
         ((TextView)findViewById(R.id.ambushSetInfo)).setText(String.valueOf(Player.getPlayer().getAmbushMax() - Player.getPlayer().getAmbushLeft()));

@@ -26,6 +26,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -464,14 +465,15 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
         Player.getPlayer().addOnChange(new OnGameObjectChange() {
             @Override
             public void change(int ChangeType) {
-
+                NumberFormat nf=NumberFormat.getInstance();
+                nf.setGroupingUsed(true);
                 if (ChangeType != OnGameObjectChange.EXTERNAL) return;
                 TextView am = (TextView) findViewById(R.id.levelAmount);
                 am.setText(String.valueOf(Player.getPlayer().getLevel()));
                 am = (TextView) findViewById(R.id.expAmount);
-                am.setText(String.valueOf(Player.getPlayer().getExp()));
+                am.setText(String.valueOf(nf.format(Player.getPlayer().getExp())));
                 am = (TextView) findViewById(R.id.goldAmount);
-                am.setText(String.valueOf(Player.getPlayer().getGold()));
+                am.setText(String.valueOf(nf.format(Player.getPlayer().getGold())));
                 ImageView btn = (ImageView) findViewById(R.id.infoview);
                 if ("".equals(Player.getPlayer().getCurrentRoute())) btn.setImageResource(R.mipmap.info);
                 else btn.setImageResource(R.mipmap.info_route);
