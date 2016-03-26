@@ -64,13 +64,14 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
      */
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        GameSettings.init(getApplicationContext());
         Player.instance();
         setContentView(R.layout.activity_main_window);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         ImageLoader.Loader(this.getApplicationContext());
-        GameSettings.init(getApplicationContext());
+
 
         LogView = (LinearLayout) findViewById(R.id.chatBox);
         scrollView= (ScrollView) findViewById(R.id.scrollView);

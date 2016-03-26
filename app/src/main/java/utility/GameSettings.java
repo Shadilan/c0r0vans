@@ -53,6 +53,7 @@ public class GameSettings extends HashMap<String,String>{
         put("TRACK_BEARING","N");
         put("BEARING","0");
         put("ZOOM","18");
+        put("PLAYER_FACTION","0");
         save();
     }
     public static float getBearing(){
@@ -76,6 +77,18 @@ public class GameSettings extends HashMap<String,String>{
         instance.put("ZOOM", String.valueOf(zoom));
         Log.d("Clientzoom", "Set zoom " + zoom);
         instance.save();
+    }
+    public static void setFaction(int faction){
+        String oldFaction=instance.get("PLAYER_FACTION");
+        if (!String.valueOf(faction).equals(oldFaction)) {
+            instance.put("PLAYER_FACTION", String.valueOf(faction));
+            instance.save();
+        }
+    }
+    public static int getFaction(){
+        String oldFaction=instance.get("PLAYER_FACTION");
+        if ("".equals(oldFaction)) oldFaction="0";
+        return Integer.parseInt(oldFaction);
     }
 
     public void save(){

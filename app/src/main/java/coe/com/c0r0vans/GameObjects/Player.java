@@ -30,6 +30,7 @@ import coe.com.c0r0vans.OnGameObjectChange;
 import coe.com.c0r0vans.R;
 import utility.Essages;
 import utility.GPSInfo;
+import utility.GameSettings;
 import utility.ImageLoader;
 import utility.ResourceString;
 import utility.serverConnect;
@@ -111,6 +112,8 @@ public class Player extends GameObject {
 
             }
         };
+        race=GameSettings.getFaction();
+
     }
 
     public int getAmbushRad(){return player.AmbushRadius;}
@@ -194,6 +197,7 @@ public class Player extends GameObject {
             if (obj.has("AmbushRadius")) AmbushRadius=obj.getInt("AmbushRadius");
             if (obj.has("ActionDistance")) ActionDistance=obj.getInt("ActionDistance");
             if (obj.has("Race")) race=obj.getInt("Race");
+            if (race!=0) GameSettings.setFaction(race);
             circle.setRadius(ActionDistance);
             if (obj.has("Upgrades")){
                 JSONArray upg=obj.getJSONArray("Upgrades");

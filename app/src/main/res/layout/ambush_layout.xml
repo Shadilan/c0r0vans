@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@android:color/white">
+    android:background="@android:color/transparent">
 
     <ImageView
         android:layout_width="wrap_content"
@@ -27,6 +27,7 @@
         android:layout_above="@+id/ambushActionBtn"
         android:layout_toEndOf="@+id/ambushFaction"
         android:layout_toStartOf="@+id/closeActionButton"
+        android:background="@android:color/white"
         />
 
     <ImageButton
