@@ -258,9 +258,9 @@ public class City extends GameObject{
             int maxInf = Math.max(Math.max(Math.max(inf1, inf2), inf3), 1);
             NumberFormat nf=NumberFormat.getInstance();
             nf.setGroupingUsed(true);
-            ((TextView)findViewById(R.id.guildInfCount)).setText(nf.format(inf1));
-            ((TextView)findViewById(R.id.allianceInfCount)).setText(nf.format(inf2));
-            ((TextView)findViewById(R.id.ligaInfCount)).setText(nf.format(inf3));
+            ((TextView)findViewById(R.id.guildInfCount)).setText(nf.format(city.getInfluence1()));
+            ((TextView)findViewById(R.id.allianceInfCount)).setText(nf.format(city.getInfluence2()));
+            ((TextView)findViewById(R.id.ligaInfCount)).setText(nf.format(city.getInfluence3()));
             ProgressBar progressBar = (ProgressBar) findViewById(R.id.GuildInf);
             progressBar.setProgress(inf1);
             progressBar.setMax(100);
