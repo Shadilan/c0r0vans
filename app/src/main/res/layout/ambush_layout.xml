@@ -4,17 +4,27 @@
     android:layout_height="wrap_content"
     android:background="@android:color/transparent">
 
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/closeActionButton"
+        android:src="@mipmap/closebutton"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true" />
+
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/ambushFaction"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true"
-        android:src="@mipmap/liga_small"
+        android:src="@mipmap/legue"
         android:minHeight="100dp"
         android:minWidth="100dp"
         android:maxWidth="100dp"
-        android:maxHeight="100dp" />
+        android:maxHeight="100dp"
+
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -23,26 +33,18 @@
         android:text="Medium Text"
         android:id="@+id/ambushDesc"
         android:singleLine="false"
-        android:layout_alignParentTop="true"
-        android:layout_above="@+id/ambushActionBtn"
-        android:layout_toEndOf="@+id/ambushFaction"
-        android:layout_toStartOf="@+id/closeActionButton"
         android:background="@drawable/layouts"
-        />
+        android:layout_below="@+id/closeActionButton"
+        android:layout_toEndOf="@+id/ambushFaction"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"/>
 
     <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/ambushActionBtn"
         android:src="@mipmap/rem_ambush"
-        android:layout_below="@+id/ambushFaction"
+        android:layout_below="@+id/ambushDesc"
         android:layout_centerHorizontal="true" />
 
-    <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/closeActionButton"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:src="@mipmap/closebutton" />
 </RelativeLayout>

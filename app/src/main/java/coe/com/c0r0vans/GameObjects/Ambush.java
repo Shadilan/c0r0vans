@@ -227,16 +227,16 @@ public class Ambush extends GameObject {
             if (f<1 || f>4) f=4;
             switch (f) {
                 case 3:
-                    ((ImageView)findViewById(R.id.ambushFaction)).setImageResource(R.mipmap.liga_small);
+                    ((ImageView)findViewById(R.id.ambushFaction)).setImageResource(R.mipmap.legue);
                     break;
                 case 2:
-                    ((ImageView)findViewById(R.id.ambushFaction)).setImageResource(R.mipmap.alliance_small);
+                    ((ImageView)findViewById(R.id.ambushFaction)).setImageResource(R.mipmap.alliance);
                     break;
                 case 1:
-                    ((ImageView)findViewById(R.id.ambushFaction)).setImageResource(R.mipmap.guild_small);
+                    ((ImageView)findViewById(R.id.ambushFaction)).setImageResource(R.mipmap.guild);
                     break;
                 default:
-                    ((ImageView)findViewById(R.id.ambushFaction)).setImageResource(R.mipmap.neutral_small);
+                    ((ImageView)findViewById(R.id.ambushFaction)).setImageResource(R.mipmap.neutral);
                     break;
             }
             ((TextView)findViewById(R.id.ambushDesc)).setText(ambush.getInfo());
