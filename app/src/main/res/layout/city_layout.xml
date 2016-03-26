@@ -170,4 +170,40 @@
         android:layout_below="@+id/cityExp"
         android:layout_centerHorizontal="true" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Medium Text"
+        android:id="@+id/guildInfCount"
+        android:layout_alignTop="@+id/GuildInf"
+        android:layout_above="@+id/AllianceInf"
+        android:layout_alignEnd="@+id/GuildInf"
+        android:layout_toEndOf="@+id/imageView"
+        android:gravity="center" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Medium Text"
+        android:id="@+id/allianceInfCount"
+        android:gravity="center"
+        android:layout_below="@+id/imageView"
+        android:layout_above="@+id/imageView4"
+        android:layout_alignEnd="@+id/GuildInf"
+        android:layout_toEndOf="@+id/imageView" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Medium Text"
+        android:id="@+id/ligaInfCount"
+        android:gravity="center"
+        android:layout_alignTop="@+id/LigaInf"
+        android:layout_above="@+id/textView26"
+        android:layout_alignEnd="@+id/LigaInf"
+        android:layout_toEndOf="@+id/imageView4" />
+
 </RelativeLayout>

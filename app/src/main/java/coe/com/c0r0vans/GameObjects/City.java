@@ -20,6 +20,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.NumberFormat;
+
 import coe.com.c0r0vans.ActionView;
 import coe.com.c0r0vans.GameSound;
 import coe.com.c0r0vans.MyGoogleMap;
@@ -254,8 +256,11 @@ public class City extends GameObject{
             int inf2 = Math.round(city.getInfluence2() * 100/ sum );
             int inf3 = Math.round(city.getInfluence3() * 100/ sum );
             int maxInf = Math.max(Math.max(Math.max(inf1, inf2), inf3), 1);
-            //TODO: Добавить текст
-            Log.d("tttt","Inf"+city.getInfluence1()+" Inf%" + inf1 +" Sum:"+sum);
+            NumberFormat nf=NumberFormat.getInstance();
+            nf.setGroupingUsed(true);
+            ((TextView)findViewById(R.id.guildInfCount)).setText(nf.format(inf1));
+            ((TextView)findViewById(R.id.allianceInfCount)).setText(nf.format(inf2));
+            ((TextView)findViewById(R.id.ligaInfCount)).setText(nf.format(inf3));
             ProgressBar progressBar = (ProgressBar) findViewById(R.id.GuildInf);
             progressBar.setProgress(inf1);
             progressBar.setMax(100);
