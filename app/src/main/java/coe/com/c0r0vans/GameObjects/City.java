@@ -305,7 +305,7 @@ public class City extends GameObject{
                 }
             };
 
-            findViewById(R.id.buyUpgrade).setOnClickListener(new OnClickListener() {
+            findViewById(R.id.startRoute).setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     serverConnect.getInstance().ExecCommand(startRouteAction,
@@ -355,7 +355,7 @@ public class City extends GameObject{
 
                 }
             };
-            findViewById(R.id.buyUpgrade).setOnClickListener(new OnClickListener() {
+            findViewById(R.id.finishRoute).setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     serverConnect.getInstance().ExecCommand(buyAction,
