@@ -421,6 +421,11 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                     }
                 }
             }
+
+            @Override
+            public void onRating(JSONObject response) {
+
+            }
         });
 
         /*MyGoogleMap.getMap().setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {

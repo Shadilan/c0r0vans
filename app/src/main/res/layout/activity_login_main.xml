@@ -71,8 +71,8 @@
             android:layout_height="wrap_content"
             android:id="@+id/imgConnected"
             android:layout_gravity="start|top"
-            android:src="@mipmap/server_connect"
-            android:visibility="invisible"
+            android:src="@mipmap/n_server_connect"
+            android:visibility="visible"
             android:layout_below="@+id/LoginButton"
             android:layout_toLeftOf="@+id/LoginButton"
             android:layout_toStartOf="@+id/LoginButton" />
@@ -82,8 +82,8 @@
             android:layout_height="wrap_content"
             android:id="@+id/imgGPS"
             android:layout_gravity="end|top"
-            android:src="@mipmap/gps_connect"
-            android:visibility="invisible"
+            android:src="@mipmap/n_gps_connect"
+            android:visibility="visible"
             android:layout_below="@+id/LoginButton"
             android:layout_toRightOf="@+id/LoginButton"
             android:layout_toEndOf="@+id/LoginButton" />

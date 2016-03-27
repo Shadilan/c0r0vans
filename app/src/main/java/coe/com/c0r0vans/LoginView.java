@@ -80,7 +80,7 @@ public class LoginView extends RelativeLayout {
                     String token=null;
                     if (response.has("Token")) token=response.getString("Token");
                     if (!(token ==null)) {
-                        ConnectStatus.setVisibility(View.VISIBLE);
+                        ConnectStatus.setImageResource(R.mipmap.server_connect);
                         Connected=true;
                     }
                     else{
@@ -129,6 +129,11 @@ public class LoginView extends RelativeLayout {
             public void onMessage(JSONObject response) {
 
             }
+
+            @Override
+            public void onRating(JSONObject response) {
+
+            }
         };
         serverConnect.getInstance().addListener(LoginListener);
 
@@ -142,10 +147,13 @@ public class LoginView extends RelativeLayout {
                 editor.apply();
                 TextView errorText= (TextView) findViewById(R.id.errorText);
                 errorText.setText("");
-                loginButton.setText("Login...");
-                Log.d("Debug info","Test login1");
-                if (serverConnect.getInstance().ExecLogin(LoginField.getText().toString(), PasswordField.getText().toString()))
-                    Log.d("Debug info","Login True");    else Log.d("Debug info","Login False");
+                loginButton.setText("Login ...");
+                if (!serverConnect.getInstance().ExecLogin(LoginField.getText().toString(), PasswordField.getText().toString()))
+                     {
+                    errorText.setText("Отсутствует подключение к интернету.");
+                    loginButton.setText("Login");
+
+                }
             }
         });
         //Если настройки не инициализированы инициализируем их.
@@ -165,7 +173,7 @@ public class LoginView extends RelativeLayout {
             @Override
             public void onLocationChanged(Location location) {
                 if (GPSInfo.getInstance().GetLat()!=-1 && GPSInfo.getInstance().GetLng()!=-1) {
-                    GPSStatus.setVisibility(View.VISIBLE);
+                    GPSStatus.setImageResource(R.mipmap.gps_connect);
                     Positioned = true;
                     checkReadyToRun();
                 }

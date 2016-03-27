@@ -14,4 +14,5 @@ public abstract class ServerListener {
     public abstract void onPlayerInfo(JSONObject response);
     public abstract void onError(JSONObject response);
     public abstract void onMessage(JSONObject response);
+    public abstract void onRating(JSONObject response);
 }

@@ -104,6 +104,11 @@ public class ActionView extends LinearLayout {
             public void onMessage(JSONObject response) {
 
             }
+
+            @Override
+            public void onRating(JSONObject response) {
+
+            }
         });
 
 
