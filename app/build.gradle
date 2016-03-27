@@ -12,11 +12,11 @@ android {
     compileSdkVersion 23
     buildToolsVersion "23.0.1"
     defaultConfig {
-        applicationId "coe.com.c0r0vans"
+        applicationId "coe.com.c0r0vansA"
         minSdkVersion 18
         targetSdkVersion 23
-        versionCode 8
-        versionName "1.2.6a"
+        versionCode 9
+        versionName "2.0.0"
     }
     buildTypes {
         release {
