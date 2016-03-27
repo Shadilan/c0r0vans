@@ -10,6 +10,7 @@ import org.json.JSONObject;
 import java.util.HashMap;
 
 import utility.Essages;
+import utility.GameSettings;
 
 /**
  * @author Shadilan
@@ -26,7 +27,9 @@ public class MessageMap extends HashMap<String,Message>{
             String sptext=sp.getString("Messages", "");
             loadJSON(new JSONObject(sptext));
         } catch (JSONException e) {
-            Essages.addEssage("Error Loading:"+ e.toString());
+            if ("Y".equals(GameSettings.getInstance().get("SHOW_NETWORK_ERROR")))
+                Essages.addEssage("Error Loading:"+ e.toString());
+
         }
         load=false;
     }
