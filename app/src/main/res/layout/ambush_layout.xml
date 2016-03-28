@@ -10,7 +10,9 @@
         android:id="@+id/closeActionButton"
         android:src="@mipmap/closebutton"
         android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        />
 
     <ImageView
         android:layout_width="wrap_content"
@@ -36,6 +38,7 @@
         android:background="@drawable/layouts"
         android:layout_below="@+id/closeActionButton"
         android:layout_toEndOf="@+id/ambushFaction"
+        android:layout_toRightOf="@+id/ambushFaction"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"/>
 

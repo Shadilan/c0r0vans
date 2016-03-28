@@ -80,13 +80,14 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
         touchView=findViewById(R.id.touchView);
 
         touchView.setOnTouchListener(new View.OnTouchListener() {
-            long tm=-1;
+            long tm = -1;
             Point oldPos;
             //float oldBearing=0;
             Point f1;
             Point f2;
             int firstId;
             int secondId;
+
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 try {
@@ -166,24 +167,24 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                             actionView.ShowView();
                         }
                     }
-                } catch (Exception e){
-                    Essages.addEssage("Gesture UE:"+e.toString());
+                } catch (Exception e) {
+                    Essages.addEssage("Gesture UE:" + e.toString());
                 }
                 return true;
             }
-            private double getAngle(Point a,Point b)
-            {
+
+            private double getAngle(Point a, Point b) {
                 double dx = b.x - a.x;
                 // Minus to correct for coord re-mapping
                 double dy = -(b.y - a.y);
 
-                double inRads = Math.atan2(dy,dx);
+                double inRads = Math.atan2(dy, dx);
 
                 // We need to map to coord system when 0 degree is at 3 O'clock, 270 at 12 O'clock
                 if (inRads < 0)
                     inRads = Math.abs(inRads);
                 else
-                    inRads = 2*Math.PI - inRads;
+                    inRads = 2 * Math.PI - inRads;
 
                 return Math.toDegrees(inRads);
             }
@@ -620,7 +621,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
             ((InfoLayout)(findViewById(R.id.informationView))).Hide();
         } else if (findViewById(R.id.actionView).getVisibility()==View.VISIBLE)
         {
-            findViewById(R.id.actionView).setVisibility(View.GONE);
+            ((ActionView)findViewById(R.id.actionView)).HideView();
         } else if (!MyGoogleMap.isMoveFixed()){
             MyGoogleMap.stopShowPoint();
         }
