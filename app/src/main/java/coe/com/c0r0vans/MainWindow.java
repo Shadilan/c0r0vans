@@ -89,65 +89,73 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
             int secondId;
             @Override
             public boolean onTouch(View v, MotionEvent event) {
+                try {
+                    if (event.getActionMasked() == MotionEvent.ACTION_DOWN) {
+                        //Зафиксировать позицию и время
+                        oldPos = new Point((int) event.getX(), (int) event.getY());
 
-                if (event.getActionMasked()==MotionEvent.ACTION_DOWN){
-                    //Зафиксировать позицию и время
-                    oldPos=new Point((int)event.getX(),(int)event.getY());
+                        tm = new Date().getTime();
+                    } else if (event.getActionMasked() == MotionEvent.ACTION_UP) {
+                        //Проверить лонгтап
+                        if (Math.abs(oldPos.x - event.getX()) < 20 && Math.abs(oldPos.y - event.getY()) < 20 && (new Date().getTime()) - tm > 1500) {
+                            tm = -1;
+                        } else if (Math.abs(oldPos.x - event.getX()) < 20 && Math.abs(oldPos.y - event.getY()) < 20) {
+                            int distance = 50;
+                            GameObject target = null;
+                            //Marker
+                            for (GameObject o : Objects.values()) {
+                                Point p = MyGoogleMap.getMap().getProjection().toScreenLocation(o.getMarker().getPosition());
+                                int calc = (int) Math.sqrt(Math.pow(p.x - oldPos.x, 2) + Math.pow(p.y - oldPos.y, 2));
+                                if (!(o instanceof Player || o instanceof Caravan) && calc < distance && o.getMarker().isVisible()) {
+                                    target = o;
+                                    distance = calc;
+                                }
+                            }
+                            if (target != null) {
 
-                    tm=new Date().getTime();
-                } else if (event.getActionMasked()==MotionEvent.ACTION_UP){
-                    //Проверить лонгтап
-                    if (Math.abs(oldPos.x-event.getX())<20 && Math.abs(oldPos.y-event.getY())<20 && (new Date().getTime())-tm>1500){
-                        tm=-1;
-                    } else if (Math.abs(oldPos.x-event.getX())<20 && Math.abs(oldPos.y-event.getY())<20)
-                    {
-                        int distance=50;
-                        GameObject target=null;
-                        //Marker
-                        for (GameObject o:Objects.values()){
-                            Point p=MyGoogleMap.getMap().getProjection().toScreenLocation(o.getMarker().getPosition());
-                            int calc= (int) Math.sqrt(Math.pow(p.x-oldPos.x,2)+Math.pow(p.y-oldPos.y,2));
-                            if (!(o instanceof Player || o instanceof Caravan) && calc<distance && o.getMarker().isVisible()) {
-                                target=o;
-                                distance=calc;
+                                SelectedObject.getInstance().setTarget(target);
+                                SelectedObject.getInstance().setPoint(target.getMarker().getPosition());
+                                ((ActionView) findViewById(R.id.actionView)).ShowView();
+                            }
+                        } else {
+                            SelectedObject.getInstance().hidePoint();
+                        }
+                        f1 = null;
+                        f2 = null;
+
+                        //иначе найти маркер
+                    } else if (event.getActionMasked() == MotionEvent.ACTION_POINTER_DOWN) {
+                        firstId = event.getPointerId(0);
+                        secondId = event.getPointerId(event.getActionIndex());
+
+                        f1 = new Point((int) event.getX(0), (int) event.getY(0));
+                        f2 = new Point((int) event.getX(event.getActionIndex()), (int) event.getY(event.getActionIndex()));
+                    } else if (event.getActionMasked() == MotionEvent.ACTION_MOVE) {
+                        if (f1 != null && f2 != null && event.getPointerCount() == 2) {
+                            Point p1 = new Point((int) event.getX(event.findPointerIndex(firstId)), (int) event.getY(event.findPointerIndex(firstId)));
+                            Point p2 = new Point((int) event.getX(event.findPointerIndex(secondId)), (int) event.getY(event.findPointerIndex(secondId)));
+                            double angle = getAngle(f1, f2) - getAngle(p1, p2);
+                            MyGoogleMap.rotate((float) angle);
+                            //Essages.addEssage("Угол"+angle);
+                            f1 = p1;
+                            f2 = p2;
+                        } else if (Math.abs(oldPos.x - event.getX()) < 20 && Math.abs(oldPos.y - event.getY()) < 20 && (new Date().getTime()) - tm > 800) {
+                            //Ambush
+                            LatLng latLng = MyGoogleMap.getMap().getProjection().fromScreenLocation(oldPos);
+                            float[] distances = new float[1];
+                            Location.distanceBetween(latLng.latitude, latLng.longitude, Player.getPlayer().getMarker().getPosition().latitude, Player.getPlayer().getMarker().getPosition().longitude, distances);
+                            if (distances.length > 0 && distances[0] < Player.getPlayer().getActionDistance()) {
+
+                                SelectedObject.getInstance().setTarget(Player.getPlayer());
+                                SelectedObject.getInstance().setPoint(latLng);
+                                ActionView actionView = (ActionView) findViewById(R.id.actionView);
+                                actionView.ShowView();
                             }
                         }
-                        if (target!=null)
-                        {
-
-                            SelectedObject.getInstance().setTarget(target);
-                            SelectedObject.getInstance().setPoint(target.getMarker().getPosition());
-                            ((ActionView) findViewById(R.id.actionView)).ShowView();
-                        }
-                    } else
-                    {
-                        SelectedObject.getInstance().hidePoint();
-                    }
-                    f1=null;
-                    f2=null;
-
-                    //иначе найти маркер
-                }else if (event.getActionMasked()==MotionEvent.ACTION_POINTER_DOWN){
-                    firstId=event.getPointerId(0);
-                    secondId=event.getPointerId(event.getActionIndex());
-
-                    f1=new Point((int)event.getX(0),(int)event.getY(0));
-                    f2=new Point((int)event.getX(event.getActionIndex()),(int)event.getY(event.getActionIndex()));
-                }
-                else if (event.getActionMasked()==MotionEvent.ACTION_MOVE) {
-                    if (f1!=null && f2!=null && event.getPointerCount()==2)
-                    {
-                        Point p1= new Point((int) event.getX(event.findPointerIndex(firstId)),(int) event.getY(event.findPointerIndex(firstId)));
-                        Point p2= new Point((int) event.getX(event.findPointerIndex(secondId)),(int) event.getY(event.findPointerIndex(secondId)));
-                        double angle=getAngle(f1,f2)-getAngle(p1,p2);
-                        MyGoogleMap.rotate((float) angle);
-                        //Essages.addEssage("Угол"+angle);
-                        f1=p1;
-                        f2=p2;
-                    }else
-                    if (Math.abs(oldPos.x-event.getX())<20 && Math.abs(oldPos.y-event.getY())<20 && (new Date().getTime())-tm>800){
+                        //Проверить поворот
+                    } else if (Math.abs(oldPos.x - event.getX()) < 20 && Math.abs(oldPos.y - event.getY()) < 20 && (new Date().getTime()) - tm > 800) {
                         //Ambush
-                        LatLng latLng=MyGoogleMap.getMap().getProjection().fromScreenLocation(oldPos);
+                        LatLng latLng = MyGoogleMap.getMap().getProjection().fromScreenLocation(oldPos);
                         float[] distances = new float[1];
                         Location.distanceBetween(latLng.latitude, latLng.longitude, Player.getPlayer().getMarker().getPosition().latitude, Player.getPlayer().getMarker().getPosition().longitude, distances);
                         if (distances.length > 0 && distances[0] < Player.getPlayer().getActionDistance()) {
@@ -158,9 +166,9 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                             actionView.ShowView();
                         }
                     }
-                    //Проверить поворот
+                } catch (Exception e){
+                    Essages.addEssage("Gesture UE:"+e.toString());
                 }
-
                 return true;
             }
             private double getAngle(Point a,Point b)

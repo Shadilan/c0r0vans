@@ -1,7 +1,6 @@
 package utility;
 
 
-import android.app.AppOpsManager;
 import android.content.Context;
 import android.location.Location;
 import android.location.LocationListener;
@@ -12,9 +11,6 @@ import android.os.Bundle;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
-
-import coe.com.c0r0vans.BuildConfig;
-import coe.com.c0r0vans.Settings;
 
 /**
  * @author Shadilan
@@ -78,11 +74,13 @@ public class GPSInfo {
             float accur=1000;
             @Override
             public void onLocationChanged(Location location) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
                     if (location.isFromMockProvider()){
                         Essages.addEssage("Вы используете фальшивые координаты. Информация отправлена администраторам.");
                         return;
 
                     }
+                }
 
                 boolean doEvent=true;
                 if (location.hasAccuracy() && location.getAccuracy()>accur+5) doEvent=false;
