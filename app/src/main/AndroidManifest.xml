@@ -26,6 +26,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme" >
         <activity
+
             android:name=".MainWindow"
             android:launchMode="singleTask"
             android:label="@string/title_activity_main_window"

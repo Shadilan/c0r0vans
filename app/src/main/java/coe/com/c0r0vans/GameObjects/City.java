@@ -223,7 +223,8 @@ public class City extends GameObject{
             init();
         }
         public void init(){
-            inflate(this.getContext(), R.layout.city_layout,this);
+            inflate(this.getContext(), R.layout.city_layout, this);
+            if ("Y".equals(GameSettings.getInstance().get("VIEW_PADDING"))) this.setAlpha(0.7f);
             Log.d("tttt","Wind1");
         }
         boolean loaded=true;
