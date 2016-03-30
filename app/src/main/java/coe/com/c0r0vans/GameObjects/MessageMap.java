@@ -2,12 +2,17 @@ package coe.com.c0r0vans.GameObjects;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 
 import utility.Essages;
 import utility.GameSettings;
@@ -25,6 +30,7 @@ public class MessageMap extends HashMap<String,Message>{
         SharedPreferences sp=ctx.getSharedPreferences("MESSAGES",Context.MODE_PRIVATE);
         try {
             String sptext=sp.getString("Messages", "");
+            Log.d("MessageLoad",sptext);
             loadJSON(new JSONObject(sptext));
         } catch (JSONException e) {
             if ("Y".equals(GameSettings.getInstance().get("SHOW_NETWORK_ERROR")))
@@ -57,14 +63,23 @@ public class MessageMap extends HashMap<String,Message>{
     private void save() throws JSONException {
         SharedPreferences sp=ctx.getSharedPreferences("MESSAGES",Context.MODE_PRIVATE);
         SharedPreferences.Editor editor =sp.edit();
-        editor.putString("Messages", getJSON().toString());
+        String out=getJSON().toString();
+        editor.putString("Messages", out);
+        Log.d("MessageSave", out);
         editor.apply();
         editor.commit();
     }
     private JSONObject getJSON() throws JSONException {
+        List<Message> msg=new LinkedList<>(this.values());
+        Collections.sort(msg, new Comparator<Message>() {
+            @Override
+            public int compare(Message lhs, Message rhs) {
+                return lhs.getTime().compareTo(rhs.getTime());
+            }
+        });
         JSONObject resultM=new JSONObject();
         JSONArray result=new JSONArray();
-        for (Message o:this.values()){
+        for (Message o:msg){
             result.put(o.getJSON());
         }
         resultM.put("Messages",result);

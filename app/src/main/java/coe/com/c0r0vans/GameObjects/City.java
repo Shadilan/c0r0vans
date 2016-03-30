@@ -96,7 +96,7 @@ public class City extends GameObject{
                 circleOptions.center(latlng);
                 circleOptions.radius(radius);
                 circleOptions.strokeColor(Color.BLUE);
-                circleOptions.strokeWidth(1);
+                circleOptions.strokeWidth(5);
                 zone = map.addCircle(circleOptions);
             } else
             {

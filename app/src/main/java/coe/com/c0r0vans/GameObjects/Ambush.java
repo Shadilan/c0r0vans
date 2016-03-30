@@ -102,7 +102,7 @@ public class Ambush extends GameObject {
                     default:
                         circleOptions.strokeColor(Color.GREEN);
                 }
-                circleOptions.strokeWidth(2);
+                circleOptions.strokeWidth(5);
                 zone = map.addCircle(circleOptions);
             } else
             {
