@@ -96,7 +96,7 @@ public class City extends GameObject{
                 circleOptions.center(latlng);
                 circleOptions.radius(radius);
                 circleOptions.strokeColor(Color.BLUE);
-                circleOptions.strokeWidth(5);
+                circleOptions.strokeWidth(2);
                 zone = map.addCircle(circleOptions);
             } else
             {
@@ -452,6 +452,11 @@ public class City extends GameObject{
         @Override
         public void setContainer(ActionView av) {
             actionView=av;
+        }
+
+        @Override
+        public void setDistance(int distance) {
+            ((TextView) findViewById(R.id.distance)).setText(distance+"м");
         }
     }
     public RelativeLayout getObjectView(Context context){

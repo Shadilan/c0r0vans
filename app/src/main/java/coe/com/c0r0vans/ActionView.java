@@ -158,6 +158,7 @@ public class ActionView extends LinearLayout {
                         Player.getPlayer().getMarker().getPosition().longitude, distances);
                 boolean inZone = (distances.length > 0 && distances[0] < (Player.getPlayer().getActionDistance()));
                 ((GameObjectView) currentView).updateInZone(inZone);
+                ((GameObjectView) currentView).setDistance((int) distances[0]);
             }
         } catch (Exception e)
         {
