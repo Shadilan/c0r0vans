@@ -3,7 +3,6 @@ package coe.com.c0r0vans;
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 
@@ -89,18 +88,13 @@ public class MyGoogleMap{
             public void onLocationChanged(Location location) {
                 float curBearing = map.getCameraPosition().bearing;
                 boolean trackBearing = "Y".equals(GameSettings.getInstance().get("TRACK_BEARING"));
-                Log.d("tttt", "hasBearing" + location.hasBearing());
-                Log.d("tttt", "hasAccuracy" + location.hasAccuracy());
-                Log.d("tttt", "getAccuracy" + location.getAccuracy());
 
                 if (trackBearing && location.hasBearing() && location.hasAccuracy() && location.getAccuracy() < 20 && location.getSpeed() * 60 * 60 / 1000 > 5) {
                     if (Math.round(oldBearing / 90) == Math.round(location.getBearing() / 90)) {
                         bearing = location.getBearing();
                         curBearing = bearing;
-                        Log.d("tttt", "Bearing" + curBearing);
                     }
                     //ChangeBearing;
-                    Log.d("tttt", "oldBearing" + oldBearing);
                     oldBearing = location.getBearing();
                 }
                 LatLng target = new LatLng(location.getLatitude(), location.getLongitude());
@@ -144,7 +138,7 @@ public class MyGoogleMap{
 
         });*/
 
-        MarkerOptions mo=new MarkerOptions().anchor(0.5f,0.5f).icon(BitmapDescriptorFactory.fromResource(R.mipmap.closebutton)
+        MarkerOptions mo=new MarkerOptions().anchor(0.5f,0.5f).icon(BitmapDescriptorFactory.fromResource(R.mipmap.showbutton)
         ).position(new LatLng(0,0)).visible(false);
         targetMarker=map.addMarker(mo);
     }

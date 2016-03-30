@@ -178,7 +178,7 @@
         android:layout_below="@id/goldAmount"
         android:layout_centerHorizontal="true"
         android:visibility="invisible"
-        android:src="@mipmap/showbutton" />
+        android:src="@mipmap/closebutton" />
 
     <coe.com.c0r0vans.ActionView
         android:layout_width="match_parent"
