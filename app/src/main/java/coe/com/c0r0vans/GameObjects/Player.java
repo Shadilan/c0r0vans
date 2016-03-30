@@ -41,6 +41,7 @@ import utility.serverConnect;
 public class Player extends GameObject {
     private static Player player;
     private int race=0;
+    private String currentRouteGuid="";
 
     public static void instance(){
         player=new Player();
@@ -74,7 +75,17 @@ public class Player extends GameObject {
     public Player() {
         init();
     }
+    public static boolean checkRoute(String guid){
+        if (player.currentRouteGuid.equals(guid)) return false;
+        if (player.currentRouteGuid.equals("")) return false;
+        for (Route r:player.Routes){
+            if ((r.getStartGuid().equals(player.currentRouteGuid) && r.getFinishGuid().equals(guid))||
+                    ((r.getStartGuid().equals(guid) && r.getFinishGuid().equals(player.currentRouteGuid))))
+                return true;
 
+        }
+        return false;
+    }
     public void init(){
         image= ImageLoader.getImage("hero");
         Upgrades=new ArrayList<>();
@@ -211,6 +222,7 @@ public class Player extends GameObject {
             }
             if (obj.has("Routes")){
                 currentRoute="";
+                currentRouteGuid="";
                 JSONArray route=obj.getJSONArray("Routes");
                 for (Route routel:Routes){
                     routel.RemoveObject();
@@ -218,7 +230,10 @@ public class Player extends GameObject {
                 Routes.clear();
                 for (int i=0;i<route.length();i++) {
                     Route routeObj=new Route(route.getJSONObject(i),map);
-                    if (routeObj.getFinishName().equals("null")) currentRoute=routeObj.getStartName();
+                    if (routeObj.getFinishName().equals("null")) {
+                        currentRoute=routeObj.getStartName();
+                        currentRouteGuid=routeObj.getStartGuid();
+                    }
                     else Routes.add(routeObj);
 
                 }
