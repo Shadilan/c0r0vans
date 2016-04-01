@@ -133,4 +133,7 @@ public class GameObject {
     public RelativeLayout getObjectView(Context context){
         return null;
     }
+    public int getRadius(){
+        return 30;
+    }
 }

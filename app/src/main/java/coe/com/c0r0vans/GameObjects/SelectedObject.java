@@ -24,7 +24,7 @@ public class SelectedObject {
         this.point=point;
         if (clickpos != null) {
             clickpos.setCenter(point);
-            clickpos.setRadius(Player.getPlayer().getAmbushRad());
+            clickpos.setRadius(target.getRadius());
 
         } else {
             CircleOptions circleOptions = new CircleOptions();

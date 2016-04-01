@@ -118,15 +118,24 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                                 SelectedObject.getInstance().setPoint(target.getMarker().getPosition());
                                 ((ActionView) findViewById(R.id.actionView)).ShowView();
                             } else {
+                                //Ambush
                                 LatLng latLng = MyGoogleMap.getMap().getProjection().fromScreenLocation(oldPos);
-                                float[] distances = new float[1];
-                                Location.distanceBetween(latLng.latitude, latLng.longitude, Player.getPlayer().getMarker().getPosition().latitude, Player.getPlayer().getMarker().getPosition().longitude, distances);
-                                if (distances.length > 0 && distances[0] < Player.getPlayer().getActionDistance()) {
-
-                                    SelectedObject.getInstance().setTarget(Player.getPlayer());
-                                    SelectedObject.getInstance().setPoint(latLng);
-                                    ActionView actionView = (ActionView) findViewById(R.id.actionView);
-                                    actionView.ShowView();
+                                float distances=GPSInfo.getDistance(latLng,Player.getPlayer().getMarker().getPosition());
+                                if (distances!=-1 && distances < Player.getPlayer().getActionDistance()) {
+                                    boolean setAmush=true;
+                                    for (GameObject o:Objects.values()){
+                                        if ((o instanceof City || o instanceof Ambush) && o.getMarker().isVisible()){
+                                            float d=GPSInfo.getDistance(latLng,o.getMarker().getPosition());
+                                            if (d<o.getRadius()) setAmush=false;
+                                        }
+                                    }
+                                    if (setAmush)
+                                    {
+                                        SelectedObject.getInstance().setTarget(Player.getPlayer());
+                                        SelectedObject.getInstance().setPoint(latLng);
+                                        ActionView actionView = (ActionView) findViewById(R.id.actionView);
+                                        actionView.ShowView();
+                                    }
                                 }
                             }
                         } else {
@@ -156,14 +165,22 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                             } else if (Math.abs(oldPos.x - event.getX()) < 20 && Math.abs(oldPos.y - event.getY()) < 20 && (new Date().getTime()) - tm > 800) {
                                 //Ambush
                                 LatLng latLng = MyGoogleMap.getMap().getProjection().fromScreenLocation(oldPos);
-                                float[] distances = new float[1];
-                                Location.distanceBetween(latLng.latitude, latLng.longitude, Player.getPlayer().getMarker().getPosition().latitude, Player.getPlayer().getMarker().getPosition().longitude, distances);
-                                if (distances.length > 0 && distances[0] < Player.getPlayer().getActionDistance()) {
-
-                                    SelectedObject.getInstance().setTarget(Player.getPlayer());
-                                    SelectedObject.getInstance().setPoint(latLng);
-                                    ActionView actionView = (ActionView) findViewById(R.id.actionView);
-                                    actionView.ShowView();
+                                float distances=GPSInfo.getDistance(latLng,Player.getPlayer().getMarker().getPosition());
+                                if (distances!=-1 && distances < Player.getPlayer().getActionDistance()) {
+                                    boolean setAmush=true;
+                                    for (GameObject o:Objects.values()){
+                                        if ((o instanceof City || o instanceof Ambush) && o.getMarker().isVisible()){
+                                            float d=GPSInfo.getDistance(latLng,o.getMarker().getPosition());
+                                            if (d<o.getRadius()) setAmush=false;
+                                        }
+                                    }
+                                    if (setAmush)
+                                    {
+                                        SelectedObject.getInstance().setTarget(Player.getPlayer());
+                                        SelectedObject.getInstance().setPoint(latLng);
+                                        ActionView actionView = (ActionView) findViewById(R.id.actionView);
+                                        actionView.ShowView();
+                                    }
                                 }
                             }
                         } catch (Exception e){

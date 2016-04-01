@@ -493,4 +493,8 @@ public class Player extends GameObject {
 
         }
     }
+    public int getRadius(){
+        return AmbushRadius;
+
+    }
 }

@@ -30,7 +30,7 @@
             android:name=".MainWindow"
             android:launchMode="singleTask"
             android:label="@string/title_activity_main_window"
-            android:screenOrientation="sensorPortrait" >
+            android:screenOrientation="userPortrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

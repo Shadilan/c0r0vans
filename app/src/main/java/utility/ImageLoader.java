@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 
+import java.util.Calendar;
 import java.util.HashMap;
 
 import coe.com.c0r0vans.R;
@@ -40,22 +41,43 @@ public class ImageLoader {
         createMarker(context, R.mipmap.city_8, "city_8");
         createMarker(context, R.mipmap.city_9, "city_9");
         createMarker(context, R.mipmap.city_10, "city_10");
-        createMarker(context, R.mipmap.ambush_00, "ambush_00");
-        createMarker(context, R.mipmap.ambush_01, "ambush_01");
-        createMarker(context, R.mipmap.ambush_02, "ambush_02");
-        createMarker(context, R.mipmap.ambush_03, "ambush_03");
-        createMarker(context, R.mipmap.ambush_1, "ambush_1");
-        createMarker(context, R.mipmap.ambush_2, "ambush_2");
-        createMarker(context, R.mipmap.ambush_3, "ambush_3");
-        createMarker(context, R.mipmap.ambush_4, "ambush_4");
-        createMarker(context, R.mipmap.ambush_build_00, "ambush_build_00");
-        createMarker(context, R.mipmap.ambush_build_01, "ambush_build_01");
-        createMarker(context, R.mipmap.ambush_build_02, "ambush_build_02");
-        createMarker(context, R.mipmap.ambush_build_03, "ambush_build_03");
-        createMarker(context, R.mipmap.ambush_build_1, "ambush_build_1");
-        createMarker(context, R.mipmap.ambush_build_2, "ambush_build_2");
-        createMarker(context, R.mipmap.ambush_build_3, "ambush_build_3");
-        createMarker(context, R.mipmap.ambush_build_4, "ambush_build_4");
+
+        Calendar cal =Calendar.getInstance();
+        if (cal.get(Calendar.DAY_OF_MONTH)==1 && cal.get(Calendar.MONTH)==Calendar.APRIL && cal.get(Calendar.HOUR)>8){
+            createMarker(context, R.mipmap.ambush_00, "ambush_00");
+            createMarker(context, R.mipmap.april_1, "ambush_01");
+            createMarker(context, R.mipmap.april_2, "ambush_02");
+            createMarker(context, R.mipmap.april_3, "ambush_03");
+            createMarker(context, R.mipmap.april_1, "ambush_1");
+            createMarker(context, R.mipmap.april_2, "ambush_2");
+            createMarker(context, R.mipmap.april_3, "ambush_3");
+            createMarker(context, R.mipmap.ambush_4, "ambush_4");
+            createMarker(context, R.mipmap.ambush_build_00, "ambush_build_00");
+            createMarker(context, R.mipmap.april_1, "ambush_build_01");
+            createMarker(context, R.mipmap.april_2, "ambush_build_02");
+            createMarker(context, R.mipmap.april_3, "ambush_build_03");
+            createMarker(context, R.mipmap.april_1, "ambush_build_1");
+            createMarker(context, R.mipmap.april_2, "ambush_build_2");
+            createMarker(context, R.mipmap.april_3, "ambush_build_3");
+            createMarker(context, R.mipmap.ambush_build_4, "ambush_build_4");
+        } else {
+            createMarker(context, R.mipmap.ambush_00, "ambush_00");
+            createMarker(context, R.mipmap.ambush_01, "ambush_01");
+            createMarker(context, R.mipmap.ambush_02, "ambush_02");
+            createMarker(context, R.mipmap.ambush_03, "ambush_03");
+            createMarker(context, R.mipmap.ambush_1, "ambush_1");
+            createMarker(context, R.mipmap.ambush_2, "ambush_2");
+            createMarker(context, R.mipmap.ambush_3, "ambush_3");
+            createMarker(context, R.mipmap.ambush_4, "ambush_4");
+            createMarker(context, R.mipmap.ambush_build_00, "ambush_build_00");
+            createMarker(context, R.mipmap.ambush_build_01, "ambush_build_01");
+            createMarker(context, R.mipmap.ambush_build_02, "ambush_build_02");
+            createMarker(context, R.mipmap.ambush_build_03, "ambush_build_03");
+            createMarker(context, R.mipmap.ambush_build_1, "ambush_build_1");
+            createMarker(context, R.mipmap.ambush_build_2, "ambush_build_2");
+            createMarker(context, R.mipmap.ambush_build_3, "ambush_build_3");
+            createMarker(context, R.mipmap.ambush_build_4, "ambush_build_4");
+        }
         createMarker(context, R.mipmap.caravan_00, "caravan_00");
         createMarker(context, R.mipmap.caravan_01, "caravan_01");
         createMarker(context, R.mipmap.caravan_02, "caravan_02");

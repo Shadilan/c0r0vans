@@ -396,4 +396,7 @@ public class Ambush extends GameObject {
         result.setAmbush(this);
         return result;
     }
+    public int getRadius(){
+        return this.radius;
+    }
 }

@@ -464,4 +464,7 @@ public class City extends GameObject{
         result.setCity(this);
         return result;
     }
+    public int getRadius(){
+        return radius;
+    }
 }

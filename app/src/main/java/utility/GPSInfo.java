@@ -180,4 +180,10 @@ public class GPSInfo {
         return lng;
     }
     public LatLng getLatLng(){return new LatLng(lat/1e6,lng/1e6);}
+    public static float getDistance(LatLng p1,LatLng p2){
+        float[] distances = new float[1];
+        Location.distanceBetween(p1.latitude, p1.longitude, p2.latitude, p2.longitude, distances);
+        if (distances.length<1) return -1;
+        else return distances[0];
+    }
 }
