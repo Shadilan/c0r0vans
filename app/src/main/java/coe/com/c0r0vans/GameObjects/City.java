@@ -136,15 +136,15 @@ public class City extends GameObject{
 
         Upgrade up=Player.getPlayer().getNextUpgrade(upgrade);
         if (up!=null) {
-            int raceBonus=0;
+            float raceBonus=0;
             long infsum=influence1+influence2+influence3;
             if (infsum>0) {
                 switch (Player.getPlayer().getRace()) {
-                    case 1:raceBonus=(int)(influence1/infsum);
+                    case 1:raceBonus=(influence1/infsum);
                         break;
-                    case 2:raceBonus=(int)(influence2/infsum);
+                    case 2:raceBonus=(influence2/infsum);
                         break;
-                    case 3:raceBonus=(int)(influence2/infsum);
+                    case 3:raceBonus=(influence2/infsum);
                         break;
                 }
             }
@@ -166,15 +166,15 @@ public class City extends GameObject{
         Upgrade up=Player.getPlayer().getNextUpgrade(upgrade);
 
         if (up!=null) {
-            int raceBonus=0;
+            float raceBonus=0;
             long infsum=influence1+influence2+influence3;
             if (infsum>0) {
                 switch (Player.getPlayer().getRace()) {
-                    case 1:raceBonus=(int)(influence1/infsum);
+                    case 1:raceBonus=(influence1/infsum);
                         break;
-                    case 2:raceBonus=(int)(influence2/infsum);
+                    case 2:raceBonus=(influence2/infsum);
                         break;
-                    case 3:raceBonus=(int)(influence2/infsum);
+                    case 3:raceBonus=(influence2/infsum);
                         break;
                 }
             }
@@ -194,15 +194,15 @@ public class City extends GameObject{
     }
     public boolean upgradeAvaible(){
         Upgrade up=Player.getPlayer().getNextUpgrade(upgrade);
-        int raceBonus=0;
+        float raceBonus=0;
         long infsum=influence1+influence2+influence3;
         if (infsum>0) {
             switch (Player.getPlayer().getRace()) {
-                case 1:raceBonus=(int)(influence1/infsum);
+                case 1:raceBonus=(influence1/infsum);
                     break;
-                case 2:raceBonus=(int)(influence2/infsum);
+                case 2:raceBonus=(influence2/infsum);
                     break;
-                case 3:raceBonus=(int)(influence2/infsum);
+                case 3:raceBonus=(influence2/infsum);
                     break;
             }
         }
