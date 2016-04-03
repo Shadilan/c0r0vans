@@ -140,24 +140,25 @@ public class City extends GameObject{
             long infsum=influence1+influence2+influence3;
             if (infsum>0) {
                 switch (Player.getPlayer().getRace()) {
-                    case 1:raceBonus=(influence1/infsum);
+                    case 1:raceBonus=(float)influence1/infsum;
                         break;
-                    case 2:raceBonus=(influence2/infsum);
+                    case 2:raceBonus=(float)influence2/infsum;
                         break;
-                    case 3:raceBonus=(influence2/infsum);
+                    case 3:raceBonus=(float)influence2/infsum;
                         break;
                 }
             }
 
-            raceBonus=((1-raceBonus/4)*(100-Player.getPlayer().getTrade())/100);
+            raceBonus=((1f-raceBonus/4)*(100f-Player.getPlayer().getTrade())/100f);
+            int upcost= (int) (up.getCost()*raceBonus);
             String dop;
             if (up.getReqCityLev()>Level) dop="Требуется уровень города "+ up.getReqCityLev()+"\n";
-            else if ((up.getCost()*raceBonus)>Player.getPlayer().getGold()) dop="Нужно больше золота!"+ up.getCost() +" золота!\n";
+            else if ((upcost)>Player.getPlayer().getGold()) dop="Нужно больше золота!"+ up.getCost() +" золота!\n";
             else if (up.getLevel()>Player.getPlayer().getLevel()-1) dop="Вы недостаточно опытны!\n";
             else dop="Эффект:" + up.getDescription()+"\n";
 
             return "Это город " + Level + " уровня.\n В городе можно приобрести улучшение \"" + up.getName() + "\" за " +
-                    (up.getCost()*raceBonus) + " золота.\n" + dop + tushkan;
+                    (upcost) + " золота.\n" + dop + tushkan;
         }
         else return "Это город "+ Level+" уровня.\n В городе можно приобрести улучшение \""+upgradeName+"\". "
                 +tushkan;
@@ -170,24 +171,26 @@ public class City extends GameObject{
             long infsum=influence1+influence2+influence3;
             if (infsum>0) {
                 switch (Player.getPlayer().getRace()) {
-                    case 1:raceBonus=(influence1/infsum);
+                    case 1:raceBonus=(float)influence1/infsum;
                         break;
-                    case 2:raceBonus=(influence2/infsum);
+                    case 2:raceBonus=(float)influence2/infsum;
                         break;
-                    case 3:raceBonus=(influence2/infsum);
+                    case 3:raceBonus=(float)influence2/infsum;
                         break;
                 }
             }
 
-            raceBonus=((1-raceBonus/4)*(100-Player.getPlayer().getTrade())/100);
+            raceBonus=((1f-raceBonus/4)*(100f-Player.getPlayer().getTrade())/100f);
+            int upcost= (int) (up.getCost()*raceBonus);
+
             String dop;
             if (up.getReqCityLev()>Level) dop="Требуется уровень города "+ up.getReqCityLev()+"\n";
-            else if ((up.getCost()*raceBonus)>Player.getPlayer().getGold()) dop="Нужно больше золота!"+ up.getCost() +" золота!\n";
+            else if ((upcost)>Player.getPlayer().getGold()) dop="Нужно больше золота!"+ up.getCost() +" золота!\n";
             else if (up.getLevel()>Player.getPlayer().getLevel()-1) dop="Вы недостаточно опытны!\n";
             else dop="Эффект:" + up.getDescription()+"\n";
 
             return up.getName() + "\" за " +
-                    (up.getCost()*raceBonus) + " золота.\n" + dop;
+                    (upcost) + " золота.\n" + dop;
         }
         else return upgradeName+"\". "
                 ;
@@ -198,20 +201,21 @@ public class City extends GameObject{
         long infsum=influence1+influence2+influence3;
         if (infsum>0) {
             switch (Player.getPlayer().getRace()) {
-                case 1:raceBonus=(influence1/infsum);
+                case 1:raceBonus=(float)influence1/infsum;
                     break;
-                case 2:raceBonus=(influence2/infsum);
+                case 2:raceBonus=(float)influence2/infsum;
                     break;
-                case 3:raceBonus=(influence2/infsum);
+                case 3:raceBonus=(float)influence2/infsum;
                     break;
             }
         }
 
-        raceBonus=((1-raceBonus/4)*(100-Player.getPlayer().getTrade())/100);
+        raceBonus=((1f-raceBonus/4)*(100f-Player.getPlayer().getTrade())/100f);
+        int upcost= (int) (up.getCost()*raceBonus);
 
         return !((up == null)
                 || (up.getReqCityLev() > Level)
-                || (up.getCost()*raceBonus > Player.getPlayer().getGold())
+                || (upcost > Player.getPlayer().getGold())
                 || (up.getLevel() > Player.getPlayer().getLevel() - 1));
     }
     public String getCityName(){return (Name+" lv."+Level) ;}
