@@ -120,9 +120,15 @@ public class ImageLoader {
      * @return Bitmap
      */
     public static Bitmap getImage(String name){
-        return images.get(name);
+        Bitmap result=images.get(name);
+        if (result==null) Essages.addEssage("Изображение "+name + " не найдено.");
+        return result;
     }
-    public static BitmapDescriptor getDescritor(String name) {return  descriptors.get(name);}
+    public static BitmapDescriptor getDescritor(String name) {
+        BitmapDescriptor result = descriptors.get(name);
+        if (result==null) Essages.addEssage("Изображение объекта "+name + " не найдено.");
+        return  result;
+    }
     private static void createMarker(Context context,int resource,String name){
         Bitmap b=BitmapFactory.decodeResource(context.getResources(), resource);
         descriptors.put(name, BitmapDescriptorFactory.fromBitmap(Bitmap.createScaledBitmap(b, b.getWidth() * 1, b.getHeight() * 1, false)));
