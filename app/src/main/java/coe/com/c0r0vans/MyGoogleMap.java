@@ -46,7 +46,7 @@ public class MyGoogleMap{
 
     /**
      * Инициализация кнопки фиксации местоположения
-     * @param button
+     * @param button Кнопка для возврата.
      */
     public static void setShowpointButton(ImageButton button){
         showpointButton=button;
@@ -141,6 +141,7 @@ public class MyGoogleMap{
         MarkerOptions mo=new MarkerOptions().anchor(0.5f,0.5f).icon(BitmapDescriptorFactory.fromResource(R.mipmap.showbutton)
         ).position(new LatLng(0,0)).visible(false);
         targetMarker=map.addMarker(mo);
+
     }
 
     /**
@@ -187,7 +188,7 @@ public class MyGoogleMap{
 
     /**
      * Изменить местоположение камеры
-     * @param target
+     * @param target точка цели
      */
     private static void moveCamera(LatLng target){
         moveCamera(target, map.getCameraPosition().bearing);
@@ -195,7 +196,7 @@ public class MyGoogleMap{
 
     /**
      * Изменить местоположение камеры
-     * @param target
+     * @param target точка цели
      * @param cbearing Угол поворота
      */
     private static void moveCamera(LatLng target,float cbearing){
@@ -230,7 +231,7 @@ public class MyGoogleMap{
 
     /**
      * ОФиксировать точку в координатах
-     * @param point
+     * @param point точка цели
      */
     public static void showPoint(LatLng point){
         moveFixed=false;
