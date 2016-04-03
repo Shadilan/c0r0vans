@@ -26,7 +26,6 @@ public class Caravan extends GameObject {
 
     public Caravan(GoogleMap map,JSONObject obj) throws JSONException {
         this.map=map;
-        image= ImageLoader.getImage("caravan");
         loadJSON(obj);
 
     }

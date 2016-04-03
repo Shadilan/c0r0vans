@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.google.android.gms.maps.model.LatLng;
 
 import coe.com.c0r0vans.GameObjects.ObjectAction;
+import coe.com.c0r0vans.GameObjects.Route;
 import coe.com.c0r0vans.MyGoogleMap;
 import coe.com.c0r0vans.R;
 import coe.com.c0r0vans.ShowHideForm;
@@ -18,56 +19,62 @@ import coe.com.c0r0vans.ShowHideForm;
 /**
  * Created by Shadilan on 22.02.2016.
  */
-public class InfoLine extends RelativeLayout {
-    private TextView labelText;
+public class CityLine extends RelativeLayout {
+    private TextView startCityView;
+    private TextView endCityView;
+    private TextView lengthView;
     private ImageButton removeButton;
     private ObjectAction removeAction;
     private ImageButton showButton;
     private String target;
-    private String labelString;
     private LatLng point;
     private ShowHideForm parentForm;
+    private LatLng startCity;
+    private LatLng endCity;
+
+    private Route route;
 
     public void setParentForm(ShowHideForm form){
         parentForm=form;
     }
-    public void setLabelText(String text){
-        labelString=text;
+    public void setData(Route r){
+        point=r.getPoint();
+        startCity=r.getStarPoint();
+        endCity=r.getEndPoint();
+        route=r;
 
-        if (labelText!=null) {
-            labelText.setText(text);
-
-        }
-
+        if (lengthView!=null && r.getDistance()>0) lengthView.setText(r.getDistance()+" м "); else
+            lengthView.setText("↝");
+        if (startCityView!=null) startCityView.setText(r.getStartName());
+        if (endCityView!=null && !r.getFinishName().equals("null")) endCityView.setText(r.getFinishName());
+        else endCityView.setVisibility(GONE);
+        if (point!=null && showButton!=null) showButton.setVisibility(VISIBLE);
 
     }
-    public void setPoint(LatLng point){
-        this.point=point;
-        showButton.setVisibility(VISIBLE);
-    }
+
     public void setTarget(String guid){
         target=guid;
     }
     public void setOnRemoveClick(ObjectAction removeAction){
         this.removeAction=removeAction;
     }
-    public InfoLine(Context context) {
+    public CityLine(Context context) {
         super(context);
         init();
     }
 
-    public InfoLine(Context context, AttributeSet attrs) {
+    public CityLine(Context context, AttributeSet attrs) {
         super(context, attrs);
         init();
     }
 
-    public InfoLine(Context context, AttributeSet attrs, int defStyleAttr) {
+    public CityLine(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init();
     }
 
     private void init(){
-        inflate(getContext(), R.layout.ambush_line, this);
+        inflate(getContext(), R.layout.route_line_layout, this);
         try {
             afterInit();
         } catch (Exception e){
@@ -82,8 +89,27 @@ public class InfoLine extends RelativeLayout {
     }
 
     private void afterInit() {
-        labelText= (TextView) findViewById(R.id.infoLineText);
-        labelText.setText(labelString);
+        startCityView= (TextView) findViewById(R.id.startCity);
+        endCityView= (TextView) findViewById(R.id.endCity);
+        lengthView= (TextView) findViewById(R.id.length);
+        startCityView.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(startCity!=null){
+                    MyGoogleMap.showPoint(startCity);
+                    if (parentForm!=null) parentForm.Hide();
+                }
+            }
+        });
+        endCityView.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(endCity!=null){
+                    MyGoogleMap.showPoint(endCity);
+                    if (parentForm!=null) parentForm.Hide();
+                }
+            }
+        });
         removeButton= (ImageButton) findViewById(R.id.removeButton);
         removeButton.setOnClickListener(new OnClickListener() {
             @Override
@@ -103,6 +129,7 @@ public class InfoLine extends RelativeLayout {
                 }
             }
         });
+        if (point!=null) showButton.setVisibility(VISIBLE);
 
     }
 }

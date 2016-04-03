@@ -53,7 +53,7 @@ public class Ambush extends GameObject {
     }
     @Override
     public Bitmap getImage() {
-        return ImageLoader.getImage("ambush");
+        return null;
     }
 
 

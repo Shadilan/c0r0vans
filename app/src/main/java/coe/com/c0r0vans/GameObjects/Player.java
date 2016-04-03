@@ -42,6 +42,7 @@ public class Player extends GameObject {
     private static Player player;
     private int race=0;
     private String currentRouteGuid="";
+    private Route currentR;
     private int trade;
 
     public static void instance(){
@@ -235,6 +236,7 @@ public class Player extends GameObject {
                     if (routeObj.getFinishName().equals("null")) {
                         currentRoute=routeObj.getStartName();
                         currentRouteGuid=routeObj.getStartGuid();
+                        currentR=routeObj;
                     }
                     else Routes.add(routeObj);
 
@@ -402,6 +404,10 @@ public class Player extends GameObject {
 
     public int getTrade() {
         return trade;
+    }
+
+    public Route getCurrentR() {
+        return currentR;
     }
 
     class ambushCreate extends RelativeLayout implements GameObjectView{

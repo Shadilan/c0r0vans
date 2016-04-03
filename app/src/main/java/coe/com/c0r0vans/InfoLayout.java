@@ -19,6 +19,7 @@ import coe.com.c0r0vans.GameObjects.AmbushItem;
 import coe.com.c0r0vans.GameObjects.Player;
 import coe.com.c0r0vans.GameObjects.Route;
 import coe.com.c0r0vans.GameObjects.Upgrade;
+import utility.CityLine;
 import utility.InfoLine;
 import utility.serverConnect;
 
@@ -189,16 +190,20 @@ public class InfoLayout extends RelativeLayout implements ShowHideForm{
 
         ll.removeAllViews();
         if (!Player.getPlayer().getCurrentRoute().equals("")){
-            InfoLine line=new InfoLine(getContext());
+            CityLine line=new CityLine(getContext());
+
             ll.addView(line);
-            line.setLabelText(String.valueOf(Player.getPlayer().getCurrentRoute()) + "↝");
+            line.setData(Player.getPlayer().getCurrentR());
+            //line.setLabelText(String.valueOf(Player.getPlayer().getCurrentRoute()) + "↝");
+
             line.setOnRemoveClick(Player.getPlayer().getDropRoute());
             line.setTarget("");
         }
         for (Route r:Player.getPlayer().getRoutes()){
-            InfoLine line=new InfoLine(getContext());
+            CityLine line=new CityLine(getContext());
             ll.addView(line);
-            line.setLabelText(r.getStartName() + " - " + r.getDistance() + " - " + r.getFinishName());
+            line.setData(r);
+            line.setParentForm(this);
             line.setOnRemoveClick(r.getAction(true));
             line.setTarget(r.getGUID());
             //line.setPoint(r.getPoint());

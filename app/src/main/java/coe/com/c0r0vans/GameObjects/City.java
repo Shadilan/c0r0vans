@@ -52,8 +52,6 @@ public class City extends GameObject{
         this.map=map;
         int Lat=obj.getInt("Lat");
         int Lng=obj.getInt("Lng");
-        image=ImageLoader.getImage("city");
-
         mark=map.addMarker(new MarkerOptions().position(new LatLng(Lat / 1e6, Lng / 1e6)));
         loadJSON(obj);
     }

@@ -32,7 +32,7 @@ public class Route extends GameObject{
     private LatLng FinishPoint;
 
     private Polyline line;
-    private String startGuid;
+
 
 
     /*public Route(JSONObject obj){
@@ -142,7 +142,8 @@ public class Route extends GameObject{
     private ObjectAction dropRoute;
 
     public LatLng getPoint(){
-        return new LatLng(Lat/1e6,Lng/1e6);
+        if (Lat==0 && Lng==0) return null;
+        else return new LatLng(Lat/1e6,Lng/1e6);
     }
     public ObjectAction getAction( boolean inZone){
         return dropRoute;
@@ -154,5 +155,13 @@ public class Route extends GameObject{
 
     public String getFinishGuid() {
         return FinishGUID;
+    }
+
+    public LatLng getStarPoint() {
+        return StartPoint;
+    }
+
+    public LatLng getEndPoint() {
+        return FinishPoint;
     }
 }
