@@ -41,8 +41,12 @@ public class MessageNotification {
      *
      * @see #cancel(Context)
      */
+
+    static NotificationManager nm;
     public static void init(Context ctx){
         context=ctx;
+          nm = (NotificationManager) context
+                .getSystemService(Context.NOTIFICATION_SERVICE);
     }
     public static boolean appActive=true;
     public static void notify(final String exampleString, final int number) {
@@ -130,10 +134,8 @@ public class MessageNotification {
         notify(context, builder.build());
     }
 
-    @TargetApi(Build.VERSION_CODES.ECLAIR)
     private static void notify(final Context context, final Notification notification) {
-        final NotificationManager nm = (NotificationManager) context
-                .getSystemService(Context.NOTIFICATION_SERVICE);
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ECLAIR) {
             nm.notify(NOTIFICATION_TAG, 0, notification);
         } else {
@@ -146,9 +148,7 @@ public class MessageNotification {
      *
      */
     @TargetApi(Build.VERSION_CODES.ECLAIR)
-    public static void cancel(final Context context) {
-        final NotificationManager nm = (NotificationManager) context
-                .getSystemService(Context.NOTIFICATION_SERVICE);
+    public static void cancel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ECLAIR) {
             nm.cancel(NOTIFICATION_TAG, 0);
         } else {

@@ -631,6 +631,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
     @Override
     protected void onResume() {
         super.onResume();
+        MessageNotification.cancel();
         try {
             Log.d("DebugCall", "ResumeCall");
             MessageNotification.appActive = true;

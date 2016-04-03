@@ -42,6 +42,7 @@ public class Player extends GameObject {
     private static Player player;
     private int race=0;
     private String currentRouteGuid="";
+    private int trade;
 
     public static void instance(){
         player=new Player();
@@ -214,8 +215,9 @@ public class Player extends GameObject {
                 JSONArray upg=obj.getJSONArray("Upgrades");
                 Upgrades.clear();
                 for (int i=0;i<upg.length();i++) {
-                    Upgrades.add(new Upgrade(upg.getJSONObject(i)));
-
+                    Upgrade upgrade=new Upgrade(upg.getJSONObject(i));
+                    Upgrades.add(upgrade);
+                    if (upgrade.getType().equals("bargain")) trade=upgrade.getEffect1();
                 }
                 Log.d("DebugInfo", "ULength" + Upgrades.size());
 
@@ -397,6 +399,11 @@ public class Player extends GameObject {
         return new ambushCreate(context);
 
     }
+
+    public int getTrade() {
+        return trade;
+    }
+
     class ambushCreate extends RelativeLayout implements GameObjectView{
 
         public ambushCreate(Context context) {

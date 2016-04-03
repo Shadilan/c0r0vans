@@ -95,6 +95,13 @@ public class City extends GameObject{
                 CircleOptions circleOptions = new CircleOptions();
                 circleOptions.center(latlng);
                 circleOptions.radius(radius);
+                /*if (this.influence1>this.influence2 && this.influence1>this.influence3)
+                    circleOptions.fillColor(R.color.colorGuild);
+                else if (this.influence2>this.influence1 && this.influence2>this.influence3)
+                    circleOptions.fillColor(R.color.colorAlliance);
+                else if (this.influence3>this.influence1 && this.influence3>this.influence2)
+                    circleOptions.fillColor(R.color.colorLiga);
+                else circleOptions.fillColor(Color.TRANSPARENT);*/
                 circleOptions.strokeColor(Color.BLUE);
                 circleOptions.strokeWidth(2);
                 zone = map.addCircle(circleOptions);
@@ -102,6 +109,13 @@ public class City extends GameObject{
             {
                 zone.setCenter(latlng);
                 zone.setRadius(radius);
+                /*if (this.influence1>this.influence2 && this.influence1>this.influence3)
+                    zone.setFillColor(R.color.colorGuild);
+                else if (this.influence2>this.influence1 && this.influence2>this.influence3)
+                    zone.setFillColor(R.color.colorAlliance);
+                else if (this.influence3>this.influence1 && this.influence3>this.influence2)
+                    zone.setFillColor(R.color.colorLiga);
+                else zone.setFillColor(Color.TRANSPARENT);*/
             }
 
             showRadius();
@@ -124,39 +138,82 @@ public class City extends GameObject{
 
         Upgrade up=Player.getPlayer().getNextUpgrade(upgrade);
         if (up!=null) {
+            int raceBonus=0;
+            long infsum=influence1+influence2+influence3;
+            if (infsum>0) {
+                switch (Player.getPlayer().getRace()) {
+                    case 1:raceBonus=(int)(influence1/infsum);
+                        break;
+                    case 2:raceBonus=(int)(influence2/infsum);
+                        break;
+                    case 3:raceBonus=(int)(influence2/infsum);
+                        break;
+                }
+            }
 
+            raceBonus=((1-raceBonus/4)*(100-Player.getPlayer().getTrade())/100);
             String dop;
             if (up.getReqCityLev()>Level) dop="Требуется уровень города "+ up.getReqCityLev()+"\n";
-            else if (up.getCost()>Player.getPlayer().getGold()) dop="Нужно больше золота!"+ up.getCost() +" золота!\n";
+            else if ((up.getCost()*raceBonus)>Player.getPlayer().getGold()) dop="Нужно больше золота!"+ up.getCost() +" золота!\n";
             else if (up.getLevel()>Player.getPlayer().getLevel()-1) dop="Вы недостаточно опытны!\n";
             else dop="Эффект:" + up.getDescription()+"\n";
 
             return "Это город " + Level + " уровня.\n В городе можно приобрести улучшение \"" + up.getName() + "\" за " +
-                    up.getCost() + " золота.\n" + dop + tushkan;
+                    (up.getCost()*raceBonus) + " золота.\n" + dop + tushkan;
         }
         else return "Это город "+ Level+" уровня.\n В городе можно приобрести улучшение \""+upgradeName+"\". "
                 +tushkan;
     }
     public String getSkillInfo() {
         Upgrade up=Player.getPlayer().getNextUpgrade(upgrade);
+
         if (up!=null) {
+            int raceBonus=0;
+            long infsum=influence1+influence2+influence3;
+            if (infsum>0) {
+                switch (Player.getPlayer().getRace()) {
+                    case 1:raceBonus=(int)(influence1/infsum);
+                        break;
+                    case 2:raceBonus=(int)(influence2/infsum);
+                        break;
+                    case 3:raceBonus=(int)(influence2/infsum);
+                        break;
+                }
+            }
+
+            raceBonus=((1-raceBonus/4)*(100-Player.getPlayer().getTrade())/100);
             String dop;
             if (up.getReqCityLev()>Level) dop="Требуется уровень города "+ up.getReqCityLev()+"\n";
-            else if (up.getCost()>Player.getPlayer().getGold()) dop="Нужно больше золота!"+ up.getCost() +" золота!\n";
+            else if ((up.getCost()*raceBonus)>Player.getPlayer().getGold()) dop="Нужно больше золота!"+ up.getCost() +" золота!\n";
             else if (up.getLevel()>Player.getPlayer().getLevel()-1) dop="Вы недостаточно опытны!\n";
             else dop="Эффект:" + up.getDescription()+"\n";
 
             return up.getName() + "\" за " +
-                    up.getCost() + " золота.\n" + dop;
+                    (up.getCost()*raceBonus) + " золота.\n" + dop;
         }
         else return upgradeName+"\". "
                 ;
     }
     public boolean upgradeAvaible(){
         Upgrade up=Player.getPlayer().getNextUpgrade(upgrade);
+        int raceBonus=0;
+        long infsum=influence1+influence2+influence3;
+        if (infsum>0) {
+            switch (Player.getPlayer().getRace()) {
+                case 1:raceBonus=(int)(influence1/infsum);
+                    break;
+                case 2:raceBonus=(int)(influence2/infsum);
+                    break;
+                case 3:raceBonus=(int)(influence2/infsum);
+                    break;
+            }
+        }
+
+        raceBonus=((1-raceBonus/4)*(100-Player.getPlayer().getTrade())/100);
+
         return !((up == null)
                 || (up.getReqCityLev() > Level)
-                || (up.getCost() > Player.getPlayer().getGold())
+                || (up.getCost()*raceBonus > Player.getPlayer().getGold())
                 || (up.getLevel() > Player.getPlayer().getLevel() - 1));
     }
     public String getCityName(){return (Name+" lv."+Level) ;}
