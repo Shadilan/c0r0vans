@@ -144,7 +144,7 @@ public class City extends GameObject{
                         break;
                     case 2:raceBonus=(float)influence2/infsum;
                         break;
-                    case 3:raceBonus=(float)influence2/infsum;
+                    case 3:raceBonus=(float)influence3/infsum;
                         break;
                 }
             }
@@ -175,11 +175,10 @@ public class City extends GameObject{
                         break;
                     case 2:raceBonus=(float)influence2/infsum;
                         break;
-                    case 3:raceBonus=(float)influence2/infsum;
+                    case 3:raceBonus=(float)influence3/infsum;
                         break;
                 }
             }
-
             raceBonus=((1f-raceBonus/4)*(100f-Player.getPlayer().getTrade())/100f);
             int upcost= (int) (up.getCost()*raceBonus);
 
@@ -205,7 +204,7 @@ public class City extends GameObject{
                     break;
                 case 2:raceBonus=(float)influence2/infsum;
                     break;
-                case 3:raceBonus=(float)influence2/infsum;
+                case 3:raceBonus=(float)influence3/infsum;
                     break;
             }
         }
