@@ -43,10 +43,6 @@ public class AmbushItem extends GameObject{
                 return ImageLoader.getImage("closebutton");
             }
 
-            @Override
-            public String getInfo() {
-                return "Отменить засаду";
-            }
 
             @Override
             public String getCommand() {

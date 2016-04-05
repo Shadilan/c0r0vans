@@ -67,7 +67,7 @@ public class MessageMap extends HashMap<String,Message>{
         editor.putString("Messages", out);
         Log.d("MessageSave", out);
         editor.apply();
-        editor.commit();
+
     }
     private JSONObject getJSON() throws JSONException {
         List<Message> msg=new LinkedList<>(this.values());

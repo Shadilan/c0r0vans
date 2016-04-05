@@ -45,11 +45,8 @@ public class Ambush extends GameObject {
 
     public  Ambush(GoogleMap map,JSONObject obj)
     {
-        Log.d("Debug info","Ambush loaded.");
         this.map=map;
         loadJSON(obj);
-        changeMarkerSize(MyGoogleMap.getClientZoom());
-
     }
     @Override
     public Bitmap getImage() {
@@ -78,7 +75,7 @@ public class Ambush extends GameObject {
             if (obj.has("Name")) Name="Засада "+obj.getString("Name");
             if (mark==null) {
                 setMarker(map.addMarker(new MarkerOptions().position(new LatLng(Lat / 1e6, Lng / 1e6))));
-                changeMarkerSize(MyGoogleMap.getClientZoom());
+                changeMarkerSize();
             } else {
                 mark.setPosition(latlng);
             }
@@ -122,7 +119,6 @@ public class Ambush extends GameObject {
         if (zone!=null) zone.remove();
     }
 
-    @Override
     public String getInfo() {
         if (faction==0) {
             if (ready < 0)
@@ -158,13 +154,14 @@ public class Ambush extends GameObject {
 
 
     @Override
-    public void changeMarkerSize(float Type) {
+    public void changeMarkerSize() {
         if (mark != null) {
+            float type= MyGoogleMap.getClientZoom();
             String markname = "ambush";
             if (ready<0) markname = markname + "_build";
             if (faction==0) markname=markname+"_"+faction+Player.getPlayer().getRace();
             else markname = markname + "_"+faction;
-            markname = markname + GameObject.zoomToPostfix(Type);
+            markname = markname + GameObject.zoomToPostfix(type);
             mark.setIcon(ImageLoader.getDescritor(markname));
             if ("Y".equals(GameSettings.getInstance().get("USE_TILT"))) mark.setAnchor(0.5f, 1f);
             else mark.setAnchor(0.5f, 0.5f);
@@ -251,10 +248,7 @@ public class Ambush extends GameObject {
                         return ImageLoader.getImage("remove_ambush");
                     }
 
-                    @Override
-                    public String getInfo() {
-                        return "Убрать засаду.";
-                    }
+
 
                     @Override
                     public String getCommand() {
@@ -304,10 +298,7 @@ public class Ambush extends GameObject {
                         return ImageLoader.getImage("attack_ambush");
                     }
 
-                    @Override
-                    public String getInfo() {
-                        return "Убрать засаду.";
-                    }
+
 
                     @Override
                     public String getCommand() {

@@ -94,14 +94,6 @@ public class GameObject {
         mark.remove();
     }
 
-    /**
-     * Generate Info about object
-     *
-     * @return info about object
-     */
-    public String getInfo() {
-        return "";
-    }
 
     /**
      * Get Action list
@@ -113,7 +105,7 @@ public class GameObject {
     }
 
 
-    public void changeMarkerSize(float Type) {
+    public void changeMarkerSize() {
         mark.setIcon(BitmapDescriptorFactory.fromResource(R.mipmap.marker));
         mark.setVisible(false);
     }

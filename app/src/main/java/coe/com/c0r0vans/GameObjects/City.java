@@ -50,9 +50,6 @@ public class City extends GameObject{
 
     public City(GoogleMap map,JSONObject obj) throws JSONException {
         this.map=map;
-        int Lat=obj.getInt("Lat");
-        int Lng=obj.getInt("Lng");
-        mark=map.addMarker(new MarkerOptions().position(new LatLng(Lat / 1e6, Lng / 1e6)));
         loadJSON(obj);
     }
 
@@ -60,7 +57,7 @@ public class City extends GameObject{
     @Override
     public void setMarker(Marker m) {
         mark=m;
-        changeMarkerSize(MyGoogleMap.getClientZoom());
+        changeMarkerSize();
 
     }
 
@@ -87,19 +84,13 @@ public class City extends GameObject{
 
             } else {
                 mark.setPosition(latlng);
-                changeMarkerSize(MyGoogleMap.getClientZoom());
+                changeMarkerSize();
             }
             if (zone==null){
                 CircleOptions circleOptions = new CircleOptions();
                 circleOptions.center(latlng);
                 circleOptions.radius(radius);
-                /*if (this.influence1>this.influence2 && this.influence1>this.influence3)
-                    circleOptions.fillColor(R.color.colorGuild);
-                else if (this.influence2>this.influence1 && this.influence2>this.influence3)
-                    circleOptions.fillColor(R.color.colorAlliance);
-                else if (this.influence3>this.influence1 && this.influence3>this.influence2)
-                    circleOptions.fillColor(R.color.colorLiga);
-                else circleOptions.fillColor(Color.TRANSPARENT);*/
+
                 circleOptions.strokeColor(Color.BLUE);
                 circleOptions.strokeWidth(2);
                 zone = map.addCircle(circleOptions);
@@ -107,13 +98,7 @@ public class City extends GameObject{
             {
                 zone.setCenter(latlng);
                 zone.setRadius(radius);
-                /*if (this.influence1>this.influence2 && this.influence1>this.influence3)
-                    zone.setFillColor(R.color.colorGuild);
-                else if (this.influence2>this.influence1 && this.influence2>this.influence3)
-                    zone.setFillColor(R.color.colorAlliance);
-                else if (this.influence3>this.influence1 && this.influence3>this.influence2)
-                    zone.setFillColor(R.color.colorLiga);
-                else zone.setFillColor(Color.TRANSPARENT);*/
+
             }
 
             showRadius();
@@ -156,13 +141,13 @@ public class City extends GameObject{
 
 
     @Override
-    public void changeMarkerSize(float Type) {
+    public void changeMarkerSize() {
         if (mark!=null) {
             String markname = "city";
             int lvl=(this.Level+1)/2;
             if (lvl==0) lvl=1;
             markname = markname + "_"+lvl;
-            markname = markname + GameObject.zoomToPostfix(Type);
+            markname = markname + GameObject.zoomToPostfix(MyGoogleMap.getClientZoom());
             mark.setIcon(ImageLoader.getDescritor(markname));
             //if ("Y".equals(GameSettings.getInstance().get("USE_TILT"))) mark.setAnchor(0.5f, 1f);
             //else
@@ -305,11 +290,6 @@ public class City extends GameObject{
                 }
 
                 @Override
-                public String getInfo() {
-                    return "Начать маршрут из этого города.";
-                }
-
-                @Override
                 public String getCommand() {
                     return "StartRoute";
                 }
@@ -352,12 +332,6 @@ public class City extends GameObject{
                 @Override
                 public Bitmap getImage() {
                     return ImageLoader.getImage("end_route");
-                }
-
-                @Override
-                public String getInfo() {
-                    return "Закончить маршрут на этом городе и запустить караван.";
-
                 }
 
                 @Override
@@ -404,10 +378,6 @@ public class City extends GameObject{
                     return ImageLoader.getImage("buy_item");
                 }
 
-                @Override
-                public String getInfo() {
-                    return "Купить апгрейд " + upgrade;
-                }
 
                 @Override
                 public String getCommand() {

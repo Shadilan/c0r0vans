@@ -502,7 +502,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
             public void onClick(View v) {
                 try {
                     MyGoogleMap.switchZoom();
-                    for (GameObject obj : Objects.values()) if (obj.getMarker()!=null) obj.changeMarkerSize(MyGoogleMap.getClientZoom());
+                    for (GameObject obj : Objects.values()) if (obj.getMarker()!=null) obj.changeMarkerSize();
                 } catch(Exception e){
                     Essages.addEssage("UE:"+e.toString());
                 }
@@ -680,7 +680,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                             } else if (o instanceof City) {
                                 ((City) o).showRadius();
                             }
-                            o.changeMarkerSize(MyGoogleMap.getClientZoom());
+                            o.changeMarkerSize();
                         }
                         Player.getPlayer().showRoute();
                         MyGoogleMap.changeSettings();

@@ -99,10 +99,6 @@ public class Route extends GameObject{
                 return ImageLoader.getImage("closebutton");
             }
 
-            @Override
-            public String getInfo() {
-                return "удалить караван";
-            }
 
             @Override
             public String getCommand() {
@@ -134,10 +130,6 @@ public class Route extends GameObject{
         if (line!=null) line.remove();
     }
 
-    @Override
-    public String getInfo() {
-        return "Маршрут";
-    }
 
     private ObjectAction dropRoute;
 

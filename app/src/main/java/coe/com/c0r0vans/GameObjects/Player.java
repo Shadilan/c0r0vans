@@ -25,14 +25,12 @@ import java.util.HashMap;
 
 import coe.com.c0r0vans.ActionView;
 import coe.com.c0r0vans.GameSound;
-import coe.com.c0r0vans.MyGoogleMap;
 import coe.com.c0r0vans.OnGameObjectChange;
 import coe.com.c0r0vans.R;
 import utility.Essages;
 import utility.GPSInfo;
 import utility.GameSettings;
 import utility.ImageLoader;
-import utility.ResourceString;
 import utility.serverConnect;
 
 /**
@@ -101,11 +99,6 @@ public class Player extends GameObject {
             }
 
             @Override
-            public String getInfo() {
-                return "Сбросить маршрут.";
-            }
-
-            @Override
             public String getCommand() {
                 return "DropUnfinishedRoute";
             }
@@ -133,7 +126,7 @@ public class Player extends GameObject {
 
 
     @Override
-    public void changeMarkerSize(float Type) {
+    public void changeMarkerSize() {
         player.mark.setIcon(BitmapDescriptorFactory.fromResource(R.mipmap.marker));
     }
 
@@ -272,12 +265,7 @@ public class Player extends GameObject {
 
     }
 
-    @Override
-    public String getInfo() {
-        return ResourceString.getInstance().getString("name")+this.Name+"\n"+
-                ResourceString.getInstance().getString("gold")+this.Gold+"\n"+
-                ResourceString.getInstance().getString("caravans")+this.Caravans+"\n";
-    }
+
 
     //private  ObjectAction createAmbush;
     private ObjectAction dropRoute;
@@ -348,21 +336,21 @@ public class Player extends GameObject {
     }
 
     private ArrayList<OnGameObjectChange> onChangeList;
-    private ArrayList<OnGameObjectChange> removeOnChangeList;
+    //private ArrayList<OnGameObjectChange> removeOnChangeList;
     public void addOnChange(OnGameObjectChange onGameObjectChange){
         if (onChangeList==null) onChangeList=new ArrayList<>();
         onChangeList.add(onGameObjectChange);
     }
-    /*public void removeOnChange(OnGameObjectChange onGameObjectChange){
+/*    public void removeOnChange(OnGameObjectChange onGameObjectChange){
         if (removeOnChangeList==null) removeOnChangeList=new ArrayList<>();
         removeOnChangeList.add(onGameObjectChange);
     }*/
     public void change(int type){
         if (onChangeList==null) return;
-        if (removeOnChangeList!=null && removeOnChangeList.size()>0){
+        /*if (removeOnChangeList!=null && removeOnChangeList.size()>0){
             onChangeList.removeAll(removeOnChangeList);
             removeOnChangeList.clear();
-        }
+        }*/
         for (OnGameObjectChange ev:onChangeList){
             ev.change(type);
         }
@@ -389,7 +377,7 @@ public class Player extends GameObject {
         circleOptions.strokeColor(Color.parseColor("#FF0000"));
         circleOptions.strokeWidth(5);
         circle2=map.addCircle(circleOptions);
-        changeMarkerSize(MyGoogleMap.getClientZoom());
+        changeMarkerSize();
         mark.setAnchor(0.5f, 0.5f);
         mark.setVisible(false);
     }
@@ -442,10 +430,6 @@ public class Player extends GameObject {
                     return ImageLoader.getImage("create_ambush");
                 }
 
-                @Override
-                public String getInfo() {
-                    return "Создание засады";
-                }
 
                 @Override
                 public String getCommand() {

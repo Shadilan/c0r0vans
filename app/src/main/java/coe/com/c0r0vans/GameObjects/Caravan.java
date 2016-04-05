@@ -16,13 +16,13 @@ import utility.ImageLoader;
  * Caravan Object
  */
 public class Caravan extends GameObject {
-    private LatLng start;
+    /*private LatLng start;
     private LatLng finish;
     private String startName;
-    private String finishName;
+    private String finishName;*/
 
     private int faction=0;
-    private double speed=20;
+//    private double speed=20;
 
     public Caravan(GoogleMap map,JSONObject obj) throws JSONException {
         this.map=map;
@@ -34,7 +34,7 @@ public class Caravan extends GameObject {
     @Override
     public void setMarker(Marker m) {
         mark=m;
-        changeMarkerSize(MyGoogleMap.getClientZoom());
+        changeMarkerSize();
     }
 
     @Override
@@ -45,10 +45,10 @@ public class Caravan extends GameObject {
             int Lng=obj.getInt("Lng");
             LatLng latlng=new LatLng(Lat / 1e6, Lng / 1e6);
             if (obj.has("Owner")) faction=obj.getInt("Owner");
-            if (obj.has("StartName")) startName=obj.getString("StartName");
-            if (obj.has("FinishName")) finishName=obj.getString("FinishName");
-            if (obj.has("Speed")) speed=obj.getDouble("Speed");
-            if (obj.has("StartLat") && obj.has("StartLng")){
+/*            if (obj.has("StartName")) startName=obj.getString("StartName");
+            if (obj.has("FinishName")) finishName=obj.getString("FinishName");*/
+            //if (obj.has("Speed")) speed=obj.getDouble("Speed");
+            /*if (obj.has("StartLat") && obj.has("StartLng")){
                 double lat=obj.getInt("StartLat")/1e6;
                 double lng=obj.getInt("StartLng")/1e6;
                 start=new LatLng(lat,lng);
@@ -57,7 +57,7 @@ public class Caravan extends GameObject {
                 double lat=obj.getInt("FinishLat")/1e6;
                 double lng=obj.getInt("FinishLng")/1e6;
                 finish=new LatLng(lat,lng);
-            } else finish=null;
+            } else finish=null;*/
 
             if (mark==null) {
                 setMarker(map.addMarker(new MarkerOptions().position(latlng)));
@@ -76,30 +76,20 @@ public class Caravan extends GameObject {
     }
 
     @Override
-    public String getInfo() {
-        String tushkan="";
-        if (Math.random()*1000<3) tushkan="На крыше видна тень кого-то невидимого.";
-        if (faction==0) if (speed>0) return "Ваш караван направляется из города "+startName+" в город "+finishName +", готовясь принести вам золото."+tushkan;
-        else return "Ваш караван направляется из города "+finishName+" в город "+startName +", готовясь принести вам золото."+tushkan;
-            else return "Чейто караван проезжает, звеня не ВАШИМ золотом.";
-    }
-    private ObjectAction dropRoute;
-
-    @Override
-    public void changeMarkerSize(float Type) {
+    public void changeMarkerSize() {
         if (mark!=null) {
             String markname = "caravan";
             if (faction<0 || faction>4) faction=4;
             if (faction==0) markname=markname+"_"+faction+Player.getPlayer().getRace();
             else markname=markname+"_"+faction;
-            markname = markname + GameObject.zoomToPostfix(Type);
+            markname = markname + GameObject.zoomToPostfix(MyGoogleMap.getClientZoom());
             mark.setIcon(ImageLoader.getDescritor(markname));
             if ("Y".equals(GameSettings.getInstance().get("USE_TILT"))) mark.setAnchor(0.5f, 1f);
             else mark.setAnchor(0.5f, 0.5f);
         }
     }
 
-    public int getIsOwner(){
+    /*public int getRace(){
         return faction;
-    }
+    }*/
 }

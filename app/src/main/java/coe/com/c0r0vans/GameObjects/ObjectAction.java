@@ -14,7 +14,6 @@ public abstract class ObjectAction {
     }
     protected GameObject owner;
     public abstract Bitmap getImage();
-    public abstract String getInfo();
     public abstract String getCommand();
     public abstract void preAction();
     public abstract void postAction();
