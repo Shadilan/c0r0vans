@@ -12,6 +12,10 @@ import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
 
+import utility.notification.Essages;
+import utility.settings.GameSettings;
+import utility.settings.SettingsListener;
+
 /**
  * @author Shadilan
  */
@@ -134,6 +138,25 @@ public class GPSInfo {
             }
         };
         onGPS();
+        GameSettings.addSettingsListener(new SettingsListener() {
+            @Override
+            public void onSettingsSave() {
+
+            }
+
+            @Override
+            public void onSettingsLoad() {
+
+            }
+
+            @Override
+            public void onSettingChange(String setting) {
+                if (setting.equals("GPS_RATE")) {
+                    GPSInfo.getInstance().offGPS();
+                    GPSInfo.getInstance().onGPS();
+                }
+            }
+        });
     }
     public void onGPS(){
         for (String prov : locationManager.getAllProviders()) {

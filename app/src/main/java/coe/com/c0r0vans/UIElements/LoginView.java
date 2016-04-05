@@ -1,4 +1,4 @@
-package coe.com.c0r0vans;
+package coe.com.c0r0vans.UIElements;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -18,13 +18,14 @@ import android.widget.TextView;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import coe.com.c0r0vans.R;
 import utility.GPSInfo;
-import utility.GameSettings;
-import utility.ServerListener;
-import utility.serverConnect;
+import utility.internet.ServerListener;
+import utility.internet.serverConnect;
+import utility.settings.GameSettings;
 
 /**
- * Created by Shadilan on 13.02.2016.
+ * View to enter login
  */
 public class LoginView extends RelativeLayout {
     SharedPreferences sp;

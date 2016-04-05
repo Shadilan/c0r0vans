@@ -49,7 +49,7 @@
             android:value="AIzaSyAneP9YQLzXNYHcKpJ2LkFOrgJHhp2_WiY" />
 
         <activity
-            android:name=".Settings"
+            android:name="utility.settings.Settings"
             android:label="@string/title_activity_main"
             android:launchMode="singleTop"
             android:parentActivityName=".MainWindow"

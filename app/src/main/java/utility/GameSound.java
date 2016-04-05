@@ -1,4 +1,4 @@
-package coe.com.c0r0vans;
+package utility;
 
 import android.app.Activity;
 import android.content.Context;
@@ -7,7 +7,9 @@ import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.Build;
 
-import utility.GameSettings;
+import coe.com.c0r0vans.R;
+import utility.settings.GameSettings;
+import utility.settings.SettingsListener;
 
 /**
  * @author Shadilan
@@ -37,6 +39,31 @@ public class GameSound {
             }
         });
         updateSettings();
+        GameSettings.addSettingsListener(new SettingsListener() {
+            @Override
+            public void onSettingsSave() {
+
+            }
+
+            @Override
+            public void onSettingsLoad() {
+
+            }
+
+            @Override
+            public void onSettingChange(String setting) {
+                switch (setting){
+                    case "MUSIC_ON":
+                        instance.music_on= GameSettings.getInstance().get("MUSIC_ON").equals("Y");
+                        if (instance.music_on && instance.musicStream==-1) {playMusic();}
+                        else if (!instance.music_on && instance.musicStream!=-1) {stopMusic();}
+                        break;
+                    case "SOUND_ON":
+                        instance.sound_on= GameSettings.getInstance().get("SOUND_ON").equals("Y");
+                        break;
+                }
+            }
+        });
     }
     private int MUSIC;
     public static int SET_AMBUSH;
@@ -46,7 +73,7 @@ public class GameSound {
     public static int FINISH_ROUTE_SOUND;
     public static int REMOVE_AMBUSH;
     private void loadSamples(){
-        MUSIC=soundPool.load(context,R.raw.drums,0);
+        MUSIC=soundPool.load(context, R.raw.drums,0);
         SET_AMBUSH=soundPool.load(context,R.raw.set_ambush,0);
         BUY_SOUND=soundPool.load(context,R.raw.coins,0);
         KILL_SOUND=soundPool.load(context,R.raw.kill,0);

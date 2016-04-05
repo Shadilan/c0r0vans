@@ -1,4 +1,4 @@
-package utility;
+package utility.settings;
 
 
 
@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -18,6 +19,27 @@ import coe.com.c0r0vans.GameObjects.GameObject;
 public class GameSettings extends HashMap<String,String>{
     private static GameSettings instance;
     private Context ctx;
+    private ArrayList<SettingsListener> settingsListeners;
+    private ArrayList<SettingsListener> removedSettingsListeners;
+    public static void addSettingsListener(SettingsListener listener){
+        if (instance.settingsListeners==null){
+            instance.settingsListeners=new ArrayList<>();
+        }
+        instance.settingsListeners.add(listener);
+    }
+    public static void removeSettingListener(SettingsListener listener){
+        if (instance.removedSettingsListeners==null){
+            instance.removedSettingsListeners=new ArrayList<>();
+        }
+        instance.removedSettingsListeners.add(listener);
+    }
+
+    private void checkListenerCount(){
+        if (removedSettingsListeners ==null || settingsListeners == null) return;
+        settingsListeners.removeAll(removedSettingsListeners);
+        removedSettingsListeners.clear();
+
+    }
     public static void init(Context context){
         if (instance==null){
             instance=new GameSettings();
@@ -36,6 +58,12 @@ public class GameSettings extends HashMap<String,String>{
         if (size()==0){
             firstRun();
         }
+        if (settingsListeners!=null) {
+            checkListenerCount();
+            for (SettingsListener listener : settingsListeners) {
+                listener.onSettingsLoad();
+            }
+        }
     }
     private void firstRun(){
         put("SHOW_AMBUSH_RADIUS","Y");
@@ -49,12 +77,22 @@ public class GameSettings extends HashMap<String,String>{
         put("GPS_REATE","3");
         put("AUTO_LOGIN","N");
         put("SHOW_NETWORK_ERROR","N");
+        put("USE_TILT","N");
         put("VIEW_PADDING","N");
         put("TRACK_BEARING","N");
         put("BEARING","0");
         put("ZOOM","18");
         put("PLAYER_FACTION","0");
         save();
+    }
+    public static void set(String property,String value){
+        instance.put(property,value);
+        if (instance.settingsListeners!=null) {
+            instance.checkListenerCount();
+            for (SettingsListener listener : instance.settingsListeners) {
+                listener.onSettingChange(property);
+            }
+        }
     }
     public static float getBearing(){
         float result =0;
@@ -70,18 +108,18 @@ public class GameSettings extends HashMap<String,String>{
         return result;
     }
     public static void setBearing(float bearing){
-        instance.put("BEARING", String.valueOf(bearing));
+        set("BEARING", String.valueOf(bearing));
         instance.save();
+
     }
     public static void setZoom(float zoom){
-        instance.put("ZOOM", String.valueOf(zoom));
-        Log.d("Clientzoom", "Set zoom " + zoom);
+        set("ZOOM", String.valueOf(zoom));
         instance.save();
     }
     public static void setFaction(int faction){
         String oldFaction=instance.get("PLAYER_FACTION");
         if (!String.valueOf(faction).equals(oldFaction)) {
-            instance.put("PLAYER_FACTION", String.valueOf(faction));
+            set("PLAYER_FACTION", String.valueOf(faction));
             instance.save();
         }
     }
@@ -105,5 +143,12 @@ public class GameSettings extends HashMap<String,String>{
         }
         ed.apply();
         ed.commit();
+        if (settingsListeners!=null) {
+            checkListenerCount();
+            for (SettingsListener listener : settingsListeners) {
+                listener.onSettingsSave();
+            }
+        }
+
     }
 }

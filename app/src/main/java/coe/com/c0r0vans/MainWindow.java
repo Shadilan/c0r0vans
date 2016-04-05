@@ -1,6 +1,5 @@
 package coe.com.c0r0vans;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Point;
 import android.location.Location;
@@ -38,13 +37,19 @@ import coe.com.c0r0vans.GameObjects.GameObject;
 import coe.com.c0r0vans.GameObjects.MessageMap;
 import coe.com.c0r0vans.GameObjects.Player;
 import coe.com.c0r0vans.GameObjects.SelectedObject;
-import utility.Essages;
+import coe.com.c0r0vans.UIElements.ActionView;
+import coe.com.c0r0vans.UIElements.ChooseFaction;
+import coe.com.c0r0vans.UIElements.InfoLayout;
+import coe.com.c0r0vans.UIElements.LoginView;
 import utility.GPSInfo;
-import utility.GameSettings;
+import utility.GameSound;
 import utility.ImageLoader;
-import utility.ResourceString;
-import utility.ServerListener;
-import utility.serverConnect;
+import utility.internet.ServerListener;
+import utility.internet.serverConnect;
+import utility.notification.Essages;
+import utility.notification.MessageNotification;
+import utility.settings.GameSettings;
+import utility.settings.SettingsListener;
 
 public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
     private static final int SETTINGS_CALL = 393;
@@ -65,15 +70,60 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
      */
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         GameSettings.init(getApplicationContext());
+        GameSettings.addSettingsListener(new SettingsListener() {
+            @Override
+            public void onSettingsSave() {
+
+            }
+
+            @Override
+            public void onSettingsLoad() {
+
+            }
+
+            @Override
+            public void onSettingChange(String setting) {
+                if (Objects == null) return;
+                switch (setting) {
+                    case "SHOW_AMBUSH_RADIUS":
+                        for (GameObject o : Objects.values()) {
+                            if (o instanceof Ambush) {
+                                ((Ambush) o).showRadius();
+                            }
+                            o.changeMarkerSize();
+                        }
+                        break;
+                    case "SHOW_CITY_RADIUS":
+                        for (GameObject o : Objects.values()) {
+                            if (o instanceof City) {
+                                ((City) o).showRadius();
+                            }
+                            o.changeMarkerSize();
+                        }
+                        break;
+                    case "SHOW_CARAVAN_ROUTE":
+                        Player.getPlayer().showRoute();
+                        break;
+                }
+            }
+        });
+
         Player.instance();
+
+        ImageLoader.Loader(this.getApplicationContext());
+
         setContentView(R.layout.activity_main_window);
+
+        Essages.setTarget(LogView);
+
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
-        ImageLoader.Loader(this.getApplicationContext());
 
-
+        LogButton = (ImageView) findViewById(R.id.showButton);
+        connect_img = (ImageView) findViewById(R.id.server_connect);
         LogView = (LinearLayout) findViewById(R.id.chatBox);
         scrollView= (ScrollView) findViewById(R.id.scrollView);
         scrollView.getLayoutParams().height=60;
@@ -120,17 +170,16 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                             } else {
                                 //Ambush
                                 LatLng latLng = MyGoogleMap.getMap().getProjection().fromScreenLocation(oldPos);
-                                float distances=GPSInfo.getDistance(latLng,Player.getPlayer().getMarker().getPosition());
-                                if (distances!=-1 && distances < Player.getPlayer().getActionDistance()) {
-                                    boolean setAmush=true;
-                                    for (GameObject o:Objects.values()){
-                                        if ((o instanceof City || o instanceof Ambush) && o.getMarker().isVisible()){
-                                            float d=GPSInfo.getDistance(latLng,o.getMarker().getPosition());
-                                            if (d<o.getRadius()) setAmush=false;
+                                float distances = GPSInfo.getDistance(latLng, Player.getPlayer().getMarker().getPosition());
+                                if (distances != -1 && distances < Player.getPlayer().getActionDistance()) {
+                                    boolean setAmush = true;
+                                    for (GameObject o : Objects.values()) {
+                                        if ((o instanceof City || o instanceof Ambush) && o.getMarker().isVisible()) {
+                                            float d = GPSInfo.getDistance(latLng, o.getMarker().getPosition());
+                                            if (d < o.getRadius()) setAmush = false;
                                         }
                                     }
-                                    if (setAmush)
-                                    {
+                                    if (setAmush) {
                                         SelectedObject.getInstance().setTarget(Player.getPlayer());
                                         SelectedObject.getInstance().setPoint(latLng);
                                         ActionView actionView = (ActionView) findViewById(R.id.actionView);
@@ -165,17 +214,16 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                             } else if (Math.abs(oldPos.x - event.getX()) < 20 && Math.abs(oldPos.y - event.getY()) < 20 && (new Date().getTime()) - tm > 800) {
                                 //Ambush
                                 LatLng latLng = MyGoogleMap.getMap().getProjection().fromScreenLocation(oldPos);
-                                float distances=GPSInfo.getDistance(latLng,Player.getPlayer().getMarker().getPosition());
-                                if (distances!=-1 && distances < Player.getPlayer().getActionDistance()) {
-                                    boolean setAmush=true;
-                                    for (GameObject o:Objects.values()){
-                                        if ((o instanceof City || o instanceof Ambush) && o.getMarker().isVisible()){
-                                            float d=GPSInfo.getDistance(latLng,o.getMarker().getPosition());
-                                            if (d<o.getRadius()) setAmush=false;
+                                float distances = GPSInfo.getDistance(latLng, Player.getPlayer().getMarker().getPosition());
+                                if (distances != -1 && distances < Player.getPlayer().getActionDistance()) {
+                                    boolean setAmush = true;
+                                    for (GameObject o : Objects.values()) {
+                                        if ((o instanceof City || o instanceof Ambush) && o.getMarker().isVisible()) {
+                                            float d = GPSInfo.getDistance(latLng, o.getMarker().getPosition());
+                                            if (d < o.getRadius()) setAmush = false;
                                         }
                                     }
-                                    if (setAmush)
-                                    {
+                                    if (setAmush) {
                                         SelectedObject.getInstance().setTarget(Player.getPlayer());
                                         SelectedObject.getInstance().setPoint(latLng);
                                         ActionView actionView = (ActionView) findViewById(R.id.actionView);
@@ -183,8 +231,8 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                                     }
                                 }
                             }
-                        } catch (Exception e){
-                            Log.d("Error",e.toString());
+                        } catch (Exception e) {
+                            Log.d("Error", e.toString());
                         }
                         //Проверить поворот
                     } else if (Math.abs(oldPos.x - event.getX()) < 20 && Math.abs(oldPos.y - event.getY()) < 20 && (new Date().getTime()) - tm > 800) {
@@ -222,18 +270,9 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                 return Math.toDegrees(inRads);
             }
         });
-
-
-
-        Essages.setTarget(LogView);
-        LogButton = (ImageView) findViewById(R.id.showButton);
-
-        connect_img = (ImageView) findViewById(R.id.server_connect);
-        ResourceString.getInstance(getApplicationContext());
-
         mapFragment.getMapAsync(this);
-        init();
 
+        init();
         if (serverConnect.getInstance().isLogin()) {
             LoginView lv= (LoginView) findViewById(R.id.loginView);
             lv.hide();
@@ -250,7 +289,6 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
         //init fields
         Objects = new HashMap<>();
 
-        ImageLoader.Loader(getApplicationContext());
         GPSInfo.getInstance(getApplicationContext());
         GameSound.init(getApplicationContext());
         GameSound.setVolumeControlStream(this);
@@ -302,7 +340,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
         Settings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(getApplicationContext(), Settings.class);
+                Intent i = new Intent(getApplicationContext(), utility.settings.Settings.class);
                 startActivityForResult(i, SETTINGS_CALL);
 
             }
@@ -664,40 +702,6 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
            Essages.addEssage("Для выхода из приложения используйте кнопку Home.");
         }
     }
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        super.onActivityResult(requestCode, resultCode, data);
-        try {
-            switch (requestCode) {
-                case (SETTINGS_CALL): {
-
-                    if (resultCode == Activity.RESULT_OK) {
-
-                        for (GameObject o : Objects.values()) {
-                            if (o instanceof Ambush) {
-                                ((Ambush) o).showRadius();
-                            } else if (o instanceof City) {
-                                ((City) o).showRadius();
-                            }
-                            o.changeMarkerSize();
-                        }
-                        Player.getPlayer().showRoute();
-                        MyGoogleMap.changeSettings();
-
-
-                        GameSound.updateSettings();
-
-                    }
-                    break;
-                }
-            }
-        }
-        catch (Exception e){
-            Essages.addEssage("Activity Result UNEXPECTED:"+e.toString());
-        }
-
-
-    }
 
 }

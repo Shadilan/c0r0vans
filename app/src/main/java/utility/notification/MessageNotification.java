@@ -1,4 +1,4 @@
-package coe.com.c0r0vans;
+package utility.notification;
 
 import android.annotation.TargetApi;
 import android.app.Notification;
@@ -11,6 +11,9 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.support.v4.app.NotificationCompat;
+
+import coe.com.c0r0vans.MainWindow;
+import coe.com.c0r0vans.R;
 
 /**
  * Helper class for showing and canceling message
@@ -39,7 +42,6 @@ public class MessageNotification {
      * <a href="https://developer.android.com/design/patterns/notifications.html">
      * Notification design guidelines</a> when doing so.
      *
-     * @see #cancel(Context)
      */
 
     static NotificationManager nm;

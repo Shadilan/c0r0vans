@@ -7,10 +7,10 @@ import com.google.android.gms.maps.model.LatLng;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import coe.com.c0r0vans.GameSound;
-import utility.Essages;
+import utility.GameSound;
 import utility.ImageLoader;
-import utility.serverConnect;
+import utility.internet.serverConnect;
+import utility.notification.Essages;
 
 /**
  * @author Shadilan
@@ -74,7 +74,6 @@ public class AmbushItem extends GameObject{
         return cancelAmbush;
     }
     public LatLng getPoint(){
-        LatLng result=new LatLng(Lat/1e6,Lng/1e6);
-        return result;
+        return new LatLng(Lat/1e6,Lng/1e6);
     }
 }

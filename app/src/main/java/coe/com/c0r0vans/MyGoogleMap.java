@@ -17,8 +17,9 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import coe.com.c0r0vans.GameObjects.GameObject;
 import coe.com.c0r0vans.GameObjects.Player;
 import utility.GPSInfo;
-import utility.GameSettings;
-import utility.serverConnect;
+import utility.internet.serverConnect;
+import utility.settings.GameSettings;
+import utility.settings.SettingsListener;
 
 /**
  * @author Shadilan
@@ -41,7 +42,25 @@ public class MyGoogleMap{
         map=mMap;
         windowHeight=Height;
         setupMap();
+        GameSettings.addSettingsListener(new SettingsListener() {
+            @Override
+            public void onSettingsSave() {
 
+            }
+
+            @Override
+            public void onSettingsLoad() {
+
+            }
+
+            @Override
+            public void onSettingChange(String setting) {
+                if (setting.equals("USE_TILT") ||
+                        setting.equals("VIEW_PADDING") ||
+                        setting.equals("TRACK_BEARING")
+                        ) MyGoogleMap.changeSettings();
+            }
+        });
     }
 
     /**

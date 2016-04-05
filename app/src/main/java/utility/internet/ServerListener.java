@@ -1,4 +1,4 @@
-package utility;
+package utility.internet;
 
 import org.json.JSONObject;
 

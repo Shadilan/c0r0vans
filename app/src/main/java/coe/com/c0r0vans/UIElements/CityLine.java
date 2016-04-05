@@ -1,4 +1,4 @@
-package utility;
+package coe.com.c0r0vans.UIElements;
 
 import android.content.Context;
 import android.util.AttributeSet;
@@ -14,10 +14,12 @@ import coe.com.c0r0vans.GameObjects.Route;
 import coe.com.c0r0vans.MyGoogleMap;
 import coe.com.c0r0vans.R;
 import coe.com.c0r0vans.ShowHideForm;
+import utility.internet.serverConnect;
+import utility.notification.Essages;
 
 
 /**
- * Created by Shadilan on 22.02.2016.
+ * Строка информации о городе
  */
 public class CityLine extends RelativeLayout {
     private TextView startCityView;
@@ -43,11 +45,13 @@ public class CityLine extends RelativeLayout {
         endCity=r.getEndPoint();
         route=r;
 
-        if (lengthView!=null && r.getDistance()>0) lengthView.setText(r.getDistance()+" м "); else
-            lengthView.setText("↝");
+        if (lengthView!=null)
+            if (r.getDistance()>0) lengthView.setText(String.format("%d м ", r.getDistance()));
+            else lengthView.setText("↝");
         if (startCityView!=null) startCityView.setText(r.getStartName());
-        if (endCityView!=null && !r.getFinishName().equals("null")) endCityView.setText(r.getFinishName());
-        else endCityView.setVisibility(GONE);
+        if (endCityView!=null)
+            if (!r.getFinishName().equals("null")) endCityView.setText(r.getFinishName());
+            else endCityView.setVisibility(GONE);
         if (point!=null && showButton!=null) showButton.setVisibility(VISIBLE);
 
     }

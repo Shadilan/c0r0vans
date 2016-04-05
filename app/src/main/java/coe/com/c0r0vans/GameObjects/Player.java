@@ -23,15 +23,15 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import coe.com.c0r0vans.ActionView;
-import coe.com.c0r0vans.GameSound;
 import coe.com.c0r0vans.OnGameObjectChange;
 import coe.com.c0r0vans.R;
-import utility.Essages;
+import coe.com.c0r0vans.UIElements.ActionView;
 import utility.GPSInfo;
-import utility.GameSettings;
+import utility.GameSound;
 import utility.ImageLoader;
-import utility.serverConnect;
+import utility.internet.serverConnect;
+import utility.notification.Essages;
+import utility.settings.GameSettings;
 
 /**
  * @author Shadilan

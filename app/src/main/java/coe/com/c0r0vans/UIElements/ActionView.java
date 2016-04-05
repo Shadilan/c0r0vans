@@ -1,4 +1,4 @@
-package coe.com.c0r0vans;
+package coe.com.c0r0vans.UIElements;
 
 import android.content.Context;
 import android.location.Location;
@@ -17,10 +17,10 @@ import coe.com.c0r0vans.GameObjects.GameObject;
 import coe.com.c0r0vans.GameObjects.GameObjectView;
 import coe.com.c0r0vans.GameObjects.Player;
 import coe.com.c0r0vans.GameObjects.SelectedObject;
-import utility.Essages;
 import utility.GPSInfo;
-import utility.ServerListener;
-import utility.serverConnect;
+import utility.internet.ServerListener;
+import utility.internet.serverConnect;
+import utility.notification.Essages;
 
 /**
  * @author Shadilan

@@ -1,4 +1,4 @@
-package coe.com.c0r0vans;
+package coe.com.c0r0vans.UIElements;
 
 import android.content.Context;
 import android.util.AttributeSet;
@@ -8,10 +8,11 @@ import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import utility.serverConnect;
+import coe.com.c0r0vans.R;
+import utility.internet.serverConnect;
 
 /**
- * Created by Shadilan on 19.03.2016.
+ * View to chose faction
  */
 public class ChooseFaction extends RelativeLayout {
     public ChooseFaction(Context context) {

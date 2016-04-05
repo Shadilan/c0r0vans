@@ -1,4 +1,4 @@
-package coe.com.c0r0vans;
+package coe.com.c0r0vans.UIElements;
 
 import android.content.Context;
 import android.util.AttributeSet;
@@ -14,9 +14,11 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import coe.com.c0r0vans.GameObjects.Message;
+import coe.com.c0r0vans.MyGoogleMap;
+import coe.com.c0r0vans.R;
 
 /**
- * Created by Shadilan on 01.03.2016.
+ * Строка Сообщения
  */
 public class EssageLine extends LinearLayout{
     private TextView text;

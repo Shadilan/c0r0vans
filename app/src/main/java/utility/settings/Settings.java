@@ -1,4 +1,4 @@
-package coe.com.c0r0vans;
+package utility.settings;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -9,8 +9,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.SeekBar;
 
-import utility.GPSInfo;
-import utility.GameSettings;
+import coe.com.c0r0vans.R;
 
 public class Settings extends AppCompatActivity {
 
@@ -60,25 +59,21 @@ public class Settings extends AppCompatActivity {
         apply_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                GameSettings.getInstance().put("SHOW_AMBUSH_RADIUS",ambushRad.isChecked()? "Y" : "N");
-                GameSettings.getInstance().put("SHOW_CITY_RADIUS", cityRad.isChecked() ? "Y" : "N");
-                GameSettings.getInstance().put("SHOW_CARAVAN_ROUTE", caravanRoute.isChecked() ? "Y" : "N");
-                GameSettings.getInstance().put("MUSIC_ON", musicOn.isChecked() ? "Y" : "N");
-                GameSettings.getInstance().put("SOUND_ON", soundOn.isChecked() ? "Y" : "N");
-                GameSettings.getInstance().put("USE_TILT", useTilt.isChecked() ? "Y" : "N");
-                GameSettings.getInstance().put("NET_DEBUG", netDebug.isChecked() ? "Y" : "N");
-                GameSettings.getInstance().put("GPS_ON_BACK", gpsOn.isChecked() ? "Y" : "N");
-                GameSettings.getInstance().put("GPS_RATE", String.valueOf(gpsRate.getProgress() + 1));
-                GameSettings.getInstance().put("AUTO_LOGIN", autoLogin.isChecked() ? "Y" : "N");
-                GameSettings.getInstance().put("SHOW_NETWORK_ERROR", netErrorLog.isChecked() ? "Y" : "N");
-                GameSettings.getInstance().put("VIEW_PADDING", usePadding.isChecked() ? "Y" : "N");
-                GameSettings.getInstance().put("TRACK_BEARING", trackBearing.isChecked() ? "Y" : "N");
+                GameSettings.set("SHOW_AMBUSH_RADIUS", ambushRad.isChecked() ? "Y" : "N");
+                GameSettings.set("SHOW_CITY_RADIUS", cityRad.isChecked() ? "Y" : "N");
+                GameSettings.set("SHOW_CARAVAN_ROUTE", caravanRoute.isChecked() ? "Y" : "N");
+                GameSettings.set("MUSIC_ON", musicOn.isChecked() ? "Y" : "N");
+                GameSettings.set("SOUND_ON", soundOn.isChecked() ? "Y" : "N");
+                GameSettings.set("USE_TILT", useTilt.isChecked() ? "Y" : "N");
+                GameSettings.set("NET_DEBUG", netDebug.isChecked() ? "Y" : "N");
+                GameSettings.set("GPS_ON_BACK", gpsOn.isChecked() ? "Y" : "N");
+                GameSettings.set("GPS_RATE", String.valueOf(gpsRate.getProgress() + 1));
+                GameSettings.set("AUTO_LOGIN", autoLogin.isChecked() ? "Y" : "N");
+                GameSettings.set("SHOW_NETWORK_ERROR", netErrorLog.isChecked() ? "Y" : "N");
+                GameSettings.set("VIEW_PADDING", usePadding.isChecked() ? "Y" : "N");
+                GameSettings.set("TRACK_BEARING", trackBearing.isChecked() ? "Y" : "N");
 
                 GameSettings.getInstance().save();
-                GPSInfo.getInstance().offGPS();
-                GPSInfo.getInstance().onGPS();
-                Intent resultIntent = new Intent();
-                setResult(Activity.RESULT_OK, resultIntent);
                 finish();
             }
         });

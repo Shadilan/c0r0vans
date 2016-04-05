@@ -11,11 +11,11 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import coe.com.c0r0vans.GameSound;
-import utility.Essages;
-import utility.GameSettings;
+import utility.GameSound;
 import utility.ImageLoader;
-import utility.serverConnect;
+import utility.internet.serverConnect;
+import utility.notification.Essages;
+import utility.settings.GameSettings;
 
 /**
  * @author Shadilan

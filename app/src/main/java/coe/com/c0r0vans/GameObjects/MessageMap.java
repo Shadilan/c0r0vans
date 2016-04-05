@@ -14,8 +14,8 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
-import utility.Essages;
-import utility.GameSettings;
+import utility.notification.Essages;
+import utility.settings.GameSettings;
 
 /**
  * @author Shadilan

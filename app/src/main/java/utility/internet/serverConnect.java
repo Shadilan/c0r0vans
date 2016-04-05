@@ -1,4 +1,4 @@
-package utility;
+package utility.internet;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
@@ -20,6 +20,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import coe.com.c0r0vans.GameObjects.ObjectAction;
+import utility.GPSInfo;
+import utility.notification.Essages;
+import utility.settings.GameSettings;
 
 /**
  * Объект обеспечивающий соединение с сервером и взаимодействие с сервером. Singleton.
@@ -126,7 +129,7 @@ public class serverConnect {
                             for (ServerListener l:listeners) l.onError(formResponse(response.toString()));
                         } catch (Exception e)
                         {
-                            Essages.addEssage("Login UE:"+e.toString());
+                            Essages.addEssage("Login UE:" + e.toString());
                         }
 
                     }

@@ -1,13 +1,12 @@
-package utility;
+package utility.notification;
 
 import android.widget.LinearLayout;
 
 import java.text.DateFormat;
 import java.util.Date;
 
-import coe.com.c0r0vans.EssageLine;
 import coe.com.c0r0vans.GameObjects.Message;
-import coe.com.c0r0vans.MessageNotification;
+import coe.com.c0r0vans.UIElements.EssageLine;
 
 /**
  * @author Shadilan

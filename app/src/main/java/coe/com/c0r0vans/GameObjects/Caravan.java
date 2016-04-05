@@ -9,8 +9,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import coe.com.c0r0vans.MyGoogleMap;
-import utility.GameSettings;
 import utility.ImageLoader;
+import utility.settings.GameSettings;
 
 /**
  * Caravan Object

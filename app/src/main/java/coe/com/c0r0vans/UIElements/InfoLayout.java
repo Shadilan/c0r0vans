@@ -1,4 +1,4 @@
-package coe.com.c0r0vans;
+package coe.com.c0r0vans.UIElements;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -19,14 +19,14 @@ import coe.com.c0r0vans.GameObjects.AmbushItem;
 import coe.com.c0r0vans.GameObjects.Player;
 import coe.com.c0r0vans.GameObjects.Route;
 import coe.com.c0r0vans.GameObjects.Upgrade;
-import utility.CityLine;
-import utility.InfoLine;
-import utility.serverConnect;
+import coe.com.c0r0vans.R;
+import coe.com.c0r0vans.ShowHideForm;
+import utility.internet.serverConnect;
 
 /**
  * Информация об игроке
  */
-public class InfoLayout extends RelativeLayout implements ShowHideForm{
+public class InfoLayout extends RelativeLayout implements ShowHideForm {
 
     public InfoLayout(Context context) {
         super(context);

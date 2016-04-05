@@ -10,7 +10,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" android:id="@+id/map"
     android:name="com.google.android.gms.maps.SupportMapFragment"
-
     tools:layout="@layout/abc_screen_simple" />
     <View
         android:layout_width="fill_parent"
@@ -130,47 +129,7 @@
 
 
 
-        <LinearLayout
-            android:orientation="vertical"
-            android:id="@+id/chatGroup"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true">
 
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:src="@mipmap/show"
-                android:id="@+id/showButton" />
-
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/imageView2"
-                android:src="@color/colorControls" />
-            <ScrollView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@android:color/white"
-                android:layout_gravity="bottom"
-                android:id="@+id/scrollView"
-
-                >
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/chatBox"
-                android:scrollbarAlwaysDrawVerticalTrack="true"
-                android:gravity="bottom"
-                android:background="@android:color/white"
-                android:focusable="true"
-                android:orientation="vertical" />
-
-    </ScrollView>
-        </LinearLayout>
     <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -180,7 +139,7 @@
         android:visibility="invisible"
         android:src="@mipmap/closebutton" />
 
-    <coe.com.c0r0vans.ActionView
+    <coe.com.c0r0vans.UIElements.ActionView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/actionView"
@@ -189,7 +148,7 @@
         android:layout_centerVertical="true"
          />
 
-<coe.com.c0r0vans.InfoLayout
+<coe.com.c0r0vans.UIElements.InfoLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/informationView"
@@ -198,7 +157,7 @@
     android:layout_centerVertical="true"
     android:visibility="gone"
     />
-<coe.com.c0r0vans.ChooseFaction
+<coe.com.c0r0vans.UIElements.ChooseFaction
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:visibility="gone"
@@ -212,7 +171,7 @@
     android:id="@+id/chooseFaction"/>
 
 
-        <coe.com.c0r0vans.LoginView
+        <coe.com.c0r0vans.UIElements.LoginView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/loginView"

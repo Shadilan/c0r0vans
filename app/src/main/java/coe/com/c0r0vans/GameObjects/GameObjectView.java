@@ -1,6 +1,6 @@
 package coe.com.c0r0vans.GameObjects;
 
-import coe.com.c0r0vans.ActionView;
+import coe.com.c0r0vans.UIElements.ActionView;
 
 /**
  * @author Shadilan

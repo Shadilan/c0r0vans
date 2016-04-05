@@ -11,6 +11,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 
 import coe.com.c0r0vans.R;
+import utility.notification.Essages;
 
 
 /**
@@ -121,7 +122,7 @@ public class ImageLoader {
      */
     public static Bitmap getImage(String name){
         Bitmap result=images.get(name);
-        if (result==null) Essages.addEssage("Изображение "+name + " не найдено.");
+        if (result==null) Essages.addEssage("Изображение " + name + " не найдено.");
         return result;
     }
     public static BitmapDescriptor getDescritor(String name) {
@@ -131,7 +132,7 @@ public class ImageLoader {
     }
     private static void createMarker(Context context,int resource,String name){
         Bitmap b=BitmapFactory.decodeResource(context.getResources(), resource);
-        descriptors.put(name, BitmapDescriptorFactory.fromBitmap(Bitmap.createScaledBitmap(b, b.getWidth() * 1, b.getHeight() * 1, false)));
+        descriptors.put(name, BitmapDescriptorFactory.fromBitmap(Bitmap.createScaledBitmap(b, b.getWidth(), b.getHeight() , false)));
         descriptors.put(name+"_m",BitmapDescriptorFactory.fromBitmap(Bitmap.createScaledBitmap(b, (int) (b.getWidth() * 0.75), (int) (b.getHeight() * 0.75), false)));
         descriptors.put(name + "_s", BitmapDescriptorFactory.fromBitmap(Bitmap.createScaledBitmap(b, (int) (b.getWidth() * 0.5), (int) (b.getHeight() * 0.5), false)));
     }

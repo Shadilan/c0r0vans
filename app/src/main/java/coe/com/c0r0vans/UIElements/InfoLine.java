@@ -1,4 +1,4 @@
-package utility;
+package coe.com.c0r0vans.UIElements;
 
 import android.content.Context;
 import android.util.AttributeSet;
@@ -13,10 +13,12 @@ import coe.com.c0r0vans.GameObjects.ObjectAction;
 import coe.com.c0r0vans.MyGoogleMap;
 import coe.com.c0r0vans.R;
 import coe.com.c0r0vans.ShowHideForm;
+import utility.internet.serverConnect;
+import utility.notification.Essages;
 
 
 /**
- * Created by Shadilan on 22.02.2016.
+ * Информационная строка для засад
  */
 public class InfoLine extends RelativeLayout {
     private TextView labelText;

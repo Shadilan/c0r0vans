@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -21,15 +20,15 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import coe.com.c0r0vans.ActionView;
-import coe.com.c0r0vans.GameSound;
 import coe.com.c0r0vans.MyGoogleMap;
 import coe.com.c0r0vans.R;
-import utility.Essages;
+import coe.com.c0r0vans.UIElements.ActionView;
 import utility.GPSInfo;
-import utility.GameSettings;
+import utility.GameSound;
 import utility.ImageLoader;
-import utility.serverConnect;
+import utility.internet.serverConnect;
+import utility.notification.Essages;
+import utility.settings.GameSettings;
 
 /**
  * @author Shadilan
