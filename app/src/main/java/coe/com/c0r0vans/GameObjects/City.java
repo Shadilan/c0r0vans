@@ -129,71 +129,7 @@ public class City extends GameObject{
         if (zone!=null) zone.remove();
     }
 
-    @Override
-    public String getInfo() {
-        String tushkan="";
-        if (Math.random()*1000<3) tushkan="У стен города следы непонятного зверя.";
 
-        Upgrade up=Player.getPlayer().getNextUpgrade(upgrade);
-        if (up!=null) {
-            float raceBonus=0;
-            long infsum=influence1+influence2+influence3;
-            if (infsum>0) {
-                switch (Player.getPlayer().getRace()) {
-                    case 1:raceBonus=(float)influence1/infsum;
-                        break;
-                    case 2:raceBonus=(float)influence2/infsum;
-                        break;
-                    case 3:raceBonus=(float)influence3/infsum;
-                        break;
-                }
-            }
-
-            raceBonus=((1f-raceBonus/4)*(100f-Player.getPlayer().getTrade())/100f);
-            int upcost= (int) (up.getCost()*raceBonus);
-            String dop;
-            if (up.getReqCityLev()>Level) dop="Требуется уровень города "+ up.getReqCityLev()+"\n";
-            else if ((upcost)>Player.getPlayer().getGold()) dop="Нужно больше золота!"+ up.getCost() +" золота!\n";
-            else if (up.getLevel()>Player.getPlayer().getLevel()-1) dop="Вы недостаточно опытны!\n";
-            else dop="Эффект:" + up.getDescription()+"\n";
-
-            return "Это город " + Level + " уровня.\n В городе можно приобрести улучшение \"" + up.getName() + "\" за " +
-                    (upcost) + " золота.\n" + dop + tushkan;
-        }
-        else return "Это город "+ Level+" уровня.\n В городе можно приобрести улучшение \""+upgradeName+"\". "
-                +tushkan;
-    }
-    public String getSkillInfo() {
-        Upgrade up=Player.getPlayer().getNextUpgrade(upgrade);
-
-        if (up!=null) {
-            float raceBonus=0;
-            long infsum=influence1+influence2+influence3;
-            if (infsum>0) {
-                switch (Player.getPlayer().getRace()) {
-                    case 1:raceBonus=(float)influence1/infsum;
-                        break;
-                    case 2:raceBonus=(float)influence2/infsum;
-                        break;
-                    case 3:raceBonus=(float)influence3/infsum;
-                        break;
-                }
-            }
-            raceBonus=((1f-raceBonus/4)*(100f-Player.getPlayer().getTrade())/100f);
-            int upcost= (int) (up.getCost()*raceBonus);
-
-            String dop;
-            if (up.getReqCityLev()>Level) dop="Требуется уровень города "+ up.getReqCityLev()+"\n";
-            else if ((upcost)>Player.getPlayer().getGold()) dop="Нужно больше золота!"+ up.getCost() +" золота!\n";
-            else if (up.getLevel()>Player.getPlayer().getLevel()-1) dop="Вы недостаточно опытны!\n";
-            else dop="Эффект:" + up.getDescription()+"\n";
-
-            return up.getName() + "\" за " +
-                    (upcost) + " золота.\n" + dop;
-        }
-        else return upgradeName+"\". "
-                ;
-    }
     public boolean upgradeAvaible(){
         Upgrade up=Player.getPlayer().getNextUpgrade(upgrade);
         float raceBonus=0;
@@ -212,12 +148,11 @@ public class City extends GameObject{
         raceBonus=((1f-raceBonus/4)*(100f-Player.getPlayer().getTrade())/100f);
         int upcost= (int) (up.getCost()*raceBonus);
 
-        return !((up == null)
-                || (up.getReqCityLev() > Level)
-                || (upcost > Player.getPlayer().getGold())
+        return !( (up.getReqCityLev() > Level)
+                || (upcost >= Player.getPlayer().getGold())
                 || (up.getLevel() > Player.getPlayer().getLevel() - 1));
     }
-    public String getCityName(){return (Name+" lv."+Level) ;}
+    public String getName(){return (Name+" lv."+Level) ;}
 
 
     @Override
@@ -297,8 +232,38 @@ public class City extends GameObject{
         ObjectAction startRouteAction;
         ObjectAction endRouteAction;
 
+        public String getSkillInfo() {
+            Upgrade up=Player.getPlayer().getNextUpgrade(upgrade);
+
+            if (up!=null) {
+                float raceBonus=0;
+                long infsum=city.influence1+city.influence2+city.influence3;
+                if (infsum>0) {
+                    switch (Player.getPlayer().getRace()) {
+                        case 1:raceBonus=(float)city.influence1/infsum;
+                            break;
+                        case 2:raceBonus=(float)city.influence2/infsum;
+                            break;
+                        case 3:raceBonus=(float)city.influence3/infsum;
+                            break;
+                    }
+                }
+                raceBonus=((1f-raceBonus/4)*(100f-Player.getPlayer().getTrade())/100f);
+                int upcost= (int) (up.getCost()*raceBonus);
+
+                String dop;
+                if (up.getReqCityLev()>Level) dop= String.format("Требуется уровень города %d\n", up.getReqCityLev());
+                else if ((upcost)>Player.getPlayer().getGold()) dop= String.format("Вам не хватает:%d золота!\n", upcost - Player.getPlayer().getGold());
+                else if (up.getLevel()>Player.getPlayer().getLevel()-1) dop= String.format("Требуется уровень %d\n", up.getLevel());
+                else dop= String.format("Эффект:%s\n", up.getDescription());
+
+                return String.format("%s\" за %d золота(без скидки %d).\n%s", up.getName(), upcost,up.getCost() , dop);
+            }
+            else return upgradeName+"\". "
+                    ;
+        }
         private void applyCity() {
-            Log.d("tttt", "Wind4");
+
 
             findViewById(R.id.closeActionButton).setOnClickListener(new OnClickListener() {
                 @Override
@@ -306,15 +271,14 @@ public class City extends GameObject{
                     close();
                 }
             });
-            ((TextView) findViewById(R.id.cityName)).setText(city.getCityName());
+            ((TextView) findViewById(R.id.cityName)).setText(city.getName());
 
             long sum = city.getInfluence1() + city.getInfluence2() + city.getInfluence3();
             if (sum == 0) sum = 1;
 
             int inf1 = Math.round(city.getInfluence1() * 100 / sum );
             int inf2 = Math.round(city.getInfluence2() * 100/ sum );
-            int inf3 = Math.round(city.getInfluence3() * 100/ sum );
-            int maxInf = Math.max(Math.max(Math.max(inf1, inf2), inf3), 1);
+            int inf3 = Math.round(city.getInfluence3() * 100 / sum);
             NumberFormat nf=NumberFormat.getInstance();
             nf.setGroupingUsed(true);
             ((TextView)findViewById(R.id.guildInfCount)).setText(nf.format(city.getInfluence1()));
@@ -332,7 +296,7 @@ public class City extends GameObject{
             progressBar = (ProgressBar) findViewById(R.id.cityExp);
             progressBar.setMax(100);
             progressBar.setProgress(city.getProgress());
-            ((TextView) findViewById(R.id.skillDesc)).setText(city.getSkillInfo());
+            ((TextView) findViewById(R.id.skillDesc)).setText(getSkillInfo());
             findViewById(R.id.buyUpgrade).setEnabled(city.upgradeAvaible());
             startRouteAction = new ObjectAction(city) {
                 @Override
@@ -358,7 +322,7 @@ public class City extends GameObject{
                 @Override
                 public void postAction() {
                     GameSound.playSound(GameSound.START_ROUTE_SOUND);
-                    Essages.addEssage("Начат маршрут в город " + Name);
+                    Essages.addEssage(String.format(getResources().getString(R.string.route_started), Name));
                     serverConnect.getInstance().getPlayerInfo();
                 }
 
@@ -408,7 +372,7 @@ public class City extends GameObject{
 
                 @Override
                 public void postAction() {
-                    Essages.addEssage("Завершен маршрут в город " + Name);
+                    Essages.addEssage(String.format(getResources().getString(R.string.route_finish), Name));
                     GameSound.playSound(GameSound.FINISH_ROUTE_SOUND);
                     serverConnect.getInstance().getPlayerInfo();
                     serverConnect.getInstance().RefreshCurrent();
@@ -461,8 +425,8 @@ public class City extends GameObject{
                     serverConnect.getInstance().getPlayerInfo();
 
                     Upgrade up = Player.getPlayer().getNextUpgrade(upgrade);
-                    if (up != null) Essages.addEssage("Улучшение " + up.getName() + " куплено.");
-                    else Essages.addEssage("Улучшение " + upgrade + " куплено.");
+                    if (up != null) Essages.addEssage(String.format(getResources().getString(R.string.upgrade_bought),up.getName()));
+                    else Essages.addEssage(String.format(getResources().getString(R.string.upgrade_bought), upgrade));
                     serverConnect.getInstance().getPlayerInfo();
                 }
 
@@ -514,7 +478,7 @@ public class City extends GameObject{
 
         @Override
         public void setDistance(int distance) {
-            ((TextView) findViewById(R.id.distance)).setText(distance+"м");
+            ((TextView) findViewById(R.id.distance)).setText(String.format(getResources().getString(R.string.distance), distance));
         }
     }
     public RelativeLayout getObjectView(Context context){

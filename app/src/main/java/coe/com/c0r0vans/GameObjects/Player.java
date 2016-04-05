@@ -215,12 +215,12 @@ public class Player extends GameObject {
             if (obj.has("Upgrades")){
                 JSONArray upg=obj.getJSONArray("Upgrades");
                 Upgrades.clear();
-                for (int i=0;i<upg.length();i++) {
+                final int upg_length = upg.length();// Moved  upg.length() call out of the loop to local variable upg_length
+                for (int i=0;i< upg_length;i++) {
                     Upgrade upgrade=new Upgrade(upg.getJSONObject(i));
                     Upgrades.add(upgrade);
                     if (upgrade.getType().equals("bargain")) trade=upgrade.getEffect1();
                 }
-                Log.d("DebugInfo", "ULength" + Upgrades.size());
 
             }
             if (obj.has("Routes")){
@@ -231,7 +231,8 @@ public class Player extends GameObject {
                     routel.RemoveObject();
                 }
                 Routes.clear();
-                for (int i=0;i<route.length();i++) {
+                final int route_length = route.length();// Moved  route.length() call out of the loop to local variable route_length
+                for (int i=0;i< route_length;i++) {
                     Route routeObj=new Route(route.getJSONObject(i),map);
                     if (routeObj.getFinishName().equals("null")) {
                         currentRoute=routeObj.getStartName();
@@ -245,13 +246,15 @@ public class Player extends GameObject {
             if (obj.has("Ambushes")){
                 JSONArray ambush=obj.getJSONArray("Ambushes");
                 Ambushes.clear();
-                for (int i=0;i<ambush.length();i++) Ambushes.add(new AmbushItem(ambush.getJSONObject(i)));
+                final int ambush_length = ambush.length();// Moved  ambush.length() call out of the loop to local variable ambush_length
+                for (int i=0;i< ambush_length;i++) Ambushes.add(new AmbushItem(ambush.getJSONObject(i)));
             }
             if (obj.has("NextUpgrades")){
                 JSONArray nextUpgrade=obj.getJSONArray("NextUpgrades");
                 NextUpgrades.clear();
 
-                for (int i=0;i<nextUpgrade.length();i++) {
+                final int nextUpgrade_length = nextUpgrade.length();// Moved  nextUpgrade.length() call out of the loop to local variable nextUpgrade_length
+                for (int i=0;i< nextUpgrade_length;i++) {
                     Upgrade nUp=new Upgrade(nextUpgrade.getJSONObject(i));
                     NextUpgrades.put(nUp.getType(), nUp);
 
@@ -392,8 +395,7 @@ public class Player extends GameObject {
     }
 
     public int getRace() {
-        Log.d("tttt","Race:"+race);
-        return race;
+                return race;
     }
 
     @Override

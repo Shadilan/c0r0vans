@@ -23,6 +23,7 @@ public class Upgrade {
     private int level;
 
     public void loadJSON(JSONObject object) throws JSONException {
+
         if (object.has("Type")) Type=object.getString("Type");
         if (object.has("Level")) level=object.getInt("Level");
         if (object.has("Name")) Name=object.getString("Name");
@@ -30,7 +31,7 @@ public class Upgrade {
         if (object.has("ReqCityLev")) reqCityLev=object.getInt("ReqCityLev");
         if (object.has("NextCost")) nextCost=object.getInt("NextCost");
         if (object.has("Effect1")) effect1=object.getInt("Effect1");
-        if (object.has("Effect2")) effect1=object.getInt("Effect2");
+        if (object.has("Effect2")) effect2=object.getInt("Effect2");
         if (object.has("Cost")) Cost=object.getInt("Cost");
     }
     public Upgrade(JSONObject object){
