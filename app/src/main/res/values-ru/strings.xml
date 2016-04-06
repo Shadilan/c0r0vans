@@ -52,5 +52,6 @@
     <string name="route_started">Начат маршрут в город %s</string>
     <string name="login_button">Login</string>
     <string name="login_button_run">Login ...</string>
+    <string name="password_label">Password</string>
 
 </resources>

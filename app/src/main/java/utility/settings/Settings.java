@@ -1,17 +1,17 @@
 package utility.settings;
 
-import android.app.Activity;
-import android.content.Intent;
-import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.content.Context;
+import android.util.AttributeSet;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 
 import coe.com.c0r0vans.R;
+import coe.com.c0r0vans.UIElements.UIControler;
 
-public class Settings extends AppCompatActivity {
+public class Settings extends RelativeLayout {
 
     Button apply_button;
     Button cancel_button;
@@ -28,10 +28,26 @@ public class Settings extends AppCompatActivity {
     CheckBox netErrorLog;
     CheckBox usePadding;
     CheckBox trackBearing;
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_settings);
+
+    public Settings(Context context) {
+        super(context);
+        init();
+    }
+
+    public Settings(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        init();
+    }
+
+    public Settings(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+        init();
+    }
+
+
+    protected void init() {
+
+        inflate(getContext(), R.layout.activity_settings, this);
         apply_button= (Button) findViewById(R.id.apply);
         cancel_button= (Button) findViewById(R.id.cancel);
         ambushRad= (CheckBox) findViewById(R.id.ambushRad);
@@ -51,9 +67,7 @@ public class Settings extends AppCompatActivity {
         cancel_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent resultIntent = new Intent();
-                setResult(Activity.RESULT_CANCELED, resultIntent);
-                finish();
+                UIControler.getWindowLayout().removeAllViews();
             }
         });
         apply_button.setOnClickListener(new View.OnClickListener() {
@@ -74,14 +88,15 @@ public class Settings extends AppCompatActivity {
                 GameSettings.set("TRACK_BEARING", trackBearing.isChecked() ? "Y" : "N");
 
                 GameSettings.getInstance().save();
-                finish();
+                UIControler.getWindowLayout().removeAllViews();
             }
         });
+        onResume();
     }
 
-    @Override
+
     protected void onResume() {
-        super.onResume();
+
         ambushRad.setChecked("Y".equals(GameSettings.getInstance().get("SHOW_AMBUSH_RADIUS")));
         cityRad.setChecked("Y".equals(GameSettings.getInstance().get("SHOW_CITY_RADIUS")));
         caravanRoute.setChecked("Y".equals(GameSettings.getInstance().get("SHOW_CARAVAN_ROUTE")));

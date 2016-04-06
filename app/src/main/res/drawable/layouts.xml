@@ -8,4 +8,10 @@
                 android:endColor="#fdfbfb"/>
         </shape>
     </item>
+    <item android:id="@android:id/text1">
+        <color android:color="@android:color/black"/>
+    </item>
+    <item android:id="@android:id/text2">
+        <color android:color="@android:color/black"/>
+    </item>
 </layer-list>

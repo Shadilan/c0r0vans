@@ -22,6 +22,7 @@ import coe.com.c0r0vans.R;
 import utility.GPSInfo;
 import utility.internet.ServerListener;
 import utility.internet.serverConnect;
+import utility.notification.Essages;
 import utility.settings.GameSettings;
 
 /**
@@ -51,6 +52,7 @@ public class LoginView extends RelativeLayout {
     public LoginView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init();
+
     }
     @Override
     protected void onFinishInflate() {
@@ -60,6 +62,11 @@ public class LoginView extends RelativeLayout {
     Button loginButton;
     private void init(){
         inflate(getContext(), R.layout.activity_login_main, this);
+        try {
+            afterInit();
+        } catch (Exception e){
+            Essages.addEssage(e.toString());
+        }
     }
     private void afterInit(){
         sp = getContext().getSharedPreferences("SpiritProto", AppCompatActivity.MODE_PRIVATE);

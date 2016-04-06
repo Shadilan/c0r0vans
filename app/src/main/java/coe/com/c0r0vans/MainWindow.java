@@ -1,6 +1,5 @@
 package coe.com.c0r0vans;
 
-import android.content.Intent;
 import android.graphics.Point;
 import android.location.Location;
 import android.os.Bundle;
@@ -343,12 +342,14 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
             }
         });
 
-        ImageView Settings = (ImageView) findViewById(R.id.settings);
+        final ImageView Settings = (ImageView) findViewById(R.id.settings);
         Settings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(getApplicationContext(), utility.settings.Settings.class);
-                startActivityForResult(i, SETTINGS_CALL);
+                UIControler.getWindowLayout().removeAllViews();
+                UIControler.getWindowLayout().addView(new utility.settings.Settings(getApplicationContext()));
+                //Intent i = new Intent(getApplicationContext(), utility.settings.Settings.class);
+                //startActivityForResult(i, SETTINGS_CALL);
 
             }
         });
