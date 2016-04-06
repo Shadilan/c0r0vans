@@ -86,11 +86,11 @@ public class LoginView extends RelativeLayout {
                     }
                     else{
                         TextView errorText= (TextView) findViewById(R.id.errorText);
-                        errorText.setText(response.getString("Error") + ":" + response.getString("Message"));
+                        errorText.setText(String.format("%s:%s", response.getString("Error"), response.getString("Message")));
                     }
 
                     checkReadyToRun();
-                    loginButton.setText("Login");
+                    loginButton.setText(R.string.login_button);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -119,7 +119,7 @@ public class LoginView extends RelativeLayout {
 
                     if (response.has("Error")) result=response.getString("Error");
                     if (response.has("Message")) result=result+" "+response.getString("Message");
-                    loginButton.setText("Login");
+                    loginButton.setText(R.string.login_button);
                     errorText.setText(result);
                 } catch (JSONException e) {
                     errorText.setText(response.toString());
@@ -148,11 +148,11 @@ public class LoginView extends RelativeLayout {
                 editor.apply();
                 TextView errorText= (TextView) findViewById(R.id.errorText);
                 errorText.setText("");
-                loginButton.setText("Login ...");
+                loginButton.setText(R.string.login_button_run);
                 if (!serverConnect.getInstance().ExecLogin(LoginField.getText().toString(), PasswordField.getText().toString()))
                      {
                     errorText.setText("Отсутствует подключение к интернету.");
-                    loginButton.setText("Login");
+                    loginButton.setText(R.string.login_button);
 
                 }
             }
@@ -207,9 +207,12 @@ public class LoginView extends RelativeLayout {
         }
     }
     public void show(){
-        setVisibility(VISIBLE);
+        if (UIControler.getWindowLayout()==null) return;
+        UIControler.getWindowLayout().removeAllViews();
+        UIControler.getWindowLayout().addView(this);
     }
     public void hide(){
-        setVisibility(GONE);
+        if (UIControler.getWindowLayout()==null) return;
+        UIControler.getWindowLayout().removeAllViews();
     }
 }

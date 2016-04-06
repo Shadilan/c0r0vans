@@ -10,6 +10,7 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -41,6 +42,7 @@ import coe.com.c0r0vans.UIElements.ActionView;
 import coe.com.c0r0vans.UIElements.ChooseFaction;
 import coe.com.c0r0vans.UIElements.InfoLayout;
 import coe.com.c0r0vans.UIElements.LoginView;
+import coe.com.c0r0vans.UIElements.UIControler;
 import utility.GPSInfo;
 import utility.GameSound;
 import utility.ImageLoader;
@@ -112,11 +114,11 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
 
         Player.instance();
 
-        ImageLoader.Loader(this.getApplicationContext());
+
 
         setContentView(R.layout.activity_main_window);
+        ImageLoader.Loader(this.getApplicationContext());
 
-        Essages.setTarget(LogView);
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -128,6 +130,12 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
         scrollView= (ScrollView) findViewById(R.id.scrollView);
         scrollView.getLayoutParams().height=60;
         touchView=findViewById(R.id.touchView);
+        ViewGroup lay= (ViewGroup) findViewById(R.id.windowLayout);
+        UIControler.setWindowLayout(lay);
+        lay.removeAllViews();
+        lay.addView(new LoginView(getApplicationContext()));
+
+        Essages.setTarget(LogView);
 
         touchView.setOnTouchListener(new View.OnTouchListener() {
             long tm = -1;
@@ -274,8 +282,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
 
         init();
         if (serverConnect.getInstance().isLogin()) {
-            LoginView lv= (LoginView) findViewById(R.id.loginView);
-            lv.hide();
+            UIControler.getWindowLayout().removeAllViews();
         }
     }
 

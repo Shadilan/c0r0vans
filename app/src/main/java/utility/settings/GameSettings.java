@@ -86,11 +86,14 @@ public class GameSettings extends HashMap<String,String>{
         save();
     }
     public static void set(String property,String value){
-        instance.put(property,value);
-        if (instance.settingsListeners!=null) {
-            instance.checkListenerCount();
-            for (SettingsListener listener : instance.settingsListeners) {
-                listener.onSettingChange(property);
+        String old_value=instance.get(property);
+        if (!value.equals(old_value)) {
+            instance.put(property, value);
+            if (instance.settingsListeners != null) {
+                instance.checkListenerCount();
+                for (SettingsListener listener : instance.settingsListeners) {
+                    listener.onSettingChange(property);
+                }
             }
         }
     }
