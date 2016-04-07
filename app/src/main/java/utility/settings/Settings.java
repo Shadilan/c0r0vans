@@ -88,7 +88,7 @@ public class Settings extends RelativeLayout {
                 GameSettings.set("TRACK_BEARING", trackBearing.isChecked() ? "Y" : "N");
 
                 GameSettings.getInstance().save();
-                UIControler.getWindowLayout().removeAllViews();
+                hide();
             }
         });
         onResume();
@@ -115,5 +115,15 @@ public class Settings extends RelativeLayout {
         }
         gpsRate.setProgress(refreshRate);
         autoLogin.setChecked("Y".equals(GameSettings.getInstance().get("AUTO_LOGIN")));
+    }
+
+    public void show() {
+        if (UIControler.getWindowLayout() == null) return;
+        UIControler.getWindowLayout().removeAllViews();
+        UIControler.getWindowLayout().addView(this);
+    }
+    public void hide(){
+        if (UIControler.getWindowLayout() == null) return;
+        UIControler.getWindowLayout().removeView(this);
     }
 }

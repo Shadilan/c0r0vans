@@ -24,7 +24,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
+                style="@style/MediumText"
                 android:text="Безопасность"
                 android:id="@+id/textView20"
                 android:layout_alignParentTop="true"
@@ -34,7 +34,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
+                style="@style/MediumText"
                 android:text="Автоматический вход "
                 android:id="@+id/textView21"
                 android:layout_alignBottom="@+id/autoLogin"
@@ -45,15 +45,18 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/autoLogin"
+
                 android:layout_below="@+id/textView20"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true"
-                android:checked="false" />
+                android:checked="false"
+                android:buttonTint="@android:color/black"
+                />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
+                style="@style/MediumText"
                 android:text="@string/settings_display"
                 android:id="@+id/textView7"
                 android:layout_below="@+id/textView21"
@@ -63,7 +66,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
+                style="@style/MediumText"
                 android:text="@string/settings_ambush_radius"
                 android:id="@+id/textView6"
                 android:layout_alignBottom="@+id/ambushRad"
@@ -77,13 +80,14 @@
                 android:layout_below="@+id/textView7"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true"
-                android:checked="true" />
+                android:checked="true"
+                android:buttonTint="@android:color/black" />
 
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
+                style="@style/MediumText"
                 android:text="@string/settings_city_radius"
                 android:id="@+id/textView8"
                 android:layout_alignBottom="@+id/cityRad"
@@ -96,12 +100,13 @@
                 android:id="@+id/cityRad"
                 android:checked="true"
                 android:layout_below="@+id/ambushRad"
+                android:buttonTint="@android:color/black"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
+                style="@style/MediumText"
                 android:text="@string/settings_show_routes"
                 android:id="@+id/textView12"
                 android:layout_alignBottom="@+id/routeShow"
@@ -114,13 +119,14 @@
                 android:id="@+id/routeShow"
                 android:checked="true"
                 android:layout_below="@+id/cityRad"
+                android:buttonTint="@android:color/black"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
+                style="@style/MediumText"
                 android:text="@string/setings_media"
                 android:id="@+id/textView9"
                 android:textStyle="bold"
@@ -130,7 +136,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
+                style="@style/MediumText"
                 android:text="@string/settings_music"
                 android:id="@+id/textView10"
                 android:layout_alignBottom="@+id/musicOn"
@@ -142,6 +148,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/musicOn"
                 android:layout_below="@+id/textView9"
+                android:buttonTint="@android:color/black"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true"
                 android:checked="true" />
@@ -149,7 +156,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
+                style="@style/MediumText"
                 android:text="@string/settings_sound"
                 android:id="@+id/textView11"
                 android:layout_alignBottom="@+id/soundOn"
@@ -162,13 +169,14 @@
                 android:id="@+id/soundOn"
                 android:checked="true"
                 android:layout_below="@+id/musicOn"
+                android:buttonTint="@android:color/black"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
+                style="@style/MediumText"
                 android:text="@string/settings_graphics"
                 android:id="@+id/textView15"
                 android:textStyle="bold"
@@ -177,7 +185,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
+                style="@style/MediumText"
                 android:text="@string/settings_graphics_tilt"
                 android:id="@+id/textView16"
                 android:layout_alignBottom="@+id/useTilt"
@@ -190,13 +198,14 @@
                 android:id="@+id/useTilt"
                 android:checked="false"
                 android:layout_below="@+id/textView15"
+                android:buttonTint="@android:color/black"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
+                style="@style/MediumText"
                 android:text="Полупрозрачность"
                 android:id="@+id/textView23"
                 android:layout_alignBottom="@+id/usePadding"
@@ -209,13 +218,14 @@
                 android:id="@+id/usePadding"
                 android:checked="false"
                 android:layout_below="@+id/useTilt"
+                android:buttonTint="@android:color/black"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
+                style="@style/MediumText"
                 android:text="GPS"
                 android:id="@+id/textView17"
                 android:textStyle="bold"
@@ -224,7 +234,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
+                style="@style/MediumText"
                 android:text="GPS в фоне"
                 android:id="@+id/textView18"
                 android:layout_alignBottom="@+id/gpsOn"
@@ -237,12 +247,13 @@
                 android:id="@+id/gpsOn"
                 android:checked="false"
                 android:layout_below="@+id/textView17"
+                android:buttonTint="@android:color/black"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
+                style="@style/MediumText"
                 android:text="Частота GPS"
                 android:id="@+id/textView19"
                 android:layout_alignBottom="@+id/gpsRate"
@@ -265,7 +276,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
+                style="@style/MediumText"
                 android:text="Курс по движению"
                 android:id="@+id/textView24"
                 android:layout_alignBottom="@+id/trackBearing"
@@ -278,12 +289,13 @@
                 android:id="@+id/trackBearing"
                 android:checked="false"
                 android:layout_below="@+id/textView19"
+                android:buttonTint="@android:color/black"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
+                style="@style/MediumText"
                 android:text="@string/settings_debug"
                 android:id="@+id/textView13"
                 android:textStyle="bold"
@@ -293,7 +305,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
+                style="@style/MediumText"
                 android:text="@string/settings_debug_net"
                 android:id="@+id/textView14"
                 android:layout_alignBottom="@+id/netLogOn"
@@ -306,12 +318,13 @@
                 android:id="@+id/netLogOn"
                 android:checked="false"
                 android:layout_below="@+id/textView13"
+                android:buttonTint="@android:color/black"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
+                style="@style/MediumText"
                 android:text="Ошибки сети"
                 android:id="@+id/textView22"
                 android:layout_alignBottom="@+id/netErrorLogOn"
@@ -324,6 +337,7 @@
                 android:id="@+id/netErrorLogOn"
                 android:checked="false"
                 android:layout_below="@+id/textView14"
+                android:buttonTint="@android:color/black"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true" />
         </RelativeLayout>

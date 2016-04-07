@@ -10,7 +10,6 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
@@ -21,23 +20,22 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.NumberFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 
 import coe.com.c0r0vans.GameObjects.Ambush;
 import coe.com.c0r0vans.GameObjects.Caravan;
 import coe.com.c0r0vans.GameObjects.City;
 import coe.com.c0r0vans.GameObjects.GameObject;
+import coe.com.c0r0vans.GameObjects.GameObjects;
 import coe.com.c0r0vans.GameObjects.MessageMap;
 import coe.com.c0r0vans.GameObjects.Player;
 import coe.com.c0r0vans.GameObjects.SelectedObject;
 import coe.com.c0r0vans.UIElements.ActionView;
+import coe.com.c0r0vans.UIElements.ButtonLayout;
 import coe.com.c0r0vans.UIElements.ChooseFaction;
 import coe.com.c0r0vans.UIElements.InfoLayout;
 import coe.com.c0r0vans.UIElements.LoginView;
@@ -50,19 +48,17 @@ import utility.internet.serverConnect;
 import utility.notification.Essages;
 import utility.notification.MessageNotification;
 import utility.settings.GameSettings;
-import utility.settings.SettingsListener;
 
 public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
-    private static final int SETTINGS_CALL = 393;
-    private HashMap<String,GameObject> Objects;
     private Handler myHandler = new Handler();
-    private ImageView connect_img;
     private int SendedRequest = 0;
     private MessageMap messages;
     private LinearLayout LogView;
     private ScrollView scrollView;
     private ImageView LogButton;
     private View touchView;
+
+    ButtonLayout buttonLayout;
 
 
     @Override
@@ -73,43 +69,8 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
         super.onCreate(savedInstanceState);
 
         GameSettings.init(getApplicationContext());
-        GameSettings.addSettingsListener(new SettingsListener() {
-            @Override
-            public void onSettingsSave() {
 
-            }
-
-            @Override
-            public void onSettingsLoad() {
-
-            }
-
-            @Override
-            public void onSettingChange(String setting) {
-                if (Objects == null) return;
-                switch (setting) {
-                    case "SHOW_AMBUSH_RADIUS":
-                        for (GameObject o : Objects.values()) {
-                            if (o instanceof Ambush) {
-                                ((Ambush) o).showRadius();
-                            }
-                            o.changeMarkerSize();
-                        }
-                        break;
-                    case "SHOW_CITY_RADIUS":
-                        for (GameObject o : Objects.values()) {
-                            if (o instanceof City) {
-                                ((City) o).showRadius();
-                            }
-                            o.changeMarkerSize();
-                        }
-                        break;
-                    case "SHOW_CARAVAN_ROUTE":
-                        Player.getPlayer().showRoute();
-                        break;
-                }
-            }
-        });
+        buttonLayout= (ButtonLayout) findViewById(R.id.buttonLayout);
 
         Player.instance();
 
@@ -124,7 +85,6 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                 .findFragmentById(R.id.map);
 
         LogButton = (ImageView) findViewById(R.id.showButton);
-        connect_img = (ImageView) findViewById(R.id.server_connect);
         LogView = (LinearLayout) findViewById(R.id.chatBox);
         scrollView= (ScrollView) findViewById(R.id.scrollView);
         scrollView.getLayoutParams().height=60;
@@ -132,7 +92,8 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
         ViewGroup lay= (ViewGroup) findViewById(R.id.windowLayout);
         UIControler.setWindowLayout(lay);
         lay.removeAllViews();
-        lay.addView(new LoginView(getApplicationContext()));
+        new LoginView(getApplicationContext()).show();
+
 
         Essages.setTarget(LogView);
 
@@ -161,7 +122,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                             int distance = 50;
                             GameObject target = null;
                             //Marker
-                            for (GameObject o : Objects.values()) {
+                            for (GameObject o : GameObjects.getInstance().values()) {
                                 Point p = MyGoogleMap.getMap().getProjection().toScreenLocation(o.getMarker().getPosition());
                                 int calc = (int) Math.sqrt(Math.pow(p.x - oldPos.x, 2) + Math.pow(p.y - oldPos.y, 2));
                                 if (!(o instanceof Player || o instanceof Caravan) && calc < distance && o.getMarker().isVisible()) {
@@ -180,7 +141,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                                 float distances = GPSInfo.getDistance(latLng, Player.getPlayer().getMarker().getPosition());
                                 if (distances != -1 && distances < Player.getPlayer().getActionDistance()) {
                                     boolean setAmush = true;
-                                    for (GameObject o : Objects.values()) {
+                                    for (GameObject o : GameObjects.getInstance().values()) {
                                         if ((o instanceof City || o instanceof Ambush) && o.getMarker().isVisible()) {
                                             float d = GPSInfo.getDistance(latLng, o.getMarker().getPosition());
                                             if (d < o.getRadius()) setAmush = false;
@@ -224,7 +185,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                                 float distances = GPSInfo.getDistance(latLng, Player.getPlayer().getMarker().getPosition());
                                 if (distances != -1 && distances < Player.getPlayer().getActionDistance()) {
                                     boolean setAmush = true;
-                                    for (GameObject o : Objects.values()) {
+                                    for (GameObject o : GameObjects.getInstance().values()) {
                                         if ((o instanceof City || o instanceof Ambush) && o.getMarker().isVisible()) {
                                             float d = GPSInfo.getDistance(latLng, o.getMarker().getPosition());
                                             if (d < o.getRadius()) setAmush = false;
@@ -279,10 +240,12 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
         });
         mapFragment.getMapAsync(this);
 
+
         init();
         if (serverConnect.getInstance().isLogin()) {
             UIControler.getWindowLayout().removeAllViews();
         }
+
     }
 
 
@@ -293,7 +256,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
 
     private void init() {
         //init fields
-        Objects = new HashMap<>();
+        GameObjects.init();
 
         GPSInfo.getInstance(getApplicationContext());
         GameSound.init(getApplicationContext());
@@ -315,7 +278,6 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
         Point size=new Point();
         getWindowManager().getDefaultDisplay().getSize(size);
         MyGoogleMap.init(googleMap, size.y);
-        MyGoogleMap.setShowpointButton((ImageButton) findViewById(R.id.showPosButton));
         Player.getPlayer().setMap(MyGoogleMap.getMap());
         createListeners();
         }
@@ -331,46 +293,8 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
     private void createListeners() {
         if (isListenersDone) return;
 
-        ImageView PlayerInfo = (ImageView) findViewById(R.id.infoview);
-        PlayerInfo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                InfoLayout info = (InfoLayout) findViewById(R.id.informationView);
-                info.Show();
 
 
-            }
-        });
-
-        final ImageView Settings = (ImageView) findViewById(R.id.settings);
-        Settings.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                UIControler.getWindowLayout().removeAllViews();
-                UIControler.getWindowLayout().addView(new utility.settings.Settings(getApplicationContext()));
-                //Intent i = new Intent(getApplicationContext(), utility.settings.Settings.class);
-                //startActivityForResult(i, SETTINGS_CALL);
-
-            }
-        });
-        Settings.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                //ForceSync
-                //Remove all Objects
-                for (GameObject obj : Objects.values()) {
-                    obj.RemoveObject();
-                }
-                Objects.clear();
-                //Run Refresh
-                serverConnect.getInstance().RefreshCurrent();
-                //Run Player
-                serverConnect.getInstance().getPlayerInfo();
-                //RunGetMessage
-                serverConnect.getInstance().getMessage();
-                return true;
-            }
-        });
         LogButton.setOnClickListener(new View.OnClickListener() {
             private boolean show = false;
 
@@ -403,66 +327,9 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
 
             @Override
             public void onRefresh(JSONObject response) {
-                try {
-                    //Проверить наличие массива JSON. Objects
-                    if (response.has("Objects")) {
-                        //Скопировать данные в массив для удаления
-                        ArrayList<GameObject> remObjects = new ArrayList<>(Objects.values());
-                        JSONArray JObj = response.getJSONArray("Objects");
-                        int leng = JObj.length();
-
-                        for (int i = 0; i < leng; i++) {
-                            GameObject robj = null;
-                            for (GameObject obj : remObjects) {
-                                if (obj.getGUID().equals(JObj.getJSONObject(i).getString("GUID"))) {
-                                    robj = obj;
-                                    break;
-                                }
-                            }
-                            if (robj != null) {
-
-                                remObjects.remove(robj);
-                                robj.loadJSON(JObj.getJSONObject(i));
-                            } else {
-                                if (JObj.getJSONObject(i).getString("Type").equals("Player")) {
-
-                                    Player.getPlayer().loadJSON(JObj.getJSONObject(i));
-
-                                } else if (JObj.getJSONObject(i).getString("Type").equals("City")) {
-
-                                    City city = new City(MyGoogleMap.getMap(), JObj.getJSONObject(i));
-                                    Objects.put(city.getGUID(), city);
-                                } else if (JObj.getJSONObject(i).getString("Type").equals("Ambush")) {
-
-                                    Ambush ambush = new Ambush(MyGoogleMap.getMap(), JObj.getJSONObject(i));
-
-                                    Objects.put(ambush.getGUID(), ambush);
-                                } else if (JObj.getJSONObject(i).getString("Type").equals("Caravan")) {
-
-                                    Caravan caravan = new Caravan(MyGoogleMap.getMap(), JObj.getJSONObject(i));
-                                    Objects.put(caravan.getGUID(), caravan);
-                                } else if (JObj.getJSONObject(i).getString("Type").equals("Sign")) {
-                                    Log.d("Debug info", "Sign Load:" + JObj.getJSONObject(i).toString());
-                                    Log.d("Game Warning", "Sign object");
-                                } else {
-                                    Log.d("Game Warning", "Unknown object");
-                                }
-                            }
-
-                        }
-                        for (GameObject obj : remObjects) {
-                            obj.RemoveObject();
-                        }
-                        for (GameObject o : remObjects) {
-                            Objects.remove(o.getGUID());
-                        }
-
-                    }
                     SendedRequest = 0;
-                    connect_img.setVisibility(View.INVISIBLE);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+                    buttonLayout.hideConnectImage();
+
             }
 
             @Override
@@ -516,45 +383,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
             }
         });
 
-        /*MyGoogleMap.getMap().setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
-            @Override
-            public void onMapLongClick(LatLng latLng) {
-                float[] distances = new float[1];
-                Location.distanceBetween(latLng.latitude, latLng.longitude, Player.getPlayer().getMarker().getPosition().latitude, Player.getPlayer().getMarker().getPosition().longitude, distances);
-                if (distances.length > 0 && distances[0] < Player.getPlayer().getActionDistance()) {
 
-                    SelectedObject.getInstance().setTarget(Player.getPlayer());
-                    SelectedObject.getInstance().setPoint(latLng);
-                    ActionView actionView = (ActionView) findViewById(R.id.actionView);
-                    actionView.ShowView();
-                }
-            }
-        });*/
-        /*MyGoogleMap.getMap().setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
-            @Override
-            public boolean onMarkerClick(Marker marker) {
-                GameObject target = findObjectByMarker(marker);
-                if (target==null || target instanceof Player) return false;
-
-                    SelectedObject.getInstance().setTarget(target);
-                    SelectedObject.getInstance().setPoint(marker.getPosition());
-                    ((ActionView) findViewById(R.id.actionView)).ShowView();
-                return true;
-            }
-        });*/
-        ImageView zoomButton= (ImageView) findViewById(R.id.zoomButton);
-        zoomButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                try {
-                    MyGoogleMap.switchZoom();
-                    for (GameObject obj : Objects.values()) if (obj.getMarker()!=null) obj.changeMarkerSize();
-                } catch(Exception e){
-                    Essages.addEssage("UE:"+e.toString());
-                }
-
-            }
-        });
         Player.getPlayer().addOnChange(new OnGameObjectChange() {
             @Override
             public void change(int ChangeType) {
@@ -643,7 +472,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                     timeToPlayerRefresh = 6;
                 } else {
                     SendedRequest++;
-                    if (SendedRequest > 1) connect_img.setVisibility(View.VISIBLE);
+                    if (SendedRequest > 1) buttonLayout.showConnectImage();
                     timeToPlayerRefresh--;
                     serverConnect.getInstance().RefreshData((int) (MyGoogleMap.getMap().getCameraPosition().target.latitude * 1e6), (int) (MyGoogleMap.getMap().getCameraPosition().target.longitude * 1e6));
                 }
@@ -696,9 +525,11 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
 
     @Override
     public void onBackPressed() {
-        if (findViewById(R.id.informationView).getVisibility()==View.VISIBLE)
+
+
+        if (UIControler.getWindowLayout().getChildCount()>0 && serverConnect.getInstance().isLogin())
         {
-            ((InfoLayout)(findViewById(R.id.informationView))).Hide();
+            UIControler.getWindowLayout().removeAllViews();
         } else if (findViewById(R.id.actionView).getVisibility()==View.VISIBLE)
         {
             ((ActionView)findViewById(R.id.actionView)).HideView();

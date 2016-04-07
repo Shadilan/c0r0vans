@@ -220,6 +220,6 @@ public class LoginView extends RelativeLayout {
     }
     public void hide(){
         if (UIControler.getWindowLayout()==null) return;
-        UIControler.getWindowLayout().removeAllViews();
+        UIControler.getWindowLayout().removeView(this);
     }
 }

@@ -22,6 +22,7 @@ import coe.com.c0r0vans.GameObjects.Upgrade;
 import coe.com.c0r0vans.R;
 import coe.com.c0r0vans.ShowHideForm;
 import utility.internet.serverConnect;
+import utility.notification.Essages;
 
 /**
  * Информация об игроке
@@ -44,6 +45,11 @@ public class InfoLayout extends RelativeLayout implements ShowHideForm {
     }
     private void init(){
         inflate(getContext(), R.layout.content_main, this);
+        try {
+            afterInit();
+        } catch (Exception e){
+            Essages.addEssage(e.toString());
+        }
     }
     @Override
     protected void onFinishInflate() {
@@ -241,10 +247,10 @@ public class InfoLayout extends RelativeLayout implements ShowHideForm {
     }
     public void Show(){
         serverConnect.getInstance().getPlayerInfo();
-        setVisibility(VISIBLE);
+        UIControler.getWindowLayout().addView(this);
 
     }
     public void Hide(){
-        setVisibility(GONE);
+        UIControler.getWindowLayout().removeView(this);
     }
 }
