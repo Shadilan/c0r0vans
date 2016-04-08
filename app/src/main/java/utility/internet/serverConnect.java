@@ -176,7 +176,8 @@ public class serverConnect {
                 (Request.Method.GET, url, null, new Response.Listener<JSONObject>(){
                     @Override
                     public void onResponse(JSONObject response) {
-                        try {
+                        //try
+                        {
 
                             clearListener();
                             if (response.has("Error")) {
@@ -190,10 +191,11 @@ public class serverConnect {
                                 }
                                 lockedActions.clear();
                             }
-                        }  catch (Exception e)
+                        }/*  catch (Exception e)
                         {
                             Essages.addEssage("Refresh UE:"+e.toString());
-                        }
+
+                        }*/
                     }
 
                 }, new Response.ErrorListener() {

@@ -15,11 +15,12 @@
         android:layout_height="fill_parent"
         android:id="@+id/touchView"
         android:clickable="true"
-        />
+        android:layout_above="@+id/chatGroup" />
     <coe.com.c0r0vans.UIElements.ButtonLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@id/buttonLayout"/>
+        android:id="@+id/buttonLayout"
+        android:layout_above="@+id/chatGroup" />
     <LinearLayout
         android:orientation="vertical"
         android:id="@+id/chatGroup"
@@ -66,21 +67,9 @@
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
          />
-
-<coe.com.c0r0vans.UIElements.ChooseFaction
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:visibility="gone"
-    android:gravity="center"
-    android:layout_alignParentStart="true"
-    android:layout_alignParentLeft="true"
-    android:layout_alignParentTop="true"
-    android:layout_alignParentBottom="true"
-    android:layout_centerHorizontal="true"
-    android:layout_centerVertical="true"
-    android:id="@+id/chooseFaction"/>
     <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/windowLayout"/>
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:id="@+id/windowLayout"></RelativeLayout>
+
 </RelativeLayout>

@@ -13,7 +13,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
-import android.widget.TextView;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -23,7 +22,6 @@ import com.google.android.gms.maps.model.LatLng;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.NumberFormat;
 import java.util.Date;
 
 import coe.com.c0r0vans.GameObjects.Ambush;
@@ -37,7 +35,6 @@ import coe.com.c0r0vans.GameObjects.SelectedObject;
 import coe.com.c0r0vans.UIElements.ActionView;
 import coe.com.c0r0vans.UIElements.ButtonLayout;
 import coe.com.c0r0vans.UIElements.ChooseFaction;
-import coe.com.c0r0vans.UIElements.InfoLayout;
 import coe.com.c0r0vans.UIElements.LoginView;
 import coe.com.c0r0vans.UIElements.UIControler;
 import utility.GPSInfo;
@@ -74,11 +71,8 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
 
         Player.instance();
 
-
-
         setContentView(R.layout.activity_main_window);
         ImageLoader.Loader(this.getApplicationContext());
-
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -91,6 +85,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
         touchView=findViewById(R.id.touchView);
         ViewGroup lay= (ViewGroup) findViewById(R.id.windowLayout);
         UIControler.setWindowLayout(lay);
+        UIControler.setButtonLayout((ViewGroup) findViewById(R.id.buttonLayout));
         lay.removeAllViews();
         new LoginView(getApplicationContext()).show();
 
@@ -248,8 +243,6 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
 
     }
 
-
-
     /**
      * Make initialization.
      */
@@ -274,9 +267,10 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
      */
     @Override
     public void onMapReady(GoogleMap googleMap) {
+        Log.d("tttt","Map Ready");
         try{
+
         Point size=new Point();
-        getWindowManager().getDefaultDisplay().getSize(size);
         MyGoogleMap.init(googleMap, size.y);
         Player.getPlayer().setMap(MyGoogleMap.getMap());
         createListeners();
@@ -327,8 +321,8 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
 
             @Override
             public void onRefresh(JSONObject response) {
-                    SendedRequest = 0;
-                    buttonLayout.hideConnectImage();
+                SendedRequest = 0;
+                ((ButtonLayout)UIControler.getButtonLayout()).hideConnectImage();
 
             }
 
@@ -341,7 +335,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
             public void onPlayerInfo(JSONObject response) {
                 Player.getPlayer().loadJSON(response);
                 if (Player.getPlayer().getRace() < 1 || Player.getPlayer().getRace() > 3) {
-                    ((ChooseFaction) findViewById(R.id.chooseFaction)).show();
+                    new ChooseFaction(getApplicationContext()).show();
                 }
                 timeToPlayerRefresh = 6;
             }
@@ -382,49 +376,8 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
 
             }
         });
-
-
-        Player.getPlayer().addOnChange(new OnGameObjectChange() {
-            @Override
-            public void change(int ChangeType) {
-                NumberFormat nf=NumberFormat.getInstance();
-                nf.setGroupingUsed(true);
-                if (ChangeType != OnGameObjectChange.EXTERNAL) return;
-                TextView am = (TextView) findViewById(R.id.levelAmount);
-                am.setText(String.valueOf(Player.getPlayer().getLevel()));
-                am = (TextView) findViewById(R.id.expAmount);
-                am.setText(String.valueOf(nf.format(Player.getPlayer().getExp())));
-                am = (TextView) findViewById(R.id.goldAmount);
-                am.setText(String.valueOf(nf.format(Player.getPlayer().getGold())));
-                ImageView btn = (ImageView) findViewById(R.id.infoview);
-                if ("".equals(Player.getPlayer().getCurrentRoute())) btn.setImageResource(R.mipmap.info);
-                else btn.setImageResource(R.mipmap.info_route);
-                ((InfoLayout) findViewById(R.id.informationView)).loadFromPlayer();
-            }
-        });
         isListenersDone=true;
-
     }
-
-    /**
-     * Return object by marker
-     *
-     * @param m Marker
-     * @return GameObject
-     */
-    /*private GameObject findObjectByMarker(Marker m) {
-        if (Player.getPlayer().getMarker().equals(m)) {
-            return Player.getPlayer();
-        } else
-            for (GameObject obj : Objects.values()) {
-                if (obj.getMarker()!=null && obj.getMarker().equals(m)) {
-                    Log.d("Debug info", "Selected object:" + obj.getClass().toString());
-                    return obj;
-                }
-            }
-        Log.d("Debug info", "Object not found.");
-        return null;
-    }*/
 
     /**
      * Start Timer to load data and other needs.

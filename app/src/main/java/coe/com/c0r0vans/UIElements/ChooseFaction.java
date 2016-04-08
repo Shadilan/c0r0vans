@@ -96,11 +96,12 @@ public class ChooseFaction extends RelativeLayout {
     }
     boolean showed=false;
     public void show(){
-        setVisibility(VISIBLE);
+        UIControler.getWindowLayout().removeAllViews();
+        UIControler.getWindowLayout().addView(this);
         showed=true;
     }
     public void hide(){
-        setVisibility(GONE);
+        UIControler.getWindowLayout().removeView(this);
     }
 
 
