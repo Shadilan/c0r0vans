@@ -521,7 +521,7 @@ public class City extends GameObject{
             });
             ImageButton btn= (ImageButton) findViewById(R.id.buy);
             btn.setEnabled(city.upgradeAvaible());
-            btn.setImageBitmap(ImageLoader.getImage(city.upgrade));
+            btn.setImageBitmap(ImageLoader.getImage(city.upgrade+"_buy"));
             startRouteAction = new ObjectAction(city) {
                 @Override
                 public Bitmap getImage() {

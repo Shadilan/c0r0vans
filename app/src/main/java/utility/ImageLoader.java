@@ -44,24 +44,7 @@ public class ImageLoader {
         createMarker(context, R.mipmap.city_10, "city_10");
 
         Calendar cal =Calendar.getInstance();
-        if (cal.get(Calendar.DAY_OF_MONTH)==1 && cal.get(Calendar.MONTH)==Calendar.APRIL && cal.get(Calendar.HOUR)>8){
-            createMarker(context, R.mipmap.ambush_00, "ambush_00");
-            createMarker(context, R.mipmap.april_1, "ambush_01");
-            createMarker(context, R.mipmap.april_2, "ambush_02");
-            createMarker(context, R.mipmap.april_3, "ambush_03");
-            createMarker(context, R.mipmap.april_1, "ambush_1");
-            createMarker(context, R.mipmap.april_2, "ambush_2");
-            createMarker(context, R.mipmap.april_3, "ambush_3");
-            createMarker(context, R.mipmap.ambush_4, "ambush_4");
-            createMarker(context, R.mipmap.ambush_build_00, "ambush_build_00");
-            createMarker(context, R.mipmap.april_1, "ambush_build_01");
-            createMarker(context, R.mipmap.april_2, "ambush_build_02");
-            createMarker(context, R.mipmap.april_3, "ambush_build_03");
-            createMarker(context, R.mipmap.april_1, "ambush_build_1");
-            createMarker(context, R.mipmap.april_2, "ambush_build_2");
-            createMarker(context, R.mipmap.april_3, "ambush_build_3");
-            createMarker(context, R.mipmap.ambush_build_4, "ambush_build_4");
-        } else {
+
             createMarker(context, R.mipmap.ambush_00, "ambush_00");
             createMarker(context, R.mipmap.ambush_01, "ambush_01");
             createMarker(context, R.mipmap.ambush_02, "ambush_02");
@@ -78,7 +61,7 @@ public class ImageLoader {
             createMarker(context, R.mipmap.ambush_build_2, "ambush_build_2");
             createMarker(context, R.mipmap.ambush_build_3, "ambush_build_3");
             createMarker(context, R.mipmap.ambush_build_4, "ambush_build_4");
-        }
+
         createMarker(context, R.mipmap.caravan_00, "caravan_00");
         createMarker(context, R.mipmap.caravan_01, "caravan_01");
         createMarker(context, R.mipmap.caravan_02, "caravan_02");
@@ -106,11 +89,17 @@ public class ImageLoader {
 
         //Skills
         images.put("speed",BitmapFactory.decodeResource(context.getResources(), R.mipmap.up_speed));
+        images.put("speed_buy",BitmapFactory.decodeResource(context.getResources(), R.mipmap.up_speed_buy));
         images.put("set_ambushes",BitmapFactory.decodeResource(context.getResources(), R.mipmap.ambushbuild));
-        images.put("ambushes",BitmapFactory.decodeResource(context.getResources(), R.mipmap.ambush_img));
-        images.put("cargo",BitmapFactory.decodeResource(context.getResources(), R.mipmap.caravan));
-        images.put("bargain",BitmapFactory.decodeResource(context.getResources(), R.mipmap.buy_item));
-        images.put("paladin",BitmapFactory.decodeResource(context.getResources(), R.mipmap.rem_ambush));
+        images.put("set_ambushes_buy",BitmapFactory.decodeResource(context.getResources(), R.mipmap.ambushbuild_buy));
+        images.put("ambushes",BitmapFactory.decodeResource(context.getResources(), R.mipmap.ambush));
+        images.put("ambushes_buy",BitmapFactory.decodeResource(context.getResources(), R.mipmap.ambush_buy));
+        images.put("cargo",BitmapFactory.decodeResource(context.getResources(), R.mipmap.cargo));
+        images.put("cargo_buy",BitmapFactory.decodeResource(context.getResources(), R.mipmap.cargo_buy));
+        images.put("bargain",BitmapFactory.decodeResource(context.getResources(), R.mipmap.bargain));
+        images.put("bargain_buy",BitmapFactory.decodeResource(context.getResources(), R.mipmap.bargain_buy));
+        images.put("paladin",BitmapFactory.decodeResource(context.getResources(), R.mipmap.paladin));
+        images.put("paladin_buy",BitmapFactory.decodeResource(context.getResources(), R.mipmap.paladin_buy));
 
 
     }
