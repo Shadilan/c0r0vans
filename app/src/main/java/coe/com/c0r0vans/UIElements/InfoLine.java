@@ -90,9 +90,16 @@ public class InfoLine extends RelativeLayout {
         removeButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                serverConnect.getInstance().ExecCommand(removeAction, target, 0, 0, 0, 0);
-                removeButton.setVisibility(INVISIBLE);
-
+                ConfirmWindow confirmWindow=new ConfirmWindow(getContext());
+                confirmWindow.setText("Распустить засаду?");
+                confirmWindow.setConfirmAction(new Runnable() {
+                    @Override
+                    public void run() {
+                        serverConnect.getInstance().ExecCommand(removeAction, target, 0, 0, 0, 0);
+                        removeButton.setVisibility(INVISIBLE);
+                    }
+                });
+                confirmWindow.show();
             }
         });
         showButton= (ImageButton) findViewById(R.id.showButton);

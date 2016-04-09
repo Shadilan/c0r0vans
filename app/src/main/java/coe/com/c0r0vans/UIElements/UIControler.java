@@ -10,7 +10,7 @@ public class UIControler {
     private static ViewGroup buttonLayout;
     private static ViewGroup actionLayout;
     private static ViewGroup windowLayout;
-    private static ViewGroup staticLayout;
+    private static ViewGroup alertLayout;
 
     public static ViewGroup getEffectLayout() {
         return effectLayout;
@@ -44,11 +44,11 @@ public class UIControler {
         UIControler.windowLayout = windowLayout;
     }
 
-    public static ViewGroup getStaticLayout() {
-        return staticLayout;
+    public static ViewGroup getAlertLayout() {
+        return alertLayout;
     }
 
-    public static void setStaticLayout(ViewGroup staticLayout) {
-        UIControler.staticLayout = staticLayout;
+    public static void setAlertLayout(ViewGroup staticLayout) {
+        UIControler.alertLayout = staticLayout;
     }
 }

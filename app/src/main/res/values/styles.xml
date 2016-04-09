@@ -9,9 +9,16 @@
     </style>
     <style name="MediumText">
         <item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
-        <item name="android:textColor">@android:color/black</item>
-
     </style>
+    <style name="SmallText">
+        <item name="android:textAppearance">?android:attr/textAppearanceSmall</item>
+        <item name="android:textColor">@android:color/black</item>
+    </style>
+    <style name="LargeText">
+        <item name="android:textAppearance">?android:attr/textAppearanceLarge</item>
+        <item name="android:textColor">@android:color/black</item>
+    </style>
+
     <style name="MyDialogTheme" parent="@style/Theme.AppCompat.Light.Dialog">
         <item name="android:windowFrame">@null</item>
         <item name="android:windowBackground">@android:color/transparent</item>

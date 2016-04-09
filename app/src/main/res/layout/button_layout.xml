@@ -109,7 +109,7 @@
         android:paddingLeft="10dp"
         android:id="@+id/zoomButton"
         android:src="@mipmap/zoombutton"
-        android:layout_alignParentBottom="true"
+        android:layout_above="@+id/chatGroup"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
 
@@ -124,4 +124,43 @@
         android:layout_centerHorizontal="true"
         android:visibility="invisible"
         android:src="@mipmap/closebutton" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:id="@+id/chatGroup"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true">
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/show"
+            android:id="@+id/showButton" />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/imageView2"
+            android:src="@color/colorControls" />
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/white"
+            android:layout_gravity="bottom"
+            android:id="@+id/scrollView">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/chatBox"
+                android:scrollbarAlwaysDrawVerticalTrack="true"
+                android:gravity="bottom"
+                android:background="@android:color/white"
+                android:focusable="true"
+                android:orientation="vertical" />
+        </ScrollView>
+    </LinearLayout>
 </RelativeLayout>

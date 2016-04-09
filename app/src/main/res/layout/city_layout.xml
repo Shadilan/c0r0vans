@@ -7,6 +7,7 @@
     <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="@drawable/action_button"
         android:id="@+id/closeActionButton"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
@@ -159,6 +160,7 @@
     <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="@drawable/action_button"
         android:id="@+id/buyUpgrade"
         android:src="@mipmap/buy_item"
         android:layout_below="@+id/textView28"
@@ -169,6 +171,7 @@
     <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="@drawable/action_button"
         android:id="@+id/startRoute"
         android:src="@mipmap/start_route"
         android:layout_below="@+id/buyPanel"
@@ -177,6 +180,7 @@
     <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="@drawable/action_button"
         android:id="@+id/finishRoute"
         android:src="@mipmap/end_route"
         android:layout_below="@+id/buyPanel"

@@ -2,10 +2,14 @@ package coe.com.c0r0vans.UIElements;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.DisplayMetrics;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import java.text.NumberFormat;
@@ -20,10 +24,13 @@ import utility.internet.serverConnect;
 import utility.notification.Essages;
 
 /**
- * Created by Shadilan on 07.04.2016.
+ * Элементы интерфейса
  */
 public class ButtonLayout extends RelativeLayout {
     InfoLayout infoLayout;
+    private LinearLayout LogView;
+    private ScrollView scrollView;
+    private ImageView LogButton;
     public ButtonLayout(Context context) {
         super(context);
         init();
@@ -71,7 +78,7 @@ public class ButtonLayout extends RelativeLayout {
         Settings.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-
+                Essages.addEssage("Принудительная загрузка.");
                 //Run Refresh
                 serverConnect.getInstance().RefreshCurrent();
                 //Run Player
@@ -115,6 +122,32 @@ public class ButtonLayout extends RelativeLayout {
                 infoLayout.loadFromPlayer();
             }
         });
+        LogView = (LinearLayout) findViewById(R.id.chatBox);
+        scrollView= (ScrollView) findViewById(R.id.scrollView);
+        if (scrollView!=null) scrollView.getLayoutParams().height=60;
+        LogButton = (ImageView) findViewById(R.id.showButton);
+        if (LogButton!=null) LogButton.setOnClickListener(new View.OnClickListener() {
+            private boolean show = false;
+
+            @Override
+            public void onClick(View v) {
+                WindowManager windowManager= (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
+
+                if (show) {
+                    show = false;
+                    DisplayMetrics dm = new DisplayMetrics();
+                    windowManager.getDefaultDisplay().getMetrics(dm);
+                    scrollView.getLayoutParams().height = dm.heightPixels / 2;
+                    scrollView.requestLayout();
+
+                } else {
+                    show = true;
+                    scrollView.getLayoutParams().height = 60;
+                    scrollView.requestLayout();
+                }
+            }
+        });
+        Essages.setTarget(LogView);
 
     }
     public void showConnectImage(){
@@ -125,5 +158,6 @@ public class ButtonLayout extends RelativeLayout {
         ImageView ci= (ImageView) findViewById(R.id.server_connect);
         ci.setVisibility(GONE);
     }
+
 
 }

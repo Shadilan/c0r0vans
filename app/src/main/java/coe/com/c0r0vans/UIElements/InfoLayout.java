@@ -44,7 +44,7 @@ public class InfoLayout extends RelativeLayout implements ShowHideForm {
         init();
     }
     private void init(){
-        inflate(getContext(), R.layout.content_main, this);
+        inflate(getContext(), R.layout.info_layout, this);
         try {
             afterInit();
         } catch (Exception e){
@@ -247,7 +247,7 @@ public class InfoLayout extends RelativeLayout implements ShowHideForm {
     }
     public void Show(){
         serverConnect.getInstance().getPlayerInfo();
-
+        UIControler.getWindowLayout().removeAllViews();
         UIControler.getWindowLayout().addView(this);
 
     }

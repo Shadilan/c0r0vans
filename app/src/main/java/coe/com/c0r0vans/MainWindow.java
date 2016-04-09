@@ -5,14 +5,10 @@ import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ScrollView;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -50,9 +46,6 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
     private Handler myHandler = new Handler();
     private int SendedRequest = 0;
     private MessageMap messages;
-    private LinearLayout LogView;
-    private ScrollView scrollView;
-    private ImageView LogButton;
     private View touchView;
 
     ButtonLayout buttonLayout;
@@ -78,19 +71,21 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
 
-        LogButton = (ImageView) findViewById(R.id.showButton);
-        LogView = (LinearLayout) findViewById(R.id.chatBox);
-        scrollView= (ScrollView) findViewById(R.id.scrollView);
-        scrollView.getLayoutParams().height=60;
+
+
+
         touchView=findViewById(R.id.touchView);
         ViewGroup lay= (ViewGroup) findViewById(R.id.windowLayout);
         UIControler.setWindowLayout(lay);
         UIControler.setButtonLayout((ViewGroup) findViewById(R.id.buttonLayout));
         lay.removeAllViews();
+        lay= (ViewGroup) findViewById(R.id.alertLayout);
+        UIControler.setAlertLayout(lay);
+        lay.removeAllViews();
         new LoginView(getApplicationContext()).show();
 
 
-        Essages.setTarget(LogView);
+
 
         touchView.setOnTouchListener(new View.OnTouchListener() {
             long tm = -1;
@@ -289,27 +284,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
 
 
 
-        LogButton.setOnClickListener(new View.OnClickListener() {
-            private boolean show = false;
 
-            @Override
-            public void onClick(View v) {
-                DisplayMetrics dm = new DisplayMetrics();
-                getWindowManager().getDefaultDisplay().getMetrics(dm);
-                if (show) {
-                    show = false;
-                    //LogView.setBackgroundColor(Color.WHITE);
-                    scrollView.getLayoutParams().height = dm.heightPixels / 2;
-                    scrollView.requestLayout();
-
-                } else {
-                    show = true;
-                    //LogView.setBackgroundColor(Color.TRANSPARENT);
-                    scrollView.getLayoutParams().height = 60;
-                    scrollView.requestLayout();
-                }
-            }
-        });
 
 
 

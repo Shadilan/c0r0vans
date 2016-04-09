@@ -118,8 +118,17 @@ public class CityLine extends RelativeLayout {
         removeButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                serverConnect.getInstance().ExecCommand(removeAction, target, 0, 0, 0, 0);
-                removeButton.setVisibility(INVISIBLE);
+                ConfirmWindow confirmWindow=new ConfirmWindow(getContext());
+                if ("".equals(endCityView.getText())) confirmWindow.setText("Отменить неоконченный маршрут?");
+                else confirmWindow.setText("Отменить маршрут \""+startCityView.getText() + " - " + endCityView.getText() + "\"?");
+                confirmWindow.setConfirmAction(new Runnable() {
+                    @Override
+                    public void run() {
+                        serverConnect.getInstance().ExecCommand(removeAction, target, 0, 0, 0, 0);
+                        removeButton.setVisibility(INVISIBLE);
+                    }
+                });
+                confirmWindow.show();
 
             }
         });

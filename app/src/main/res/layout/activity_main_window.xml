@@ -30,34 +30,7 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true">
 
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:src="@mipmap/show"
-            android:id="@+id/showButton" />
 
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/imageView2"
-            android:src="@color/colorControls" />
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@android:color/white"
-            android:layout_gravity="bottom"
-            android:id="@+id/scrollView">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/chatBox"
-                android:scrollbarAlwaysDrawVerticalTrack="true"
-                android:gravity="bottom"
-                android:background="@android:color/white"
-                android:focusable="true"
-                android:orientation="vertical" />
-        </ScrollView>
     </LinearLayout>
     <coe.com.c0r0vans.UIElements.ActionView
         android:layout_width="match_parent"
@@ -70,6 +43,13 @@
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:id="@+id/windowLayout"></RelativeLayout>
+        android:id="@+id/windowLayout"/>
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:gravity="center"
+        android:id="@+id/alertLayout"/>
 
 </RelativeLayout>

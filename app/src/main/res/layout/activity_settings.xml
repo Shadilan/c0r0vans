@@ -50,7 +50,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true"
                 android:checked="false"
-                android:buttonTint="@android:color/black"
+
                 />
 
             <TextView
@@ -81,7 +81,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true"
                 android:checked="true"
-                android:buttonTint="@android:color/black" />
+                 />
 
 
             <TextView
@@ -100,7 +100,7 @@
                 android:id="@+id/cityRad"
                 android:checked="true"
                 android:layout_below="@+id/ambushRad"
-                android:buttonTint="@android:color/black"
+
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true" />
             <TextView
@@ -119,7 +119,7 @@
                 android:id="@+id/routeShow"
                 android:checked="true"
                 android:layout_below="@+id/cityRad"
-                android:buttonTint="@android:color/black"
+
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true" />
 
@@ -148,7 +148,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/musicOn"
                 android:layout_below="@+id/textView9"
-                android:buttonTint="@android:color/black"
+
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true"
                 android:checked="true" />
@@ -169,7 +169,7 @@
                 android:id="@+id/soundOn"
                 android:checked="true"
                 android:layout_below="@+id/musicOn"
-                android:buttonTint="@android:color/black"
+
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true" />
 
@@ -198,7 +198,7 @@
                 android:id="@+id/useTilt"
                 android:checked="false"
                 android:layout_below="@+id/textView15"
-                android:buttonTint="@android:color/black"
+
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true" />
 
@@ -218,7 +218,7 @@
                 android:id="@+id/usePadding"
                 android:checked="false"
                 android:layout_below="@+id/useTilt"
-                android:buttonTint="@android:color/black"
+
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true" />
 
@@ -247,7 +247,7 @@
                 android:id="@+id/gpsOn"
                 android:checked="false"
                 android:layout_below="@+id/textView17"
-                android:buttonTint="@android:color/black"
+
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true" />
             <TextView
@@ -289,7 +289,7 @@
                 android:id="@+id/trackBearing"
                 android:checked="false"
                 android:layout_below="@+id/textView19"
-                android:buttonTint="@android:color/black"
+
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true" />
             <TextView
@@ -318,7 +318,7 @@
                 android:id="@+id/netLogOn"
                 android:checked="false"
                 android:layout_below="@+id/textView13"
-                android:buttonTint="@android:color/black"
+
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true" />
             <TextView
@@ -337,7 +337,6 @@
                 android:id="@+id/netErrorLogOn"
                 android:checked="false"
                 android:layout_below="@+id/textView14"
-                android:buttonTint="@android:color/black"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true" />
         </RelativeLayout>

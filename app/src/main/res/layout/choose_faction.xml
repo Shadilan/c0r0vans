@@ -3,13 +3,13 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:layout_gravity="center_horizontal"
-    android:background="@android:color/white"
+    android:background="@drawable/layouts"
     >
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
+        style="@style/LargeText"
         android:text="Выбери Фракцию."
         android:id="@+id/textView25"
         android:layout_alignParentTop="true"
@@ -64,7 +64,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
+            style="@style/LargeText"
             android:text="@string/guild_name"
             android:id="@+id/factionName"
             android:layout_alignBaseline="@+id/faction_text1"
@@ -77,7 +77,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceSmall"
+            style="@style/SmallText"
             android:text="@string/guild_desc"
             android:id="@+id/factionDesc"
             android:layout_centerVertical="true"
@@ -93,6 +93,8 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:text="Принять"
+        android:background="@drawable/action_button"
+        android:textColor="@android:color/black"
         android:id="@+id/acceptFaction" />
 
 

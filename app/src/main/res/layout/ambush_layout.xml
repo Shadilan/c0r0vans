@@ -7,6 +7,7 @@
     <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="@drawable/action_button"
         android:id="@+id/closeActionButton"
         android:src="@mipmap/closebutton"
         android:layout_alignParentTop="true"
@@ -47,6 +48,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/ambushActionBtn"
         android:src="@mipmap/rem_ambush"
+        android:background="@drawable/action_button"
         android:layout_below="@+id/ambushDesc"
         android:layout_centerHorizontal="true" />
 

@@ -25,6 +25,7 @@ import java.text.NumberFormat;
 import coe.com.c0r0vans.MyGoogleMap;
 import coe.com.c0r0vans.R;
 import coe.com.c0r0vans.UIElements.ActionView;
+import coe.com.c0r0vans.UIElements.ConfirmWindow;
 import utility.GPSInfo;
 import utility.GameSound;
 import utility.ImageLoader;
@@ -408,13 +409,21 @@ public class City extends GameObject{
             findViewById(R.id.buyUpgrade).setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    serverConnect.getInstance().ExecCommand(buyAction,
-                            city.getGUID(),
-                            GPSInfo.getInstance().GetLat(),
-                            GPSInfo.getInstance().GetLng(),
-                            (int) (city.getMarker().getPosition().latitude * 1e6),
-                            (int) (city.getMarker().getPosition().longitude * 1e6));
-                    close();
+                    ConfirmWindow confirmWindow=new ConfirmWindow(getContext());
+                    confirmWindow.setText("Вы уверены что хотите купить улучшение?");
+                    confirmWindow.setConfirmAction(new Runnable() {
+                        @Override
+                        public void run() {
+                            serverConnect.getInstance().ExecCommand(buyAction,
+                                    city.getGUID(),
+                                    GPSInfo.getInstance().GetLat(),
+                                    GPSInfo.getInstance().GetLng(),
+                                    (int) (city.getMarker().getPosition().latitude * 1e6),
+                                    (int) (city.getMarker().getPosition().longitude * 1e6));
+                            close();
+                        }
+                    });
+                    confirmWindow.show();
                 }
             });
 

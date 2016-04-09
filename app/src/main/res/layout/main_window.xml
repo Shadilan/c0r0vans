@@ -3,8 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="coe.com.c0r0vans.MainWindow"
-    tools:layout="@android:layout/activity_list_item">
+    tools:context="coe.com.c0r0vans.MainWindow">
     <fragment xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
@@ -19,45 +18,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/buttonLayout"/>
-    <!--TODO вынести в отдельный лэйаут с отдельным управлением-->
-    <LinearLayout
-        android:orientation="vertical"
-        android:id="@+id/chatGroup"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true">
-
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:src="@mipmap/show"
-            android:id="@+id/showButton" />
-
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/imageView2"
-            android:src="@color/colorControls" />
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@android:color/white"
-            android:layout_gravity="bottom"
-            android:id="@+id/scrollView">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/chatBox"
-                android:scrollbarAlwaysDrawVerticalTrack="true"
-                android:gravity="bottom"
-                android:background="@android:color/white"
-                android:focusable="true"
-                android:orientation="vertical" />
-        </ScrollView>
-    </LinearLayout>
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
