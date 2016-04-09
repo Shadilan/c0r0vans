@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -26,6 +27,7 @@ import coe.com.c0r0vans.ConfirmWindow;
 import coe.com.c0r0vans.MyGoogleMap;
 import coe.com.c0r0vans.R;
 import coe.com.c0r0vans.UIElements.ActionView;
+import coe.com.c0r0vans.UIElements.UIControler;
 import utility.GPSInfo;
 import utility.GameSound;
 import utility.ImageLoader;
@@ -138,7 +140,7 @@ public class City extends GameObject{
                 || (upcost >= Player.getPlayer().getGold())
                 || (up.getLevel() > Player.getPlayer().getLevel() - 1));
     }
-    public String getName(){return (Name+" lv."+Level) ;}
+    public String getName(){return (Name+" ур."+Level) ;}
 
 
     @Override
@@ -204,13 +206,12 @@ public class City extends GameObject{
         public void init(){
             inflate(this.getContext(), R.layout.city_layout, this);
             if ("Y".equals(GameSettings.getInstance().get("VIEW_PADDING"))) this.setAlpha(0.7f);
-            Log.d("tttt","Wind1");
+
         }
         boolean loaded=true;
 
 
         public void setCity(City city){
-            Log.d("tttt","Wind2");
             this.city=city;
             if (loaded) applyCity();
         }
@@ -410,7 +411,27 @@ public class City extends GameObject{
                 @Override
                 public void onClick(View v) {
                     ConfirmWindow confirmWindow=new ConfirmWindow(getContext());
-                    confirmWindow.setText("Вы уверены что хотите купить улучшение?");
+                    Upgrade up=Player.getPlayer().getNextUpgrade(upgrade);
+                    if (up!=null) {
+                        float raceBonus = 0;
+                        long infsum = city.influence1 + city.influence2 + city.influence3;
+                        if (infsum > 0) {
+                            switch (Player.getPlayer().getRace()) {
+                                case 1:
+                                    raceBonus = (float) city.influence1 / infsum;
+                                    break;
+                                case 2:
+                                    raceBonus = (float) city.influence2 / infsum;
+                                    break;
+                                case 3:
+                                    raceBonus = (float) city.influence3 / infsum;
+                                    break;
+                            }
+                        }
+                        raceBonus = ((1f - raceBonus / 4) * (100f - Player.getPlayer().getTrade()) / 100f);
+                        int upcost = (int) (up.getCost() * raceBonus);
+                        confirmWindow.setText("Вы уверены что хотите купить улучшение \"" + up.getName() + "\" " + up.getLevel() + " уровня за ?");
+                    } else confirmWindow.setText("Вы уверены что хотите купить улучшение \"" + upgradeName + "\"?");
                     confirmWindow.setConfirmAction(new Runnable() {
                         @Override
                         public void run() {
@@ -460,8 +481,252 @@ public class City extends GameObject{
             ((TextView) findViewById(R.id.distance)).setText(String.format(getResources().getString(R.string.distance), distance));
         }
     }
+    private class CityAction extends RelativeLayout implements  GameObjectView{
+        City city;
+        public CityAction(Context context) {
+            super(context);
+            init();
+        }
+
+        public CityAction(Context context, AttributeSet attrs) {
+            super(context, attrs);
+            init();
+        }
+
+        public CityAction(Context context, AttributeSet attrs, int defStyleAttr) {
+            super(context, attrs, defStyleAttr);
+            init();
+        }
+        public void init(){
+            inflate(this.getContext(), R.layout.city_actions, this);
+            if ("Y".equals(GameSettings.getInstance().get("VIEW_PADDING"))) this.setAlpha(0.7f);
+        }
+        boolean loaded=true;
+
+
+        public void setCity(City city){
+            this.city=city;
+            if (loaded) applyCity();
+        }
+        ObjectAction buyAction;
+        ObjectAction startRouteAction;
+        ObjectAction endRouteAction;
+
+        private void applyCity() {
+            findViewById(R.id.cancel).setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    close();
+                }
+            });
+            ImageButton btn= (ImageButton) findViewById(R.id.buy);
+            btn.setEnabled(city.upgradeAvaible());
+            btn.setImageBitmap(ImageLoader.getImage(city.upgrade));
+            startRouteAction = new ObjectAction(city) {
+                @Override
+                public Bitmap getImage() {
+                    return ImageLoader.getImage("start_route");
+                }
+
+                @Override
+                public String getCommand() {
+                    return "StartRoute";
+                }
+
+                @Override
+                public void preAction() {
+                    Player.getPlayer().setRouteStart(false);
+                }
+
+                @Override
+                public void postAction() {
+                    GameSound.playSound(GameSound.START_ROUTE_SOUND);
+                    Essages.addEssage(String.format(getResources().getString(R.string.route_started), Name));
+                    serverConnect.getInstance().getPlayerInfo();
+                }
+
+                @Override
+                public void postError() {
+                    Player.getPlayer().setRouteStart(true);
+
+                }
+            };
+
+            findViewById(R.id.start).setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    serverConnect.getInstance().ExecCommand(startRouteAction,
+                            city.getGUID(),
+                            GPSInfo.getInstance().GetLat(),
+                            GPSInfo.getInstance().GetLng(),
+                            (int) (city.getMarker().getPosition().latitude * 1e6),
+                            (int) (city.getMarker().getPosition().longitude * 1e6));
+                    close();
+                }
+            });
+            endRouteAction = new ObjectAction(city) {
+                @Override
+                public Bitmap getImage() {
+                    return ImageLoader.getImage("end_route");
+                }
+
+                @Override
+                public String getCommand() {
+                    return "FinishRoute";
+                }
+
+                @Override
+                public void preAction() {
+                    Player.getPlayer().setRouteStart(true);
+                }
+
+                @Override
+                public void postAction() {
+                    Essages.addEssage(String.format(getResources().getString(R.string.route_finish), Name));
+                    GameSound.playSound(GameSound.FINISH_ROUTE_SOUND);
+                    serverConnect.getInstance().getPlayerInfo();
+                    serverConnect.getInstance().RefreshCurrent();
+                }
+
+                @Override
+                public void postError() {
+                    Player.getPlayer().setRouteStart(false);
+
+                }
+            };
+            findViewById(R.id.end).setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    serverConnect.getInstance().ExecCommand(endRouteAction,
+                            city.getGUID(),
+                            GPSInfo.getInstance().GetLat(),
+                            GPSInfo.getInstance().GetLng(),
+                            (int) (city.getMarker().getPosition().latitude * 1e6),
+                            (int) (city.getMarker().getPosition().longitude * 1e6));
+                    close();
+                }
+
+            });
+
+            buyAction = new ObjectAction(city) {
+                @Override
+                public Bitmap getImage() {
+                    return ImageLoader.getImage("buy_item");
+                }
+
+
+                @Override
+                public String getCommand() {
+                    return "BuyUpgrade";
+                }
+
+                @Override
+                public void preAction() {
+
+                }
+
+                @Override
+                public void postAction() {
+                    GameSound.playSound(GameSound.BUY_SOUND);
+                    serverConnect.getInstance().getPlayerInfo();
+
+                    Upgrade up = Player.getPlayer().getNextUpgrade(upgrade);
+                    if (up != null) Essages.addEssage(String.format(getResources().getString(R.string.upgrade_bought),up.getName()));
+                    else Essages.addEssage(String.format(getResources().getString(R.string.upgrade_bought), upgrade));
+                    serverConnect.getInstance().getPlayerInfo();
+                }
+
+                @Override
+                public void postError() {
+
+                }
+            };
+            findViewById(R.id.buy).setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ConfirmWindow confirmWindow=new ConfirmWindow(getContext());
+                    Upgrade up=Player.getPlayer().getNextUpgrade(upgrade);
+                    if (up!=null) {
+                        float raceBonus = 0;
+                        long infsum = city.influence1 + city.influence2 + city.influence3;
+                        if (infsum > 0) {
+                            switch (Player.getPlayer().getRace()) {
+                                case 1:
+                                    raceBonus = (float) city.influence1 / infsum;
+                                    break;
+                                case 2:
+                                    raceBonus = (float) city.influence2 / infsum;
+                                    break;
+                                case 3:
+                                    raceBonus = (float) city.influence3 / infsum;
+                                    break;
+                            }
+                        }
+                        raceBonus = ((1f - raceBonus / 4) * (100f - Player.getPlayer().getTrade()) / 100f);
+                        int upcost = (int) (up.getCost() * raceBonus);
+                        confirmWindow.setText("Вы уверены что хотите купить улучшение \"" + up.getName() + "\" " + up.getLevel() + " уровня за ?");
+                    } else confirmWindow.setText("Вы уверены что хотите купить улучшение \"" + upgradeName + "\"?");
+                    confirmWindow.setConfirmAction(new Runnable() {
+                        @Override
+                        public void run() {
+                            serverConnect.getInstance().ExecCommand(buyAction,
+                                    city.getGUID(),
+                                    GPSInfo.getInstance().GetLat(),
+                                    GPSInfo.getInstance().GetLng(),
+                                    (int) (city.getMarker().getPosition().latitude * 1e6),
+                                    (int) (city.getMarker().getPosition().longitude * 1e6));
+                            close();
+                        }
+                    });
+                    confirmWindow.show();
+                }
+            });
+            findViewById(R.id.info).setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    UIControler.getActionLayout().removeAllViews();
+                    CityWindow cityWindow=new CityWindow(getContext());
+                    cityWindow.setCity(city);
+                    UIControler.getActionLayout().setCurrentView(cityWindow);
+
+                }
+            });
+
+        }
+        public void updateInZone(boolean inZone){
+            if (inZone) {
+                findViewById(R.id.start).setVisibility(INVISIBLE);
+                findViewById(R.id.end).setVisibility(INVISIBLE);
+                findViewById(R.id.buy).setVisibility(INVISIBLE);
+                if (Player.getPlayer().getRouteStart()) findViewById(R.id.start).setVisibility(VISIBLE);
+                if (!Player.getPlayer().getRouteStart() && (city!=null) && !Player.checkRoute(city.getGUID())) findViewById(R.id.end).setVisibility(VISIBLE);
+                if (city!=null && city.upgradeAvaible()) findViewById(R.id.buy).setVisibility(VISIBLE);
+            }
+            else
+            {
+                findViewById(R.id.start).setVisibility(INVISIBLE);
+                findViewById(R.id.end).setVisibility(INVISIBLE);
+                findViewById(R.id.buy).setVisibility(INVISIBLE);
+            }
+        }
+        public void close(){
+            this.setVisibility(GONE);
+            city=null;
+            actionView.HideView();
+        }
+        ActionView actionView;
+        @Override
+        public void setContainer(ActionView av) {
+            actionView=av;
+        }
+
+        @Override
+        public void setDistance(int distance) {
+
+        }
+    }
     public RelativeLayout getObjectView(Context context){
-        CityWindow result=new CityWindow(context);
+        CityAction result=new CityAction(context);
         result.setCity(this);
         return result;
     }

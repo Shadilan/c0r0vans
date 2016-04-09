@@ -44,34 +44,6 @@ public class ActionView extends LinearLayout {
     }
     public void init(){
         //inflate(getContext(), R.layout.actions_layout, this);
-
-    }
-
-    public void HideView(){
-        SelectedObject.getInstance().hidePoint();
-        this.removeAllViews();
-    }
-    LocationListener locationListener;
-    RelativeLayout currentView=null;
-
-    public void ShowView(){
-        //Очистить вью
-        //Загрузить вью
-        //Обновить видимость экшенов
-        Log.d("tttt","test");
-        this.removeAllViews();
-        GameObject target=SelectedObject.getInstance().getTarget();
-        if (target instanceof Player){
-            currentView=target.getObjectView(getContext());
-        } else
-        if (target instanceof City)
-        {
-            currentView=target.getObjectView(getContext());
-        } else if (target instanceof Ambush)
-        {
-            currentView=target.getObjectView(getContext());
-
-        }
         serverConnect.getInstance().addListener(new ServerListener() {
             @Override
             public void onLogin(JSONObject response) {
@@ -136,14 +108,47 @@ public class ActionView extends LinearLayout {
 
                 }
             };
-            GPSInfo.getInstance().AddLocationListener(locationListener);
+            GPSInfo.getInstance(getContext()).AddLocationListener(locationListener);
         }
-        reloadActions();
-        ((GameObjectView)currentView).setContainer(this);
-        this.addView(currentView);
+    }
 
-        this.requestLayout();
+    public void HideView(){
+        SelectedObject.getInstance().hidePoint();
+        this.removeAllViews();
+    }
+    LocationListener locationListener;
+    RelativeLayout currentView=null;
+
+    public void ShowView(){
+        //Очистить вью
+        //Загрузить вью
+        //Обновить видимость экшенов
+        Log.d("tttt","test");
+        this.removeAllViews();
+        GameObject target=SelectedObject.getInstance().getTarget();
+        if (target instanceof Player){
+            setCurrentView(target.getObjectView(getContext()));
+
+        } else
+        if (target instanceof City)
+        {
+            setCurrentView(target.getObjectView(getContext()));
+        } else if (target instanceof Ambush)
+        {
+            setCurrentView(target.getObjectView(getContext()));
+
+        }
+
+
+
         Log.d("tttt", "test");
+    }
+    public void setCurrentView(RelativeLayout view){
+        currentView= view;
+        ((GameObjectView) view).setContainer(this);
+        this.addView(currentView);
+        this.requestLayout();
+        reloadActions();
     }
 
     private void reloadActions(){

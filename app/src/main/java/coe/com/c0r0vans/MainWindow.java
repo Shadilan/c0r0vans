@@ -81,6 +81,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
         lay.removeAllViews();
         lay= (ViewGroup) findViewById(R.id.alertLayout);
         UIControler.setAlertLayout(lay);
+        UIControler.setActionLayout((ActionView) findViewById(R.id.actionView));
         lay.removeAllViews();
         new LoginView(getApplicationContext()).show();
 
