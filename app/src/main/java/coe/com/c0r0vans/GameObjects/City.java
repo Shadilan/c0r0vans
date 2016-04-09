@@ -22,10 +22,10 @@ import org.json.JSONObject;
 
 import java.text.NumberFormat;
 
+import coe.com.c0r0vans.ConfirmWindow;
 import coe.com.c0r0vans.MyGoogleMap;
 import coe.com.c0r0vans.R;
 import coe.com.c0r0vans.UIElements.ActionView;
-import coe.com.c0r0vans.UIElements.ConfirmWindow;
 import utility.GPSInfo;
 import utility.GameSound;
 import utility.ImageLoader;
