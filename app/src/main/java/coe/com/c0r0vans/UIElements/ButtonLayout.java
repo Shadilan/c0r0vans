@@ -12,14 +12,13 @@ import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-import java.text.NumberFormat;
-
 import coe.com.c0r0vans.GameObjects.GameObject;
 import coe.com.c0r0vans.GameObjects.GameObjects;
 import coe.com.c0r0vans.GameObjects.Player;
 import coe.com.c0r0vans.MyGoogleMap;
 import coe.com.c0r0vans.OnGameObjectChange;
 import coe.com.c0r0vans.R;
+import utility.StringUtils;
 import utility.internet.serverConnect;
 import utility.notification.Essages;
 
@@ -106,15 +105,14 @@ public class ButtonLayout extends RelativeLayout {
         Player.getPlayer().addOnChange(new OnGameObjectChange() {
             @Override
             public void change(int ChangeType) {
-                NumberFormat nf = NumberFormat.getInstance();
-                nf.setGroupingUsed(true);
+
                 if (ChangeType != OnGameObjectChange.EXTERNAL) return;
                 TextView am = (TextView) findViewById(R.id.levelAmount);
                 am.setText(String.valueOf(Player.getPlayer().getLevel()));
                 am = (TextView) findViewById(R.id.expAmount);
-                am.setText(String.valueOf(nf.format(Player.getPlayer().getExp())));
+                am.setText(String.valueOf(StringUtils.intToStr(Player.getPlayer().getExp())));
                 am = (TextView) findViewById(R.id.goldAmount);
-                am.setText(String.valueOf(nf.format(Player.getPlayer().getGold())));
+                am.setText(String.valueOf(StringUtils.intToStr(Player.getPlayer().getGold())));
                 ImageView btn = (ImageView) findViewById(R.id.infoview);
                 if ("".equals(Player.getPlayer().getCurrentRoute()))
                     btn.setImageResource(R.mipmap.info);

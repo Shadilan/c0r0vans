@@ -21,8 +21,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.NumberFormat;
-
 import coe.com.c0r0vans.ConfirmWindow;
 import coe.com.c0r0vans.MyGoogleMap;
 import coe.com.c0r0vans.R;
@@ -31,6 +29,7 @@ import coe.com.c0r0vans.UIElements.UIControler;
 import utility.GPSInfo;
 import utility.GameSound;
 import utility.ImageLoader;
+import utility.StringUtils;
 import utility.internet.serverConnect;
 import utility.notification.Essages;
 import utility.settings.GameSettings;
@@ -240,11 +239,11 @@ public class City extends GameObject{
 
                 String dop;
                 if (up.getReqCityLev()>Level) dop= String.format("Требуется уровень города %d\n", up.getReqCityLev());
-                else if ((upcost)>Player.getPlayer().getGold()) dop= String.format("Вам не хватает:%d золота!\n", upcost - Player.getPlayer().getGold());
+                else if ((upcost)>Player.getPlayer().getGold()) dop= String.format("Вам не хватает:%s золота!\n", StringUtils.intToStr(upcost - Player.getPlayer().getGold()));
                 else if (up.getLevel()>Player.getPlayer().getLevel()-1) dop= String.format("Требуется уровень %d\n", up.getLevel());
                 else dop= String.format("Эффект:%s\n", up.getDescription());
 
-                return String.format("%s\" за %d золота(без скидки %d).\n%s", up.getName(), upcost,up.getCost() , dop);
+                return String.format("%s\" за %s золота(без скидки %s).\n%s", up.getName(), StringUtils.intToStr(upcost),StringUtils.intToStr(up.getCost()), dop);
             }
             else return upgradeName+"\". "
                     ;
@@ -266,11 +265,10 @@ public class City extends GameObject{
             int inf1 = Math.round(city.getInfluence1() * 100 / sum );
             int inf2 = Math.round(city.getInfluence2() * 100/ sum );
             int inf3 = Math.round(city.getInfluence3() * 100 / sum);
-            NumberFormat nf=NumberFormat.getInstance();
-            nf.setGroupingUsed(true);
-            ((TextView)findViewById(R.id.guildInfCount)).setText(nf.format(city.getInfluence1()));
-            ((TextView)findViewById(R.id.allianceInfCount)).setText(nf.format(city.getInfluence2()));
-            ((TextView)findViewById(R.id.ligaInfCount)).setText(nf.format(city.getInfluence3()));
+
+            ((TextView)findViewById(R.id.guildInfCount)).setText(StringUtils.longToStr(city.getInfluence1()));
+            ((TextView)findViewById(R.id.allianceInfCount)).setText(StringUtils.longToStr(city.getInfluence2()));
+            ((TextView)findViewById(R.id.ligaInfCount)).setText(StringUtils.longToStr(city.getInfluence3()));
             ProgressBar progressBar = (ProgressBar) findViewById(R.id.GuildInf);
             progressBar.setProgress(inf1);
             progressBar.setMax(100);
@@ -430,8 +428,8 @@ public class City extends GameObject{
                         }
                         raceBonus = ((1f - raceBonus / 4) * (100f - Player.getPlayer().getTrade()) / 100f);
                         int upcost = (int) (up.getCost() * raceBonus);
-                        confirmWindow.setText("Вы уверены что хотите купить улучшение \"" + up.getName() + "\" " + up.getLevel() + " уровня за ?");
-                    } else confirmWindow.setText("Вы уверены что хотите купить улучшение \"" + upgradeName + "\"?");
+                        confirmWindow.setText(String.format("Вы уверены что хотите купить улучшение \"%s\" %d уровня за %s?", up.getName(), up.getLevel(), StringUtils.intToStr(upcost)));
+                    } else confirmWindow.setText(String.format("Вы уверены что хотите купить улучшение \"%s\"?", upgradeName));
                     confirmWindow.setConfirmAction(new Runnable() {
                         @Override
                         public void run() {
@@ -664,8 +662,8 @@ public class City extends GameObject{
                         }
                         raceBonus = ((1f - raceBonus / 4) * (100f - Player.getPlayer().getTrade()) / 100f);
                         int upcost = (int) (up.getCost() * raceBonus);
-                        confirmWindow.setText("Вы уверены что хотите купить улучшение \"" + up.getName() + "\" " + up.getLevel() + " уровня за ?");
-                    } else confirmWindow.setText("Вы уверены что хотите купить улучшение \"" + upgradeName + "\"?");
+                        confirmWindow.setText(String.format("Вы уверены что хотите купить улучшение \"%s\" %d уровня за %s?", up.getName(), up.getLevel(), StringUtils.intToStr(upcost)));
+                    } else confirmWindow.setText(String.format("Вы уверены что хотите купить улучшение \"%s\"?", upgradeName));
                     confirmWindow.setConfirmAction(new Runnable() {
                         @Override
                         public void run() {
