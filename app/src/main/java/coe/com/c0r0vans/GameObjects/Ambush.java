@@ -204,7 +204,7 @@ public class Ambush extends GameObject {
         }
         private void init(){
             inflate(this.getContext(),R.layout.ambush_layout,this);
-            if ("Y".equals(GameSettings.getInstance().get("VIEW_PADDING"))) this.setAlpha(0.7f);
+            //if ("Y".equals(GameSettings.getInstance().get("VIEW_PADDING"))) this.setAlpha(0.7f);
         }
         Ambush ambush;
         boolean loaded=true;

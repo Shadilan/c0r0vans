@@ -206,7 +206,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 style="@style/MediumText"
-                android:text="Полупрозрачность"
+                android:text="Быстрые действия"
                 android:id="@+id/textView23"
                 android:layout_alignBottom="@+id/usePadding"
                 android:layout_alignParentLeft="true"

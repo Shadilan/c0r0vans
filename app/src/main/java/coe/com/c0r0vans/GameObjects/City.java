@@ -204,7 +204,7 @@ public class City extends GameObject{
         }
         public void init(){
             inflate(this.getContext(), R.layout.city_layout, this);
-            if ("Y".equals(GameSettings.getInstance().get("VIEW_PADDING"))) this.setAlpha(0.7f);
+            //if ("Y".equals(GameSettings.getInstance().get("VIEW_PADDING"))) this.setAlpha(0.7f);
 
         }
         boolean loaded=true;
@@ -497,7 +497,7 @@ public class City extends GameObject{
         }
         public void init(){
             inflate(this.getContext(), R.layout.city_actions, this);
-            if ("Y".equals(GameSettings.getInstance().get("VIEW_PADDING"))) this.setAlpha(0.7f);
+            //if ("Y".equals(GameSettings.getInstance().get("VIEW_PADDING"))) this.setAlpha(0.7f);
         }
         boolean loaded=true;
 
@@ -724,9 +724,16 @@ public class City extends GameObject{
         }
     }
     public RelativeLayout getObjectView(Context context){
-        CityAction result=new CityAction(context);
-        result.setCity(this);
-        return result;
+        if ("Y".equals(GameSettings.getInstance().get("VIEW_PADDING"))) {
+            CityAction result = new CityAction(context);
+            result.setCity(this);
+            return result;
+        } else
+        {
+            CityWindow result = new CityWindow(context);
+            result.setCity(this);
+            return result;
+        }
     }
     public int getRadius(){
         return radius;
