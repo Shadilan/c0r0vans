@@ -322,7 +322,11 @@ public class City extends GameObject{
                             GPSInfo.getInstance().GetLng(),
                             (int) (city.getMarker().getPosition().latitude * 1e6),
                             (int) (city.getMarker().getPosition().longitude * 1e6));
-                    close();
+                    if ("Y".equals(GameSettings.getInstance().get("CLOSE_WINDOW")))
+                        close();
+                    else {
+                        updateInZone(true);
+                    }
                 }
 
 
@@ -367,7 +371,11 @@ public class City extends GameObject{
                             GPSInfo.getInstance().GetLng(),
                             (int) (city.getMarker().getPosition().latitude * 1e6),
                             (int) (city.getMarker().getPosition().longitude * 1e6));
-                    close();
+                    if ("Y".equals(GameSettings.getInstance().get("CLOSE_WINDOW")))
+                        close();
+                    else {
+                        updateInZone(true);
+                    }
                 }
 
             });
@@ -439,7 +447,11 @@ public class City extends GameObject{
                                     GPSInfo.getInstance().GetLng(),
                                     (int) (city.getMarker().getPosition().latitude * 1e6),
                                     (int) (city.getMarker().getPosition().longitude * 1e6));
-                            close();
+                            if ("Y".equals(GameSettings.getInstance().get("CLOSE_WINDOW")))
+                                close();
+                            else {
+                                updateInZone(true);
+                            }
                         }
                     });
                     confirmWindow.show();
@@ -559,7 +571,11 @@ public class City extends GameObject{
                             GPSInfo.getInstance().GetLng(),
                             (int) (city.getMarker().getPosition().latitude * 1e6),
                             (int) (city.getMarker().getPosition().longitude * 1e6));
-                    close();
+                    if ("Y".equals(GameSettings.getInstance().get("CLOSE_WINDOW")))
+                        close();
+                    else {
+                        updateInZone(true);
+                    }
                 }
             });
             endRouteAction = new ObjectAction(city) {
@@ -601,7 +617,11 @@ public class City extends GameObject{
                             GPSInfo.getInstance().GetLng(),
                             (int) (city.getMarker().getPosition().latitude * 1e6),
                             (int) (city.getMarker().getPosition().longitude * 1e6));
-                    close();
+                    if ("Y".equals(GameSettings.getInstance().get("CLOSE_WINDOW")))
+                        close();
+                    else {
+                        updateInZone(true);
+                    }
                 }
 
             });
@@ -673,7 +693,11 @@ public class City extends GameObject{
                                     GPSInfo.getInstance().GetLng(),
                                     (int) (city.getMarker().getPosition().latitude * 1e6),
                                     (int) (city.getMarker().getPosition().longitude * 1e6));
-                            close();
+                            if ("Y".equals(GameSettings.getInstance().get("CLOSE_WINDOW")))
+                                close();
+                            else {
+                                updateInZone(true);
+                            }
                         }
                     });
                     confirmWindow.show();

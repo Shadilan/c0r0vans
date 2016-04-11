@@ -226,10 +226,29 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 style="@style/MediumText"
+                android:text="Автозакрытие окон"
+                android:layout_alignBottom="@+id/closeWindow"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true" />
+
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/closeWindow"
+                android:checked="false"
+                android:layout_below="@+id/usePadding"
+
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/MediumText"
                 android:text="GPS"
                 android:id="@+id/textView17"
                 android:textStyle="bold"
-                android:layout_below="@+id/textView23"
+                android:layout_below="@+id/closeWindow"
                 android:layout_centerHorizontal="true" />
             <TextView
                 android:layout_width="wrap_content"

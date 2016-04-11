@@ -28,6 +28,7 @@ public class Settings extends RelativeLayout {
     CheckBox netErrorLog;
     CheckBox usePadding;
     CheckBox trackBearing;
+    CheckBox closeWindow;
 
     public Settings(Context context) {
         super(context);
@@ -63,6 +64,7 @@ public class Settings extends RelativeLayout {
         netErrorLog= (CheckBox) findViewById(R.id.netErrorLogOn);
         usePadding= (CheckBox) findViewById(R.id.usePadding);
         trackBearing= (CheckBox) findViewById(R.id.trackBearing);
+        closeWindow= (CheckBox) findViewById(R.id.closeWindow);
 
         cancel_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -86,7 +88,7 @@ public class Settings extends RelativeLayout {
                 GameSettings.set("SHOW_NETWORK_ERROR", netErrorLog.isChecked() ? "Y" : "N");
                 GameSettings.set("VIEW_PADDING", usePadding.isChecked() ? "Y" : "N");
                 GameSettings.set("TRACK_BEARING", trackBearing.isChecked() ? "Y" : "N");
-
+                GameSettings.set("CLOSE_WINDOW", closeWindow.isChecked() ? "Y" : "N");
                 GameSettings.getInstance().save();
                 hide();
             }
@@ -108,6 +110,7 @@ public class Settings extends RelativeLayout {
         netErrorLog.setChecked("Y".equals(GameSettings.getInstance().get("SHOW_NETWORK_ERROR")));
         usePadding.setChecked("Y".equals(GameSettings.getInstance().get("VIEW_PADDING")));
         trackBearing.setChecked("Y".equals(GameSettings.getInstance().get("TRACK_BEARING")));
+        closeWindow.setChecked("Y".equals(GameSettings.getInstance().get("CLOSE_WINDOW")));
         int refreshRate=3;
         if (GameSettings.getInstance().get("GPS_RATE")!=null){
             String strRate=GameSettings.getInstance().get("GPS_RATE");
