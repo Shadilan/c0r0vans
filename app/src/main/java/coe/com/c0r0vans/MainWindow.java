@@ -46,7 +46,6 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
     private Handler myHandler = new Handler();
     private int SendedRequest = 0;
     private MessageMap messages;
-    private View touchView;
 
     ButtonLayout buttonLayout;
 
@@ -72,12 +71,10 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                 .findFragmentById(R.id.map);
 
 
-
-
-        touchView=findViewById(R.id.touchView);
+        View touchView = findViewById(R.id.touchView);
         ViewGroup lay= (ViewGroup) findViewById(R.id.windowLayout);
         UIControler.setWindowLayout(lay);
-        UIControler.setButtonLayout((ViewGroup) findViewById(R.id.buttonLayout));
+        UIControler.setButtonLayout((ButtonLayout) findViewById(R.id.buttonLayout));
         lay.removeAllViews();
         lay= (ViewGroup) findViewById(R.id.alertLayout);
         UIControler.setAlertLayout(lay);
@@ -298,7 +295,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
             @Override
             public void onRefresh(JSONObject response) {
                 SendedRequest = 0;
-                ((ButtonLayout)UIControler.getButtonLayout()).hideConnectImage();
+                UIControler.getButtonLayout().hideConnectImage();
 
             }
 
@@ -401,7 +398,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                     timeToPlayerRefresh = 6;
                 } else {
                     SendedRequest++;
-                    if (SendedRequest > 1) buttonLayout.showConnectImage();
+                    if (SendedRequest > 1) UIControler.getButtonLayout().showConnectImage();
                     timeToPlayerRefresh--;
                     serverConnect.getInstance().RefreshData((int) (MyGoogleMap.getMap().getCameraPosition().target.latitude * 1e6), (int) (MyGoogleMap.getMap().getCameraPosition().target.longitude * 1e6));
                 }

@@ -6,7 +6,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end|top"
-        android:src="@mipmap/server_connect"
+        android:src="@mipmap/n_server_connect"
         android:id="@+id/server_connect"
         android:padding="10dp"
         android:paddingRight="10dp"

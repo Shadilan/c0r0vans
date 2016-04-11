@@ -93,7 +93,7 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:text="Принять"
-        android:background="@drawable/action_button"
+        style="@style/CommonButton"
         android:textColor="@android:color/black"
         android:id="@+id/acceptFaction" />
 

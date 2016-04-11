@@ -7,7 +7,7 @@ import android.view.ViewGroup;
  */
 public class UIControler {
     private static ViewGroup effectLayout;
-    private static ViewGroup buttonLayout;
+    private static ButtonLayout buttonLayout;
     private static ActionView actionLayout;
     private static ViewGroup windowLayout;
     private static ViewGroup alertLayout;
@@ -20,11 +20,11 @@ public class UIControler {
         UIControler.effectLayout = effectLayout;
     }
 
-    public static ViewGroup getButtonLayout() {
+    public static ButtonLayout getButtonLayout() {
         return buttonLayout;
     }
 
-    public static void setButtonLayout(ViewGroup buttonLayout) {
+    public static void setButtonLayout(ButtonLayout buttonLayout) {
         UIControler.buttonLayout = buttonLayout;
     }
 

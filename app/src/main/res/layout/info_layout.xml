@@ -16,7 +16,7 @@
         android:layout_height="wrap_content"
         android:text="↩"
         android:id="@+id/back_button"
-        android:background="@drawable/action_button"
+        style="@style/TabButton"
         android:minWidth="5dp" />
 
     <HorizontalScrollView
@@ -44,7 +44,7 @@
             android:id="@+id/playerInfoButton"
             android:textOff="@string/information"
             android:textOn="@string/information"
-            android:background="@drawable/tab_button"
+            style="@style/TabButton"
             android:checked="true" />
 
         <ToggleButton
@@ -52,7 +52,7 @@
             android:layout_height="wrap_content"
             android:text="@string/upgrades"
             android:id="@+id/upgradeInfoButton"
-            android:background="@drawable/tab_button"
+            style="@style/TabButton"
             android:textOff="@string/upgrades"
             android:textOn="@string/upgrades" />
 
@@ -61,7 +61,7 @@
             android:layout_height="wrap_content"
             android:text="@string/route_window"
             android:id="@+id/routeInfoButton"
-            android:background="@drawable/tab_button"
+            style="@style/TabButton"
             android:textOff="@string/route_window"
             android:textOn="@string/route_window" />
         <ToggleButton
@@ -69,7 +69,7 @@
             android:layout_height="wrap_content"
             android:text="Засады"
             android:id="@+id/ambushInfoButton"
-            android:background="@drawable/tab_button"
+            style="@style/TabButton"
             android:textOff="Засады"
             android:textOn="Засады" />
     </GridLayout>

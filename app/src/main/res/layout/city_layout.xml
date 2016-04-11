@@ -7,7 +7,7 @@
     <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/action_button"
+        style="@style/CommonButton"
         android:id="@+id/closeActionButton"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
@@ -17,8 +17,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-
+        style="@style/LargeText"
         android:id="@+id/cityName"
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true"
@@ -29,12 +28,13 @@
         android:layout_height="wrap_content"
         android:id="@+id/imageView"
         android:src="@mipmap/guild_small"
-        android:minHeight="50dp"
-        android:minWidth="50dp"
+        android:minHeight="40dp"
+        android:minWidth="40dp"
         android:layout_below="@+id/textView27"
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
-        />
+        android:maxWidth="40dp"
+        android:maxHeight="40dp" />
 
     <ProgressBar
         android:layout_width="wrap_content"
@@ -49,7 +49,7 @@
         android:max="100"
         android:progress="50"
         android:layout_alignTop="@+id/imageView"
-        style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal"
+        style="@style/LargeProgressBar"
         android:progressDrawable="@drawable/guild_progress" />
 
     <ImageView
@@ -57,9 +57,9 @@
         android:layout_height="wrap_content"
         android:id="@+id/imageView3"
         android:maxHeight="50dp"
-        android:maxWidth="50dp"
-        android:minHeight="50dp"
-        android:minWidth="50dp"
+        android:maxWidth="40dp"
+        android:minHeight="40dp"
+        android:minWidth="40dp"
         android:layout_below="@+id/imageView"
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
@@ -85,10 +85,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/imageView4"
-        android:maxHeight="50dp"
-        android:maxWidth="50dp"
-        android:minHeight="50dp"
-        android:minWidth="50dp"
+        android:maxHeight="40dp"
+        android:maxWidth="40dp"
+        android:minHeight="40dp"
+        android:minWidth="40dp"
         android:layout_below="@+id/imageView3"
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
@@ -114,7 +114,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
+        style="@style/MediumText"
         android:text="Рост города"
         android:id="@+id/textView26"
         android:layout_below="@+id/LigaInf"
@@ -140,7 +140,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
+        style="@style/MediumText"
         android:text="Покупки"
         android:id="@+id/textView28"
         android:layout_alignParentTop="true"
@@ -160,7 +160,7 @@
     <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/action_button"
+        style="@style/CommonButton"
         android:id="@+id/buyUpgrade"
         android:src="@mipmap/buy_item"
         android:layout_below="@+id/textView28"
@@ -171,7 +171,7 @@
     <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/action_button"
+        style="@style/CommonButton"
         android:id="@+id/startRoute"
         android:src="@mipmap/start_route"
         android:layout_below="@+id/buyPanel"
@@ -180,7 +180,7 @@
     <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/action_button"
+        style="@style/CommonButton"
         android:id="@+id/finishRoute"
         android:src="@mipmap/end_route"
         android:layout_below="@+id/buyPanel"
@@ -189,7 +189,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
+        style="@style/MediumText"
         android:text="Влияние фракций"
         android:id="@+id/textView27"
         android:layout_below="@+id/cityName"
@@ -200,7 +200,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
+        style="@style/MediumText"
         android:text="Medium Text"
         android:id="@+id/guildInfCount"
         android:layout_alignTop="@+id/GuildInf"
@@ -214,7 +214,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
+        style="@style/MediumText"
         android:text="Medium Text"
         android:id="@+id/allianceInfCount"
         android:gravity="center"
@@ -228,7 +228,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
+        style="@style/MediumText"
         android:text="Medium Text"
         android:id="@+id/ligaInfCount"
         android:gravity="center"
@@ -242,7 +242,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
+        style="@style/MediumText"
         android:id="@+id/distance"
         android:layout_below="@+id/startRoute"
         android:layout_alignParentRight="true"
