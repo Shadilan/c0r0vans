@@ -42,7 +42,8 @@
         android:layout_toEndOf="@+id/ambushFaction"
         android:layout_toRightOf="@+id/ambushFaction"
         android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"/>
+        android:layout_alignParentRight="true"
+        android:padding="2dp" />
 
     <ImageButton
         android:layout_width="wrap_content"
