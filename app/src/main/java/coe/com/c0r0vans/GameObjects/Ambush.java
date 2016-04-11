@@ -20,6 +20,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Arrays;
+
 import coe.com.c0r0vans.MyGoogleMap;
 import coe.com.c0r0vans.R;
 import coe.com.c0r0vans.UIElements.ActionView;
@@ -114,7 +116,8 @@ public class Ambush extends GameObject {
 
     @Override
     public void RemoveObject() {
-        mark.remove();
+        if (mark!=null) mark.remove();
+        mark=null;
         if (zone!=null) zone.remove();
     }
 
@@ -161,16 +164,23 @@ public class Ambush extends GameObject {
             if (faction==0) markname=markname+"_"+faction+Player.getPlayer().getRace();
             else markname = markname + "_"+faction;
             markname = markname + GameObject.zoomToPostfix(type);
-            mark.setIcon(ImageLoader.getDescritor(markname));
-            if ("Y".equals(GameSettings.getInstance().get("USE_TILT"))) mark.setAnchor(0.5f, 1f);
-            else mark.setAnchor(0.5f, 0.5f);
+            try {
+                mark.setIcon(ImageLoader.getDescritor(markname));
+                if ("Y".equals(GameSettings.getInstance().get("USE_TILT")))
+                    mark.setAnchor(0.5f, 1f);
+                else mark.setAnchor(0.5f, 0.5f);
+            } catch (Exception e){
+                Essages.addEssage("mark:"+markname);
+                Essages.addEssage(e.toString());
+                Essages.addEssage(Arrays.toString(e.getStackTrace()));
+            }
         }
     }
 
     @Override
     public void setVisibility(boolean visibility) {
         zone.setVisible(visibility);
-        mark.setVisible(visibility);
+        if (mark!=null) mark.setVisible(visibility);
     }
 
     public void showRadius(){

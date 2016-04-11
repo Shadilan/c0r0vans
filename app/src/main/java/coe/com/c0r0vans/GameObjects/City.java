@@ -112,8 +112,9 @@ public class City extends GameObject{
 
     @Override
     public void RemoveObject() {
-        mark.remove();
+        if (mark!=null) mark.remove();
         if (zone!=null) zone.remove();
+        mark=null;
     }
 
 
@@ -160,7 +161,7 @@ public class City extends GameObject{
 
     @Override
     public void setVisibility(boolean visibility) {
-        mark.setVisible(visibility);
+        if (mark!=null) mark.setVisible(visibility);
         zone.setVisible(visibility);
     }
 
@@ -308,7 +309,7 @@ public class City extends GameObject{
 
                 @Override
                 public void postError() {
-                    Player.getPlayer().setRouteStart(true);
+                    //Player.getPlayer().setRouteStart(true);
 
                 }
             };
@@ -461,20 +462,12 @@ public class City extends GameObject{
         }
         public void updateInZone(boolean inZone){
             if (inZone) {
-                findViewById(R.id.start).setVisibility(INVISIBLE);
-                findViewById(R.id.end).setVisibility(INVISIBLE);
-                findViewById(R.id.buy).setVisibility(INVISIBLE);
-                if (Player.getPlayer().getRouteStart()) findViewById(R.id.start).setVisibility(VISIBLE);
-                if (!Player.getPlayer().getRouteStart())
-                    if ((city!=null) && !Player.checkRoute(city.getGUID())) {
-                        findViewById(R.id.end).setVisibility(VISIBLE);
-                        findViewById(R.id.end).setEnabled(true);
-                    } else {
-                        findViewById(R.id.end).setVisibility(VISIBLE);
-                        findViewById(R.id.end).setEnabled(false);
-                    }
-                findViewById(R.id.buy).setVisibility(VISIBLE);
-                findViewById(R.id.buy).setEnabled(false);
+                findViewById(R.id.startRoute).setVisibility(GONE);
+                findViewById(R.id.finishRoute).setVisibility(GONE);
+                findViewById(R.id.buyUpgrade).setVisibility(GONE);
+                if (Player.getPlayer().getRouteStart()) findViewById(R.id.startRoute).setVisibility(VISIBLE);
+                if (!Player.getPlayer().getRouteStart() && (city!=null) && !Player.checkRoute(city.getGUID())) findViewById(R.id.finishRoute).setVisibility(VISIBLE);
+                if (city!=null && city.upgradeAvaible()) findViewById(R.id.buyUpgrade).setVisibility(VISIBLE);
             }
             else
             {
@@ -565,7 +558,7 @@ public class City extends GameObject{
 
                 @Override
                 public void postError() {
-                    Player.getPlayer().setRouteStart(true);
+                    //Player.getPlayer().setRouteStart(true);
 
                 }
             };
@@ -729,16 +722,8 @@ public class City extends GameObject{
                 findViewById(R.id.end).setVisibility(INVISIBLE);
                 findViewById(R.id.buy).setVisibility(INVISIBLE);
                 if (Player.getPlayer().getRouteStart()) findViewById(R.id.start).setVisibility(VISIBLE);
-                if (!Player.getPlayer().getRouteStart())
-                    if ((city!=null) && !Player.checkRoute(city.getGUID())) {
-                        findViewById(R.id.end).setVisibility(VISIBLE);
-                        findViewById(R.id.end).setEnabled(true);
-                    } else {
-                        findViewById(R.id.end).setVisibility(VISIBLE);
-                        findViewById(R.id.end).setEnabled(false);
-                    }
-                findViewById(R.id.buy).setVisibility(VISIBLE);
-                findViewById(R.id.buy).setEnabled(false);
+                if (!Player.getPlayer().getRouteStart() && (city!=null) && !Player.checkRoute(city.getGUID())) findViewById(R.id.end).setVisibility(VISIBLE);
+                if (city!=null && city.upgradeAvaible()) findViewById(R.id.buy).setVisibility(VISIBLE);
             }
             else
             {

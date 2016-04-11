@@ -10,7 +10,8 @@
         android:src="@mipmap/buy_item"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_margin="10dp"/>
+        android:layout_margin="10dp"
+        android:clickable="true" />
 
     <ImageButton
         android:layout_width="wrap_content"
@@ -49,6 +50,7 @@
         android:layout_below="@+id/buy"
         android:layout_toLeftOf="@+id/buy"
         android:layout_toStartOf="@+id/buy"
-        android:layout_margin="10dp"/>
+        android:layout_margin="10dp"
+        android:clickable="false" />
 
 </RelativeLayout>

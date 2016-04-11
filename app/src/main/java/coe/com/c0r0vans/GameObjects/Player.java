@@ -9,7 +9,6 @@ import android.view.View;
 import android.widget.RelativeLayout;
 
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
@@ -127,7 +126,7 @@ public class Player extends GameObject {
 
     @Override
     public void changeMarkerSize() {
-        player.mark.setIcon(BitmapDescriptorFactory.fromResource(R.mipmap.marker));
+        //player.mark.setIcon(BitmapDescriptorFactory.fromResource(R.mipmap.marker));
     }
 
     @Override
@@ -137,7 +136,7 @@ public class Player extends GameObject {
 
     @Override
     public void setVisibility(boolean visibility) {
-        mark.setVisible(false);
+        if (mark!=null) mark.setVisible(false);
         circle.setVisible(visibility);
         circle2.setVisible(visibility);
     }

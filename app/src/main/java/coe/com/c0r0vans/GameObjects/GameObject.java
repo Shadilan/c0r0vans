@@ -5,7 +5,6 @@ import android.graphics.Bitmap;
 import android.widget.RelativeLayout;
 
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.Marker;
 
@@ -13,8 +12,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-
-import coe.com.c0r0vans.R;
 
 /**
  * @author Shadilan
@@ -92,6 +89,7 @@ public class GameObject {
     public void RemoveObject() {
         if (mark!=null)
         mark.remove();
+        mark=null;
     }
 
 
@@ -106,8 +104,7 @@ public class GameObject {
 
 
     public void changeMarkerSize() {
-        mark.setIcon(BitmapDescriptorFactory.fromResource(R.mipmap.marker));
-        mark.setVisible(false);
+
     }
 
     public int getProgress() {
