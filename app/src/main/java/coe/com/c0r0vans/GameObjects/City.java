@@ -298,6 +298,7 @@ public class City extends GameObject{
                 @Override
                 public void preAction() {
                     Player.getPlayer().setRouteStart(false);
+                    Player.getPlayer().setCurrentRouteGUID(city.getGUID());
                 }
 
                 @Override
@@ -717,7 +718,11 @@ public class City extends GameObject{
 
         }
         public void updateInZone(boolean inZone){
+
+            Essages.addEssage(String.valueOf(Player.checkRoute(city.getGUID())));
+            Essages.addEssage(city.getGUID());
             if (inZone) {
+
                 findViewById(R.id.start).setVisibility(INVISIBLE);
                 findViewById(R.id.end).setVisibility(INVISIBLE);
                 findViewById(R.id.buy).setVisibility(INVISIBLE);

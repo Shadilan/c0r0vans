@@ -75,8 +75,8 @@ public class Player extends GameObject {
         init();
     }
     public static boolean checkRoute(String guid){
-        if (player.currentRouteGuid.equals(guid)) return false;
-        if (player.currentRouteGuid.equals("")) return false;
+        if (player.currentRouteGuid.equals(guid)) return true;
+        if (player.currentRouteGuid.equals("")) return true;
         for (Route r:player.Routes){
             if ((r.getStartGuid().equals(player.currentRouteGuid) && r.getFinishGuid().equals(guid))||
                     ((r.getStartGuid().equals(guid) && r.getFinishGuid().equals(player.currentRouteGuid))))
@@ -226,7 +226,7 @@ public class Player extends GameObject {
                 final int route_length = route.length();// Moved  route.length() call out of the loop to local variable route_length
                 for (int i=0;i< route_length;i++) {
                     Route routeObj=new Route(route.getJSONObject(i),map);
-                    if (routeObj.getFinishName().equals("null")) {
+                    if (routeObj.getFinishName().equals("null") || routeObj.getFinishName()==null) {
                         currentRoute=routeObj.getStartName();
                         currentRouteGuid=routeObj.getStartGuid();
                         currentR=routeObj;
@@ -398,6 +398,11 @@ public class Player extends GameObject {
     public Route getCurrentR() {
         return currentR;
     }
+
+    public void setCurrentRouteGUID(String currentRouteGUID) {
+        this.currentRouteGuid = currentRouteGUID;
+    }
+
 
     class ambushCreate extends RelativeLayout implements GameObjectView{
 

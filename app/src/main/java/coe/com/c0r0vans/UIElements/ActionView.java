@@ -123,7 +123,7 @@ public class ActionView extends LinearLayout {
         //Очистить вью
         //Загрузить вью
         //Обновить видимость экшенов
-        Log.d("tttt","test");
+        Log.d("tttt","test_2");
         this.removeAllViews();
         GameObject target=SelectedObject.getInstance().getTarget();
         if (target instanceof Player){
@@ -141,7 +141,7 @@ public class ActionView extends LinearLayout {
 
 
 
-        Log.d("tttt", "test");
+        Log.d("tttt", "test_2");
     }
     public void setCurrentView(RelativeLayout view){
         currentView= view;
@@ -153,7 +153,7 @@ public class ActionView extends LinearLayout {
 
     private void reloadActions(){
         try {
-
+Log.d("!!!","TEST RELOAD");
             if (currentView != null && currentView instanceof GameObjectView) {
                 if (SelectedObject.getInstance().getTarget()==null || SelectedObject.getInstance().getTarget().getMarker()==null) return;
                 float[] distances = new float[1];
@@ -161,7 +161,9 @@ public class ActionView extends LinearLayout {
                         SelectedObject.getInstance().getTarget().getMarker().getPosition().longitude,
                         Player.getPlayer().getMarker().getPosition().latitude,
                         Player.getPlayer().getMarker().getPosition().longitude, distances);
+
                 boolean inZone = (distances.length > 0 && distances[0] <= (Player.getPlayer().getActionDistance()));
+                Log.d("!!!","TEST RELOAD2");
                 ((GameObjectView) currentView).updateInZone(inZone);
                 ((GameObjectView) currentView).setDistance((int) distances[0]);
             }
