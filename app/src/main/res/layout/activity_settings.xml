@@ -226,7 +226,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 style="@style/MediumText"
-                android:text="Автозакрытие окон"
+                android:text="Закрыть окна по действию"
                 android:layout_alignBottom="@+id/closeWindow"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true" />

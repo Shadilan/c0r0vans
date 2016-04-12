@@ -46,10 +46,10 @@ public class Upgrade {
         return ImageLoader.getImage(Type);
     }
     public String getDescription(){
-        return "Уровень "+level+"\n"+Description;
+        return Description;
     }
     public String getName(){
-        return Name;
+        return Name+" (Уровень "+level+")";
     }
     public String getType() {return Type;}
     public int getCost(){return Cost;}

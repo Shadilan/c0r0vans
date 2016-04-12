@@ -241,7 +241,7 @@ public class City extends GameObject{
 
                 String dop;
                 if (up.getReqCityLev()>Level) dop= String.format("Требуется уровень города %d\n", up.getReqCityLev());
-                else if ((upcost)>Player.getPlayer().getGold()) dop= String.format("Вам не хватает:%s золота!\n", StringUtils.intToStr(upcost - Player.getPlayer().getGold()));
+                else if ((upcost)>Player.getPlayer().getGold()) dop= String.format("Нужно больше золота!!! Еще %s золота!\n", StringUtils.intToStr(upcost - Player.getPlayer().getGold()));
                 else if (up.getLevel()>Player.getPlayer().getLevel()-1) dop= String.format("Требуется уровень %d\n", up.getLevel());
                 else dop= String.format("Эффект:%s\n", up.getDescription());
 

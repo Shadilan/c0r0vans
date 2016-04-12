@@ -3,10 +3,8 @@ package coe.com.c0r0vans.UIElements;
 import android.content.Context;
 import android.graphics.Color;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -172,22 +170,25 @@ public class InfoLayout extends RelativeLayout implements ShowHideForm {
         ((TextView)findViewById(R.id.ambushSetInfo)).setText(String.valueOf(Player.getPlayer().getAmbushMax() - Player.getPlayer().getAmbushLeft()));
         ((TextView)findViewById(R.id.mostReachIn)).setText(String.valueOf(Player.getPlayer().getMostReachIn()) + "км");
 
-        GridLayout gl= (GridLayout) findViewById(R.id.upgradeInfo);
+        LinearLayout gl= (LinearLayout) findViewById(R.id.upgradeInfo);
         gl.removeAllViews();
 
-        gl.setRowCount(Player.getPlayer().getUpgrades().size()*2);
 
         for (Upgrade u:Player.getPlayer().getUpgrades()){
+            LinearLayout l=new LinearLayout(getContext());
+            l.setBackgroundResource(R.drawable.layouts_bordered);
+            l.setOrientation(LinearLayout.HORIZONTAL);
+
+            gl.addView(l);
             ImageView iv=new ImageView(getContext());
-            Log.d("DebugInfo", "Upg show:" + u.getDescription());
             iv.setImageBitmap(u.getImage());
-            gl.addView(iv);
+            l.addView(iv);
             TextView info=new TextView(getContext());
             info.setSingleLine(false);
             info.setText(u.getName() + "\n" + u.getDescription());
             info.setTextColor(Color.BLACK);
-
-            gl.addView(info);
+            l.addView(info);
+            l.requestLayout();
         }
 
         LinearLayout ll=(LinearLayout) findViewById(R.id.routeInfo);
