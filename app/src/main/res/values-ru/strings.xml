@@ -53,5 +53,7 @@
     <string name="login_button">Login</string>
     <string name="login_button_run">Login ...</string>
     <string name="password_label">Password</string>
+    <string name="LoginComplete">Вход выполнен. Ожидание GPS.</string>
+    <string name="legue_name">Лига независимых купцов</string>
 
 </resources>

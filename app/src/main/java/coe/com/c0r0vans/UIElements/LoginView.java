@@ -87,17 +87,22 @@ public class LoginView extends RelativeLayout {
                     //String token=response.getString("Token");
                     String token=null;
                     if (response.has("Token")) token=response.getString("Token");
+                    TextView errorText= (TextView) findViewById(R.id.errorText);
                     if (!(token ==null)) {
                         ConnectStatus.setImageResource(R.mipmap.server_connect);
                         Connected=true;
+                        loginButton.setVisibility(INVISIBLE);
+                        errorText.setText(R.string.LoginComplete);
                     }
                     else{
-                        TextView errorText= (TextView) findViewById(R.id.errorText);
+
                         errorText.setText(String.format("%s:%s", response.getString("Error"), response.getString("Message")));
                     }
 
                     checkReadyToRun();
                     loginButton.setText(R.string.login_button);
+
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

@@ -154,8 +154,8 @@ public class ActionView extends LinearLayout {
     private void reloadActions(){
         try {
 
-
             if (currentView != null && currentView instanceof GameObjectView) {
+                if (SelectedObject.getInstance().getTarget()==null || SelectedObject.getInstance().getTarget().getMarker()==null) return;
                 float[] distances = new float[1];
                 Location.distanceBetween(SelectedObject.getInstance().getTarget().getMarker().getPosition().latitude,
                         SelectedObject.getInstance().getTarget().getMarker().getPosition().longitude,

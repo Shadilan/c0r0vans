@@ -18,6 +18,7 @@ import com.google.android.gms.maps.model.LatLng;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Arrays;
 import java.util.Date;
 
 import coe.com.c0r0vans.GameObjects.Ambush;
@@ -64,13 +65,17 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
         Player.instance();
 
         setContentView(R.layout.activity_main_window);
-        ImageLoader.Loader(this.getApplicationContext());
+        try {
+            ImageLoader.Loader(this.getApplicationContext());
 
+
+        } catch (Exception e){
+            Log.d("UNEXPECTED","Loading error:"+e.toString());
+
+        }
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
-
-
         View touchView = findViewById(R.id.touchView);
         ViewGroup lay= (ViewGroup) findViewById(R.id.windowLayout);
         UIControler.setWindowLayout(lay);
@@ -111,11 +116,13 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                             GameObject target = null;
                             //Marker
                             for (GameObject o : GameObjects.getInstance().values()) {
-                                Point p = MyGoogleMap.getMap().getProjection().toScreenLocation(o.getMarker().getPosition());
-                                int calc = (int) Math.sqrt(Math.pow(p.x - oldPos.x, 2) + Math.pow(p.y - oldPos.y, 2));
-                                if (!(o instanceof Player || o instanceof Caravan) && calc < distance && o.getMarker().isVisible()) {
-                                    target = o;
-                                    distance = calc;
+                                if (o.getMarker()!=null) {
+                                    Point p = MyGoogleMap.getMap().getProjection().toScreenLocation(o.getMarker().getPosition());
+                                    int calc = (int) Math.sqrt(Math.pow(p.x - oldPos.x, 2) + Math.pow(p.y - oldPos.y, 2));
+                                    if (!(o instanceof Player || o instanceof Caravan) && calc < distance && o.getMarker().isVisible()) {
+                                        target = o;
+                                        distance = calc;
+                                    }
                                 }
                             }
                             if (target != null) {
@@ -130,7 +137,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                                 if (distances != -1 && distances < Player.getPlayer().getActionDistance()) {
                                     boolean setAmush = true;
                                     for (GameObject o : GameObjects.getInstance().values()) {
-                                        if ((o instanceof City || o instanceof Ambush) && o.getMarker().isVisible()) {
+                                        if ((o instanceof City || o instanceof Ambush) && o.getMarker()!=null && o.getMarker().isVisible()) {
                                             float d = GPSInfo.getDistance(latLng, o.getMarker().getPosition());
                                             if (d < o.getRadius()) setAmush = false;
                                         }
@@ -206,6 +213,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                     }
                 } catch (Exception e) {
                     Essages.addEssage("Gesture UE:" + e.toString());
+                    Essages.addEssage(Arrays.toString(e.getStackTrace()));
                 }
                 return true;
             }
