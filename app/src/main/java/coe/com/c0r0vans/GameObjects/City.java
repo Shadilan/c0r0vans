@@ -120,6 +120,7 @@ public class City extends GameObject{
 
     public boolean upgradeAvaible(){
         Upgrade up=Player.getPlayer().getNextUpgrade(upgrade);
+        if (up == null ) return true;
         float raceBonus=0;
         long infsum=influence1+influence2+influence3;
         if (infsum>0) {
