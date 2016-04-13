@@ -9,6 +9,7 @@ import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
@@ -18,6 +19,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.UUID;
 
 import coe.com.c0r0vans.GameObjects.ObjectAction;
 import utility.GPSInfo;
@@ -110,42 +112,7 @@ public class serverConnect {
     public boolean ExecLogin(String Login, String Password){
         if (!checkConnection()) return false;
         String url=ServerAddres+"/login.jsp"+"?Login="+Login+"&Password="+Password;
-        //if ("Y".equals(GameSettings.getInstance().get("NET_DEBUG"))) Essages.addEssage("Net:"+url);
-        Log.d("Debug info", "Connect url:" + url);
-        final JsonObjectRequest jsObjRequest = new JsonObjectRequest
-                (Request.Method.GET, url, null, new Response.Listener<JSONObject>(){
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        try {
-                            clearListener();
-
-                            if (response.has("Error")){
-                                for (ServerListener l:listeners) l.onError(response);
-                            } else {
-                                Token = response.getString("Token");
-                                for (ServerListener l : listeners) l.onLogin(response);
-                            }
-                        } catch (JSONException e) {
-                            for (ServerListener l:listeners) l.onError(formResponse(response.toString()));
-                        } catch (Exception e)
-                        {
-                            Essages.addEssage("Login UE:" + e.toString());
-                        }
-
-                    }
-                }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        try {
-                            for (ServerListener l : listeners)
-                                l.onError(formResponse(error.toString()));
-                        } catch (Exception e)
-                        {
-                            Essages.addEssage("Login Error UE:"+e.toString());
-                        }
-                    }
-                });
-        reqq.add(jsObjRequest);
+        runRequest(UUID.randomUUID().toString(),url,ResponseListenerWithUID.LOGIN);
         return true;
     }
     private JSONObject formResponse(String resp){
@@ -166,63 +133,21 @@ public class serverConnect {
      * @return true
      */
     public boolean RefreshData(int Lat,int Lng){
-
+        String UID= UUID.randomUUID().toString();
         if (!checkConnection()) return false;
         if (Token==null) return false;
-        String url=ServerAddres+"/getdata.jsp"+"?ReqName=ScanRange&Token="+Token+"&plat="+Lat+"&plng="+Lng;
-        Log.d("Debug info", "Connect url:" + url);
-        if ("Y".equals(GameSettings.getInstance().get("NET_DEBUG"))) Essages.addEssage("Net:"+url);
-        final JsonObjectRequest jsObjRequest = new JsonObjectRequest
-                (Request.Method.GET, url, null, new Response.Listener<JSONObject>(){
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        //try
-                        {
-
-                            clearListener();
-                            if (response.has("Error")) {
-                                for (ServerListener l : listeners) l.onError(response);
-                            } else {
-                                for (ServerListener l : listeners) l.onRefresh(response);
-                            }
-                            if (lockedActions != null) {
-                                for (ObjectAction act : lockedActions) {
-                                    act.setEnable(true);
-                                }
-                                lockedActions.clear();
-                            }
-                        }/*  catch (Exception e)
-                        {
-                            Essages.addEssage("Refresh UE:"+e.toString());
-
-                        }*/
-                    }
-
-                }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        try {
-                            for (ServerListener l : listeners)
-                                l.onError(formResponse(error.toString()));
-                        } catch (Exception e)
-                        {
-                            Essages.addEssage("Refresh Error UE:"+e.toString());
-                        }
-                    }
-                });
-        jsObjRequest.setRetryPolicy(new DefaultRetryPolicy(20 * 1000, 0,
-                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-        reqq.add(jsObjRequest);
+        String url=ServerAddres+"/getdata.jsp"+"?ReqName=ScanRange&Token="+Token+"&plat="+Lat+"&plng="+Lng+"&UUID="+UID;
+        runRequest(UID, url, ResponseListenerWithUID.REFRESH);
         return true;
     }
     public boolean RefreshCurrent(){
-        RefreshData(GPSInfo.getInstance().GetLat(),GPSInfo.getInstance().GetLng());
+        RefreshData(GPSInfo.getInstance().GetLat(), GPSInfo.getInstance().GetLng());
         return true;
     }
 
     private ArrayList<ObjectAction> lockedActions;
-    private HashMap<Response.Listener<JSONObject>,ObjectAction> listenersMap;
-    private HashMap<Response.ErrorListener,ObjectAction> errorMap;
+    private HashMap<String,ObjectAction> listenersMap;
+    private HashMap<String,ObjectAction> errorMap;
 
 
     /**
@@ -239,142 +164,29 @@ public class serverConnect {
         if (Token==null) return false;
         String url=ServerAddres+"/getdata.jsp"+"?Token="+Token+"&ReqName="+action.getCommand()+"&plat="+Lat+"&plng="+Lng+"&TGUID="+Target+"&lat="+TLat+"&lng="+TLng;
         Log.d("Debug info", "Connection url:" + url);
-        if ("Y".equals(GameSettings.getInstance().get("NET_DEBUG"))) Essages.addEssage("Net:"+url);
         if (lockedActions==null) lockedActions=new ArrayList<>();
-
         lockedActions.add(action);
         action.preAction();
-
-        Response.Listener<JSONObject> l=new Response.Listener<JSONObject>(){
-            @Override
-            public void onResponse(JSONObject response) {
-                try {
-                    clearListener();
-
-                    if (response.has("Error")) {
-                        for (ServerListener l : listeners) l.onError(response);
-                        if (listenersMap.get(this) != null) listenersMap.get(this).postError();
-                    } else {
-                        for (ServerListener l : listeners) l.onAction(response);
-                        if (listenersMap.get(this) != null) listenersMap.get(this).postAction();
-                    }
-                } catch (Exception e)
-                {
-                    Essages.addEssage("Command UE:"+e.toString());
-                }
-            }
-        };
-
-        Response.ErrorListener le=new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                try {
-                    for (ServerListener l : listeners) l.onError(formResponse(error.toString()));
-                    if (errorMap.get(this) != null) errorMap.get(this).postError();
-                } catch (Exception e)
-                {
-                    Essages.addEssage("Command Error UE:"+e.toString());
-                }
-            }
-        };
-        listenersMap.put(l,action);
-        errorMap.put(le,action);
-        final JsonObjectRequest jsObjRequest = new JsonObjectRequest
-                (Request.Method.GET, url, null, l, le);
-        jsObjRequest.setRetryPolicy(new DefaultRetryPolicy(20 * 1000, 0,
-                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-        reqq.add(jsObjRequest);
+        String UID=UUID.randomUUID().toString();
+        listenersMap.put(UID, action);
+        errorMap.put(UID, action);
+        runRequest(UID, url, ResponseListenerWithUID.ACTION);
         return true;
     }
-
-
 
     public boolean getPlayerInfo(){
-
         if (!checkConnection()) return false;
         if (Token==null) return false;
-
         String url=ServerAddres+"/getdata.jsp"+"?Token="+Token+"&ReqName=GetPlayerInfo";
-        Log.d("Debug info", "Connection url:" + url);
-        if ("Y".equals(GameSettings.getInstance().get("NET_DEBUG"))) Essages.addEssage("Net:"+url);
-        Response.Listener<JSONObject> l=new Response.Listener<JSONObject>(){
-            @Override
-            public void onResponse(JSONObject response) {
-                try {
-                    clearListener();
-                    if (response.has("Error")) {
-                        for (ServerListener l : listeners) l.onError(response);
-                    } else {
-                        for (ServerListener l : listeners) l.onPlayerInfo(response);
-                    }
-                } catch (Exception e)
-                {
-                    Essages.addEssage("PlayerInfo UE:"+e.toString());
-                }
-
-            }
-        };
-        Response.ErrorListener le=new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                try {
-                    for (ServerListener l : listeners) l.onError(formResponse(error.toString()));
-                } catch (Exception e)
-                {
-                    Essages.addEssage("Player Info UE:"+e.toString());
-                }
-            }
-        };
-
-
-        final JsonObjectRequest jsObjRequest = new JsonObjectRequest
-                (Request.Method.GET, url, null,l , le);
-        reqq.add(jsObjRequest);
+        runRequest(UUID.randomUUID().toString(),url,ResponseListenerWithUID.PLAYER);
         return true;
     }
-    public boolean getMessage(){
 
+    public boolean getMessage(){
         if (!checkConnection()) return false;
         if (Token==null) return false;
-
         String url=ServerAddres+"/getdata.jsp"+"?Token="+Token+"&ReqName=GetMessage";
-        Log.d("Debug info", "Connection url:" + url);
-        if ("Y".equals(GameSettings.getInstance().get("NET_DEBUG"))) Essages.addEssage("Net:"+url);
-        Response.Listener<JSONObject> l=new Response.Listener<JSONObject>(){
-            @Override
-            public void onResponse(JSONObject response) {
-                try {
-                    clearListener();
-                    if (response.has("Error")) {
-                        for (ServerListener l : listeners) l.onError(response);
-                    } else {
-                        for (ServerListener l : listeners) l.onMessage(response);
-                    }
-                }  catch (Exception e)
-                {
-                    Essages.addEssage("Message UE:"+e.toString());
-                }
-
-            }
-        };
-        Response.ErrorListener le=new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                try {
-                    for (ServerListener l : listeners) l.onError(formResponse(error.toString()));
-                } catch (Exception e)
-                {
-                    Essages.addEssage("Message error UE:"+e.toString());
-                }
-            }
-        };
-
-
-        final JsonObjectRequest jsObjRequest = new JsonObjectRequest
-                (Request.Method.GET, url, null,l , le);
-        jsObjRequest.setRetryPolicy(new DefaultRetryPolicy(20 * 1000, 0,
-                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-        reqq.add(jsObjRequest);
+        runRequest(UUID.randomUUID().toString(),url,ResponseListenerWithUID.MESSAGE);
         return true;
     }
     /**
@@ -392,48 +204,7 @@ public class serverConnect {
 
         String url=ServerAddres+"/getdata.jsp"+"?Token="+Token+"&ReqName=SetRace&Race="+race;
         Log.d("Debug info", "Connection url:" + url);
-        if ("Y".equals(GameSettings.getInstance().get("NET_DEBUG"))) Essages.addEssage("Net:"+url);
-        Response.Listener<JSONObject> l=new Response.Listener<JSONObject>(){
-            @Override
-            public void onResponse(JSONObject response) {
-                try {
-                    clearListener();
-                    if (response.has("Error")) {
-                        for (ServerListener l : listeners) l.onError(response);
-                    } else {
-                        getPlayerInfo();
-                        if (response.has("Result")) try {
-                            Log.d("Debug info", response.getString("Result"));
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }  catch (Exception e)
-                {
-                    Essages.addEssage("SetRace UE:"+e.toString());
-                }
-
-            }
-        };
-        Response.ErrorListener le=new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                try {
-                    for (ServerListener l : listeners) l.onError(formResponse(error.toString()));
-                }  catch (Exception e)
-                {
-                    Essages.addEssage("SetRaceE UE:"+e.toString());
-                }
-
-            }
-        };
-
-
-        final JsonObjectRequest jsObjRequest = new JsonObjectRequest
-                (Request.Method.GET, url, null,l , le);
-        jsObjRequest.setRetryPolicy(new DefaultRetryPolicy(20 * 1000, 0,
-                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-        reqq.add(jsObjRequest);
+        runRequest(UUID.randomUUID().toString(), url, ResponseListenerWithUID.SETRACE);
         return true;
     }
     public boolean GetRating(){
@@ -441,44 +212,77 @@ public class serverConnect {
         if (Token==null) return false;
 
         String url=ServerAddres+"/getdata.jsp"+"?Token="+Token+"&ReqName=GetRate";
-        Log.d("Debug info", "Connection url:" + url);
-        if ("Y".equals(GameSettings.getInstance().get("NET_DEBUG"))) Essages.addEssage("Net:"+url);
-        Response.Listener<JSONObject> l=new Response.Listener<JSONObject>(){
-            @Override
-            public void onResponse(JSONObject response) {
-                try {
-                    clearListener();
-                    if (response.has("Error")) {
-                        for (ServerListener l : listeners) l.onError(response);
-                    } else {
-                        for (ServerListener l : listeners) l.onRating(response);
-                    }
-                }  catch (Exception e)
-                {
-                    Essages.addEssage("Rating UE:"+e.toString());
-                }
-
-            }
-        };
-        Response.ErrorListener le=new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                try {
-                    for (ServerListener l : listeners) l.onError(formResponse(error.toString()));
-                }  catch (Exception e)
-                {
-                    Essages.addEssage("SetRaceE UE:"+e.toString());
-                }
-
-            }
-        };
-
-
+        runRequest(UUID.randomUUID().toString(),url,ResponseListenerWithUID.RATING);
+        return true;
+    }
+    private void runRequest(String UID,String request,int type){
+        if (!checkConnection()) return;
+        if ("Y".equals(GameSettings.getInstance().get("NET_DEBUG"))) Essages.addEssage("Net:"+request);
         final JsonObjectRequest jsObjRequest = new JsonObjectRequest
-                (Request.Method.GET, url, null,l , le);
+                (Request.Method.GET, request, null, new ResponseListenerWithUID(UID,request,type){
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        //try
+                        {
+
+                            clearListener();
+
+                            if (response.has("Error")) {
+                                for (ServerListener l : listeners) l.onError(response);
+                            } else {
+                                switch (getType()){
+                                    case LOGIN:
+                                        try {
+                                            Token = response.getString("Token");
+                                            for (ServerListener l : listeners) l.onLogin(response);
+                                        } catch (JSONException e) {
+                                            for (ServerListener l:listeners) l.onError(formResponse(response.toString()));
+                                        }
+                                        break;
+                                    case REFRESH:for (ServerListener l : listeners) l.onRefresh(response);
+                                        break;
+                                    case ACTION: for (ServerListener l : listeners) l.onAction(response);
+                                        if (listenersMap.get(getUID()) != null) listenersMap.get(getUID()).postAction();
+                                        break;
+                                    case SETRACE:getPlayerInfo();
+                                        break;
+                                    case MESSAGE:for (ServerListener l : listeners) l.onMessage(response);
+                                        break;
+                                    case PLAYER:for (ServerListener l : listeners) l.onPlayerInfo(response);
+                                        break;
+                                    case RATING:for (ServerListener l : listeners) l.onRating(response);
+                                        break;
+                                }
+                            }
+                            if (lockedActions != null) {
+                                for (ObjectAction act : lockedActions) {
+                                    act.setEnable(true);
+                                }
+                                lockedActions.clear();
+                            }
+                        }
+                    }
+
+                }, new ResponseErrorListenerWithUID(UID,request,type) {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        try {
+
+                            if (error.networkResponse == null && error.getClass().equals(TimeoutError.class)) runRequest(getUID(), getRequest(), getType());
+                            else if (getType()==2) if (errorMap.get(getUID()) != null) errorMap.get(getUID()).postError();
+                            for (ServerListener l : listeners)
+                                l.onError(formResponse(error.toString()));
+
+
+                        } catch (Exception e)
+                        {
+                            Essages.addEssage("Net UE:"+e.toString());
+                        }
+                    }
+                });
         jsObjRequest.setRetryPolicy(new DefaultRetryPolicy(20 * 1000, 0,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         reqq.add(jsObjRequest);
-        return true;
+
     }
 }
