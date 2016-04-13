@@ -78,7 +78,7 @@ public class Route extends GameObject{
             }
             if (StartPoint!=null && FinishPoint!=null) {
                 PolylineOptions options = new PolylineOptions();
-                options.width(2);
+                options.width(3);
                 options.color(Color.BLUE);
                 options.add(StartPoint);
                 options.add(FinishPoint);
@@ -158,7 +158,7 @@ public class Route extends GameObject{
     }
     public void fadeRoute(){
         if (line!=null)
-        line.setColor(Color.CYAN);
+        line.setColor(Color.LTGRAY);
     }
     public void releaseFade(){
         if (line!=null)
