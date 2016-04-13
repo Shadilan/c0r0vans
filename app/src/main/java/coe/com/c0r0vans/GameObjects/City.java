@@ -92,6 +92,7 @@ public class City extends GameObject{
                 CircleOptions circleOptions = new CircleOptions();
                 circleOptions.center(latlng);
                 circleOptions.radius(radius);
+                circleOptions.zIndex(0);
 
                 circleOptions.strokeColor(Color.BLUE);
                 circleOptions.strokeWidth(2);

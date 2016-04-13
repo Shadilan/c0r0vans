@@ -32,7 +32,7 @@ public class SelectedObject {
             circleOptions.radius(Player.getPlayer().getAmbushRad());
             circleOptions.strokeColor(Color.RED);
             circleOptions.strokeWidth(5);
-
+            circleOptions.zIndex(1);
             clickpos = MyGoogleMap.getMap().addCircle(circleOptions);
 
         }
@@ -44,7 +44,7 @@ public class SelectedObject {
             circleOptions.radius(1);
             circleOptions.strokeColor(Color.RED);
             circleOptions.strokeWidth(5);
-
+            circleOptions.zIndex(1);
             clickPoint = MyGoogleMap.getMap().addCircle(circleOptions);
         }
         clickPoint.setVisible(true);

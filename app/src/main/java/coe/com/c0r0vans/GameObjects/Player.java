@@ -168,6 +168,7 @@ public class Player extends GameObject {
             CircleOptions circleOptions=new CircleOptions();
             circleOptions.center(m.getPosition());
             circleOptions.radius(ActionDistance);
+            circleOptions.zIndex(2);
             circleOptions.strokeColor(Color.parseColor("#D08D2E"));
             circleOptions.strokeWidth(5);
             circle=map.addCircle(circleOptions);
@@ -181,6 +182,7 @@ public class Player extends GameObject {
             circleOptions.radius(5);
             circleOptions.strokeColor(Color.parseColor("#FF0000"));
             circleOptions.strokeWidth(5);
+            circleOptions.zIndex(2);
             circle2=map.addCircle(circleOptions);
         }
     }
@@ -369,6 +371,7 @@ public class Player extends GameObject {
         circleOptions.radius(ActionDistance);
         circleOptions.strokeColor(Color.parseColor("#D08D2E"));
         circleOptions.strokeWidth(5);
+        circleOptions.zIndex(1);
         circle=map.addCircle(circleOptions);
         circleOptions=new CircleOptions();
         circleOptions.center(new LatLng(GPSInfo.getInstance().GetLat() / 1E6, GPSInfo.getInstance().GetLng() / 1E6));

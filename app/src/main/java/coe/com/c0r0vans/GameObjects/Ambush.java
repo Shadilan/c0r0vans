@@ -84,6 +84,7 @@ public class Ambush extends GameObject {
                 CircleOptions circleOptions = new CircleOptions();
                 circleOptions.center(latlng);
                 circleOptions.radius(radius);
+                circleOptions.zIndex(0);
                 switch (faction){
                     case 0:
                         circleOptions.strokeColor(Color.BLUE);
