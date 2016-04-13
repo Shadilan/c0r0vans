@@ -98,6 +98,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
             Point f2;
             int firstId;
             int secondId;
+            boolean closeCity=true;
 
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -108,7 +109,8 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
 
                         tm = new Date().getTime();
                     } else if (event.getActionMasked() == MotionEvent.ACTION_UP) {
-                        UIControler.getActionLayout().HideView();
+                        if (closeCity) UIControler.getActionLayout().HideView();
+                        closeCity=true;
                         //Проверить лонгтап
                         if (Math.abs(oldPos.x - event.getX()) < 20 && Math.abs(oldPos.y - event.getY()) < 20 && (new Date().getTime()) - tm > 1500) {
                             tm = -1;
@@ -159,6 +161,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
 
 
                     } else if (event.getActionMasked() == MotionEvent.ACTION_POINTER_DOWN) {
+                        closeCity=false;
                         firstId = event.getPointerId(0);
                         secondId = event.getPointerId(event.getActionIndex());
 
