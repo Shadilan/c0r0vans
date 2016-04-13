@@ -500,4 +500,13 @@ public class Player extends GameObject {
         return AmbushRadius;
 
     }
+    public void higlight(String city){
+        if (city==null) for (Route r:Routes){
+             r.releaseFade();
+        }
+            else
+        for (Route r:Routes){
+            if (!(city.equals(r.getStartGuid()) || city.equals(r.getFinishGuid()))) r.fadeRoute();
+        }
+    }
 }

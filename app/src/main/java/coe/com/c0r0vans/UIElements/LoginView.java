@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -151,16 +152,30 @@ public class LoginView extends RelativeLayout {
         serverConnect.getInstance().addListener(LoginListener);
 
         loginButton = (Button) findViewById(R.id.LoginButton);
+        OnFocusChangeListener focusChangeListener=new OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus)  {
+                    InputMethodManager imm = (InputMethodManager)getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                }
+            }
+        };
+        LoginField.setOnFocusChangeListener(focusChangeListener);
+        PasswordField.setOnFocusChangeListener(focusChangeListener);
         loginButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 SharedPreferences.Editor editor = sp.edit();
+
                 editor.putString("Login", LoginField.getText().toString());
                 editor.putString("Password", PasswordField.getText().toString());
+
                 editor.apply();
                 TextView errorText= (TextView) findViewById(R.id.errorText);
                 errorText.setText("");
                 loginButton.setText(R.string.login_button_run);
+
                 if (!serverConnect.getInstance().ExecLogin(LoginField.getText().toString(), PasswordField.getText().toString()))
                      {
                     errorText.setText("Отсутствует подключение к интернету.");

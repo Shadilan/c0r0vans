@@ -156,4 +156,13 @@ public class Route extends GameObject{
     public LatLng getEndPoint() {
         return FinishPoint;
     }
+    public void fadeRoute(){
+        if (line!=null)
+        line.setColor(Color.CYAN);
+    }
+    public void releaseFade(){
+        if (line!=null)
+        line.setColor(Color.BLUE);
+
+    }
 }

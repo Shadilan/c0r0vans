@@ -108,6 +108,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
 
                         tm = new Date().getTime();
                     } else if (event.getActionMasked() == MotionEvent.ACTION_UP) {
+                        UIControler.getActionLayout().HideView();
                         //Проверить лонгтап
                         if (Math.abs(oldPos.x - event.getX()) < 20 && Math.abs(oldPos.y - event.getY()) < 20 && (new Date().getTime()) - tm > 1500) {
                             tm = -1;
