@@ -115,6 +115,7 @@ public class ActionView extends LinearLayout {
     public void HideView(){
         SelectedObject.getInstance().hidePoint();
         this.removeAllViews();
+        Player.getPlayer().higlight(null);
     }
     LocationListener locationListener;
     RelativeLayout currentView=null;
@@ -133,6 +134,7 @@ public class ActionView extends LinearLayout {
         if (target instanceof City)
         {
             setCurrentView(target.getObjectView(getContext()));
+            Player.getPlayer().higlight(target.getGUID());
         } else if (target instanceof Ambush)
         {
             setCurrentView(target.getObjectView(getContext()));
