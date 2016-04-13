@@ -31,7 +31,7 @@ import utility.settings.GameSettings;
  * @author Shadilan
  */
 public class serverConnect {
-
+    private final int max_retry=3;
     private static serverConnect instance;
 
     /**
@@ -215,7 +215,11 @@ public class serverConnect {
         runRequest(UUID.randomUUID().toString(),url,ResponseListenerWithUID.RATING);
         return true;
     }
+
     private void runRequest(String UID,String request,int type){
+        runRequest(UID,request,type,0);
+    }
+    private void runRequest(String UID,String request,int type, final int try_count){
         if (!checkConnection()) return;
         if ("Y".equals(GameSettings.getInstance().get("NET_DEBUG"))) Essages.addEssage("Net:"+request);
         final JsonObjectRequest jsObjRequest = new JsonObjectRequest
@@ -268,7 +272,7 @@ public class serverConnect {
                     public void onErrorResponse(VolleyError error) {
                         try {
 
-                            if (error.networkResponse == null && error.getClass().equals(TimeoutError.class)) runRequest(getUID(), getRequest(), getType());
+                            if (error.networkResponse == null && error.getClass().equals(TimeoutError.class) && try_count<max_retry) runRequest(getUID(), getRequest(), getType(),try_count+1);
                             else if (getType()==2) if (errorMap.get(getUID()) != null) errorMap.get(getUID()).postError();
                             for (ServerListener l : listeners)
                                 l.onError(formResponse(error.toString()));
