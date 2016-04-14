@@ -15,8 +15,8 @@ android {
         applicationId "coe.com.c0r0vansA"
         minSdkVersion 14
         targetSdkVersion 23
-        versionCode 19
-        versionName "2.0.10a"
+        versionCode 20
+        versionName "2.0.11a"
     }
     buildTypes {
         release {

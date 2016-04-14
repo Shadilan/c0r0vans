@@ -154,10 +154,19 @@ public class Player extends GameObject {
     /*public Circle getCircle(){
         return circle;
     }*/
+    String lastCity=null;
     public void setPosition(LatLng target){
         if (mark!=null) mark.setPosition(target);
         if (circle!=null) circle.setCenter(target);
         if (circle2!=null) circle2.setCenter(target);
+        for (GameObject o:GameObjects.getInstance().values()){
+            if (o instanceof City && o.getMarker()!=null){
+                if (GPSInfo.getDistance(target,o.getMarker().getPosition())<=this.getActionDistance() && (lastCity==null || lastCity.equals(o.getGUID())))
+                {
+                    GameSound.playSound(GameSound.GATE_OPEN);
+                }
+            }
+        }
     }
     @Override
     public void setMarker(Marker m) {

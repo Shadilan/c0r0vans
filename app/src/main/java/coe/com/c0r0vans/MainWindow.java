@@ -302,13 +302,6 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
 
     private void createListeners() {
         if (isListenersDone) return;
-
-
-
-
-
-
-
         serverConnect.getInstance().addListener(new ServerListener() {
             @Override
             public void onLogin(JSONObject response) {
