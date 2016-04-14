@@ -18,6 +18,7 @@ import coe.com.c0r0vans.GameObjects.Player;
 import coe.com.c0r0vans.MyGoogleMap;
 import coe.com.c0r0vans.OnGameObjectChange;
 import coe.com.c0r0vans.R;
+import coe.com.c0r0vans.UIElements.InfoLayout.InfoLayout;
 import utility.StringUtils;
 import utility.internet.serverConnect;
 import utility.notification.Essages;

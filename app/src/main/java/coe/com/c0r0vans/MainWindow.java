@@ -56,15 +56,17 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
      * Create form;
      */
     protected void onCreate(Bundle savedInstanceState) {
+        Log.d("Timing","Start");
         super.onCreate(savedInstanceState);
-
+        Log.d("Timing", "Super");
         GameSettings.init(getApplicationContext());
-
+        Log.d("Timing", "GameSettings");
         buttonLayout= (ButtonLayout) findViewById(R.id.buttonLayout);
-
+        Log.d("Timing","Button");
         Player.instance();
-
+        Log.d("Timing", "Player");
         setContentView(R.layout.activity_main_window);
+        Log.d("Timing", "ContentView");
         try {
             ImageLoader.Loader(this.getApplicationContext());
 
@@ -73,11 +75,15 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
             Log.d("UNEXPECTED","Loading error:"+e.toString());
 
         }
+        Log.d("Timing","ImageLoader");
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
+        Log.d("Timing","MapFragment");
         View touchView = findViewById(R.id.touchView);
+        Log.d("Timing","Touch");
         ViewGroup lay= (ViewGroup) findViewById(R.id.windowLayout);
+        Log.d("Timing","window");
         UIControler.setWindowLayout(lay);
         UIControler.setButtonLayout((ButtonLayout) findViewById(R.id.buttonLayout));
         lay.removeAllViews();
@@ -85,11 +91,9 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
         UIControler.setAlertLayout(lay);
         UIControler.setActionLayout((ActionView) findViewById(R.id.actionView));
         lay.removeAllViews();
+        Log.d("Timing", "UI");
         new LoginView(getApplicationContext()).show();
-
-
-
-
+        Log.d("Timing", "Login");
         touchView.setOnTouchListener(new View.OnTouchListener() {
             long tm = -1;
             Point oldPos;
@@ -98,7 +102,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
             Point f2;
             int firstId;
             int secondId;
-            boolean closeCity=true;
+            boolean closeCity = true;
 
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -110,7 +114,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                         tm = new Date().getTime();
                     } else if (event.getActionMasked() == MotionEvent.ACTION_UP) {
                         if (closeCity) UIControler.getActionLayout().HideView();
-                        closeCity=true;
+                        closeCity = true;
                         //Проверить лонгтап
                         if (Math.abs(oldPos.x - event.getX()) < 20 && Math.abs(oldPos.y - event.getY()) < 20 && (new Date().getTime()) - tm > 1500) {
                             tm = -1;
@@ -119,7 +123,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                             GameObject target = null;
                             //Marker
                             for (GameObject o : GameObjects.getInstance().values()) {
-                                if (o.getMarker()!=null) {
+                                if (o.getMarker() != null) {
                                     Point p = MyGoogleMap.getMap().getProjection().toScreenLocation(o.getMarker().getPosition());
                                     int calc = (int) Math.sqrt(Math.pow(p.x - oldPos.x, 2) + Math.pow(p.y - oldPos.y, 2));
                                     if (!(o instanceof Player || o instanceof Caravan) && calc < distance && o.getMarker().isVisible()) {
@@ -140,7 +144,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                                 if (distances != -1 && distances < Player.getPlayer().getActionDistance()) {
                                     boolean setAmush = true;
                                     for (GameObject o : GameObjects.getInstance().values()) {
-                                        if ((o instanceof City || o instanceof Ambush) && o.getMarker()!=null && o.getMarker().isVisible()) {
+                                        if ((o instanceof City || o instanceof Ambush) && o.getMarker() != null && o.getMarker().isVisible()) {
                                             float d = GPSInfo.getDistance(latLng, o.getMarker().getPosition());
                                             if (d < o.getRadius()) setAmush = false;
                                         }
@@ -161,7 +165,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
 
 
                     } else if (event.getActionMasked() == MotionEvent.ACTION_POINTER_DOWN) {
-                        closeCity=false;
+                        closeCity = false;
                         firstId = event.getPointerId(0);
                         secondId = event.getPointerId(event.getActionIndex());
 
@@ -238,10 +242,12 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                 return Math.toDegrees(inRads);
             }
         });
+        Log.d("Timing", "Listener");
         mapFragment.getMapAsync(this);
-
+        Log.d("Timing", "mapFragment");
 
         init();
+        Log.d("Timing", "Init");
         if (serverConnect.getInstance().isLogin()) {
             UIControler.getWindowLayout().removeAllViews();
         }
@@ -254,15 +260,20 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
 
     private void init() {
         //init fields
-        GameObjects.init();
 
+        GameObjects.init();
+        Log.d("Timing", "GameObject");
         GPSInfo.getInstance(getApplicationContext());
+        Log.d("Timing", "GPS");
         GameSound.init(getApplicationContext());
         GameSound.setVolumeControlStream(this);
+        Log.d("Timing", "Sound");
         messages=new MessageMap(getApplicationContext());
         MessageNotification.init(getApplicationContext());
         messageRequest.run();
+        Log.d("Timing", "Message");
         serverConnect.getInstance().connect(getResources().getString(R.string.serveradress), this.getApplicationContext());
+        Log.d("Timing", "Server");
     }
 
     /**
@@ -444,9 +455,10 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
     @Override
     protected void onResume() {
         super.onResume();
+        Log.d("Timing", "ResumeSuper");
         MessageNotification.cancel();
+        Log.d("Timing", "MessageCancel");
         try {
-            Log.d("DebugCall", "ResumeCall");
             MessageNotification.appActive = true;
             StartTickTimer();
             GameSound.playMusic();
@@ -459,6 +471,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
         catch (Exception e){
             Essages.addEssage("Resume UNEXPECTED:"+e.toString());
         }
+        Log.d("Timing", "RestartTick");
     }
 
     @Override
