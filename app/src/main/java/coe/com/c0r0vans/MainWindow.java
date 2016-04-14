@@ -1,5 +1,7 @@
 package coe.com.c0r0vans;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Point;
 import android.location.Location;
 import android.os.Bundle;
@@ -64,6 +66,15 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
         buttonLayout= (ButtonLayout) findViewById(R.id.buttonLayout);
         Log.d("Timing","Button");
         Player.instance();
+        SharedPreferences sp=getApplicationContext().getSharedPreferences("player",Context.MODE_PRIVATE);
+        String pls=sp.getString("player","");
+        if (!"".equals(pls)){
+            try {
+                Player.getPlayer().loadJSON(new JSONObject(pls));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
         Log.d("Timing", "Player");
         setContentView(R.layout.activity_main_window);
         Log.d("Timing", "ContentView");
@@ -326,6 +337,15 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                 if (Player.getPlayer().getRace() < 1 || Player.getPlayer().getRace() > 3) {
                     new ChooseFaction(getApplicationContext()).show();
                 }
+                SharedPreferences sp=getApplicationContext().getSharedPreferences("player", Context.MODE_PRIVATE);
+                SharedPreferences.Editor ed=sp.edit();
+                try {
+                    ed.putString("player",Player.getPlayer().getJSON().toString());
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                ed.apply();
+
                 timeToPlayerRefresh = 6;
             }
 

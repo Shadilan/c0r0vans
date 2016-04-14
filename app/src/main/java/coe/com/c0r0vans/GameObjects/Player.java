@@ -1,6 +1,7 @@
 package coe.com.c0r0vans.GameObjects;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.util.AttributeSet;
