@@ -62,4 +62,18 @@ public class Upgrade {
     public int getEffect1() {
         return effect1;
     }
+
+    public JSONObject getJSON() throws JSONException {
+        JSONObject result=new JSONObject();
+        result.put("Type",Type);
+        result.put("Level",level);
+        result.put("Name",Name);
+        result.put("Description",Description);
+        result.put("ReqCityLev",reqCityLev);
+        result.put("Effect1",effect1);
+        //result.put("Effect2",effect2);
+        result.put("Cost",Cost);
+
+        return result;
+    }
 }

@@ -196,6 +196,37 @@ public class Player extends GameObject {
         }
     }
 
+    public JSONObject getJSON() throws JSONException {
+        JSONObject result=new JSONObject();
+        result.put("GUID",GUID);
+        result.put("PlayerName",Name);
+        result.put("Level", Level);
+        result.put("TNL",TNL);
+        result.put("Exp",Exp);
+        result.put("Gold",Gold);
+        result.put("Caravans",Caravans);
+        result.put("AmbushesMax",AmbushesMax);
+        result.put("AmbushesLeft",AmbushesLeft);
+        result.put("AmbushRadius",AmbushRadius);
+        result.put("ActionDistance",ActionDistance);
+        result.put("Race",race);
+        JSONArray upg=new JSONArray();
+        for (Upgrade u:Upgrades){
+            upg.put(u.getJSON());
+        }
+        result.put("Upgrades",upg);
+        JSONArray r=new JSONArray();
+        for (Route u:Routes){
+            r.put(u.getJSON());
+        }
+        result.put("Routes",r);
+        JSONArray a=new JSONArray();
+        for (AmbushItem u:Ambushes){
+            a.put(u.getJSON());
+        }
+        result.put("Ambushes",a);
+        return result;
+    }
 
     @Override
     public void loadJSON(JSONObject obj) {

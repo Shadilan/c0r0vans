@@ -165,4 +165,19 @@ public class Route extends GameObject{
         line.setColor(Color.BLUE);
 
     }
+
+    public JSONObject getJSON() throws JSONException {
+        JSONObject result=new JSONObject();
+
+        result.put("GUID",GUID);
+        result.put("StartName",StartName);
+        result.put("FinishName",FinishName);
+        result.put("StartGUID",StartGUID);
+        result.put("FinishGUID",FinishGUID);
+        result.put("Lat",Lat);
+        result.put("Lng",Lng);
+
+
+        return result;
+    }
 }

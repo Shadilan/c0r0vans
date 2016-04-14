@@ -31,6 +31,15 @@ public class AmbushItem extends GameObject{
         }
     }
     ObjectAction cancelAmbush;
+    public JSONObject getJSON() throws JSONException {
+        JSONObject result=new JSONObject();
+        result.put("GUID",GUID);
+        result.put("Name",Name);
+        result.put("Lat",Lat);
+        result.put("Lng",Lng);
+        result.put("Progress",progress);
+        return result;
+    }
     public void loadJSON(JSONObject object) throws JSONException {
         if (object.has("GUID")) GUID=object.getString("GUID");
         if (object.has("Name")) Name=object.getString("Name");
