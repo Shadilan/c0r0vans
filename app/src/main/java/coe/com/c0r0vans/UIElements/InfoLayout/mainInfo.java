@@ -49,10 +49,10 @@ public class MainInfo extends LinearLayout implements PlayerInfoLayout {
     public void update(){
         level.setText(StringUtils.intToStr(Player.getPlayer().getLevel()));
         exp.setText(StringUtils.intToStr(Player.getPlayer().getExp()));
-        gold.setText(StringUtils.intToStr(Player.getPlayer().getExp()));
-        caravans.setText(StringUtils.intToStr(Player.getPlayer().getExp()));
-        ambushes.setText(StringUtils.intToStr(Player.getPlayer().getExp()));
-        ambushes_left.setText(StringUtils.intToStr(Player.getPlayer().getExp()));
+        gold.setText(StringUtils.intToStr(Player.getPlayer().getGold()));
+        caravans.setText(StringUtils.intToStr(Player.getPlayer().getCaravans()));
+        ambushes.setText(StringUtils.intToStr(Player.getPlayer().getAmbushMax()));
+        ambushes_left.setText(StringUtils.intToStr(Player.getPlayer().getAmbushLeft()));
 
         if (Player.getPlayer().getRace()==1){
             faction.setImageResource(R.mipmap.guild);
