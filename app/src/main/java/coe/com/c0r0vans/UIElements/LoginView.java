@@ -94,6 +94,7 @@ public class LoginView extends RelativeLayout {
                         Connected=true;
                         loginButton.setVisibility(INVISIBLE);
                         errorText.setText(R.string.LoginComplete);
+                        serverConnect.getInstance().sendDebug(0,"Login complete");
                     }
                     else{
 

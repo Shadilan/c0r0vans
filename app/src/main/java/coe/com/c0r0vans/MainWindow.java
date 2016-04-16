@@ -72,7 +72,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
             try {
                 Player.getPlayer().loadJSON(new JSONObject(pls));
             } catch (JSONException e) {
-                e.printStackTrace();
+                Log.d("LoadPlayer","Error:"+pls);
             }
         }
         Log.d("Timing", "Player");
@@ -134,7 +134,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                             GameObject target = null;
                             //Marker
                             for (GameObject o : GameObjects.getInstance().values()) {
-                                if (o.getMarker() != null) {
+                                if (o!=null && o.getMarker() != null) {
                                     Point p = MyGoogleMap.getMap().getProjection().toScreenLocation(o.getMarker().getPosition());
                                     int calc = (int) Math.sqrt(Math.pow(p.x - oldPos.x, 2) + Math.pow(p.y - oldPos.y, 2));
                                     if (!(o instanceof Player || o instanceof Caravan) && calc < distance && o.getMarker().isVisible()) {

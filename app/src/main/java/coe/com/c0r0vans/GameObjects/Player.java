@@ -1,7 +1,6 @@
 package coe.com.c0r0vans.GameObjects;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.util.AttributeSet;
@@ -155,19 +154,35 @@ public class Player extends GameObject {
     /*public Circle getCircle(){
         return circle;
     }*/
-    String lastCity=null;
+    ArrayList<String> lastCity;
     public void setPosition(LatLng target){
         if (mark!=null) mark.setPosition(target);
         if (circle!=null) circle.setCenter(target);
         if (circle2!=null) circle2.setCenter(target);
+        float lastRange=this.getActionDistance();
+        if (lastCity==null)lastCity=new ArrayList<>();
+        ArrayList<String>newLastCity=new ArrayList<>();
+        boolean needSignal=false;
+        //Если город ближе по дистанции чем город дистанция игрока
+        //добавить город в доступные
+        // если город не входит в ранее доступные пометить необходимость сигнала
+        //очистить список ранее доступных
+        //добавит в список ранее доступных доступные города
+        //если есть пометка выполнить сигнал.
         for (GameObject o:GameObjects.getInstance().values()){
             if (o instanceof City && o.getMarker()!=null){
-                if (GPSInfo.getDistance(target,o.getMarker().getPosition())<=this.getActionDistance() && (lastCity==null || lastCity.equals(o.getGUID())))
-                {
-                    GameSound.playSound(GameSound.GATE_OPEN);
+                float range=GPSInfo.getDistance(target,o.getMarker().getPosition());
+                if (range<=lastRange) {
+                    newLastCity.add(o.getGUID());
+                    boolean find=false;
+                    for (String a:lastCity)if (a.equals(o.getGUID())) find=true;
+                    if (!find) needSignal=true;
                 }
             }
         }
+        if (needSignal) GameSound.playSound(GameSound.GATE_OPEN);
+        lastCity.clear();
+        lastCity.addAll(newLastCity);
     }
     @Override
     public void setMarker(Marker m) {
@@ -225,7 +240,7 @@ public class Player extends GameObject {
         for (AmbushItem u:Ambushes){
             a.put(u.getJSON());
         }
-        result.put("Ambushes",a);
+        result.put("Ambushes", a);
         return result;
     }
 
@@ -246,7 +261,8 @@ public class Player extends GameObject {
             if (obj.has("ActionDistance")) ActionDistance=obj.getInt("ActionDistance");
             if (obj.has("Race")) race=obj.getInt("Race");
             if (race!=0) GameSettings.setFaction(race);
-            circle.setRadius(ActionDistance);
+            //TODO: Здесь не должно быть нула. Видимо маркер не инициализуерся в игроке.
+            if (circle!=null) circle.setRadius(ActionDistance);
             if (obj.has("Upgrades")){
                 JSONArray upg=obj.getJSONArray("Upgrades");
                 Upgrades.clear();

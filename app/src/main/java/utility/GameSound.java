@@ -8,8 +8,6 @@ import android.media.SoundPool;
 import android.os.Build;
 import android.util.Log;
 
-import java.util.concurrent.ThreadPoolExecutor;
-
 import coe.com.c0r0vans.R;
 import utility.settings.GameSettings;
 import utility.settings.SettingsListener;
@@ -79,13 +77,13 @@ public class GameSound {
         Log.d("Timing", "Sound-settings");
     }
     private int MUSIC=-1;
-    public static int SET_AMBUSH=-1;
-    public static int BUY_SOUND=-1;
-    public static int KILL_SOUND=-1;
-    public static int START_ROUTE_SOUND=-1;
-    public static int FINISH_ROUTE_SOUND=-1;
-    public static int REMOVE_AMBUSH=-1;
-    public static int GATE_OPEN=-1;
+    public static int SET_AMBUSH;
+    public static int BUY_SOUND;
+    public static int KILL_SOUND;
+    public static int START_ROUTE_SOUND;
+    public static int FINISH_ROUTE_SOUND;
+    public static int REMOVE_AMBUSH;
+    public static int GATE_OPEN;
     private Runnable task=new Runnable() {
         @Override
         public void run() {
@@ -111,6 +109,7 @@ public class GameSound {
         MUSIC=soundPool.load(context, R.raw.drums,0);
         Log.d("Timing", "Sound-music");
         new Thread(task).start();
+        //task.run();
         Log.d("Timing", "Sound-thread");
 
     }
@@ -162,7 +161,8 @@ public class GameSound {
         else if (!instance.music_on && instance.musicStream!=-1) {stopMusic();}
     }
     public static void playSound(int soundId){
-        if (soundId!=-1) return;
+        Log.d("SoundCheck","SoundID:"+soundId);
+        if (soundId==-1) return;
         if (instance.sound_on) {
             if (instance.soundStream!=-1) {
                 instance.soundPool.stop(instance.soundStream);

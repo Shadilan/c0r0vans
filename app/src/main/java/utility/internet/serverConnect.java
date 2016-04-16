@@ -3,12 +3,12 @@ package utility.internet;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.provider.Settings;
 import android.util.Log;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
@@ -22,7 +22,9 @@ import java.util.HashMap;
 import java.util.UUID;
 
 import coe.com.c0r0vans.GameObjects.ObjectAction;
+import coe.com.c0r0vans.GameObjects.Player;
 import utility.GPSInfo;
+import utility.StringUtils;
 import utility.notification.Essages;
 import utility.settings.GameSettings;
 
@@ -288,5 +290,30 @@ public class serverConnect {
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         reqq.add(jsObjRequest);
 
+    }
+    public void sendDebug(int type,String message){
+        //
+        if (!checkConnection()) return;
+        String request="https://support-merchantarg.rhcloud.com/addLog.jsp";
+        JSONObject reqTest= null;
+        String android_id = Settings.Secure.getString(context.getContentResolver(),
+                Settings.Secure.ANDROID_ID);
+        String user=Player.getPlayer().getName();
+        String hash= StringUtils.MD5("COWBOW"+user+android_id+message);
+        try {
+            reqTest = new JSONObject().put("Type",type)
+                    .put("User", user)
+                    .put("Device",android_id)
+                    .put("Data",message)
+                    .put("hash",hash);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        final JsonObjectRequest jsObjRequest = new JsonObjectRequest
+                (Request.Method.POST, request,reqTest, null, null);
+        jsObjRequest.setRetryPolicy(new DefaultRetryPolicy(20 * 1000, 0,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        reqq.add(jsObjRequest);
     }
 }
