@@ -11,6 +11,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 
 import coe.com.c0r0vans.R;
+import utility.internet.serverConnect;
 import utility.notification.Essages;
 
 
@@ -111,12 +112,18 @@ public class ImageLoader {
      */
     public static Bitmap getImage(String name){
         Bitmap result=images.get(name);
-        if (result==null) Essages.addEssage("Изображение " + name + " не найдено.");
+        if (result==null) {
+            Essages.addEssage("Изображение " + name + " не найдено.");
+            serverConnect.getInstance().sendDebug(2,"Изображение " + name + " не найдено.");
+        }
         return result;
     }
     public static BitmapDescriptor getDescritor(String name) {
         BitmapDescriptor result = descriptors.get(name);
-        if (result==null) Essages.addEssage("Изображение объекта "+name + " не найдено.");
+        if (result==null) {
+            Essages.addEssage("Изображение объекта "+name + " не найдено.");
+            serverConnect.getInstance().sendDebug(2,"Изображение объекта "+name + " не найдено.");
+        }
         return  result;
     }
     private static void createMarker(Context context,int resource,String name){

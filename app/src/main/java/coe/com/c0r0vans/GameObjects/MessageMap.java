@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
+import utility.internet.serverConnect;
 import utility.notification.Essages;
 import utility.settings.GameSettings;
 
@@ -35,6 +36,7 @@ public class MessageMap extends HashMap<String,Message>{
         } catch (JSONException e) {
             if ("Y".equals(GameSettings.getInstance().get("SHOW_NETWORK_ERROR")))
                 Essages.addEssage("Error Loading:"+ e.toString());
+            serverConnect.getInstance().sendDebug(2,"Error Loading:"+ e.toString());
 
         }
         load=false;

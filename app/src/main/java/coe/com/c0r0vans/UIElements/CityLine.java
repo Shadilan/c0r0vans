@@ -16,7 +16,6 @@ import coe.com.c0r0vans.MyGoogleMap;
 import coe.com.c0r0vans.R;
 import coe.com.c0r0vans.ShowHideForm;
 import utility.internet.serverConnect;
-import utility.notification.Essages;
 
 
 /**
@@ -83,7 +82,7 @@ public class CityLine extends RelativeLayout {
         try {
             afterInit();
         } catch (Exception e){
-            Essages.addEssage(e.toString());
+            serverConnect.getInstance().sendDebug(2, e.toString());
         }
 
     }

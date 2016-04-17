@@ -1,29 +1,18 @@
 package coe.com.c0r0vans.UIElements.InfoLayout;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.ToggleButton;
 
-import coe.com.c0r0vans.GameObjects.AmbushItem;
-import coe.com.c0r0vans.GameObjects.Player;
-import coe.com.c0r0vans.GameObjects.Route;
-import coe.com.c0r0vans.GameObjects.Upgrade;
 import coe.com.c0r0vans.R;
 import coe.com.c0r0vans.ShowHideForm;
-import coe.com.c0r0vans.UIElements.CityLine;
-import coe.com.c0r0vans.UIElements.InfoLine;
 import coe.com.c0r0vans.UIElements.UIControler;
-import utility.StringUtils;
 import utility.internet.serverConnect;
-import utility.notification.Essages;
 
 /**
  * Информация об игроке
@@ -50,7 +39,7 @@ public class InfoLayout extends RelativeLayout implements ShowHideForm {
         try {
             afterInit();
         } catch (Exception e){
-            Essages.addEssage(e.toString());
+            serverConnect.getInstance().sendDebug(2, e.toString());
         }
     }
     @Override

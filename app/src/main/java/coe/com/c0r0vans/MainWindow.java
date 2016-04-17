@@ -231,8 +231,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                         }
                     }
                 } catch (Exception e) {
-                    Essages.addEssage("Gesture UE:" + e.toString());
-                    Essages.addEssage(Arrays.toString(e.getStackTrace()));
+                    serverConnect.getInstance().sendDebug(2,"Gesture UE:" + e.toString()+Arrays.toString(e.getStackTrace()) );
                 }
                 return true;
             }
@@ -303,7 +302,8 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
         createListeners();
         }
         catch (Exception e){
-            Essages.addEssage("Resume UNEXPECTED:"+e.toString());
+            serverConnect.getInstance().sendDebug(2,"Resume UNEXPECTED:"+e.toString());
+
         }
     }
     boolean isListenersDone=false;
@@ -364,6 +364,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                     if (errorMsg.equals("")) errorMsg = errorText;
                     if (!"Unexpected Response".equals(errorText) || "Y".equals(GameSettings.getInstance().get("SHOW_NETWORK_ERROR")))
                         Essages.addEssage(errorMsg);
+                        else serverConnect.getInstance().sendDebug(2, errorMsg);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -402,7 +403,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
             }
         }
         catch (Exception e){
-            Essages.addEssage("TickTimer UNEXPECTED:"+e.toString());
+            serverConnect.getInstance().sendDebug(2, "TickTimer UNEXPECTED:" + e.toString());
         }
         Log.d("DebugCall", "postDelayed");
         Log.d("Debug info","Delay:"+delay);
@@ -440,7 +441,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                 }
         }
         catch (Exception e){
-            Essages.addEssage("Tick UNEXPECTED:"+e.toString());
+            serverConnect.getInstance().sendDebug(2, "Tick UNEXPECTED:" + e.toString());
         }
         StartTickTimer();
     }
@@ -482,7 +483,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                 serverConnect.getInstance().RefreshCurrent();
         }
         catch (Exception e){
-            Essages.addEssage("Resume UNEXPECTED:"+e.toString());
+            serverConnect.getInstance().sendDebug(2,"Resume UNEXPECTED:"+e.toString()+"\n");
         }
         Log.d("Timing", "RestartTick");
     }
@@ -503,6 +504,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
         else
         {
            Essages.addEssage("Для выхода из приложения используйте кнопку Home.");
+            serverConnect.getInstance().sendDebug(0,"Для выхода из приложения используйте кнопку Home.");
         }
     }
 

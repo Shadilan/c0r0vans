@@ -9,6 +9,7 @@ import android.util.Log;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
+import com.android.volley.Response;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
@@ -23,6 +24,7 @@ import java.util.UUID;
 
 import coe.com.c0r0vans.GameObjects.ObjectAction;
 import coe.com.c0r0vans.GameObjects.Player;
+import coe.com.c0r0vans.R;
 import utility.GPSInfo;
 import utility.StringUtils;
 import utility.notification.Essages;
@@ -282,7 +284,7 @@ public class serverConnect {
 
                         } catch (Exception e)
                         {
-                            Essages.addEssage("Net UE:"+e.toString());
+                            serverConnect.getInstance().sendDebug(2, "Net UE:" + e.toString());
                         }
                     }
                 });
@@ -299,19 +301,31 @@ public class serverConnect {
         String android_id = Settings.Secure.getString(context.getContentResolver(),
                 Settings.Secure.ANDROID_ID);
         String user=Player.getPlayer().getName();
-        String hash= StringUtils.MD5("COWBOW"+user+android_id+message);
+        String version=context.getResources().getString(R.string.version);
+        String hash= StringUtils.MD5("COWBOW"+user+android_id+message+version);
         try {
             reqTest = new JSONObject().put("Type",type)
                     .put("User", user)
                     .put("Device",android_id)
                     .put("Data",message)
-                    .put("hash",hash);
+                    .put("hash",hash).put("Version",version);
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
         final JsonObjectRequest jsObjRequest = new JsonObjectRequest
-                (Request.Method.POST, request,reqTest, null, null);
+                (Request.Method.POST, request, reqTest, new Response.Listener<JSONObject>() {
+
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                });
         jsObjRequest.setRetryPolicy(new DefaultRetryPolicy(20 * 1000, 0,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         reqq.add(jsObjRequest);

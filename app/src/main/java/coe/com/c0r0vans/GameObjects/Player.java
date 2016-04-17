@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 
 import com.google.android.gms.maps.GoogleMap;
@@ -351,6 +352,10 @@ public class Player extends GameObject {
     public int getAmbushLeft() {
         return AmbushesLeft;
     }
+    public void setAmbushLeft(int AmbushLeft){
+        AmbushesLeft=AmbushLeft;
+        change(OnGameObjectChange.PLAYER);
+    }
 
     public int getAmbushMax() {
         return AmbushesMax;
@@ -451,6 +456,7 @@ public class Player extends GameObject {
 
     }
 
+
     public int getTrade() {
         return trade;
     }
@@ -509,6 +515,7 @@ public class Player extends GameObject {
                 public void postAction() {
                     serverConnect.getInstance().RefreshCurrent();
                     GameSound.playSound(GameSound.SET_AMBUSH);
+                    Player.getPlayer().setAmbushLeft(Player.getPlayer().getAmbushLeft() - 1);
                     Essages.addEssage("Засада создана.");
 
                 }
@@ -535,7 +542,20 @@ public class Player extends GameObject {
 
         @Override
         public void updateInZone(boolean inZone) {
-            if (inZone) findViewById(R.id.createAmbushAction).setVisibility(VISIBLE);
+            if (inZone){
+                ImageButton btn= (ImageButton) findViewById(R.id.createAmbushAction);
+                btn.setVisibility(VISIBLE);
+                if (Player.getPlayer().getAmbushLeft()>0){
+                    btn.setClickable(true);
+                    btn.setEnabled(true);
+                    btn.setAlpha(1f);
+                } else
+                {
+                    btn.setClickable(false);
+                    btn.setEnabled(false);
+                    btn.setAlpha(0.5f);
+                }
+            }
             else findViewById(R.id.createAmbushAction).setVisibility(INVISIBLE);
         }
 

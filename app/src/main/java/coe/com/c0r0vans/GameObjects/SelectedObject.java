@@ -33,6 +33,7 @@ public class SelectedObject {
             circleOptions.strokeColor(Color.RED);
             circleOptions.strokeWidth(5);
             circleOptions.zIndex(1);
+            circleOptions.radius(target.getRadius());
             clickpos = MyGoogleMap.getMap().addCircle(circleOptions);
 
         }

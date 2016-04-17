@@ -469,8 +469,36 @@ public class City extends GameObject{
                 findViewById(R.id.finishRoute).setVisibility(GONE);
                 findViewById(R.id.buyUpgrade).setVisibility(GONE);
                 if (Player.getPlayer().getRouteStart()) findViewById(R.id.startRoute).setVisibility(VISIBLE);
-                if (!Player.getPlayer().getRouteStart() && (city!=null) && !Player.checkRoute(city.getGUID())) findViewById(R.id.finishRoute).setVisibility(VISIBLE);
-                if (city!=null && city.upgradeAvaible()) findViewById(R.id.buyUpgrade).setVisibility(VISIBLE);
+                if (!Player.getPlayer().getRouteStart() && (city!=null))
+                {
+                    ImageButton btn= (ImageButton) findViewById(R.id.finishRoute);
+                    btn.setVisibility(VISIBLE);
+                    if (!Player.checkRoute(city.getGUID())) {
+                        btn.setClickable(true);
+                        btn.setEnabled(true);
+                        btn.setAlpha(1f);
+                    } else
+                    {
+                        btn.setClickable(false);
+                        btn.setEnabled(false);
+                        btn.setAlpha(0.5f);
+                    }
+
+                }
+                if (city!=null) {
+                    ImageButton btn= (ImageButton) findViewById(R.id.buyUpgrade);
+                    btn.setVisibility(VISIBLE);
+                    if (city.upgradeAvaible()) {
+                        btn.setClickable(true);
+                        btn.setEnabled(true);
+                        btn.setAlpha(1f);
+                    } else
+                    {
+                        btn.setClickable(false);
+                        btn.setEnabled(false);
+                        btn.setAlpha(0.5f);
+                    }
+                }
             }
             else
             {
@@ -726,8 +754,36 @@ public class City extends GameObject{
                 findViewById(R.id.end).setVisibility(INVISIBLE);
                 findViewById(R.id.buy).setVisibility(INVISIBLE);
                 if (Player.getPlayer().getRouteStart()) findViewById(R.id.start).setVisibility(VISIBLE);
-                if (!Player.getPlayer().getRouteStart() && (city!=null) && !Player.checkRoute(city.getGUID())) findViewById(R.id.end).setVisibility(VISIBLE);
-                if (city!=null && city.upgradeAvaible()) findViewById(R.id.buy).setVisibility(VISIBLE);
+                if (!Player.getPlayer().getRouteStart() && (city!=null))
+                {
+                    ImageButton btn= (ImageButton) findViewById(R.id.end);
+                    btn.setVisibility(VISIBLE);
+                    if (!Player.checkRoute(city.getGUID())) {
+                        btn.setClickable(true);
+                        btn.setEnabled(true);
+                        btn.setAlpha(1f);
+                    } else
+                    {
+                        btn.setClickable(false);
+                        btn.setEnabled(false);
+                        btn.setAlpha(0.5f);
+                    }
+
+                }
+                if (city!=null) {
+                    ImageButton btn= (ImageButton) findViewById(R.id.buy);
+                    btn.setVisibility(VISIBLE);
+                    if (city.upgradeAvaible()) {
+                        btn.setClickable(true);
+                        btn.setEnabled(true);
+                        btn.setAlpha(1f);
+                    } else
+                    {
+                        btn.setClickable(false);
+                        btn.setEnabled(false);
+                        btn.setAlpha(0.5f);
+                    }
+                }
             }
             else
             {

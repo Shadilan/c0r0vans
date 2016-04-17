@@ -23,7 +23,6 @@ import coe.com.c0r0vans.R;
 import utility.GPSInfo;
 import utility.internet.ServerListener;
 import utility.internet.serverConnect;
-import utility.notification.Essages;
 import utility.settings.GameSettings;
 
 /**
@@ -66,7 +65,7 @@ public class LoginView extends RelativeLayout {
         try {
             afterInit();
         } catch (Exception e){
-            Essages.addEssage(e.toString());
+            serverConnect.getInstance().sendDebug(2, e.toString());
         }
     }
     private void afterInit(){
@@ -94,7 +93,7 @@ public class LoginView extends RelativeLayout {
                         Connected=true;
                         loginButton.setVisibility(INVISIBLE);
                         errorText.setText(R.string.LoginComplete);
-                        serverConnect.getInstance().sendDebug(0,"Login complete");
+                        serverConnect.getInstance().sendDebug(0,"Вход выполнен.");
                     }
                     else{
 

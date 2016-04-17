@@ -7,6 +7,8 @@ import com.google.android.gms.maps.model.LatLng;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Arrays;
+
 import utility.GameSound;
 import utility.ImageLoader;
 import utility.internet.serverConnect;
@@ -27,7 +29,7 @@ public class AmbushItem extends GameObject{
         try {
             loadJSON(obj);
         } catch (JSONException e) {
-            e.printStackTrace();
+            serverConnect.getInstance().sendDebug(2, e.toString()+"\n"+Arrays.toString(e.getStackTrace()));
         }
     }
     ObjectAction cancelAmbush;
@@ -66,7 +68,7 @@ public class AmbushItem extends GameObject{
             @Override
             public void postAction() {
                 GameSound.playSound(GameSound.START_ROUTE_SOUND);
-                serverConnect.getInstance().getPlayerInfo();
+                Player.getPlayer().setAmbushLeft(Player.getPlayer().getAmbushLeft()+1);
                 Essages.addEssage("Засада распущена");
             }
 

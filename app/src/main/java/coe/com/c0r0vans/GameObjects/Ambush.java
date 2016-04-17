@@ -20,8 +20,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.Arrays;
-
 import coe.com.c0r0vans.MyGoogleMap;
 import coe.com.c0r0vans.R;
 import coe.com.c0r0vans.UIElements.ActionView;
@@ -171,9 +169,7 @@ public class Ambush extends GameObject {
                     mark.setAnchor(0.5f, 1f);
                 else mark.setAnchor(0.5f, 0.5f);
             } catch (Exception e){
-                Essages.addEssage("mark:"+markname);
-                Essages.addEssage(e.toString());
-                Essages.addEssage(Arrays.toString(e.getStackTrace()));
+                serverConnect.getInstance().sendDebug(2, "mark:" + markname+"\n"+e.toString()+"\n"+e.getStackTrace());
             }
         }
     }
@@ -275,6 +271,7 @@ public class Ambush extends GameObject {
                     @Override
                     public void postAction() {
                         GameSound.playSound(GameSound.REMOVE_AMBUSH);
+                        Player.getPlayer().setAmbushLeft(Player.getPlayer().getAmbushLeft() + 1);
                         Essages.addEssage("Засада распущена");
                         owner.RemoveObject();
                     }

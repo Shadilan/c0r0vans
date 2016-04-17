@@ -17,10 +17,10 @@ import coe.com.c0r0vans.GameObjects.GameObject;
 import coe.com.c0r0vans.GameObjects.GameObjectView;
 import coe.com.c0r0vans.GameObjects.Player;
 import coe.com.c0r0vans.GameObjects.SelectedObject;
+import coe.com.c0r0vans.OnGameObjectChange;
 import utility.GPSInfo;
 import utility.internet.ServerListener;
 import utility.internet.serverConnect;
-import utility.notification.Essages;
 
 /**
  * @author Shadilan
@@ -82,7 +82,12 @@ public class ActionView extends LinearLayout {
 
             }
         });
-
+        Player.getPlayer().addOnChange(new OnGameObjectChange() {
+            @Override
+            public void change(int ChangeType) {
+                reloadActions();
+            }
+        });
 
         if (locationListener==null) {
             locationListener = new LocationListener() {
@@ -155,7 +160,6 @@ public class ActionView extends LinearLayout {
 
     private void reloadActions(){
         try {
-Log.d("!!!","TEST RELOAD");
             if (currentView != null && currentView instanceof GameObjectView) {
                 if (SelectedObject.getInstance().getTarget()==null || SelectedObject.getInstance().getTarget().getMarker()==null) return;
                 float[] distances = new float[1];
@@ -165,13 +169,12 @@ Log.d("!!!","TEST RELOAD");
                         Player.getPlayer().getMarker().getPosition().longitude, distances);
 
                 boolean inZone = (distances.length > 0 && distances[0] <= (Player.getPlayer().getActionDistance()));
-                Log.d("!!!","TEST RELOAD2");
                 ((GameObjectView) currentView).updateInZone(inZone);
                 ((GameObjectView) currentView).setDistance((int) distances[0]);
             }
         } catch (Exception e)
         {
-            Essages.addEssage("UER:"+e.toString());
+            serverConnect.getInstance().sendDebug(2, "UER:" + e.toString());
         }
     }
 

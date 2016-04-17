@@ -50,7 +50,7 @@ public class ButtonLayout extends RelativeLayout {
         try {
             afterInit();
         } catch (Exception e){
-            Essages.addEssage(e.toString());
+            serverConnect.getInstance().sendDebug(2, e.toString());
         }
     }
 
@@ -110,7 +110,7 @@ public class ButtonLayout extends RelativeLayout {
                     for (GameObject obj : GameObjects.getInstance().values())
                         if (obj.getMarker() != null) obj.changeMarkerSize();
                 } catch (Exception e) {
-                    Essages.addEssage("UE:" + e.toString());
+                    serverConnect.getInstance().sendDebug(2, "UE:" + e.toString());
                 }
 
             }
