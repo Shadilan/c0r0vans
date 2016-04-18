@@ -122,13 +122,16 @@ public class Ambush extends GameObject {
 
     public String getInfo() {
         if (faction==0) {
+            String dop="";
+            Upgrade up=Player.getPlayer().getUpgrade("ambushes");
+            if (up!=null && getRadius()<up.getEffect1()) dop="\nРазмер засады меньше чем вы можете организовать.";
             if (ready < 0)
-                return "Ваши верные войны разбивают здесь засаду. Работать еще " + (ready * -1) + " минут.";
+                return "Ваши верные войны разбивают здесь засаду. Работать еще " + (ready * -1) + " минут."+dop;
             else if (ready / 60 > 2)
-                return "Ваши верные войны ждут здесь вражеских контрабандистов в Засаде. Стоят уже " + (Math.round(ready / 60)) + " часов.";
+                return "Ваши верные войны ждут здесь вражеских контрабандистов в Засаде. Стоят уже " + (Math.round(ready / 60)) + " часов."+dop;
             else if (ready / 60 / 24 > 2)
-                return "Ваши верные войны ждут здесь вражеских контрабандистов в Засаде. Стоят уже " + (Math.round(ready / 60 / 24)) + " дней.";
-            else return "Ваши верные войны ждут здесь вражеских контрабандистов в Засаде.";
+                return "Ваши верные войны ждут здесь вражеских контрабандистов в Засаде. Стоят уже " + (Math.round(ready / 60 / 24)) + " дней."+dop;
+            else return "Ваши верные войны ждут здесь вражеских контрабандистов в Засаде."+dop;
         }
         else if (faction==Player.getPlayer().getRace()){
             if (ready < 0)

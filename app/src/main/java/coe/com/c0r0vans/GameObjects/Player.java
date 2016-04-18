@@ -423,6 +423,11 @@ public class Player extends GameObject {
 
         return NextUpgrades.get(type);
     }
+    public Upgrade getUpgrade(String type){
+        if (Upgrades==null) return null;
+        for (Upgrade u:Upgrades) if(u.getType().equals(type)) return u;
+        return null;
+    }
 
     public void setMap(GoogleMap map) {
         this.map = map;
