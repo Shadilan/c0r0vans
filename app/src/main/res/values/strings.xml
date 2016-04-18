@@ -56,7 +56,7 @@
     <string name="distance">%dм</string>
     <string name="upgrade_bought">Улучшение %s куплено.</string>
     <string name="route_finish">Завершен маршрут в город %s</string>
-    <string name="route_started">Начат маршрут в город %s</string>
+    <string name="route_started">Начат маршрут из города %s</string>
     <string name="login_button">Login</string>
     <string name="login_button_run">Login ...</string>
     <string name="password_label">Password</string>
