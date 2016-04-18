@@ -287,6 +287,7 @@ public class City extends GameObject{
             ((TextView) findViewById(R.id.skillDesc)).setText(getSkillInfo());
             findViewById(R.id.buyUpgrade).setEnabled(city.upgradeAvaible());
             startRouteAction = new ObjectAction(city) {
+
                 @Override
                 public Bitmap getImage() {
                     return ImageLoader.getImage("start_route");
@@ -299,6 +300,7 @@ public class City extends GameObject{
 
                 @Override
                 public void preAction() {
+
                     Player.getPlayer().setRouteStart(false);
                     Player.getPlayer().setCurrentRouteGUID(city.getGUID());
                 }
@@ -312,8 +314,12 @@ public class City extends GameObject{
 
                 @Override
                 public void postError() {
-                    //Player.getPlayer().setRouteStart(true);
+                    //Player.getPlayer().setRouteStart(previous);
 
+                }
+                @Override
+                public void serverError(){
+                    Player.getPlayer().setRouteStart(true);
                 }
             };
 
@@ -578,6 +584,8 @@ public class City extends GameObject{
                 @Override
                 public void preAction() {
                     Player.getPlayer().setRouteStart(false);
+                    Player.getPlayer().setCurrentRouteGUID(city.getGUID());
+
                 }
 
                 @Override
@@ -589,8 +597,12 @@ public class City extends GameObject{
 
                 @Override
                 public void postError() {
+
                     //Player.getPlayer().setRouteStart(true);
 
+                }
+                public void serverError(){
+                    Player.getPlayer().setRouteStart(true);
                 }
             };
 

@@ -1,6 +1,5 @@
 package coe.com.c0r0vans.GameObjects;
 
-import android.app.ActivityManager;
 import android.graphics.Bitmap;
 import android.util.Log;
 
@@ -18,6 +17,9 @@ public abstract class ObjectAction {
     public abstract void preAction();
     public abstract void postAction();
     public abstract void postError();
+    public void serverError(){
+        postError();
+    }
     protected boolean enabled=true;
     public void setEnable(boolean flag){
         Log.d("DebugAction",getCommand()+":"+flag);
