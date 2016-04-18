@@ -306,7 +306,7 @@ public class City extends GameObject{
                 }
 
                 @Override
-                public void postAction() {
+                public void postAction(JSONObject response) {
                     GameSound.playSound(GameSound.START_ROUTE_SOUND);
                     Essages.addEssage(String.format(getResources().getString(R.string.route_started), Name));
                     serverConnect.getInstance().getPlayerInfo();
@@ -359,7 +359,7 @@ public class City extends GameObject{
                 }
 
                 @Override
-                public void postAction() {
+                public void postAction(JSONObject response) {
                     Essages.addEssage(String.format(getResources().getString(R.string.route_finish), Name));
                     GameSound.playSound(GameSound.FINISH_ROUTE_SOUND);
                     serverConnect.getInstance().getPlayerInfo();
@@ -408,7 +408,7 @@ public class City extends GameObject{
                 }
 
                 @Override
-                public void postAction() {
+                public void postAction(JSONObject response) {
                     GameSound.playSound(GameSound.BUY_SOUND);
                     serverConnect.getInstance().getPlayerInfo();
 
@@ -589,7 +589,7 @@ public class City extends GameObject{
                 }
 
                 @Override
-                public void postAction() {
+                public void postAction(JSONObject response) {
                     GameSound.playSound(GameSound.START_ROUTE_SOUND);
                     Essages.addEssage(String.format(getResources().getString(R.string.route_started), Name));
                     serverConnect.getInstance().getPlayerInfo();
@@ -639,7 +639,7 @@ public class City extends GameObject{
                 }
 
                 @Override
-                public void postAction() {
+                public void postAction(JSONObject response) {
                     Essages.addEssage(String.format(getResources().getString(R.string.route_finish), Name));
                     GameSound.playSound(GameSound.FINISH_ROUTE_SOUND);
                     serverConnect.getInstance().getPlayerInfo();
@@ -688,7 +688,7 @@ public class City extends GameObject{
                 }
 
                 @Override
-                public void postAction() {
+                public void postAction(JSONObject response) {
                     GameSound.playSound(GameSound.BUY_SOUND);
                     serverConnect.getInstance().getPlayerInfo();
 

@@ -109,7 +109,7 @@ public class Player extends GameObject {
             }
 
             @Override
-            public void postAction() {
+            public void postAction(JSONObject response) {
                 serverConnect.getInstance().getPlayerInfo();
                 Essages.addEssage("Незаконченый маршрут отменен.");
             }
@@ -517,7 +517,7 @@ public class Player extends GameObject {
                 }
 
                 @Override
-                public void postAction() {
+                public void postAction(JSONObject response) {
                     serverConnect.getInstance().RefreshCurrent();
                     GameSound.playSound(GameSound.SET_AMBUSH);
                     Player.getPlayer().setAmbushLeft(Player.getPlayer().getAmbushLeft() - 1);

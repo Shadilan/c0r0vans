@@ -112,7 +112,7 @@ public class Route extends GameObject{
             }
             //Todo: Another sound;
             @Override
-            public void postAction() {
+            public void postAction(JSONObject response) {
                 GameSound.playSound(GameSound.START_ROUTE_SOUND);
                 serverConnect.getInstance().getPlayerInfo();
                 Essages.addEssage("Караван из "+getStartName()+" в "+getFinishName()+" отменен.");

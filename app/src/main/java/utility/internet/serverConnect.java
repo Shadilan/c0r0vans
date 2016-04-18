@@ -250,7 +250,7 @@ public class serverConnect {
                                     case REFRESH:for (ServerListener l : listeners) l.onRefresh(response);
                                         break;
                                     case ACTION: for (ServerListener l : listeners) l.onAction(response);
-                                        if (listenersMap.get(getUID()) != null) listenersMap.get(getUID()).postAction();
+                                        if (listenersMap.get(getUID()) != null) listenersMap.get(getUID()).postAction(response);
                                         break;
                                     case SETRACE:getPlayerInfo();
                                         break;

@@ -66,7 +66,7 @@ public class AmbushItem extends GameObject{
             }
             //Todo: Another sound;
             @Override
-            public void postAction() {
+            public void postAction(JSONObject response) {
                 GameSound.playSound(GameSound.START_ROUTE_SOUND);
                 Player.getPlayer().setAmbushLeft(Player.getPlayer().getAmbushLeft()+1);
                 Essages.addEssage("Засада распущена");
