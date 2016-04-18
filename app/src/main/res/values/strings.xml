@@ -52,7 +52,7 @@
     <string name="alliance_name">Цеховой альянс</string>
     <string name="legue_name">Лига независимых купцов</string>
     <string name="legue_text">Независимые купцы существовали всегда. В поисках выгоды они все время продумывали новые торговые маршруты, сокращали издержки и повышали привлекательность своей продукции для покупателя. Однако конкуренция на рынке не была честной - и Гильдия и Альянс использовали свое влияние для создания неблагоприятных условий успешным купцам. Для защиты своих интересов независимые купцы создали Лигу. Не обладая монопольным положением ни в одной отрасли Лига уверенно чувствует себя во всех областях. Умение Лиги работать с покупателями и максимизировать свою прибыль позволяет ей конкурировать с Гильдией и Альянсом в их традиционных сферах влияния. В настоящее время все три организации обладают примерно равным влиянием и потенциалом.</string>
-    <string name="version" translatable="false">2.0.12a</string>
+    <string name="version" translatable="false">2.0.13a</string>
     <string name="distance">%dм</string>
     <string name="upgrade_bought">Улучшение %s куплено.</string>
     <string name="route_finish">Завершен маршрут в город %s</string>
@@ -62,4 +62,16 @@
     <string name="password_label">Password</string>
     <string name="LoginComplete">Login complete. Waiting for GPS.</string>
     <string name="message_notification_placeholder_text_template">-</string>
+    <string name="about_text">Copyright
+Program use:
+Images and Graphics based on graphics published on http://nicubunu.ro/ under Public domain licence.
+Images and Gaphics based on graphics published on https://openclipart.org/detail/16553/rogue-character under Public domain licence.
+Music and sounds published on https://freesound.org under Attribution Licence
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+Software provide for alpha test purpose. If you are not accepted for alpha test by Developers of software you may not use this software.
+
+All rights reserved to Circle of Eternity</string>
+    <string name="about_title">About...</string>
 </resources>

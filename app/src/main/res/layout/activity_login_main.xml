@@ -112,5 +112,18 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:textColor="@android:color/black"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:id="@+id/textView32" />
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="\?"
+        android:id="@+id/about_button"
+        style="@style/CommonButton"
+        android:maxWidth="60dp"
+        android:minWidth="2dp"
+        android:layout_alignBottom="@+id/textView32"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
 </RelativeLayout>

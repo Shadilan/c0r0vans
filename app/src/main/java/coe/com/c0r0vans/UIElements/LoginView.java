@@ -223,6 +223,13 @@ public class LoginView extends RelativeLayout {
             }
         };
         GPSInfo.getInstance().AddLocationListener(locationListener);
+        findViewById(R.id.about_button).setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AboutWindow about=new AboutWindow(getContext());
+                about.show();
+            }
+        });
     }
 
     private void checkReadyToRun(){

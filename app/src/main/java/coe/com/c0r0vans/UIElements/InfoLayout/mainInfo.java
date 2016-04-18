@@ -22,6 +22,7 @@ public class MainInfo extends LinearLayout implements PlayerInfoLayout {
     private TextView ambushes;
     private TextView ambushes_left;
     private ImageView faction;
+    private TextView tnl;
     public MainInfo(Context context) {
         super(context);
         init();
@@ -40,6 +41,7 @@ public class MainInfo extends LinearLayout implements PlayerInfoLayout {
         inflate(getContext(), R.layout.info_main,this);
         level= (TextView) findViewById(R.id.levelInfo);
         exp= (TextView) findViewById(R.id.expInfo);
+        tnl= (TextView) findViewById(R.id.tnlInfo);
         gold= (TextView) findViewById(R.id.goldInfo);
         caravans= (TextView) findViewById(R.id.caravanInfo);
         ambushes= (TextView) findViewById(R.id.ambushSetInfo);
@@ -50,8 +52,9 @@ public class MainInfo extends LinearLayout implements PlayerInfoLayout {
         level.setText(StringUtils.intToStr(Player.getPlayer().getLevel()));
         exp.setText(StringUtils.intToStr(Player.getPlayer().getExp()));
         gold.setText(StringUtils.intToStr(Player.getPlayer().getGold()));
+        tnl.setText(StringUtils.intToStr(Player.getPlayer().getTNL()));
         caravans.setText(StringUtils.intToStr(Player.getPlayer().getCaravans()));
-        ambushes.setText(StringUtils.intToStr(Player.getPlayer().getAmbushMax()));
+        ambushes.setText(StringUtils.intToStr(Player.getPlayer().getAmbushMax()-Player.getPlayer().getAmbushLeft()));
         ambushes_left.setText(StringUtils.intToStr(Player.getPlayer().getAmbushLeft()));
 
         if (Player.getPlayer().getRace()==1){

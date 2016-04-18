@@ -51,10 +51,13 @@ public class MessageMap extends HashMap<String,Message>{
         JSONArray jsonArray;
         if (jsonObject.has("Messages")){
             jsonArray=jsonObject.getJSONArray("Messages");
+
             for (int i=0;i<jsonArray.length();i++){
                 Message message=new Message(jsonArray.getJSONObject(i));
+
                 if (put(message)){
                     Essages.addEssage(message,load);
+
                 }
             }
             if (jsonArray.length()>0){
