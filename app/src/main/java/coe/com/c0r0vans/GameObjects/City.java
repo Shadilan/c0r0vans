@@ -372,6 +372,7 @@ public class City extends GameObject{
                     Essages.addEssage(String.format(getResources().getString(R.string.route_finish), Name));
                     GameSound.playSound(GameSound.FINISH_ROUTE_SOUND);
                     serverConnect.getInstance().getPlayerInfo();
+                    Player.getPlayer().setCurrentRouteGUID("");
                     for (GameObject o:GameObjects.getInstance().values()){
                         if (o!=null && o instanceof City) ((City) o).updateColor();
                     }
@@ -656,6 +657,7 @@ public class City extends GameObject{
                 public void postAction(JSONObject response) {
                     Essages.addEssage(String.format(getResources().getString(R.string.route_finish), Name));
                     GameSound.playSound(GameSound.FINISH_ROUTE_SOUND);
+                    Player.getPlayer().setCurrentRouteGUID("");
                     serverConnect.getInstance().getPlayerInfo();
                     for (GameObject o:GameObjects.getInstance().values()){
                         if (o!=null && o instanceof City) ((City) o).updateColor();
