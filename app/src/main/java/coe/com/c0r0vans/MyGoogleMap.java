@@ -108,7 +108,7 @@ public class MyGoogleMap{
                 float curBearing = map.getCameraPosition().bearing;
                 boolean trackBearing = "Y".equals(GameSettings.getInstance().get("TRACK_BEARING"));
 
-                if (trackBearing && location.hasBearing() && location.hasAccuracy() && location.getAccuracy() < 20 /*&&location.getSpeed() * 60 * 60 / 1000 > 5*/) {
+                if (trackBearing && location.hasBearing() && location.hasAccuracy() && location.getAccuracy() < 20 && location.getSpeed() * 60 * 60 / 1000 > 5) {
                     if (Math.round(oldBearing / 90) == Math.round(location.getBearing() / 90)) {
                         bearing = location.getBearing();
                         curBearing = bearing;
