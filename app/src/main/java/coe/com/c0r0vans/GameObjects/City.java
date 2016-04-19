@@ -93,8 +93,8 @@ public class City extends GameObject{
                 circleOptions.center(latlng);
                 circleOptions.radius(radius);
                 circleOptions.zIndex(0);
-
-                circleOptions.strokeColor(Color.BLUE);
+                if (Player.checkRoute(GUID)) circleOptions.strokeColor(Color.DKGRAY);
+                else circleOptions.strokeColor(Color.BLUE);
                 circleOptions.strokeWidth(2);
                 zone = map.addCircle(circleOptions);
             } else
@@ -176,7 +176,10 @@ public class City extends GameObject{
             zone.setVisible(false);
         }
     }
-
+    public void updateColor(){
+        if (Player.checkRoute(GUID)) circle.setStrokeColor(Color.BLUE);
+        else circle.setStrokeColor(Color.DKGRAY);
+    }
     public long getInfluence1() {
         return influence1;
     }
@@ -310,6 +313,9 @@ public class City extends GameObject{
                     GameSound.playSound(GameSound.START_ROUTE_SOUND);
                     Essages.addEssage(String.format(getResources().getString(R.string.route_started), Name));
                     serverConnect.getInstance().getPlayerInfo();
+                    for (GameObject o:GameObjects.getInstance().values()){
+                        if (o!=null && o instanceof City) ((City) o).updateColor();
+                    }
                 }
 
                 @Override
@@ -363,7 +369,9 @@ public class City extends GameObject{
                     Essages.addEssage(String.format(getResources().getString(R.string.route_finish), Name));
                     GameSound.playSound(GameSound.FINISH_ROUTE_SOUND);
                     serverConnect.getInstance().getPlayerInfo();
-                    serverConnect.getInstance().RefreshCurrent();
+                    for (GameObject o:GameObjects.getInstance().values()){
+                        if (o!=null && o instanceof City) ((City) o).updateColor();
+                    }
                 }
 
                 @Override
@@ -593,6 +601,9 @@ public class City extends GameObject{
                     GameSound.playSound(GameSound.START_ROUTE_SOUND);
                     Essages.addEssage(String.format(getResources().getString(R.string.route_started), Name));
                     serverConnect.getInstance().getPlayerInfo();
+                    for (GameObject o:GameObjects.getInstance().values()){
+                        if (o!=null && o instanceof City) ((City) o).updateColor();
+                    }
                 }
 
                 @Override
@@ -643,7 +654,9 @@ public class City extends GameObject{
                     Essages.addEssage(String.format(getResources().getString(R.string.route_finish), Name));
                     GameSound.playSound(GameSound.FINISH_ROUTE_SOUND);
                     serverConnect.getInstance().getPlayerInfo();
-                    serverConnect.getInstance().RefreshCurrent();
+                    for (GameObject o:GameObjects.getInstance().values()){
+                        if (o!=null && o instanceof City) ((City) o).updateColor();
+                    }
                 }
 
                 @Override
