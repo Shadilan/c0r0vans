@@ -179,7 +179,7 @@ public class City extends GameObject{
         }
     }
     public void updateColor(){
-            if (Player.checkRoute(GUID)) zone.setStrokeColor(Color.BLUE);
+            if (!Player.checkRoute(GUID)) zone.setStrokeColor(Color.BLUE);
             else zone.setStrokeColor(Color.DKGRAY);
 
     }
