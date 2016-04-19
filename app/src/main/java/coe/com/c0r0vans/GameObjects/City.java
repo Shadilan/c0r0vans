@@ -21,6 +21,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Arrays;
+
 import coe.com.c0r0vans.ConfirmWindow;
 import coe.com.c0r0vans.MyGoogleMap;
 import coe.com.c0r0vans.R;
@@ -177,8 +179,9 @@ public class City extends GameObject{
         }
     }
     public void updateColor(){
-        if (Player.checkRoute(GUID)) circle.setStrokeColor(Color.BLUE);
-        else circle.setStrokeColor(Color.DKGRAY);
+            if (Player.checkRoute(GUID)) zone.setStrokeColor(Color.BLUE);
+            else zone.setStrokeColor(Color.DKGRAY);
+
     }
     public long getInfluence1() {
         return influence1;

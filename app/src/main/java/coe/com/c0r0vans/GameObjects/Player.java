@@ -77,7 +77,7 @@ public class Player extends GameObject {
     }
     public static boolean checkRoute(String guid){
         if (player.currentRouteGuid.equals(guid)) return true;
-        if (player.currentRouteGuid.equals("")) return true;
+        if (player.currentRouteGuid.equals("")) return false;
         for (Route r:player.Routes){
             if ((r.getStartGuid().equals(player.currentRouteGuid) && r.getFinishGuid().equals(guid))||
                     ((r.getStartGuid().equals(guid) && r.getFinishGuid().equals(player.currentRouteGuid))))
