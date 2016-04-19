@@ -19,6 +19,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -221,7 +222,7 @@ public class serverConnect {
     }
 
     private void runRequest(String UID,String request,int type){
-        runRequest(UID,request,type,0);
+        runRequest(UID, request, type, 0);
     }
     private void runRequest(String UID,String request,int type, final int try_count){
         if (!checkConnection()) return;
@@ -230,7 +231,7 @@ public class serverConnect {
                 (Request.Method.GET, request, null, new ResponseListenerWithUID(UID,request,type){
                     @Override
                     public void onResponse(JSONObject response) {
-                        //try
+                        try
                         {
 
                             clearListener();
@@ -269,6 +270,11 @@ public class serverConnect {
                                 lockedActions.clear();
                             }
                         }
+                        catch (Exception e){
+                            sendDebug(2,e.toString()+"\n"+ Arrays.toString(e.getStackTrace()));
+                        }
+
+
                     }
 
                 }, new ResponseErrorListenerWithUID(UID,request,type) {
