@@ -112,6 +112,9 @@ public class Player extends GameObject {
             public void postAction(JSONObject response) {
                 serverConnect.getInstance().getPlayerInfo();
                 Essages.addEssage("Незаконченый маршрут отменен.");
+                for (GameObject o:GameObjects.getInstance().values()){
+                    if (o!=null && o instanceof City) ((City) o).updateColor();
+                }
             }
             @Override
             public void postError() {
