@@ -21,8 +21,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.Arrays;
-
 import coe.com.c0r0vans.ConfirmWindow;
 import coe.com.c0r0vans.MyGoogleMap;
 import coe.com.c0r0vans.R;
@@ -659,9 +657,7 @@ public class City extends GameObject{
                     GameSound.playSound(GameSound.FINISH_ROUTE_SOUND);
                     Player.getPlayer().setCurrentRouteGUID("");
                     serverConnect.getInstance().getPlayerInfo();
-                    for (GameObject o:GameObjects.getInstance().values()){
-                        if (o!=null && o instanceof City) ((City) o).updateColor();
-                    }
+
                 }
 
                 @Override
