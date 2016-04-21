@@ -87,7 +87,7 @@ public class Player extends GameObject {
         return false;
     }
     public void init(){
-        image= ImageLoader.getImage("hero");
+        //image= ImageLoader.getImage("hero");
         Upgrades=new ArrayList<>();
         NextUpgrades=new HashMap<>();
         Routes=new ArrayList<>();
