@@ -142,7 +142,7 @@ public class Player extends GameObject {
     @Override
     public void setVisibility(boolean visibility) {
         if (mark!=null) mark.setVisible(false);
-        circle.setVisible(visibility);
+        zone.setVisible(visibility);
         circle2.setVisible(visibility);
     }
 
@@ -162,7 +162,7 @@ public class Player extends GameObject {
     ArrayList<String> lastCity;
     public void setPosition(LatLng target){
         if (mark!=null) mark.setPosition(target);
-        if (circle!=null) circle.setCenter(target);
+        if (zone!=null) zone.setCenter(target);
         if (circle2!=null) circle2.setCenter(target);
         float lastRange=this.getActionDistance();
         if (lastCity==null)lastCity=new ArrayList<>();
@@ -192,7 +192,7 @@ public class Player extends GameObject {
     @Override
     public void setMarker(Marker m) {
         mark=m;
-        if (circle!=null) circle.setCenter(m.getPosition());
+        if (zone!=null) zone.setCenter(m.getPosition());
         else
         {
             CircleOptions circleOptions=new CircleOptions();
@@ -201,7 +201,7 @@ public class Player extends GameObject {
             circleOptions.zIndex(2);
             circleOptions.strokeColor(Color.parseColor("#D08D2E"));
             circleOptions.strokeWidth(5);
-            circle=map.addCircle(circleOptions);
+            zone=map.addCircle(circleOptions);
 
         }
         if (circle2!=null) circle2.setCenter(m.getPosition());
@@ -267,7 +267,7 @@ public class Player extends GameObject {
             if (obj.has("Race")) race=obj.getInt("Race");
             if (race!=0) GameSettings.setFaction(race);
             //TODO: Здесь не должно быть нула. Видимо маркер не инициализуерся в игроке.
-            if (circle!=null) circle.setRadius(ActionDistance);
+            if (zone!=null) zone.setRadius(ActionDistance);
             if (obj.has("Upgrades")){
                 JSONArray upg=obj.getJSONArray("Upgrades");
                 Upgrades.clear();
@@ -435,7 +435,7 @@ public class Player extends GameObject {
 
     public void setMap(GoogleMap map) {
         this.map = map;
-
+        //Todo Дваждый описано создание объектов видимо не правильно, надо вынести
         mark=map.addMarker(new MarkerOptions().position(new LatLng(GPSInfo.getInstance().GetLat() / 1E6, GPSInfo.getInstance().GetLng() / 1E6)));
         CircleOptions circleOptions=new CircleOptions();
         circleOptions.center(new LatLng(GPSInfo.getInstance().GetLat() / 1E6, GPSInfo.getInstance().GetLng() / 1E6));
@@ -443,7 +443,7 @@ public class Player extends GameObject {
         circleOptions.strokeColor(Color.parseColor("#D08D2E"));
         circleOptions.strokeWidth(5);
         circleOptions.zIndex(1);
-        circle=map.addCircle(circleOptions);
+        zone=map.addCircle(circleOptions);
         circleOptions=new CircleOptions();
         circleOptions.center(new LatLng(GPSInfo.getInstance().GetLat() / 1E6, GPSInfo.getInstance().GetLng() / 1E6));
         circleOptions.radius(5);

@@ -120,6 +120,7 @@ public class Ambush extends GameObject {
         if (mark!=null) mark.remove();
         mark=null;
         if (zone!=null) zone.remove();
+        zone=null;
     }
 
     public String getInfo() {
@@ -270,7 +271,7 @@ public class Ambush extends GameObject {
                     public void preAction() {
 
                         owner.getMarker().setVisible(false);
-                        zone.setVisible(false);
+                        owner.getZone().setVisible(false);
                     }
 
                     @Override
@@ -284,7 +285,7 @@ public class Ambush extends GameObject {
                     @Override
                     public void postError() {
                         owner.getMarker().setVisible(true);
-                        zone.setVisible(true);
+                        owner.getZone().setVisible(true);
                     }
                 };
                 removeButton.setOnClickListener(new OnClickListener() {

@@ -34,7 +34,7 @@ public class GameObject {
 
     protected Bitmap image;
     protected Marker mark;
-    protected Circle circle;
+    protected Circle zone;
     protected GoogleMap map;
 
 
@@ -90,6 +90,9 @@ public class GameObject {
         if (mark!=null)
         mark.remove();
         mark=null;
+        if (zone!=null) zone.remove();
+        zone=null;
+
     }
 
 
@@ -124,5 +127,8 @@ public class GameObject {
     }
     public int getRadius(){
         return 30;
+    }
+    public Circle getZone(){
+        return zone;
     }
 }
