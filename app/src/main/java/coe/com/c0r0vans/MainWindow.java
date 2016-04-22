@@ -469,18 +469,17 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
     @Override
     protected void onResume() {
         super.onResume();
-        Log.d("Timing", "ResumeSuper");
-        MessageNotification.cancel();
-        Log.d("Timing", "MessageCancel");
+
         try {
+            MessageNotification.cancel();
             MessageNotification.appActive = true;
             StartTickTimer();
             GameSound.playMusic();
             //if (!"Y".equals(GameSettings.getInstance().get("GPS_ON_BACK")))
+            /*if (serverConnect.getInstance().isLogin() && GPSInfo.getInstance().GetLat() != -1 && GPSInfo.getInstance().GetLng() != -1)
+                serverConnect.getInstance().RefreshCurrent();*/
             GPSInfo.getInstance().onGPS();
-            if (serverConnect.getInstance().isLogin() && this.hasWindowFocus()
-                    && GPSInfo.getInstance().GetLat() != -1 && GPSInfo.getInstance().GetLng() != -1)
-                serverConnect.getInstance().RefreshCurrent();
+
         }
         catch (Exception e){
             serverConnect.getInstance().sendDebug(2,"Resume UNEXPECTED:"+e.toString()+"\n");

@@ -14,12 +14,14 @@ import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.gms.maps.model.LatLng;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.UUID;
@@ -142,6 +144,9 @@ public class serverConnect {
      * @param Lng Longtitude of position to get data
      * @return true
      */
+    int oldLat=0;
+    int oldLng=0;
+    long oldTime=0;
     public boolean RefreshData(int Lat,int Lng){
         String UID= UUID.randomUUID().toString();
         if (!checkConnection()) return false;
@@ -150,11 +155,18 @@ public class serverConnect {
         MyGoogleMap.setOldLatLng(Lat,Lng);
         String url=ServerAddres+"/getdata.jsp"+"?ReqName=ScanRange&Token="+Token+"&plat="+Lat+"&plng="+Lng+"&UUID="+UID;
         runRequest(UID, url, ResponseListenerWithUID.REFRESH);
+        oldLat=Lat;
+        oldLng=Lng;
+        oldTime=new Date().getTime();
         return true;
     }
     public boolean RefreshCurrent(){
-        RefreshData(GPSInfo.getInstance().GetLat(), GPSInfo.getInstance().GetLng());
-        return true;
+        return RefreshData(GPSInfo.getInstance().GetLat(), GPSInfo.getInstance().GetLng());
+    }
+    public boolean checkRefresh(){
+        long newTime= new Date().getTime();
+        if ((GPSInfo.getDistance(new LatLng(oldLat/1e6,oldLng/1e6),GPSInfo.getInstance().getLatLng())>500)|| newTime-oldTime>5*1000*60) return RefreshCurrent();
+                else return false;
     }
 
     private ArrayList<ObjectAction> lockedActions;

@@ -18,6 +18,7 @@ import coe.com.c0r0vans.GameObjects.GameObject;
 import coe.com.c0r0vans.GameObjects.Player;
 import utility.GPSInfo;
 import utility.internet.serverConnect;
+import utility.notification.Essages;
 import utility.settings.GameSettings;
 import utility.settings.SettingsListener;
 
@@ -121,6 +122,7 @@ public class MyGoogleMap{
                     moveCamera(target, curBearing);
                 }
                 Player.getPlayer().setPosition(target);
+                serverConnect.getInstance().checkRefresh();
             }
 
             @Override
