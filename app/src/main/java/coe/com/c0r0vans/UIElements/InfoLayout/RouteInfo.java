@@ -8,7 +8,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 
@@ -25,7 +24,7 @@ import utility.settings.GameSettings;
 public class RouteInfo extends RelativeLayout implements PlayerInfoLayout {
     LinearLayout routeInfo;
     int page=0;
-    int pageSize=5;
+    int pageSize=20;
     ShowHideForm parent;
     public RouteInfo(Context context) {
         super(context);

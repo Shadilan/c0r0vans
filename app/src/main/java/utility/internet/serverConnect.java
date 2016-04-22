@@ -26,6 +26,7 @@ import java.util.UUID;
 
 import coe.com.c0r0vans.GameObjects.ObjectAction;
 import coe.com.c0r0vans.GameObjects.Player;
+import coe.com.c0r0vans.MyGoogleMap;
 import coe.com.c0r0vans.R;
 import utility.GPSInfo;
 import utility.StringUtils;
@@ -142,6 +143,8 @@ public class serverConnect {
         String UID= UUID.randomUUID().toString();
         if (!checkConnection()) return false;
         if (Token==null) return false;
+        //TODO: Придумать другой вариант с меньше связностью кода
+        MyGoogleMap.setOldLatLng(Lat,Lng);
         String url=ServerAddres+"/getdata.jsp"+"?ReqName=ScanRange&Token="+Token+"&plat="+Lat+"&plng="+Lng+"&UUID="+UID;
         runRequest(UID, url, ResponseListenerWithUID.REFRESH);
         return true;
@@ -275,7 +278,9 @@ public class serverConnect {
                                             for (ServerListener l:listeners) l.onError(formResponse(response.toString()));
                                         }
                                         break;
-                                    case REFRESH:for (ServerListener l : listeners) l.onRefresh(response);
+                                    case REFRESH:
+                                        for (ServerListener l : listeners) l.onRefresh(response);
+
                                         break;
                                     case ACTION: for (ServerListener l : listeners) l.onAction(response);
                                         if (listenersMap.get(getUID()) != null) listenersMap.get(getUID()).postAction(response);

@@ -218,7 +218,11 @@ public class MyGoogleMap{
      * @param target точка цели
      * @param cbearing Угол поворота
      */
+    private static LatLng oldLatLng=null;
     private static void moveCamera(LatLng target,float cbearing){
+        if (oldLatLng==null || GPSInfo.getDistance(oldLatLng,target)>300){
+            serverConnect.getInstance().RefreshData((int)(target.latitude*1e6),(int)(target.longitude*1e6));
+        }
         bearing = cbearing;
         GameSettings.setBearing(bearing);
 
@@ -261,7 +265,6 @@ public class MyGoogleMap{
         }
 
         if (showpointButton!=null) showpointButton.setVisibility(View.VISIBLE);
-        serverConnect.getInstance().RefreshData((int)(point.latitude*1e6),(int) (point.longitude*1e6));
         moveCamera(point);
     }
 
@@ -285,5 +288,9 @@ public class MyGoogleMap{
         /*if (!moveFixed) moveCamera(targetMarker.getPosition(),map.getCameraPosition().bearing+angle);
         else moveCamera(Player.getPlayer().getMarker().getPosition(), map.getCameraPosition().bearing+angle);*/
         moveCamera(map.getCameraPosition().target, map.getCameraPosition().bearing+angle);
+    }
+
+    public static void setOldLatLng(int lat, int lng) {
+        oldLatLng=new LatLng((float)lat/1e6,(float)lng/1e6);
     }
 }

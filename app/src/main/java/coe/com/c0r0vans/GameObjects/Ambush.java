@@ -79,6 +79,8 @@ public class Ambush extends GameObject {
                 changeMarkerSize();
             } else {
                 mark.setPosition(latlng);
+                mark.setVisible(true);
+                changeMarkerSize();
             }
             if (zone==null){
                 CircleOptions circleOptions = new CircleOptions();
