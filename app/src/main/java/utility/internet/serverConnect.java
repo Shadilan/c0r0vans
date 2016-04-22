@@ -56,6 +56,7 @@ public class serverConnect {
     private Context context;    //Контекст приложения
     private RequestQueue reqq;  //Очередь запросов
     private String Token;       //Токен
+    private String login="";
 
     /**
      * Constructor
@@ -119,7 +120,9 @@ public class serverConnect {
     public boolean ExecLogin(String Login, String Password){
         if (!checkConnection()) return false;
         String url=ServerAddres+"/login.jsp"+"?Login="+Login+"&Password="+Password;
+        login=Login;
         runRequest(UUID.randomUUID().toString(),url,ResponseListenerWithUID.LOGIN);
+        sendDebug(1,"Login try.");
         return true;
     }
     private JSONObject formResponse(String resp){
@@ -172,7 +175,7 @@ public class serverConnect {
         if (!checkConnection()) return false;
         if (Token==null) return false;
         String url=ServerAddres+"/getdata.jsp"+"?Token="+Token+"&ReqName="+action.getCommand()+"&plat="+Lat+"&plng="+Lng+"&TGUID="+Target+"&lat="+TLat+"&lng="+TLng;
-        Log.d("Debug info", "Connection url:" + url);
+        sendDebug(5,"Action execute:"+action.getCommand());
         if (lockedActions==null) lockedActions=new ArrayList<>();
         lockedActions.add(action);
         action.preAction();
@@ -328,7 +331,7 @@ public class serverConnect {
 
                         } catch (Exception e)
                         {
-                            serverConnect.getInstance().sendDebug(2, "Net UE:" + e.toString());
+                            serverConnect.getInstance().sendDebug(3, "Net UE:" + e.toString());
                         }
                     }
                 });
@@ -349,11 +352,13 @@ public class serverConnect {
         String hash= StringUtils.MD5("COWBOW"+user+android_id+message+version);
         try {
             reqTest = new JSONObject().put("Type",type)
-                    .put("User", user)
+                    .put("User", login)
                     .put("Device",android_id)
-                    .put("Version",version)
+                    .put("Version", version)
                     .put("Data", message)
-                    .put("hash",hash).put("Version",version);
+                    .put("Lat",GPSInfo.getInstance().getLatLng().latitude)
+                    .put("Lng",GPSInfo.getInstance().getLatLng().longitude)
+                    .put("hash", hash).put("Version", version);
         } catch (JSONException e) {
             e.printStackTrace();
         }

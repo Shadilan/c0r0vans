@@ -5,11 +5,15 @@ import android.util.AttributeSet;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.util.Collections;
+import java.util.Comparator;
+
 import coe.com.c0r0vans.GameObjects.AmbushItem;
 import coe.com.c0r0vans.GameObjects.Player;
 import coe.com.c0r0vans.R;
 import coe.com.c0r0vans.ShowHideForm;
 import coe.com.c0r0vans.UIElements.InfoLine;
+import utility.GPSInfo;
 
 /**
  * Информация о засадах
@@ -32,13 +36,19 @@ public class AmbushInfo extends LinearLayout implements PlayerInfoLayout {
         init();
     }
     private void init(){
-        inflate(getContext(), R.layout.info_route,this);
+        inflate(getContext(), R.layout.info_ambush,this);
         ambushInfo= (LinearLayout) findViewById(R.id.routeInfo);
     }
 
     @Override
     public void update() {
-
+        Collections.sort(Player.getPlayer().getAmbushes(), new Comparator<AmbushItem>() {
+            @Override
+            public int compare(AmbushItem lhs, AmbushItem rhs) {
+                return (int) (GPSInfo.getDistance(lhs.getLatLng(),Player.getPlayer().getMarker().getPosition())-
+                                        GPSInfo.getDistance(rhs.getLatLng(),Player.getPlayer().getMarker().getPosition()));
+            }
+        });
         ambushInfo.removeAllViews();
         for (AmbushItem r: Player.getPlayer().getAmbushes()){
             InfoLine line=new InfoLine(getContext());
