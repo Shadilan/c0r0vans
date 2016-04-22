@@ -313,7 +313,8 @@ public class serverConnect {
             reqTest = new JSONObject().put("Type",type)
                     .put("User", user)
                     .put("Device",android_id)
-                    .put("Data",message)
+                    .put("Version",version)
+                    .put("Data", message)
                     .put("hash",hash).put("Version",version);
         } catch (JSONException e) {
             e.printStackTrace();
