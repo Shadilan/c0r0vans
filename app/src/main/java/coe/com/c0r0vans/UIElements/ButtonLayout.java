@@ -91,6 +91,7 @@ public class ButtonLayout extends RelativeLayout {
             @Override
             public boolean onLongClick(View v) {
                 Essages.addEssage("Принудительная загрузка.");
+                serverConnect.getInstance().clearQueue();
                 //Run Refresh
                 serverConnect.getInstance().RefreshCurrent();
                 //Run Player

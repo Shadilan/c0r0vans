@@ -21,6 +21,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.UUID;
 
 import coe.com.c0r0vans.GameObjects.ObjectAction;
@@ -222,9 +223,35 @@ public class serverConnect {
     }
 
     private void runRequest(String UID,String request,int type){
-        runRequest(UID, request, type, 0);
+        if (busy) requestList.add(new RequestData(UID,request,type));
+        else runRequest(UID, request, type, 0);
+    }
+    boolean busy=false;
+    private class RequestData{
+        public RequestData(String UID,String request, int type){
+            this.request=request;
+            this.UID=UID;
+            this.type=type;
+        }
+        String UID;
+        String request;
+        int type;
+    }
+    LinkedList<RequestData> requestList=new LinkedList<>();
+    private void runNextRequest(){
+        if (requestList.isEmpty()) {
+            busy=false;
+            return;
+        }
+        RequestData requestData=requestList.poll();
+        runRequest(requestData.UID,requestData.request,requestData.type,0);
+    }
+    public void clearQueue(){
+        busy=false;
+        requestList.clear();
     }
     private void runRequest(String UID,String request,int type, final int try_count){
+        busy=true;
         if (!checkConnection()) return;
         if ("Y".equals(GameSettings.getInstance().get("NET_DEBUG"))) Essages.addEssage("Net:"+request);
         final JsonObjectRequest jsObjRequest = new JsonObjectRequest
@@ -269,10 +296,12 @@ public class serverConnect {
                                 }
                                 lockedActions.clear();
                             }
+
                         }
                         catch (Exception e){
                             sendDebug(2,e.toString()+"\n"+ Arrays.toString(e.getStackTrace()));
                         }
+                        runNextRequest();
 
 
                     }
@@ -283,9 +312,13 @@ public class serverConnect {
                         try {
 
                             if (error.networkResponse == null && error.getClass().equals(TimeoutError.class) && try_count<max_retry) runRequest(getUID(), getRequest(), getType(),try_count+1);
-                            else if (getType()==2) if (errorMap.get(getUID()) != null) errorMap.get(getUID()).postError();
-                            for (ServerListener l : listeners)
-                                l.onError(formResponse(error.toString()));
+                            else {
+                                if (getType() == 2) if (errorMap.get(getUID()) != null)
+                                    errorMap.get(getUID()).postError();
+                                for (ServerListener l : listeners)
+                                    l.onError(formResponse(error.toString()));
+                                runNextRequest();
+                            }
 
 
                         } catch (Exception e)
