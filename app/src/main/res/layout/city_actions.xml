@@ -53,4 +53,24 @@
         android:layout_margin="10dp"
         android:clickable="false" />
 
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/restart_route"
+        android:background="@drawable/action_button"
+        android:src="@mipmap/restart_route"
+        android:layout_alignTop="@+id/start"
+        android:layout_alignLeft="@+id/cancel"
+        android:layout_alignStart="@+id/cancel" />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/drop_route"
+        android:background="@drawable/action_button"
+        android:src="@mipmap/drop_route"
+        android:layout_alignTop="@+id/buy"
+        android:layout_alignLeft="@+id/info"
+        android:layout_alignStart="@+id/info" />
+
 </RelativeLayout>

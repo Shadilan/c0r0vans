@@ -283,4 +283,27 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
 
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/restart_route"
+        style="@style/CommonButton"
+        android:background="@drawable/action_button"
+        android:src="@mipmap/restart_route"
+        android:layout_below="@+id/buyPanel"
+        android:layout_toRightOf="@+id/finishRoute"
+        android:layout_toEndOf="@+id/finishRoute" />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/drop_route"
+        style="@style/CommonButton"
+        android:background="@drawable/action_button"
+        android:src="@mipmap/drop_route"
+        android:layout_below="@+id/buyPanel"
+        android:layout_toLeftOf="@+id/finishRoute"
+        android:layout_toStartOf="@+id/finishRoute" />
+
+
 </RelativeLayout>

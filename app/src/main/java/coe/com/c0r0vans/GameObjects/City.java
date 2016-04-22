@@ -477,28 +477,85 @@ public class City extends GameObject{
                     confirmWindow.show();
                 }
             });
+            findViewById(R.id.restart_route).setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    serverConnect.getInstance().ExecCommand(endRouteAction,
+                            city.getGUID(),
+                            GPSInfo.getInstance().GetLat(),
+                            GPSInfo.getInstance().GetLng(),
+                            (int) (city.getMarker().getPosition().latitude * 1e6),
+                            (int) (city.getMarker().getPosition().longitude * 1e6));
+                    serverConnect.getInstance().ExecCommand(startRouteAction,
+                            city.getGUID(),
+                            GPSInfo.getInstance().GetLat(),
+                            GPSInfo.getInstance().GetLng(),
+                            (int) (city.getMarker().getPosition().latitude * 1e6),
+                            (int) (city.getMarker().getPosition().longitude * 1e6));
+                    if ("Y".equals(GameSettings.getInstance().get("CLOSE_WINDOW")))
+                        close();
+                    else {
+                        updateInZone(true);
+                    }
+                }
+            });
+            findViewById(R.id.drop_route).setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ConfirmWindow confirmWindow=new ConfirmWindow(getContext());
+                    confirmWindow.setText("Вы уверены что хотите отменить не завершенный маршрут?");
+                    confirmWindow.setConfirmAction(new Runnable() {
+                        @Override
+                        public void run() {
+                            serverConnect.getInstance().ExecCommand(Player.getPlayer().getDropRoute(),
+                                    city.getGUID(),
+                                    GPSInfo.getInstance().GetLat(),
+                                    GPSInfo.getInstance().GetLng(),
+                                    (int) (city.getMarker().getPosition().latitude * 1e6),
+                                    (int) (city.getMarker().getPosition().longitude * 1e6));
+                            updateInZone(true);
+                        }
+                    });
+                    confirmWindow.show();
+
+                }
+            });
+
 
         }
         public void updateInZone(boolean inZone){
             if (inZone) {
-                findViewById(R.id.startRoute).setVisibility(GONE);
-                findViewById(R.id.finishRoute).setVisibility(GONE);
-                findViewById(R.id.buyUpgrade).setVisibility(GONE);
+                findViewById(R.id.startRoute).setVisibility(INVISIBLE);
+                findViewById(R.id.finishRoute).setVisibility(INVISIBLE);
+                findViewById(R.id.buyUpgrade).setVisibility(INVISIBLE);
+                findViewById(R.id.restart_route).setVisibility(INVISIBLE);
+                findViewById(R.id.drop_route).setVisibility(INVISIBLE);
                 if (Player.getPlayer().getRouteStart()) findViewById(R.id.startRoute).setVisibility(VISIBLE);
                 if (!Player.getPlayer().getRouteStart() && (city!=null))
                 {
                     ImageButton btn= (ImageButton) findViewById(R.id.finishRoute);
+                    ImageButton btn2= (ImageButton) findViewById(R.id.restart_route);
                     btn.setVisibility(VISIBLE);
+                    btn2.setVisibility(VISIBLE);
                     if (!Player.checkRoute(city.getGUID())) {
                         btn.setClickable(true);
                         btn.setEnabled(true);
                         btn.setAlpha(1f);
+                        btn2.setClickable(true);
+                        btn2.setEnabled(true);
+                        btn2.setAlpha(1f);
                     } else
                     {
                         btn.setClickable(false);
                         btn.setEnabled(false);
                         btn.setAlpha(0.5f);
+                        btn2.setClickable(false);
+                        btn2.setEnabled(false);
+                        btn2.setAlpha(0.5f);
                     }
+                    btn= (ImageButton) findViewById(R.id.drop_route);
+                    btn.setVisibility(VISIBLE);
+
 
                 }
                 if (city!=null) {
@@ -521,6 +578,8 @@ public class City extends GameObject{
                 findViewById(R.id.startRoute).setVisibility(GONE);
                 findViewById(R.id.finishRoute).setVisibility(GONE);
                 findViewById(R.id.buyUpgrade).setVisibility(GONE);
+                findViewById(R.id.restart_route).setVisibility(GONE);
+                findViewById(R.id.drop_route).setVisibility(GONE);
             }
         }
         public void close(){
@@ -579,7 +638,7 @@ public class City extends GameObject{
             });
             ImageButton btn= (ImageButton) findViewById(R.id.buy);
             btn.setEnabled(city.upgradeAvaible());
-            btn.setImageBitmap(ImageLoader.getImage(city.upgrade+"_buy"));
+            btn.setImageBitmap(ImageLoader.getImage(city.upgrade + "_buy"));
             startRouteAction = new ObjectAction(city) {
                 @Override
                 public Bitmap getImage() {
@@ -771,6 +830,49 @@ public class City extends GameObject{
 
                 }
             });
+            findViewById(R.id.restart_route).setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    serverConnect.getInstance().ExecCommand(endRouteAction,
+                            city.getGUID(),
+                            GPSInfo.getInstance().GetLat(),
+                            GPSInfo.getInstance().GetLng(),
+                            (int) (city.getMarker().getPosition().latitude * 1e6),
+                            (int) (city.getMarker().getPosition().longitude * 1e6));
+                    serverConnect.getInstance().ExecCommand(startRouteAction,
+                            city.getGUID(),
+                            GPSInfo.getInstance().GetLat(),
+                            GPSInfo.getInstance().GetLng(),
+                            (int) (city.getMarker().getPosition().latitude * 1e6),
+                            (int) (city.getMarker().getPosition().longitude * 1e6));
+                    if ("Y".equals(GameSettings.getInstance().get("CLOSE_WINDOW")))
+                        close();
+                    else {
+                        updateInZone(true);
+                    }
+                }
+            });
+            findViewById(R.id.drop_route).setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ConfirmWindow confirmWindow=new ConfirmWindow(getContext());
+                    confirmWindow.setText("Вы уверены что хотите отменить не завершенный маршрут?");
+                    confirmWindow.setConfirmAction(new Runnable() {
+                        @Override
+                        public void run() {
+                            serverConnect.getInstance().ExecCommand(Player.getPlayer().getDropRoute(),
+                                    city.getGUID(),
+                                    GPSInfo.getInstance().GetLat(),
+                                    GPSInfo.getInstance().GetLng(),
+                                    (int) (city.getMarker().getPosition().latitude * 1e6),
+                                    (int) (city.getMarker().getPosition().longitude * 1e6));
+                            updateInZone(true);
+                        }
+                    });
+                    confirmWindow.show();
+
+                }
+            });
 
         }
         public void updateInZone(boolean inZone){
@@ -779,21 +881,33 @@ public class City extends GameObject{
                 findViewById(R.id.start).setVisibility(INVISIBLE);
                 findViewById(R.id.end).setVisibility(INVISIBLE);
                 findViewById(R.id.buy).setVisibility(INVISIBLE);
+                findViewById(R.id.restart_route).setVisibility(INVISIBLE);
+                findViewById(R.id.drop_route).setVisibility(INVISIBLE);
                 if (Player.getPlayer().getRouteStart()) findViewById(R.id.start).setVisibility(VISIBLE);
                 if (!Player.getPlayer().getRouteStart() && (city!=null))
                 {
                     ImageButton btn= (ImageButton) findViewById(R.id.end);
+                    ImageButton btn2= (ImageButton) findViewById(R.id.restart_route);
                     btn.setVisibility(VISIBLE);
+                    btn2.setVisibility(VISIBLE);
                     if (!Player.checkRoute(city.getGUID())) {
                         btn.setClickable(true);
                         btn.setEnabled(true);
                         btn.setAlpha(1f);
+                        btn2.setClickable(true);
+                        btn2.setEnabled(true);
+                        btn2.setAlpha(1f);
                     } else
                     {
                         btn.setClickable(false);
                         btn.setEnabled(false);
                         btn.setAlpha(0.5f);
+                        btn2.setClickable(false);
+                        btn2.setEnabled(false);
+                        btn2.setAlpha(0.5f);
                     }
+                    btn= (ImageButton) findViewById(R.id.drop_route);
+                    btn.setVisibility(VISIBLE);
 
                 }
                 if (city!=null) {
@@ -816,6 +930,8 @@ public class City extends GameObject{
                 findViewById(R.id.start).setVisibility(INVISIBLE);
                 findViewById(R.id.end).setVisibility(INVISIBLE);
                 findViewById(R.id.buy).setVisibility(INVISIBLE);
+                findViewById(R.id.restart_route).setVisibility(INVISIBLE);
+                findViewById(R.id.drop_route).setVisibility(INVISIBLE);
             }
         }
         public void close(){
