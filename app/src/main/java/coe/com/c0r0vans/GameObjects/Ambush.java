@@ -40,7 +40,7 @@ public class Ambush extends GameObject {
 
     private int faction;
     private int radius=30;
-    private Circle zone;
+    protected Circle zone;
 
     private int ready=0;
 
@@ -79,7 +79,7 @@ public class Ambush extends GameObject {
                 changeMarkerSize();
             } else {
                 mark.setPosition(latlng);
-                mark.setVisible(true);
+                setVisibility(true);
                 changeMarkerSize();
             }
             if (zone==null){
@@ -184,13 +184,15 @@ public class Ambush extends GameObject {
 
     @Override
     public void setVisibility(boolean visibility) {
-        zone.setVisible(visibility);
+        if ("Y".equals(GameSettings.getInstance().get("SHOW_AMBUSH_RADIUS")))
+                if (zone!=null) zone.setVisible(visibility);
+        else if (zone!=null) zone.setVisible(false);
         if (mark!=null) mark.setVisible(visibility);
     }
 
     public void showRadius(){
         String opt= GameSettings.getInstance().get("SHOW_AMBUSH_RADIUS");
-        if (opt.equals("Y")){
+        if (opt.equals("Y") && mark!=null && mark.isVisible()){
             zone.setVisible(true);
         } else
         {
@@ -272,8 +274,7 @@ public class Ambush extends GameObject {
                     @Override
                     public void preAction() {
 
-                        owner.getMarker().setVisible(false);
-                        owner.getZone().setVisible(false);
+                        owner.setVisibility(false);
                     }
 
                     @Override
@@ -286,8 +287,7 @@ public class Ambush extends GameObject {
 
                     @Override
                     public void postError() {
-                        owner.getMarker().setVisible(true);
-                        owner.getZone().setVisible(true);
+                        owner.setVisibility(true);
                     }
                 };
                 removeButton.setOnClickListener(new OnClickListener() {
@@ -324,8 +324,7 @@ public class Ambush extends GameObject {
 
                     public void preAction() {
 
-                        owner.getMarker().setVisible(false);
-                        zone.setVisible(false);
+                        owner.setVisibility(false);
                     }
 
                     @Override
@@ -342,8 +341,7 @@ public class Ambush extends GameObject {
 
                     @Override
                     public void postError() {
-                        owner.getMarker().setVisible(true);
-                        zone.setVisible(true);
+                        owner.setVisibility(true);
                     }
                 };
 
@@ -409,5 +407,8 @@ public class Ambush extends GameObject {
     }
     public int getRadius(){
         return this.radius;
+    }
+    public Circle getZone(){
+        return zone;
     }
 }
