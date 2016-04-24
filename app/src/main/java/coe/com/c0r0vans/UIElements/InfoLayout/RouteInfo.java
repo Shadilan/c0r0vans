@@ -25,6 +25,7 @@ public class RouteInfo extends RelativeLayout implements PlayerInfoLayout {
     LinearLayout routeInfo;
     int page=0;
     int pageSize=15;
+    int max_page=1;
     ShowHideForm parent;
     public RouteInfo(Context context) {
         super(context);
@@ -52,7 +53,8 @@ public class RouteInfo extends RelativeLayout implements PlayerInfoLayout {
                 page = 0;
             }
         }
-        if (page>Player.getPlayer().getRoutes().size()/pageSize) page=Player.getPlayer().getRoutes().size()/pageSize;
+        max_page=Math.abs((Player.getPlayer().getRoutes().size()-1)/pageSize)+1;
+        if (page+1>max_page) page=Player.getPlayer().getRoutes().size()/pageSize;
 
         btn.setOnClickListener(new OnClickListener() {
             @Override
@@ -141,7 +143,7 @@ public class RouteInfo extends RelativeLayout implements PlayerInfoLayout {
             btn.setEnabled(true);
         }
         TextView tv= (TextView) findViewById(R.id.pageNumber);
-        int max_page=Math.abs((Player.getPlayer().getRoutes().size()-1)/pageSize)+1;
+        max_page=Math.abs((Player.getPlayer().getRoutes().size()-1)/pageSize)+1;
         tv.setText(String.valueOf(page+1)+"/"+max_page);
         GameSettings.getInstance().put("RoutePage",String.valueOf(page));
         //GameSettings.getInstance().save();
