@@ -24,7 +24,7 @@ import utility.settings.GameSettings;
 public class RouteInfo extends RelativeLayout implements PlayerInfoLayout {
     LinearLayout routeInfo;
     int page=0;
-    int pageSize=20;
+    int pageSize=15;
     ShowHideForm parent;
     public RouteInfo(Context context) {
         super(context);
@@ -141,7 +141,8 @@ public class RouteInfo extends RelativeLayout implements PlayerInfoLayout {
             btn.setEnabled(true);
         }
         TextView tv= (TextView) findViewById(R.id.pageNumber);
-        tv.setText(String.valueOf(page));
+        int max_page=Math.abs((Player.getPlayer().getRoutes().size()-1)/pageSize)+1;
+        tv.setText(String.valueOf(page+1)+"/"+max_page);
         GameSettings.getInstance().put("RoutePage",String.valueOf(page));
         //GameSettings.getInstance().save();
 
