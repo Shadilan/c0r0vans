@@ -12,6 +12,8 @@ import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import org.json.JSONObject;
+
 import coe.com.c0r0vans.GameObjects.GameObject;
 import coe.com.c0r0vans.GameObjects.GameObjects;
 import coe.com.c0r0vans.GameObjects.Player;
@@ -20,6 +22,7 @@ import coe.com.c0r0vans.OnGameObjectChange;
 import coe.com.c0r0vans.R;
 import coe.com.c0r0vans.UIElements.InfoLayout.InfoLayout;
 import utility.StringUtils;
+import utility.internet.ServerListener;
 import utility.internet.serverConnect;
 import utility.notification.Essages;
 
@@ -160,6 +163,51 @@ public class ButtonLayout extends RelativeLayout {
             }
         });
         Essages.setTarget(LogView);
+        serverConnect.getInstance().addListener(new ServerListener() {
+            @Override
+            public void onLogin(JSONObject response) {
+
+            }
+
+            @Override
+            public void onRefresh(JSONObject response) {
+
+            }
+
+            @Override
+            public void onAction(JSONObject response) {
+
+            }
+
+            @Override
+            public void onPlayerInfo(JSONObject response) {
+
+            }
+
+            @Override
+            public void onError(JSONObject response) {
+
+            }
+
+            @Override
+            public void onMessage(JSONObject response) {
+
+            }
+
+            @Override
+            public void onRating(JSONObject response) {
+
+            }
+
+            @Override
+            public void onChangeQueue(int count) {
+                super.onChangeQueue(count);
+                TextView textView= (TextView) findViewById(R.id.QueueCnt);
+                if (count==0){
+                    textView.setText("");
+                } else textView.setText(""+count);
+            }
+        });
 
     }
     public void showConnectImage(){

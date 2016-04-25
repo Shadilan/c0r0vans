@@ -231,6 +231,12 @@ public class serverConnect {
     private void runRequest(String UID,String request,int type){
         if (busy) requestList.add(new RequestData(UID,request,type));
         else runRequest(UID, request, type, 0);
+        int queuesize=requestList.size()+1;
+        if (listeners!=null)
+            for (ServerListener l:listeners){
+
+                l.onChangeQueue(queuesize);
+            }
     }
     boolean busy=false;
     private class RequestData{
@@ -247,14 +253,32 @@ public class serverConnect {
     private void runNextRequest(){
         if (requestList.isEmpty()) {
             busy=false;
+            if (listeners!=null)
+                for (ServerListener l:listeners){
+
+                    l.onChangeQueue(0);
+                }
             return;
         }
         RequestData requestData=requestList.poll();
         runRequest(requestData.UID,requestData.request,requestData.type,0);
+        int queuesize=requestList.size()+1;
+        if (listeners!=null)
+            for (ServerListener l:listeners){
+                l.onChangeQueue(queuesize);
+            }
     }
     public void clearQueue(){
-        busy=false;
         requestList.clear();
+        busy=false;
+        if (listeners!=null)
+            for (ServerListener l:listeners){
+
+                l.onChangeQueue(0);
+            }
+    }
+    public int getQueueSize(){
+        return requestList.size();
     }
     private void runRequest(String UID,String request,int type, final int try_count){
         busy=true;

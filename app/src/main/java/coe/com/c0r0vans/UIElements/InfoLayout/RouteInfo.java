@@ -2,6 +2,7 @@ package coe.com.c0r0vans.UIElements.InfoLayout;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -10,6 +11,7 @@ import android.widget.TextView;
 
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 
 import coe.com.c0r0vans.GameObjects.Player;
 import coe.com.c0r0vans.GameObjects.Route;
@@ -24,7 +26,7 @@ import utility.settings.GameSettings;
 public class RouteInfo extends RelativeLayout implements PlayerInfoLayout {
     LinearLayout routeInfo;
     int page=0;
-    int pageSize=15;
+    int pageSize=50;
     int max_page=1;
     ShowHideForm parent;
     public RouteInfo(Context context) {
@@ -42,7 +44,9 @@ public class RouteInfo extends RelativeLayout implements PlayerInfoLayout {
         init();
     }
     private void init(){
-        inflate(getContext(), R.layout.info_route,this);
+        Log.d("Timing","!!Время:"+(new Date().getTime()));
+        inflate(getContext(), R.layout.info_route, this);
+        Log.d("Timing", "!!Время:" + (new Date().getTime()));
         routeInfo= (LinearLayout) findViewById(R.id.routeInfo);
         Button btn= (Button) findViewById(R.id.previous);
         String spage=GameSettings.getInstance().get("RoutePage");
@@ -53,9 +57,10 @@ public class RouteInfo extends RelativeLayout implements PlayerInfoLayout {
                 page = 0;
             }
         }
+        Log.d("Timing","!!Время:"+(new Date().getTime()));
         max_page=Math.abs((Player.getPlayer().getRoutes().size()-1)/pageSize)+1;
         if (page+1>max_page) page=Player.getPlayer().getRoutes().size()/pageSize;
-
+        Log.d("Timing","!!Время:"+(new Date().getTime()));
         btn.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -80,7 +85,7 @@ public class RouteInfo extends RelativeLayout implements PlayerInfoLayout {
             }
         });
 
-        if (page+1>Player.getPlayer().getRoutes().size()/pageSize) {
+        if (page+2>max_page) {
             btn.setClickable(false);
             btn.setEnabled(false);
         } else
@@ -88,20 +93,24 @@ public class RouteInfo extends RelativeLayout implements PlayerInfoLayout {
             btn.setClickable(true);
             btn.setEnabled(true);
         }
+        Log.d("Timing","!!Время:"+(new Date().getTime()));
         TextView tv= (TextView) findViewById(R.id.pageNumber);
         tv.setText(String.valueOf(page));
+        Log.d("Timing", "!!Время:" + (new Date().getTime()));
     }
     @Override
     public void update() {
+        Log.d("Timing","Время:"+(new Date().getTime()));
         routeInfo=(LinearLayout) findViewById(R.id.routeInfo);
         Collections.sort(Player.getPlayer().getRoutes(), new Comparator<Route>() {
-                    @Override
-                    public int compare(Route lhs, Route rhs) {
+            @Override
+            public int compare(Route lhs, Route rhs) {
 
-                        return lhs.getDistance()-rhs.getDistance();
-                    }
-                });
+                return lhs.getDistance() - rhs.getDistance();
+            }
+        });
                 routeInfo.removeAllViews();
+        Log.d("Timing", "Время:" + (new Date().getTime()));
         if (!Player.getPlayer().getCurrentRoute().equals("")){
             CityLine line=new CityLine(getContext());
 
@@ -110,6 +119,7 @@ public class RouteInfo extends RelativeLayout implements PlayerInfoLayout {
             line.setOnRemoveClick(Player.getPlayer().getDropRoute());
             line.setTarget("");
         }
+        Log.d("Timing","Время:"+(new Date().getTime()));
         int i=0;
         for (Route r:Player.getPlayer().getRoutes()){
             if (i>page*pageSize && i<(page+1)*pageSize) {
@@ -122,6 +132,8 @@ public class RouteInfo extends RelativeLayout implements PlayerInfoLayout {
             } else if (i>(page+1)*pageSize) break;
             i++;
         }
+        Log.d("Timing","Время:"+(new Date().getTime()));
+        max_page=Math.abs((Player.getPlayer().getRoutes().size()-2)/pageSize)+1;
         if (page<1) {
             Button btn= (Button) findViewById(R.id.previous);
             btn.setClickable(false);
@@ -132,7 +144,7 @@ public class RouteInfo extends RelativeLayout implements PlayerInfoLayout {
             btn.setClickable(true);
             btn.setEnabled(true);
         }
-        if (page+1>Player.getPlayer().getRoutes().size()/pageSize) {
+        if (page+2>max_page) {
             Button btn= (Button) findViewById(R.id.next);
             btn.setClickable(false);
             btn.setEnabled(false);
@@ -142,10 +154,12 @@ public class RouteInfo extends RelativeLayout implements PlayerInfoLayout {
             btn.setClickable(true);
             btn.setEnabled(true);
         }
+        Log.d("Timing","Время:"+(new Date().getTime()));
         TextView tv= (TextView) findViewById(R.id.pageNumber);
-        max_page=Math.abs((Player.getPlayer().getRoutes().size()-1)/pageSize)+1;
+
         tv.setText(String.valueOf(page+1)+"/"+max_page);
-        GameSettings.getInstance().put("RoutePage",String.valueOf(page));
+        GameSettings.getInstance().put("RoutePage", String.valueOf(page));
+        Log.d("Timing", "Время:" + (new Date().getTime()));
         //GameSettings.getInstance().save();
 
     }
