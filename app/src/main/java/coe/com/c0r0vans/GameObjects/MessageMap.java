@@ -25,21 +25,27 @@ import utility.settings.GameSettings;
 public class MessageMap extends HashMap<String,Message>{
     Context ctx;
     Boolean load=false;
+    Runnable task=new Runnable() {
+        @Override
+        public void run() {
+            load=true;
+            SharedPreferences sp=ctx.getSharedPreferences("MESSAGES",Context.MODE_PRIVATE);
+            try {
+                String sptext=sp.getString("Messages", "");
+                Log.d("MessageLoad",sptext);
+                loadJSON(new JSONObject(sptext));
+            } catch (JSONException e) {
+                if ("Y".equals(GameSettings.getInstance().get("SHOW_NETWORK_ERROR")))
+                    Essages.addEssage("Error Loading:"+ e.toString());
+                serverConnect.getInstance().sendDebug(2,"Error Loading:"+ e.toString());
+
+            }
+            load=false;
+        }
+    };
     public MessageMap(Context ctx){
         this.ctx=ctx;
-        load=true;
-        SharedPreferences sp=ctx.getSharedPreferences("MESSAGES",Context.MODE_PRIVATE);
-        try {
-            String sptext=sp.getString("Messages", "");
-            Log.d("MessageLoad",sptext);
-            loadJSON(new JSONObject(sptext));
-        } catch (JSONException e) {
-            if ("Y".equals(GameSettings.getInstance().get("SHOW_NETWORK_ERROR")))
-                Essages.addEssage("Error Loading:"+ e.toString());
-            serverConnect.getInstance().sendDebug(2,"Error Loading:"+ e.toString());
-
-        }
-        load=false;
+        new Thread(task).start();
     }
     public boolean put(Message message){
         if (this.get(message.getGUID())!=null) return false;

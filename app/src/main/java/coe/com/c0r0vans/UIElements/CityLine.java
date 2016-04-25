@@ -15,6 +15,7 @@ import coe.com.c0r0vans.GameObjects.Route;
 import coe.com.c0r0vans.MyGoogleMap;
 import coe.com.c0r0vans.R;
 import coe.com.c0r0vans.ShowHideForm;
+import utility.StringUtils;
 import utility.internet.serverConnect;
 
 
@@ -46,7 +47,7 @@ public class CityLine extends RelativeLayout {
         route=r;
 
         if (lengthView!=null)
-            if (r.getDistance()>0) lengthView.setText(String.format("%d м ", r.getDistance()));
+            if (r.getDistance()>0) lengthView.setText(String.format("%dм. %s❍", r.getDistance(), StringUtils.intToStr(r.getProfit())));
             else lengthView.setText("↝");
         if (startCityView!=null) startCityView.setText(r.getStartName());
         if (endCityView!=null)

@@ -57,7 +57,7 @@ public class AmbushInfo extends LinearLayout implements PlayerInfoLayout {
             String ready="";
             if (r.getProgress()<0) ready=" ⌛"+Math.abs(r.getProgress()) + " мин.";
             else if (r.getProgress()>0) ready=""+r.getProgress()+" мин.";
-            line.setLabelText(String.format(" %s расстояние: %sм.%s", r.getName(), (int)GPSInfo.getDistance(Player.getPlayer().getMarker().getPosition(), r.getLatLng()),ready));
+            line.setLabelText(String.format(" %s. расстояние: %sм.%s", r.getName(), (int)GPSInfo.getDistance(Player.getPlayer().getMarker().getPosition(), r.getLatLng()),ready));
             line.setOnRemoveClick(r.getAction(true));
             line.setTarget(r.getGUID());
             line.setPoint(r.getPoint());

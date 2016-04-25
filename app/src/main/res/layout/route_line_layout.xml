@@ -8,68 +8,51 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/removeButton"
-        android:src="@mipmap/closebutton" />
-    <HorizontalScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_toLeftOf="@+id/showButton"
-        android:layout_toStartOf="@+id/showButton"
-        android:layout_toRightOf="@+id/removeButton"
-        android:layout_toEndOf="@+id/removeButton"
+        android:layout_centerVertical="true"
+        android:src="@mipmap/closebutton"
+        style="@style/CommonButton" />
 
-        android:gravity="center_vertical|center_horizontal"
-        android:layout_alignBottom="@+id/removeButton"
-        android:layout_alignTop="@+id/removeButton"
-        android:layout_centerInParent="true">
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical|center_horizontal"
-            android:baselineAligned="false">
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:clickable="true"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="StartCity"
-        android:id="@+id/startCity"
-
-        />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:text=""
-                android:id="@+id/length"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                android:gravity="center_vertical|center_horizontal"
-                android:layout_toRightOf="@+id/removeButton"
-                android:layout_toStartOf="@+id/showButton"
-                android:layout_toLeftOf="@+id/showButton" />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:clickable="true"
-                android:text=""
-                android:id="@+id/endCity"
-                android:gravity="center_vertical|center_horizontal"
-                android:layout_toRightOf="@+id/removeButton"
-                android:layout_toStartOf="@+id/showButton"
-                android:layout_toLeftOf="@+id/showButton" />
-        </LinearLayout>
-    </HorizontalScrollView>
     <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/showButton"
         android:visibility="invisible"
         android:src="@mipmap/showbutton"
-        android:layout_alignParentTop="true"
+        android:layout_centerVertical="true"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        style="@style/CommonButton" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:text="StartCity"
+        android:id="@+id/startCity"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/removeButton"
+        android:layout_toEndOf="@+id/removeButton"
+        style="@style/SmallText" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:text="sdfsdf"
+        android:id="@+id/endCity"
+        android:gravity="center_vertical|center_horizontal"
+        style="@style/SmallText"
+        android:layout_below="@+id/startCity"
+        android:layout_toRightOf="@+id/removeButton"
+        android:layout_toEndOf="@+id/removeButton" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="asdasd"
+        android:id="@+id/length"
+        android:layout_centerVertical="true"
+        android:layout_toLeftOf="@+id/showButton"
+        android:layout_toStartOf="@+id/showButton"
+        style="@style/SmallText" />
 
 </RelativeLayout>

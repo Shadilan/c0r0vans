@@ -32,7 +32,7 @@ public class Route extends GameObject{
     private LatLng FinishPoint;
 
     private Polyline line;
-
+    private int profit=0;
 
 
     /*public Route(JSONObject obj){
@@ -64,6 +64,7 @@ public class Route extends GameObject{
             if (obj.has("StartGUID")) StartGUID = obj.getString("StartGUID");
             if (obj.has("FinishGUID")) FinishGUID = obj.getString("FinishGUID");
             if (obj.has("Distance")) Distance = obj.getInt("Distance");
+            if (obj.has("profit")) profit=obj.getInt("profit");
             if (obj.has("Lat")) Lat = obj.getInt("Lat");
             if (obj.has("Lng")) Lng = obj.getInt("Lng");
             if (obj.has("StartLat") && obj.has("StartLng")) {
@@ -174,10 +175,15 @@ public class Route extends GameObject{
         result.put("FinishName",FinishName);
         result.put("StartGUID",StartGUID);
         result.put("FinishGUID",FinishGUID);
+        result.put("profit",profit);
         result.put("Lat",Lat);
         result.put("Lng",Lng);
 
 
         return result;
+    }
+
+    public int getProfit() {
+        return profit;
     }
 }
