@@ -21,6 +21,7 @@ import utility.GPSInfo;
 public class AmbushInfo extends LinearLayout implements PlayerInfoLayout {
     LinearLayout ambushInfo;
     ShowHideForm parent;
+
     public AmbushInfo(Context context) {
         super(context);
         init();
@@ -53,8 +54,10 @@ public class AmbushInfo extends LinearLayout implements PlayerInfoLayout {
         for (AmbushItem r: Player.getPlayer().getAmbushes()){
             InfoLine line=new InfoLine(getContext());
             //float[] distances = new float[1];
-
-            line.setLabelText(r.getName());
+            String ready="";
+            if (r.getProgress()<0) ready=" ⌛"+Math.abs(r.getProgress()) + " мин.";
+            else if (r.getProgress()>0) ready=""+r.getProgress()+" мин.";
+            line.setLabelText(String.format(" %s расстояние: %sм.%s", r.getName(), (int)GPSInfo.getDistance(Player.getPlayer().getMarker().getPosition(), r.getLatLng()),ready));
             line.setOnRemoveClick(r.getAction(true));
             line.setTarget(r.getGUID());
             line.setPoint(r.getPoint());

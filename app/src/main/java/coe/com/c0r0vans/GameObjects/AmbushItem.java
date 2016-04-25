@@ -39,7 +39,7 @@ public class AmbushItem extends GameObject{
         result.put("Name",Name);
         result.put("Lat",Lat);
         result.put("Lng",Lng);
-        result.put("Progress",progress);
+        result.put("Ready",progress);
         return result;
     }
     public void loadJSON(JSONObject object) throws JSONException {
@@ -47,7 +47,8 @@ public class AmbushItem extends GameObject{
         if (object.has("Name")) Name=object.getString("Name");
         if (object.has("Lat")) Lat=object.getInt("Lat");
         if (object.has("Lng")) Lng=object.getInt("Lng");
-        if (object.has("Progress")) progress=object.getInt("Progress");
+        if (object.has("Ready")) progress=object.getInt("Ready");
+
         cancelAmbush=new ObjectAction(this) {
             @Override
             public Bitmap getImage() {
