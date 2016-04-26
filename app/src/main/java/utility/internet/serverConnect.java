@@ -381,8 +381,13 @@ public class serverConnect {
         if (!checkConnection()) return;
         String request="https://support-merchantarg.rhcloud.com/addLog.jsp";
         JSONObject reqTest= null;
-        String android_id = Settings.Secure.getString(context.getContentResolver(),
-                Settings.Secure.ANDROID_ID);
+        String android_id;
+        try {
+            android_id = Settings.Secure.getString(context.getContentResolver(),
+                    Settings.Secure.ANDROID_ID);
+        } catch(Exception e){
+            android_id="";
+        }
         String user=Player.getPlayer().getName();
         String version=context.getResources().getString(R.string.version);
         String hash= StringUtils.MD5("COWBOW"+user+android_id+message+version);

@@ -14,6 +14,8 @@ import android.widget.TextView;
 
 import org.json.JSONObject;
 
+import java.util.Arrays;
+
 import coe.com.c0r0vans.GameObjects.GameObject;
 import coe.com.c0r0vans.GameObjects.GameObjects;
 import coe.com.c0r0vans.GameObjects.Player;
@@ -93,14 +95,18 @@ public class ButtonLayout extends RelativeLayout {
         Settings.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                Essages.addEssage("Принудительная загрузка.");
-                serverConnect.getInstance().clearQueue();
-                //Run Refresh
-                serverConnect.getInstance().RefreshCurrent();
-                //Run Player
-                serverConnect.getInstance().getPlayerInfo();
-                //RunGetMessage
-                serverConnect.getInstance().getMessage();
+                try {
+                    Essages.addEssage("Принудительная загрузка.");
+                    serverConnect.getInstance().clearQueue();
+                    //Run Refresh
+                    serverConnect.getInstance().RefreshCurrent();
+                    //Run Player
+                    serverConnect.getInstance().getPlayerInfo();
+                    //RunGetMessage
+                    serverConnect.getInstance().getMessage();
+                } catch (Exception e){
+                    serverConnect.getInstance().sendDebug(2, "ForceSync UE:" + e.toString() + "\n" + Arrays.toString(e.getStackTrace()));
+                }
                 return true;
             }
         });
@@ -122,19 +128,22 @@ public class ButtonLayout extends RelativeLayout {
         Player.getPlayer().addOnChange(new OnGameObjectChange() {
             @Override
             public void change(int ChangeType) {
-
-                if (ChangeType != OnGameObjectChange.EXTERNAL) return;
-                TextView am = (TextView) findViewById(R.id.levelAmount);
-                am.setText(String.valueOf(Player.getPlayer().getLevel()));
-                am = (TextView) findViewById(R.id.expAmount);
-                am.setText(String.valueOf(StringUtils.intToStr(Player.getPlayer().getExp())));
-                am = (TextView) findViewById(R.id.goldAmount);
-                am.setText(String.valueOf(StringUtils.intToStr(Player.getPlayer().getGold())));
-                ImageView btn = (ImageView) findViewById(R.id.infoview);
-                if ("".equals(Player.getPlayer().getCurrentRoute()))
-                    btn.setImageResource(R.mipmap.info);
-                else btn.setImageResource(R.mipmap.info_route);
-                infoLayout.loadFromPlayer();
+                try {
+                    if (ChangeType != OnGameObjectChange.EXTERNAL) return;
+                    TextView am = (TextView) findViewById(R.id.levelAmount);
+                    am.setText(String.valueOf(Player.getPlayer().getLevel()));
+                    am = (TextView) findViewById(R.id.expAmount);
+                    am.setText(String.valueOf(StringUtils.intToStr(Player.getPlayer().getExp())));
+                    am = (TextView) findViewById(R.id.goldAmount);
+                    am.setText(String.valueOf(StringUtils.intToStr(Player.getPlayer().getGold())));
+                    ImageView btn = (ImageView) findViewById(R.id.infoview);
+                    if ("".equals(Player.getPlayer().getCurrentRoute()))
+                        btn.setImageResource(R.mipmap.info);
+                    else btn.setImageResource(R.mipmap.info_route);
+                    infoLayout.loadFromPlayer();
+                } catch (Exception e){
+                    serverConnect.getInstance().sendDebug(2, "Player UE:" + e.toString() + "\n" + Arrays.toString(e.getStackTrace()));
+                }
             }
         });
         LogView = (LinearLayout) findViewById(R.id.chatBox);
@@ -146,19 +155,23 @@ public class ButtonLayout extends RelativeLayout {
 
             @Override
             public void onClick(View v) {
-                WindowManager windowManager= (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
+                try {
+                    WindowManager windowManager = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
 
-                if (show) {
-                    show = false;
-                    DisplayMetrics dm = new DisplayMetrics();
-                    windowManager.getDefaultDisplay().getMetrics(dm);
-                    scrollView.getLayoutParams().height = dm.heightPixels / 2;
-                    scrollView.requestLayout();
+                    if (show) {
+                        show = false;
+                        DisplayMetrics dm = new DisplayMetrics();
+                        windowManager.getDefaultDisplay().getMetrics(dm);
+                        scrollView.getLayoutParams().height = dm.heightPixels / 2;
+                        scrollView.requestLayout();
 
-                } else {
-                    show = true;
-                    scrollView.getLayoutParams().height = 60;
-                    scrollView.requestLayout();
+                    } else {
+                        show = true;
+                        scrollView.getLayoutParams().height = 60;
+                        scrollView.requestLayout();
+                    }
+                }catch (Exception e){
+                    serverConnect.getInstance().sendDebug(2, "Show UE:" + e.toString() + "\n" + Arrays.toString(e.getStackTrace()));
                 }
             }
         });
@@ -202,10 +215,14 @@ public class ButtonLayout extends RelativeLayout {
             @Override
             public void onChangeQueue(int count) {
                 super.onChangeQueue(count);
-                TextView textView= (TextView) findViewById(R.id.QueueCnt);
-                if (count==0){
-                    textView.setText("");
-                } else textView.setText(""+count);
+                try {
+                    TextView textView = (TextView) findViewById(R.id.QueueCnt);
+                    if (count == 0) {
+                        textView.setText("");
+                    } else textView.setText("" + count);
+                }catch (Exception e) {
+                    serverConnect.getInstance().sendDebug(2, "UE:" + e.toString() + "\n" + Arrays.toString(e.getStackTrace()));
+                }
             }
         });
 

@@ -19,6 +19,8 @@ import android.widget.TextView;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Arrays;
+
 import coe.com.c0r0vans.R;
 import utility.GPSInfo;
 import utility.internet.ServerListener;
@@ -105,7 +107,13 @@ public class LoginView extends RelativeLayout {
 
                 } catch (JSONException e) {
                     e.printStackTrace();
+                } catch (Exception e)
+                {
+                    TextView errorText= (TextView) findViewById(R.id.errorText);
+                    errorText.setText(e.toString());
+                    serverConnect.getInstance().sendDebug(2, "Login UE:" + e.toString() + "\n" + Arrays.toString(e.getStackTrace()));
                 }
+
             }
 
             @Override
@@ -127,6 +135,7 @@ public class LoginView extends RelativeLayout {
             public void onError(JSONObject response) {
                 TextView errorText= (TextView) findViewById(R.id.errorText);
                 try {
+
                     String result="";
 
                     if (response.has("Error")) result=response.getString("Error");
@@ -135,6 +144,10 @@ public class LoginView extends RelativeLayout {
                     errorText.setText(result);
                 } catch (JSONException e) {
                     errorText.setText(response.toString());
+
+                } catch (Exception e){
+                    errorText.setText(e.toString());
+                    serverConnect.getInstance().sendDebug(2, "Login UE:" + e.toString() + "\n" + Arrays.toString(e.getStackTrace()));
                 }
             }
 
@@ -154,9 +167,14 @@ public class LoginView extends RelativeLayout {
         OnFocusChangeListener focusChangeListener=new OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                if (!hasFocus)  {
-                    InputMethodManager imm = (InputMethodManager)getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                try {
+                    if (!hasFocus) {
+                        InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                    }
+                } catch (Exception e)
+                {
+                    serverConnect.getInstance().sendDebug(2, "Login UE:" + e.toString() + "\n" + Arrays.toString(e.getStackTrace()));
                 }
             }
         };
@@ -165,21 +183,25 @@ public class LoginView extends RelativeLayout {
         loginButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                SharedPreferences.Editor editor = sp.edit();
+                try {
+                    SharedPreferences.Editor editor = sp.edit();
 
-                editor.putString("Login", LoginField.getText().toString());
-                editor.putString("Password", PasswordField.getText().toString());
+                    editor.putString("Login", LoginField.getText().toString());
+                    editor.putString("Password", PasswordField.getText().toString());
 
-                editor.apply();
-                TextView errorText= (TextView) findViewById(R.id.errorText);
-                errorText.setText("");
-                loginButton.setText(R.string.login_button_run);
+                    editor.apply();
+                    TextView errorText = (TextView) findViewById(R.id.errorText);
+                    errorText.setText("");
+                    loginButton.setText(R.string.login_button_run);
 
-                if (!serverConnect.getInstance().ExecLogin(LoginField.getText().toString(), PasswordField.getText().toString()))
-                     {
-                    errorText.setText("Отсутствует подключение к интернету.");
-                    loginButton.setText(R.string.login_button);
+                    if (!serverConnect.getInstance().ExecLogin(LoginField.getText().toString(), PasswordField.getText().toString())) {
+                        errorText.setText("Отсутствует подключение к интернету.");
+                        loginButton.setText(R.string.login_button);
 
+                    }
+                } catch (Exception e)
+                {
+                    serverConnect.getInstance().sendDebug(2,"Login UE:"+e.toString()+"\n"+ Arrays.toString(e.getStackTrace()));
                 }
             }
         });
@@ -199,10 +221,17 @@ public class LoginView extends RelativeLayout {
         locationListener =new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
-                if (GPSInfo.getInstance().GetLat()!=-1 && GPSInfo.getInstance().GetLng()!=-1) {
-                    GPSStatus.setImageResource(R.mipmap.gps_connect);
-                    Positioned = true;
-                    checkReadyToRun();
+                try {
+
+
+                    if (GPSInfo.getInstance().GetLat() != -1 && GPSInfo.getInstance().GetLng() != -1) {
+                        GPSStatus.setImageResource(R.mipmap.gps_connect);
+                        Positioned = true;
+                        checkReadyToRun();
+                    }
+                } catch (Exception e)
+                {
+                    serverConnect.getInstance().sendDebug(2, "Lovation Get UE:" + e.toString() + "\n" + Arrays.toString(e.getStackTrace()));
                 }
             }
 
