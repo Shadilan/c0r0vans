@@ -69,7 +69,7 @@ public class GPSInfo {
      * @param mContext Application context
      */
 
-
+    private boolean hasAccuracy=false;
     private GPSInfo(Context mContext) {
         locationManager = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
         context=mContext;
@@ -89,8 +89,15 @@ public class GPSInfo {
 
                 boolean doEvent=true;
                 if (location.hasAccuracy() && location.getAccuracy()>accur+5) doEvent=false;
-                accur=location.getAccuracy();
+                if (location.hasAccuracy()) {
+                    hasAccuracy=true;
+                    accur=location.getAccuracy();
+                }
+                if (location.hasAccuracy()!=hasAccuracy) doEvent=false;
+
+
                 if (doEvent) {
+
                     speed = (int) (location.getSpeed() * 60 *60 / 1000);
                     if (location.getLongitude() != -1 && location.getLatitude() != -1) {
                         lat = (int) (location.getLatitude() * 1000000);
@@ -130,6 +137,7 @@ public class GPSInfo {
 
             @Override
             public void onProviderDisabled(String provider) {
+                serverConnect.getInstance().sendDebug(2,"Потенциальный завис:"+provider+" выключен.");
                 if (locationListeners !=null){
                     if (locationListenersRem !=null) locationListeners.removeAll(locationListenersRem);
                     for (LocationListener ll:locationListeners){
