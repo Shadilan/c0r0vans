@@ -2,12 +2,14 @@ package coe.com.c0r0vans.GameObjects;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Handler;
 import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -45,7 +47,14 @@ public class MessageMap extends HashMap<String,Message>{
     };
     public MessageMap(Context ctx){
         this.ctx=ctx;
-        new Thread(task).start();
+        //todo вынести в отдельный поток после переноса визуальной части в хэндлер
+        try {
+            task.run();
+        } catch(Exception e){
+            serverConnect.getInstance().sendDebug(2,"Error Loading:"+ e.toString()+ Arrays.toString(e.getStackTrace()));
+
+        }
+
     }
     public boolean put(Message message){
         if (this.get(message.getGUID())!=null) return false;
@@ -90,8 +99,11 @@ public class MessageMap extends HashMap<String,Message>{
         });
         JSONObject resultM=new JSONObject();
         JSONArray result=new JSONArray();
+        //todo Убрать ограничение
+        int i=0;
         for (Message o:msg){
             result.put(o.getJSON());
+            if (i>30) break;
         }
         resultM.put("Messages",result);
         return resultM;
