@@ -153,7 +153,8 @@ public class serverConnect {
         if (Token==null) return false;
         //TODO: Придумать другой вариант с меньше связностью кода
         MyGoogleMap.setOldLatLng(Lat,Lng);
-        String url=ServerAddres+"/getdata.jsp"+"?ReqName=ScanRange&Token="+Token+"&plat="+Lat+"&plng="+Lng+"&UUID="+UID;
+        String hash= StringUtils.MD5("COWBOW"+Token+Lat+Lng+"ScanRange"+UID);
+        String url=ServerAddres+"/getdata.jsp"+"?ReqName=ScanRange&Token="+Token+"&plat="+Lat+"&plng="+Lng+"&UUID="+UID+"&hash="+hash;
         runRequest(UID, url, ResponseListenerWithUID.REFRESH);
         oldLat=Lat;
         oldLng=Lng;
@@ -186,12 +187,13 @@ public class serverConnect {
         Log.d("DebugAction", "Step1");
         if (!checkConnection()) return false;
         if (Token==null) return false;
-        String url=ServerAddres+"/getdata.jsp"+"?Token="+Token+"&ReqName="+action.getCommand()+"&plat="+Lat+"&plng="+Lng+"&TGUID="+Target+"&lat="+TLat+"&lng="+TLng;
         sendDebug(5,"Action execute:"+action.getCommand());
         if (lockedActions==null) lockedActions=new ArrayList<>();
         lockedActions.add(action);
         action.preAction();
         String UID=UUID.randomUUID().toString();
+        String hash= StringUtils.MD5("COWBOW" + Token + Lat + Lng + action.getCommand() + UID+Target+TLat+TLng);
+        String url=ServerAddres+"/getdata.jsp"+"?Token="+Token+"&ReqName="+action.getCommand()+"&plat="+Lat+"&plng="+Lng+"&TGUID="+Target+"&lat="+TLat+"&lng="+TLng+"&UID="+UID+"&hash="+hash;
         listenersMap.put(UID, action);
         errorMap.put(UID, action);
         runRequest(UID, url, ResponseListenerWithUID.ACTION);
