@@ -138,15 +138,17 @@ public class serverConnect {
 
         return result;
     }
+
+    int oldLat=0;
+    int oldLng=0;
+    long oldTime=0;
+
     /**
      * Get new data
      * @param Lat Latitude of position to get data
      * @param Lng Longtitude of position to get data
      * @return true
      */
-    int oldLat=0;
-    int oldLng=0;
-    long oldTime=0;
     public boolean RefreshData(int Lat,int Lng){
         String UID= UUID.randomUUID().toString();
         if (!checkConnection()) return false;
@@ -162,12 +164,11 @@ public class serverConnect {
         return true;
     }
     public boolean RefreshCurrent(){
-        return RefreshData(GPSInfo.getInstance().GetLat(), GPSInfo.getInstance().GetLng());
+        return RefreshData((int)(MyGoogleMap.getMap().getCameraPosition().target.latitude*1e6),(int)(MyGoogleMap.getMap().getCameraPosition().target.longitude*1e6));
     }
-    public boolean checkRefresh(){
-        long newTime= new Date().getTime();
-        if ((GPSInfo.getDistance(new LatLng(oldLat/1e6,oldLng/1e6),GPSInfo.getInstance().getLatLng())>500)|| newTime-oldTime>5*1000*60) return RefreshCurrent();
-                else return false;
+    public boolean checkRefresh() {
+        long newTime = new Date().getTime();
+        return ((GPSInfo.getDistance(new LatLng(oldLat / 1e6, oldLng / 1e6), GPSInfo.getInstance().getLatLng()) > 500) || newTime - oldTime > 5 * 1000 * 60) && RefreshCurrent();
     }
 
     private ArrayList<ObjectAction> lockedActions;
