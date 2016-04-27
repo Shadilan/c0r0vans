@@ -32,8 +32,6 @@ import coe.com.c0r0vans.MyGoogleMap;
 import coe.com.c0r0vans.R;
 import utility.GPSInfo;
 import utility.StringUtils;
-import utility.notification.Essages;
-import utility.settings.GameSettings;
 
 /**
  * Объект обеспечивающий соединение с сервером и взаимодействие с сервером. Singleton.
@@ -298,7 +296,6 @@ public class serverConnect {
     private void runRequest(String UID,String request,int type, final int try_count){
         busy=true;
         if (!checkConnection()) return;
-        if ("Y".equals(GameSettings.getInstance().get("NET_DEBUG"))) Essages.addEssage("Net:"+request);
         final JsonObjectRequest jsObjRequest = new JsonObjectRequest
                 (Request.Method.GET, request, null, new ResponseListenerWithUID(UID,request,type){
                     @Override
@@ -381,6 +378,7 @@ public class serverConnect {
     }
     public void sendDebug(int type,String message){
         //
+        Log.d("SendDebug",message);
         if (!checkConnection()) return;
         String request="https://support-merchantarg.rhcloud.com/addLog.jsp";
         JSONObject reqTest= null;

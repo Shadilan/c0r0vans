@@ -325,25 +325,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 style="@style/MediumText"
-                android:text="@string/settings_debug_net"
-                android:id="@+id/textView14"
-                android:layout_alignBottom="@+id/netLogOn"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true" />
-
-            <CheckBox
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/netLogOn"
-                android:checked="false"
-                android:layout_below="@+id/textView13"
-
-                android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true" />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                style="@style/MediumText"
                 android:text="Ошибки сети"
                 android:id="@+id/textView22"
                 android:layout_alignBottom="@+id/netErrorLogOn"
@@ -355,7 +336,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/netErrorLogOn"
                 android:checked="false"
-                android:layout_below="@+id/textView14"
+                android:layout_below="@+id/textView13"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true" />
 

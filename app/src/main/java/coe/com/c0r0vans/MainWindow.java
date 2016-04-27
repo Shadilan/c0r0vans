@@ -131,7 +131,8 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                             //Проверить лонгтап
                             if (Math.abs(oldPos.x - event.getX()) < 20 && Math.abs(oldPos.y - event.getY()) < 20 && (new Date().getTime()) - tm > 1500) {
                                 tm = -1;
-                            } else if (Math.abs(oldPos.x - event.getX()) < 20 && Math.abs(oldPos.y - event.getY()) < 20) {
+                            } else
+                            if (Math.abs(oldPos.x - event.getX()) < 20 && Math.abs(oldPos.y - event.getY()) < 20) {
                                 int distance = 50;
                                 GameObject target = null;
                                 //Marker
@@ -150,7 +151,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                                     SelectedObject.getInstance().setTarget(target);
                                     SelectedObject.getInstance().setPoint(target.getMarker().getPosition());
                                     ((ActionView) findViewById(R.id.actionView)).ShowView();
-                                } else {
+                                } else if (Player.getPlayer()!=null & Player.getPlayer().getMarker()!=null){
                                     //Ambush
                                     LatLng latLng = MyGoogleMap.getMap().getProjection().fromScreenLocation(oldPos);
                                     float distances = GPSInfo.getDistance(latLng, Player.getPlayer().getMarker().getPosition());

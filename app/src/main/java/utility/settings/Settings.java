@@ -20,7 +20,6 @@ public class Settings extends RelativeLayout {
     CheckBox cityRad;
     CheckBox soundOn;
     CheckBox musicOn;
-    CheckBox netDebug;
     CheckBox useTilt;
     CheckBox gpsOn;
     SeekBar gpsRate;
@@ -56,7 +55,7 @@ public class Settings extends RelativeLayout {
         cityRad= (CheckBox) findViewById(R.id.cityRad);
         soundOn= (CheckBox) findViewById(R.id.soundOn);
         musicOn=(CheckBox) findViewById(R.id.musicOn);
-        netDebug=(CheckBox) findViewById(R.id.netLogOn);
+
         useTilt=(CheckBox) findViewById(R.id.useTilt);
         gpsOn=(CheckBox) findViewById(R.id.gpsOn);
         gpsRate=(SeekBar) findViewById(R.id.gpsRate);
@@ -81,7 +80,6 @@ public class Settings extends RelativeLayout {
                 GameSettings.set("MUSIC_ON", musicOn.isChecked() ? "Y" : "N");
                 GameSettings.set("SOUND_ON", soundOn.isChecked() ? "Y" : "N");
                 GameSettings.set("USE_TILT", useTilt.isChecked() ? "Y" : "N");
-                GameSettings.set("NET_DEBUG", netDebug.isChecked() ? "Y" : "N");
                 GameSettings.set("GPS_ON_BACK", gpsOn.isChecked() ? "Y" : "N");
                 GameSettings.set("GPS_RATE", String.valueOf(gpsRate.getProgress() + 1));
                 GameSettings.set("AUTO_LOGIN", autoLogin.isChecked() ? "Y" : "N");
@@ -105,7 +103,6 @@ public class Settings extends RelativeLayout {
         musicOn.setChecked("Y".equals(GameSettings.getInstance().get("MUSIC_ON")));
         soundOn.setChecked("Y".equals(GameSettings.getInstance().get("SOUND_ON")));
         useTilt.setChecked("Y".equals(GameSettings.getInstance().get("USE_TILT")));
-        netDebug.setChecked("Y".equals(GameSettings.getInstance().get("NET_DEBUG")));
         gpsOn.setChecked("Y".equals(GameSettings.getInstance().get("GPS_ON_BACK")));
         netErrorLog.setChecked("Y".equals(GameSettings.getInstance().get("SHOW_NETWORK_ERROR")));
         usePadding.setChecked("Y".equals(GameSettings.getInstance().get("VIEW_PADDING")));
