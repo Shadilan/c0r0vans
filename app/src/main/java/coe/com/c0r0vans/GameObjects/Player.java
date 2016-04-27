@@ -42,6 +42,7 @@ public class Player extends GameObject {
     private String currentRouteGuid="";
     private Route currentR;
     private int trade;
+    private int profit=0;
 
     public static void instance(){
         player=new Player();
@@ -279,7 +280,9 @@ public class Player extends GameObject {
                 }
 
             }
+            profit=0;
             if (obj.has("Routes")){
+
                 currentRoute="";
                 currentRouteGuid="";
                 JSONArray route=obj.getJSONArray("Routes");
@@ -296,8 +299,9 @@ public class Player extends GameObject {
                         currentR=routeObj;
                     }
                     else Routes.add(routeObj);
-
+                    profit+=routeObj.getProfit();
                 }
+
             }
             if (obj.has("Ambushes")){
                 JSONArray ambush=obj.getJSONArray("Ambushes");
@@ -317,6 +321,10 @@ public class Player extends GameObject {
                 }
             }
             routeStart = currentRoute.equals("");
+            //TODO Слишком много одинаковых вызовов.
+            for (GameObject o:GameObjects.getInstance().values()){
+                if (o!=null && o instanceof City) ((City) o).updateColor();
+            }
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -476,6 +484,10 @@ public class Player extends GameObject {
 
     public void setCurrentRouteGUID(String currentRouteGUID) {
         this.currentRouteGuid = currentRouteGUID;
+    }
+
+    public int getProfit() {
+        return profit;
     }
 
 

@@ -77,12 +77,12 @@ public class InfoLayout extends RelativeLayout implements ShowHideForm {
         ToggleButton routeInfo= (ToggleButton) findViewById(R.id.routeInfoButton);
         ToggleButton ambushInfo= (ToggleButton) findViewById(R.id.ambushInfoButton);
 
-        setCurrent(new MainInfo(getContext()));
+        setCurrent(new MainInfoTable(getContext()));
 
         playerInfo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setCurrent(new MainInfo(getContext()));
+                setCurrent(new MainInfoTable(getContext()));
 
                 ToggleButton b = (ToggleButton) findViewById(R.id.playerInfoButton);
                 b.setChecked(true);

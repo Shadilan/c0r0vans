@@ -101,6 +101,8 @@ public class City extends GameObject{
             {
                 zone.setCenter(latlng);
                 zone.setRadius(radius);
+                if (Player.checkRoute(GUID)) zone.setStrokeColor(Color.DKGRAY);
+                else zone.setStrokeColor(Color.BLUE);
 
             }
 
@@ -256,8 +258,6 @@ public class City extends GameObject{
                     ;
         }
         private void applyCity() {
-
-
             findViewById(R.id.closeActionButton).setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -716,7 +716,9 @@ public class City extends GameObject{
                     GameSound.playSound(GameSound.FINISH_ROUTE_SOUND);
                     Player.getPlayer().setCurrentRouteGUID("");
                     serverConnect.getInstance().getPlayerInfo();
-
+                    for (GameObject o:GameObjects.getInstance().values()){
+                        if (o!=null && o instanceof City) ((City) o).updateColor();
+                    }
                 }
 
                 @Override
@@ -870,7 +872,6 @@ public class City extends GameObject{
                         }
                     });
                     confirmWindow.show();
-
                 }
             });
 
