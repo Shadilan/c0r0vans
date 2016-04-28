@@ -26,7 +26,7 @@ import utility.settings.GameSettings;
 public class RouteInfo extends RelativeLayout implements PlayerInfoLayout {
     LinearLayout routeInfo;
     int page=0;
-    int pageSize=50;
+    int pageSize=20;
     int max_page=1;
     ShowHideForm parent;
     public RouteInfo(Context context) {
@@ -122,7 +122,7 @@ public class RouteInfo extends RelativeLayout implements PlayerInfoLayout {
         Log.d("Timing","Время:"+(new Date().getTime()));
         int i=0;
         for (Route r:Player.getPlayer().getRoutes()){
-            if (i>page*pageSize && i<(page+1)*pageSize) {
+            if (i>=page*pageSize && i<(page+1)*pageSize) {
                 CityLine line = new CityLine(getContext());
                 routeInfo.addView(line);
                 line.setData(r);
