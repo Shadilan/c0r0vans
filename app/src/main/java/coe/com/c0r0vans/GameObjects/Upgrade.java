@@ -21,6 +21,7 @@ public class Upgrade {
     private int Cost=0;
     private int reqCityLev=0;
     private int level;
+    private int effect2;
 
     public void loadJSON(JSONObject object) throws JSONException {
 
@@ -31,7 +32,7 @@ public class Upgrade {
         if (object.has("ReqCityLev")) reqCityLev=object.getInt("ReqCityLev");
         //if (object.has("NextCost")) nextCost=object.getInt("NextCost");
         if (object.has("Effect1")) effect1=object.getInt("Effect1");
-        //if (object.has("Effect2")) effect2=object.getInt("Effect2");
+        if (object.has("Effect2")) effect2=object.getInt("Effect2");
         if (object.has("Cost")) Cost=object.getInt("Cost");
     }
     public Upgrade(JSONObject object){
@@ -71,9 +72,13 @@ public class Upgrade {
         result.put("Description",Description);
         result.put("ReqCityLev",reqCityLev);
         result.put("Effect1",effect1);
-        //result.put("Effect2",effect2);
+        result.put("Effect2",effect2);
         result.put("Cost",Cost);
 
         return result;
+    }
+
+    public int getEffect2() {
+        return effect2;
     }
 }

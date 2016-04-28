@@ -30,6 +30,7 @@ public class Route extends GameObject{
     private int Lng;
     private LatLng StartPoint;
     private LatLng FinishPoint;
+    private int time=0;
 
     private Polyline line;
     private int profit=0;
@@ -83,11 +84,26 @@ public class Route extends GameObject{
                 options.color(Color.BLUE);
                 options.add(StartPoint);
                 options.add(FinishPoint);
+                options.geodesic(true);
                 if (map!=null) {
                     line = map.addPolyline(options);
                     //Log.d("RouteTest","Line draw");
                     showRoute();
 
+                }
+            }
+            Player.getPlayer().getUpgrade("speed");
+            //time=S/v + (v*v-(1+a)*(1+a))/2/(a)/v-0.7
+            Upgrade up=Player.getPlayer().getUpgrade("speed");
+            if (up!=null && up.getEffect2()>0) {
+                int v=up.getEffect2();
+                int a=up.getEffect1();
+                int S=Distance;
+                int S0= (int) Math.ceil((Math.pow(v,2)-1)/2/a);
+                if (S0>S) time= (int) Math.ceil(Math.sqrt(2*S/a));
+                else {
+                    int t0 = (int) Math.ceil(v / a);
+                    time = (S - S0) / v + t0;
                 }
             }
         }
@@ -185,5 +201,9 @@ public class Route extends GameObject{
 
     public int getProfit() {
         return profit;
+    }
+
+    public int getTime() {
+        return time;
     }
 }

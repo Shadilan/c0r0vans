@@ -47,7 +47,7 @@ public class CityLine extends RelativeLayout {
         route=r;
 
         if (lengthView!=null)
-            if (r.getDistance()>0) lengthView.setText(String.format("%dм. %s❍", r.getDistance(), StringUtils.intToStr(r.getProfit())));
+            if (r.getDistance()>0) lengthView.setText(String.format("%dм. %s❍. %s⌛", r.getDistance(), StringUtils.intToStr(r.getProfit()),StringUtils.intToStr(r.getTime())));
             else lengthView.setText("↝");
         if (startCityView!=null) startCityView.setText(r.getStartName());
         if (endCityView!=null)
