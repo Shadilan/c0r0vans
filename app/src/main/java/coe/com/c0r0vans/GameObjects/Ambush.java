@@ -40,7 +40,7 @@ public class Ambush extends GameObject {
 
     private int faction;
     private int radius=30;
-    protected Circle zone;
+    private Circle zone;
 
     private int ready=0;
 
@@ -125,18 +125,18 @@ public class Ambush extends GameObject {
         zone=null;
     }
 
-    public String getInfo() {
+    private String getInfo() {
         if (faction==0) {
             String dop="";
             Upgrade up=Player.getPlayer().getUpgrade("ambushes");
             if (up!=null && getRadius()<up.getEffect1()) dop="\nРазмер засады меньше чем вы можете организовать.";
             if (ready < 0)
-                return "Ваши верные войны разбивают здесь засаду. Работать еще " + (ready * -1) + " минут."+dop;
+                return "Ваши верные воины разбивают здесь засаду. Работать еще " + (ready * -1) + " минут."+dop;
             else if (ready / 60 > 2)
-                return "Ваши верные войны ждут здесь вражеских контрабандистов в Засаде. Стоят уже " + (Math.round(ready / 60)) + " часов."+dop;
+                return "Ваши верные воины ждут здесь вражеских контрабандистов в Засаде. Стоят уже " + (Math.round(ready / 60)) + " часов."+dop;
             else if (ready / 60 / 24 > 2)
-                return "Ваши верные войны ждут здесь вражеских контрабандистов в Засаде. Стоят уже " + (Math.round(ready / 60 / 24)) + " дней."+dop;
-            else return "Ваши верные войны ждут здесь вражеских контрабандистов в Засаде."+dop;
+                return "Ваши верные воины ждут здесь вражеских контрабандистов в Засаде. Стоят уже " + (Math.round(ready / 60 / 24)) + " дней."+dop;
+            else return "Ваши верные воины ждут здесь вражеских контрабандистов в Засаде."+dop;
         }
         else if (faction==Player.getPlayer().getRace()){
             if (ready < 0)
@@ -159,33 +159,35 @@ public class Ambush extends GameObject {
 
     }
 
-    ObjectAction removeAmbush;
+    //ObjectAction removeAmbush;
 
 
     @Override
     public void changeMarkerSize() {
         if (mark != null) {
             float type= MyGoogleMap.getClientZoom();
-            String markname = "ambush";
-            if (ready<0) markname = markname + "_build";
-            if (faction==0) markname=markname+"_"+faction+Player.getPlayer().getRace();
-            else markname = markname + "_"+faction;
-            markname = markname + GameObject.zoomToPostfix(type);
+            String mark_name = "ambush";
+            if (ready<0) mark_name = mark_name + "_build";
+            if (faction==0) mark_name=mark_name+"_"+faction+Player.getPlayer().getRace();
+            else mark_name = mark_name + "_"+faction;
+            mark_name = mark_name + GameObject.zoomToPostfix(type);
             try {
-                mark.setIcon(ImageLoader.getDescritor(markname));
+                mark.setIcon(ImageLoader.getDescritor(mark_name));
                 if ("Y".equals(GameSettings.getInstance().get("USE_TILT")))
                     mark.setAnchor(0.5f, 1f);
                 else mark.setAnchor(0.5f, 0.5f);
             } catch (Exception e){
-                serverConnect.getInstance().sendDebug(2, "mark:" + markname+"\n"+e.toString()+"\n"+e.getStackTrace());
+                serverConnect.getInstance().sendDebug(2, "mark:" + mark_name+"\n"+e.toString()+"\n"+Arrays.toString(e.getStackTrace()));
             }
         }
     }
 
     @Override
     public void setVisibility(boolean visibility) {
-        if ("Y".equals(GameSettings.getInstance().get("SHOW_AMBUSH_RADIUS")))
-                if (zone!=null) zone.setVisible(visibility);
+        if ("Y".equals(GameSettings.getInstance().get("SHOW_AMBUSH_RADIUS"))) {
+            if (zone != null)
+                zone.setVisible(visibility);
+        }
         else if (zone!=null) zone.setVisible(false);
         if (mark!=null) mark.setVisible(visibility);
     }
@@ -199,7 +201,7 @@ public class Ambush extends GameObject {
             zone.setVisible(false);
         }
     }
-    public int getFaction() {
+    private int getFaction() {
         return faction;
     }
 
@@ -220,19 +222,16 @@ public class Ambush extends GameObject {
             init();
         }
         private void init(){
-            inflate(this.getContext(),R.layout.ambush_layout,this);
+            inflate(this.getContext(), R.layout.ambush_layout, this);
             //if ("Y".equals(GameSettings.getInstance().get("VIEW_PADDING"))) this.setAlpha(0.7f);
         }
         Ambush ambush;
-        boolean loaded=true;
 
 
 
         public void setAmbush(Ambush ambush){
             this.ambush=ambush;
-            if (loaded){
-                applyAmbush();
-            }
+            applyAmbush();
         }
         private ObjectAction removeAction;
         private void applyAmbush() {
@@ -397,7 +396,7 @@ public class Ambush extends GameObject {
 
         @Override
         public void setDistance(int distance) {
-            ((TextView) findViewById(R.id.distance)).setText(distance+"м");
+            ((TextView) findViewById(R.id.distance)).setText(String.format(getContext().getString(R.string.distance_mesure), distance));
         }
     }
     public RelativeLayout getObjectView(Context context){
