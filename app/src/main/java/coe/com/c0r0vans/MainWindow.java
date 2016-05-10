@@ -58,9 +58,11 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
      * Create form;
      */
     protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.loading_layout);
         Log.d("Timing","Start");
         try {
-            super.onCreate(savedInstanceState);
+
 
             Log.d("Timing", "Super");
             GameSettings.init(getApplicationContext());
@@ -78,7 +80,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                 }
             }
             Log.d("Timing", "Player");
-            setContentView(R.layout.activity_main_window);
+
             Log.d("Timing", "ContentView");
             try {
                 ImageLoader.Loader(this.getApplicationContext());
@@ -88,6 +90,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                 Log.d("UNEXPECTED", "Loading error:" + e.toString());
 
             }
+            setContentView(R.layout.activity_main_window);
             Log.d("Timing", "ImageLoader");
             // Obtain the SupportMapFragment and get notified when the map is ready to be used.
             SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()

@@ -75,4 +75,5 @@ Software provide for alpha test purpose. If you are not accepted for alpha test 
 All rights reserved to Circle of Eternity</string>
     <string name="about_title">About...</string>
     <string name="distance_mesure">%dм</string>
+    <string name="title_activity_loading">Corovans Loading</string>
 </resources>
