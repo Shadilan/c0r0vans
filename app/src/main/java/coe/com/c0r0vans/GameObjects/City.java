@@ -835,23 +835,26 @@ public class City extends GameObject{
             findViewById(R.id.restart_route).setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    serverConnect.getInstance().ExecCommand(endRouteAction,
-                            city.getGUID(),
-                            GPSInfo.getInstance().GetLat(),
-                            GPSInfo.getInstance().GetLng(),
-                            (int) (city.getMarker().getPosition().latitude * 1e6),
-                            (int) (city.getMarker().getPosition().longitude * 1e6));
-                    serverConnect.getInstance().ExecCommand(startRouteAction,
-                            city.getGUID(),
-                            GPSInfo.getInstance().GetLat(),
-                            GPSInfo.getInstance().GetLng(),
-                            (int) (city.getMarker().getPosition().latitude * 1e6),
-                            (int) (city.getMarker().getPosition().longitude * 1e6));
-                    if ("Y".equals(GameSettings.getInstance().get("CLOSE_WINDOW")))
-                        close();
-                    else {
-                        updateInZone(true);
-                    }
+                    if (city.getMarker()!=null) {
+                        serverConnect.getInstance().ExecCommand(endRouteAction,
+                                city.getGUID(),
+                                GPSInfo.getInstance().GetLat(),
+                                GPSInfo.getInstance().GetLng(),
+                                (int) (city.getMarker().getPosition().latitude * 1e6),
+                                (int) (city.getMarker().getPosition().longitude * 1e6));
+                        serverConnect.getInstance().ExecCommand(startRouteAction,
+                                city.getGUID(),
+                                GPSInfo.getInstance().GetLat(),
+                                GPSInfo.getInstance().GetLng(),
+                                (int) (city.getMarker().getPosition().latitude * 1e6),
+                                (int) (city.getMarker().getPosition().longitude * 1e6));
+
+                        if ("Y".equals(GameSettings.getInstance().get("CLOSE_WINDOW")))
+                            close();
+                        else {
+                            updateInZone(true);
+                        }
+                    } else close();
                 }
             });
             findViewById(R.id.drop_route).setOnClickListener(new OnClickListener() {

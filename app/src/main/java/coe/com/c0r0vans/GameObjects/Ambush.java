@@ -348,12 +348,14 @@ public class Ambush extends GameObject {
             removeButton.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    serverConnect.getInstance().ExecCommand(removeAction,
-                            ambush.getGUID(),
-                            GPSInfo.getInstance().GetLat(),
-                            GPSInfo.getInstance().GetLng(),
-                            (int)(ambush.getMarker().getPosition().latitude*1e6),
-                            (int)(ambush.getMarker().getPosition().longitude*1e6));
+                    if (ambush.getMarker()!=null) {
+                        serverConnect.getInstance().ExecCommand(removeAction,
+                                ambush.getGUID(),
+                                GPSInfo.getInstance().GetLat(),
+                                GPSInfo.getInstance().GetLng(),
+                                (int) (ambush.getMarker().getPosition().latitude * 1e6),
+                                (int) (ambush.getMarker().getPosition().longitude * 1e6));
+                    }
                     close();
                 }
 
@@ -365,6 +367,7 @@ public class Ambush extends GameObject {
                     close();
                 }
             });
+
         }
 
         @Override
