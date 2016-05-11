@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
+import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 
@@ -32,6 +33,7 @@ public class ImageLoader {
         //Buttons
         images.put("closebutton", BitmapFactory.decodeResource(context.getResources(), R.mipmap.closebutton));
         //Markers
+        MapsInitializer.initialize(context);
         createMarker(context, R.mipmap.marker, "marker");
         createMarker(context, R.mipmap.city_1, "city_1");
         createMarker(context, R.mipmap.city_2, "city_2");

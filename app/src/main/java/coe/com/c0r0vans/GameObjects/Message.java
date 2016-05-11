@@ -28,21 +28,38 @@ public class Message {
     public Message(JSONObject jsonObject) throws JSONException {
         loadJSON(jsonObject);
     }
+    public Message(String text){
+        GUID="";
+        message=text;
+        type="";
+        state="";
+        target=null;
+        time=new Date();
+        notify=false;
+    }
+    public Message(String text,Date date){
+        GUID="";
+        message=text;
+        type="";
+        state="";
+        target=null;
+        time=date;
+        notify=false;
+    }
     public void loadJSON(JSONObject jsonObject) throws JSONException {
-        int lat=0;
-        int lng=0;
-        if (jsonObject.has("GUID")) GUID=jsonObject.getString("GUID");
-        if (jsonObject.has("Message")) message=jsonObject.getString("Message");
-        if (jsonObject.has("Type")) type=jsonObject.getString("Type");
-        if (jsonObject.has("State")) state=jsonObject.getString("State");
-        if (jsonObject.has("Time")) time=new Date(jsonObject.getLong("Time"));
-        if (jsonObject.has("TargetLat")) lat=jsonObject.getInt("TargetLat");
-        if (jsonObject.has("TargetLng")) lng=jsonObject.getInt("TargetLng");
-        if (jsonObject.has("notify")) notify=jsonObject.getBoolean("notify"); else notify=true;
-        Log.d("tttt",type);
-        if (lat!=0 && lng!=0) {
-            target=new LatLng((double)lat/1e6,(double)lng/1e6);
-            Log.d("tttt", String.valueOf(lat));
+        int lat = 0;
+        int lng = 0;
+        if (jsonObject.has("GUID")) GUID = jsonObject.getString("GUID");
+        if (jsonObject.has("Message")) message = jsonObject.getString("Message");
+        if (jsonObject.has("Type")) type = jsonObject.getString("Type");
+        if (jsonObject.has("State")) state = jsonObject.getString("State");
+        if (jsonObject.has("Time")) time = new Date(jsonObject.getLong("Time"));
+        if (jsonObject.has("TargetLat")) lat = jsonObject.getInt("TargetLat");
+        if (jsonObject.has("TargetLng")) lng = jsonObject.getInt("TargetLng");
+        notify = !jsonObject.has("notify") || jsonObject.getBoolean("notify");
+
+        if (lat != 0 && lng != 0) {
+            target = new LatLng((double) lat / 1e6, (double) lng / 1e6);
         }
 
     }

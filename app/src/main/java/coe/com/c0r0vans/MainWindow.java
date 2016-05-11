@@ -38,7 +38,6 @@ import coe.com.c0r0vans.UIElements.LoginView;
 import coe.com.c0r0vans.UIElements.UIControler;
 import utility.GPSInfo;
 import utility.GameSound;
-import utility.ImageLoader;
 import utility.internet.ServerListener;
 import utility.internet.serverConnect;
 import utility.notification.Essages;
@@ -60,38 +59,9 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.loading_layout);
-        Log.d("Timing","Start");
         try {
-
-
-            Log.d("Timing", "Super");
-            GameSettings.init(getApplicationContext());
-            Log.d("Timing", "GameSettings");
             buttonLayout = (ButtonLayout) findViewById(R.id.buttonLayout);
-            Log.d("Timing", "Button");
-            Player.instance();
-            SharedPreferences sp = getApplicationContext().getSharedPreferences("player", Context.MODE_PRIVATE);
-            String pls = sp.getString("player", "");
-            if (!"".equals(pls)) {
-                try {
-                    Player.getPlayer().loadJSON(new JSONObject(pls));
-                } catch (JSONException e) {
-                    Log.d("LoadPlayer", "Error:" + pls);
-                }
-            }
-            Log.d("Timing", "Player");
-
-            Log.d("Timing", "ContentView");
-            try {
-                ImageLoader.Loader(this.getApplicationContext());
-
-
-            } catch (Exception e) {
-                Log.d("UNEXPECTED", "Loading error:" + e.toString());
-
-            }
             setContentView(R.layout.activity_main_window);
-            Log.d("Timing", "ImageLoader");
             // Obtain the SupportMapFragment and get notified when the map is ready to be used.
             SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                     .findFragmentById(R.id.map);
@@ -281,20 +251,9 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
 
     private void init() {
         //init fields
-
-        GameObjects.init();
-        Log.d("Timing", "GameObject");
-        GPSInfo.getInstance(getApplicationContext());
-        Log.d("Timing", "GPS");
-        GameSound.init(getApplicationContext());
         GameSound.setVolumeControlStream(this);
-        Log.d("Timing", "Sound");
         messages=new MessageMap(getApplicationContext());
-        MessageNotification.init(getApplicationContext());
         messageRequest.run();
-        Log.d("Timing", "Message");
-        serverConnect.getInstance().connect(getResources().getString(R.string.serveradress), this.getApplicationContext());
-        Log.d("Timing", "Server");
     }
 
     /**
@@ -380,8 +339,6 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                     if (!"Unexpected Response".equals(errorText) || "Y".equals(GameSettings.getInstance().get("SHOW_NETWORK_ERROR")))
                         Essages.addEssage(errorMsg);
                         else serverConnect.getInstance().sendDebug(3, errorMsg);
-                } catch (JSONException e) {
-                    serverConnect.getInstance().sendDebug(2, "Player UE:" + e.toString() + "\n" + Arrays.toString(e.getStackTrace()));
                 } catch (Exception e){
                     serverConnect.getInstance().sendDebug(2, "Player UE:" + e.toString() + "\n" + Arrays.toString(e.getStackTrace()));
                 }

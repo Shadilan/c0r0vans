@@ -49,7 +49,7 @@ public class MessageMap extends HashMap<String,Message>{
         this.ctx=ctx;
         //todo вынести в отдельный поток после переноса визуальной части в хэндлер
         try {
-            task.run();
+            new Thread(task).start();
         } catch(Exception e){
             serverConnect.getInstance().sendDebug(2,"Error Loading:"+ e.toString()+ Arrays.toString(e.getStackTrace()));
 
@@ -71,8 +71,8 @@ public class MessageMap extends HashMap<String,Message>{
                 Message message=new Message(jsonArray.getJSONObject(i));
 
                 if (put(message)){
-                    Essages.addEssage(message,load);
-
+                    message.notify=!load;
+                    Essages.addEssage(message);
                 }
             }
             if (jsonArray.length()>0){
@@ -102,6 +102,7 @@ public class MessageMap extends HashMap<String,Message>{
         //todo Убрать ограничение
         int i=0;
         for (Message o:msg){
+            i++;
             result.put(o.getJSON());
             if (i>30) break;
         }

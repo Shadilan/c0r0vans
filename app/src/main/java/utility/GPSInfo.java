@@ -25,8 +25,10 @@ public class GPSInfo {
 
     public static GPSInfo getInstance(Context mContext) {
         if (instance == null) {
+
             instance = new GPSInfo(mContext);
         }
+
         return instance;
     }
 
@@ -64,12 +66,11 @@ public class GPSInfo {
     }
 
     Context context;
+    private boolean hasAccuracy=false;
     /**
      * Constructor
      * @param mContext Application context
      */
-
-    private boolean hasAccuracy=false;
     private GPSInfo(Context mContext) {
         locationManager = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
         context=mContext;

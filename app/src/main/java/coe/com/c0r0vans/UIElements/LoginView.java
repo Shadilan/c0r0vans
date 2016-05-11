@@ -79,7 +79,6 @@ public class LoginView extends RelativeLayout {
         GPSStatus= (ImageView)  this.findViewById(R.id.imgGPS);
         ConnectStatus= (ImageView)  this.findViewById(R.id.imgConnected);
         GPSInfo.getInstance(this.getContext());
-        serverConnect.getInstance().connect(getResources().getString(R.string.serveradress), this.getContext());
         LoginListener=new ServerListener() {
             @Override
             public void onLogin(JSONObject response) {
