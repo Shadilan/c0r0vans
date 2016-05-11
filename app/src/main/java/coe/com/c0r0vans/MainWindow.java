@@ -405,7 +405,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                     && GPSInfo.getInstance().GetLat() != -1 && GPSInfo.getInstance().GetLng() != -1)
                 if (timeToPlayerRefresh < 1) {
                     serverConnect.getInstance().getPlayerInfo();
-                    serverConnect.getInstance().RefreshData((int) (MyGoogleMap.getMap().getCameraPosition().target.latitude * 1e6), (int) (MyGoogleMap.getMap().getCameraPosition().target.longitude * 1e6));
+                    serverConnect.getInstance().RefreshCurrent();
 
 
                     timeToPlayerRefresh = 6;
@@ -413,7 +413,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                     SendedRequest++;
                     if (SendedRequest > 1) UIControler.getButtonLayout().showConnectImage();
                     timeToPlayerRefresh--;
-                    serverConnect.getInstance().RefreshData((int) (MyGoogleMap.getMap().getCameraPosition().target.latitude * 1e6), (int) (MyGoogleMap.getMap().getCameraPosition().target.longitude * 1e6));
+                    serverConnect.getInstance().RefreshCurrent();
                 }
         }
         catch (Exception e){

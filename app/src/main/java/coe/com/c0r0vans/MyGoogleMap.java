@@ -18,7 +18,6 @@ import coe.com.c0r0vans.GameObjects.GameObject;
 import coe.com.c0r0vans.GameObjects.Player;
 import utility.GPSInfo;
 import utility.internet.serverConnect;
-import utility.notification.Essages;
 import utility.settings.GameSettings;
 import utility.settings.SettingsListener;
 
@@ -214,17 +213,15 @@ public class MyGoogleMap{
     private static void moveCamera(LatLng target){
         moveCamera(target, map.getCameraPosition().bearing);
     }
-
+    private static LatLng oldLatLng=null;
     /**
      * Изменить местоположение камеры
      * @param target точка цели
      * @param cbearing Угол поворота
      */
-    private static LatLng oldLatLng=null;
+
     private static void moveCamera(LatLng target,float cbearing){
-        if (oldLatLng==null || GPSInfo.getDistance(oldLatLng,target)>300){
-            serverConnect.getInstance().RefreshData((int)(target.latitude*1e6),(int)(target.longitude*1e6));
-        }
+
         bearing = cbearing;
         GameSettings.setBearing(bearing);
 
@@ -251,6 +248,9 @@ public class MyGoogleMap{
         /*if ("Y".equals(GameSettings.getInstance().get("VIEW_PADDING"))) {
             map.setPadding(0, windowHeight / 2, 0, 40);
         } else map.setPadding(0, 0, 0, 40);*/
+        if (oldLatLng==null || GPSInfo.getDistance(oldLatLng,target)>300){
+            serverConnect.getInstance().RefreshCurrent();
+        }
     }
     private static LatLng targetPoint;
 
