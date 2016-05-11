@@ -79,9 +79,13 @@ public class Route extends GameObject{
 
             }
             if (StartPoint!=null && FinishPoint!=null) {
+
                 PolylineOptions options = new PolylineOptions();
                 options.width(3);
-                options.color(Color.BLUE);
+                GameObject target=SelectedObject.getInstance().getTarget();
+                if (target!=null && target instanceof City && !(target.getGUID().equals(StartGUID) || target.getGUID().equals(FinishGUID)))
+                    options.color(Color.LTGRAY);
+                else options.color(Color.BLUE);
                 options.add(StartPoint);
                 options.add(FinishPoint);
                 options.geodesic(true);
