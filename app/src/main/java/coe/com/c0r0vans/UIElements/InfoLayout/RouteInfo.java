@@ -26,7 +26,7 @@ import utility.settings.GameSettings;
 public class RouteInfo extends RelativeLayout implements PlayerInfoLayout {
     LinearLayout routeInfo;
     int page=0;
-    int pageSize=20;
+    int pageSize=50;
     int max_page=1;
     ShowHideForm parent;
     public RouteInfo(Context context) {
