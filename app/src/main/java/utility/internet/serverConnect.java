@@ -390,7 +390,8 @@ public class serverConnect {
         } catch(Exception e){
             android_id="";
         }
-        String user=Player.getPlayer().getName();
+        String user="";
+        if (Player.getPlayer()!=null) user=Player.getPlayer().getName();
         String version=context.getResources().getString(R.string.version);
         String hash= StringUtils.MD5("COWBOW"+user+android_id+message+version);
         try {
