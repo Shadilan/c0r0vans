@@ -16,6 +16,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import coe.com.c0r0vans.GameObjects.GameObject;
 import coe.com.c0r0vans.GameObjects.Player;
+import coe.com.c0r0vans.R;
 import utility.GPSInfo;
 import utility.internet.serverConnect;
 import utility.settings.GameSettings;

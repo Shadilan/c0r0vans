@@ -8,6 +8,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import coe.com.c0r0vans.UIElements.UIControler;
+import coe.com.c0r0vans.R;
 
 /**
  * Запрос подтверждения

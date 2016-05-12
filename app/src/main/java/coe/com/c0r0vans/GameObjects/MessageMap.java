@@ -35,7 +35,7 @@ public class MessageMap extends HashMap<String,Message>{
             try {
                 String sptext=sp.getString("Messages", "");
                 Log.d("MessageLoad",sptext);
-                loadJSON(new JSONObject(sptext));
+                if (!"".equals(sptext))  loadJSON(new JSONObject(sptext));
             } catch (JSONException e) {
                 if ("Y".equals(GameSettings.getInstance().get("SHOW_NETWORK_ERROR")))
                     Essages.addEssage("Error Loading:"+ e.toString());

@@ -1,5 +1,6 @@
 package coe.com.c0r0vans;
 
+import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.content.Context;
 import android.content.Intent;
@@ -18,7 +19,12 @@ import android.view.ViewGroup;
 import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.GoogleAuthUtil;
 import com.google.android.gms.auth.UserRecoverableAuthException;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.AccountPicker;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -45,6 +51,7 @@ import coe.com.c0r0vans.UIElements.ChooseFaction;
 import coe.com.c0r0vans.UIElements.InfoLayout.InfoLayout;
 import coe.com.c0r0vans.UIElements.LoginView;
 import coe.com.c0r0vans.UIElements.UIControler;
+import coe.com.c0r0vans.R;
 import utility.GPSInfo;
 import utility.GameSound;
 import utility.ImageLoader;
@@ -60,6 +67,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
     private MessageMap messages;
     MainWindow self=this;
     private boolean ready=false;
+    GoogleApiClient mGoogleApiClient;
 
     //Security
     private final static String G_PLUS_SCOPE =
@@ -70,7 +78,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
             "https://www.googleapis.com/auth/userinfo.email";
     private final static String SCOPES = G_PLUS_SCOPE + " " + USERINFO_SCOPE + " " + EMAIL_SCOPE;
 
-
+//dfNouaJXqFsNC2Bdru7zYF8q
     @Override
     /**
      * Create form;
@@ -89,16 +97,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                     @Override
                     public void run() {
                         Log.d("Loader", "Ofthread");
-                        SharedPreferences sharedPreferences=getSharedPreferences("ACC", MODE_PRIVATE);
-                        String accName=sharedPreferences.getString("acc_name", "");
-                        if ("".equals(accName)) {
-                            Intent intent = AccountPicker.newChooseAccountIntent(null, null, new String[]{"com.google"},
-                                    false, null, null, null, null);
-                            startActivityForResult(intent, 123);
-                        } else
-                        {
-                            getToken(accName);
-                        }
+
                         ofThreadInit();
                         //Возвращаемся в основной поток для работы с UI.
                         myHandler.post(new Runnable() {
@@ -184,7 +183,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
      */
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        Log.d("Loader","Map Ready");
+        Log.d("Loader", "Map Ready");
         try{
 
         Point size=new Point();
@@ -505,15 +504,17 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
 
     @Override
     protected void onPause(){
-        Log.d("Loader","ActivityPause");
+        Log.d("Loader", "ActivityPause");
         try {
             super.onPause();
-            myHandler.removeCallbacks(myRunable);
+            if (ready) {
+                myHandler.removeCallbacks(myRunable);
 
-            MessageNotification.appActive = false;
-            GameSound.stopMusic();
-            if (!"Y".equals(GameSettings.getInstance().get("GPS_ON_BACK")))
-                GPSInfo.getInstance().offGPS();
+                MessageNotification.appActive = false;
+                GameSound.stopMusic();
+                if (!"Y".equals(GameSettings.getInstance().get("GPS_ON_BACK")))
+                    GPSInfo.getInstance().offGPS();
+            }
         } catch (Exception e){
             serverConnect.getInstance().sendDebug(2, "Pause UE:" + e.toString() + "\n" + Arrays.toString(e.getStackTrace()));
         }
@@ -557,46 +558,46 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
             serverConnect.getInstance().sendDebug(2, "BackPress UE:" + e.toString() + "\n" + Arrays.toString(e.getStackTrace()));
         }
     }
+    private  void signIn(){
+        SharedPreferences sharedPreferences=getSharedPreferences("ACC", MODE_PRIVATE);
+        String accountName=sharedPreferences.getString("AccountName", "");
+        GoogleSignInOptions gso;
+        if ("".equals(accountName))
+            gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                    .requestIdToken("818299087088-ooq951dsv5btv7361u4obhlse0apt3al.apps.googleusercontent.com")
+                    .requestEmail()
+                    .build();
+        else
+            gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                    .requestIdToken("818299087088-ooq951dsv5btv7361u4obhlse0apt3al.apps.googleusercontent.com")
+                    .requestEmail()
+                    .setAccountName(accountName)
+                    .build();
+            mGoogleApiClient = new GoogleApiClient.Builder(getApplicationContext())
+                    .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                    .build();
+            Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
+            startActivityForResult(signInIntent, 123);
 
+    }
     protected void onActivityResult(final int requestCode, final int resultCode,
                                     final Intent data) {
-        Log.d("Loader","ActivityResult");
-        if (requestCode == 123 && resultCode == RESULT_OK) {
-            final String accountName = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
-            SharedPreferences sharedPreferences=getSharedPreferences("ACC", Context.MODE_PRIVATE);
-            SharedPreferences.Editor editor=sharedPreferences.edit();
-            editor.putString("acc_name", accountName);
-            editor.apply();
-            getToken(accountName);
+        Log.d("Token", "ActivityResult");
+
+        if (requestCode == 123) {
+            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+
+            if (result.isSuccess()) {
+                GoogleSignInAccount acct = result.getSignInAccount();
+                // Get account information
+                //String accountNAme = acct.get();
+                String idToken=acct.getIdToken();
+                //String mEmail = acct.getEmail();
+                //Log.d("Token",mFullName);
+                //Log.d("Token",mEmail);
+                Log.d("Token",idToken);
+            } else Log.d("Token","Reslt:"+result.getStatus().getStatusMessage()+result.getStatus().toString());
         }
     }
-    private void getToken(final String accName){
-        AsyncTask<Void, Void, String> getToken = new AsyncTask<Void, Void, String>() {
-            @Override
-            protected String doInBackground(Void... params) {
-                String token="";
-                try {
-                    token = GoogleAuthUtil.getToken(MainWindow.this, accName,
-                            SCOPES);
-                    return token;
 
-                } catch (UserRecoverableAuthException userAuthEx) {
-                    startActivityForResult(userAuthEx.getIntent(), 123);
-                }  catch (IOException ioEx) {
-                    Log.d("TokenError", "Fatal Authorization Exception" + ioEx.getLocalizedMessage());
-                }  catch (GoogleAuthException fatalAuthEx)  {
-                    Log.d("TokenError", "Fatal Authorization Exception" + fatalAuthEx.getLocalizedMessage());
-                }
-                return token;
-            }
-
-            @Override
-            protected void onPostExecute(String token) {
-                //reg(token);
-                Log.d("Token",token);
-            }
-
-        };
-        getToken.execute(null, null, null);
-    }
 }
