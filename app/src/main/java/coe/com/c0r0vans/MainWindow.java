@@ -1,13 +1,10 @@
 package coe.com.c0r0vans;
 
-import android.accounts.Account;
-import android.accounts.AccountManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Point;
 import android.location.Location;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
@@ -16,14 +13,10 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.google.android.gms.auth.GoogleAuthException;
-import com.google.android.gms.auth.GoogleAuthUtil;
-import com.google.android.gms.auth.UserRecoverableAuthException;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
-import com.google.android.gms.common.AccountPicker;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -33,7 +26,6 @@ import com.google.android.gms.maps.model.LatLng;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.Date;
 
@@ -48,10 +40,8 @@ import coe.com.c0r0vans.GameObjects.SelectedObject;
 import coe.com.c0r0vans.UIElements.ActionView;
 import coe.com.c0r0vans.UIElements.ButtonLayout;
 import coe.com.c0r0vans.UIElements.ChooseFaction;
-import coe.com.c0r0vans.UIElements.InfoLayout.InfoLayout;
 import coe.com.c0r0vans.UIElements.LoginView;
 import coe.com.c0r0vans.UIElements.UIControler;
-import coe.com.c0r0vans.R;
 import utility.GPSInfo;
 import utility.GameSound;
 import utility.ImageLoader;
@@ -86,34 +76,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_window);
-
-        //Даем время интерфейсу
-        Log.d("Loader", "Create");
-        myHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                //Запускаем отдельный поток для прогрузки
-                Thread thread = new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Log.d("Loader", "Ofthread");
-
-                        ofThreadInit();
-                        //Возвращаемся в основной поток для работы с UI.
-                        myHandler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                Log.d("Loader", "OnThread");
-                                init();
-                            }
-                        });
-                    }
-                });
-                Log.d("Loader", "Start");
-                thread.start();
-            }
-        }, 5000);
-
+        signIn();
     }
 
     /**
@@ -592,12 +555,42 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                 // Get account information
                 //String accountNAme = acct.get();
                 String idToken=acct.getIdToken();
-                //String mEmail = acct.getEmail();
-                //Log.d("Token",mFullName);
-                //Log.d("Token",mEmail);
-                Log.d("Token",idToken);
+                String mEmail = acct.getEmail();
+                SharedPreferences sharedPreferences=getSharedPreferences("ACC", MODE_PRIVATE);
+                SharedPreferences.Editor editor=sharedPreferences.edit();
+                editor.putString("AccountName", mEmail);
+                editor.commit();
+                initStart();
             } else Log.d("Token","Reslt:"+result.getStatus().getStatusMessage()+result.getStatus().toString());
         }
+    }
+    private void initStart(){
+        //Даем время интерфейсу
+        Log.d("Loader", "Create");
+        myHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                //Запускаем отдельный поток для прогрузки
+                Thread thread = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Log.d("Loader", "Ofthread");
+
+                        ofThreadInit();
+                        //Возвращаемся в основной поток для работы с UI.
+                        myHandler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                Log.d("Loader", "OnThread");
+                                init();
+                            }
+                        });
+                    }
+                });
+                Log.d("Loader", "Start");
+                thread.start();
+            }
+        }, 1000);
     }
 
 }
