@@ -10,6 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ToggleButton;
 
+import java.util.Arrays;
 import java.util.Date;
 
 import coe.com.c0r0vans.R;
@@ -25,24 +26,21 @@ public class InfoLayout extends RelativeLayout implements ShowHideForm {
     PlayerInfoLayout current;
     public InfoLayout(Context context) {
         super(context);
-        init();
     }
 
     public InfoLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
-        init();
     }
 
     public InfoLayout(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        init();
     }
-    private void init(){
+    public void init(){
         inflate(getContext(), R.layout.info_layout, this);
         try {
             afterInit();
         } catch (Exception e){
-            serverConnect.getInstance().sendDebug(2, e.toString());
+            serverConnect.getInstance().sendDebug(2, e.toString()+ Arrays.toString(e.getStackTrace()));
         }
     }
     @Override

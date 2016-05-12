@@ -33,27 +33,13 @@ public class LoadingActivity extends AppCompatActivity {
         self=this;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.loading);
-        GPSInfo.getInstance(getApplicationContext());
+
         handler=new Handler();
         Thread thread=new Thread(new Runnable() {
             @Override
             public void run() {
-                GameSettings.init(getApplicationContext());
-                ImageLoader.Loader(getApplicationContext());
-                GameSound.init(getApplicationContext());
-                MessageNotification.init(getApplicationContext());
-                serverConnect.getInstance().connect(getResources().getString(R.string.serveradress), getApplicationContext());
-                Player.instance();
-                SharedPreferences sp = getApplicationContext().getSharedPreferences("player", Context.MODE_PRIVATE);
-                String pls = sp.getString("player", "");
-                if (!"".equals(pls)) {
-                    try {
-                        Player.getPlayer().loadJSON(new JSONObject(pls));
-                    } catch (JSONException e) {
-                        Log.d("LoadPlayer", "Error:" + pls);
-                    }
-                }
-                GameObjects.init();
+
+
                 handler.post(new Runnable() {
                     @Override
                     public void run() {

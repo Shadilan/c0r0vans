@@ -76,4 +76,5 @@ All rights reserved to Circle of Eternity</string>
     <string name="about_title">About...</string>
     <string name="distance_mesure">%dм</string>
     <string name="title_activity_loading">Corovans Loading</string>
+    <string name="LogoText">Logo of Circle of Eternity</string>
 </resources>

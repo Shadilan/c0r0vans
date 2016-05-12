@@ -367,7 +367,7 @@ public class serverConnect {
 
                         } catch (Exception e)
                         {
-                            serverConnect.getInstance().sendDebug(3, "Net UE:" + e.toString());
+                            serverConnect.getInstance().sendDebug(3, "Net UE:" + e.toString()+ Arrays.toString(e.getStackTrace()));
                         }
                     }
                 });
@@ -381,6 +381,7 @@ public class serverConnect {
         Log.d("SendDebug",message);
         if (!checkConnection()) return;
         String request="https://support-merchantarg.rhcloud.com/addLog.jsp";
+
         JSONObject reqTest= null;
         String android_id;
         try {

@@ -11,6 +11,8 @@ import android.widget.RelativeLayout;
 
 import org.json.JSONObject;
 
+import java.util.Arrays;
+
 import coe.com.c0r0vans.GameObjects.Ambush;
 import coe.com.c0r0vans.GameObjects.City;
 import coe.com.c0r0vans.GameObjects.GameObject;
@@ -30,18 +32,16 @@ public class ActionView extends LinearLayout {
 
     public ActionView(Context context) {
         super(context);
-        init();
     }
 
     public ActionView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        init();
     }
 
     public ActionView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        init();
     }
+
     public void init(){
         //inflate(getContext(), R.layout.actions_layout, this);
         serverConnect.getInstance().addListener(new ServerListener() {
@@ -82,6 +82,7 @@ public class ActionView extends LinearLayout {
 
             }
         });
+        Log.d("Loader","ErrorPlace");
         Player.getPlayer().addOnChange(new OnGameObjectChange() {
             @Override
             public void change(int ChangeType) {
@@ -174,7 +175,7 @@ public class ActionView extends LinearLayout {
             }
         } catch (Exception e)
         {
-            serverConnect.getInstance().sendDebug(2, "UER:" + e.toString());
+            serverConnect.getInstance().sendDebug(2, "UER:" + e.toString()+ Arrays.toString(e.getStackTrace()));
         }
     }
 

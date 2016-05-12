@@ -39,7 +39,7 @@ public class MessageMap extends HashMap<String,Message>{
             } catch (JSONException e) {
                 if ("Y".equals(GameSettings.getInstance().get("SHOW_NETWORK_ERROR")))
                     Essages.addEssage("Error Loading:"+ e.toString());
-                serverConnect.getInstance().sendDebug(2,"Error Loading:"+ e.toString());
+                serverConnect.getInstance().sendDebug(2,"Error Loading:"+ e.toString()+ Arrays.toString(e.getStackTrace()));
 
             }
             load=false;

@@ -43,25 +43,26 @@ public class ButtonLayout extends RelativeLayout {
 
     public ButtonLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
-        init();
+
     }
 
     public ButtonLayout(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        init();
+
     }
-    private void init(){
+    public void init(){
         inflate(getContext(), R.layout.button_layout, this);
         try {
             afterInit();
         } catch (Exception e){
-            serverConnect.getInstance().sendDebug(2, e.toString());
+            serverConnect.getInstance().sendDebug(2, e.toString()+ Arrays.toString(e.getStackTrace()));
         }
     }
 
     private void afterInit(){
         MyGoogleMap.setShowpointButton((ImageButton) findViewById(R.id.showPosButton));
         infoLayout=new InfoLayout(getContext());
+        infoLayout.init();
         ImageView PlayerInfo = (ImageView) findViewById(R.id.infoview);
 
         PlayerInfo.setOnClickListener(new View.OnClickListener() {
@@ -81,17 +82,19 @@ public class ButtonLayout extends RelativeLayout {
             }
         });
         TextView am = (TextView) findViewById(R.id.levelAmount);
-        am.setText(String.valueOf(Player.getPlayer().getLevel()));
         am = (TextView) findViewById(R.id.expAmount);
-        am.setText(String.valueOf(StringUtils.intToStr(Player.getPlayer().getExp())));
         am = (TextView) findViewById(R.id.goldAmount);
-        am.setText(String.valueOf(StringUtils.intToStr(Player.getPlayer().getGold())));
         ImageView btn = (ImageView) findViewById(R.id.infoview);
-        if ("".equals(Player.getPlayer().getCurrentRoute()))
-            btn.setImageResource(R.mipmap.info);
-        else btn.setImageResource(R.mipmap.info_route);
+        if (Player.getPlayer()!=null) {
+            am.setText(String.valueOf(Player.getPlayer().getLevel()));
+            am.setText(String.valueOf(StringUtils.intToStr(Player.getPlayer().getExp())));
+            am.setText(String.valueOf(StringUtils.intToStr(Player.getPlayer().getGold())));
+            if ("".equals(Player.getPlayer().getCurrentRoute()))
+                btn.setImageResource(R.mipmap.info);
+            else btn.setImageResource(R.mipmap.info_route);
 
-        infoLayout.loadFromPlayer();
+            infoLayout.loadFromPlayer();
+        }
         Settings.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
@@ -120,7 +123,7 @@ public class ButtonLayout extends RelativeLayout {
                     for (GameObject obj : GameObjects.getInstance().values())
                         if (obj.getMarker() != null) obj.changeMarkerSize();
                 } catch (Exception e) {
-                    serverConnect.getInstance().sendDebug(2, "UE:" + e.toString());
+                    serverConnect.getInstance().sendDebug(2, "UE:" + e.toString()+ Arrays.toString(e.getStackTrace()));
                 }
 
             }

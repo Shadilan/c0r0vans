@@ -67,7 +67,7 @@ public class LoginView extends RelativeLayout {
         try {
             afterInit();
         } catch (Exception e){
-            serverConnect.getInstance().sendDebug(2, e.toString());
+            serverConnect.getInstance().sendDebug(2, e.toString()+ Arrays.toString(e.getStackTrace()));
         }
     }
     private void afterInit(){

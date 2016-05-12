@@ -1,9 +1,12 @@
 package coe.com.c0r0vans;
 
+import android.accounts.AccountManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Point;
 import android.location.Location;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
@@ -12,6 +15,10 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.gms.auth.GoogleAuthException;
+import com.google.android.gms.auth.GoogleAuthUtil;
+import com.google.android.gms.auth.UserRecoverableAuthException;
+import com.google.android.gms.common.AccountPicker;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -20,6 +27,7 @@ import com.google.android.gms.maps.model.LatLng;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Date;
 
@@ -34,10 +42,12 @@ import coe.com.c0r0vans.GameObjects.SelectedObject;
 import coe.com.c0r0vans.UIElements.ActionView;
 import coe.com.c0r0vans.UIElements.ButtonLayout;
 import coe.com.c0r0vans.UIElements.ChooseFaction;
+import coe.com.c0r0vans.UIElements.InfoLayout.InfoLayout;
 import coe.com.c0r0vans.UIElements.LoginView;
 import coe.com.c0r0vans.UIElements.UIControler;
 import utility.GPSInfo;
 import utility.GameSound;
+import utility.ImageLoader;
 import utility.internet.ServerListener;
 import utility.internet.serverConnect;
 import utility.notification.Essages;
@@ -48,8 +58,17 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
     private Handler myHandler = new Handler();
     private int SendedRequest = 0;
     private MessageMap messages;
+    MainWindow self=this;
+    private boolean ready=false;
 
-    ButtonLayout buttonLayout;
+    //Security
+    private final static String G_PLUS_SCOPE =
+            "oauth2:https://www.googleapis.com/auth/plus.me";
+    private final static String USERINFO_SCOPE =
+            "https://www.googleapis.com/auth/userinfo.profile";
+    private final static String EMAIL_SCOPE =
+            "https://www.googleapis.com/auth/userinfo.email";
+    private final static String SCOPES = G_PLUS_SCOPE + " " + USERINFO_SCOPE + " " + EMAIL_SCOPE;
 
 
     @Override
@@ -58,190 +77,43 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
      */
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.loading_layout);
-        try {
-            buttonLayout = (ButtonLayout) findViewById(R.id.buttonLayout);
-            setContentView(R.layout.activity_main_window);
-            // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-            SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                    .findFragmentById(R.id.map);
-            Log.d("Timing", "MapFragment");
-            View touchView = findViewById(R.id.touchView);
-            Log.d("Timing", "Touch");
-            ViewGroup lay = (ViewGroup) findViewById(R.id.windowLayout);
-            Log.d("Timing", "window");
-            UIControler.setWindowLayout(lay);
-            UIControler.setButtonLayout((ButtonLayout) findViewById(R.id.buttonLayout));
-            lay.removeAllViews();
-            lay = (ViewGroup) findViewById(R.id.alertLayout);
-            UIControler.setAlertLayout(lay);
-            UIControler.setActionLayout((ActionView) findViewById(R.id.actionView));
-            lay.removeAllViews();
-            Log.d("Timing", "UI");
-            new LoginView(getApplicationContext()).show();
-            Log.d("Timing", "Login");
-            touchView.setOnTouchListener(new View.OnTouchListener() {
-                long tm = -1;
-                Point oldPos;
-                //float oldBearing=0;
-                Point f1;
-                Point f2;
-                int firstId;
-                int secondId;
-                boolean closeCity = true;
+        setContentView(R.layout.activity_main_window);
 
-                @Override
-                public boolean onTouch(View v, MotionEvent event) {
-                    try {
-                        if (event.getActionMasked() == MotionEvent.ACTION_DOWN) {
-                            //Зафиксировать позицию и время
-                            oldPos = new Point((int) event.getX(), (int) event.getY());
-
-                            tm = new Date().getTime();
-                        } else if (event.getActionMasked() == MotionEvent.ACTION_UP) {
-                            if (closeCity) UIControler.getActionLayout().HideView();
-                            closeCity = true;
-                            //Проверить лонгтап
-                            if (Math.abs(oldPos.x - event.getX()) < 20 && Math.abs(oldPos.y - event.getY()) < 20 && (new Date().getTime()) - tm > 1500) {
-                                tm = -1;
-                            } else
-                            if (Math.abs(oldPos.x - event.getX()) < 20 && Math.abs(oldPos.y - event.getY()) < 20) {
-                                int distance = 50;
-                                GameObject target = null;
-                                //Marker
-                                for (GameObject o : GameObjects.getInstance().values()) {
-                                    if (o != null && o.getMarker() != null) {
-                                        Point p = MyGoogleMap.getMap().getProjection().toScreenLocation(o.getMarker().getPosition());
-                                        int calc = (int) Math.sqrt(Math.pow(p.x - oldPos.x, 2) + Math.pow(p.y - oldPos.y, 2));
-                                        if (!(o instanceof Player || o instanceof Caravan) && calc < distance && o.getMarker().isVisible()) {
-                                            target = o;
-                                            distance = calc;
-                                        }
-                                    }
-                                }
-                                if (target != null) {
-
-                                    SelectedObject.getInstance().setTarget(target);
-                                    SelectedObject.getInstance().setPoint(target.getMarker().getPosition());
-                                    ((ActionView) findViewById(R.id.actionView)).ShowView();
-                                } else if (Player.getPlayer()!=null & Player.getPlayer().getMarker()!=null){
-                                    //Ambush
-                                    LatLng latLng = MyGoogleMap.getMap().getProjection().fromScreenLocation(oldPos);
-                                    float distances = GPSInfo.getDistance(latLng, Player.getPlayer().getMarker().getPosition());
-                                    if (distances != -1 && distances < Player.getPlayer().getActionDistance()) {
-                                        boolean setAmush = true;
-                                        for (GameObject o : GameObjects.getInstance().values()) {
-                                            if ((o instanceof City || o instanceof Ambush) && o.getMarker() != null && o.getMarker().isVisible()) {
-                                                float d = GPSInfo.getDistance(latLng, o.getMarker().getPosition());
-                                                if (d < o.getRadius()) setAmush = false;
-                                            }
-                                        }
-                                        if (setAmush) {
-                                            SelectedObject.getInstance().setTarget(Player.getPlayer());
-                                            SelectedObject.getInstance().setPoint(latLng);
-                                            ActionView actionView = (ActionView) findViewById(R.id.actionView);
-                                            actionView.ShowView();
-                                        }
-                                    }
-                                }
-                            } else {
-                                SelectedObject.getInstance().hidePoint();
-                            }
-                            f1 = null;
-                            f2 = null;
-
-
-                        } else if (event.getActionMasked() == MotionEvent.ACTION_POINTER_DOWN) {
-                            closeCity = false;
-                            firstId = event.getPointerId(0);
-                            secondId = event.getPointerId(event.getActionIndex());
-
-                            f1 = new Point((int) event.getX(0), (int) event.getY(0));
-                            f2 = new Point((int) event.getX(event.getActionIndex()), (int) event.getY(event.getActionIndex()));
-                        } else if (event.getActionMasked() == MotionEvent.ACTION_MOVE) {
-                            try {
-
-                                if (f1 != null && f2 != null && event.getPointerCount() == 2) {
-                                    Point p1 = new Point((int) event.getX(event.findPointerIndex(firstId)), (int) event.getY(event.findPointerIndex(firstId)));
-                                    Point p2 = new Point((int) event.getX(event.findPointerIndex(secondId)), (int) event.getY(event.findPointerIndex(secondId)));
-                                    double angle = getAngle(f1, f2) - getAngle(p1, p2);
-                                    MyGoogleMap.rotate((float) angle);
-                                    //Essages.addEssage("Угол"+angle);
-                                    f1 = p1;
-                                    f2 = p2;
-                                } else if (Math.abs(oldPos.x - event.getX()) < 20 && Math.abs(oldPos.y - event.getY()) < 20 && (new Date().getTime()) - tm > 800) {
-                                    //Ambush
-                                    LatLng latLng = MyGoogleMap.getMap().getProjection().fromScreenLocation(oldPos);
-                                    float distances = GPSInfo.getDistance(latLng, Player.getPlayer().getMarker().getPosition());
-                                    if (distances != -1 && distances < Player.getPlayer().getActionDistance()) {
-                                        boolean setAmush = true;
-                                        for (GameObject o : GameObjects.getInstance().values()) {
-                                            if ((o instanceof City || o instanceof Ambush) && o.getMarker().isVisible()) {
-                                                float d = GPSInfo.getDistance(latLng, o.getMarker().getPosition());
-                                                if (d < o.getRadius()) setAmush = false;
-                                            }
-                                        }
-                                        if (setAmush) {
-                                            SelectedObject.getInstance().setTarget(Player.getPlayer());
-                                            SelectedObject.getInstance().setPoint(latLng);
-                                            ActionView actionView = (ActionView) findViewById(R.id.actionView);
-                                            actionView.ShowView();
-                                        }
-                                    }
-                                }
-                            } catch (Exception e) {
-                                Log.d("Error", e.toString());
-                            }
-                            //Проверить поворот
-                        } else if (Math.abs(oldPos.x - event.getX()) < 20 && Math.abs(oldPos.y - event.getY()) < 20 && (new Date().getTime()) - tm > 800) {
-                            //Ambush
-                            LatLng latLng = MyGoogleMap.getMap().getProjection().fromScreenLocation(oldPos);
-                            float[] distances = new float[1];
-                            Location.distanceBetween(latLng.latitude, latLng.longitude, Player.getPlayer().getMarker().getPosition().latitude, Player.getPlayer().getMarker().getPosition().longitude, distances);
-                            if (distances.length > 0 && distances[0] < Player.getPlayer().getActionDistance()) {
-
-                                SelectedObject.getInstance().setTarget(Player.getPlayer());
-                                SelectedObject.getInstance().setPoint(latLng);
-                                ActionView actionView = (ActionView) findViewById(R.id.actionView);
-                                actionView.ShowView();
-                            }
+        //Даем время интерфейсу
+        Log.d("Loader", "Create");
+        myHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                //Запускаем отдельный поток для прогрузки
+                Thread thread = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Log.d("Loader", "Ofthread");
+                        SharedPreferences sharedPreferences=getSharedPreferences("ACC", MODE_PRIVATE);
+                        String accName=sharedPreferences.getString("acc_name", "");
+                        if ("".equals(accName)) {
+                            Intent intent = AccountPicker.newChooseAccountIntent(null, null, new String[]{"com.google"},
+                                    false, null, null, null, null);
+                            startActivityForResult(intent, 123);
+                        } else
+                        {
+                            getToken(accName);
                         }
-                    } catch (Exception e) {
-                        serverConnect.getInstance().sendDebug(2, "Gesture UE:" + e.toString() + Arrays.toString(e.getStackTrace()));
+                        ofThreadInit();
+                        //Возвращаемся в основной поток для работы с UI.
+                        myHandler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                Log.d("Loader", "OnThread");
+                                init();
+                            }
+                        });
                     }
-                    return true;
-                }
-
-                private double getAngle(Point a, Point b) {
-                    double dx = b.x - a.x;
-                    // Minus to correct for coord re-mapping
-                    double dy = -(b.y - a.y);
-
-                    double inRads = Math.atan2(dy, dx);
-
-                    // We need to map to coord system when 0 degree is at 3 O'clock, 270 at 12 O'clock
-                    if (inRads < 0)
-                        inRads = Math.abs(inRads);
-                    else
-                        inRads = 2 * Math.PI - inRads;
-
-                    return Math.toDegrees(inRads);
-                }
-            });
-            Log.d("Timing", "Listener");
-            mapFragment.getMapAsync(this);
-            Log.d("Timing", "mapFragment");
-
-            init();
-            Log.d("Timing", "Init");
-            if (serverConnect.getInstance().isLogin()) {
-                UIControler.getWindowLayout().removeAllViews();
+                });
+                Log.d("Loader", "Start");
+                thread.start();
             }
-        } catch (Exception e){
-            serverConnect.getInstance().sendDebug(2, "Init UE:" + e.toString() + Arrays.toString(e.getStackTrace()));
-            throw e;
-
-        }
+        }, 5000);
 
     }
 
@@ -251,9 +123,58 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
 
     private void init() {
         //init fields
-        GameSound.setVolumeControlStream(this);
-        messages=new MessageMap(getApplicationContext());
-        messageRequest.run();
+        try {
+            GPSInfo.getInstance(getApplicationContext());
+
+            //Загрузка GoogleMap.
+            SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                    .findFragmentById(R.id.map);
+            mapFragment.getMapAsync(this);
+            //Компонент управления слоями
+            ViewGroup lay = (ViewGroup) findViewById(R.id.windowLayout);
+            UIControler.setWindowLayout(lay);
+            UIControler.setButtonLayout((ButtonLayout) findViewById(R.id.buttonLayout));
+            lay.removeAllViews();
+            lay = (ViewGroup) findViewById(R.id.alertLayout);
+            UIControler.setAlertLayout(lay);
+            UIControler.setActionLayout((ActionView) findViewById(R.id.actionView));
+            lay.removeAllViews();
+            GameSound.setVolumeControlStream(self);
+            messages=new MessageMap(getApplicationContext());
+            messageRequest.run();
+            ((ActionView)findViewById(R.id.actionView)).init();
+            ((ButtonLayout)findViewById(R.id.buttonLayout)).init();
+
+            //Окно логина
+            if (serverConnect.getInstance().isLogin()) {
+                UIControler.getWindowLayout().removeAllViews();
+            } else new LoginView(getApplicationContext()).show();
+            ((ViewGroup) findViewById(R.id.alertLayout)).removeAllViews();
+
+            onTrueResume();
+            ready=true;
+        } catch (Exception e){
+            serverConnect.getInstance().sendDebug(2, "Init UE:" + e.toString() + Arrays.toString(e.getStackTrace()));
+            throw e;
+        }
+    }
+    private void ofThreadInit(){
+        GameSettings.init(getApplicationContext());
+        ImageLoader.Loader(getApplicationContext());
+        GameSound.init(getApplicationContext());
+        MessageNotification.init(getApplicationContext());
+        serverConnect.getInstance().connect(getResources().getString(R.string.serveradress), getApplicationContext());
+        Player.instance();
+        SharedPreferences sp = getApplicationContext().getSharedPreferences("player", Context.MODE_PRIVATE);
+        String pls = sp.getString("player", "");
+        if (!"".equals(pls)) {
+            try {
+                Player.getPlayer().loadJSON(new JSONObject(pls));
+            } catch (JSONException e) {
+                Log.d("LoadPlayer", "Error:" + pls);
+            }
+        }
+        GameObjects.init();
     }
 
     /**
@@ -263,7 +184,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
      */
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        Log.d("tttt","Map Ready");
+        Log.d("Loader","Map Ready");
         try{
 
         Point size=new Point();
@@ -282,6 +203,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
      */
 
     private void createListeners() {
+        Log.d("Loader","Listeners");
         if (isListenersDone) return;
         serverConnect.getInstance().addListener(new ServerListener() {
             @Override
@@ -362,17 +284,165 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
 
             }
         });
+        View touchView = findViewById(R.id.touchView);
+        touchView.setOnTouchListener(new View.OnTouchListener() {
+            long tm = -1;
+            Point oldPos;
+            //float oldBearing=0;
+            Point f1;
+            Point f2;
+            int firstId;
+            int secondId;
+            boolean closeCity = true;
+            //TODO: Какая то жесть надо привести в аккуратный вид.
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                try {
+                    if (event.getActionMasked() == MotionEvent.ACTION_DOWN) {
+                        //Зафиксировать позицию и время
+                        oldPos = new Point((int) event.getX(), (int) event.getY());
+
+                        tm = new Date().getTime();
+                    } else if (event.getActionMasked() == MotionEvent.ACTION_UP) {
+                        if (closeCity) UIControler.getActionLayout().HideView();
+                        closeCity = true;
+                        //Проверить лонгтап
+                        if (Math.abs(oldPos.x - event.getX()) < 20 && Math.abs(oldPos.y - event.getY()) < 20 && (new Date().getTime()) - tm > 1500) {
+                            tm = -1;
+                        } else if (Math.abs(oldPos.x - event.getX()) < 20 && Math.abs(oldPos.y - event.getY()) < 20) {
+                            int distance = 50;
+                            GameObject target = null;
+                            //Marker
+                            for (GameObject o : GameObjects.getInstance().values()) {
+                                if (o != null && o.getMarker() != null) {
+                                    Point p = MyGoogleMap.getMap().getProjection().toScreenLocation(o.getMarker().getPosition());
+                                    int calc = (int) Math.sqrt(Math.pow(p.x - oldPos.x, 2) + Math.pow(p.y - oldPos.y, 2));
+                                    if (!(o instanceof Player || o instanceof Caravan) && calc < distance && o.getMarker().isVisible()) {
+                                        target = o;
+                                        distance = calc;
+                                    }
+                                }
+                            }
+                            if (target != null) {
+
+                                SelectedObject.getInstance().setTarget(target);
+                                SelectedObject.getInstance().setPoint(target.getMarker().getPosition());
+                                ((ActionView) findViewById(R.id.actionView)).ShowView();
+                            } else if (Player.getPlayer() != null & Player.getPlayer().getMarker() != null) {
+                                //Ambush
+                                LatLng latLng = MyGoogleMap.getMap().getProjection().fromScreenLocation(oldPos);
+                                float distances = GPSInfo.getDistance(latLng, Player.getPlayer().getMarker().getPosition());
+                                if (distances != -1 && distances < Player.getPlayer().getActionDistance()) {
+                                    boolean setAmush = true;
+                                    for (GameObject o : GameObjects.getInstance().values()) {
+                                        if ((o instanceof City || o instanceof Ambush) && o.getMarker() != null && o.getMarker().isVisible()) {
+                                            float d = GPSInfo.getDistance(latLng, o.getMarker().getPosition());
+                                            if (d < o.getRadius()) setAmush = false;
+                                        }
+                                    }
+                                    if (setAmush) {
+                                        SelectedObject.getInstance().setTarget(Player.getPlayer());
+                                        SelectedObject.getInstance().setPoint(latLng);
+                                        ActionView actionView = (ActionView) findViewById(R.id.actionView);
+                                        actionView.ShowView();
+                                    }
+                                }
+                            }
+                        } else {
+                            SelectedObject.getInstance().hidePoint();
+                        }
+                        f1 = null;
+                        f2 = null;
+
+
+                    } else if (event.getActionMasked() == MotionEvent.ACTION_POINTER_DOWN) {
+                        closeCity = false;
+                        firstId = event.getPointerId(0);
+                        secondId = event.getPointerId(event.getActionIndex());
+
+                        f1 = new Point((int) event.getX(0), (int) event.getY(0));
+                        f2 = new Point((int) event.getX(event.getActionIndex()), (int) event.getY(event.getActionIndex()));
+                    } else if (event.getActionMasked() == MotionEvent.ACTION_MOVE) {
+                        try {
+
+                            if (f1 != null && f2 != null && event.getPointerCount() == 2) {
+                                Point p1 = new Point((int) event.getX(event.findPointerIndex(firstId)), (int) event.getY(event.findPointerIndex(firstId)));
+                                Point p2 = new Point((int) event.getX(event.findPointerIndex(secondId)), (int) event.getY(event.findPointerIndex(secondId)));
+                                double angle = getAngle(f1, f2) - getAngle(p1, p2);
+                                MyGoogleMap.rotate((float) angle);
+                                //Essages.addEssage("Угол"+angle);
+                                f1 = p1;
+                                f2 = p2;
+                            } else if (Math.abs(oldPos.x - event.getX()) < 20 && Math.abs(oldPos.y - event.getY()) < 20 && (new Date().getTime()) - tm > 800) {
+                                //Ambush
+                                LatLng latLng = MyGoogleMap.getMap().getProjection().fromScreenLocation(oldPos);
+                                float distances = GPSInfo.getDistance(latLng, Player.getPlayer().getMarker().getPosition());
+                                if (distances != -1 && distances < Player.getPlayer().getActionDistance()) {
+                                    boolean setAmush = true;
+                                    for (GameObject o : GameObjects.getInstance().values()) {
+                                        if ((o instanceof City || o instanceof Ambush) && o.getMarker().isVisible()) {
+                                            float d = GPSInfo.getDistance(latLng, o.getMarker().getPosition());
+                                            if (d < o.getRadius()) setAmush = false;
+                                        }
+                                    }
+                                    if (setAmush) {
+                                        SelectedObject.getInstance().setTarget(Player.getPlayer());
+                                        SelectedObject.getInstance().setPoint(latLng);
+                                        ActionView actionView = (ActionView) findViewById(R.id.actionView);
+                                        actionView.ShowView();
+                                    }
+                                }
+                            }
+                        } catch (Exception e) {
+                            Log.d("Error", e.toString());
+                        }
+                        //Проверить поворот
+                    } else if (Math.abs(oldPos.x - event.getX()) < 20 && Math.abs(oldPos.y - event.getY()) < 20 && (new Date().getTime()) - tm > 800) {
+                        //Ambush
+                        LatLng latLng = MyGoogleMap.getMap().getProjection().fromScreenLocation(oldPos);
+                        float[] distances = new float[1];
+                        Location.distanceBetween(latLng.latitude, latLng.longitude, Player.getPlayer().getMarker().getPosition().latitude, Player.getPlayer().getMarker().getPosition().longitude, distances);
+                        if (distances.length > 0 && distances[0] < Player.getPlayer().getActionDistance()) {
+
+                            SelectedObject.getInstance().setTarget(Player.getPlayer());
+                            SelectedObject.getInstance().setPoint(latLng);
+                            ActionView actionView = (ActionView) findViewById(R.id.actionView);
+                            actionView.ShowView();
+                        }
+                    }
+                } catch (Exception e) {
+                    serverConnect.getInstance().sendDebug(2, "Gesture UE:" + e.toString() + Arrays.toString(e.getStackTrace()));
+                }
+                return true;
+            }
+
+            private double getAngle(Point a, Point b) {
+                double dx = b.x - a.x;
+                // Minus to correct for coord re-mapping
+                double dy = -(b.y - a.y);
+
+                double inRads = Math.atan2(dy, dx);
+
+                // We need to map to coord system when 0 degree is at 3 O'clock, 270 at 12 O'clock
+                if (inRads < 0)
+                    inRads = Math.abs(inRads);
+                else
+                    inRads = 2 * Math.PI - inRads;
+
+                return Math.toDegrees(inRads);
+            }
+        });
         isListenersDone=true;
     }
 
     /**
-     * Start Timer to load data and other needs.
+     * Tick Клиента
      */
     private void StartTickTimer() {
+
         int delay = 1000;
         try {
             if (serverConnect.getInstance().isLogin() && (timeToPlayerRefresh != -1) && GPSInfo.getInstance().GetLat() != -1 && GPSInfo.getInstance().GetLng() != -1) {
-                Log.d("Debug info", "Speed:" + GPSInfo.getInstance().getSpeed());
                 if (GPSInfo.getInstance().getSpeed() < 30) delay = 40000;
                 else if (GPSInfo.getInstance().getSpeed() > 30) delay = 20000;
 
@@ -381,8 +451,6 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
         catch (Exception e){
             serverConnect.getInstance().sendDebug(2, "TickTimer UNEXPECTED:" + e.toString());
         }
-        Log.d("DebugCall", "postDelayed");
-        Log.d("Debug info","Delay:"+delay);
         myHandler.postDelayed(myRunable, delay);
 
     }
@@ -400,7 +468,6 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
     int timeToPlayerRefresh=-1;
     private void Tick() {
         try {
-            Log.d("Debug info", "Time to refresh");
             if (serverConnect.getInstance().isLogin() && this.hasWindowFocus()
                     && GPSInfo.getInstance().GetLat() != -1 && GPSInfo.getInstance().GetLng() != -1)
                 if (timeToPlayerRefresh < 1) {
@@ -438,6 +505,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
 
     @Override
     protected void onPause(){
+        Log.d("Loader","ActivityPause");
         try {
             super.onPause();
             myHandler.removeCallbacks(myRunable);
@@ -452,28 +520,27 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
     }
     @Override
     protected void onResume() {
+
         super.onResume();
-
-        try {
-            MessageNotification.cancel();
-            MessageNotification.appActive = true;
-            StartTickTimer();
-            GameSound.playMusic();
-            //if (!"Y".equals(GameSettings.getInstance().get("GPS_ON_BACK")))
-            /*if (serverConnect.getInstance().isLogin() && GPSInfo.getInstance().GetLat() != -1 && GPSInfo.getInstance().GetLng() != -1)
-                serverConnect.getInstance().RefreshCurrent();*/
-            GPSInfo.getInstance().onGPS();
-
+        Log.d("Loader", "ActivityResume");
+        if (ready) {
+            Log.d("Loader","ActivityResume+");
+            try {
+                onTrueResume();
+            } catch (Exception e) {
+                serverConnect.getInstance().sendDebug(2, "Resume UNEXPECTED:" + e.toString() + "\n");
+            }
         }
-        catch (Exception e){
-            serverConnect.getInstance().sendDebug(2,"Resume UNEXPECTED:"+e.toString()+"\n");
-        }
-        Log.d("Timing", "RestartTick");
     }
-
+    private void onTrueResume(){
+        MessageNotification.cancel();
+        MessageNotification.appActive = true;
+        StartTickTimer();
+        GameSound.playMusic();
+        GPSInfo.getInstance().onGPS();
+    }
     @Override
     public void onBackPressed() {
-
         try {
             if (UIControler.getWindowLayout().getChildCount() > 0 && serverConnect.getInstance().isLogin()) {
                 UIControler.getWindowLayout().removeAllViews();
@@ -491,5 +558,45 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
         }
     }
 
+    protected void onActivityResult(final int requestCode, final int resultCode,
+                                    final Intent data) {
+        Log.d("Loader","ActivityResult");
+        if (requestCode == 123 && resultCode == RESULT_OK) {
+            final String accountName = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
+            SharedPreferences sharedPreferences=getSharedPreferences("ACC", Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor=sharedPreferences.edit();
+            editor.putString("acc_name", accountName);
+            editor.apply();
+            getToken(accountName);
+        }
+    }
+    private void getToken(final String accName){
+        AsyncTask<Void, Void, String> getToken = new AsyncTask<Void, Void, String>() {
+            @Override
+            protected String doInBackground(Void... params) {
+                String token="";
+                try {
+                    token = GoogleAuthUtil.getToken(MainWindow.this, accName,
+                            SCOPES);
+                    return token;
 
+                } catch (UserRecoverableAuthException userAuthEx) {
+                    startActivityForResult(userAuthEx.getIntent(), 123);
+                }  catch (IOException ioEx) {
+                    Log.d("TokenError", "Fatal Authorization Exception" + ioEx.getLocalizedMessage());
+                }  catch (GoogleAuthException fatalAuthEx)  {
+                    Log.d("TokenError", "Fatal Authorization Exception" + fatalAuthEx.getLocalizedMessage());
+                }
+                return token;
+            }
+
+            @Override
+            protected void onPostExecute(String token) {
+                //reg(token);
+                Log.d("Token",token);
+            }
+
+        };
+        getToken.execute(null, null, null);
+    }
 }

@@ -52,21 +52,23 @@ public class MainInfoTable extends LinearLayout implements PlayerInfoLayout {
         profit = (TextView) findViewById(R.id.profit);
     }
     public void update(){
-        level.setText(StringUtils.intToStr(Player.getPlayer().getLevel()));
-        exp.setText(StringUtils.intToStr(Player.getPlayer().getExp()));
-        gold.setText(StringUtils.intToStr(Player.getPlayer().getGold()));
-        tnl.setText(StringUtils.intToStr(Player.getPlayer().getTNL()));
-        caravans.setText(StringUtils.intToStr(Player.getPlayer().getCaravans()));
-        ambushes.setText(StringUtils.intToStr(Player.getPlayer().getAmbushMax()-Player.getPlayer().getAmbushLeft()));
-        ambushes_left.setText(StringUtils.intToStr(Player.getPlayer().getAmbushLeft()));
-        profit.setText(StringUtils.intToStr(Player.getPlayer().getProfit()));
+        if (Player.getPlayer()!=null) {
+            level.setText(StringUtils.intToStr(Player.getPlayer().getLevel()));
+            exp.setText(StringUtils.intToStr(Player.getPlayer().getExp()));
+            gold.setText(StringUtils.intToStr(Player.getPlayer().getGold()));
+            tnl.setText(StringUtils.intToStr(Player.getPlayer().getTNL()));
+            caravans.setText(StringUtils.intToStr(Player.getPlayer().getCaravans()));
+            ambushes.setText(StringUtils.intToStr(Player.getPlayer().getAmbushMax() - Player.getPlayer().getAmbushLeft()));
+            ambushes_left.setText(StringUtils.intToStr(Player.getPlayer().getAmbushLeft()));
+            profit.setText(StringUtils.intToStr(Player.getPlayer().getProfit()));
 
-        if (Player.getPlayer().getRace()==1){
-            faction.setImageResource(R.mipmap.guild);
-        }else if (Player.getPlayer().getRace()==2){
-            faction.setImageResource(R.mipmap.alliance);
-        }else if (Player.getPlayer().getRace()==3){
-            faction.setImageResource(R.mipmap.legue);
+            if (Player.getPlayer().getRace() == 1) {
+                faction.setImageResource(R.mipmap.guild);
+            } else if (Player.getPlayer().getRace() == 2) {
+                faction.setImageResource(R.mipmap.alliance);
+            } else if (Player.getPlayer().getRace() == 3) {
+                faction.setImageResource(R.mipmap.legue);
+            }
         }
     }
 
