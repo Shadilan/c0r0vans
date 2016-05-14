@@ -8,8 +8,8 @@ import android.widget.CheckBox;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 
-import coe.com.c0r0vans.R;
-import coe.com.c0r0vans.UIElements.UIControler;
+import com.coe.c0r0vans.R;
+import com.coe.c0r0vans.UIElements.UIControler;
 
 public class Settings extends RelativeLayout {
 

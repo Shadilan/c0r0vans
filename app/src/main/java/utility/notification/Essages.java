@@ -3,14 +3,12 @@ package utility.notification;
 import android.os.Handler;
 import android.widget.LinearLayout;
 
+import com.coe.c0r0vans.GameObjects.Message;
+import com.coe.c0r0vans.UIElements.EssageLine;
+
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-
-
-
-import coe.com.c0r0vans.GameObjects.Message;
-import coe.com.c0r0vans.UIElements.EssageLine;
 
 /**
  * @author Shadilan
@@ -71,6 +69,6 @@ public class Essages {
             if (list==null) list=new ArrayList<>();
             list.add(msg);
         }
-        if (msg.notify) MessageNotification.notify(msg.getMessage(), 1);
+        if (msg.notify) MessageNotification.notify(msg.getMessage(), 1,MessageNotification.DEFAULT);
     }
 }

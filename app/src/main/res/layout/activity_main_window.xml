@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="coe.com.c0r0vans.MainWindow"
+    tools:context="com.coe.c0r0vans.MainWindow"
     tools:layout="@android:layout/activity_list_item">
 <fragment xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
@@ -17,7 +17,7 @@
         android:id="@+id/touchView"
         android:clickable="true"
         android:layout_above="@+id/chatGroup" />
-    <coe.com.c0r0vans.UIElements.ButtonLayout
+    <com.coe.c0r0vans.UIElements.ButtonLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/buttonLayout"
@@ -33,7 +33,7 @@
 
 
     </LinearLayout>
-    <coe.com.c0r0vans.UIElements.ActionView
+    <com.coe.c0r0vans.UIElements.ActionView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/actionView"

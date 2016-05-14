@@ -4,16 +4,18 @@ import android.annotation.TargetApi;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 
-import coe.com.c0r0vans.MainWindow;
-import coe.com.c0r0vans.R;
+import com.coe.c0r0vans.MainWindow;
+import com.coe.c0r0vans.R;
 
 /**
  * Helper class for showing and canceling message
@@ -27,6 +29,9 @@ public class MessageNotification {
      * The unique identifier for this type of notification.
      */
     private static final String NOTIFICATION_TAG = "Message";
+    public static final int DESTROY=R.raw.kill;
+    public static final int INCOME=R.raw.coins;
+    public static final int DEFAULT=R.raw.default_note;
     private static Context context;
 
     /**
@@ -51,7 +56,7 @@ public class MessageNotification {
                 .getSystemService(Context.NOTIFICATION_SERVICE);
     }
     public static boolean appActive=true;
-    public static void notify(final String exampleString, final int number) {
+    public static void notify(final String exampleString, final int number,int type) {
         if (appActive) return;
 
         final Resources res = context.getResources();
@@ -67,13 +72,17 @@ public class MessageNotification {
         vibra[2]=1000l;
         vibra[3]=10000l;
 
-
+        int resID=R.raw.default_note;
 
         final NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
 
                 // Set appropriate defaults for the notification light, sound,
                 // and vibration.
                 .setDefaults(Notification.DEFAULT_ALL)
+                .setSound(Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" +
+                        context.getResources().getResourcePackageName(resID) + '/' +
+                        context.getResources().getResourceTypeName(resID) + '/' +
+                        context.getResources().getResourceEntryName(resID)))
 
                         // Set required fields, including the small icon, the
                         // notification title, and text.

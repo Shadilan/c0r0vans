@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
+import com.coe.c0r0vans.R;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -11,7 +12,6 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import java.util.Calendar;
 import java.util.HashMap;
 
-import coe.com.c0r0vans.R;
 import utility.internet.serverConnect;
 import utility.notification.Essages;
 

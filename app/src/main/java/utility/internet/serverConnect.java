@@ -14,6 +14,10 @@ import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.coe.c0r0vans.GameObjects.ObjectAction;
+import com.coe.c0r0vans.GameObjects.Player;
+import com.coe.c0r0vans.MyGoogleMap;
+import com.coe.c0r0vans.R;
 import com.google.android.gms.maps.model.LatLng;
 
 import org.json.JSONException;
@@ -26,10 +30,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.UUID;
 
-import coe.com.c0r0vans.GameObjects.ObjectAction;
-import coe.com.c0r0vans.GameObjects.Player;
-import coe.com.c0r0vans.MyGoogleMap;
-import coe.com.c0r0vans.R;
 import utility.GPSInfo;
 import utility.StringUtils;
 

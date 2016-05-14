@@ -8,7 +8,8 @@ import android.media.SoundPool;
 import android.os.Build;
 import android.util.Log;
 
-import coe.com.c0r0vans.R;
+import com.coe.c0r0vans.R;
+
 import utility.settings.GameSettings;
 import utility.settings.SettingsListener;
 

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="coe.com.c0r0vans" > <!-- Type of version. Set when deployed. Number of build -->
+    package="com.coe.c0r0vans" > <!-- Type of version. Set when deployed. Number of build -->
     <uses-sdk android:minSdkVersion="18" />
 
     <!-- To auto-complete the email text field in the login form with the user's emails -->
@@ -21,7 +21,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".MainWindow"
+            android:name="com.coe.c0r0vans.MainWindow"
             android:label="@string/title_activity_main_window"
             android:launchMode="singleTask"
             android:screenOrientation="userPortrait" >

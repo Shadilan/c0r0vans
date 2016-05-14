@@ -1,16 +1,15 @@
 package utility.settings;
 
 
-
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 
+import com.coe.c0r0vans.GameObjects.GameObject;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-
-import coe.com.c0r0vans.GameObjects.GameObject;
 
 /**
  * @author Shadilan
