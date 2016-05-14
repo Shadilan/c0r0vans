@@ -120,6 +120,7 @@ public class ActionView extends LinearLayout {
 
     public void HideView(){
         SelectedObject.getInstance().hidePoint();
+        SelectedObject.getInstance().setTarget(null);
         this.removeAllViews();
         Player.getPlayer().higlight(null);
     }
