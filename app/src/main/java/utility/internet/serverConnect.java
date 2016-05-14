@@ -117,10 +117,13 @@ public class serverConnect {
      * @param Password Password of user
      * @return true
      */
-    public boolean ExecLogin(String Login, String Password){
+    public boolean ExecLogin(String Login, String Password,String gmail){
         if (!checkConnection()) return false;
-        String url=ServerAddres+"/login.jsp"+"?Login="+Login+"&Password="+Password;
+        String version=context.getResources().getString(R.string.version);
+        String hash= StringUtils.MD5("COWBOW"+Login+Password+gmail+version+"Login");
+        String url=ServerAddres+"/login.jsp"+"?Login="+Login+"&Password="+Password+"&GMail="+gmail+"&Version"+version+"&hash="+hash;
         login=Login;
+
         runRequest(UUID.randomUUID().toString(),url,ResponseListenerWithUID.LOGIN);
         sendDebug(1,"Login try.");
         return true;
