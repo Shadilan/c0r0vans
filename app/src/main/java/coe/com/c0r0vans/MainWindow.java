@@ -522,7 +522,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
         }
     }
     private  void signIn(){
-        SharedPreferences sharedPreferences=getSharedPreferences("ACC", MODE_PRIVATE);
+        SharedPreferences sharedPreferences=getSharedPreferences("SpiritProto", MODE_PRIVATE);
         String accountName=sharedPreferences.getString("AccountName", "");
         GoogleSignInOptions gso;
         if ("".equals(accountName))
@@ -556,7 +556,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                 //String accountNAme = acct.get();
                 String idToken=acct.getIdToken();
                 String mEmail = acct.getEmail();
-                SharedPreferences sharedPreferences=getSharedPreferences("ACC", MODE_PRIVATE);
+                SharedPreferences sharedPreferences=getSharedPreferences("SpiritProto", MODE_PRIVATE);
                 SharedPreferences.Editor editor=sharedPreferences.edit();
                 editor.putString("AccountName", mEmail);
                 editor.commit();

@@ -187,13 +187,13 @@ public class LoginView extends RelativeLayout {
 
                     editor.putString("Login", LoginField.getText().toString());
                     editor.putString("Password", PasswordField.getText().toString());
-
                     editor.apply();
+                    String gmail=sp.getString("AccountName","");
                     TextView errorText = (TextView) findViewById(R.id.errorText);
                     errorText.setText("");
                     loginButton.setText(R.string.login_button_run);
 
-                    if (!serverConnect.getInstance().ExecLogin(LoginField.getText().toString(), PasswordField.getText().toString())) {
+                    if (!serverConnect.getInstance().ExecLogin(LoginField.getText().toString(), PasswordField.getText().toString(),gmail)) {
                         errorText.setText("Отсутствует подключение к интернету.");
                         loginButton.setText(R.string.login_button);
 
