@@ -4,7 +4,6 @@ import android.annotation.TargetApi;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -78,11 +77,10 @@ public class MessageNotification {
 
                 // Set appropriate defaults for the notification light, sound,
                 // and vibration.
-                .setDefaults(Notification.DEFAULT_ALL)
-                .setSound(Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" +
-                        context.getResources().getResourcePackageName(resID) + '/' +
-                        context.getResources().getResourceTypeName(resID) + '/' +
-                        context.getResources().getResourceEntryName(resID)))
+                .setDefaults(Notification.DEFAULT_LIGHTS)
+                .setVibrate(new long[]{500, 1000, 1000})
+                .setSound(Uri.parse("android.resource://"
+                        + context.getPackageName() + "/" + DEFAULT))
 
                         // Set required fields, including the small icon, the
                         // notification title, and text.
