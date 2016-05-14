@@ -201,7 +201,7 @@ public class Ambush extends GameObject {
             zone.setVisible(false);
         }
     }
-    private int getFaction() {
+    public int getFaction() {
         return faction;
     }
 

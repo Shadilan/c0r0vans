@@ -172,6 +172,24 @@
 
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/MediumText"
+                android:text="@string/vibrate_on"
+                android:layout_alignBottom="@+id/vibrateOn"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true" />
+
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/vibrateOn"
+                android:checked="true"
+                android:layout_below="@+id/soundOn"
+
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -180,7 +198,7 @@
                 android:text="@string/settings_graphics"
                 android:id="@+id/textView15"
                 android:textStyle="bold"
-                android:layout_below="@+id/textView11"
+                android:layout_below="@+id/vibrateOn"
                 android:layout_centerHorizontal="true" />
             <TextView
                 android:layout_width="wrap_content"

@@ -28,6 +28,7 @@ import coe.com.c0r0vans.R;
 import coe.com.c0r0vans.UIElements.ActionView;
 import utility.GPSInfo;
 import utility.GameSound;
+import utility.GameVibrate;
 import utility.ImageLoader;
 import utility.internet.serverConnect;
 import utility.notification.Essages;
@@ -169,6 +170,7 @@ public class Player extends GameObject {
         if (lastCity==null)lastCity=new ArrayList<>();
         ArrayList<String>newLastCity=new ArrayList<>();
         boolean needSignal=false;
+        int signal=0;
         //Если город ближе по дистанции чем город дистанция игрока
         //добавить город в доступные
         // если город не входит в ранее доступные пометить необходимость сигнала
@@ -176,17 +178,28 @@ public class Player extends GameObject {
         //добавит в список ранее доступных доступные города
         //если есть пометка выполнить сигнал.
         for (GameObject o:GameObjects.getInstance().values()){
-            if (o instanceof City && o.getMarker()!=null){
+            if ((o instanceof City && o.getMarker()!=null)||
+                (o instanceof Ambush && o.getMarker()!=null &&
+                        ((Ambush)o).getFaction()!=0 &&
+                        ((Ambush)o).getFaction()!=Player.getPlayer().getRace()))
+            {
                 float range=GPSInfo.getDistance(target,o.getMarker().getPosition());
                 if (range<=lastRange) {
                     newLastCity.add(o.getGUID());
                     boolean find=false;
                     for (String a:lastCity)if (a.equals(o.getGUID())) find=true;
-                    if (!find) needSignal=true;
+                    if (!find) {
+                        needSignal=true;
+                        if (o instanceof City) signal=GameSound.GATE_OPEN;
+                        else signal=GameSound.ROGUE_CAMP;
+                    }
                 }
             }
         }
-        if (needSignal) GameSound.playSound(GameSound.GATE_OPEN);
+        if (needSignal) {
+            GameSound.playSound(signal);
+            GameVibrate.vibrate();
+        }
         lastCity.clear();
         lastCity.addAll(newLastCity);
     }

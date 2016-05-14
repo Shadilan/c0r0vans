@@ -65,9 +65,13 @@ public class GameSettings extends HashMap<String,String>{
             }
         }
     }
+    public static String getValue(String key){
+     return instance.get(key);
+    }
+
     private void firstRun(){
-        put("SHOW_AMBUSH_RADIUS","Y");
-        put("SHOW_CITY_RADIUS","Y");
+        put("SHOW_AMBUSH_RADIUS","N");
+        put("SHOW_CITY_RADIUS","N");
         put("MUSIC_ON","N");
         put("SOUND_ON","N");
         put("SHOW_CARAVAN_ROUTE","N");
@@ -84,6 +88,7 @@ public class GameSettings extends HashMap<String,String>{
         put("ZOOM","18");
         put("PLAYER_FACTION","0");
         put("AUTOCLOSE_WINDOW","N");
+        put("VIBRATE_ON","N");
         save();
     }
     public static void set(String property,String value){

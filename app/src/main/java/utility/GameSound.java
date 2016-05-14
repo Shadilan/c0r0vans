@@ -84,6 +84,7 @@ public class GameSound {
     public static int FINISH_ROUTE_SOUND;
     public static int REMOVE_AMBUSH;
     public static int GATE_OPEN;
+    public static int ROGUE_CAMP;
     private Runnable task=new Runnable() {
         @Override
         public void run() {
@@ -101,6 +102,7 @@ public class GameSound {
 
             REMOVE_AMBUSH=soundPool.load(context,R.raw.remove_ambush,0);
             GATE_OPEN=soundPool.load(context,R.raw.gate,0);
+            ROGUE_CAMP=soundPool.load(context,R.raw.rogue_camp,0);
 
         }
     };

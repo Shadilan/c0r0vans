@@ -28,6 +28,7 @@ public class Settings extends RelativeLayout {
     CheckBox usePadding;
     CheckBox trackBearing;
     CheckBox closeWindow;
+    private CheckBox vibrateOn;
 
     public Settings(Context context) {
         super(context);
@@ -55,7 +56,7 @@ public class Settings extends RelativeLayout {
         cityRad= (CheckBox) findViewById(R.id.cityRad);
         soundOn= (CheckBox) findViewById(R.id.soundOn);
         musicOn=(CheckBox) findViewById(R.id.musicOn);
-
+        vibrateOn=(CheckBox) findViewById(R.id.vibrateOn);
         useTilt=(CheckBox) findViewById(R.id.useTilt);
         gpsOn=(CheckBox) findViewById(R.id.gpsOn);
         gpsRate=(SeekBar) findViewById(R.id.gpsRate);
@@ -79,6 +80,7 @@ public class Settings extends RelativeLayout {
                 GameSettings.set("SHOW_CARAVAN_ROUTE", caravanRoute.isChecked() ? "Y" : "N");
                 GameSettings.set("MUSIC_ON", musicOn.isChecked() ? "Y" : "N");
                 GameSettings.set("SOUND_ON", soundOn.isChecked() ? "Y" : "N");
+                GameSettings.set("VIBRATE_ON", vibrateOn.isChecked() ? "Y" : "N");
                 GameSettings.set("USE_TILT", useTilt.isChecked() ? "Y" : "N");
                 GameSettings.set("GPS_ON_BACK", gpsOn.isChecked() ? "Y" : "N");
                 GameSettings.set("GPS_RATE", String.valueOf(gpsRate.getProgress() + 1));
@@ -102,6 +104,7 @@ public class Settings extends RelativeLayout {
         caravanRoute.setChecked("Y".equals(GameSettings.getInstance().get("SHOW_CARAVAN_ROUTE")));
         musicOn.setChecked("Y".equals(GameSettings.getInstance().get("MUSIC_ON")));
         soundOn.setChecked("Y".equals(GameSettings.getInstance().get("SOUND_ON")));
+        vibrateOn.setChecked("Y".equals(GameSettings.getInstance().get("VIBRATE_ON")));
         useTilt.setChecked("Y".equals(GameSettings.getInstance().get("USE_TILT")));
         gpsOn.setChecked("Y".equals(GameSettings.getInstance().get("GPS_ON_BACK")));
         netErrorLog.setChecked("Y".equals(GameSettings.getInstance().get("SHOW_NETWORK_ERROR")));

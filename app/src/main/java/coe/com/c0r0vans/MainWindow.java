@@ -44,6 +44,7 @@ import coe.com.c0r0vans.UIElements.LoginView;
 import coe.com.c0r0vans.UIElements.UIControler;
 import utility.GPSInfo;
 import utility.GameSound;
+import utility.GameVibrate;
 import utility.ImageLoader;
 import utility.internet.ServerListener;
 import utility.internet.serverConnect;
@@ -125,6 +126,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
         ImageLoader.Loader(getApplicationContext());
         GameSound.init(getApplicationContext());
         MessageNotification.init(getApplicationContext());
+        GameVibrate.init(getApplicationContext());
         serverConnect.getInstance().connect(getResources().getString(R.string.serveradress), getApplicationContext());
         Player.instance();
         SharedPreferences sp = getApplicationContext().getSharedPreferences("player", Context.MODE_PRIVATE);
@@ -554,13 +556,15 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                 GoogleSignInAccount acct = result.getSignInAccount();
                 // Get account information
                 //String accountNAme = acct.get();
-                String idToken=acct.getIdToken();
-                String mEmail = acct.getEmail();
-                SharedPreferences sharedPreferences=getSharedPreferences("SpiritProto", MODE_PRIVATE);
-                SharedPreferences.Editor editor=sharedPreferences.edit();
-                editor.putString("AccountName", mEmail);
-                editor.commit();
-                initStart();
+                if (acct!=null) {
+                    String idToken = acct.getIdToken();
+                    String mEmail = acct.getEmail();
+                    SharedPreferences sharedPreferences = getSharedPreferences("SpiritProto", MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putString("AccountName", mEmail);
+                    editor.commit();
+                    initStart();
+                } else finish();
             } else Log.d("Token","Reslt:"+result.getStatus().getStatusMessage()+result.getStatus().toString());
         }
     }

@@ -68,5 +68,6 @@ Software provide for alpha test purpose. If you are not accepted for alpha test 
 All rights reserved to Circle of Eternity</string>
     <string name="about_title">О программе</string>
     <string name="distance_mesure">%dм</string>
+    <string name="vibrate_on">Вибрация</string>
 
 </resources>
