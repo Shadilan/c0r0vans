@@ -589,6 +589,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                             @Override
                             public void run() {
                                 Log.d("Loader", "OnThread");
+                                GameVibrate.vibrate();
                                 init();
                             }
                         });

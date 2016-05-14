@@ -11,6 +11,7 @@ import utility.settings.GameSettings;
 public class GameVibrate {
     private static Vibrator vibrator;
     private static Context context;
+    private static long[] pattern=new long[]{1000,500,1000};
     public static void init(Context pContext){
         context=pContext;
         vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);

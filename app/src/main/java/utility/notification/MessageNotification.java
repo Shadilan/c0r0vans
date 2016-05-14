@@ -30,7 +30,7 @@ public class MessageNotification {
     private static final String NOTIFICATION_TAG = "Message";
     public static final int DESTROY=R.raw.kill;
     public static final int INCOME=R.raw.coins;
-    public static final int DEFAULT=R.raw.default_note;
+    public static final int DEFAULT=R.raw.default_notification;
     private static Context context;
 
     /**
@@ -65,12 +65,7 @@ public class MessageNotification {
         final Bitmap picture = BitmapFactory.decodeResource(res, R.mipmap.ic_launcher);
 
         final String title = "Уведомление";
-        long[] vibra=new long[4];
-        vibra[0]=100l;
-        vibra[1]=10l;
-        vibra[2]=1000l;
-        vibra[3]=10000l;
-
+        //Todo: Накопление уведомлений
         int resID=R.raw.default_note;
 
         final NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
@@ -78,7 +73,6 @@ public class MessageNotification {
                 // Set appropriate defaults for the notification light, sound,
                 // and vibration.
                 .setDefaults(Notification.DEFAULT_LIGHTS)
-                .setVibrate(new long[]{500, 1000, 1000})
                 .setSound(Uri.parse("android.resource://"
                         + context.getPackageName() + "/" + DEFAULT))
 
@@ -87,9 +81,6 @@ public class MessageNotification {
                 .setSmallIcon(R.mipmap.ic_launcher_s)
                 .setContentTitle(title)
                 .setContentText(exampleString)
-
-                .setVibrate(vibra)
-
                         // All fields below this line are optional.
 
                         // Use a default priority (recognized on devices running Android
