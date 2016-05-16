@@ -86,13 +86,16 @@ public class Route extends GameObject{
                 if (target!=null && target instanceof City && !(target.getGUID().equals(StartGUID) || target.getGUID().equals(FinishGUID)))
                     options.color(Color.LTGRAY);
                 else options.color(Color.BLUE);
+                options.geodesic(true);
                 options.add(StartPoint);
                 options.add(FinishPoint);
-                options.geodesic(true);
+
                 if (map!=null) {
                     line = map.addPolyline(options);
+
                     //Log.d("RouteTest","Line draw");
                     showRoute();
+
 
                 }
             }

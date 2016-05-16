@@ -9,6 +9,7 @@ import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 
 import com.coe.c0r0vans.R;
+import com.coe.c0r0vans.UIElements.AboutWindow;
 import com.coe.c0r0vans.UIElements.UIControler;
 
 public class Settings extends RelativeLayout {
@@ -91,6 +92,13 @@ public class Settings extends RelativeLayout {
                 GameSettings.set("CLOSE_WINDOW", closeWindow.isChecked() ? "Y" : "N");
                 GameSettings.getInstance().save();
                 hide();
+            }
+        });
+        findViewById(R.id.about_button).setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AboutWindow about = new AboutWindow(getContext());
+                about.show();
             }
         });
         onResume();

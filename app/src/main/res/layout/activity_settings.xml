@@ -284,7 +284,6 @@
                 android:id="@+id/gpsOn"
                 android:checked="false"
                 android:layout_below="@+id/textView17"
-
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true" />
             <TextView
@@ -384,6 +383,16 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
-
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="\?"
+        android:id="@+id/about_button"
+        style="@style/CommonButton"
+        android:maxWidth="60dp"
+        android:minWidth="2dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+         />
 
 </RelativeLayout>

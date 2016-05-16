@@ -56,6 +56,7 @@ public class MessageNotification {
     }
     public static boolean appActive=true;
     public static void notify(final String exampleString, final int number,int type) {
+        //todo настройка нотификации
         if (appActive) return;
 
         final Resources res = context.getResources();

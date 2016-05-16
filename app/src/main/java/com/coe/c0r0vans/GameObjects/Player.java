@@ -177,6 +177,7 @@ public class Player extends GameObject {
         //очистить список ранее доступных
         //добавит в список ранее доступных доступные города
         //если есть пометка выполнить сигнал.
+        //todo:Сделать сохранение информации о нотифицированном объекте некоторое время.
         for (GameObject o:GameObjects.getInstance().values()){
             if ((o instanceof City && o.getMarker()!=null)||
                 (o instanceof Ambush && o.getMarker()!=null &&

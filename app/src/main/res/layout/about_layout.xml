@@ -9,16 +9,23 @@
         android:layout_height="wrap_content"
         style="@style/LargeText"
         android:text="@string/about_title"
-        android:id="@+id/textView29"
+        android:id="@+id/title"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/SmallText"
+        android:text="@string/version"
+        android:id="@+id/version"
+        android:layout_below="@+id/title" />
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="464dp"
         android:id="@+id/scrollView2"
         android:layout_above="@+id/closeWindow"
-        android:layout_below="@+id/textView29" >
+        android:layout_below="@+id/version" >
 
         <TextView
             android:layout_width="wrap_content"
