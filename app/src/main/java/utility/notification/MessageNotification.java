@@ -65,9 +65,9 @@ public class MessageNotification {
         // TODO: Remove this if your notification has no relevant thumbnail.
         final Bitmap picture = BitmapFactory.decodeResource(res, R.mipmap.ic_launcher);
 
-        final String title = "Уведомление";
+        final String title = context.getResources().getString(R.string.app_name);
         //Todo: Накопление уведомлений
-        int resID=R.raw.default_note;
+        int resID=R.raw.default_notification;
 
         final NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
 
@@ -115,7 +115,7 @@ public class MessageNotification {
                                 context,
                                 0,
                                 new Intent(context, MainWindow.class),
-                                PendingIntent.FLAG_IMMUTABLE))
+                                PendingIntent.FLAG_UPDATE_CURRENT))
 
                         // Show expanded text content on devices running Android 4.1 or
                         // later.
