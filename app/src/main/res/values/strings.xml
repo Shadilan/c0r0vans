@@ -58,7 +58,7 @@
     <string name="route_finish">Rote has finished in "%s"</string>
     <string name="route_started">Route has started in "%s"</string>
     <string name="login_button">Login</string>
-    <string name="login_button_run">Login ...</string>
+    <string name="login_button_run">Login …</string>
     <string name="password_label">Password</string>
     <string name="LoginComplete">Login complete. Waiting for GPS.</string>
     <string name="message_notification_placeholder_text_template">-</string>
@@ -73,9 +73,10 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 Software provide for alpha test purpose. If you are not accepted for alpha test by Developers of software you may not use this software.
 
 All rights reserved to Circle of Eternity</string>
-    <string name="about_title">About...</string>
+    <string name="about_title">About…</string>
     <string name="distance_mesure">%dм</string>
     <string name="title_activity_loading">Corovans Loading</string>
     <string name="LogoText">Logo of Circle of Eternity</string>
     <string name="vibrate_on">Vibration</string>
+    <string name="notificationCount">\nЕще %d оповещений.</string>
 </resources>

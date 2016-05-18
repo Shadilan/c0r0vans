@@ -32,6 +32,8 @@ public class ImageLoader {
         images.put("android", BitmapFactory.decodeResource(context.getResources(), R.mipmap.ic_launcher));
         //Buttons
         images.put("closebutton", BitmapFactory.decodeResource(context.getResources(), R.mipmap.closebutton));
+        //Notifications
+        images.put("income",BitmapFactory.decodeResource(context.getResources(),R.mipmap.income));
         //Markers
         MapsInitializer.initialize(context);
         createMarker(context, R.mipmap.marker, "marker");

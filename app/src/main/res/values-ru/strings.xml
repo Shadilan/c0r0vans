@@ -51,7 +51,7 @@
     <string name="route_finish">Завершен маршрут в город %s</string>
     <string name="route_started">Начат маршрут из города %s</string>
     <string name="login_button">Login</string>
-    <string name="login_button_run">Login ...</string>
+    <string name="login_button_run">Login …</string>
     <string name="password_label">Password</string>
     <string name="LoginComplete">Вход выполнен. Ожидание координат.</string>
     <string name="legue_name">Лига независимых купцов</string>
@@ -69,5 +69,9 @@ All rights reserved to Circle of Eternity</string>
     <string name="about_title">О программе</string>
     <string name="distance_mesure">%dм</string>
     <string name="vibrate_on">Вибрация</string>
+    <string name="notificationCount">\nЕще %d оповещений.</string>
+    <string name="title_activity_loading">Идет загрузка.</string>
+    <string name="LogoText">Лого</string>
+
 
 </resources>

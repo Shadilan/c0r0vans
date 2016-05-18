@@ -69,6 +69,6 @@ public class Essages {
             if (list==null) list=new ArrayList<>();
             list.add(msg);
         }
-        if (msg.notify) MessageNotification.notify(msg.getMessage(), 1,MessageNotification.DEFAULT);
+        if (msg.notify) MessageNotification.notify(msg.getMessage(), MessageNotification.DEFAULT);
     }
 }
