@@ -99,11 +99,11 @@ public class MessageMap extends HashMap<String,Message>{
         JSONObject resultM=new JSONObject();
         JSONArray result=new JSONArray();
         //todo Убрать ограничение
-        int i=0;
+        int i=msg.size();
+        msg=msg.subList(i-30,i);
         for (Message o:msg){
             i++;
             result.put(o.getJSON());
-            if (i>30) break;
         }
         resultM.put("Messages",result);
         return resultM;
