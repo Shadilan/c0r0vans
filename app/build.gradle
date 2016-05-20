@@ -14,7 +14,7 @@ android {
     defaultConfig {
         applicationId 'com.coe.c0r0vans'
         minSdkVersion 14
-        targetSdkVersion 19
+        targetSdkVersion 23
         versionCode 29
         versionName "2.0.18a"
         signingConfig signingConfigs.Release
