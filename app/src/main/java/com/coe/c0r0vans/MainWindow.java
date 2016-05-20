@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.coe.c0r0vans.GameObjects.Ambush;
 import com.coe.c0r0vans.GameObjects.Caravan;
@@ -87,6 +88,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
     private void init() {
         //init fields
         try {
+            ((TextView)findViewById(R.id.status)).setText(R.string.init_object);
             GPSInfo.getInstance(getApplicationContext());
 
             //Загрузка GoogleMap.
@@ -524,6 +526,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
         }
     }
     private  void signIn(){
+        ((TextView)findViewById(R.id.status)).setText(R.string.enter_google_account);
         SharedPreferences sharedPreferences=getSharedPreferences("SpiritProto", MODE_PRIVATE);
         String accountName=sharedPreferences.getString("AccountName", "");
         GoogleSignInOptions gso;
@@ -547,9 +550,10 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
     }
     protected void onActivityResult(final int requestCode, final int resultCode,
                                     final Intent data) {
-        Log.d("Token", "ActivityResult");
+
 
         if (requestCode == 123) {
+            ((TextView)findViewById(R.id.status)).setText(R.string.done_google_account);
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
 
             if (result.isSuccess()) {
@@ -563,6 +567,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     editor.putString("AccountName", mEmail);
                     editor.apply();
+                    ((TextView)findViewById(R.id.status)).setText(R.string.data_init);
                     initStart();
                 } else finish();
             } else {
@@ -588,8 +593,6 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                         myHandler.post(new Runnable() {
                             @Override
                             public void run() {
-                                Log.d("Loader", "OnThread");
-                                GameVibrate.vibrate();
                                 init();
                             }
                         });
@@ -601,4 +604,16 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
         }, 1000);
     }
 
+    public void energyBreakPointStart(final int stateId, final String stateDescription) {
+        final Intent stateUpdate = new Intent("com.quicinc.Trepn.UpdateAppState");
+        stateUpdate.putExtra("com.quicinc.Trepn.UpdateAppState.Value", stateId);
+        stateUpdate.putExtra("com.quicinc.Trepn.UpdateAppState.Value.Desc", stateDescription);
+        sendBroadcast(stateUpdate);
+    }// Generated  energyBreakPointStart method
+
+    public void energyBreakPointEnd() {
+        final Intent stateUpdate = new Intent("com.quicinc.Trepn.UpdateAppState");
+        stateUpdate.putExtra("com.quicinc.Trepn.UpdateAppState.Value", 0);
+        sendBroadcast(stateUpdate);
+    }// Generated  energyBreakPointEnd method
 }
