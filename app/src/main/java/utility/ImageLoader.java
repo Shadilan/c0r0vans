@@ -33,7 +33,7 @@ public class ImageLoader {
         //Buttons
         images.put("closebutton", BitmapFactory.decodeResource(context.getResources(), R.mipmap.closebutton));
         //Notifications
-        images.put("income",BitmapFactory.decodeResource(context.getResources(),R.mipmap.income));
+        images.put("income",BitmapFactory.decodeResource(context.getResources(),R.mipmap.ic_launcher));
         //Markers
         MapsInitializer.initialize(context);
         createMarker(context, R.mipmap.marker, "marker");
