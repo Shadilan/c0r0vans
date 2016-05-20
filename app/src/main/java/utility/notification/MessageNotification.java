@@ -55,7 +55,9 @@ public class MessageNotification {
                 .getSystemService(Context.NOTIFICATION_SERVICE);
     }
     public static boolean appActive=true;
-    public static void notify(final String exampleString, final int number,int type) {
+    private static int number=0;
+    public static void notify(final String exampleString,int type) {
+
         //todo настройка нотификации
         if (appActive) return;
 
@@ -68,7 +70,7 @@ public class MessageNotification {
         final String title = res.getString(R.string.app_name);
         //Todo: Накопление уведомлений
         int resID=R.raw.default_notification;
-
+        number++;
         final NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
 
                 // Set appropriate defaults for the notification light, sound,
@@ -115,7 +117,7 @@ public class MessageNotification {
                                 context,
                                 0,
                                 new Intent(context, MainWindow.class),
-                                PendingIntent.FLAG_IMMUTABLE))
+                                PendingIntent.FLAG_UPDATE_CURRENT))
 
                         // Show expanded text content on devices running Android 4.1 or
                         // later.
@@ -150,6 +152,7 @@ public class MessageNotification {
      */
     @TargetApi(Build.VERSION_CODES.ECLAIR)
     public static void cancel() {
+        number=0;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ECLAIR) {
             nm.cancel(NOTIFICATION_TAG, 0);
         } else {
