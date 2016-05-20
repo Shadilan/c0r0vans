@@ -8,14 +8,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 
 import com.coe.c0r0vans.MainWindow;
 import com.coe.c0r0vans.R;
-
-import utility.ImageLoader;
 
 /**
  * Helper class for showing and canceling message
@@ -48,20 +47,15 @@ public class MessageNotification {
      * Notification design guidelines</a> when doing so.
      *
      */
-    private static int noteCount=0;
 
     static NotificationManager nm;
-    private static int destroyCount=0;
-    private static int incomeCount=0;
-
     public static void init(Context ctx){
         context=ctx;
           nm = (NotificationManager) context
                 .getSystemService(Context.NOTIFICATION_SERVICE);
     }
     public static boolean appActive=true;
-    public static void notify(final String exampleString,int type) {
-        int number;
+    public static void notify(final String exampleString, final int number,int type) {
         //todo настройка нотификации
         if (appActive) return;
 
@@ -69,25 +63,9 @@ public class MessageNotification {
 
         // This image is used as the notification's large icon (thumbnail).
         // TODO: Remove this if your notification has no relevant thumbnail.
-        final Bitmap picture;
-         if (type==DESTROY) {
-             destroyCount++;
-             number=destroyCount;
-             picture = ImageLoader.getImage("attack_ambush");
-         }
-        else if (type==INCOME) {
-             incomeCount++;
-             number=incomeCount;
-             picture = ImageLoader.getImage("income");
-         }
-        else {
-             noteCount++;
-             number=noteCount;
-             picture = ImageLoader.getImage("android");
-         }
+        final Bitmap picture = BitmapFactory.decodeResource(res, R.mipmap.ic_launcher);
 
-
-        final String title = context.getResources().getString(R.string.app_name);
+        final String title = res.getString(R.string.app_name);
         //Todo: Накопление уведомлений
         int resID=R.raw.default_notification;
 
@@ -95,9 +73,12 @@ public class MessageNotification {
 
                 // Set appropriate defaults for the notification light, sound,
                 // and vibration.
-                .setDefaults(Notification.DEFAULT_LIGHTS | Notification.DEFAULT_VIBRATE)
+                .setDefaults(Notification.DEFAULT_LIGHTS)
                 .setSound(Uri.parse("android.resource://"
                         + context.getPackageName() + "/" + DEFAULT))
+
+                        // Set required fields, including the small icon, the
+                        // notification title, and text.
                 .setSmallIcon(R.mipmap.ic_launcher_s)
                 .setContentTitle(title)
                 .setContentText(exampleString)
@@ -134,21 +115,21 @@ public class MessageNotification {
                                 context,
                                 0,
                                 new Intent(context, MainWindow.class),
-                                PendingIntent.FLAG_UPDATE_CURRENT))
+                                PendingIntent.FLAG_IMMUTABLE))
 
                         // Show expanded text content on devices running Android 4.1 or
                         // later.
                 .setStyle(new NotificationCompat.BigTextStyle()
                         .bigText(exampleString)
                         .setBigContentTitle(title)
-                        )
+                        .setSummaryText(exampleString))
 
                         // Example additional actions for this notification. These will
                         // only show on devices running Android 4.1 or later, so you
                         // should ensure that the activity in this notification's
                         // content intent provides access to the same actions in
                         // another way.
-                .setGroup("GROUP_TYPE_"+type)
+
                 .setAutoCancel(true);
 
         notify(context, builder.build());
@@ -169,9 +150,6 @@ public class MessageNotification {
      */
     @TargetApi(Build.VERSION_CODES.ECLAIR)
     public static void cancel() {
-        noteCount=0;
-        destroyCount=0;
-        incomeCount=0;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ECLAIR) {
             nm.cancel(NOTIFICATION_TAG, 0);
         } else {
