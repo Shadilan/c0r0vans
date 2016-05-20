@@ -124,7 +124,7 @@ public class MessageNotification {
                 .setStyle(new NotificationCompat.BigTextStyle()
                         .bigText(exampleString)
                         .setBigContentTitle(title)
-                        .setSummaryText(exampleString))
+                        .setSummaryText("Сообщений:"))
 
                         // Example additional actions for this notification. These will
                         // only show on devices running Android 4.1 or later, so you
