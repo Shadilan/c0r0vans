@@ -75,7 +75,7 @@ public class MessageNotification {
 
                 // Set appropriate defaults for the notification light, sound,
                 // and vibration.
-                .setDefaults(Notification.DEFAULT_LIGHTS)
+                .setDefaults(Notification.DEFAULT_LIGHTS | Notification.DEFAULT_VIBRATE)
                 .setSound(Uri.parse("android.resource://"
                         + context.getPackageName() + "/" + DEFAULT))
 
