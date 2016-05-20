@@ -27,7 +27,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:clickable="true"
-        android:text="StartCity"
         android:id="@+id/startCity"
         android:layout_alignParentTop="true"
         android:layout_toRightOf="@+id/removeButton"

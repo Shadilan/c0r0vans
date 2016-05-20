@@ -76,7 +76,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
      */
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main_window);
+        setContentView(R.layout.main_activity);
         signIn();
     }
 
@@ -562,7 +562,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                     SharedPreferences sharedPreferences = getSharedPreferences("SpiritProto", MODE_PRIVATE);
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     editor.putString("AccountName", mEmail);
-                    editor.commit();
+                    editor.apply();
                     initStart();
                 } else finish();
             } else {

@@ -81,7 +81,7 @@ public class CityLine extends RelativeLayout {
     }
 
     private void init(){
-        inflate(getContext(), R.layout.route_line_layout, this);
+        inflate(getContext(), R.layout.route_line, this);
         try {
             afterInit();
         } catch (Exception e){

@@ -64,7 +64,7 @@ public class LoginView extends RelativeLayout {
     }
     Button loginButton;
     private void init(){
-        inflate(getContext(), R.layout.activity_login_main, this);
+        inflate(getContext(), R.layout.main_login, this);
         try {
             afterInit();
         } catch (Exception e){

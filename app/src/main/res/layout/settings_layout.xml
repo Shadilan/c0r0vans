@@ -19,7 +19,7 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -366,8 +366,6 @@
         android:text="@string/setings_cancel"
         style="@style/CommonButton"
         android:id="@+id/cancel"
-        android:layout_row="32"
-        android:layout_column="0"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
@@ -378,8 +376,6 @@
         android:text="@string/setings_apply"
         style="@style/CommonButton"
         android:id="@+id/apply"
-        android:layout_row="32"
-        android:layout_column="15"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />

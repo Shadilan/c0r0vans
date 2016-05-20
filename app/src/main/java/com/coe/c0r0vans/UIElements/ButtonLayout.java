@@ -52,7 +52,7 @@ public class ButtonLayout extends RelativeLayout {
 
     }
     public void init(){
-        inflate(getContext(), R.layout.button_layout, this);
+        inflate(getContext(), R.layout.main_button, this);
         try {
             afterInit();
         } catch (Exception e){
@@ -82,17 +82,17 @@ public class ButtonLayout extends RelativeLayout {
 
             }
         });
-        TextView am = (TextView) findViewById(R.id.levelAmount);
-        am = (TextView) findViewById(R.id.expAmount);
-        am = (TextView) findViewById(R.id.goldAmount);
-        ImageView btn = (ImageView) findViewById(R.id.infoview);
+        TextView am;
         if (Player.getPlayer()!=null) {
+            am = (TextView) findViewById(R.id.levelAmount);
             am.setText(String.valueOf(Player.getPlayer().getLevel()));
+            am = (TextView) findViewById(R.id.expAmount);
             am.setText(String.valueOf(StringUtils.intToStr(Player.getPlayer().getExp())));
+            am = (TextView) findViewById(R.id.goldAmount);
             am.setText(String.valueOf(StringUtils.intToStr(Player.getPlayer().getGold())));
             if ("".equals(Player.getPlayer().getCurrentRoute()))
-                btn.setImageResource(R.mipmap.info);
-            else btn.setImageResource(R.mipmap.info_route);
+                PlayerInfo.setImageResource(R.mipmap.info);
+            else PlayerInfo.setImageResource(R.mipmap.info_route);
 
             infoLayout.loadFromPlayer();
         }
@@ -223,7 +223,7 @@ public class ButtonLayout extends RelativeLayout {
                     TextView textView = (TextView) findViewById(R.id.QueueCnt);
                     if (count == 0) {
                         textView.setText("");
-                    } else textView.setText("" + count);
+                    } else textView.setText(String.valueOf(count));
                 }catch (Exception e) {
                     serverConnect.getInstance().sendDebug(2, "UE:" + e.toString() + "\n" + Arrays.toString(e.getStackTrace()));
                 }

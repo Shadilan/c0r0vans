@@ -49,7 +49,7 @@ public class Settings extends RelativeLayout {
 
     protected void init() {
 
-        inflate(getContext(), R.layout.activity_settings, this);
+        inflate(getContext(), R.layout.settings_layout, this);
         apply_button= (Button) findViewById(R.id.apply);
         cancel_button= (Button) findViewById(R.id.cancel);
         ambushRad= (CheckBox) findViewById(R.id.ambushRad);
