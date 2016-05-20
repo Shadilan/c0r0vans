@@ -57,7 +57,7 @@ public class ImageLoader {
             createMarker(context, R.mipmap.ambush_1, "ambush_1");
             createMarker(context, R.mipmap.ambush_2, "ambush_2");
             createMarker(context, R.mipmap.ambush_3, "ambush_3");
-            createMarker(context, R.mipmap.ambush_4, "ambush_4");
+            createMarker(context, R.mipmap.ambush_00, "ambush_4");
             createMarker(context, R.mipmap.ambush_build_00, "ambush_build_00");
             createMarker(context, R.mipmap.ambush_build_01, "ambush_build_01");
             createMarker(context, R.mipmap.ambush_build_02, "ambush_build_02");
@@ -65,7 +65,7 @@ public class ImageLoader {
             createMarker(context, R.mipmap.ambush_build_1, "ambush_build_1");
             createMarker(context, R.mipmap.ambush_build_2, "ambush_build_2");
             createMarker(context, R.mipmap.ambush_build_3, "ambush_build_3");
-            createMarker(context, R.mipmap.ambush_build_4, "ambush_build_4");
+            createMarker(context, R.mipmap.ambush_build_00, "ambush_build_4");
 
         createMarker(context, R.mipmap.caravan_00, "caravan_00");
         createMarker(context, R.mipmap.caravan_01, "caravan_01");
