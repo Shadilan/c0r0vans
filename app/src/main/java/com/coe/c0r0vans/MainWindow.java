@@ -569,10 +569,10 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                     editor.apply();
                     ((TextView)findViewById(R.id.status)).setText(R.string.data_init);
                     initStart();
-                } else finish();
+                } else signIn();
             } else {
                 Log.d("Token","Reslt:"+result.getStatus().getStatusMessage()+result.getStatus().toString());
-                finish();
+                signIn();
             }
         }
     }
