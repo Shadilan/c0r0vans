@@ -10,7 +10,7 @@ android {
         }
     }
     compileSdkVersion 23
-    buildToolsVersion "23.0.1"
+    buildToolsVersion "23.0.2"
     defaultConfig {
         applicationId 'com.coe.c0r0vans'
         minSdkVersion 14
@@ -36,8 +36,10 @@ dependencies {
     compile project(':volley')
     compile 'com.android.support:appcompat-v7:23.4.0'
     compile 'com.android.support:design:23.4.0'
-    compile 'com.google.android.gms:play-services:9.0.0'
-    compile 'com.google.android.gms:play-services-ads:9.0.0'
-    compile 'com.google.android.gms:play-services-identity:9.0.0'
     compile 'com.android.support:support-v4:23.4.0'
+    /*Версия 9 почему то вызывает зависание.*/
+    compile 'com.google.android.gms:play-services:8.4.0'
+    compile 'com.google.android.gms:play-services-ads:8.4.0'
+    compile 'com.google.android.gms:play-services-identity:8.4.0'
+
 }
