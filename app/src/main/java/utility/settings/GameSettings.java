@@ -69,20 +69,28 @@ public class GameSettings extends HashMap<String,String>{
     }
 
     private void firstRun(){
-        put("SHOW_AMBUSH_RADIUS","N");
-        put("SHOW_CITY_RADIUS","N");
+        //Безопасность
+        put("AUTO_LOGIN","N");
+        //Отображение
+        put("SHOW_AMBUSH_RADIUS","Y");
+        put("SHOW_CITY_RADIUS","Y");
+        put("SHOW_CARAVAN_ROUTE","N");
+        //Медия
         put("MUSIC_ON","N");
         put("SOUND_ON","N");
-        put("SHOW_CARAVAN_ROUTE","N");
+        put("VIBRATE_ON","N");
+        //
         put("USE_TILT","N");
-        put("NET_DEBUG","N");
+        put("VIEW_PADDING","N");//Быстрые действия
+        put("CLOSE_WINDOW","Y");
+
         put("GPS_ON_BACK","N");
         put("GPS_REATE","3");
-        put("AUTO_LOGIN","N");
-        put("SHOW_NETWORK_ERROR","N");
-        put("USE_TILT","N");
-        put("VIEW_PADDING","N");
         put("TRACK_BEARING","N");
+
+        put("SHOW_NETWORK_ERROR","N");
+
+
         put("BEARING","0");
         put("ZOOM","18");
         put("PLAYER_FACTION","0");
@@ -150,7 +158,6 @@ public class GameSettings extends HashMap<String,String>{
             ed.putString(key,instance.get(key));
         }
         ed.apply();
-        ed.commit();
         if (settingsListeners!=null) {
             checkListenerCount();
             for (SettingsListener listener : settingsListeners) {

@@ -76,20 +76,26 @@ public class Settings extends RelativeLayout {
         apply_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                GameSettings.set("AUTO_LOGIN", autoLogin.isChecked() ? "Y" : "N");
+
                 GameSettings.set("SHOW_AMBUSH_RADIUS", ambushRad.isChecked() ? "Y" : "N");
                 GameSettings.set("SHOW_CITY_RADIUS", cityRad.isChecked() ? "Y" : "N");
                 GameSettings.set("SHOW_CARAVAN_ROUTE", caravanRoute.isChecked() ? "Y" : "N");
+
                 GameSettings.set("MUSIC_ON", musicOn.isChecked() ? "Y" : "N");
                 GameSettings.set("SOUND_ON", soundOn.isChecked() ? "Y" : "N");
                 GameSettings.set("VIBRATE_ON", vibrateOn.isChecked() ? "Y" : "N");
+
                 GameSettings.set("USE_TILT", useTilt.isChecked() ? "Y" : "N");
+                GameSettings.set("VIEW_PADDING", usePadding.isChecked() ? "Y" : "N");
+                GameSettings.set("CLOSE_WINDOW", closeWindow.isChecked() ? "Y" : "N");
+
                 GameSettings.set("GPS_ON_BACK", gpsOn.isChecked() ? "Y" : "N");
                 GameSettings.set("GPS_RATE", String.valueOf(gpsRate.getProgress() + 1));
-                GameSettings.set("AUTO_LOGIN", autoLogin.isChecked() ? "Y" : "N");
-                GameSettings.set("SHOW_NETWORK_ERROR", netErrorLog.isChecked() ? "Y" : "N");
-                GameSettings.set("VIEW_PADDING", usePadding.isChecked() ? "Y" : "N");
                 GameSettings.set("TRACK_BEARING", trackBearing.isChecked() ? "Y" : "N");
-                GameSettings.set("CLOSE_WINDOW", closeWindow.isChecked() ? "Y" : "N");
+
+                GameSettings.set("SHOW_NETWORK_ERROR", netErrorLog.isChecked() ? "Y" : "N");
+
                 GameSettings.getInstance().save();
                 hide();
             }
