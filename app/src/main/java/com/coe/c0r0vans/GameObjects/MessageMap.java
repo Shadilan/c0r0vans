@@ -99,7 +99,7 @@ public class MessageMap extends HashMap<String,Message>{
         JSONArray result=new JSONArray();
         //todo Убрать ограничение
         int i=msg.size();
-        msg=msg.subList(i-30,i);
+        msg=msg.subList(Math.max(i-30,0),i);
         for (Message o:msg){
             i++;
             result.put(o.getJSON());
