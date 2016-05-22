@@ -56,7 +56,6 @@ public class MyGoogleMap{
             @Override
             public void onSettingChange(String setting) {
                 if (setting.equals("USE_TILT") ||
-                        setting.equals("VIEW_PADDING") ||
                         setting.equals("TRACK_BEARING")
                         ) MyGoogleMap.changeSettings();
             }
@@ -245,9 +244,6 @@ public class MyGoogleMap{
                             .target(target)
                             .build()));
 
-        /*if ("Y".equals(GameSettings.getInstance().get("VIEW_PADDING"))) {
-            map.setPadding(0, windowHeight / 2, 0, 40);
-        } else map.setPadding(0, 0, 0, 40);*/
         if (oldLatLng==null || GPSInfo.getDistance(oldLatLng,target)>300){
             serverConnect.getInstance().RefreshCurrent();
         }

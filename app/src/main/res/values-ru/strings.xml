@@ -70,15 +70,19 @@
 
 Все права на приложение принадлежать "Circle of Eternity"</string>
     <string name="about_title">О программе</string>
-    <string name="distance_mesure">%dм</string>
+    <string name="distance_mesure" formatted="false">%dм</string>
     <string name="vibrate_on">Вибрация</string>
-    <string name="notificationCount">\nЕще %d оповещений.</string>
     <string name="title_activity_loading">Идет загрузка.</string>
     <string name="LogoText">Лого</string>
     <string name="enter_google_account">Вход аккаунт Google</string>
     <string name="done_google_account">Вход выполнен</string>
     <string name="data_init">Инициализация данных</string>
     <string name="init_object">Загрузка объектов</string>
+    <string name="city_lvl_required" formatted="false">Требуется уровень города %d\n</string>
+    <string name="need_more_gold" formatted="false">Нужно больше золота!!! Еще %s золота!\n</string>
+    <string name="need_higher_lvl" formatted="false">Требуется уровень %d\n</string>
+    <string name="price" formatted="false">%s\" за %s золота(без скидки %s).\n%s</string>
+    <string name="unknown_upgrade" formatted="false">"%s\". "</string>
 
 
 </resources>
