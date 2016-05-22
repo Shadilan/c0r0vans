@@ -22,8 +22,7 @@ import com.coe.c0r0vans.UIElements.InfoLayout.InfoLayout;
 
 import org.json.JSONObject;
 
-import java.util.Arrays;
-
+import utility.GATracker;
 import utility.StringUtils;
 import utility.internet.ServerListener;
 import utility.internet.serverConnect;
@@ -56,7 +55,7 @@ public class ButtonLayout extends RelativeLayout {
         try {
             afterInit();
         } catch (Exception e){
-            serverConnect.getInstance().sendDebug(2, e.toString()+ Arrays.toString(e.getStackTrace()));
+            GATracker.trackException("ButtonLayout",e);
         }
     }
 
@@ -109,7 +108,7 @@ public class ButtonLayout extends RelativeLayout {
                     //RunGetMessage
                     serverConnect.getInstance().getMessage();
                 } catch (Exception e){
-                    serverConnect.getInstance().sendDebug(2, "ForceSync UE:" + e.toString() + "\n" + Arrays.toString(e.getStackTrace()));
+                    GATracker.trackException("ForceSync",e);
                 }
                 return true;
             }
@@ -124,7 +123,7 @@ public class ButtonLayout extends RelativeLayout {
                     for (GameObject obj : GameObjects.getInstance().values())
                         if (obj.getMarker() != null) obj.changeMarkerSize();
                 } catch (Exception e) {
-                    serverConnect.getInstance().sendDebug(2, "UE:" + e.toString()+ Arrays.toString(e.getStackTrace()));
+                    GATracker.trackException("ZoomClick",e);
                 }
 
             }
@@ -146,7 +145,7 @@ public class ButtonLayout extends RelativeLayout {
                     else btn.setImageResource(R.mipmap.info_route);
                     infoLayout.loadFromPlayer();
                 } catch (Exception e){
-                    serverConnect.getInstance().sendDebug(2, "Player UE:" + e.toString() + "\n" + Arrays.toString(e.getStackTrace()));
+                    GATracker.trackException("PlayerChange",e);
                 }
             }
         });
@@ -175,7 +174,7 @@ public class ButtonLayout extends RelativeLayout {
                         scrollView.requestLayout();
                     }
                 }catch (Exception e){
-                    serverConnect.getInstance().sendDebug(2, "Show UE:" + e.toString() + "\n" + Arrays.toString(e.getStackTrace()));
+                    GATracker.trackException("OpenMessages",e);
                 }
             }
         });
@@ -225,7 +224,7 @@ public class ButtonLayout extends RelativeLayout {
                         textView.setText("");
                     } else textView.setText(String.valueOf(count));
                 }catch (Exception e) {
-                    serverConnect.getInstance().sendDebug(2, "UE:" + e.toString() + "\n" + Arrays.toString(e.getStackTrace()));
+                    GATracker.trackException("ChangeQueue",e);
                 }
             }
         });

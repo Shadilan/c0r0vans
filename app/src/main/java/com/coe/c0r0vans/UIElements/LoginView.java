@@ -8,7 +8,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -21,8 +20,7 @@ import com.coe.c0r0vans.R;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.Arrays;
-
+import utility.GATracker;
 import utility.GPSInfo;
 import utility.internet.ServerListener;
 import utility.internet.serverConnect;
@@ -68,7 +66,7 @@ public class LoginView extends RelativeLayout {
         try {
             afterInit();
         } catch (Exception e){
-            serverConnect.getInstance().sendDebug(2, e.toString()+ Arrays.toString(e.getStackTrace()));
+            GATracker.trackException("LoginView",e);
         }
     }
     private void afterInit(){
@@ -84,7 +82,6 @@ public class LoginView extends RelativeLayout {
             @Override
             public void onLogin(JSONObject response) {
                 try {
-                    Log.d("LoginView", "Response:" + response.toString());
                     //Todo:Change to correct implementation.
                     //String token=response.getString("Token");
                     String token=null;
@@ -94,6 +91,7 @@ public class LoginView extends RelativeLayout {
                         ConnectStatus.setImageResource(R.mipmap.server_connect);
                         Connected=true;
                         loginButton.setVisibility(INVISIBLE);
+                        GATracker.trackTimeEnd("System","Login");
                         errorText.setText(R.string.LoginComplete);
                     }
                     else{
@@ -111,7 +109,7 @@ public class LoginView extends RelativeLayout {
                 {
                     TextView errorText= (TextView) findViewById(R.id.errorText);
                     errorText.setText(e.toString());
-                    serverConnect.getInstance().sendDebug(2, "Login UE:" + e.toString() + "\n" + Arrays.toString(e.getStackTrace()));
+                    GATracker.trackException("LoginView",e);
                 }
 
             }
@@ -147,7 +145,7 @@ public class LoginView extends RelativeLayout {
 
                 } catch (Exception e){
                     errorText.setText(e.toString());
-                    serverConnect.getInstance().sendDebug(2, "Login UE:" + e.toString() + "\n" + Arrays.toString(e.getStackTrace()));
+                    GATracker.trackException("LoginView",e);
                 }
             }
 
@@ -174,7 +172,7 @@ public class LoginView extends RelativeLayout {
                     }
                 } catch (Exception e)
                 {
-                    serverConnect.getInstance().sendDebug(2, "Login UE:" + e.toString() + "\n" + Arrays.toString(e.getStackTrace()));
+                    GATracker.trackException("LoginView",e);
                 }
             }
         };
@@ -184,6 +182,7 @@ public class LoginView extends RelativeLayout {
             @Override
             public void onClick(View v) {
                 try {
+                    GATracker.trackTimeStart("System","Login");
                     SharedPreferences.Editor editor = sp.edit();
 
                     editor.putString("Login", LoginField.getText().toString());
@@ -201,7 +200,7 @@ public class LoginView extends RelativeLayout {
                     }
                 } catch (Exception e)
                 {
-                    serverConnect.getInstance().sendDebug(2,"Login UE:"+e.toString()+"\n"+ Arrays.toString(e.getStackTrace()));
+                    GATracker.trackException("LoginView",e);
                 }
             }
         });
@@ -227,11 +226,12 @@ public class LoginView extends RelativeLayout {
                     if (GPSInfo.getInstance().GetLat() != -1 && GPSInfo.getInstance().GetLng() != -1) {
                         GPSStatus.setImageResource(R.mipmap.gps_connect);
                         Positioned = true;
+                        GATracker.trackTimeEnd("System","LocationStart");
                         checkReadyToRun();
                     }
                 } catch (Exception e)
                 {
-                    serverConnect.getInstance().sendDebug(2, "Lovation Get UE:" + e.toString() + "\n" + Arrays.toString(e.getStackTrace()));
+                    GATracker.trackException("LoginView",e);
                 }
             }
 
@@ -250,6 +250,7 @@ public class LoginView extends RelativeLayout {
 
             }
         };
+        GATracker.trackTimeStart("System","LocationStart");
         GPSInfo.getInstance().AddLocationListener(locationListener);
         findViewById(R.id.about_button).setOnClickListener(new OnClickListener() {
             @Override

@@ -14,9 +14,9 @@ import com.coe.c0r0vans.R;
 import com.coe.c0r0vans.ShowHideForm;
 import com.coe.c0r0vans.UIElements.UIControler;
 
-import java.util.Arrays;
 import java.util.Date;
 
+import utility.GATracker;
 import utility.internet.serverConnect;
 
 /**
@@ -41,7 +41,7 @@ public class InfoLayout extends RelativeLayout implements ShowHideForm {
         try {
             afterInit();
         } catch (Exception e){
-            serverConnect.getInstance().sendDebug(2, e.toString()+ Arrays.toString(e.getStackTrace()));
+            GATracker.trackException("InfoLayout",e);
         }
     }
     @Override

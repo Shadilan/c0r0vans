@@ -74,7 +74,7 @@ public class Caravan extends GameObject {
         }
 
     }
-
+    private String currentMarkName="";
     @Override
     public void changeMarkerSize() {
         if (mark!=null) {
@@ -83,9 +83,13 @@ public class Caravan extends GameObject {
             if (faction==0) markname=markname+"_"+faction+Player.getPlayer().getRace();
             else markname=markname+"_"+faction;
             markname = markname + GameObject.zoomToPostfix(MyGoogleMap.getClientZoom());
-            mark.setIcon(ImageLoader.getDescritor(markname));
-            if ("Y".equals(GameSettings.getInstance().get("USE_TILT"))) mark.setAnchor(0.5f, 1f);
-            else mark.setAnchor(0.5f, 0.5f);
+            if (!markname.equals(currentMarkName)) {
+                mark.setIcon(ImageLoader.getDescritor(markname));
+                if ("Y".equals(GameSettings.getInstance().get("USE_TILT")))
+                    mark.setAnchor(0.5f, 1f);
+                else mark.setAnchor(0.5f, 0.5f);
+                currentMarkName=markname;
+            }
         }
     }
 

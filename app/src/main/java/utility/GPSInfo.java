@@ -12,7 +12,6 @@ import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
 
-import utility.internet.serverConnect;
 import utility.settings.GameSettings;
 import utility.settings.SettingsListener;
 
@@ -82,7 +81,7 @@ public class GPSInfo {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
                     if (location.isFromMockProvider()){
                         //Essages.addEssage("Вы используете фальшивые координаты. Информация отправлена администраторам.");
-                        serverConnect.getInstance().sendDebug(2,"Глуппый вертолет");
+                        GATracker.trackHit("System","SpoofingWithMock");
                         return;
 
                     }
@@ -138,7 +137,7 @@ public class GPSInfo {
 
             @Override
             public void onProviderDisabled(String provider) {
-                serverConnect.getInstance().sendDebug(2,"Потенциальный завис:"+provider+" выключен.");
+                GATracker.trackHit("GPSProvider",provider+"Off");
                 if (locationListeners !=null){
                     if (locationListenersRem !=null) locationListeners.removeAll(locationListenersRem);
                     for (LocationListener ll:locationListeners){

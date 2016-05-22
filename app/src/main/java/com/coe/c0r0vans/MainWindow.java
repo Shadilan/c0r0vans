@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.coe.c0r0vans.GameObjects.Ambush;
 import com.coe.c0r0vans.GameObjects.Caravan;
 import com.coe.c0r0vans.GameObjects.City;
+import com.coe.c0r0vans.GameObjects.CorovanApplication;
 import com.coe.c0r0vans.GameObjects.GameObject;
 import com.coe.c0r0vans.GameObjects.GameObjects;
 import com.coe.c0r0vans.GameObjects.MessageMap;
@@ -40,9 +41,9 @@ import com.google.android.gms.maps.model.LatLng;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.Arrays;
 import java.util.Date;
 
+import utility.GATracker;
 import utility.GPSInfo;
 import utility.GameSound;
 import utility.GameVibrate;
@@ -60,15 +61,14 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
     MainWindow self=this;
     private boolean ready=false;
     GoogleApiClient mGoogleApiClient;
-
     //Security
-    private final static String G_PLUS_SCOPE =
+    /*private final static String G_PLUS_SCOPE =
             "oauth2:https://www.googleapis.com/auth/plus.me";
     private final static String USERINFO_SCOPE =
             "https://www.googleapis.com/auth/userinfo.profile";
     private final static String EMAIL_SCOPE =
             "https://www.googleapis.com/auth/userinfo.email";
-    private final static String SCOPES = G_PLUS_SCOPE + " " + USERINFO_SCOPE + " " + EMAIL_SCOPE;
+    private final static String SCOPES = G_PLUS_SCOPE + " " + USERINFO_SCOPE + " " + EMAIL_SCOPE;*/
 
 //dfNouaJXqFsNC2Bdru7zYF8q
     @Override
@@ -77,6 +77,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
      */
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        GATracker.initialize((CorovanApplication) getApplication());
         setContentView(R.layout.main_activity);
         signIn();
     }
@@ -118,8 +119,9 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
 
             onTrueResume();
             ready=true;
+            GATracker.trackTimeEnd("System","Init");
         } catch (Exception e){
-            serverConnect.getInstance().sendDebug(2, "Init UE:" + e.toString() + Arrays.toString(e.getStackTrace()));
+            GATracker.trackException("Initialize",e);
             throw e;
         }
     }
@@ -137,7 +139,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
             try {
                 Player.getPlayer().loadJSON(new JSONObject(pls));
             } catch (JSONException e) {
-                Log.d("LoadPlayer", "Error:" + pls);
+                GATracker.trackException("LoadPlayer",e);
             }
         }
         GameObjects.init();
@@ -159,8 +161,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
         createListeners();
         }
         catch (Exception e){
-            serverConnect.getInstance().sendDebug(2,"Resume UNEXPECTED:"+e.toString());
-
+            GATracker.trackException("LoadPlayer",e);
         }
     }
     boolean isListenersDone=false;
@@ -207,14 +208,13 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
 
                     timeToPlayerRefresh = 6;
                 } catch (Exception e){
-                    serverConnect.getInstance().sendDebug(2, "Player UE:" + e.toString() + "\n" + Arrays.toString(e.getStackTrace()));
+                    GATracker.trackException("LoadPlayer",e);
                 }
             }
 
             @Override
             public void onError(JSONObject response) {
                 try {
-                    Log.d("Debug info", "Error Listener;");
                     String errorText = "";
                     if (response.has("Error")) {
                         errorText = response.getString("Error");
@@ -226,9 +226,9 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                     if (errorMsg.equals("")) errorMsg = errorText;
                     if (!"Unexpected Response".equals(errorText) || "Y".equals(GameSettings.getInstance().get("SHOW_NETWORK_ERROR")))
                         Essages.addEssage(errorMsg);
-                        else serverConnect.getInstance().sendDebug(3, errorMsg);
+                    GATracker.trackException("NetworkError",errorMsg);
                 } catch (Exception e){
-                    serverConnect.getInstance().sendDebug(2, "Player UE:" + e.toString() + "\n" + Arrays.toString(e.getStackTrace()));
+                    GATracker.trackException("NetworkError",e);
                 }
             }
 
@@ -237,10 +237,8 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                 if (response.has("Messages")) {
                     try {
                         messages.loadJSON(response);
-                    } catch (JSONException e) {
-                        serverConnect.getInstance().sendDebug(2, "Message UE:" +response.toString()+"\n"+ e.toString() + "\n" + Arrays.toString(e.getStackTrace()));
                     } catch (Exception e){
-                        serverConnect.getInstance().sendDebug(2, "Message UE:" + e.toString() + "\n" + Arrays.toString(e.getStackTrace()));
+                        GATracker.trackException("LoadMessage",e);
                     }
                 }
             }
@@ -360,7 +358,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                                 }
                             }
                         } catch (Exception e) {
-                            Log.d("Error", e.toString());
+                            GATracker.trackException("MainWindow.Touch",e);
                         }
                         //Проверить поворот
                     } else if (Math.abs(oldPos.x - event.getX()) < 20 && Math.abs(oldPos.y - event.getY()) < 20 && (new Date().getTime()) - tm > 800) {
@@ -377,7 +375,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                         }
                     }
                 } catch (Exception e) {
-                    serverConnect.getInstance().sendDebug(2, "Gesture UE:" + e.toString() + Arrays.toString(e.getStackTrace()));
+                    GATracker.trackException("MainWindow.Touch",e);
                 }
                 return true;
             }
@@ -415,7 +413,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
             }
         }
         catch (Exception e){
-            serverConnect.getInstance().sendDebug(2, "TickTimer UNEXPECTED:" + e.toString());
+            GATracker.trackException("Timer",e);
         }
         myHandler.postDelayed(myRunable, delay);
 
@@ -450,7 +448,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                 }
         }
         catch (Exception e){
-            serverConnect.getInstance().sendDebug(2, "Tick UNEXPECTED:" + e.toString());
+            GATracker.trackException("Timer",e);
         }
         StartTickTimer();
     }
@@ -462,18 +460,20 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                 myHandler.removeCallbacks(messageRequest);
                 myHandler.postDelayed(messageRequest, 60000);
             }catch (Exception e){
-                serverConnect.getInstance().sendDebug(2, "Message UE:" + e.toString() + "\n" + Arrays.toString(e.getStackTrace()));
+                GATracker.trackException("Timer",e);
             }
 
         }
     };
 
 
+
+
     @Override
-    protected void onPause(){
-        Log.d("Loader", "ActivityPause");
+    protected void onStop() {
+        super.onStop();
         try {
-            super.onPause();
+
             if (ready) {
                 myHandler.removeCallbacks(myRunable);
 
@@ -483,23 +483,26 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                     GPSInfo.getInstance().offGPS();
             }
         } catch (Exception e){
-            serverConnect.getInstance().sendDebug(2, "Pause UE:" + e.toString() + "\n" + Arrays.toString(e.getStackTrace()));
+            GATracker.trackException("onStop",e);
+
         }
     }
-    @Override
-    protected void onResume() {
 
-        super.onResume();
-        Log.d("Loader", "ActivityResume");
+    @Override
+    protected void onRestart() {
+        super.onRestart();
         if (ready) {
-            Log.d("Loader","ActivityResume+");
+
             try {
                 onTrueResume();
             } catch (Exception e) {
-                serverConnect.getInstance().sendDebug(2, "Resume UNEXPECTED:" + e.toString() + "\n");
+                GATracker.trackException("onRestart",e);
             }
         }
     }
+
+
+
     private void onTrueResume(){
         MessageNotification.cancel();
         MessageNotification.appActive = true;
@@ -518,14 +521,15 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                 MyGoogleMap.stopShowPoint();
             } else {
                 Essages.addEssage("Для выхода из приложения используйте кнопку Home.");
-                serverConnect.getInstance().sendDebug(0, "Для выхода из приложения используйте кнопку Home.");
+                GATracker.trackHit("System","BackPressed");
             }
         } catch (Exception e)
         {
-            serverConnect.getInstance().sendDebug(2, "BackPress UE:" + e.toString() + "\n" + Arrays.toString(e.getStackTrace()));
+            GATracker.trackException("BackPressed",e);
         }
     }
     private  void signIn(){
+        GATracker.trackTimeStart("System","SignIn");
         ((TextView)findViewById(R.id.status)).setText(R.string.enter_google_account);
         SharedPreferences sharedPreferences=getSharedPreferences("SpiritProto", MODE_PRIVATE);
         String accountName=sharedPreferences.getString("AccountName", "");
@@ -557,6 +561,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
 
             if (result.isSuccess()) {
+
                 GoogleSignInAccount acct = result.getSignInAccount();
                 // Get account information
                 //String accountNAme = acct.get();
@@ -567,18 +572,19 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     editor.putString("AccountName", mEmail);
                     editor.apply();
+                    GATracker.trackTimeEnd("System","SignIn");
+                    GATracker.trackHit("System","SignIn");
                     ((TextView)findViewById(R.id.status)).setText(R.string.data_init);
+                    GATracker.trackTimeStart("System","Init");
                     initStart();
                 } else signIn();
             } else {
-                Log.d("Token","Reslt:"+result.getStatus().getStatusMessage()+result.getStatus().toString());
                 signIn();
             }
         }
     }
     private void initStart(){
         //Даем время интерфейсу
-        Log.d("Loader", "Create");
         myHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -586,8 +592,6 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                 Thread thread = new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        Log.d("Loader", "Ofthread");
-
                         ofThreadInit();
                         //Возвращаемся в основной поток для работы с UI.
                         myHandler.post(new Runnable() {
@@ -598,22 +602,8 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                         });
                     }
                 });
-                Log.d("Loader", "Start");
                 thread.start();
             }
         }, 1000);
     }
-
-    public void energyBreakPointStart(final int stateId, final String stateDescription) {
-        final Intent stateUpdate = new Intent("com.quicinc.Trepn.UpdateAppState");
-        stateUpdate.putExtra("com.quicinc.Trepn.UpdateAppState.Value", stateId);
-        stateUpdate.putExtra("com.quicinc.Trepn.UpdateAppState.Value.Desc", stateDescription);
-        sendBroadcast(stateUpdate);
-    }// Generated  energyBreakPointStart method
-
-    public void energyBreakPointEnd() {
-        final Intent stateUpdate = new Intent("com.quicinc.Trepn.UpdateAppState");
-        stateUpdate.putExtra("com.quicinc.Trepn.UpdateAppState.Value", 0);
-        sendBroadcast(stateUpdate);
-    }// Generated  energyBreakPointEnd method
 }

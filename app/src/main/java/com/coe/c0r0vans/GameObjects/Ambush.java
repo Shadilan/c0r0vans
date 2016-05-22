@@ -23,8 +23,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.Arrays;
-
+import utility.GATracker;
 import utility.GPSInfo;
 import utility.GameSound;
 import utility.ImageLoader;
@@ -161,7 +160,7 @@ public class Ambush extends GameObject {
 
     //ObjectAction removeAmbush;
 
-
+    private String currentMarkName;
     @Override
     public void changeMarkerSize() {
         if (mark != null) {
@@ -171,13 +170,12 @@ public class Ambush extends GameObject {
             if (faction==0) mark_name=mark_name+"_"+faction+Player.getPlayer().getRace();
             else mark_name = mark_name + "_"+faction;
             mark_name = mark_name + GameObject.zoomToPostfix(type);
-            try {
+            if (!mark_name.equals(currentMarkName)) {
                 mark.setIcon(ImageLoader.getDescritor(mark_name));
                 if ("Y".equals(GameSettings.getInstance().get("USE_TILT")))
                     mark.setAnchor(0.5f, 1f);
                 else mark.setAnchor(0.5f, 0.5f);
-            } catch (Exception e){
-                serverConnect.getInstance().sendDebug(2, "mark:" + mark_name+"\n"+e.toString()+"\n"+Arrays.toString(e.getStackTrace()));
+                currentMarkName=mark_name;
             }
         }
     }
@@ -332,7 +330,7 @@ public class Ambush extends GameObject {
                         if (response.has("Message")) try {
                             Essages.addEssage(response.getString("Message"));
                         } catch (JSONException e) {
-                            serverConnect.getInstance().sendDebug(2,e.toString()+"\n"+ Arrays.toString(e.getStackTrace()));
+                            GATracker.trackException("ObjectAction",e);
                         }
                         else Essages.addEssage("Разбойники уничтожены.");
                         owner.RemoveObject();

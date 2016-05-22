@@ -3,19 +3,16 @@ package utility.internet;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.provider.Settings;
 import android.util.Log;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.coe.c0r0vans.GameObjects.ObjectAction;
-import com.coe.c0r0vans.GameObjects.Player;
 import com.coe.c0r0vans.MyGoogleMap;
 import com.coe.c0r0vans.R;
 import com.google.android.gms.maps.model.LatLng;
@@ -24,12 +21,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.UUID;
 
+import utility.GATracker;
 import utility.GPSInfo;
 import utility.StringUtils;
 
@@ -125,7 +122,6 @@ public class serverConnect {
         login=Login;
 
         runRequest(UUID.randomUUID().toString(),url,ResponseListenerWithUID.LOGIN);
-        sendDebug(1,"Login try.");
         return true;
     }
     private JSONObject formResponse(String resp){
@@ -186,10 +182,8 @@ public class serverConnect {
      * @return true
      */
     public boolean ExecCommand(ObjectAction action, String Target, int Lat,int Lng , int TLat,int TLng){
-        Log.d("DebugAction", "Step1");
         if (!checkConnection()) return false;
         if (Token==null) return false;
-        sendDebug(5,"Action execute:"+action.getCommand());
         if (lockedActions==null) lockedActions=new ArrayList<>();
         lockedActions.add(action);
         action.preAction();
@@ -346,7 +340,7 @@ public class serverConnect {
 
                         }
                         catch (Exception e){
-                            sendDebug(2,e.toString()+"\n"+ Arrays.toString(e.getStackTrace()));
+                            GATracker.trackException("NetworkError",e);
                         }
                         runNextRequest();
 
@@ -370,7 +364,7 @@ public class serverConnect {
 
                         } catch (Exception e)
                         {
-                            serverConnect.getInstance().sendDebug(3, "Net UE:" + e.toString()+ Arrays.toString(e.getStackTrace()));
+                            GATracker.trackException("NetworkError",e);
                         }
                     }
                 });
@@ -379,8 +373,7 @@ public class serverConnect {
         reqq.add(jsObjRequest);
 
     }
-    public void sendDebug(int type,String message){
-        //
+    /*public void sendDebug(int type,String message){
         Log.d("SendDebug",message);
         if (!checkConnection()) return;
         String request="https://support-merchantarg.rhcloud.com/addLog.jsp";
@@ -426,5 +419,5 @@ public class serverConnect {
         jsObjRequest.setRetryPolicy(new DefaultRetryPolicy(20 * 1000, 0,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         reqq.add(jsObjRequest);
-    }
+    }*/
 }

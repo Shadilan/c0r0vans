@@ -20,6 +20,7 @@ import utility.settings.GameSettings;
 /**
  * @author Shadilan
  */
+//// TODO: 21.05.2016 Привести к объекту караван
 public class Route extends GameObject{
     private String StartName;
     private String FinishName;

@@ -19,8 +19,7 @@ import com.coe.c0r0vans.OnGameObjectChange;
 
 import org.json.JSONObject;
 
-import java.util.Arrays;
-
+import utility.GATracker;
 import utility.GPSInfo;
 import utility.internet.ServerListener;
 import utility.internet.serverConnect;
@@ -177,7 +176,7 @@ public class ActionView extends LinearLayout {
             }
         } catch (Exception e)
         {
-            serverConnect.getInstance().sendDebug(2, "UER:" + e.toString()+ Arrays.toString(e.getStackTrace()));
+            GATracker.trackException("ActionReload",e);
         }
     }
 

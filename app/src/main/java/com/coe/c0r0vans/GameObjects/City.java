@@ -146,7 +146,7 @@ public class City extends GameObject{
     }
     public String getName(){return (Name+" ур."+Level) ;}
 
-
+    private String currentMarkName;
     @Override
     public void changeMarkerSize() {
         if (mark!=null) {
@@ -155,10 +155,11 @@ public class City extends GameObject{
             if (lvl==0) lvl=1;
             markname = markname + "_"+lvl;
             markname = markname + GameObject.zoomToPostfix(MyGoogleMap.getClientZoom());
-            mark.setIcon(ImageLoader.getDescritor(markname));
-            //if ("Y".equals(GameSettings.getInstance().get("USE_TILT"))) mark.setAnchor(0.5f, 1f);
-            //else
-            mark.setAnchor(0.5f, 0.5f);
+            if (!markname.equals(currentMarkName)) {
+                mark.setIcon(ImageLoader.getDescritor(markname));
+                mark.setAnchor(0.5f, 0.5f);
+                currentMarkName=markname;
+            }
         }
     }
 

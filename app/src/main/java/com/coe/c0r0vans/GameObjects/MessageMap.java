@@ -8,14 +8,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
-import utility.internet.serverConnect;
+import utility.GATracker;
 import utility.notification.Essages;
 import utility.settings.GameSettings;
 
@@ -38,7 +37,7 @@ public class MessageMap extends HashMap<String,Message>{
             } catch (JSONException e) {
                 if ("Y".equals(GameSettings.getInstance().get("SHOW_NETWORK_ERROR")))
                     Essages.addEssage("Error Loading:"+ e.toString());
-                serverConnect.getInstance().sendDebug(2,"Error Loading:"+ e.toString()+ Arrays.toString(e.getStackTrace()));
+                GATracker.trackException("MessageLoad",e);
 
             }
             load=false;
@@ -50,7 +49,7 @@ public class MessageMap extends HashMap<String,Message>{
         try {
             new Thread(task).start();
         } catch(Exception e){
-            serverConnect.getInstance().sendDebug(2,"Error Loading:"+ e.toString()+ Arrays.toString(e.getStackTrace()));
+            GATracker.trackException("LoadMessage",e);
 
         }
 

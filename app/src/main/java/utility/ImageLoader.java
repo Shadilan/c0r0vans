@@ -12,7 +12,6 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import java.util.Calendar;
 import java.util.HashMap;
 
-import utility.internet.serverConnect;
 import utility.notification.Essages;
 
 
@@ -105,6 +104,7 @@ public class ImageLoader {
         images.put("bargain_buy",BitmapFactory.decodeResource(context.getResources(), R.mipmap.bargain_buy));
         images.put("paladin",BitmapFactory.decodeResource(context.getResources(), R.mipmap.paladin));
         images.put("paladin_buy",BitmapFactory.decodeResource(context.getResources(), R.mipmap.paladin_buy));
+        images.put("unknown",BitmapFactory.decodeResource(context.getResources(),R.mipmap.unknown));
 
 
     }
@@ -118,15 +118,17 @@ public class ImageLoader {
         Bitmap result=images.get(name);
         if (result==null) {
             Essages.addEssage("Изображение " + name + " не найдено.");
-            serverConnect.getInstance().sendDebug(2,"Изображение " + name + " не найдено.");
+            GATracker.trackException("ImageLoader","ImageNoteFound:"+name);
+            result=images.get("unknown");
         }
         return result;
     }
     public static BitmapDescriptor getDescritor(String name) {
         BitmapDescriptor result = descriptors.get(name);
         if (result==null) {
+            GATracker.trackException("ImageLoader","ImageNoteFound:"+name);
             Essages.addEssage("Изображение объекта "+name + " не найдено.");
-            serverConnect.getInstance().sendDebug(2,"Изображение объекта "+name + " не найдено.");
+            result=BitmapDescriptorFactory.fromBitmap(images.get("unknown"));
         }
         return  result;
     }

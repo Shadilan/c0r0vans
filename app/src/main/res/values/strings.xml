@@ -25,7 +25,7 @@
     <string name="most_in">Most reach in</string>
     <string name="title_activity_main">Information</string>
     <string name="ambush">Ambush</string>
-    <string name="google_app_id" translatable="false">111416</string>
+
     <string name="settings_display">Display settings</string>
     <string name="settings_ambush_radius">Ambush radius</string>
     <string name="settings_city_radius">City radius</string>

@@ -7,8 +7,7 @@ import com.google.android.gms.maps.model.LatLng;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.Arrays;
-
+import utility.GATracker;
 import utility.GameSound;
 import utility.ImageLoader;
 import utility.internet.serverConnect;
@@ -18,6 +17,7 @@ import utility.notification.Essages;
  * @author Shadilan
  * Элемент списка засад
  */
+//// TODO: 21.05.2016 Привести к Ambush объекту.
 public class AmbushItem extends GameObject{
     private int Lat;
     private int Lng;
@@ -29,7 +29,7 @@ public class AmbushItem extends GameObject{
         try {
             loadJSON(obj);
         } catch (JSONException e) {
-            serverConnect.getInstance().sendDebug(2, e.toString()+"\n"+Arrays.toString(e.getStackTrace()));
+            GATracker.trackException("ObjectLoad",e);
         }
     }
     ObjectAction cancelAmbush;

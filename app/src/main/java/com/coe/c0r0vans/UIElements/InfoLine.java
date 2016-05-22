@@ -14,6 +14,7 @@ import com.coe.c0r0vans.R;
 import com.coe.c0r0vans.ShowHideForm;
 import com.google.android.gms.maps.model.LatLng;
 
+import utility.GATracker;
 import utility.internet.serverConnect;
 
 
@@ -73,7 +74,7 @@ public class InfoLine extends RelativeLayout {
         try {
             afterInit();
         } catch (Exception e){
-            serverConnect.getInstance().sendDebug(2, e.toString());
+            GATracker.trackException("InfoLine",e);
         }
 
     }

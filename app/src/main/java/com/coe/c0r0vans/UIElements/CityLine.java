@@ -15,8 +15,7 @@ import com.coe.c0r0vans.R;
 import com.coe.c0r0vans.ShowHideForm;
 import com.google.android.gms.maps.model.LatLng;
 
-import java.util.Arrays;
-
+import utility.GATracker;
 import utility.StringUtils;
 import utility.internet.serverConnect;
 
@@ -85,7 +84,7 @@ public class CityLine extends RelativeLayout {
         try {
             afterInit();
         } catch (Exception e){
-            serverConnect.getInstance().sendDebug(2, e.toString()+ Arrays.toString(e.getStackTrace())+ Arrays.toString(e.getStackTrace()));
+            GATracker.trackException("CityLine",e);
         }
 
     }

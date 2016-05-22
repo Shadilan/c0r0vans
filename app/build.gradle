@@ -25,6 +25,11 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.Release
         }
+        debug {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.Release
+        }
     }
     productFlavors {
     }
@@ -43,3 +48,4 @@ dependencies {
     compile 'com.google.android.gms:play-services-identity:8.4.0'
 
 }
+apply plugin: 'com.google.gms.google-services'
