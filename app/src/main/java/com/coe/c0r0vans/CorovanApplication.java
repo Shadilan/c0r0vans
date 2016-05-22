@@ -1,8 +1,7 @@
-package com.coe.c0r0vans.GameObjects;
+package com.coe.c0r0vans;
 
 import android.app.Application;
 
-import com.coe.c0r0vans.R;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
 

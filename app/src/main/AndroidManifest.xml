@@ -19,7 +19,8 @@
         android:fullBackupContent="true"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        android:name=".GameObjects.CorovanApplication">
+        android:name=".CorovanApplication"
+        android:allowBackup="true">
         <activity
             android:name="com.coe.c0r0vans.MainWindow"
             android:label="@string/title_activity_main_window"
@@ -29,6 +30,7 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.

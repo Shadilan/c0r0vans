@@ -1,6 +1,6 @@
 package utility;
 
-import com.coe.c0r0vans.GameObjects.CorovanApplication;
+import com.coe.c0r0vans.CorovanApplication;
 import com.coe.c0r0vans.R;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
@@ -24,13 +24,14 @@ public class GATracker {
         mTracker.send(new HitBuilders.EventBuilder().setCategory(category).setAction(action).setLabel("Hit").build());
     }
     public static void trackTime(String category,String action,long time){
-        mTracker.send(new HitBuilders.EventBuilder().setCategory(category).setAction(action).setLabel("Time").setValue(time).build());
+        mTracker.send(new HitBuilders.TimingBuilder().setCategory(category).setVariable(action).setLabel("Time").setValue(time).build());
     }
     public static void trackException(String action,Exception e){
-        mTracker.send(new HitBuilders.EventBuilder().setCategory("Exception").setAction(action).setLabel(e.toString()).set("Description", Arrays.toString(e.getStackTrace())).build());
+        mTracker.send(new HitBuilders.ExceptionBuilder().setDescription(action+":"+Arrays.toString(e.getStackTrace())).build());
     }
     public static void trackException(String action,String text){
-        mTracker.send(new HitBuilders.EventBuilder().setCategory("Exception").setAction(action).setLabel(text).build());
+
+        mTracker.send(new HitBuilders.ExceptionBuilder().setDescription(action+":"+text).build());
     }
     private static HashMap<String,Long> timers;
     private static void checkInitTimers(){

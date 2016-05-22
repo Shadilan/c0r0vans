@@ -12,9 +12,10 @@ import com.coe.c0r0vans.MyGoogleMap;
 import com.coe.c0r0vans.R;
 import com.google.android.gms.maps.model.LatLng;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import utility.GATracker;
+import utility.StringUtils;
 
 /**
  * Строка Сообщения
@@ -28,7 +29,7 @@ public class EssageLine extends LinearLayout{
     private LinearLayout parentForm;
     private EssageLine current;
     private Message msg;
-    private static DateFormat df = new SimpleDateFormat("dd.MM.yy HH:mm:ss");
+
 
 
     public void setParentForm(LinearLayout form){
@@ -36,11 +37,11 @@ public class EssageLine extends LinearLayout{
 
     }
     public void setText(String text){
-        txt=df.format(new Date()) + ":" + text;
+        txt= StringUtils.dateToStr(new Date()) + ":" + text;
         if (this.text!=null) this.text.setText(txt);
     }
     public void setText(Date date,String text){
-        txt=df.format(date) + ":" +text;
+        txt=StringUtils.dateToStr(date) + ":" +text;
         if (this.text!=null) this.text.setText(txt);
 
     }
@@ -48,7 +49,7 @@ public class EssageLine extends LinearLayout{
     public void setText(Message text){
         point=text.getTarget();
         if (showButton!=null && point!=null) showButton.setVisibility(VISIBLE);
-        txt=df.format(text.getTime()) + ":" + text.getMessage();
+        txt=StringUtils.dateToStr(text.getTime()) + ":" + text.getMessage();
         if (this.text!=null) this.text.setText(txt);
         msg=text;
     }
@@ -96,8 +97,12 @@ public class EssageLine extends LinearLayout{
         removeButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                parentForm.removeView(current);
-                if (msg!=null) msg.remove();
+                try {
+                    parentForm.removeView(current);
+                    if (msg != null) msg.remove();
+                } catch (Exception e){
+                    GATracker.trackException("RemoveMessage","AfterInit");
+                }
             }
         });
         showButton= (ImageButton) findViewById(R.id.showButton);

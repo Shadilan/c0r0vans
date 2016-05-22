@@ -17,7 +17,6 @@ import android.widget.TextView;
 import com.coe.c0r0vans.GameObjects.Ambush;
 import com.coe.c0r0vans.GameObjects.Caravan;
 import com.coe.c0r0vans.GameObjects.City;
-import com.coe.c0r0vans.GameObjects.CorovanApplication;
 import com.coe.c0r0vans.GameObjects.GameObject;
 import com.coe.c0r0vans.GameObjects.GameObjects;
 import com.coe.c0r0vans.GameObjects.MessageMap;
