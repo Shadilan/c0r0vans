@@ -9,7 +9,6 @@ import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 
-import java.util.Calendar;
 import java.util.HashMap;
 
 import utility.notification.Essages;
@@ -22,6 +21,7 @@ import utility.notification.Essages;
 public class ImageLoader {
     //private static ImageLoader instance;
     private static HashMap<String,Bitmap> images=new HashMap<>();
+    private static HashMap<String,Bitmap> markers=new HashMap<>();
     private static HashMap<String,BitmapDescriptor> descriptors = new HashMap<>();
     /**
      * Load images on start;
@@ -47,7 +47,7 @@ public class ImageLoader {
         createMarker(context, R.mipmap.city_9, "city_9");
         createMarker(context, R.mipmap.city_10, "city_10");
 
-        Calendar cal =Calendar.getInstance();
+
 
             createMarker(context, R.mipmap.ambush_00, "ambush_00");
             createMarker(context, R.mipmap.ambush_01, "ambush_01");
@@ -106,6 +106,10 @@ public class ImageLoader {
         images.put("paladin_buy",BitmapFactory.decodeResource(context.getResources(), R.mipmap.paladin_buy));
         images.put("unknown",BitmapFactory.decodeResource(context.getResources(),R.mipmap.unknown));
 
+        //Workaround для решения проблемы белых квадратов
+        Bitmap b=BitmapFactory.decodeResource(context.getResources(), R.mipmap.unknown);
+        descriptors.put("unknown", BitmapDescriptorFactory.fromBitmap(Bitmap.createScaledBitmap(b, b.getWidth(), b.getHeight() , false)));
+
 
     }
 
@@ -124,7 +128,10 @@ public class ImageLoader {
         return result;
     }
     public static BitmapDescriptor getDescritor(String name) {
-        BitmapDescriptor result = descriptors.get(name);
+
+        //BitmapDescriptor result = descriptors.get(name);
+        //Workaround for https://code.google.com/p/gmaps-api-issues/issues/detail?id=9765
+        BitmapDescriptor result=BitmapDescriptorFactory.fromBitmap(markers.get(name));
         if (result==null) {
             GATracker.trackException("ImageLoader","ImageNoteFound:"+name);
             Essages.addEssage("Изображение объекта "+name + " не найдено.");
@@ -132,10 +139,16 @@ public class ImageLoader {
         }
         return  result;
     }
+
     private static void createMarker(Context context,int resource,String name){
         Bitmap b=BitmapFactory.decodeResource(context.getResources(), resource);
-        descriptors.put(name, BitmapDescriptorFactory.fromBitmap(Bitmap.createScaledBitmap(b, b.getWidth(), b.getHeight() , false)));
+        //Workaround for https://code.google.com/p/gmaps-api-issues/issues/detail?id=9765
+        markers.put(name,Bitmap.createScaledBitmap(b, b.getWidth(), b.getHeight() , false));
+        markers.put(name+"_m",Bitmap.createScaledBitmap(b, (int) (b.getWidth()*0.75),(int) (b.getHeight()*0.75) , false));
+        markers.put(name+"_s",Bitmap.createScaledBitmap(b, (int) (b.getWidth()*0.5),(int) (b.getHeight()*0.5) , false));
+
+        /*descriptors.put(name, BitmapDescriptorFactory.fromBitmap(Bitmap.createScaledBitmap(b, b.getWidth(), b.getHeight() , false)));
         descriptors.put(name+"_m",BitmapDescriptorFactory.fromBitmap(Bitmap.createScaledBitmap(b, (int) (b.getWidth() * 0.75), (int) (b.getHeight() * 0.75), false)));
-        descriptors.put(name + "_s", BitmapDescriptorFactory.fromBitmap(Bitmap.createScaledBitmap(b, (int) (b.getWidth() * 0.5), (int) (b.getHeight() * 0.5), false)));
+        descriptors.put(name + "_s", BitmapDescriptorFactory.fromBitmap(Bitmap.createScaledBitmap(b, (int) (b.getWidth() * 0.5), (int) (b.getHeight() * 0.5), false)));*/
     }
 }

@@ -87,11 +87,16 @@ public class GameObject {
      * Actions to do on remove object
      */
     public void RemoveObject() {
-        if (mark!=null)
-        mark.remove();
-        mark=null;
-        if (zone!=null) zone.remove();
-        zone=null;
+        if (mark!=null){
+            mark.remove();
+            mark=null;
+        }
+
+        if (zone!=null) {
+            zone.remove();
+            zone=null;
+        }
+
 
     }
 
