@@ -284,7 +284,8 @@ public class City extends GameObject{
             ((TextView) findViewById(R.id.skillDesc)).setText(getSkillInfo());
             findViewById(R.id.buyUpgrade).setEnabled(city.upgradeAvaible());
             startRouteAction = new ObjectAction(city) {
-
+                private String oldRoute;
+                private boolean previous;
                 @Override
                 public Bitmap getImage() {
                     return ImageLoader.getImage("start_route");
@@ -297,7 +298,8 @@ public class City extends GameObject{
 
                 @Override
                 public void preAction() {
-
+                    oldRoute=Player.getPlayer().getCurrentRoute();
+                    previous=Player.getPlayer().getRouteStart();
                     Player.getPlayer().setRouteStart(false);
                     Player.getPlayer().setCurrentRouteGUID(city.getGUID());
                 }
@@ -314,7 +316,8 @@ public class City extends GameObject{
 
                 @Override
                 public void postError() {
-                    //Player.getPlayer().setRouteStart(previous);
+                    Player.getPlayer().setRouteStart(previous);
+                    Player.getPlayer().setCurrentRouteGUID(oldRoute);
 
                 }
                 @Override
@@ -322,7 +325,44 @@ public class City extends GameObject{
                     Player.getPlayer().setRouteStart(true);
                 }
             };
+            endRouteAction = new ObjectAction(city) {
+                private String oldRoute;
+                private boolean previous;
+                @Override
+                public Bitmap getImage() {
+                    return ImageLoader.getImage("end_route");
+                }
 
+                @Override
+                public String getCommand() {
+                    return "FinishRoute";
+                }
+
+                @Override
+                public void preAction() {
+                    previous=Player.getPlayer().getRouteStart();
+                    oldRoute=Player.getPlayer().getCurrentRoute();
+                    Player.getPlayer().setRouteStart(true);
+                }
+
+                @Override
+                public void postAction(JSONObject response) {
+                    Essages.addEssage(String.format(getResources().getString(R.string.route_finish), Name));
+                    GameSound.playSound(GameSound.FINISH_ROUTE_SOUND);
+                    serverConnect.getInstance().getPlayerInfo();
+                    Player.getPlayer().setCurrentRouteGUID("");
+                    for (GameObject o:GameObjects.getInstance().values()){
+                        if (o!=null && o instanceof City) ((City) o).updateColor();
+                    }
+                }
+
+                @Override
+                public void postError() {
+                    Player.getPlayer().setRouteStart(previous);
+                    Player.getPlayer().setCurrentRouteGUID(oldRoute);
+
+                }
+            };
             findViewById(R.id.startRoute).setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -342,39 +382,7 @@ public class City extends GameObject{
 
             });
 
-            endRouteAction = new ObjectAction(city) {
-                @Override
-                public Bitmap getImage() {
-                    return ImageLoader.getImage("end_route");
-                }
 
-                @Override
-                public String getCommand() {
-                    return "FinishRoute";
-                }
-
-                @Override
-                public void preAction() {
-                    Player.getPlayer().setRouteStart(true);
-                }
-
-                @Override
-                public void postAction(JSONObject response) {
-                    Essages.addEssage(String.format(getResources().getString(R.string.route_finish), Name));
-                    GameSound.playSound(GameSound.FINISH_ROUTE_SOUND);
-                    serverConnect.getInstance().getPlayerInfo();
-                    Player.getPlayer().setCurrentRouteGUID("");
-                    for (GameObject o:GameObjects.getInstance().values()){
-                        if (o!=null && o instanceof City) ((City) o).updateColor();
-                    }
-                }
-
-                @Override
-                public void postError() {
-                    Player.getPlayer().setRouteStart(false);
-
-                }
-            };
             findViewById(R.id.finishRoute).setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -694,7 +702,10 @@ public class City extends GameObject{
             ImageButton btn= (ImageButton) findViewById(R.id.buy);
             btn.setEnabled(city.upgradeAvaible());
             btn.setImageBitmap(ImageLoader.getImage(city.upgrade + "_buy"));
+
             startRouteAction = new ObjectAction(city) {
+                private String oldRoute;
+                private boolean previous;
                 @Override
                 public Bitmap getImage() {
                     return ImageLoader.getImage("start_route");
@@ -707,9 +718,10 @@ public class City extends GameObject{
 
                 @Override
                 public void preAction() {
+                    oldRoute=Player.getPlayer().getCurrentRoute();
+                    previous=Player.getPlayer().getRouteStart();
                     Player.getPlayer().setRouteStart(false);
                     Player.getPlayer().setCurrentRouteGUID(city.getGUID());
-
                 }
 
                 @Override
@@ -724,12 +736,51 @@ public class City extends GameObject{
 
                 @Override
                 public void postError() {
-
-                    //Player.getPlayer().setRouteStart(true);
+                    Player.getPlayer().setRouteStart(previous);
+                    Player.getPlayer().setCurrentRouteGUID(oldRoute);
 
                 }
+                @Override
                 public void serverError(){
                     Player.getPlayer().setRouteStart(true);
+                }
+            };
+            endRouteAction = new ObjectAction(city) {
+                private String oldRoute;
+                private boolean previous;
+                @Override
+                public Bitmap getImage() {
+                    return ImageLoader.getImage("end_route");
+                }
+
+                @Override
+                public String getCommand() {
+                    return "FinishRoute";
+                }
+
+                @Override
+                public void preAction() {
+                    previous=Player.getPlayer().getRouteStart();
+                    oldRoute=Player.getPlayer().getCurrentRoute();
+                    Player.getPlayer().setRouteStart(true);
+                }
+
+                @Override
+                public void postAction(JSONObject response) {
+                    Essages.addEssage(String.format(getResources().getString(R.string.route_finish), Name));
+                    GameSound.playSound(GameSound.FINISH_ROUTE_SOUND);
+                    serverConnect.getInstance().getPlayerInfo();
+                    Player.getPlayer().setCurrentRouteGUID("");
+                    for (GameObject o:GameObjects.getInstance().values()){
+                        if (o!=null && o instanceof City) ((City) o).updateColor();
+                    }
+                }
+
+                @Override
+                public void postError() {
+                    Player.getPlayer().setRouteStart(previous);
+                    Player.getPlayer().setCurrentRouteGUID(oldRoute);
+
                 }
             };
 
@@ -749,39 +800,6 @@ public class City extends GameObject{
                     }
                 }
             });
-            endRouteAction = new ObjectAction(city) {
-                @Override
-                public Bitmap getImage() {
-                    return ImageLoader.getImage("end_route");
-                }
-
-                @Override
-                public String getCommand() {
-                    return "FinishRoute";
-                }
-
-                @Override
-                public void preAction() {
-                    Player.getPlayer().setRouteStart(true);
-                }
-
-                @Override
-                public void postAction(JSONObject response) {
-                    Essages.addEssage(String.format(getResources().getString(R.string.route_finish), Name));
-                    GameSound.playSound(GameSound.FINISH_ROUTE_SOUND);
-                    Player.getPlayer().setCurrentRouteGUID("");
-                    serverConnect.getInstance().getPlayerInfo();
-                    for (GameObject o:GameObjects.getInstance().values()){
-                        if (o!=null && o instanceof City) ((City) o).updateColor();
-                    }
-                }
-
-                @Override
-                public void postError() {
-                    Player.getPlayer().setRouteStart(false);
-
-                }
-            };
             findViewById(R.id.end).setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
