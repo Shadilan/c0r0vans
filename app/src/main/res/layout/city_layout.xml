@@ -23,11 +23,14 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"/>
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/pageChoose">
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/cityName"
-        android:id="@+id/pageChoose"
         android:orientation="horizontal">
         <ToggleButton
             android:layout_width="wrap_content"
@@ -43,8 +46,8 @@
             android:layout_height="wrap_content"
             android:text="@string/information"
             android:id="@+id/infoToggle"
-            android:textOff="Информация"
-            android:textOn="Информация"
+            android:textOff="Инфо"
+            android:textOn="Инфо"
             style="@style/TabButton"
             android:checked="false" />
         <ToggleButton
@@ -56,15 +59,16 @@
             android:textOn="Маршруты"
             style="@style/TabButton"
             android:checked="false" />
-
     </LinearLayout>
+    </HorizontalScrollView>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/pageChoose"
         android:orientation="vertical"
         android:id="@+id/swapPanel"
-        android:layout_above="@+id/actionPanel">
+        android:layout_above="@+id/actionPanel"
+        android:layout_margin="5dp">
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -335,7 +339,17 @@
         android:layout_above="@+id/distance"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="3dp">
-    <ImageButton
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/drop_route"
+            style="@style/CommonButton"
+            android:background="@drawable/action_button"
+            android:src="@mipmap/drop_route"
+             />
+
+        <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         style="@style/CommonButton"
@@ -359,16 +373,6 @@
         android:background="@drawable/action_button"
         android:src="@mipmap/restart_route"
         />
-
-    <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/drop_route"
-        style="@style/CommonButton"
-        android:background="@drawable/action_button"
-        android:src="@mipmap/drop_route"
-         />
-
 
 
     </LinearLayout>
