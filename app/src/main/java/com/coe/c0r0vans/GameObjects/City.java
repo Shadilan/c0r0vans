@@ -571,11 +571,11 @@ public class City extends GameObject{
         }
         public void updateInZone(boolean inZone){
             if (inZone) {
-                findViewById(R.id.startRoute).setVisibility(INVISIBLE);
-                findViewById(R.id.finishRoute).setVisibility(INVISIBLE);
+                findViewById(R.id.startRoute).setVisibility(GONE);
+                findViewById(R.id.finishRoute).setVisibility(GONE);
                 findViewById(R.id.buyUpgrade).setVisibility(INVISIBLE);
-                findViewById(R.id.restart_route).setVisibility(INVISIBLE);
-                findViewById(R.id.drop_route).setVisibility(INVISIBLE);
+                findViewById(R.id.restart_route).setVisibility(GONE);
+                findViewById(R.id.drop_route).setVisibility(GONE);
                 if (Player.getPlayer().getRouteStart()) findViewById(R.id.startRoute).setVisibility(VISIBLE);
                 if (!Player.getPlayer().getRouteStart() && (city!=null))
                 {
