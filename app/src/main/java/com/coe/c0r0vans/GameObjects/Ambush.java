@@ -39,7 +39,6 @@ public class Ambush extends GameObject {
 
     private int faction;
     private int radius=30;
-    private Circle zone;
 
     private int ready=0;
 

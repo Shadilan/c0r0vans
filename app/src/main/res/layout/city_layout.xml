@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="wrap_content"
+    android:layout_width="match_parent" android:layout_height="match_parent"
     android:background="@drawable/layouts"
     android:clickable="true"
     >
@@ -15,7 +15,6 @@
         android:layout_alignParentRight="true"
         android:src="@mipmap/closebutton"
         android:layout_marginBottom="0dp" />
-
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -24,7 +23,68 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"/>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/cityName"
+        android:id="@+id/pageChoose"
+        android:orientation="horizontal">
+        <ToggleButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/information"
+            android:id="@+id/marketToggle"
+            android:textOff="Покупки"
+            android:textOn="Покупки"
+            style="@style/TabButton"
+            android:checked="true" />
+        <ToggleButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/information"
+            android:id="@+id/infoToggle"
+            android:textOff="Информация"
+            android:textOn="Информация"
+            style="@style/TabButton"
+            android:checked="false" />
+        <ToggleButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/information"
+            android:id="@+id/routeToggle"
+            android:textOff="Маршруты"
+            android:textOn="Маршруты"
+            style="@style/TabButton"
+            android:checked="false" />
 
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/pageChoose"
+        android:orientation="vertical"
+        android:id="@+id/swapPanel"
+        android:layout_above="@+id/actionPanel">
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/infoPanel"
+        android:visibility="gone"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/SmallText"
+            android:text="Влияние фракций"
+            android:id="@+id/textView27"
+            android:layout_centerHorizontal="true"
+            android:textStyle="bold"
+            android:padding="0dp"
+            android:layout_marginBottom="0dp"
+            android:layout_marginTop="0dp"
+            android:layout_margin="0dp"
+            android:layout_marginLeft="0dp"
+            android:layout_marginRight="0dp" />
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -139,29 +199,67 @@
         android:progressDrawable="@drawable/base_progress"
         android:paddingTop="0dp"
         android:paddingBottom="0dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/MediumText"
+            android:text="Medium Text"
+            android:id="@+id/guildInfCount"
+            android:layout_alignTop="@+id/GuildInf"
+            android:layout_above="@+id/AllianceInf"
+            android:layout_alignEnd="@+id/GuildInf"
+            android:layout_alignRight="@+id/GuildInf"
+            android:layout_toEndOf="@+id/imageView"
+            android:layout_toRightOf="@id/imageView"
+            android:gravity="center"
+            android:layout_marginTop="0dp"
+            android:layout_marginBottom="0dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/MediumText"
+            android:text="Medium Text"
+            android:id="@+id/allianceInfCount"
+            android:gravity="center"
+            android:layout_below="@+id/imageView"
+            android:layout_above="@+id/imageView4"
+            android:layout_alignEnd="@+id/GuildInf"
+            android:layout_alignRight="@+id/GuildInf"
+            android:layout_toEndOf="@+id/imageView"
+            android:layout_toRightOf="@id/imageView"
+            android:layout_marginTop="0dp"
+            android:layout_marginBottom="0dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/MediumText"
+            android:text="Medium Text"
+            android:id="@+id/ligaInfCount"
+            android:gravity="center"
+            android:layout_alignTop="@+id/LigaInf"
+            android:layout_above="@+id/textView26"
+            android:layout_alignEnd="@+id/LigaInf"
+            android:layout_alignRight="@+id/LigaInf"
+            android:layout_toEndOf="@+id/imageView4"
+            android:layout_toRightOf="@id/imageView4"
+            android:layout_marginTop="0dp"
+            android:layout_marginBottom="0dp" />
+    </RelativeLayout>
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/cityExp"
-        android:id="@+id/buyPanel">
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        style="@style/SmallText"
-        android:text="Покупки"
-        android:id="@+id/textView28"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:textStyle="bold"
-        android:padding="0dp"
-        android:layout_margin="0dp" />
+        android:id="@+id/buyPanel"
+        >
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         style="@style/SmallText"
         android:text="SkillDesc"
         android:id="@+id/skillDesc"
-        android:layout_below="@+id/textView28"
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
         android:layout_toStartOf="@+id/buyUpgrade"
@@ -180,18 +278,70 @@
         android:layout_marginLeft="0dp"
         android:layout_marginTop="0dp"
         android:layout_marginBottom="0dp" />
-    </RelativeLayout>
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/CommonButton"
+            android:id="@+id/buyAmbush"
+            android:src="@mipmap/ambush_add"
+            android:layout_below="@id/buyUpgrade"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginRight="3dp"
+            android:layout_marginLeft="0dp"
+            android:layout_marginTop="0dp"
+            android:layout_marginBottom="0dp"
+            android:visibility="invisible"/>
 
+        <NumberPicker
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/numberPicker"
+            android:layout_alignTop="@+id/buyAmbush"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignBottom="@+id/buyAmbush"
+            android:orientation="horizontal"
+            android:visibility="invisible"/>
+
+        <TextView
+            style="@style/SmallText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Цена найма:\nОбщая цена:"
+            android:id="@+id/textView14"
+            android:layout_alignTop="@+id/numberPicker"
+            android:layout_toRightOf="@+id/numberPicker"
+            android:layout_toEndOf="@+id/numberPicker"
+            android:visibility="invisible"/>
+
+    </RelativeLayout>
+        <ScrollView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/routePanel"
+                android:visibility="gone"
+                android:orientation="vertical" />
+        </ScrollView>
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/actionPanel"
+        android:layout_above="@+id/distance"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="3dp">
     <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         style="@style/CommonButton"
         android:id="@+id/startRoute"
-
         android:src="@mipmap/start_route"
-        android:layout_below="@+id/buyPanel"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="3dp" />
+         />
 
     <ImageButton
         android:layout_width="wrap_content"
@@ -199,89 +349,7 @@
         style="@style/CommonButton"
         android:id="@+id/finishRoute"
         android:src="@mipmap/end_route"
-        android:layout_below="@+id/buyPanel"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="3dp"
-        android:layout_marginLeft="0dp"
-        android:layout_marginRight="0dp"
-        android:layout_marginTop="0dp" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        style="@style/SmallText"
-        android:text="Влияние фракций"
-        android:id="@+id/textView27"
-        android:layout_below="@+id/cityName"
-        android:layout_centerHorizontal="true"
-        android:textStyle="bold"
-        android:padding="0dp"
-        android:layout_marginBottom="0dp"
-        android:layout_marginTop="0dp"
-        android:layout_margin="0dp"
-        android:layout_marginLeft="0dp"
-        android:layout_marginRight="0dp" />
-
-
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        style="@style/MediumText"
-        android:text="Medium Text"
-        android:id="@+id/guildInfCount"
-        android:layout_alignTop="@+id/GuildInf"
-        android:layout_above="@+id/AllianceInf"
-        android:layout_alignEnd="@+id/GuildInf"
-        android:layout_alignRight="@+id/GuildInf"
-        android:layout_toEndOf="@+id/imageView"
-        android:layout_toRightOf="@id/imageView"
-        android:gravity="center"
-        android:layout_marginTop="0dp"
-        android:layout_marginBottom="0dp" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        style="@style/MediumText"
-        android:text="Medium Text"
-        android:id="@+id/allianceInfCount"
-        android:gravity="center"
-        android:layout_below="@+id/imageView"
-        android:layout_above="@+id/imageView4"
-        android:layout_alignEnd="@+id/GuildInf"
-        android:layout_alignRight="@+id/GuildInf"
-        android:layout_toEndOf="@+id/imageView"
-        android:layout_toRightOf="@id/imageView"
-        android:layout_marginTop="0dp"
-        android:layout_marginBottom="0dp" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        style="@style/MediumText"
-        android:text="Medium Text"
-        android:id="@+id/ligaInfCount"
-        android:gravity="center"
-        android:layout_alignTop="@+id/LigaInf"
-        android:layout_above="@+id/textView26"
-        android:layout_alignEnd="@+id/LigaInf"
-        android:layout_alignRight="@+id/LigaInf"
-        android:layout_toEndOf="@+id/imageView4"
-        android:layout_toRightOf="@id/imageView4"
-        android:layout_marginTop="0dp"
-        android:layout_marginBottom="0dp" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        style="@style/MediumText"
-        android:id="@+id/distance"
-        android:text="111"
-
-        android:layout_below="@+id/startRoute"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+         />
 
     <ImageButton
         android:layout_width="wrap_content"
@@ -290,9 +358,7 @@
         style="@style/CommonButton"
         android:background="@drawable/action_button"
         android:src="@mipmap/restart_route"
-        android:layout_below="@+id/buyPanel"
-        android:layout_toRightOf="@+id/finishRoute"
-        android:layout_toEndOf="@+id/finishRoute" />
+        />
 
     <ImageButton
         android:layout_width="wrap_content"
@@ -301,9 +367,22 @@
         style="@style/CommonButton"
         android:background="@drawable/action_button"
         android:src="@mipmap/drop_route"
-        android:layout_below="@+id/buyPanel"
-        android:layout_toLeftOf="@+id/finishRoute"
-        android:layout_toStartOf="@+id/finishRoute" />
+         />
+
+
+
+    </LinearLayout>
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/MediumText"
+        android:id="@+id/distance"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
 
 
 </RelativeLayout>

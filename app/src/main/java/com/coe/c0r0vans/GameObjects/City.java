@@ -7,17 +7,20 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import com.coe.c0r0vans.ConfirmWindow;
 import com.coe.c0r0vans.MyGoogleMap;
 import com.coe.c0r0vans.R;
+import com.coe.c0r0vans.ShowHideForm;
 import com.coe.c0r0vans.UIElements.ActionView;
+import com.coe.c0r0vans.UIElements.CityLine;
 import com.coe.c0r0vans.UIElements.UIControler;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -45,9 +48,6 @@ public class City extends GameObject{
     private long influence1=0;
     private long influence2=0;
     private long influence3=0;
-
-
-    private Circle zone;
 
 
     public City(GoogleMap map,JSONObject obj) throws JSONException {
@@ -112,14 +112,6 @@ public class City extends GameObject{
         }
 
     }
-
-    @Override
-    public void RemoveObject() {
-        if (mark!=null) mark.remove();
-        if (zone!=null) zone.remove();
-        mark=null;
-    }
-
 
     public boolean upgradeAvaible(){
         Upgrade up=Player.getPlayer().getNextUpgrade(upgrade);
@@ -196,8 +188,9 @@ public class City extends GameObject{
         return influence3;
     }
 
-    private class CityWindow extends RelativeLayout implements  GameObjectView{
+    private class CityWindow extends RelativeLayout implements  GameObjectView,ShowHideForm{
         City city;
+        CityWindow self;
         public CityWindow(Context context) {
             super(context);
             init();
@@ -213,8 +206,8 @@ public class City extends GameObject{
             init();
         }
         public void init(){
+            self=this;
             inflate(this.getContext(), R.layout.city_layout, this);
-            //if ("Y".equals(GameSettings.getInstance().get("VIEW_PADDING"))) this.setAlpha(0.7f);
 
         }
         boolean loaded=true;
@@ -248,15 +241,14 @@ public class City extends GameObject{
                 int upcost= (int) (up.getCost()*raceBonus);
 
                 String dop;
-                if (up.getReqCityLev()>Level) dop= String.format("Требуется уровень города %d\n", up.getReqCityLev());
-                else if ((upcost)>Player.getPlayer().getGold()) dop= String.format("Нужно больше золота!!! Еще %s золота!\n", StringUtils.intToStr(upcost - Player.getPlayer().getGold()));
-                else if (up.getLevel()>Player.getPlayer().getLevel()-1) dop= String.format("Требуется уровень %d\n", up.getLevel());
+                if (up.getReqCityLev()>Level) dop= String.format(getContext().getString(R.string.city_lvl_required), up.getReqCityLev());
+                else if ((upcost)>Player.getPlayer().getGold()) dop= String.format(getContext().getString(R.string.need_more_gold), StringUtils.intToStr(upcost - Player.getPlayer().getGold()));
+                else if (up.getLevel()>Player.getPlayer().getLevel()-1) dop= String.format(getContext().getString(R.string.need_higher_lvl), up.getLevel());
                 else dop= String.format("Эффект:%s\n", up.getDescription());
 
-                return String.format("%s\" за %s золота(без скидки %s).\n%s", up.getName(), StringUtils.intToStr(upcost),StringUtils.intToStr(up.getCost()), dop);
+                return String.format(getContext().getString(R.string.price), up.getName(), StringUtils.intToStr(upcost),StringUtils.intToStr(up.getCost()), dop);
             }
-            else return upgradeName+"\". "
-                    ;
+            else return (String.format(getContext().getString(R.string.unknown_upgrade), upgradeName));
         }
         private void applyCity() {
             findViewById(R.id.closeActionButton).setOnClickListener(new OnClickListener() {
@@ -521,7 +513,60 @@ public class City extends GameObject{
 
                 }
             });
-
+            findViewById(R.id.marketToggle).setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ToggleButton b = (ToggleButton) findViewById(R.id.infoToggle);
+                    b.setChecked(false);
+                    b = (ToggleButton) findViewById(R.id.marketToggle);
+                    b.setChecked(true);
+                    b = (ToggleButton) findViewById(R.id.routeToggle);
+                    b.setChecked(false);
+                    findViewById(R.id.buyPanel).setVisibility(VISIBLE);
+                    findViewById(R.id.infoPanel).setVisibility(GONE);
+                    findViewById(R.id.routePanel).setVisibility(GONE);
+                }
+            });
+            findViewById(R.id.infoToggle).setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ToggleButton b = (ToggleButton) findViewById(R.id.infoToggle);
+                    b.setChecked(true);
+                    b = (ToggleButton) findViewById(R.id.marketToggle);
+                    b.setChecked(false);
+                    b = (ToggleButton) findViewById(R.id.routeToggle);
+                    b.setChecked(false);
+                    findViewById(R.id.buyPanel).setVisibility(GONE);
+                    findViewById(R.id.infoPanel).setVisibility(VISIBLE);
+                    findViewById(R.id.routePanel).setVisibility(GONE);
+                }
+            });
+            findViewById(R.id.routeToggle).setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    LinearLayout l= (LinearLayout) findViewById(R.id.routePanel);
+                    l.removeAllViews();
+                    ToggleButton b = (ToggleButton) findViewById(R.id.infoToggle);
+                    b.setChecked(false);
+                    b = (ToggleButton) findViewById(R.id.marketToggle);
+                    b.setChecked(false);
+                    b = (ToggleButton) findViewById(R.id.routeToggle);
+                    b.setChecked(true);
+                    for (Route r:Player.getPlayer().getRoutes()){
+                        if (r.getStartGuid().equals(city.getGUID())||r.getFinishGuid().equals(city.getGUID())){
+                            CityLine line = new CityLine(getContext());
+                            l.addView(line);
+                            line.setData(r);
+                            line.setParentForm(self);
+                            line.setOnRemoveClick(r.getAction(true));
+                            line.setTarget(r.getGUID());
+                        }
+                    }
+                    findViewById(R.id.buyPanel).setVisibility(GONE);
+                    findViewById(R.id.infoPanel).setVisibility(GONE);
+                    findViewById(R.id.routePanel).setVisibility(VISIBLE);
+                }
+            });
 
         }
         public void updateInZone(boolean inZone){
@@ -578,7 +623,7 @@ public class City extends GameObject{
             {
                 findViewById(R.id.startRoute).setVisibility(GONE);
                 findViewById(R.id.finishRoute).setVisibility(GONE);
-                findViewById(R.id.buyUpgrade).setVisibility(GONE);
+                findViewById(R.id.buyUpgrade).setVisibility(INVISIBLE);
                 findViewById(R.id.restart_route).setVisibility(GONE);
                 findViewById(R.id.drop_route).setVisibility(GONE);
             }
@@ -597,6 +642,16 @@ public class City extends GameObject{
         @Override
         public void setDistance(int distance) {
             ((TextView) findViewById(R.id.distance)).setText(String.format(getResources().getString(R.string.distance), distance));
+        }
+
+        @Override
+        public void Show() {
+
+        }
+
+        @Override
+        public void Hide() {
+            close();
         }
     }
     private class CityAction extends RelativeLayout implements  GameObjectView{
@@ -617,7 +672,6 @@ public class City extends GameObject{
         }
         public void init(){
             inflate(this.getContext(), R.layout.city_actions, this);
-            //if ("Y".equals(GameSettings.getInstance().get("VIEW_PADDING"))) this.setAlpha(0.7f);
         }
         boolean loaded=true;
 
