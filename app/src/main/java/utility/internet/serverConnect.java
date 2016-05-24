@@ -118,7 +118,7 @@ public class serverConnect {
         if (!checkConnection()) return false;
         String version=context.getResources().getString(R.string.version);
         String hash= StringUtils.MD5("COWBOW"+Login+Password+gmail+version+"Login");
-        String url=ServerAddres+"/login.jsp"+"?Login="+Login+"&Password="+Password+"&GMail="+gmail+"&Version"+version+"&hash="+hash;
+        String url=ServerAddres+"/login.jsp"+"?Login="+Login+"&Password="+Password+"&GMail="+gmail+"&Version="+version+"&hash="+hash;
         login=Login;
 
         runRequest(UUID.randomUUID().toString(),url,ResponseListenerWithUID.LOGIN);
@@ -188,7 +188,7 @@ public class serverConnect {
         lockedActions.add(action);
         action.preAction();
         String UID=UUID.randomUUID().toString();
-        String hash= StringUtils.MD5("COWBOW" + Token + Lat + Lng + action.getCommand() + UID+Target+TLat+TLng);
+        String hash= StringUtils.MD5("COWBOW" + Token + Lat + Lng + +TLat+TLng+Target+action.getCommand() + UID);
         String url=ServerAddres+"/getdata.jsp"+"?Token="+Token+"&ReqName="+action.getCommand()+"&plat="+Lat+"&plng="+Lng+"&TGUID="+Target+"&lat="+TLat+"&lng="+TLng+"&UID="+UID+"&hash="+hash;
         listenersMap.put(UID, action);
         errorMap.put(UID, action);
@@ -199,7 +199,9 @@ public class serverConnect {
     public boolean getPlayerInfo(){
         if (!checkConnection()) return false;
         if (Token==null) return false;
-        String url=ServerAddres+"/getdata.jsp"+"?Token="+Token+"&ReqName=GetPlayerInfo";
+        String UID=UUID.randomUUID().toString();
+        String hash= StringUtils.MD5("COWBOW" + Token +"GetPlayerInfo" + UID);
+        String url=ServerAddres+"/getdata.jsp"+"?Token="+Token+"&ReqName=GetPlayerInfo&UUID="+UID+"&hash="+hash;
         runRequest(UUID.randomUUID().toString(),url,ResponseListenerWithUID.PLAYER);
         return true;
     }
@@ -207,7 +209,10 @@ public class serverConnect {
     public boolean getMessage(){
         if (!checkConnection()) return false;
         if (Token==null) return false;
-        String url=ServerAddres+"/getdata.jsp"+"?Token="+Token+"&ReqName=GetMessage";
+        String UID=UUID.randomUUID().toString();
+        String hash= StringUtils.MD5("COWBOW" + Token +"GetMessage" + UID);
+        String url=ServerAddres+"/getdata.jsp"+"?Token="+Token+"&ReqName=GetMessage&UUID="+UID+"&hash="+hash;
+
         runRequest(UUID.randomUUID().toString(),url,ResponseListenerWithUID.MESSAGE);
         return true;
     }
@@ -223,8 +228,9 @@ public class serverConnect {
 
         if (!checkConnection()) return false;
         if (Token==null) return false;
-
-        String url=ServerAddres+"/getdata.jsp"+"?Token="+Token+"&ReqName=SetRace&Race="+race;
+        String UID=UUID.randomUUID().toString();
+        String hash= StringUtils.MD5("COWBOW" + Token +"SetRace" + UID);
+        String url=ServerAddres+"/getdata.jsp"+"?Token="+Token+"&ReqName=SetRace&Race="+race+"&UUID="+UID+"&hash="+hash;
         Log.d("Debug info", "Connection url:" + url);
         runRequest(UUID.randomUUID().toString(), url, ResponseListenerWithUID.SETRACE);
         return true;

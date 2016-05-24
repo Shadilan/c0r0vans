@@ -70,7 +70,6 @@ public class Ambush extends GameObject {
             if (faction<0 ||faction>4) faction=4;
             if (obj.has("Radius")) radius=obj.getInt("Radius");
             if (obj.has("Ready")) ready=obj.getInt("Ready");
-            if (obj.has("Progress")) progress=obj.getInt("Progress");
             if (obj.has("Name")) Name="Засада "+obj.getString("Name");
             if (mark==null) {
                 setMarker(map.addMarker(new MarkerOptions().position(new LatLng(Lat / 1e6, Lng / 1e6))));
