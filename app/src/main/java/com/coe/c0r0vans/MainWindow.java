@@ -559,7 +559,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
             ((TextView)findViewById(R.id.status)).setText(R.string.done_google_account);
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
 
-            if (result.isSuccess()) {
+            if (result!=null && result.isSuccess()) {
 
                 GoogleSignInAccount acct = result.getSignInAccount();
                 // Get account information
