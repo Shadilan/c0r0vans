@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="CommonProgressBar" parent="Base.Widget.AppCompat.ProgressBar.Horizontal">
+        <item name="android:layout_margin">5dp</item>
+        <item name="android:layout_marginRight">10dp</item>
+        <item name="android:layout_marginEnd">10dp</item>
+    </style>
+</resources>

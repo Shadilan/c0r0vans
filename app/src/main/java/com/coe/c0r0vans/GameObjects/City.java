@@ -552,36 +552,51 @@ public class City extends GameObject{
             findViewById(R.id.routeToggle).setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    LinearLayout l= (LinearLayout) findViewById(R.id.routePanel);
-                    l.removeAllViews();
+
                     ToggleButton b = (ToggleButton) findViewById(R.id.infoToggle);
                     b.setChecked(false);
                     b = (ToggleButton) findViewById(R.id.marketToggle);
                     b.setChecked(false);
                     b = (ToggleButton) findViewById(R.id.routeToggle);
                     b.setChecked(true);
-                    for (Route r:Player.getPlayer().getRoutes()){
-                        if (r.getStartGuid().equals(city.getGUID())||r.getFinishGuid().equals(city.getGUID())){
-                            CityLine line = new CityLine(getContext());
-                            l.addView(line);
-                            line.setData(r);
-                            line.setParentForm(self);
-                            line.setOnRemoveClick(r.getAction(true));
-                            line.setTarget(r.getGUID());
-                        }
-                    }
+
                     findViewById(R.id.buyPanel).setVisibility(GONE);
                     findViewById(R.id.infoPanel).setVisibility(GONE);
                     findViewById(R.id.routePanel).setVisibility(VISIBLE);
                 }
             });
-
+            countRoutes();
+        }
+        private void countRoutes(){
+            int amount=0;
+            int income=0;
+            LinearLayout l= (LinearLayout) findViewById(R.id.routePanel);
+            l.removeAllViews();
+            for (Route r:Player.getPlayer().getRoutes()){
+                if (r.getStartGuid().equals(city.getGUID())||r.getFinishGuid().equals(city.getGUID())){
+                    CityLine line = new CityLine(getContext());
+                    amount++;
+                    income+=r.getProfit();
+                    l.addView(line);
+                    line.setData(r);
+                    line.setParentForm(self);
+                    line.setOnRemoveClick(r.getAction(true));
+                    line.setTarget(r.getGUID());
+                }
+                ((TextView)findViewById(R.id.routeCount)).setText(String.valueOf(amount));
+                ((TextView)findViewById(R.id.routeIncome)).setText(String.valueOf(income));
+            }
         }
         public void updateInZone(boolean inZone){
             if (inZone) {
                 findViewById(R.id.startRoute).setVisibility(GONE);
                 findViewById(R.id.finishRoute).setVisibility(GONE);
-                findViewById(R.id.buyUpgrade).setVisibility(INVISIBLE);
+                {
+                    ImageButton btn= (ImageButton) findViewById(R.id.buyUpgrade);
+                    btn.setClickable(false);
+                    btn.setEnabled(false);
+                    btn.setAlpha(0.5f);
+                }
                 findViewById(R.id.restart_route).setVisibility(GONE);
                 findViewById(R.id.drop_route).setVisibility(GONE);
                 if (Player.getPlayer().getRouteStart()) findViewById(R.id.startRoute).setVisibility(VISIBLE);
@@ -614,7 +629,7 @@ public class City extends GameObject{
                 }
                 if (city!=null) {
                     ImageButton btn= (ImageButton) findViewById(R.id.buyUpgrade);
-                    btn.setVisibility(VISIBLE);
+
                     if (city.upgradeAvaible()) {
                         btn.setClickable(true);
                         btn.setEnabled(true);
@@ -631,7 +646,12 @@ public class City extends GameObject{
             {
                 findViewById(R.id.startRoute).setVisibility(GONE);
                 findViewById(R.id.finishRoute).setVisibility(GONE);
-                findViewById(R.id.buyUpgrade).setVisibility(INVISIBLE);
+                {
+                    ImageButton btn= (ImageButton) findViewById(R.id.buyUpgrade);
+                    btn.setClickable(false);
+                    btn.setEnabled(false);
+                    btn.setAlpha(0.5f);
+                }
                 findViewById(R.id.restart_route).setVisibility(GONE);
                 findViewById(R.id.drop_route).setVisibility(GONE);
             }

@@ -79,6 +79,7 @@
     </style>
     <style name="CommonProgressBar" parent="Base.Widget.AppCompat.ProgressBar.Horizontal">
         <item name="android:layout_margin">5dp</item>
+        <item name="android:layout_marginRight">10dp</item>
     </style>
 
 </resources>
