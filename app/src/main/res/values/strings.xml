@@ -88,4 +88,5 @@ All rights reserved to Circle of Eternity</string>
     <string name="need_higher_lvl" formatted="false">Требуется уровень %d\n</string>
     <string name="price" formatted="false">%s\" за %s золота(без скидки %s).\n%s</string>
     <string name="unknown_upgrade" formatted="false">"%s\". "</string>
+    <string name="Question_Symbol" translatable="false">\?</string>
 </resources>
