@@ -83,6 +83,13 @@
     <string name="need_higher_lvl" formatted="false">Требуется уровень %d\n</string>
     <string name="price" formatted="false">%s\" за %s золота(без скидки %s).\n%s</string>
     <string name="unknown_upgrade" formatted="false">"%s\". "</string>
+    <string name="choose_faction">Выбери Фракцию.</string>
+    <string name="accept">Принять</string>
+    <string name="income">Доход:</string>
+    <string name="ambush_left">Засад осталось:</string>
+    <string name="ambush_set">Засад установлено:</string>
+    <string name="caravans_count">Караванов:</string>
+    <string name="ambushs">Засады</string>
 
 
 </resources>

@@ -10,7 +10,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         style="@style/LargeText"
-        android:text="Выбери Фракцию."
+        android:text="@string/choose_faction"
         android:id="@+id/textView25"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"/>
@@ -57,9 +57,7 @@
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
+            android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal">
         <TextView
             android:layout_width="wrap_content"
@@ -67,10 +65,6 @@
             style="@style/LargeText"
             android:text="@string/guild_name"
             android:id="@+id/factionName"
-            android:layout_alignBaseline="@+id/faction_text1"
-            android:layout_alignBottom="@+id/faction_text1"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp" />
 
@@ -80,9 +74,6 @@
             style="@style/SmallText"
             android:text="@string/guild_desc"
             android:id="@+id/factionDesc"
-            android:layout_centerVertical="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
             android:layout_margin="5dp" />
         </LinearLayout>
     </ScrollView>
@@ -92,7 +83,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:text="Принять"
+        android:text="@string/accept"
         style="@style/CommonButton"
         android:textColor="@android:color/black"
         android:id="@+id/acceptFaction" />

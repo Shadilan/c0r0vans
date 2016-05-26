@@ -13,119 +13,106 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-
-            android:text="Уровень"
-            android:textSize="20dp" />
+            style="@style/MediumTextNP"
+            android:text="@string/level" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="1"
+            style="@style/MediumTextNP"
             android:id="@+id/levelInfo"
-            android:layout_gravity="right"
-            android:textSize="20dp"/>
+            android:layout_gravity="right"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Опыт"
-            android:textSize="20dp"/>
+            style="@style/MediumTextNP"
+            android:text="@string/experience"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="1000"
             android:id="@+id/expInfo"
-            android:layout_gravity="right"
-            android:textSize="20dp"/>
+            style="@style/MediumTextNP"
+            android:layout_gravity="right"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="До уровня"
-            android:textSize="20dp"/>
+            style="@style/MediumTextNP"
+            android:text="@string/tnl"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="19000"
             android:id="@+id/tnlInfo"
             android:layout_gravity="right"
-            android:textSize="20dp"/>
+            android:textSize="20sp"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Золото"
-            android:textSize="20dp"/>
+            android:text="@string/gold"
+            style="@style/MediumTextNP"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="1000"
             android:id="@+id/goldInfo"
             android:layout_gravity="right"
-            android:textSize="20dp"/>
+            style="@style/MediumTextNP"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Доход"
-            android:textSize="20dp"
+            android:text="@string/income"
+            style="@style/MediumTextNP"
             />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="0"
             android:id="@+id/profit"
             android:layout_gravity="right"
-            android:textSize="20dp" />
+            style="@style/MediumTextNP" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Караванов"
-            android:textSize="20dp"/>
+            android:text="@string/caravans_count"
+            style="@style/MediumTextNP"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="1"
             android:id="@+id/caravanInfo"
             android:layout_gravity="right"
-            android:textSize="20dp"/>
+            style="@style/MediumTextNP"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Засад осталось"
-            android:textSize="20dp"/>
+            android:text="@string/ambush_left"
+            style="@style/MediumTextNP"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="10"
             android:id="@+id/ambushLeftInfo"
             android:layout_gravity="right"
-            android:textSize="20dp"/>
+            style="@style/MediumTextNP"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Засад установлено"
-            android:textSize="20dp"/>
+            android:text="@string/ambush_set"
+            style="@style/MediumTextNP"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="0"
             android:id="@+id/ambushSetInfo"
             android:layout_gravity="right"
-            android:textSize="20dp"/>
-
-
-
-
+            style="@style/MediumTextNP"/>
     </GridLayout>
 
     <ImageView
