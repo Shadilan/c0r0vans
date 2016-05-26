@@ -38,7 +38,7 @@
             android:layout_height="wrap_content"
             android:text="@string/information"
             android:id="@+id/marketToggle"
-            android:textOff="Покупки"
+            android:textOff="@string/market"
             android:textOn="Покупки"
             style="@style/TabButton"
             android:checked="false" />
@@ -47,8 +47,8 @@
             android:layout_height="wrap_content"
             android:text="@string/information"
             android:id="@+id/infoToggle"
-            android:textOff="Инфо"
-            android:textOn="Инфо"
+            android:textOff="@string/information"
+            android:textOn="@string/information"
             style="@style/TabButton"
             android:checked="true" />
         <ToggleButton
@@ -56,32 +56,40 @@
             android:layout_height="wrap_content"
             android:text="@string/information"
             android:id="@+id/routeToggle"
-            android:textOff="Маршруты"
-            android:textOn="Маршруты"
+            android:textOff="@string/route_window"
+            android:textOn="@string/route_window"
             style="@style/TabButton"
             android:checked="false" />
     </LinearLayout>
     </HorizontalScrollView>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/infoPanel"
+        android:background="@drawable/layouts"
+        android:layout_above="@+id/actionPanel"
+        android:layout_below="@id/pageChoose"
+        android:layout_margin="5dp">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/pageChoose"
+
         android:orientation="vertical"
         android:id="@+id/swapPanel"
-        android:background="@drawable/layouts"
-        android:layout_above="@+id/actionPanel"
-        android:layout_margin="5dp">
-    <RelativeLayout
+        >
+
+
+            <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/infoPanel"
+
         android:visibility="visible"
         >
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             style="@style/SmallText"
-            android:text="Влияние фракций"
+            android:text="@string/faction_influence"
             android:id="@+id/textView27"
             android:layout_centerHorizontal="true"
             android:textStyle="bold"
@@ -182,7 +190,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         style="@style/SmallText"
-        android:text="Рост города"
+        android:text="@string/city_grows"
         android:id="@+id/textView26"
         android:layout_below="@+id/LigaInf"
         android:layout_centerHorizontal="true"
@@ -256,14 +264,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             style="@style/MediumText"
-            android:text="Количество маршрутов:"
+            android:text="@string/route_count"
             android:id="@+id/title_routecount"
             android:layout_below="@id/cityExp"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             style="@style/MediumText"
-            android:text="1"
+
             android:id="@+id/routeCount"
             android:layout_below="@id/cityExp"
             android:layout_alignParentRight="true"
@@ -273,14 +281,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             style="@style/MediumText"
-            android:text="Доход в час:"
+            android:text="@string/income"
             android:id="@+id/title_routeIncome"
             android:layout_below="@id/title_routecount"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             style="@style/MediumText"
-            android:text="0"
             android:id="@+id/routeIncome"
             android:layout_below="@id/title_routecount"
             android:layout_alignParentRight="true"
@@ -288,7 +295,7 @@
             />
 
     </RelativeLayout>
-    <RelativeLayout
+        <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/buyPanel"
@@ -299,7 +306,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         style="@style/SmallText"
-        android:text="SkillDesc"
         android:id="@+id/skillDesc"
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
@@ -349,7 +355,7 @@
             style="@style/SmallText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Цена найма:\nОбщая цена:"
+
             android:id="@+id/textView14"
             android:layout_alignTop="@+id/numberPicker"
             android:layout_toRightOf="@+id/numberPicker"
@@ -357,18 +363,15 @@
             android:visibility="invisible"/>
 
     </RelativeLayout>
-        <ScrollView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/routePanel"
                 android:visibility="gone"
                 android:orientation="vertical" />
-        </ScrollView>
-
     </LinearLayout>
+</ScrollView>
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

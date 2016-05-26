@@ -93,10 +93,14 @@ All rights reserved to Circle of Eternity</string>
     <string name="accept">Accept</string>
     <string name="previous" translatable="false"><![CDATA[<]]></string>
     <string name="next" translatable="false"><![CDATA[>]]></string>
-    <string name="income">Income:</string>
+    <string name="income">Income per hour:</string>
     <string name="ambush_left">Ambushes left:</string>
     <string name="ambush_set">Ambushes set:</string>
     <string name="caravans_count">Caravans:</string>
     <string name="back" translatable="false">↩</string>
     <string name="ambushs">Ambushes</string>
+    <string name="faction_influence">Faction influence</string>
+    <string name="city_grows">City population</string>
+    <string name="route_count">Number of routes:</string>
+    <string name="market">Shop</string>
 </resources>

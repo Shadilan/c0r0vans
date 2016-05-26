@@ -85,11 +85,15 @@
     <string name="unknown_upgrade" formatted="false">"%s\". "</string>
     <string name="choose_faction">Выбери Фракцию.</string>
     <string name="accept">Принять</string>
-    <string name="income">Доход:</string>
+    <string name="income">Доход в час:</string>
     <string name="ambush_left">Засад осталось:</string>
     <string name="ambush_set">Засад установлено:</string>
     <string name="caravans_count">Караванов:</string>
     <string name="ambushs">Засады</string>
+    <string name="faction_influence">Влияние фракций</string>
+    <string name="city_grows">Рост города</string>
+    <string name="route_count">Количество маршрутов:</string>
+    <string name="market">Покупки</string>
 
 
 </resources>
