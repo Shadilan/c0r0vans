@@ -50,7 +50,7 @@
             android:textOff="@string/information"
             android:textOn="@string/information"
             style="@style/TabButton"
-            android:checked="true" />
+            android:checked="false" />
         <ToggleButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -65,304 +65,297 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/infoPanel"
         android:background="@drawable/layouts"
         android:layout_above="@+id/actionPanel"
         android:layout_below="@id/pageChoose"
         android:layout_margin="5dp">
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-
-        android:orientation="vertical"
-        android:id="@+id/swapPanel"
-        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:id="@+id/swapPanel">
 
 
             <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/infoPanel"
+                android:visibility="gone">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/SmallText"
+                    android:text="@string/faction_influence"
+                    android:id="@+id/textView27"
+                    android:layout_centerHorizontal="true"
+                    android:textStyle="bold"
+                    android:padding="0dp"
+                    android:layout_marginBottom="0dp"
+                    android:layout_marginTop="0dp"
+                    android:layout_margin="0dp"
+                    android:layout_marginLeft="0dp"
+                    android:layout_marginRight="0dp" />
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/imageView"
+                    android:src="@mipmap/guild_small"
+                    android:minHeight="40dp"
+                    android:minWidth="40dp"
+                    android:layout_below="@+id/textView27"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentLeft="true"
+                    android:maxWidth="40dp"
+                    android:maxHeight="40dp" />
 
-        android:visibility="visible"
-        >
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            style="@style/SmallText"
-            android:text="@string/faction_influence"
-            android:id="@+id/textView27"
-            android:layout_centerHorizontal="true"
-            android:textStyle="bold"
-            android:padding="0dp"
-            android:layout_marginBottom="0dp"
-            android:layout_marginTop="0dp"
-            android:layout_margin="0dp"
-            android:layout_marginLeft="0dp"
-            android:layout_marginRight="0dp" />
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/imageView"
-        android:src="@mipmap/guild_small"
-        android:minHeight="40dp"
-        android:minWidth="40dp"
-        android:layout_below="@+id/textView27"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"
-        android:maxWidth="40dp"
-        android:maxHeight="40dp" />
+                <ProgressBar
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/GuildInf"
+                    android:layout_alignBottom="@+id/imageView"
+                    android:layout_toRightOf="@id/imageView"
+                    android:indeterminate="false"
+                    android:max="100"
+                    android:progress="50"
+                    android:layout_alignTop="@+id/imageView"
+                    style="@style/CommonProgressBar"
+                    android:progressDrawable="@drawable/guild_progress"
+                    android:layout_alignRight="@+id/cityExp"
+                    android:layout_alignEnd="@+id/cityExp" />
 
-    <ProgressBar
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/GuildInf"
-        android:layout_alignBottom="@+id/imageView"
-        android:layout_toRightOf="@id/imageView"
-        android:indeterminate="false"
-        android:max="100"
-        android:progress="50"
-        android:layout_alignTop="@+id/imageView"
-        style="@style/CommonProgressBar"
-        android:progressDrawable="@drawable/guild_progress"
-        android:layout_alignRight="@+id/cityExp"
-        android:layout_alignEnd="@+id/cityExp" />
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/imageView3"
+                    android:maxHeight="40dp"
+                    android:maxWidth="40dp"
+                    android:minHeight="40dp"
+                    android:minWidth="40dp"
+                    android:layout_below="@+id/imageView"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentLeft="true"
+                    android:src="@mipmap/alliance_small"
+                    />
 
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/imageView3"
-        android:maxHeight="40dp"
-        android:maxWidth="40dp"
-        android:minHeight="40dp"
-        android:minWidth="40dp"
-        android:layout_below="@+id/imageView"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"
-        android:src="@mipmap/alliance_small"
-        />
+                <ProgressBar
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/AllianceInf"
+                    android:layout_alignBottom="@+id/imageView3"
+                    android:layout_toRightOf="@id/imageView3"
+                    android:indeterminate="false"
+                    android:layout_below="@+id/imageView"
+                    style="@style/CommonProgressBar"
+                    android:progressDrawable="@drawable/alliance_progress"
+                    android:progress="50"
+                    android:max="100"
+                    android:layout_alignRight="@+id/GuildInf"
+                    android:layout_alignEnd="@+id/GuildInf" />
 
-    <ProgressBar
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/AllianceInf"
-        android:layout_alignBottom="@+id/imageView3"
-        android:layout_toRightOf="@id/imageView3"
-        android:indeterminate="false"
-        android:layout_below="@+id/imageView"
-        style="@style/CommonProgressBar"
-        android:progressDrawable="@drawable/alliance_progress"
-        android:progress="50"
-        android:max="100"
-        android:layout_alignRight="@+id/GuildInf"
-        android:layout_alignEnd="@+id/GuildInf" />
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/imageView4"
+                    android:maxHeight="40dp"
+                    android:maxWidth="40dp"
+                    android:minHeight="40dp"
+                    android:minWidth="40dp"
+                    android:layout_below="@+id/imageView3"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentLeft="true"
+                    android:src="@mipmap/liga_small"
+                    />
 
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/imageView4"
-        android:maxHeight="40dp"
-        android:maxWidth="40dp"
-        android:minHeight="40dp"
-        android:minWidth="40dp"
-        android:layout_below="@+id/imageView3"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"
-        android:src="@mipmap/liga_small"
-        />
+                <ProgressBar
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/LigaInf"
+                    android:layout_alignBottom="@+id/imageView4"
+                    android:layout_toRightOf="@id/imageView4"
+                    android:indeterminate="false"
+                    android:progress="50"
+                    android:max="100"
+                    style="@style/CommonProgressBar"
+                    android:progressDrawable="@drawable/liga_progress"
+                    android:layout_below="@+id/imageView3"
+                    android:layout_alignParentLeft="false"
+                    android:layout_alignRight="@+id/GuildInf"
+                    android:layout_alignEnd="@+id/GuildInf" />
 
-    <ProgressBar
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/LigaInf"
-        android:layout_alignBottom="@+id/imageView4"
-        android:layout_toRightOf="@id/imageView4"
-        android:indeterminate="false"
-        android:progress="50"
-        android:max="100"
-        style="@style/CommonProgressBar"
-        android:progressDrawable="@drawable/liga_progress"
-        android:layout_below="@+id/imageView3"
-        android:layout_alignParentLeft="false"
-        android:layout_alignRight="@+id/GuildInf"
-        android:layout_alignEnd="@+id/GuildInf" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/SmallText"
+                    android:text="@string/city_grows"
+                    android:id="@+id/textView26"
+                    android:layout_below="@+id/LigaInf"
+                    android:layout_centerHorizontal="true"
+                    android:textStyle="bold"
+                    android:padding="0dp"
+                    android:layout_margin="0dp" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        style="@style/SmallText"
-        android:text="@string/city_grows"
-        android:id="@+id/textView26"
-        android:layout_below="@+id/LigaInf"
-        android:layout_centerHorizontal="true"
-        android:textStyle="bold"
-        android:padding="0dp"
-        android:layout_margin="0dp" />
+                <ProgressBar
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/cityExp"
+                    android:layout_below="@+id/textView26"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"
+                    android:indeterminate="false"
+                    style="@style/CommonProgressBar"
+                    android:progressDrawable="@drawable/base_progress"
+                    android:paddingTop="0dp"
+                    android:paddingBottom="0dp"
+                    android:layout_centerHorizontal="true" />
 
-    <ProgressBar
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/cityExp"
-        android:layout_below="@+id/textView26"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:indeterminate="false"
-        style="@style/CommonProgressBar"
-        android:progressDrawable="@drawable/base_progress"
-        android:paddingTop="0dp"
-        android:paddingBottom="0dp"
-        android:layout_centerHorizontal="true" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/MediumText"
+                    android:text="Medium Text"
+                    android:id="@+id/guildInfCount"
+                    android:layout_alignTop="@+id/GuildInf"
+                    android:layout_above="@+id/AllianceInf"
+                    android:layout_alignEnd="@+id/GuildInf"
+                    android:layout_alignRight="@+id/GuildInf"
+                    android:layout_toEndOf="@+id/imageView"
+                    android:layout_toRightOf="@id/imageView"
+                    android:gravity="center"
+                    android:layout_marginTop="0dp"
+                    android:layout_marginBottom="0dp" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            style="@style/MediumText"
-            android:text="Medium Text"
-            android:id="@+id/guildInfCount"
-            android:layout_alignTop="@+id/GuildInf"
-            android:layout_above="@+id/AllianceInf"
-            android:layout_alignEnd="@+id/GuildInf"
-            android:layout_alignRight="@+id/GuildInf"
-            android:layout_toEndOf="@+id/imageView"
-            android:layout_toRightOf="@id/imageView"
-            android:gravity="center"
-            android:layout_marginTop="0dp"
-            android:layout_marginBottom="0dp" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/MediumText"
+                    android:text="Medium Text"
+                    android:id="@+id/allianceInfCount"
+                    android:gravity="center"
+                    android:layout_below="@+id/imageView"
+                    android:layout_above="@+id/imageView4"
+                    android:layout_alignEnd="@+id/GuildInf"
+                    android:layout_alignRight="@+id/GuildInf"
+                    android:layout_toEndOf="@+id/imageView"
+                    android:layout_toRightOf="@id/imageView"
+                    android:layout_marginTop="0dp"
+                    android:layout_marginBottom="0dp" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            style="@style/MediumText"
-            android:text="Medium Text"
-            android:id="@+id/allianceInfCount"
-            android:gravity="center"
-            android:layout_below="@+id/imageView"
-            android:layout_above="@+id/imageView4"
-            android:layout_alignEnd="@+id/GuildInf"
-            android:layout_alignRight="@+id/GuildInf"
-            android:layout_toEndOf="@+id/imageView"
-            android:layout_toRightOf="@id/imageView"
-            android:layout_marginTop="0dp"
-            android:layout_marginBottom="0dp" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/MediumText"
+                    android:text="Medium Text"
+                    android:id="@+id/ligaInfCount"
+                    android:gravity="center"
+                    android:layout_alignTop="@+id/LigaInf"
+                    android:layout_above="@+id/textView26"
+                    android:layout_alignEnd="@+id/LigaInf"
+                    android:layout_alignRight="@+id/LigaInf"
+                    android:layout_toEndOf="@+id/imageView4"
+                    android:layout_toRightOf="@id/imageView4" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            style="@style/MediumText"
-            android:text="Medium Text"
-            android:id="@+id/ligaInfCount"
-            android:gravity="center"
-            android:layout_alignTop="@+id/LigaInf"
-            android:layout_above="@+id/textView26"
-            android:layout_alignEnd="@+id/LigaInf"
-            android:layout_alignRight="@+id/LigaInf"
-            android:layout_toEndOf="@+id/imageView4"
-            android:layout_toRightOf="@id/imageView4" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/MediumText"
+                    android:text="@string/route_count"
+                    android:id="@+id/title_routecount"
+                    android:layout_below="@id/cityExp"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/MediumText"
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            style="@style/MediumText"
-            android:text="@string/route_count"
-            android:id="@+id/title_routecount"
-            android:layout_below="@id/cityExp"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            style="@style/MediumText"
+                    android:id="@+id/routeCount"
+                    android:layout_below="@id/cityExp"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/MediumText"
+                    android:text="@string/income"
+                    android:id="@+id/title_routeIncome"
+                    android:layout_below="@id/title_routecount"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/MediumText"
+                    android:id="@+id/routeIncome"
+                    android:layout_below="@id/title_routecount"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"
+                    />
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/buyPanel"
+                android:visibility="gone">
 
-            android:id="@+id/routeCount"
-            android:layout_below="@id/cityExp"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            style="@style/MediumText"
-            android:text="@string/income"
-            android:id="@+id/title_routeIncome"
-            android:layout_below="@id/title_routecount"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            style="@style/MediumText"
-            android:id="@+id/routeIncome"
-            android:layout_below="@id/title_routecount"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/SmallText"
+                    android:id="@+id/skillDesc"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_toStartOf="@+id/buyUpgrade"
+                    android:layout_toLeftOf="@+id/buyUpgrade"/>
 
-    </RelativeLayout>
-        <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/buyPanel"
-        android:visibility="gone"
-        >
+                <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/CommonButton"
+                    android:id="@+id/buyUpgrade"
+                    android:src="@mipmap/buy_item"
+                    android:layout_alignTop="@+id/skillDesc"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginRight="3dp"
+                    android:layout_marginLeft="0dp"
+                    android:layout_marginTop="0dp"
+                    android:layout_marginBottom="0dp" />
+                <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/CommonButton"
+                    android:id="@+id/buyAmbush"
+                    android:src="@mipmap/ambush_add"
+                    android:layout_below="@id/buyUpgrade"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginRight="3dp"
+                    android:layout_marginLeft="0dp"
+                    android:layout_marginTop="0dp"
+                    android:layout_marginBottom="0dp"
+                    android:visibility="invisible"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        style="@style/SmallText"
-        android:id="@+id/skillDesc"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"
-        android:layout_toStartOf="@+id/buyUpgrade"
-        android:layout_toLeftOf="@+id/buyUpgrade"/>
+                <NumberPicker
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/numberPicker"
+                    android:layout_alignTop="@+id/buyAmbush"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignBottom="@+id/buyAmbush"
+                    android:orientation="horizontal"
+                    android:visibility="invisible"/>
 
-    <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        style="@style/CommonButton"
-        android:id="@+id/buyUpgrade"
-        android:src="@mipmap/buy_item"
-        android:layout_alignTop="@+id/skillDesc"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginRight="3dp"
-        android:layout_marginLeft="0dp"
-        android:layout_marginTop="0dp"
-        android:layout_marginBottom="0dp" />
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            style="@style/CommonButton"
-            android:id="@+id/buyAmbush"
-            android:src="@mipmap/ambush_add"
-            android:layout_below="@id/buyUpgrade"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            android:layout_marginRight="3dp"
-            android:layout_marginLeft="0dp"
-            android:layout_marginTop="0dp"
-            android:layout_marginBottom="0dp"
-            android:visibility="invisible"/>
+                <TextView
+                    style="@style/SmallText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
 
-        <NumberPicker
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/numberPicker"
-            android:layout_alignTop="@+id/buyAmbush"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_alignBottom="@+id/buyAmbush"
-            android:orientation="horizontal"
-            android:visibility="invisible"/>
-
-        <TextView
-            style="@style/SmallText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-
-            android:id="@+id/textView14"
-            android:layout_alignTop="@+id/numberPicker"
-            android:layout_toRightOf="@+id/numberPicker"
-            android:layout_toEndOf="@+id/numberPicker"
-            android:visibility="invisible"/>
-
-    </RelativeLayout>
+                    android:id="@+id/textView14"
+                    android:layout_alignTop="@+id/numberPicker"
+                    android:layout_toRightOf="@+id/numberPicker"
+                    android:layout_toEndOf="@+id/numberPicker"
+                    android:visibility="invisible"/>
+            </RelativeLayout>
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -370,8 +363,8 @@
                 android:id="@+id/routePanel"
                 android:visibility="gone"
                 android:orientation="vertical" />
-    </LinearLayout>
-</ScrollView>
+        </LinearLayout>
+    </ScrollView>
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

@@ -13,7 +13,7 @@
         <item name="android:padding">3dp</item>
     </style>
     <style name="MediumTextNP">
-        <item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
+        <item name="android:textAppearance">?android:attr/textAppearanceSmall</item>
         <item name="android:layout_margin">1dp</item>
         <item name="android:padding">3dp</item>
     </style>

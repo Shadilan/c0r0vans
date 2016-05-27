@@ -457,8 +457,8 @@ public class City extends GameObject{
                         }
                         raceBonus = ((1f - raceBonus / 4) * (100f - Player.getPlayer().getTrade()) / 100f);
                         int upcost = (int) (up.getCost() * raceBonus);
-                        confirmWindow.setText(String.format("Вы уверены что хотите купить улучшение \"%s\" %d уровня за %s?", up.getName(), up.getLevel(), StringUtils.intToStr(upcost)));
-                    } else confirmWindow.setText(String.format("Вы уверены что хотите купить улучшение \"%s\"?", upgradeName));
+                        confirmWindow.setText(String.format(getContext().getString(R.string.accept_buy_upgrade), up.getName(), up.getLevel(), StringUtils.intToStr(upcost)));
+                    } else confirmWindow.setText(String.format(getContext().getString(R.string.accept_buy_upgrade_unknown), upgradeName));
                     confirmWindow.setConfirmAction(new Runnable() {
                         @Override
                         public void run() {
@@ -533,6 +533,7 @@ public class City extends GameObject{
                     findViewById(R.id.buyPanel).setVisibility(VISIBLE);
                     findViewById(R.id.infoPanel).setVisibility(GONE);
                     findViewById(R.id.routePanel).setVisibility(GONE);
+                    GameSettings.set("CityTab","Market");
                 }
             });
             findViewById(R.id.infoToggle).setOnClickListener(new OnClickListener() {
@@ -547,25 +548,40 @@ public class City extends GameObject{
                     findViewById(R.id.buyPanel).setVisibility(GONE);
                     findViewById(R.id.infoPanel).setVisibility(VISIBLE);
                     findViewById(R.id.routePanel).setVisibility(GONE);
+                    GameSettings.set("CityTab","Info");
                 }
             });
             findViewById(R.id.routeToggle).setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
                     ToggleButton b = (ToggleButton) findViewById(R.id.infoToggle);
                     b.setChecked(false);
                     b = (ToggleButton) findViewById(R.id.marketToggle);
                     b.setChecked(false);
                     b = (ToggleButton) findViewById(R.id.routeToggle);
                     b.setChecked(true);
-
                     findViewById(R.id.buyPanel).setVisibility(GONE);
                     findViewById(R.id.infoPanel).setVisibility(GONE);
                     findViewById(R.id.routePanel).setVisibility(VISIBLE);
+                    GameSettings.set("CityTab","Route");
                 }
             });
+
             countRoutes();
+            ToggleButton b;
+            switch (GameSettings.getValue("CityTab")){
+                case "Market": b = (ToggleButton) findViewById(R.id.marketToggle);
+                    b.setChecked(true);
+                    findViewById(R.id.buyPanel).setVisibility(VISIBLE);
+                    break;
+                case "Route": b = (ToggleButton) findViewById(R.id.marketToggle);
+                    b.setChecked(true);
+                    findViewById(R.id.buyPanel).setVisibility(VISIBLE);
+                    break;
+                default:   b = (ToggleButton) findViewById(R.id.marketToggle);
+                    b.setChecked(true);
+                    findViewById(R.id.buyPanel).setVisibility(VISIBLE);
+            }
         }
         private void countRoutes(){
             int amount=0;

@@ -103,4 +103,6 @@ All rights reserved to Circle of Eternity</string>
     <string name="city_grows">City population</string>
     <string name="route_count">Number of routes:</string>
     <string name="market">Shop</string>
+    <string name="accept_buy_upgrade">Are you sure you want buy \"%s\" %d level for %s gold?</string>
+    <string name="accept_buy_upgrade_unknown">Are you sure you want buy \"%s\"?</string>
 </resources>

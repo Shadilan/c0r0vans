@@ -47,7 +47,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/tnlInfo"
             android:layout_gravity="right"
-            android:textSize="20sp"/>
+            style="@style/MediumTextNP"/>
 
         <TextView
             android:layout_width="wrap_content"
