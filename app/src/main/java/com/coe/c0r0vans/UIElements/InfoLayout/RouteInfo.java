@@ -164,7 +164,7 @@ public class RouteInfo extends RelativeLayout implements PlayerInfoLayout {
         GameSettings.getInstance().put("RoutePage", String.valueOf(page));
         Log.d("Timing", "Время:" + (new Date().getTime()));
         //GameSettings.getInstance().save();
-        GATracker.trackTimeStart("InfoLayout","RoutesUpdate");
+        GATracker.trackTimeStart("InfoLayout","RoutesUpdate ");
 
     }
 

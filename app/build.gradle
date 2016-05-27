@@ -3,10 +3,8 @@ apply plugin: 'com.android.application'
 android {
     signingConfigs {
         Release {
-            keyAlias 'MainKey'
-            keyPassword 'Enternity8'
             storeFile file('D:/Android.SRC/CoE.jks')
-            storePassword 'Enternity8'
+
         }
     }
     compileSdkVersion 23
@@ -26,7 +24,7 @@ android {
             signingConfig signingConfigs.Release
         }
         debug {
-            minifyEnabled true
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.Release
         }

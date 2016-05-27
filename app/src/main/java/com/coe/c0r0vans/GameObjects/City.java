@@ -569,18 +569,20 @@ public class City extends GameObject{
 
             countRoutes();
             ToggleButton b;
-            switch (GameSettings.getValue("CityTab")){
+            String a=GameSettings.getValue("CityTab");
+            if (a==null) a="Info";
+            switch (a){
                 case "Market": b = (ToggleButton) findViewById(R.id.marketToggle);
                     b.setChecked(true);
                     findViewById(R.id.buyPanel).setVisibility(VISIBLE);
                     break;
-                case "Route": b = (ToggleButton) findViewById(R.id.marketToggle);
+                case "Route": b = (ToggleButton) findViewById(R.id.routeToggle);
                     b.setChecked(true);
-                    findViewById(R.id.buyPanel).setVisibility(VISIBLE);
+                    findViewById(R.id.routePanel).setVisibility(VISIBLE);
                     break;
-                default:   b = (ToggleButton) findViewById(R.id.marketToggle);
+                default:   b = (ToggleButton) findViewById(R.id.infoToggle);
                     b.setChecked(true);
-                    findViewById(R.id.buyPanel).setVisibility(VISIBLE);
+                    findViewById(R.id.infoPanel).setVisibility(VISIBLE);
             }
         }
         private void countRoutes(){
