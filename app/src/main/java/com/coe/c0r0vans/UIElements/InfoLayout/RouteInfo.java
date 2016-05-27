@@ -19,6 +19,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 
+import utility.GATracker;
 import utility.settings.GameSettings;
 
 /**
@@ -101,6 +102,7 @@ public class RouteInfo extends RelativeLayout implements PlayerInfoLayout {
     }
     @Override
     public void update() {
+        GATracker.trackTimeStart("InfoLayout","RoutesUpdate");
         Log.d("Timing","Время:"+(new Date().getTime()));
         routeInfo=(LinearLayout) findViewById(R.id.routeInfo);
         Collections.sort(Player.getPlayer().getRoutes(), new Comparator<Route>() {
@@ -162,6 +164,7 @@ public class RouteInfo extends RelativeLayout implements PlayerInfoLayout {
         GameSettings.getInstance().put("RoutePage", String.valueOf(page));
         Log.d("Timing", "Время:" + (new Date().getTime()));
         //GameSettings.getInstance().save();
+        GATracker.trackTimeStart("InfoLayout","RoutesUpdate");
 
     }
 

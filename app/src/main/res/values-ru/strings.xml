@@ -94,8 +94,8 @@
     <string name="city_grows">Рост города</string>
     <string name="route_count">Количество маршрутов:</string>
     <string name="market">Покупки</string>
-    <string name="accept_buy_upgrade">Вы уверены что хотите купить улучшение \"%s\" %d уровня за %s?</string>
-    <string name="accept_buy_upgrade_unknown">Вы уверены что хотите купить улучшение \"%s\"?</string>
+    <string name="accept_buy_upgrade" formatted="false">Вы уверены что хотите купить улучшение \"%s\" %d уровня за %s?</string>
+    <string name="accept_buy_upgrade_unknown" formatted="false">Вы уверены что хотите купить улучшение \"%s\"?</string>
 
 
 </resources>
