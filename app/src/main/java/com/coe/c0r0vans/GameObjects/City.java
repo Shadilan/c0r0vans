@@ -48,6 +48,7 @@ public class City extends GameObject{
     private long influence1=0;
     private long influence2=0;
     private long influence3=0;
+    private boolean owner;
 
 
     public City(GoogleMap map,JSONObject obj) throws JSONException {
@@ -80,6 +81,7 @@ public class City extends GameObject{
             if (obj.has("Influence1")) influence1=obj.getLong("Influence1");
             if (obj.has("Influence2")) influence2=obj.getLong("Influence2");
             if (obj.has("Influence3")) influence3=obj.getLong("Influence3");
+            if (obj.has("Owner")) owner=obj.getBoolean("Owner"); else owner=false;
             Log.d("tttt","Influence1:"+influence1);
             if (mark==null) {
                 setMarker(map.addMarker(new MarkerOptions().position(latlng)));
@@ -186,6 +188,10 @@ public class City extends GameObject{
 
     public long getInfluence3() {
         return influence3;
+    }
+
+    public boolean getOwner() {
+        return owner;
     }
 
     private class CityWindow extends RelativeLayout implements  GameObjectView,ShowHideForm{
@@ -315,7 +321,7 @@ public class City extends GameObject{
                 }
 
                 @Override
-                public void postError() {
+                public void postError(JSONObject response) {
                     Player.getPlayer().setRouteStart(previous);
                     Player.getPlayer().setCurrentRouteGUID(oldRoute);
 
@@ -357,7 +363,7 @@ public class City extends GameObject{
                 }
 
                 @Override
-                public void postError() {
+                public void postError(JSONObject response) {
                     Player.getPlayer().setRouteStart(previous);
                     Player.getPlayer().setCurrentRouteGUID(oldRoute);
 
@@ -430,7 +436,7 @@ public class City extends GameObject{
                 }
 
                 @Override
-                public void postError() {
+                public void postError(JSONObject response) {
 
                 }
             };
@@ -773,7 +779,7 @@ public class City extends GameObject{
                 }
 
                 @Override
-                public void postError() {
+                public void postError(JSONObject response) {
                     Player.getPlayer().setRouteStart(previous);
                     Player.getPlayer().setCurrentRouteGUID(oldRoute);
 
@@ -815,7 +821,7 @@ public class City extends GameObject{
                 }
 
                 @Override
-                public void postError() {
+                public void postError(JSONObject response) {
                     Player.getPlayer().setRouteStart(previous);
                     Player.getPlayer().setCurrentRouteGUID(oldRoute);
 
@@ -885,7 +891,7 @@ public class City extends GameObject{
                 }
 
                 @Override
-                public void postError() {
+                public void postError(JSONObject response) {
 
                 }
             };
@@ -912,8 +918,8 @@ public class City extends GameObject{
                         }
                         raceBonus = ((1f - raceBonus / 4) * (100f - Player.getPlayer().getTrade()) / 100f);
                         int upcost = (int) (up.getCost() * raceBonus);
-                        confirmWindow.setText(String.format("Вы уверены что хотите купить улучшение \"%s\" %d уровня за %s?", up.getName(), up.getLevel(), StringUtils.intToStr(upcost)));
-                    } else confirmWindow.setText(String.format("Вы уверены что хотите купить улучшение \"%s\"?", upgradeName));
+                        confirmWindow.setText(String.format(getContext().getString(R.string.price), up.getName(), up.getLevel(), StringUtils.intToStr(upcost),""));
+                    } else confirmWindow.setText(String.format(getContext().getString(R.string.unknown_upgrade), upgradeName));
                     confirmWindow.setConfirmAction(new Runnable() {
                         @Override
                         public void run() {

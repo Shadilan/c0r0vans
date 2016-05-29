@@ -246,7 +246,7 @@ public class Ambush extends GameObject {
             if (ambush.getFaction()==0)
             {
                 removeButton.setImageResource(R.mipmap.dismiss);
-                removeAction = new ObjectAction(ambush) {
+                removeAction = new ObjectAction(ambush){
                     @Override
                     public Bitmap getImage() {
                         return ImageLoader.getImage("remove_ambush");
@@ -274,7 +274,7 @@ public class Ambush extends GameObject {
                     }
 
                     @Override
-                    public void postError() {
+                    public void postError(JSONObject response) {
                         owner.setVisibility(true);
                     }
                 };
@@ -328,7 +328,7 @@ public class Ambush extends GameObject {
                     }
 
                     @Override
-                    public void postError() {
+                    public void postError(JSONObject response) {
                         owner.setVisibility(true);
                     }
                 };

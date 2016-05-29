@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 
+import com.coe.c0r0vans.MyGoogleMap;
 import com.coe.c0r0vans.OnGameObjectChange;
 import com.coe.c0r0vans.R;
 import com.coe.c0r0vans.UIElements.ActionView;
@@ -26,6 +27,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import utility.GATracker;
 import utility.GPSInfo;
 import utility.GameSound;
 import utility.GameVibrate;
@@ -120,8 +122,18 @@ public class Player extends GameObject {
                 }
             }
             @Override
-            public void postError() {
-
+            public void postError(JSONObject response) {
+                String error="";
+                String message="";
+                try {
+                    /*if (response.has("Error"))
+                        error = response.getString("Error");*/
+                    if (response.has("Message"))
+                        message=response.getString("Message");
+                } catch (JSONException e) {
+                    GATracker.trackException("DropRoute",e);
+                }
+                Essages.addEssage(message);
             }
         };
         race=GameSettings.getFaction();
@@ -403,11 +415,6 @@ public class Player extends GameObject {
     public String getCurrentRoute(){return currentRoute;}
     public ObjectAction getDropRoute(){return dropRoute;}
 
-    /*public void setCurrentRoute(String currentRoute) {
-        this.currentRoute = currentRoute;
-        change(OnGameObjectChange.PLAYER);
-    }*/
-
     public void setRouteStart(boolean routeStart) {
         this.routeStart = routeStart;
         change(OnGameObjectChange.PLAYER);
@@ -425,21 +432,14 @@ public class Player extends GameObject {
     }
 
     private ArrayList<OnGameObjectChange> onChangeList;
-    //private ArrayList<OnGameObjectChange> removeOnChangeList;
     public void addOnChange(OnGameObjectChange onGameObjectChange){
         if (onChangeList==null) onChangeList=new ArrayList<>();
         onChangeList.add(onGameObjectChange);
     }
-/*    public void removeOnChange(OnGameObjectChange onGameObjectChange){
-        if (removeOnChangeList==null) removeOnChangeList=new ArrayList<>();
-        removeOnChangeList.add(onGameObjectChange);
-    }*/
+
     public void change(int type){
         if (onChangeList==null) return;
-        /*if (removeOnChangeList!=null && removeOnChangeList.size()>0){
-            onChangeList.removeAll(removeOnChangeList);
-            removeOnChangeList.clear();
-        }*/
+
         for (OnGameObjectChange ev:onChangeList){
             ev.change(type);
         }
@@ -556,8 +556,18 @@ public class Player extends GameObject {
                 }
 
                 @Override
-                public void postError() {
-
+                public void postError(JSONObject response) {
+                    String error="";
+                    String message="";
+                    try {
+                        /*if (response.has("Error"))
+                            error = response.getString("Error");*/
+                        if (response.has("Message"))
+                            message=response.getString("Message");
+                    } catch (JSONException e) {
+                        GATracker.trackException("CreateAmbush",e);
+                    }
+                    Essages.addEssage(message);
                 }
             };
             findViewById(R.id.createAmbushAction).setOnClickListener(new OnClickListener() {
@@ -571,8 +581,67 @@ public class Player extends GameObject {
                     close();
                 }
             });
+            createCity=new ObjectAction(Player.getPlayer()) {
+                @Override
+                public Bitmap getImage() {
+                    return ImageLoader.getImage("create_city");
+                }
+
+                @Override
+                public String getCommand() {
+                    return "CreateCity";
+                }
+
+                @Override
+                public void preAction() {
+
+                }
+
+                @Override
+                public void postAction(JSONObject response) {
+                    Essages.addEssage("Запрос на содзание города обработан.");
+                    if (response.has("City")){
+                        try {
+                            City city=new City(MyGoogleMap.getMap(),response.getJSONObject("City"));
+                            GameObjects.getInstance().put(city.getGUID(),city);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+
+                @Override
+                public void postError(JSONObject response) {
+                    String error="";
+                    String message="";
+                    try {
+                        /*if (response.has("Error"))
+                            error = response.getString("Error");*/
+                        if (response.has("Message"))
+                            message=response.getString("Message");
+                    } catch (JSONException e) {
+                        GATracker.trackException("CreateCity",e);
+                    }
+                    Essages.addEssage(message);
+
+                }
+
+
+            };
+            findViewById(R.id.createCity).setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    serverConnect.getInstance().createCity(createCity,
+                            GPSInfo.getInstance().GetLat(), GPSInfo.getInstance().GetLng(),
+                            (int) (SelectedObject.getInstance().getPoint().latitude * 1e6),
+                            (int) (SelectedObject.getInstance().getPoint().longitude * 1e6)
+                    );
+                    close();
+                }
+            });
         }
         ObjectAction createAmbush;
+        ObjectAction createCity;
 
 
         @Override
@@ -590,8 +659,42 @@ public class Player extends GameObject {
                     btn.setEnabled(false);
                     btn.setAlpha(0.5f);
                 }
+                btn= (ImageButton) findViewById(R.id.createCity);
+                btn.setVisibility(VISIBLE);
+                boolean allow=true;
+                for (GameObject o: GameObjects.getInstance().values()){
+                    if (o instanceof City && o.getMarker()!=null){
+                        float dist=375;
+                        float mapper=0;
+                        if (((City) o).getOwner())dist=625;
+                        double tlat=SelectedObject.getInstance().getPoint().latitude;
+                        double tlng=SelectedObject.getInstance().getPoint().longitude;
+                        double lat=o.getMarker().getPosition().latitude;
+                        double lng=o.getMarker().getPosition().longitude;
+                        double delta_lat=Math.asin((180/3.1415926)*(dist-mapper)/(6378137)); //это 375 минус апгрейд картографера метров
+                        double delta_lng=Math.asin((180/3.1415926)*(375-mapper)/(6378137*Math.cos((tlat/1000000)*3.1415926/180)));
+                        if ((tlat>lat-delta_lat && tlat<lat+delta_lat)
+                                && (tlng>lng-delta_lng && tlng<lng+delta_lng))
+                        {
+                            allow=false;
+                        }
+                    }
+                }
+                if (allow){
+                    btn.setClickable(true);
+                    btn.setEnabled(true);
+                    btn.setAlpha(1f);
+                } else
+                {
+                    btn.setClickable(false);
+                    btn.setEnabled(false);
+                    btn.setAlpha(0.5f);
+                }
             }
-            else findViewById(R.id.createAmbushAction).setVisibility(INVISIBLE);
+            else {
+                findViewById(R.id.createAmbushAction).setVisibility(INVISIBLE);
+                findViewById(R.id.createCity).setVisibility(INVISIBLE);
+            }
         }
 
         @Override

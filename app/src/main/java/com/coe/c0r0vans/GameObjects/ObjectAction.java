@@ -3,7 +3,10 @@ package com.coe.c0r0vans.GameObjects;
 import android.graphics.Bitmap;
 import android.util.Log;
 
+import org.json.JSONException;
 import org.json.JSONObject;
+
+import utility.GATracker;
 
 /**
  * @author Shadilan
@@ -18,9 +21,13 @@ public abstract class ObjectAction {
     public abstract String getCommand();
     public abstract void preAction();
     public abstract void postAction(JSONObject response);
-    public abstract void postError();
+    public abstract void postError(JSONObject response);
     public void serverError(){
-        postError();
+        try {
+            postError(new JSONObject().put("Error","S0000").put("Message","Server Error."));
+        } catch (JSONException e) {
+            GATracker.trackException("ObjectAction",e);
+        }
     }
     protected boolean enabled=true;
     public void setEnable(boolean flag){
