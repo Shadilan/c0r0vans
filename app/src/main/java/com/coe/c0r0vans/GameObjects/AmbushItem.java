@@ -74,7 +74,7 @@ public class AmbushItem extends GameObject{
             }
 
             @Override
-            public void postError() {
+            public void postError(JSONObject response) {
                 serverConnect.getInstance().getPlayerInfo();
             }
         };

@@ -31,4 +31,14 @@
         android:layout_centerInParent="true"
         android:id="@+id/space"
         android:layout_margin="10dp"/>
+
+    <ImageButton
+        style="@style/CommonButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/createCity"
+        android:src="@mipmap/create_city"
+        android:layout_below="@+id/space"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="10dp"/>
 </RelativeLayout>

@@ -104,6 +104,7 @@ public class ImageLoader {
         images.put("bargain_buy",BitmapFactory.decodeResource(context.getResources(), R.mipmap.bargain_buy));
         images.put("paladin",BitmapFactory.decodeResource(context.getResources(), R.mipmap.paladin));
         images.put("paladin_buy",BitmapFactory.decodeResource(context.getResources(), R.mipmap.paladin_buy));
+        images.put("create_city",BitmapFactory.decodeResource(context.getResources(), R.mipmap.create_city));
         images.put("unknown",BitmapFactory.decodeResource(context.getResources(),R.mipmap.unknown));
 
         //Workaround для решения проблемы белых квадратов
@@ -131,13 +132,13 @@ public class ImageLoader {
 
         //BitmapDescriptor result = descriptors.get(name);
         //Workaround for https://code.google.com/p/gmaps-api-issues/issues/detail?id=9765
-        BitmapDescriptor result=BitmapDescriptorFactory.fromBitmap(markers.get(name));
-        if (result==null) {
+        //BitmapDescriptor result=BitmapDescriptorFactory.fromBitmap(markers.get(name));
+        /*if (result==null) {
             GATracker.trackException("ImageLoader","ImageNoteFound:"+name);
             Essages.addEssage("Изображение объекта "+name + " не найдено.");
             result=BitmapDescriptorFactory.fromBitmap(images.get("unknown"));
-        }
-        return  result;
+        }*/
+        return  BitmapDescriptorFactory.fromBitmap(markers.get(name));//result;
     }
 
     private static void createMarker(Context context,int resource,String name){

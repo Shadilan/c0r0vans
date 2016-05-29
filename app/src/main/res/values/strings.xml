@@ -109,4 +109,6 @@ All rights reserved to Circle of Eternity</string>
     <string name="nickname">Nickname:</string>
     <string name="invite">Invite:</string>
     <string name="registration">Registration</string>
+    <string name="approve_upgrade">Вы уверены что хотите купить улучшение \"%s\" %d уровня за %s?</string>
+    <string name="approve_unknown_up">Вы уверены что хотите купить улучшение \"%s\"?</string>
 </resources>

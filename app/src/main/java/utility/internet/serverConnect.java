@@ -107,23 +107,7 @@ public class serverConnect {
         }
     }
 
-        //UserActions
-    /**
-     *  Login and get Secure Token
-     * @param Login Login of user
-     * @param Password Password of user
-     * @return true
-     */
-    public boolean ExecLogin(String Login, String Password,String gmail){
-        if (!checkConnection()) return false;
-        String version=context.getResources().getString(R.string.version);
-        String hash= StringUtils.MD5("COWBOW"+Login+Password+gmail+version+"Login");
-        String url=ServerAddres+"/login.jsp"+"?Login="+Login+"&Password="+Password+"&GMail="+gmail+"&Version="+version+"&hash="+hash;
-        login=Login;
 
-        runRequest(UUID.randomUUID().toString(),url,ResponseListenerWithUID.LOGIN);
-        return true;
-    }
     private JSONObject formResponse(String resp){
         JSONObject result=new JSONObject();
         try {
@@ -217,7 +201,36 @@ public class serverConnect {
         runRequest(UID, url, ResponseListenerWithUID.ACTION);
         return true;
     }
-
+    public boolean createCity(ObjectAction action,int Lat,int Lng , int TLat,int TLng){
+        if (!checkConnection()) return false;
+        if (Token==null) return false;
+        if (lockedActions==null) lockedActions=new ArrayList<>();
+        String version=context.getResources().getString(R.string.version);
+        lockedActions.add(action);
+        action.preAction();
+        String UID=UUID.randomUUID().toString();
+        String hash= StringUtils.MD5("COWBOW" + Token + Lat + Lng +TLat+TLng+UID+version+"CreateCity" );
+        String url=ServerAddres+"/getdata.jsp"+"?Token="+Token+"&ReqName="+"CreateCity"+"&plat="+Lat+"&plng="+Lng+"&lat="+TLat+"&lng="+TLng+"&UUID="+UID+"&hash="+hash+"&version="+version;
+        listenersMap.put(UID, action);
+        errorMap.put(UID, action);
+        runRequest(UID, url, ResponseListenerWithUID.ACTION);
+        return true;
+    }
+    public boolean hirePeople(ObjectAction action,int Lat,int Lng , String target,int amount){
+        if (!checkConnection()) return false;
+        if (Token==null) return false;
+        if (lockedActions==null) lockedActions=new ArrayList<>();
+        String version=context.getResources().getString(R.string.version);
+        lockedActions.add(action);
+        action.preAction();
+        String UID=UUID.randomUUID().toString();
+        String hash= StringUtils.MD5("COWBOW" + Token + Lat + Lng + target+amount+UID+"HirePeople" );
+        String url=ServerAddres+"/getdata.jsp"+"?Token="+Token+"&ReqName="+"HirePeople"+"&plat="+Lat+"&plng="+Lng+"&TGUID="+target+"&Amount="+amount+"&UUID="+UID+"&hash="+hash+"&version="+version;
+        listenersMap.put(UID, action);
+        errorMap.put(UID, action);
+        runRequest(UID, url, ResponseListenerWithUID.ACTION);
+        return true;
+    }
     public boolean getPlayerInfo(){
         if (!checkConnection()) return false;
         if (Token==null) return false;
@@ -315,6 +328,7 @@ public class serverConnect {
                 l.onChangeQueue(0);
             }
     }
+
     public int getQueueSize(){
         return requestList.size();
     }
@@ -407,7 +421,7 @@ public class serverConnect {
                             if (error.networkResponse == null && error.getClass().equals(TimeoutError.class) && try_count<max_retry) runRequest(getUID(), getRequest(), getType(),try_count+1);
                             else {
                                 if (getType() == 2) if (errorMap.get(getUID()) != null)
-                                    errorMap.get(getUID()).postError();
+                                    errorMap.get(getUID()).postError(new JSONObject().put("Error","U0000").put("Message",error.getMessage()));
                                 for (ServerListener l : listeners)
                                     l.onError(formResponse(error.toString()));
                                 runNextRequest();
@@ -471,5 +485,22 @@ public class serverConnect {
         jsObjRequest.setRetryPolicy(new DefaultRetryPolicy(20 * 1000, 0,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         reqq.add(jsObjRequest);
+    }*/
+    //UserActions
+    /**
+     *  Login and get Secure Token
+     * @param Login Login of user
+     * @param Password Password of user
+     * @return true
+     */
+    /*public boolean ExecLogin(String Login, String Password,String gmail){
+        if (!checkConnection()) return false;
+        String version=context.getResources().getString(R.string.version);
+        String hash= StringUtils.MD5("COWBOW"+Login+Password+gmail+version+"Login");
+        String url=ServerAddres+"/login.jsp"+"?Login="+Login+"&Password="+Password+"&GMail="+gmail+"&Version="+version+"&hash="+hash;
+        login=Login;
+
+        runRequest(UUID.randomUUID().toString(),url,ResponseListenerWithUID.LOGIN);
+        return true;
     }*/
 }
