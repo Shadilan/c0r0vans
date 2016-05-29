@@ -1,7 +1,8 @@
 <resources>
     <string name="app_name">c0r0vans α</string>
     <string name="login_window">Login</string>
-    <string name="serveradress" translatable="false">https://alpha3-corovans.rhcloud.com</string>
+    <string name="serveradressOld" translatable="false">https://alpha3-corovans.rhcloud.com</string>
+    <string name="serveradress" translatable="false">https://alpha4-corovans.rhcloud.com</string>
     <string name="supportdress" translatable="false">https://support-merchantarg.rhcloud.com</string>
     <string name="title_activity_main_window">c0r0vans</string>
     <string name="action_window">Actions</string>
@@ -105,4 +106,7 @@ All rights reserved to Circle of Eternity</string>
     <string name="market">Shop</string>
     <string name="accept_buy_upgrade" formatted="false">Are you sure you want buy \"%s\" %d level for %s gold?</string>
     <string name="accept_buy_upgrade_unknown" formatted="false">Are you sure you want buy \"%s\"?</string>
+    <string name="nickname">Nickname:</string>
+    <string name="invite">Invite:</string>
+    <string name="registration">Registration</string>
 </resources>

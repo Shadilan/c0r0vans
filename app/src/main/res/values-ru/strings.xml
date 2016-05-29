@@ -96,6 +96,9 @@
     <string name="market">Покупки</string>
     <string name="accept_buy_upgrade" formatted="false">Вы уверены что хотите купить улучшение \"%s\" %d уровня за %s?</string>
     <string name="accept_buy_upgrade_unknown" formatted="false">Вы уверены что хотите купить улучшение \"%s\"?</string>
+    <string name="nickname">Псевдоним:</string>
+    <string name="invite">Приглашение:</string>
+    <string name="registration">Регистрация</string>
 
 
 </resources>

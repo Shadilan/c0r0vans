@@ -15,6 +15,8 @@ public abstract class ResponseListenerWithUID implements Response.Listener<JSONO
     public static final int MESSAGE = 4;
     public static final int PLAYER = 5;
     public static final int RATING = 6;
+    public static final int AUTHORIZE=7;
+    public static final int REGISTER=8;
 
     private String UID;
     private String request;

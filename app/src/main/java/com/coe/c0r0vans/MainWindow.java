@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Point;
 import android.location.Location;
+import android.location.LocationListener;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
@@ -25,7 +26,6 @@ import com.coe.c0r0vans.GameObjects.SelectedObject;
 import com.coe.c0r0vans.UIElements.ActionView;
 import com.coe.c0r0vans.UIElements.ButtonLayout;
 import com.coe.c0r0vans.UIElements.ChooseFaction;
-import com.coe.c0r0vans.UIElements.LoginView;
 import com.coe.c0r0vans.UIElements.UIControler;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -75,6 +75,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
      * Create form;
      */
     protected void onCreate(Bundle savedInstanceState) {
+        Log.d("ProcedureCall","onCreate");
         super.onCreate(savedInstanceState);
         GATracker.initialize((CorovanApplication) getApplication());
         setContentView(R.layout.main_activity);
@@ -86,11 +87,10 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
      */
 
     private void init() {
+        Log.d("ProcedureCall","init");
         //init fields
-        try {
-            ((TextView)findViewById(R.id.status)).setText(R.string.init_object);
-            GPSInfo.getInstance(getApplicationContext());
-
+        GATracker.trackTimeStart("System","Init");
+//            ((TextView)findViewById(R.id.status)).setText(R.string.init_object);
             //Загрузка GoogleMap.
             SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                     .findFragmentById(R.id.map);
@@ -110,27 +110,20 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
             ((ActionView)findViewById(R.id.actionView)).init();
             ((ButtonLayout)findViewById(R.id.buttonLayout)).init();
 
-            //Окно логина
-            if (serverConnect.getInstance().isLogin()) {
-                UIControler.getWindowLayout().removeAllViews();
-            } else new LoginView(getApplicationContext()).show();
-            ((ViewGroup) findViewById(R.id.alertLayout)).removeAllViews();
 
+            UIControler.getWindowLayout().removeAllViews();
+            ((ViewGroup) findViewById(R.id.alertLayout)).removeAllViews();
             onTrueResume();
             ready=true;
             GATracker.trackTimeEnd("System","Init");
-        } catch (Exception e){
-            GATracker.trackException("Initialize",e);
-            throw e;
-        }
     }
     private void ofThreadInit(){
+        Log.d("ProcedureCall","ofThreadInit");
         GameSettings.init(getApplicationContext());
         ImageLoader.Loader(getApplicationContext());
         GameSound.init(getApplicationContext());
         MessageNotification.init(getApplicationContext());
         GameVibrate.init(getApplicationContext());
-        serverConnect.getInstance().connect(getResources().getString(R.string.serveradress), getApplicationContext());
         Player.instance();
         SharedPreferences sp = getApplicationContext().getSharedPreferences("player", Context.MODE_PRIVATE);
         String pls = sp.getString("player", "");
@@ -151,7 +144,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
      */
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        Log.d("Loader", "Map Ready");
+        Log.d("ProcedureCall","onMapReady");
         try{
 
         Point size=new Point();
@@ -169,7 +162,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
      */
 
     private void createListeners() {
-        Log.d("Loader","Listeners");
+        Log.d("ProcedureCall","createListener");
         if (isListenersDone) return;
         serverConnect.getInstance().addListener(new ServerListener() {
             @Override
@@ -402,7 +395,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
      * Tick Клиента
      */
     private void StartTickTimer() {
-
+        Log.d("ProcedureCall","StartTickTimer");
         int delay = 1000;
         try {
             if (serverConnect.getInstance().isLogin() && (timeToPlayerRefresh != -1) && GPSInfo.getInstance().GetLat() != -1 && GPSInfo.getInstance().GetLng() != -1) {
@@ -430,6 +423,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
 
     int timeToPlayerRefresh=-1;
     private void Tick() {
+        Log.d("ProcedureCall","Tick");
         try {
             if (serverConnect.getInstance().isLogin() && this.hasWindowFocus()
                     && GPSInfo.getInstance().GetLat() != -1 && GPSInfo.getInstance().GetLng() != -1)
@@ -470,6 +464,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
 
     @Override
     protected void onStop() {
+        Log.d("ProcedureCall","onStop");
         super.onStop();
         try {
 
@@ -489,6 +484,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
 
     @Override
     protected void onRestart() {
+        Log.d("ProcedureCall","onRestart");
         super.onRestart();
         if (ready) {
 
@@ -503,6 +499,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
 
 
     private void onTrueResume(){
+        Log.d("ProcedureCall","onTrueResume");
         MessageNotification.cancel();
         MessageNotification.appActive = true;
         StartTickTimer();
@@ -511,6 +508,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
     }
     @Override
     public void onBackPressed() {
+        Log.d("ProcedureCall","onBackPressed");
         try {
             if (UIControler.getWindowLayout().getChildCount() > 0 && serverConnect.getInstance().isLogin()) {
                 UIControler.getWindowLayout().removeAllViews();
@@ -528,6 +526,8 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
         }
     }
     private  void signIn(){
+        Log.d("ProcedureCall","signIn");
+        serverConnect.getInstance().connect(getResources().getString(R.string.serveradress), getApplicationContext());
         GATracker.trackTimeStart("System","SignIn");
         ((TextView)findViewById(R.id.status)).setText(R.string.enter_google_account);
         SharedPreferences sharedPreferences=getSharedPreferences("SpiritProto", MODE_PRIVATE);
@@ -553,6 +553,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
     }
     protected void onActivityResult(final int requestCode, final int resultCode,
                                     final Intent data) {
+        Log.d("ProcedureCall","onActivityResult");
 
 
         if (requestCode == 123) {
@@ -565,24 +566,241 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                 // Get account information
                 //String accountNAme = acct.get();
                 if (acct!=null) {
-                    String idToken = acct.getIdToken();
+                    idToken = acct.getIdToken();
                     String mEmail = acct.getEmail();
                     SharedPreferences sharedPreferences = getSharedPreferences("SpiritProto", MODE_PRIVATE);
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     editor.putString("AccountName", mEmail);
                     editor.apply();
                     GATracker.trackTimeEnd("System","SignIn");
-                    GATracker.trackHit("System","SignIn");
-                    ((TextView)findViewById(R.id.status)).setText(R.string.data_init);
-                    GATracker.trackTimeStart("System","Init");
-                    initStart();
+                    //Login To Server
+                    loginWithToken();
+
+                    //initStart();
                 } else signIn();
             } else {
                 signIn();
             }
         }
     }
+    String idToken;
+    private void loginWithToken(){
+        Log.d("ProcedureCall","loginWithToken");
+        GATracker.trackTimeStart("System","LoginToServer");
+        serverConnect.getInstance().addListener(new ServerListener() {
+            @Override
+            public void onLogin(JSONObject response) {
+                serverConnect.getInstance().removeListener(this);
+                GATracker.trackTimeEnd("System","LoginToServer");
+                if (response.has("Token")) {
+                    ((TextView)findViewById(R.id.status)).setText("Вход выполнен.");
+                    // Выполнить дальнейшую загрузку
+                    initGPS();
+                } else if (response.has("Error")){
+                    try {
+                        String err=response.getString("Error");
+                        switch (err){
+                            case "H0101":
+                                ((TextView)findViewById(R.id.status)).setText("Сервер отказал запрос.");
+                                break;
+                            //Token не распознан
+                            case "L0201":
+                                //Указать на ошибку
+                                ((TextView)findViewById(R.id.status)).setText("Токен не действителен.");
+                                //Получить новый токен
+                                signIn();
+                                break;
+                            //Пользователь не зарегестрирован
+                            case "L0202":
+                                //Начать процесс регистрации
+                                ((TextView)findViewById(R.id.status)).setText("Регистрация пользователя.");
+                                initRegister();
+                                break;
+                            //Версия не поддерживается
+                            case "L0203":
+                                //Указать ошибку
+                                ((TextView)findViewById(R.id.status)).setText("Ваша версия не поддерживается.");
+                                //Остановить процесс загрузки
+                                break;
+                            default:
+                                ((TextView)findViewById(R.id.status)).setText("Неопознанная ошибка.");
+                                myHandler.postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        loginWithToken();
+                                    }
+                                },5000);
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+            }
+
+            @Override
+            public void onRefresh(JSONObject response) {
+
+            }
+
+            @Override
+            public void onAction(JSONObject response) {
+
+            }
+
+            @Override
+            public void onPlayerInfo(JSONObject response) {
+
+            }
+
+            @Override
+            public void onError(JSONObject response) {
+
+            }
+
+            @Override
+            public void onMessage(JSONObject response) {
+
+            }
+
+            @Override
+            public void onRating(JSONObject response) {
+
+            }
+        });
+        serverConnect.getInstance().ExecAuthorize(idToken);
+    }
+    private void initRegister(){
+        Log.d("ProcedureCall","initRegister");
+        findViewById(R.id.regForm).setVisibility(View.VISIBLE);
+        findViewById(R.id.register).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                serverConnect.getInstance().addListener(new ServerListener() {
+                    @Override
+                    public void onLogin(JSONObject response) {
+                        serverConnect.getInstance().removeListener(this);
+                        GATracker.trackTimeEnd("System","RegisterToServer");
+                        if (response.has("Token")) {
+                            ((TextView)findViewById(R.id.status)).setText("Вход выполнен.");
+                            // Выполнить дальнейшую загрузку
+                            initGPS();
+                        } else if (response.has("Error")){
+                            try {
+                                String err=response.getString("Error");
+                                switch (err){
+                                    case "H0101":
+                                        ((TextView)findViewById(R.id.status)).setText("Сервер отказал запрос.");
+                                        break;
+                                    //Token не распознан
+                                    case "L0301":
+                                        //Указать на ошибку
+                                        ((TextView)findViewById(R.id.status)).setText("Токен не действителен.");
+                                        //Получить новый токен
+                                        signIn();
+                                        break;
+                                    //Пользователь не зарегестрирован
+                                    case "L0202":
+                                        //Начать процесс регистрации
+                                        ((TextView)findViewById(R.id.status)).setText("Регистрация пользователя.");
+                                        initRegister();
+                                        break;
+                                    //Версия не поддерживается
+                                    case "L0303":
+                                        //Указать ошибку
+                                        ((TextView)findViewById(R.id.status)).setText("Пользователь зарегестрирован ранее.");
+                                        initRegister();
+                                        break;
+                                    //Версия не поддерживается
+                                    case "L0304":
+                                        //Указать ошибку
+                                        ((TextView)findViewById(R.id.status)).setText("Ваша версия не поддерживается.");
+                                        //Остановить процесс загрузки
+                                        break;
+                                    default:
+                                        ((TextView)findViewById(R.id.status)).setText("Неопознанная ошибка.");
+                                        myHandler.postDelayed(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                loginWithToken();
+                                            }
+                                        },5000);
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                    }
+                    @Override
+                    public void onRefresh(JSONObject response) {}
+                    @Override
+                    public void onAction(JSONObject response) {}
+                    @Override
+                    public void onPlayerInfo(JSONObject response) {}
+                    @Override
+                    public void onError(JSONObject response) {}
+                    @Override
+                    public void onMessage(JSONObject response) {}
+                    @Override
+                    public void onRating(JSONObject response) {}
+                });
+                String userName= ((TextView) findViewById(R.id.regName)).getText().toString();
+                String invite= ((TextView) findViewById(R.id.inviteCode)).getText().toString();
+                if (
+                        !"".equals(userName) && !"".equals(invite)) {
+                    ((TextView) findViewById(R.id.status)).setText("Запрос регистрации.");
+                    GATracker.trackTimeEnd("System", "RegisterToServer");
+                    findViewById(R.id.regForm).setVisibility(View.INVISIBLE);
+                    serverConnect.getInstance().ExecRegister(idToken, userName, invite);
+                }
+            }
+        });
+    }
+    private void initGPS(){
+        Log.d("ProcedureCall","initGPS");
+        GATracker.trackTimeStart("System","LocationStart");
+        ((TextView)findViewById(R.id.status)).setText("Определение метосположения.");
+        GPSInfo.getInstance(getApplicationContext());
+        GPSInfo.getInstance().AddLocationListener(new LocationListener() {
+            @Override
+            public void onLocationChanged(Location location) {
+                try {
+
+                    if (GPSInfo.getInstance().GetLat() != -1 && GPSInfo.getInstance().GetLng() != -1) {
+                        GPSInfo.getInstance().RemoveLocationListener(this);
+                        ((TextView)findViewById(R.id.status)).setText("Местоположение определено.");
+                        GATracker.trackTimeEnd("System","LocationStart");
+                        initStart();
+                    }
+                } catch (Exception e)
+                {
+                    GATracker.trackException("GPS",e);
+                }
+            }
+
+            @Override
+            public void onStatusChanged(String provider, int status, Bundle extras) {
+
+            }
+
+            @Override
+            public void onProviderEnabled(String provider) {
+
+            }
+
+            @Override
+            public void onProviderDisabled(String provider) {
+
+            }
+        });
+        GPSInfo.getInstance().onGPS();
+    }
     private void initStart(){
+        Log.d("ProcedureCall","initStart");
+        GATracker.trackTimeStart("System","Init");
+        ((TextView)findViewById(R.id.status)).setText(R.string.data_init);
         //Даем время интерфейсу
         myHandler.postDelayed(new Runnable() {
             @Override

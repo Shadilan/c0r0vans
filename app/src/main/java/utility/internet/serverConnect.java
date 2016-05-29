@@ -135,6 +135,28 @@ public class serverConnect {
 
         return result;
     }
+    /**
+     *  Login and get Secure Token
+
+     * @return true
+     */
+    public boolean ExecAuthorize(String googleToken){
+        if (!checkConnection()) return false;
+        String version=context.getResources().getString(R.string.version);
+        String hash= StringUtils.MD5("COWBOW"+googleToken+version+"Authorize");
+        String url=ServerAddres+"/authorize.jsp"+"?ReqName=Authorize&GoogleToken="+googleToken+"&Version="+version+"&hash="+hash;
+        Log.d("TestGoogle",url);
+        runRequest(UUID.randomUUID().toString(),url,ResponseListenerWithUID.AUTHORIZE);
+        return true;
+    }
+    public boolean ExecRegister(String googleToken,String userName,String inviteCode){
+        if (!checkConnection()) return false;
+        String version=context.getResources().getString(R.string.version);
+        String hash= StringUtils.MD5("COWBOW"+googleToken+userName+inviteCode+version+"Register");
+        String url=ServerAddres+"/authorize.jsp"+"?ReqName=Register&GoogleToken="+googleToken+"&UserName="+userName+"&InviteCode="+inviteCode+"&Version="+version+"&hash="+hash;
+        runRequest(UUID.randomUUID().toString(),url,ResponseListenerWithUID.REGISTER);
+        return true;
+    }
 
     int oldLat=0;
     int oldLng=0;
@@ -297,6 +319,7 @@ public class serverConnect {
         return requestList.size();
     }
     private void runRequest(String UID,String request,int type, final int try_count){
+        Log.d("URLRequest",request);
         busy=true;
         if (!checkConnection()) return;
         final JsonObjectRequest jsObjRequest = new JsonObjectRequest
@@ -305,11 +328,18 @@ public class serverConnect {
                     public void onResponse(JSONObject response) {
                         try
                         {
-
+                            Log.d("URLRequest",response.toString());
                             clearListener();
 
                             if (response.has("Error")) {
-                                for (ServerListener l : listeners) l.onError(response);
+                                switch (getType()) {
+                                    case AUTHORIZE:
+                                    case REGISTER:
+                                            for (ServerListener l : listeners) l.onLogin(response);
+                                        break;
+                                    default:
+                                        for (ServerListener l : listeners) l.onError(response);
+                                }
                             } else {
                                 switch (getType()){
                                     case LOGIN:
@@ -334,6 +364,22 @@ public class serverConnect {
                                     case PLAYER:for (ServerListener l : listeners) l.onPlayerInfo(response);
                                         break;
                                     case RATING:for (ServerListener l : listeners) l.onRating(response);
+                                        break;
+                                    case AUTHORIZE:
+                                        try {
+                                            Token = response.getString("Token");
+                                            for (ServerListener l : listeners) l.onLogin(response);
+                                        } catch (JSONException e) {
+                                            for (ServerListener l:listeners) l.onError(formResponse(response.toString()));
+                                        }
+                                        break;
+                                    case REGISTER:
+                                        try {
+                                            Token = response.getString("Token");
+                                            for (ServerListener l : listeners) l.onLogin(response);
+                                        } catch (JSONException e) {
+                                            for (ServerListener l:listeners) l.onError(formResponse(response.toString()));
+                                        }
                                         break;
                                 }
                             }
