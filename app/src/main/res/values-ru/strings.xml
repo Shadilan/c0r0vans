@@ -99,5 +99,7 @@
     <string name="nickname">Псевдоним:</string>
     <string name="invite">Приглашение:</string>
     <string name="registration">Регистрация</string>
+    <string name="approve_upgrade">Вы уверены что хотите купить улучшение \"%s\" %d уровня за %s?</string>
+    <string name="approve_unknown_up">Вы уверены что хотите купить улучшение \"%s\"?</string>
 
 </resources>

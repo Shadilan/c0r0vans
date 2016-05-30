@@ -321,7 +321,7 @@ public class City extends GameObject{
                 }
 
                 @Override
-                public void postError(JSONObject response) {
+                public void postError() {
                     Player.getPlayer().setRouteStart(previous);
                     Player.getPlayer().setCurrentRouteGUID(oldRoute);
 
@@ -363,7 +363,7 @@ public class City extends GameObject{
                 }
 
                 @Override
-                public void postError(JSONObject response) {
+                public void postError() {
                     Player.getPlayer().setRouteStart(previous);
                     Player.getPlayer().setCurrentRouteGUID(oldRoute);
 
@@ -436,7 +436,7 @@ public class City extends GameObject{
                 }
 
                 @Override
-                public void postError(JSONObject response) {
+                public void postError() {
 
                 }
             };
