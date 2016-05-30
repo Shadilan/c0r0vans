@@ -321,7 +321,7 @@ public class City extends GameObject{
                 }
 
                 @Override
-                public void postError() {
+                public void postError(JSONObject response) {
                     Player.getPlayer().setRouteStart(previous);
                     Player.getPlayer().setCurrentRouteGUID(oldRoute);
 
@@ -363,7 +363,7 @@ public class City extends GameObject{
                 }
 
                 @Override
-                public void postError() {
+                public void postError(JSONObject response) {
                     Player.getPlayer().setRouteStart(previous);
                     Player.getPlayer().setCurrentRouteGUID(oldRoute);
 
@@ -436,7 +436,7 @@ public class City extends GameObject{
                 }
 
                 @Override
-                public void postError() {
+                public void postError(JSONObject response) {
 
                 }
             };
@@ -918,8 +918,8 @@ public class City extends GameObject{
                         }
                         raceBonus = ((1f - raceBonus / 4) * (100f - Player.getPlayer().getTrade()) / 100f);
                         int upcost = (int) (up.getCost() * raceBonus);
-                        confirmWindow.setText(String.format(getContext().getString(R.string.price), up.getName(), up.getLevel(), StringUtils.intToStr(upcost),""));
-                    } else confirmWindow.setText(String.format(getContext().getString(R.string.unknown_upgrade), upgradeName));
+                        confirmWindow.setText(String.format(getContext().getString(R.string.accept_buy_upgrade), up.getName(), up.getLevel(), StringUtils.intToStr(upcost)));
+                    } else confirmWindow.setText(String.format(getContext().getString(R.string.accept_buy_upgrade_unknown), upgradeName));
                     confirmWindow.setConfirmAction(new Runnable() {
                         @Override
                         public void run() {

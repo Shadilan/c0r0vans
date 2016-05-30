@@ -4,7 +4,7 @@
     <string name="title_activity_main_window">к0р0ваны α</string>
     <string name="login_window">Вход</string>
     <string name="action_window">Действия</string>
-    <string name="route_window">Пути</string>
+    <string name="route_window">Маршруты</string>
     <string name="begin">Начало:</string>
     <string name="end">Конец:</string>
     <string name="gold">Золото:</string>
@@ -74,7 +74,7 @@
     <string name="vibrate_on">Вибрация</string>
     <string name="title_activity_loading">Идет загрузка.</string>
     <string name="LogoText">Лого</string>
-    <string name="enter_google_account">Вход аккаунт Google</string>
+    <string name="enter_google_account">Вход в аккаунт Google</string>
     <string name="done_google_account">Вход выполнен</string>
     <string name="data_init">Инициализация данных</string>
     <string name="init_object">Загрузка объектов</string>
@@ -99,7 +99,5 @@
     <string name="nickname">Псевдоним:</string>
     <string name="invite">Приглашение:</string>
     <string name="registration">Регистрация</string>
-    <string name="approve_upgrade">Вы уверены что хотите купить улучшение \"%s\" %d уровня за %s?</string>
-    <string name="approve_unknown_up">Вы уверены что хотите купить улучшение \"%s\"?</string>
 
 </resources>
