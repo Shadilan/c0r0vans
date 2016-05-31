@@ -664,10 +664,13 @@ public class Player extends GameObject {
                 boolean allow=true;
                 for (GameObject o: GameObjects.getInstance().values()){
                     if (o instanceof City && o.getMarker()!=null){
-                        float dist=375;
+                        float dist=250;
                         float mapper=0;
-                        if (((City) o).getOwner())dist=625;
-                        double tlat=SelectedObject.getInstance().getPoint().latitude;
+                        if (((City) o).getOwner())dist=500;
+                        Upgrade up=Player.getPlayer().getUpgrade("founder");
+                        if (up!=null) dist+=up.getEffect2();
+                        else dist+=125;
+                        /*double tlat=SelectedObject.getInstance().getPoint().latitude;
                         double tlng=SelectedObject.getInstance().getPoint().longitude;
                         double lat=o.getMarker().getPosition().latitude;
                         double lng=o.getMarker().getPosition().longitude;
@@ -676,6 +679,9 @@ public class Player extends GameObject {
                         if ((tlat>lat-delta_lat && tlat<lat+delta_lat)
                                 && (tlng>lng-delta_lng && tlng<lng+delta_lng))
                         {
+                            allow=false;
+                        }*/
+                        if (o.getMarker()!=null && GPSInfo.getDistance(o.getMarker().getPosition(),SelectedObject.getInstance().getPoint())<dist){
                             allow=false;
                         }
                     }
