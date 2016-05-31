@@ -655,7 +655,9 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
 
             @Override
             public void onError(JSONObject response) {
-
+                serverConnect.getInstance().removeListener(this);
+                GATracker.trackTimeEnd("System","RegisterToServer");
+                signIn();
             }
 
             @Override
@@ -740,7 +742,11 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                     @Override
                     public void onPlayerInfo(JSONObject response) {}
                     @Override
-                    public void onError(JSONObject response) {}
+                    public void onError(JSONObject response) {
+                        serverConnect.getInstance().removeListener(this);
+                        GATracker.trackTimeEnd("System","RegisterToServer");
+                        signIn();
+                    }
                     @Override
                     public void onMessage(JSONObject response) {}
                     @Override

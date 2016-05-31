@@ -13,6 +13,7 @@ import java.util.HashMap;
 
 import utility.internet.ServerListener;
 import utility.internet.serverConnect;
+import utility.notification.Essages;
 import utility.settings.GameSettings;
 import utility.settings.SettingsListener;
 
@@ -32,6 +33,7 @@ public class GameObjects extends HashMap<String,GameObject> {
             @Override
             public void onRefresh(JSONObject response) {
                 try {
+                    Essages.addEssage("Загрузка данных");
                     //Проверить наличие массива JSON. Objects
                     if (response.has("Objects")) {
                         //Скопировать данные в массив для удаления
@@ -52,24 +54,24 @@ public class GameObjects extends HashMap<String,GameObject> {
                                 remObjects.remove(robj);
                                 robj.loadJSON(JObj.getJSONObject(i));
                             } else {
-                                if (JObj.getJSONObject(i).getString("Type").equals("Player")) {
+                                if (JObj.getJSONObject(i).getString("Type").equalsIgnoreCase("Player")) {
 
                                     Player.getPlayer().loadJSON(JObj.getJSONObject(i));
 
-                                } else if (JObj.getJSONObject(i).getString("Type").equals("City")) {
+                                } else if (JObj.getJSONObject(i).getString("Type").equalsIgnoreCase("City")) {
 
                                     City city = new City(MyGoogleMap.getMap(), JObj.getJSONObject(i));
                                     instance.put(city.getGUID(), city);
-                                } else if (JObj.getJSONObject(i).getString("Type").equals("Ambush")) {
+                                } else if (JObj.getJSONObject(i).getString("Type").equalsIgnoreCase("Ambush")) {
 
                                     Ambush ambush = new Ambush(MyGoogleMap.getMap(), JObj.getJSONObject(i));
 
                                     instance.put(ambush.getGUID(), ambush);
-                                } else if (JObj.getJSONObject(i).getString("Type").equals("Caravan")) {
+                                } else if (JObj.getJSONObject(i).getString("Type").equalsIgnoreCase("Caravan")) {
 
                                     Caravan caravan = new Caravan(MyGoogleMap.getMap(), JObj.getJSONObject(i));
                                     instance.put(caravan.getGUID(), caravan);
-                                } else if (JObj.getJSONObject(i).getString("Type").equals("Sign")) {
+                                } else if (JObj.getJSONObject(i).getString("Type").equalsIgnoreCase("Sign")) {
                                     Log.d("Debug info", "Sign Load:" + JObj.getJSONObject(i).toString());
                                     Log.d("Game Warning", "Sign object");
                                 } else {
@@ -88,7 +90,7 @@ public class GameObjects extends HashMap<String,GameObject> {
                     }
 
                 } catch (JSONException e) {
-                    e.printStackTrace();
+                    Essages.addEssage(e.toString());
                 }
             }
 

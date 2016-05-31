@@ -92,7 +92,7 @@
             android:id="@+id/version"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true" />
-
+            <!--Todo Подложка -->
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
