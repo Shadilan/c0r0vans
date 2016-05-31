@@ -32,10 +32,9 @@ import utility.notification.Essages;
  * Элементы интерфейса
  */
 public class ButtonLayout extends RelativeLayout {
-    InfoLayout infoLayout;
-    private LinearLayout LogView;
+    private InfoLayout infoLayout;
     private ScrollView scrollView;
-    private ImageView LogButton;
+
     public ButtonLayout(Context context) {
         super(context);
         init();
@@ -149,11 +148,11 @@ public class ButtonLayout extends RelativeLayout {
                 }
             }
         });
-        LogView = (LinearLayout) findViewById(R.id.chatBox);
+        LinearLayout logView = (LinearLayout) findViewById(R.id.chatBox);
         scrollView= (ScrollView) findViewById(R.id.scrollView);
         if (scrollView!=null) scrollView.getLayoutParams().height=60;
-        LogButton = (ImageView) findViewById(R.id.showButton);
-        if (LogButton!=null) LogButton.setOnClickListener(new View.OnClickListener() {
+        ImageView logButton = (ImageView) findViewById(R.id.showButton);
+        if (logButton !=null) logButton.setOnClickListener(new View.OnClickListener() {
             private boolean show = false;
 
             @Override
@@ -178,7 +177,7 @@ public class ButtonLayout extends RelativeLayout {
                 }
             }
         });
-        Essages.setTarget(LogView);
+        Essages.setTarget(logView);
         serverConnect.getInstance().addListener(new ServerListener() {
             @Override
             public void onLogin(JSONObject response) {

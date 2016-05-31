@@ -36,8 +36,6 @@ public class CityLine extends RelativeLayout {
     private LatLng startCity;
     private LatLng endCity;
 
-    private Route route;
-
     public void setParentForm(ShowHideForm form){
         parentForm=form;
     }
@@ -45,10 +43,9 @@ public class CityLine extends RelativeLayout {
         point=r.getPoint();
         startCity=r.getStarPoint();
         endCity=r.getEndPoint();
-        route=r;
 
         if (lengthView!=null)
-            if (r.getDistance()>0) lengthView.setText(String.format("%dм. %s❍. %s⌛", r.getDistance(), StringUtils.intToStr(r.getProfit()),StringUtils.intToStr(r.getTime())));
+            if (r.getDistance()>0) lengthView.setText(String.format(getContext().getString(R.string.route_info_line), r.getDistance(), StringUtils.intToStr(r.getProfit()),StringUtils.intToStr(r.getTime())));
             else lengthView.setText("↝");
         if (startCityView!=null) startCityView.setText(r.getStartName());
         if (endCityView!=null)

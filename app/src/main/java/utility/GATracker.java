@@ -23,7 +23,7 @@ public class GATracker {
     public static void trackHit(String category,String action){
         mTracker.send(new HitBuilders.EventBuilder().setCategory(category).setAction(action).setLabel("Hit").build());
     }
-    public static void trackTime(String category,String action,long time){
+    private static void trackTime(String category, String action, long time){
         mTracker.send(new HitBuilders.TimingBuilder().setCategory(category).setVariable(action).setLabel("Time").setValue(time).build());
     }
     public static void trackException(String action,Exception e){

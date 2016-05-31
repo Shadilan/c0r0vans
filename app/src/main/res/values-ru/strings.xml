@@ -99,5 +99,14 @@
     <string name="nickname">Псевдоним:</string>
     <string name="invite">Приглашение:</string>
     <string name="registration">Регистрация</string>
+    <string name="route_info_line" translatable="false">%dм. %s❍. %s⌛</string>
+    <string name="close">Закрыть</string>
+
+    <string name="fast_actions">Быстрые действия</string>
+    <string name="autoclose">Закрыть окна по действию</string>
+    <string name="location">Местоположение</string>
+    <string name="background_gps">GPS в фоне</string>
+    <string name="gps_rating">Частота GPS</string>
+    <string name="course_on_move">Курс по движению</string>
 
 </resources>

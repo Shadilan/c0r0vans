@@ -49,7 +49,7 @@ public class UpgradeInfo extends LinearLayout implements PlayerInfoLayout {
             l.addView(iv);
             TextView info=new TextView(getContext());
             info.setSingleLine(false);
-            info.setText(u.getName() + "\n" + u.getDescription());
+            info.setText(String.format(getContext().getString(R.string.two_lines), u.getName(), u.getDescription()));
             info.setTextColor(Color.BLACK);
             l.addView(info);
             l.requestLayout();

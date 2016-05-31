@@ -7,7 +7,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         style="@style/MediumText"
-        android:text="Вы уверены"
         android:id="@+id/question"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
@@ -20,7 +19,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Да"
+        android:text="@string/yes"
         style="@style/CommonButton"
         android:id="@+id/confirmButton"
         android:layout_below="@+id/question"
@@ -30,7 +29,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Нет"
+        android:text="@string/no"
         style="@style/CommonButton"
         android:id="@+id/rejectButton"
         android:layout_below="@+id/question"

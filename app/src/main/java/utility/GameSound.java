@@ -20,8 +20,6 @@ public class GameSound {
     private static GameSound instance;
     private SoundPool soundPool;
     private Context context;
-    private float volume=1;
-    private AudioManager audioManager;
     private boolean music_on=false;
     private boolean sound_on=false;
     private int soundStream=-1;
@@ -130,12 +128,11 @@ public class GameSound {
                     .setAudioAttributes(audioAttributes)
                     .build();
         } else {
-            audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+            AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
             float actVolume = (float) audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
             float maxVolume = (float) audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
-            volume = actVolume / maxVolume;
 
-            int counter = 0;
+            //int counter = 0;
 
             soundPool = new SoundPool(10, AudioManager.STREAM_MUSIC, 0);
         }
@@ -157,7 +154,7 @@ public class GameSound {
         }
 
     }
-    public static void updateSettings(){
+    private static void updateSettings(){
         instance.music_on= GameSettings.getInstance().get("MUSIC_ON").equals("Y");
         instance.sound_on= GameSettings.getInstance().get("SOUND_ON").equals("Y");
         if (instance.music_on && instance.musicStream==-1) {playMusic();}

@@ -124,8 +124,9 @@ public class ActionView extends LinearLayout {
         this.removeAllViews();
         Player.getPlayer().higlight(null);
     }
-    LocationListener locationListener;
-    RelativeLayout currentView=null;
+
+    private LocationListener locationListener;
+    private RelativeLayout currentView=null;
 
     public void ShowView(){
         //Очистить вью

@@ -123,7 +123,7 @@ public class Player extends GameObject {
             }
             @Override
             public void postError(JSONObject response) {
-                String error="";
+                //String error="";
                 String message="";
                 try {
                     /*if (response.has("Error"))
@@ -557,7 +557,7 @@ public class Player extends GameObject {
 
                 @Override
                 public void postError(JSONObject response) {
-                    String error="";
+                    //String error="";
                     String message="";
                     try {
                         /*if (response.has("Error"))
@@ -612,7 +612,7 @@ public class Player extends GameObject {
 
                 @Override
                 public void postError(JSONObject response) {
-                    String error="";
+                    //String error="";
                     String message="";
                     try {
                         /*if (response.has("Error"))

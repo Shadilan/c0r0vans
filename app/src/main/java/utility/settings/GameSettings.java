@@ -50,7 +50,7 @@ public class GameSettings extends HashMap<String,String>{
     public static GameSettings getInstance(){
         return instance;
     }
-    public void load(){
+    private void load(){
         SharedPreferences sp=ctx.getSharedPreferences("settings",Context.MODE_PRIVATE);
         this.clear();
         putAll((Map<String, String>) sp.getAll());
@@ -69,8 +69,6 @@ public class GameSettings extends HashMap<String,String>{
     }
 
     private void firstRun(){
-        //Безопасность
-        put("AUTO_LOGIN","N");
         //Отображение
         put("SHOW_AMBUSH_RADIUS","Y");
         put("SHOW_CITY_RADIUS","Y");

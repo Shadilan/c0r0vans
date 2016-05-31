@@ -26,7 +26,6 @@ import utility.settings.SettingsListener;
  */
 public class MyGoogleMap{
     private static GoogleMap map;
-    private static int windowHeight=800;
     private static float clientZoom = GameObject.ICON_MEDIUM;
     private static boolean moveFixed=true;
     private static Marker targetMarker;
@@ -40,7 +39,6 @@ public class MyGoogleMap{
      */
     public static void init(GoogleMap mMap,int Height){
         map=mMap;
-        windowHeight=Height;
         setupMap();
         GameSettings.addSettingsListener(new SettingsListener() {
             @Override

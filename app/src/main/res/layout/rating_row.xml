@@ -6,7 +6,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="1"
         android:id="@+id/playerPlace"
         android:layout_margin="5dp" />
 
@@ -14,7 +13,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="Name of Player"
+
         android:id="@+id/playerName"
         android:layout_margin="5dp" />
 

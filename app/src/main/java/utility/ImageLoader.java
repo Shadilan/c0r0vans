@@ -22,7 +22,7 @@ public class ImageLoader {
     //private static ImageLoader instance;
     private static HashMap<String,Bitmap> images=new HashMap<>();
     private static HashMap<String,Bitmap> markers=new HashMap<>();
-    private static HashMap<String,BitmapDescriptor> descriptors = new HashMap<>();
+    //private static HashMap<String,BitmapDescriptor> descriptors = new HashMap<>();
     /**
      * Load images on start;
      * @param context Application Context
@@ -109,7 +109,7 @@ public class ImageLoader {
 
         //Workaround для решения проблемы белых квадратов
         Bitmap b=BitmapFactory.decodeResource(context.getResources(), R.mipmap.unknown);
-        descriptors.put("unknown", BitmapDescriptorFactory.fromBitmap(Bitmap.createScaledBitmap(b, b.getWidth(), b.getHeight() , false)));
+        //descriptors.put("unknown", BitmapDescriptorFactory.fromBitmap(Bitmap.createScaledBitmap(b, b.getWidth(), b.getHeight() , false)));
 
 
     }

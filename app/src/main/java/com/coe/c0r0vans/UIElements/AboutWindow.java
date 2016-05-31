@@ -34,7 +34,7 @@ public class AboutWindow extends RelativeLayout {
             }
         });
     }
-    public void close(){
+    private void close(){
         if (UIControler.getAlertLayout()==null) return;
         UIControler.getAlertLayout().removeAllViews();
 

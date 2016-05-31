@@ -95,7 +95,8 @@ public class ChooseFaction extends RelativeLayout {
 
 
     }
-    boolean showed=false;
+
+    private boolean showed=false;
     public void show(){
         UIControler.getWindowLayout().removeAllViews();
         UIControler.getWindowLayout().addView(this);

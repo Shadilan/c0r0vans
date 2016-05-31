@@ -32,7 +32,8 @@ public class AmbushItem extends GameObject{
             GATracker.trackException("ObjectLoad",e);
         }
     }
-    ObjectAction cancelAmbush;
+
+    private ObjectAction cancelAmbush;
     public JSONObject getJSON() throws JSONException {
         JSONObject result=new JSONObject();
         result.put("GUID",GUID);

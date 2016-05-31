@@ -13,8 +13,8 @@ import com.coe.c0r0vans.UIElements.UIControler;
  * Запрос подтверждения
  */
 public class ConfirmWindow extends RelativeLayout {
-    Runnable confirm; //Операция согласия
-    Runnable reject;
+    private Runnable confirm; //Операция согласия
+    private Runnable reject;
     public ConfirmWindow(Context context) {
         super(context);
         init();

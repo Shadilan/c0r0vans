@@ -115,7 +115,7 @@ public class City extends GameObject{
 
     }
 
-    public boolean upgradeAvaible(){
+    private boolean upgradeAvaible(){
         Upgrade up=Player.getPlayer().getNextUpgrade(upgrade);
         if (up == null ) return true;
         float raceBonus=0;
@@ -178,15 +178,15 @@ public class City extends GameObject{
             else zone.setStrokeColor(Color.DKGRAY);
 
     }
-    public long getInfluence1() {
+    private long getInfluence1() {
         return influence1;
     }
 
-    public long getInfluence2() {
+    private long getInfluence2() {
         return influence2;
     }
 
-    public long getInfluence3() {
+    private long getInfluence3() {
         return influence3;
     }
 

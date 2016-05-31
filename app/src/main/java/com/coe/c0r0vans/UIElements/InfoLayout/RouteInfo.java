@@ -157,12 +157,10 @@ public class RouteInfo extends RelativeLayout implements PlayerInfoLayout {
             btn.setClickable(true);
             btn.setEnabled(true);
         }
-        Log.d("Timing","Время:"+(new Date().getTime()));
         TextView tv= (TextView) findViewById(R.id.pageNumber);
 
-        tv.setText(String.valueOf(page+1)+"/"+max_page);
+        tv.setText(String.format(getContext().getString(R.string.pages), page + 1, max_page));
         GameSettings.getInstance().put("RoutePage", String.valueOf(page));
-        Log.d("Timing", "Время:" + (new Date().getTime()));
         //GameSettings.getInstance().save();
         GATracker.trackTimeStart("InfoLayout","RoutesUpdate ");
 

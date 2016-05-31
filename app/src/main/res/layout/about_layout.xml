@@ -38,7 +38,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="close"
+        android:text="@string/close"
         style="@style/CommonButton"
         android:id="@+id/closeWindow"
         android:layout_alignParentBottom="true"

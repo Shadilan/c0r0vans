@@ -24,7 +24,6 @@ public class Settings extends RelativeLayout {
     CheckBox useTilt;
     CheckBox gpsOn;
     SeekBar gpsRate;
-    CheckBox autoLogin;
     CheckBox netErrorLog;
     CheckBox usePadding;
     CheckBox trackBearing;
@@ -61,7 +60,7 @@ public class Settings extends RelativeLayout {
         useTilt=(CheckBox) findViewById(R.id.useTilt);
         gpsOn=(CheckBox) findViewById(R.id.gpsOn);
         gpsRate=(SeekBar) findViewById(R.id.gpsRate);
-        autoLogin=(CheckBox) findViewById(R.id.autoLogin);
+
         netErrorLog= (CheckBox) findViewById(R.id.netErrorLogOn);
         usePadding= (CheckBox) findViewById(R.id.usePadding);
         trackBearing= (CheckBox) findViewById(R.id.trackBearing);
@@ -76,7 +75,7 @@ public class Settings extends RelativeLayout {
         apply_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                GameSettings.set("AUTO_LOGIN", autoLogin.isChecked() ? "Y" : "N");
+
 
                 GameSettings.set("SHOW_AMBUSH_RADIUS", ambushRad.isChecked() ? "Y" : "N");
                 GameSettings.set("SHOW_CITY_RADIUS", cityRad.isChecked() ? "Y" : "N");
@@ -131,7 +130,6 @@ public class Settings extends RelativeLayout {
             refreshRate=Integer.parseInt(strRate)-1;
         }
         gpsRate.setProgress(refreshRate);
-        autoLogin.setChecked("Y".equals(GameSettings.getInstance().get("AUTO_LOGIN")));
     }
 
     public void show() {

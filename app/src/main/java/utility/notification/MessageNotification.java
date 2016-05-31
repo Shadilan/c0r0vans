@@ -69,7 +69,7 @@ public class MessageNotification {
 
         final String title = res.getString(R.string.app_name);
         //Todo: Накопление уведомлений
-        int resID=R.raw.default_notification;
+        //int resID=R.raw.default_notification;
         number++;
         final NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
 

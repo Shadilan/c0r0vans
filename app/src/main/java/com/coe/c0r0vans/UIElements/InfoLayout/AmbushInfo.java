@@ -20,8 +20,8 @@ import utility.GPSInfo;
  * Информация о засадах
  */
 public class AmbushInfo extends LinearLayout implements PlayerInfoLayout {
-    LinearLayout ambushInfo;
-    ShowHideForm parent;
+    private LinearLayout ambushInfo;
+    private ShowHideForm parent;
 
     public AmbushInfo(Context context) {
         super(context);
