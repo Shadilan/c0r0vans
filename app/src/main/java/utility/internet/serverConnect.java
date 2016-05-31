@@ -345,7 +345,7 @@ public class serverConnect {
                             Log.d("URLRequest",response.toString());
                             clearListener();
 
-                            if (response.has("Error")) {
+                            if (response.has("Error") || (response.has("Result") && !response.getString("Result").equals("OK"))) {
                                 switch (getType()) {
                                     case AUTHORIZE:
                                     case REGISTER:

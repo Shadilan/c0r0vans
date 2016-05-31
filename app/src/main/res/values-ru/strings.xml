@@ -108,5 +108,6 @@
     <string name="background_gps">GPS в фоне</string>
     <string name="gps_rating">Частота GPS</string>
     <string name="course_on_move">Курс по движению</string>
+    <string name="leftHirelings">Можно нанять:</string>
 
 </resources>

@@ -121,4 +121,5 @@ All rights reserved to Circle of Eternity</string>
     <string name="qiestion" translatable="false">\?</string>
     <string name="pages" formatted="false">%d/%d</string>
     <string name="two_lines" formatted="false">%s\n%s</string>
+    <string name="leftHirelings">Left to hire:</string>
 </resources>

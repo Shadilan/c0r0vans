@@ -113,6 +113,30 @@
             android:id="@+id/ambushSetInfo"
             android:layout_gravity="right"
             style="@style/MediumTextNP"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/hirelings"
+            style="@style/MediumTextNP"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/hirelings"
+            android:layout_gravity="right"
+            style="@style/MediumTextNP"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/leftHirelings"
+            style="@style/MediumTextNP"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/leftHirelings"
+            android:layout_gravity="right"
+            style="@style/MediumTextNP"/>
     </GridLayout>
 
     <ImageView

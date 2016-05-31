@@ -46,6 +46,9 @@ public class Player extends GameObject {
     private Route currentR;
     private int trade;
     private int profit=0;
+    private int hirelings;
+    private int maxHirelings;
+    private int leftToHire;
 
     public static void instance(){
         player=new Player();
@@ -292,6 +295,9 @@ public class Player extends GameObject {
             if (obj.has("AmbushRadius")) AmbushRadius=obj.getInt("AmbushRadius");
             if (obj.has("ActionDistance")) ActionDistance=obj.getInt("ActionDistance");
             if (obj.has("Race")) race=obj.getInt("Race");
+            if (obj.has("Hirelings")) hirelings=obj.getInt("Hirelings"); else hirelings=100;
+            if (obj.has("LeftToHire")) leftToHire=obj.getInt("LeftToHire"); else leftToHire=100;
+
             if (race!=0) GameSettings.setFaction(race);
             //TODO: Здесь не должно быть нула. Видимо маркер не инициализуерся в игроке.
             if (zone!=null) zone.setRadius(ActionDistance);
@@ -502,6 +508,10 @@ public class Player extends GameObject {
 
     public int getProfit() {
         return profit;
+    }
+
+    public int getHirelings() {
+        return hirelings;
     }
 
 
