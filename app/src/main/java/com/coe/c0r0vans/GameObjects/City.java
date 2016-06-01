@@ -10,6 +10,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
@@ -236,6 +237,14 @@ public class City extends GameObject{
     private boolean upgradeAvaible(){
         Upgrade up=Player.getPlayer().getNextUpgrade(upgrade);
         if (up == null ) return true;
+        float raceBonus=discount();
+        int upcost= (int) (up.getCost()*raceBonus);
+
+        return !( (up.getReqCityLev() > Level)
+                || (upcost >= Player.getPlayer().getGold())
+                || (up.getLevel() > Player.getPlayer().getLevel() - 1));
+    }
+    private float discount(){
         float raceBonus=0;
         long infsum=influence1+influence2+influence3;
         if (infsum>0) {
@@ -248,13 +257,7 @@ public class City extends GameObject{
                     break;
             }
         }
-
-        raceBonus=((1f-raceBonus/4)*(100f-Player.getPlayer().getTrade())/100f);
-        int upcost= (int) (up.getCost()*raceBonus);
-
-        return !( (up.getReqCityLev() > Level)
-                || (upcost >= Player.getPlayer().getGold())
-                || (up.getLevel() > Player.getPlayer().getLevel() - 1));
+        return ((1f-raceBonus/4)*(100f-Player.getPlayer().getTrade())/100f);
     }
     public String getName(){return (Name+" ур."+Level) ;}
 
@@ -315,6 +318,8 @@ public class City extends GameObject{
     private class CityWindow extends RelativeLayout implements  GameObjectView,ShowHideForm{
         City city;
         CityWindow self;
+        private int currentCount=1;
+
         public CityWindow(Context context) {
             super(context);
             init();
@@ -488,6 +493,72 @@ public class City extends GameObject{
                     confirmWindow.show();
                 }
             });
+            findViewById(R.id.hire_plus).setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //Проверить что хватает денег
+
+                    SeekBar seekBar= (SeekBar) findViewById(R.id.hireCount);
+                    int priceForOne= (int) (1000*discount());
+                    int max=Math.min(Player.getPlayer().getLeftToHire(),Player.getPlayer().getGold()/priceForOne);
+                    int price=(currentCount+1)*priceForOne;
+                    //todo чтото здесь не так.
+                    if (price<Player.getPlayer().getGold()) {
+                        //Прибавить количество
+                        currentCount++;
+                        //Отразить количество
+                        ((TextView)findViewById(R.id.hire_amount)).setText(StringUtils.intToStr(currentCount));
+                        //Отразить цену
+                        ((TextView)findViewById(R.id.hire_price)).setText(StringUtils.intToStr(price));
+                        seekBar.setProgress(currentCount);
+                    }
+                    if (currentCount>max){
+                        currentCount=max;
+                        //Отразить количество
+                        ((TextView)findViewById(R.id.hire_amount)).setText(StringUtils.intToStr(currentCount));
+                        //Отразить цену
+                        ((TextView)findViewById(R.id.hire_price)).setText(StringUtils.intToStr(price));
+                        seekBar.setProgress(currentCount);
+                    }
+                    //Пересчитать максимум
+                    seekBar.setMax(max);
+
+                }
+            });
+            findViewById(R.id.hire_minus).setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //Проверить что хватает денег
+                    SeekBar seekBar= (SeekBar) findViewById(R.id.hireCount);
+                    int priceForOne= (int) (1000*discount());
+                    int price=(currentCount-1)*priceForOne;
+                    int max=Math.min(Player.getPlayer().getLeftToHire(),Player.getPlayer().getGold()/priceForOne);
+                    if (currentCount>max){
+                        currentCount=max;
+                        //Отразить количество
+                        ((TextView)findViewById(R.id.hire_amount)).setText(StringUtils.intToStr(currentCount));
+                        //Отразить цену
+                        ((TextView)findViewById(R.id.hire_price)).setText(StringUtils.intToStr(price));
+                        seekBar.setProgress(currentCount);
+                    }
+                    if (currentCount>1) {
+                        //Прибавить количество
+                        currentCount--;
+                        //Отразить количество
+                        ((TextView)findViewById(R.id.hire_amount)).setText(StringUtils.intToStr(currentCount));
+                        //Отразить цену
+                        ((TextView)findViewById(R.id.hire_price)).setText(StringUtils.intToStr(price));
+                        seekBar.setProgress(currentCount);
+                    }
+                    //Пересчитать максимум
+
+                    seekBar.setMax(max);
+
+
+
+                }
+            });
+
             findViewById(R.id.restart_route).setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {

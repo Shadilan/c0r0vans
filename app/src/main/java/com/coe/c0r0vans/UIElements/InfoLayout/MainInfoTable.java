@@ -67,7 +67,7 @@ public class MainInfoTable extends LinearLayout implements PlayerInfoLayout {
             ambushes_left.setText(StringUtils.intToStr(Player.getPlayer().getAmbushLeft()));
             profit.setText(StringUtils.intToStr(Player.getPlayer().getProfit()));
             hirelings.setText(StringUtils.intToStr(Player.getPlayer().getHirelings()));
-            leftToHire.setText(StringUtils.intToStr(Player.getPlayer().getHirelings()));
+            leftToHire.setText(StringUtils.intToStr(Player.getPlayer().getLeftToHire()));
             if (Player.getPlayer().getRace() == 1) {
                 faction.setImageResource(R.mipmap.guild);
             } else if (Player.getPlayer().getRace() == 2) {

@@ -514,6 +514,10 @@ public class Player extends GameObject {
         return hirelings;
     }
 
+    public int getLeftToHire() {
+        return leftToHire;
+    }
+
 
     class ambushCreate extends RelativeLayout implements GameObjectView{
 
