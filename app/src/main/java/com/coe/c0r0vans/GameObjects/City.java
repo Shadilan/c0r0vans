@@ -930,7 +930,7 @@ public class City extends GameObject{
             ImageButton btn= (ImageButton) findViewById(R.id.buy);
             btn.setEnabled(city.upgradeAvaible());
             btn.setImageBitmap(ImageLoader.getImage(city.upgrade + "_buy"));
-
+            updateAction(getContext());
 
             findViewById(R.id.start).setOnClickListener(new OnClickListener() {
                 @Override
