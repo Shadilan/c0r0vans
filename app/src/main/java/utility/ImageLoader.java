@@ -105,6 +105,7 @@ public class ImageLoader {
         images.put("paladin",BitmapFactory.decodeResource(context.getResources(), R.mipmap.paladin));
         images.put("paladin_buy",BitmapFactory.decodeResource(context.getResources(), R.mipmap.paladin_buy));
         images.put("create_city",BitmapFactory.decodeResource(context.getResources(), R.mipmap.create_city));
+        images.put("founder",BitmapFactory.decodeResource(context.getResources(), R.mipmap.founder));
         images.put("unknown",BitmapFactory.decodeResource(context.getResources(),R.mipmap.unknown));
 
         //Workaround для решения проблемы белых квадратов

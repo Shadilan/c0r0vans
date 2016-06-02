@@ -518,6 +518,14 @@ public class Player extends GameObject {
         return leftToHire;
     }
 
+    public void setGold(int gold) {
+        this.Gold = gold;
+    }
+
+    public void setHirelings(int hirelings) {
+        this.hirelings = hirelings;
+    }
+
 
     class ambushCreate extends RelativeLayout implements GameObjectView{
 

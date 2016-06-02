@@ -30,6 +30,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import utility.GATracker;
 import utility.GPSInfo;
 import utility.GameSound;
 import utility.ImageLoader;
@@ -497,68 +498,145 @@ public class City extends GameObject{
                 @Override
                 public void onClick(View v) {
                     //Проверить что хватает денег
-
-                    SeekBar seekBar= (SeekBar) findViewById(R.id.hireCount);
-                    int priceForOne= (int) (1000*discount());
-                    int max=Math.min(Player.getPlayer().getLeftToHire(),Player.getPlayer().getGold()/priceForOne);
-                    int price=(currentCount+1)*priceForOne;
-                    //todo чтото здесь не так.
-                    if (price<Player.getPlayer().getGold()) {
-                        //Прибавить количество
-                        currentCount++;
-                        //Отразить количество
-                        ((TextView)findViewById(R.id.hire_amount)).setText(StringUtils.intToStr(currentCount));
-                        //Отразить цену
-                        ((TextView)findViewById(R.id.hire_price)).setText(StringUtils.intToStr(price));
-                        seekBar.setProgress(currentCount);
-                    }
-                    if (currentCount>max){
-                        currentCount=max;
-                        //Отразить количество
-                        ((TextView)findViewById(R.id.hire_amount)).setText(StringUtils.intToStr(currentCount));
-                        //Отразить цену
-                        ((TextView)findViewById(R.id.hire_price)).setText(StringUtils.intToStr(price));
-                        seekBar.setProgress(currentCount);
-                    }
-                    //Пересчитать максимум
-                    seekBar.setMax(max);
-
+                    countHire(currentCount+1);
                 }
             });
             findViewById(R.id.hire_minus).setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     //Проверить что хватает денег
-                    SeekBar seekBar= (SeekBar) findViewById(R.id.hireCount);
-                    int priceForOne= (int) (1000*discount());
-                    int price=(currentCount-1)*priceForOne;
-                    int max=Math.min(Player.getPlayer().getLeftToHire(),Player.getPlayer().getGold()/priceForOne);
-                    if (currentCount>max){
-                        currentCount=max;
-                        //Отразить количество
-                        ((TextView)findViewById(R.id.hire_amount)).setText(StringUtils.intToStr(currentCount));
-                        //Отразить цену
-                        ((TextView)findViewById(R.id.hire_price)).setText(StringUtils.intToStr(price));
-                        seekBar.setProgress(currentCount);
+                    countHire(currentCount-1);
+                }
+            });
+            SeekBar seekBar= (SeekBar) findViewById(R.id.hireCount);
+            seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                @Override
+                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                    if (!fromUser) {
+                        return;
                     }
-                    if (currentCount>1) {
-                        //Прибавить количество
-                        currentCount--;
-                        //Отразить количество
-                        ((TextView)findViewById(R.id.hire_amount)).setText(StringUtils.intToStr(currentCount));
-                        //Отразить цену
-                        ((TextView)findViewById(R.id.hire_price)).setText(StringUtils.intToStr(price));
-                        seekBar.setProgress(currentCount);
-                    }
-                    //Пересчитать максимум
+                   countHire(progress);
 
-                    seekBar.setMax(max);
+                }
 
+                @Override
+                public void onStartTrackingTouch(SeekBar seekBar) {
 
+                }
+
+                @Override
+                public void onStopTrackingTouch(SeekBar seekBar) {
 
                 }
             });
+            findViewById(R.id.buyAmbush).setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ObjectAction hire=new ObjectAction(city) {
+                        public int amount=currentCount;
+                        public int gold=0;
+                        @Override
+                        public Bitmap getImage() {
+                            return null;
+                        }
 
+                        @Override
+                        public String getCommand() {
+                            return "HirePeople";
+                        }
+
+                        @Override
+                        public void preAction() {
+                            int priceForOne= (int) (1000*discount());
+                            int price=(amount)*priceForOne;
+                            gold=price;
+                            Player.getPlayer().setGold(Player.getPlayer().getGold());
+                        }
+
+                        @Override
+                        public void postAction(JSONObject response) {
+                            try {
+                                if (response.has("Result") && "OK".equals(response.getString("Result"))) {
+                                    Player.getPlayer().setHirelings(Player.getPlayer().getHirelings()+amount);
+                                    Essages.addEssage("Приобретено "+amount+" наемников за "+gold+" золота.");
+                                } else
+                                {
+                                    Player.getPlayer().setGold(Player.getPlayer().getGold()+gold);
+                                    if (response.has("Result")){
+                                        String err=response.getString("Result");
+                                        switch (err){
+                                            case "L0001":
+                                                //todo:Сделать вызов логина;
+                                                Essages.addEssage("Связь с сервером потеряна. Перезапустите приложение.");
+                                                break;
+                                            case "O1301":
+                                                Essages.addEssage("Действие не выполнено. Такого города не существует.");
+                                                break;
+                                            case "O1302":
+                                                Essages.addEssage("Вы находитесь слишком далеко от города.");
+                                                break;
+                                            case "O1303":
+                                                Essages.addEssage("Недостаточно денег для покупки.");
+                                                break;
+                                            case "O1304":
+                                                Essages.addEssage("Не хватает лидерства для покупки.");
+                                                break;
+                                                default:
+                                                    if (response.has("Message")) Essages.addEssage(response.getString("Message"));
+                                                    else Essages.addEssage("Неопределенная ошибка");
+
+                                        }
+                                    } else
+                                    {
+                                        Essages.addEssage("Неопределенная ошибка");
+                                    }
+                                }
+                            } catch (JSONException e) {
+                                GATracker.trackException("Hire","PostAction Error JSON");
+                            }
+                        }
+
+                        @Override
+                        public void postError(JSONObject response) {
+                            Player.getPlayer().setGold(Player.getPlayer().getGold()+gold);
+                            try {
+                            if (response.has("Result")){
+                                String err=response.getString("Result");
+                                switch (err){
+                                    case "L0001":
+                                        //todo:Сделать вызов логина;
+                                        Essages.addEssage("Связь с сервером потеряна. Перезапустите приложение.");
+                                        break;
+                                    case "O1301":
+                                        Essages.addEssage("Действие не выполнено. Такого города не существует.");
+                                        break;
+                                    case "O1302":
+                                        Essages.addEssage("Вы находитесь слишком далеко от города.");
+                                        break;
+                                    case "O1303":
+                                        Essages.addEssage("Недостаточно денег для покупки.");
+                                        break;
+                                    case "O1304":
+                                        Essages.addEssage("Не хватает лидерства для покупки.");
+                                        break;
+                                    default:
+                                        if (response.has("Message")) Essages.addEssage(response.getString("Message"));
+                                        else Essages.addEssage("Неопределенная ошибка");
+
+                                }
+                            } else
+                            {
+                                Essages.addEssage("Неопределенная ошибка");
+                            }
+                            } catch (JSONException e) {
+                                GATracker.trackException("Hire","ErrorAction Error JSON");
+                            }
+                        }
+                    };
+                    serverConnect.getInstance().hirePeople(hire,GPSInfo.getInstance().GetLat(),GPSInfo.getInstance().GetLng(),city.getGUID(),currentCount);
+                    countHire(1);
+                }
+            });
             findViewById(R.id.restart_route).setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -665,6 +743,23 @@ public class City extends GameObject{
                     b.setChecked(true);
                     findViewById(R.id.infoPanel).setVisibility(VISIBLE);
             }
+            countHire(1);
+        }
+        private boolean countHire(int newValue){
+
+            int priceForOne= (int) (1000*discount());
+            int max=Math.min(Player.getPlayer().getLeftToHire(),Player.getPlayer().getGold()/priceForOne);
+            int current=newValue;
+            if (current<1) current=1;
+            if (current>max) current=currentCount;
+            if (current>max) current=max;
+            currentCount=current;
+            int price=(currentCount)*priceForOne;
+            ((TextView)findViewById(R.id.hire_price)).setText(String.format(getContext().getString(R.string.hire), currentCount, StringUtils.intToStr(price)));
+            SeekBar seekBar= (SeekBar) findViewById(R.id.hireCount);
+            seekBar.setProgress(currentCount);
+            seekBar.setMax(max);
+            return currentCount==newValue;
         }
         private void countRoutes(){
             int amount=0;
@@ -740,6 +835,17 @@ public class City extends GameObject{
                         btn.setAlpha(0.5f);
                     }
                 }
+                ImageButton btn= (ImageButton) findViewById(R.id.buyAmbush);
+                if (currentCount>0 && inZone) {
+                    btn.setClickable(true);
+                    btn.setEnabled(true);
+                    btn.setAlpha(1f);
+                } else
+                {
+                    btn.setClickable(false);
+                    btn.setEnabled(false);
+                    btn.setAlpha(0.5f);
+                }
             }
             else
             {
@@ -747,6 +853,12 @@ public class City extends GameObject{
                 findViewById(R.id.finishRoute).setVisibility(GONE);
                 {
                     ImageButton btn= (ImageButton) findViewById(R.id.buyUpgrade);
+                    btn.setClickable(false);
+                    btn.setEnabled(false);
+                    btn.setAlpha(0.5f);
+                }
+                {
+                    ImageButton btn= (ImageButton) findViewById(R.id.buyAmbush);
                     btn.setClickable(false);
                     btn.setEnabled(false);
                     btn.setAlpha(0.5f);

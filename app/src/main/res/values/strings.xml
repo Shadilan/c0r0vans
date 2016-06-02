@@ -122,4 +122,6 @@ All rights reserved to Circle of Eternity</string>
     <string name="pages" formatted="false">%d/%d</string>
     <string name="two_lines" formatted="false">%s\n%s</string>
     <string name="leftHirelings">Left to hire:</string>
+    <string name="hire" formatted="false">Hire %d h. for %s</string>
+    <string name="server_unavaible">Сервер не доступен.Попытка через 30 сек.</string>
 </resources>

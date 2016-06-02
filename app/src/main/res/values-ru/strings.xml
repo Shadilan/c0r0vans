@@ -109,5 +109,7 @@
     <string name="gps_rating">Частота GPS</string>
     <string name="course_on_move">Курс по движению</string>
     <string name="leftHirelings">Можно нанять:</string>
+    <string name="hire" formatted="false">Нанять %d ч. за %s золота.</string>
+    <string name="server_unavaible">Сервер не доступен.Попытка через 30 сек.</string>
 
 </resources>

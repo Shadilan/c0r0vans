@@ -294,7 +294,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/buyPanel"
-                android:visibility="visible">
+                android:visibility="gone">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -343,9 +343,10 @@
                     android:layout_alignTop="@+id/buyAmbush"
                     android:layout_alignLeft="@+id/hire_minus"
                     android:layout_alignStart="@+id/hire_minus"
-                    android:layout_toLeftOf="@+id/hire_amount"
-                    android:layout_toStartOf="@+id/hire_amount"
-                    android:gravity="center_vertical|center_horizontal" />
+                    android:gravity="center_vertical|center_horizontal"
+                    android:layout_toLeftOf="@+id/buyAmbush"
+                    android:layout_toStartOf="@+id/buyAmbush"
+                    android:text="@string/hire" />
 
                 <Button
                     style="?android:attr/buttonStyleSmall"
@@ -370,30 +371,15 @@
                     android:layout_toEndOf="@+id/hire_minus"
                     android:indeterminate="false" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:text="1000"
-                    android:id="@+id/hire_amount"
-                    android:layout_alignBottom="@+id/buyAmbush"
-                    android:layout_toLeftOf="@+id/buyAmbush"
-                    android:layout_toStartOf="@+id/buyAmbush"
-                    android:minWidth="80dp"
-                    android:maxWidth="80dp"
-                    android:layout_alignTop="@+id/hire_price"
-                    android:textAlignment="gravity"
-                    android:gravity="center_vertical|center_horizontal" />
-
                 <Button
                     style="?android:attr/buttonStyleSmall"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="+"
                     android:id="@+id/hire_plus"
-                    android:layout_toLeftOf="@+id/hire_amount"
-                    android:layout_toStartOf="@+id/hire_amount"
-                    android:layout_below="@+id/hire_price" />
+                    android:layout_toLeftOf="@+id/buyAmbush"
+                    android:layout_toStartOf="@+id/buyAmbush"
+                    android:layout_alignTop="@+id/hireCount" />
 
             </RelativeLayout>
 

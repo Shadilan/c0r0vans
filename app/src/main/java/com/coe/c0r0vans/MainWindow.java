@@ -525,8 +525,19 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
             GATracker.trackException("BackPressed",e);
         }
     }
+    int signCall=0;
     private  void signIn(){
-        Log.d("ProcedureCall","signIn");
+        if (signCall>3){
+            ((TextView)findViewById(R.id.status)).setText(R.string.server_unavaible);
+            signCall=0;
+            myHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    signIn();
+                }
+            },30000);
+        }
+
         serverConnect.getInstance().connect(getResources().getString(R.string.serveradress), getApplicationContext());
         GATracker.trackTimeStart("System","SignIn");
         ((TextView)findViewById(R.id.status)).setText(R.string.enter_google_account);
