@@ -111,5 +111,6 @@
     <string name="leftHirelings">Можно нанять:</string>
     <string name="hire" formatted="false">Нанять %d ч. за %s золота.</string>
     <string name="server_unavaible">Сервер не доступен.Попытка через 30 сек.</string>
+    <string name="city_created" >Поселение возникло в %d метрах от вас.</string>
 
 </resources>

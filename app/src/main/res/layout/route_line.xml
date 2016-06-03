@@ -7,14 +7,6 @@
     <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/removeButton"
-        android:layout_centerVertical="true"
-        android:src="@mipmap/closebutton"
-        style="@style/CommonButton" />
-
-    <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:id="@+id/showButton"
         android:visibility="invisible"
         android:src="@mipmap/showbutton"
@@ -29,8 +21,6 @@
         android:clickable="true"
         android:id="@+id/startCity"
         android:layout_alignParentTop="true"
-        android:layout_toRightOf="@+id/removeButton"
-        android:layout_toEndOf="@+id/removeButton"
         style="@style/SmallText" />
     <TextView
         android:layout_width="wrap_content"
@@ -40,9 +30,7 @@
         android:id="@+id/endCity"
         android:gravity="center_vertical|center_horizontal"
         style="@style/SmallText"
-        android:layout_below="@+id/startCity"
-        android:layout_toRightOf="@+id/removeButton"
-        android:layout_toEndOf="@+id/removeButton" />
+        android:layout_below="@+id/startCity" />
 
     <TextView
         android:layout_width="wrap_content"

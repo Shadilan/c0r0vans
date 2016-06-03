@@ -774,7 +774,6 @@ public class City extends GameObject{
                     l.addView(line);
                     line.setData(r);
                     line.setParentForm(self);
-                    line.setOnRemoveClick(r.getAction(true));
                     line.setTarget(r.getGUID());
                 }
                 ((TextView)findViewById(R.id.routeCount)).setText(String.valueOf(amount));

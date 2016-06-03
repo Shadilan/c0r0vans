@@ -7,8 +7,6 @@ import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.coe.c0r0vans.ConfirmWindow;
-import com.coe.c0r0vans.GameObjects.ObjectAction;
 import com.coe.c0r0vans.GameObjects.Route;
 import com.coe.c0r0vans.MyGoogleMap;
 import com.coe.c0r0vans.R;
@@ -17,7 +15,6 @@ import com.google.android.gms.maps.model.LatLng;
 
 import utility.GATracker;
 import utility.StringUtils;
-import utility.internet.serverConnect;
 
 
 /**
@@ -27,8 +24,6 @@ public class CityLine extends RelativeLayout {
     private TextView startCityView;
     private TextView endCityView;
     private TextView lengthView;
-    private ImageButton removeButton;
-    private ObjectAction removeAction;
     private ImageButton showButton;
     private String target;
     private LatLng point;
@@ -58,9 +53,6 @@ public class CityLine extends RelativeLayout {
     public void setTarget(String guid){
         target=guid;
     }
-    public void setOnRemoveClick(ObjectAction removeAction){
-        this.removeAction=removeAction;
-    }
     public CityLine(Context context) {
         super(context);
         init();
@@ -81,7 +73,7 @@ public class CityLine extends RelativeLayout {
         try {
             afterInit();
         } catch (Exception e){
-            GATracker.trackException("CityLine",e);
+            GATracker.trackException("CityLine","Initialization error");
         }
 
     }
@@ -111,24 +103,6 @@ public class CityLine extends RelativeLayout {
                     MyGoogleMap.showPoint(endCity);
                     if (parentForm!=null) parentForm.Hide();
                 }
-            }
-        });
-        removeButton= (ImageButton) findViewById(R.id.removeButton);
-        removeButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ConfirmWindow confirmWindow=new ConfirmWindow(getContext());
-                if ("".equals(endCityView.getText())) confirmWindow.setText("Отменить неоконченный маршрут?");
-                else confirmWindow.setText("Отменить маршрут \""+startCityView.getText() + " - " + endCityView.getText() + "\"?");
-                confirmWindow.setConfirmAction(new Runnable() {
-                    @Override
-                    public void run() {
-                        serverConnect.getInstance().ExecCommand(removeAction, target, 0, 0, 0, 0);
-                        removeButton.setVisibility(INVISIBLE);
-                    }
-                });
-                confirmWindow.show();
-
             }
         });
         showButton= (ImageButton) findViewById(R.id.showButton);

@@ -405,9 +405,7 @@ public class Player extends GameObject {
         return AmbushesMax;
     }
 
-    public int getMostReachIn() {
-        return MostIn;
-    }
+
 
     public ArrayList<Upgrade> getUpgrades() {
         return Upgrades;
@@ -604,6 +602,7 @@ public class Player extends GameObject {
                 }
             });
             createCity=new ObjectAction(Player.getPlayer()) {
+                LatLng coord=new LatLng(SelectedObject.getInstance().getPoint().latitude,SelectedObject.getInstance().getPoint().longitude);
                 @Override
                 public Bitmap getImage() {
                     return ImageLoader.getImage("create_city");
@@ -621,13 +620,14 @@ public class Player extends GameObject {
 
                 @Override
                 public void postAction(JSONObject response) {
-                    Essages.addEssage("Запрос на содзание города обработан.");
+                    int distance= (int) GPSInfo.getDistance(GPSInfo.getInstance().getLatLng(),coord);
+                    Essages.addEssage("Поселение было создано в "+ distance+" метрах.");
                     if (response.has("City")){
                         try {
                             City city=new City(MyGoogleMap.getMap(),response.getJSONObject("City"));
                             GameObjects.getInstance().put(city.getGUID(),city);
                         } catch (JSONException e) {
-                            e.printStackTrace();
+                            GATracker.trackException("CreateCity","PostAction Error.");
                         }
                     }
                 }

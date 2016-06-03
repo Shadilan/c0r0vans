@@ -1,6 +1,5 @@
 package com.coe.c0r0vans.GameObjects;
 
-import android.graphics.Bitmap;
 import android.graphics.Color;
 
 import com.google.android.gms.maps.GoogleMap;
@@ -11,10 +10,6 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import utility.GameSound;
-import utility.ImageLoader;
-import utility.internet.serverConnect;
-import utility.notification.Essages;
 import utility.settings.GameSettings;
 
 /**
@@ -118,36 +113,7 @@ public class Route extends GameObject{
         catch (JSONException e) {
             e.printStackTrace();
         }
-        dropRoute=new ObjectAction(this) {
-            @Override
-            public Bitmap getImage() {
-                return ImageLoader.getImage("closebutton");
-            }
 
-
-            @Override
-            public String getCommand() {
-                if (FinishName.equals("null")) return "DropUnfinishedRoute";
-                else return "DropRoute";
-            }
-
-            @Override
-            public void preAction() {
-
-            }
-            //Todo: Another sound;
-            @Override
-            public void postAction(JSONObject response) {
-                GameSound.playSound(GameSound.START_ROUTE_SOUND);
-                serverConnect.getInstance().getPlayerInfo();
-                Essages.addEssage("Караван из "+getStartName()+" в "+getFinishName()+" отменен.");
-            }
-
-            @Override
-            public void postError(JSONObject response) {
-                serverConnect.getInstance().getPlayerInfo();
-            }
-        };
     }
 
     @Override
@@ -156,15 +122,11 @@ public class Route extends GameObject{
     }
 
 
-    private ObjectAction dropRoute;
-
     public LatLng getPoint(){
         if (Lat==0 && Lng==0) return null;
         else return new LatLng(Lat/1e6,Lng/1e6);
     }
-    public ObjectAction getAction( boolean inZone){
-        return dropRoute;
-    }
+
 
     public String getStartGuid() {
         return StartGUID;

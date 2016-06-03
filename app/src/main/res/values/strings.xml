@@ -123,5 +123,6 @@ All rights reserved to Circle of Eternity</string>
     <string name="two_lines" formatted="false">%s\n%s</string>
     <string name="leftHirelings">Left to hire:</string>
     <string name="hire" formatted="false">Hire %d h. for %s</string>
-    <string name="server_unavaible">Сервер не доступен.Попытка через 30 сек.</string>
+    <string name="server_unavaible">Server unavaible.\nRetry in 30 seconds.</string>
+    <string name="city_created">Town appear near you at %d meters.</string>
 </resources>
