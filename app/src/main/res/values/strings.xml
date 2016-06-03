@@ -54,10 +54,10 @@
     <string name="legue_name">League of Independent merchants</string>
     <string name="legue_text">Независимые купцы существовали всегда. В поисках выгоды они все время продумывали новые торговые маршруты, сокращали издержки и повышали привлекательность своей продукции для покупателя. Однако конкуренция на рынке не была честной - и Гильдия и Альянс использовали свое влияние для создания неблагоприятных условий успешным купцам. Для защиты своих интересов независимые купцы создали Лигу. Не обладая монопольным положением ни в одной отрасли Лига уверенно чувствует себя во всех областях. Умение Лиги работать с покупателями и максимизировать свою прибыль позволяет ей конкурировать с Гильдией и Альянсом в их традиционных сферах влияния. В настоящее время все три организации обладают примерно равным влиянием и потенциалом.</string>
     <string name="version" translatable="false">2.0.19a</string>
-    <string name="distance">%dм</string>
+    <string name="distance">%1$dм</string>
     <string name="upgrade_bought">Upgrade "%s" has bought.</string>
-    <string name="route_finish">Rote has finished in "%s"</string>
-    <string name="route_started">Route has started in "%s"</string>
+    <string name="route_finish">Rote has finished in "%1$s"</string>
+    <string name="route_started">Route has started in "%1$s"</string>
     <string name="login_button">Login</string>
     <string name="login_button_run">Login …</string>
     <string name="password_label">Password</string>
@@ -75,7 +75,7 @@ Software provide for alpha test purpose. If you are not accepted for alpha test 
 
 All rights reserved to Circle of Eternity</string>
     <string name="about_title">About…</string>
-    <string name="distance_mesure" formatted="false">%dм</string>
+    <string name="distance_mesure" >%1$dм</string>
     <string name="title_activity_loading">Corovans Loading</string>
     <string name="LogoText">Logo of Circle of Eternity</string>
     <string name="vibrate_on">Vibration</string>
@@ -83,11 +83,11 @@ All rights reserved to Circle of Eternity</string>
     <string name="done_google_account">Sign in complete</string>
     <string name="data_init">Data initialization</string>
     <string name="init_object">Object Loading</string>
-    <string name="city_lvl_required" formatted="false">Need town level %d\n</string>
-    <string name="need_more_gold" formatted="false">Need %s more gold!\n</string>
-    <string name="need_higher_lvl" formatted="false">Need Level %d\n</string>
-    <string name="price" formatted="false">%s\" for %s gold(full price: %s).\n%s</string>
-    <string name="unknown_upgrade" formatted="false">"%s\". "</string>
+    <string name="city_lvl_required" >Need town level %1$d\n</string>
+    <string name="need_more_gold">Need %1$s more gold!\n</string>
+    <string name="need_higher_lvl">Need Level %1$d\n</string>
+    <string name="price" >%1$s\" for %2$s gold(full price: %3$s).\n%4$s</string>
+    <string name="unknown_upgrade">"%1$s\". "</string>
     <string name="Question_Symbol" translatable="false">\?</string>
     <string name="choose_faction">Choose Faction.</string>
     <string name="accept">Accept</string>
@@ -103,12 +103,12 @@ All rights reserved to Circle of Eternity</string>
     <string name="city_grows">City population</string>
     <string name="route_count">Number of routes:</string>
     <string name="market">Shop</string>
-    <string name="accept_buy_upgrade" formatted="false">Are you sure you want buy \"%s\" %d level for %s gold?</string>
-    <string name="accept_buy_upgrade_unknown" formatted="false">Are you sure you want buy \"%s\"?</string>
+    <string name="accept_buy_upgrade" >Are you sure you want buy \"%1$s\" %2$d level for %3$s gold?</string>
+    <string name="accept_buy_upgrade_unknown" >Are you sure you want buy \"%1$s\"?</string>
     <string name="nickname">Nickname:</string>
     <string name="invite">Invite:</string>
     <string name="registration">Registration</string>
-    <string name="route_info_line" formatted="false">%dm. %s❍. %s⌛</string>
+    <string name="route_info_line" >%1$dm. %2$s❍. %3$s⌛</string>
     <string name="close">Close</string>
     <string name="yes" translatable="false">✔</string>
     <string name="no" translatable="false">✖</string>
@@ -119,10 +119,10 @@ All rights reserved to Circle of Eternity</string>
     <string name="gps_rating">GPS rating</string>
     <string name="course_on_move">Course by move</string>
     <string name="qiestion" translatable="false">\?</string>
-    <string name="pages" formatted="false">%d/%d</string>
-    <string name="two_lines" formatted="false">%s\n%s</string>
+    <string name="pages">%1$d/%2$d</string>
+    <string name="two_lines" >%1$s\n%2$s</string>
     <string name="leftHirelings">Left to hire:</string>
     <string name="hire">Hire: %1$d  for %2$s</string>
     <string name="server_unavaible">Server unavaible.\nRetry in 30 seconds.</string>
-    <string name="city_created">Town appear near you at %d meters.</string>
+    <string name="city_created">Town appear near you at %1$d meters.</string>
 </resources>

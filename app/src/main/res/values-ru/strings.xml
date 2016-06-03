@@ -70,7 +70,7 @@
 
 Все права на приложение принадлежать "Circle of Eternity"</string>
     <string name="about_title">О программе</string>
-    <string name="distance_mesure" formatted="false">%dм</string>
+    <string name="distance_mesure">%dм</string>
     <string name="vibrate_on">Вибрация</string>
     <string name="title_activity_loading">Идет загрузка.</string>
     <string name="LogoText">Лого</string>
@@ -78,11 +78,11 @@
     <string name="done_google_account">Вход выполнен</string>
     <string name="data_init">Инициализация данных</string>
     <string name="init_object">Загрузка объектов</string>
-    <string name="city_lvl_required" formatted="false">Требуется уровень города %d\n</string>
-    <string name="need_more_gold" formatted="false">Нужно больше золота!!! Еще %s золота!\n</string>
-    <string name="need_higher_lvl" formatted="false">Требуется уровень %d\n</string>
-    <string name="price" formatted="false">%s\" за %s золота(без скидки %s).\n%s</string>
-    <string name="unknown_upgrade" formatted="false">"%s\". "</string>
+    <string name="city_lvl_required" >Требуется уровень города %d\n</string>
+    <string name="need_more_gold" >Нужно больше золота!!! Еще %s золота!\n</string>
+    <string name="need_higher_lvl" >Требуется уровень %d\n</string>
+    <string name="price" >%1$s\" за %2$s золота(без скидки %3$s).\n%4$s</string>
+    <string name="unknown_upgrade">"%s\". "</string>
     <string name="choose_faction">Выбери Фракцию.</string>
     <string name="accept">Принять</string>
     <string name="income">Доход в час:</string>
@@ -94,12 +94,12 @@
     <string name="city_grows">Рост города</string>
     <string name="route_count">Количество маршрутов:</string>
     <string name="market">Покупки</string>
-    <string name="accept_buy_upgrade" formatted="false">Вы уверены что хотите купить улучшение \"%s\" %d уровня за %s?</string>
-    <string name="accept_buy_upgrade_unknown" formatted="false">Вы уверены что хотите купить улучшение \"%s\"?</string>
+    <string name="accept_buy_upgrade" >Вы уверены что хотите купить улучшение \"%1$s\" %3$d уровня за %3$s?</string>
+    <string name="accept_buy_upgrade_unknown" >Вы уверены что хотите купить улучшение \"%1$s\"?</string>
     <string name="nickname">Псевдоним:</string>
     <string name="invite">Приглашение:</string>
     <string name="registration">Регистрация</string>
-    <string name="route_info_line" translatable="false">%dм. %s❍. %s⌛</string>
+    <string name="route_info_line" translatable="false">%1$dм. %2$s❍. %3$s⌛</string>
     <string name="close">Закрыть</string>
 
     <string name="fast_actions">Быстрые действия</string>
@@ -109,8 +109,8 @@
     <string name="gps_rating">Частота GPS</string>
     <string name="course_on_move">Курс по движению</string>
     <string name="leftHirelings">Можно нанять:</string>
-    <string name="hire" formatted="false">Нанять: %d чел. за %s золота.</string>
+    <string name="hire" >Нанять: %1$d чел. за %2$s золота.</string>
     <string name="server_unavaible">Сервер не доступен.Попытка через 30 сек.</string>
-    <string name="city_created" >Поселение возникло в %d метрах от вас.</string>
+    <string name="city_created" >Поселение возникло в %1$d метрах от вас.</string>
 
 </resources>
