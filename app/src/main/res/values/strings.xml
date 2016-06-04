@@ -133,8 +133,8 @@ All rights reserved to Circle of Eternity</string>
     <string name="sk_name_speed">Speed</string>
     <string name="sk_name_cargo">Cargo</string>
     <string name="sk_name_bargain">Bargain</string>
-    <string name="sk_name_ambushes">Ambush's Size</string>
-    <string name="sk_name_set_ambushes">Ambush's Control</string>
+    <string name="sk_name_ambushes">Ambush\'s Size</string>
+    <string name="sk_name_set_ambushes">Ambush\'s Control</string>
     <string name="sk_name_founder">Founder</string>
     <string name="sk_name_paladin">Access Radius</string>
 </resources>
