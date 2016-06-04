@@ -177,6 +177,14 @@ public class City extends GameObject{
         loadJSON(obj);
     }
 
+    @Override
+    public void RemoveObject() {
+        super.RemoveObject();
+        if (buildZone!=null){
+            buildZone.remove();
+            buildZone=null;
+        }
+    }
 
     @Override
     public void setMarker(Marker m) {
