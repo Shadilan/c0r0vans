@@ -103,9 +103,9 @@ public class ButtonLayout extends RelativeLayout {
                     //Run Refresh
                     serverConnect.getInstance().RefreshCurrent();
                     //Run Player
-                    serverConnect.getInstance().getPlayerInfo();
+                    serverConnect.getInstance().callGetPlayerInfo();
                     //RunGetMessage
-                    serverConnect.getInstance().getMessage();
+                    serverConnect.getInstance().callGetMessage();
                 } catch (Exception e){
                     GATracker.trackException("ForceSync",e);
                 }

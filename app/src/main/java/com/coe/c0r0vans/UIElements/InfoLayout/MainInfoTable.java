@@ -27,6 +27,7 @@ public class MainInfoTable extends LinearLayout implements PlayerInfoLayout {
     private TextView profit;
     private TextView hirelings;
     private TextView leftToHire;
+    private TextView foundedCities;
 
     public MainInfoTable(Context context) {
         super(context);
@@ -55,6 +56,7 @@ public class MainInfoTable extends LinearLayout implements PlayerInfoLayout {
         profit = (TextView) findViewById(R.id.profit);
         hirelings= (TextView) findViewById(R.id.hirelings);
         leftToHire= (TextView) findViewById(R.id.leftHirelings);
+        foundedCities= (TextView) findViewById(R.id.foundedCities);
     }
     public void update(){
         if (Player.getPlayer()!=null) {
@@ -68,6 +70,7 @@ public class MainInfoTable extends LinearLayout implements PlayerInfoLayout {
             profit.setText(StringUtils.intToStr(Player.getPlayer().getProfit()));
             hirelings.setText(StringUtils.intToStr(Player.getPlayer().getHirelings()));
             leftToHire.setText(StringUtils.intToStr(Player.getPlayer().getLeftToHire()));
+            foundedCities.setText(StringUtils.intToStr(Player.getPlayer().getFoundedCities()));
             if (Player.getPlayer().getRace() == 1) {
                 faction.setImageResource(R.mipmap.guild);
             } else if (Player.getPlayer().getRace() == 2) {

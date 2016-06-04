@@ -49,6 +49,7 @@ public class Player extends GameObject {
     private int hirelings;
     private int maxHirelings;
     private int leftToHire;
+    private int foundedCities;
 
     public static void instance(){
         player=new Player();
@@ -117,7 +118,7 @@ public class Player extends GameObject {
 
             @Override
             public void postAction(JSONObject response) {
-                serverConnect.getInstance().getPlayerInfo();
+                serverConnect.getInstance().callGetPlayerInfo();
                 Essages.addEssage("Незаконченый маршрут отменен.");
                 setCurrentRouteGUID("");
                 for (GameObject o:GameObjects.getInstance().values()){
@@ -260,12 +261,21 @@ public class Player extends GameObject {
         result.put("AmbushesLeft",AmbushesLeft);
         result.put("AmbushRadius",AmbushRadius);
         result.put("ActionDistance",ActionDistance);
+        result.put("Hirelings",hirelings);
+        result.put("LeftToHire",leftToHire);
+        result.put("FoundedCities",foundedCities);
         result.put("Race",race);
         JSONArray upg=new JSONArray();
         for (Upgrade u:Upgrades){
             upg.put(u.getJSON());
         }
         result.put("Upgrades",upg);
+        upg=new JSONArray();
+        for (Upgrade u:NextUpgrades.values()){
+            upg.put(u.getJSON());
+        }
+        result.put("NextUpgrades",upg);
+
         JSONArray r=new JSONArray();
         for (Route u:Routes){
             r.put(u.getJSON());
@@ -297,7 +307,7 @@ public class Player extends GameObject {
             if (obj.has("Race")) race=obj.getInt("Race");
             if (obj.has("Hirelings")) hirelings=obj.getInt("Hirelings"); else hirelings=100;
             if (obj.has("LeftToHire")) leftToHire=obj.getInt("LeftToHire"); else leftToHire=100;
-
+            if (obj.has("FoundedCities")) foundedCities=obj.getInt("FoundedCities"); else foundedCities=0;
             if (race!=0) GameSettings.setFaction(race);
             //TODO: Здесь не должно быть нула. Видимо маркер не инициализуерся в игроке.
             if (zone!=null) zone.setRadius(ActionDistance);
@@ -522,6 +532,14 @@ public class Player extends GameObject {
 
     public void setHirelings(int hirelings) {
         this.hirelings = hirelings;
+    }
+
+    public int getFoundedCities() {
+        return foundedCities;
+    }
+
+    public void setRace(int race) {
+        this.race = race;
     }
 
 

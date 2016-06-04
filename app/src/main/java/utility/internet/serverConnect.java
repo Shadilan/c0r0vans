@@ -13,8 +13,10 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.coe.c0r0vans.GameObjects.ObjectAction;
+import com.coe.c0r0vans.GameObjects.Player;
 import com.coe.c0r0vans.MyGoogleMap;
 import com.coe.c0r0vans.R;
+import com.coe.c0r0vans.UIElements.ChooseFaction;
 import com.google.android.gms.maps.model.LatLng;
 
 import org.json.JSONException;
@@ -28,7 +30,7 @@ import java.util.UUID;
 
 import utility.GATracker;
 import utility.GPSInfo;
-import utility.StringUtils;
+import utility.notification.Essages;
 
 /**
  * Объект обеспечивающий соединение с сервером и взаимодействие с сервером. Singleton.
@@ -53,7 +55,11 @@ public class serverConnect {
     private Context context;    //Контекст приложения
     private RequestQueue reqq;  //Очередь запросов
     private String Token;       //Токен
-    private String login="";
+    //private String login="";
+    String version="";
+    private ArrayList<ObjectAction> lockedActions;
+    private HashMap<String,ObjectAction> listenersMap;
+    private HashMap<String,ObjectAction> errorMap;
 
     /**
      * Constructor
@@ -72,6 +78,7 @@ public class serverConnect {
         ServerAddres = serverAddres;
         context = ctx;
         reqq = Volley.newRequestQueue(context);
+        version=context.getResources().getString(R.string.version);
 
     }
 
@@ -126,18 +133,20 @@ public class serverConnect {
      */
     public boolean ExecAuthorize(String googleToken){
         if (!checkConnection()) return false;
-        String version=context.getResources().getString(R.string.version);
-        String hash= StringUtils.MD5("COWBOW"+googleToken+version+"Authorize");
-        String url=ServerAddres+"/authorize.jsp"+"?ReqName=Authorize&GoogleToken="+googleToken+"&Version="+version+"&hash="+hash;
-        Log.d("TestGoogle",url);
+        String url=new UrlBuilder(ServerAddres+"/authorize.jsp","Authorize",version)
+                .put("GoogleToken",googleToken)
+                .build();
         runRequest(UUID.randomUUID().toString(),url,ResponseListenerWithUID.AUTHORIZE);
         return true;
     }
+
     public boolean ExecRegister(String googleToken,String userName,String inviteCode){
         if (!checkConnection()) return false;
-        String version=context.getResources().getString(R.string.version);
-        String hash= StringUtils.MD5("COWBOW"+googleToken+userName+inviteCode+version+"Register");
-        String url=ServerAddres+"/authorize.jsp"+"?ReqName=Register&GoogleToken="+googleToken+"&UserName="+userName+"&InviteCode="+inviteCode+"&Version="+version+"&hash="+hash;
+        String url=new UrlBuilder(ServerAddres+"/authorize.jsp","Register",version)
+                .put("GoogleToken",googleToken)
+                .put("UserName",userName)
+                .put("InviteCode",inviteCode)
+                .build();
         runRequest(UUID.randomUUID().toString(),url,ResponseListenerWithUID.REGISTER);
         return true;
     }
@@ -152,31 +161,58 @@ public class serverConnect {
      * @param Lng Longtitude of position to get data
      * @return true
      */
-    public boolean RefreshData(int Lat,int Lng){
+    public boolean callScanRange(int Lat, int Lng){
         String UID= UUID.randomUUID().toString();
         if (!checkConnection()) return false;
         if (Token==null) return false;
-        //TODO: Придумать другой вариант с меньше связностью кода
         MyGoogleMap.setOldLatLng(Lat,Lng);
-        String hash= StringUtils.MD5("COWBOW"+Token+Lat+Lng+"ScanRange"+UID);
-        String url=ServerAddres+"/getdata.jsp"+"?ReqName=ScanRange&Token="+Token+"&plat="+Lat+"&plng="+Lng+"&UUID="+UID+"&hash="+hash;
+        String url=new UrlBuilder(ServerAddres+"/getdata.jsp","ScanRange",version)
+                .put("Token",Token)
+                .put("plat",Lat)
+                .put("plng",Lng)
+                .put("UUID",UID)
+                .build();
         runRequest(UID, url, ResponseListenerWithUID.REFRESH);
         oldLat=Lat;
         oldLng=Lng;
         oldTime=new Date().getTime();
         return true;
     }
+
+    public boolean callGetPlayerInfo(){
+        if (!checkConnection()) return false;
+        if (Token==null) return false;
+        String UID=UUID.randomUUID().toString();
+        String url=new UrlBuilder(ServerAddres+"/getdata.jsp","GetPlayerInfo",version)
+                .put("Token",Token)
+                .put("UUID",UID)
+                .build();
+        runRequest(UUID.randomUUID().toString(),url,ResponseListenerWithUID.PLAYER);
+        return true;
+    }
+
+    public boolean callGetMessage(){
+        if (!checkConnection()) return false;
+        if (Token==null) return false;
+        String UID=UUID.randomUUID().toString();
+        String url=new UrlBuilder(ServerAddres+"/getdata.jsp","GetMessage",version)
+                .put("Token",Token)
+                .put("UUID",UID)
+                .build();
+        runRequest(UUID.randomUUID().toString(),url,ResponseListenerWithUID.MESSAGE);
+        return true;
+    }
+
+
     public boolean RefreshCurrent(){
-        return RefreshData((int)(MyGoogleMap.getMap().getCameraPosition().target.latitude*1e6),(int)(MyGoogleMap.getMap().getCameraPosition().target.longitude*1e6));
+        return callScanRange((int)(MyGoogleMap.getMap().getCameraPosition().target.latitude*1e6),(int)(MyGoogleMap.getMap().getCameraPosition().target.longitude*1e6));
     }
     public boolean checkRefresh() {
         long newTime = new Date().getTime();
         return ((GPSInfo.getDistance(new LatLng(oldLat / 1e6, oldLng / 1e6), GPSInfo.getInstance().getLatLng()) > 500) || newTime - oldTime > 5 * 1000 * 60) && RefreshCurrent();
     }
 
-    private ArrayList<ObjectAction> lockedActions;
-    private HashMap<String,ObjectAction> listenersMap;
-    private HashMap<String,ObjectAction> errorMap;
+
 
 
     /**
@@ -194,23 +230,36 @@ public class serverConnect {
         lockedActions.add(action);
         action.preAction();
         String UID=UUID.randomUUID().toString();
-        String hash= StringUtils.MD5("COWBOW" + Token + Lat + Lng + +TLat+TLng+Target+action.getCommand() + UID);
-        String url=ServerAddres+"/getdata.jsp"+"?Token="+Token+"&ReqName="+action.getCommand()+"&plat="+Lat+"&plng="+Lng+"&TGUID="+Target+"&lat="+TLat+"&lng="+TLng+"&UID="+UID+"&hash="+hash;
+        String url=new UrlBuilder(ServerAddres+"/getdata.jsp",action.getCommand(),version)
+                .put("Token",Token)
+                .put("plat",Lat)
+                .put("plng",Lng)
+                .put("lat",TLat)
+                .put("lng",TLng)
+                .put("UUID",UID)
+                .put("TGUID",Target)
+                .build();
         listenersMap.put(UID, action);
         errorMap.put(UID, action);
         runRequest(UID, url, ResponseListenerWithUID.ACTION);
         return true;
     }
+
     public boolean createCity(ObjectAction action,int Lat,int Lng , int TLat,int TLng){
         if (!checkConnection()) return false;
         if (Token==null) return false;
         if (lockedActions==null) lockedActions=new ArrayList<>();
-        String version=context.getResources().getString(R.string.version);
         lockedActions.add(action);
         action.preAction();
         String UID=UUID.randomUUID().toString();
-        String hash= StringUtils.MD5("COWBOW" + Token + Lat + Lng +TLat+TLng+UID+version+"CreateCity" );
-        String url=ServerAddres+"/getdata.jsp"+"?Token="+Token+"&ReqName="+"CreateCity"+"&plat="+Lat+"&plng="+Lng+"&lat="+TLat+"&lng="+TLng+"&UUID="+UID+"&hash="+hash+"&version="+version;
+        String url=new UrlBuilder(ServerAddres+"/getdata.jsp",action.getCommand(),version)
+                .put("Token",Token)
+                .put("plat",Lat)
+                .put("plng",Lng)
+                .put("lat",TLat)
+                .put("lng",TLng)
+                .put("UUID",UID)
+                .build();
         listenersMap.put(UID, action);
         errorMap.put(UID, action);
         runRequest(UID, url, ResponseListenerWithUID.ACTION);
@@ -224,33 +273,22 @@ public class serverConnect {
         lockedActions.add(action);
         action.preAction();
         String UID=UUID.randomUUID().toString();
-        String hash= StringUtils.MD5("COWBOW" + Token + Lat + Lng + target+amount+UID+"HirePeople" );
-        String url=ServerAddres+"/getdata.jsp"+"?Token="+Token+"&ReqName="+"HirePeople"+"&plat="+Lat+"&plng="+Lng+"&TGUID="+target+"&Amount="+amount+"&UUID="+UID+"&hash="+hash+"&version="+version;
+        String url=new UrlBuilder(ServerAddres+"/getdata.jsp",action.getCommand(),version)
+                .put("Token",Token)
+                .put("plat",Lat)
+                .put("plng",Lng)
+                .put("TGUID",target)
+                .put("Amount",amount)
+                .put("UUID",UID)
+                .build();
         listenersMap.put(UID, action);
         errorMap.put(UID, action);
         runRequest(UID, url, ResponseListenerWithUID.ACTION);
         return true;
     }
-    public boolean getPlayerInfo(){
-        if (!checkConnection()) return false;
-        if (Token==null) return false;
-        String UID=UUID.randomUUID().toString();
-        String hash= StringUtils.MD5("COWBOW" + Token +"GetPlayerInfo" + UID);
-        String url=ServerAddres+"/getdata.jsp"+"?Token="+Token+"&ReqName=GetPlayerInfo&UUID="+UID+"&hash="+hash;
-        runRequest(UUID.randomUUID().toString(),url,ResponseListenerWithUID.PLAYER);
-        return true;
-    }
 
-    public boolean getMessage(){
-        if (!checkConnection()) return false;
-        if (Token==null) return false;
-        String UID=UUID.randomUUID().toString();
-        String hash= StringUtils.MD5("COWBOW" + Token +"GetMessage" + UID);
-        String url=ServerAddres+"/getdata.jsp"+"?Token="+Token+"&ReqName=GetMessage&UUID="+UID+"&hash="+hash;
 
-        runRequest(UUID.randomUUID().toString(),url,ResponseListenerWithUID.MESSAGE);
-        return true;
-    }
+
     /**
      * Check if we have Token
      * @return true if we have token otherwise false;
@@ -259,25 +297,29 @@ public class serverConnect {
         return Token != null;
     }
 
-    public boolean setRace(int race){
-
+    public boolean callSetRace(int race){
         if (!checkConnection()) return false;
         if (Token==null) return false;
         String UID=UUID.randomUUID().toString();
-        String hash= StringUtils.MD5("COWBOW" + Token +"SetRace" + UID);
-        String url=ServerAddres+"/getdata.jsp"+"?Token="+Token+"&ReqName=SetRace&Race="+race+"&UUID="+UID+"&hash="+hash;
-        Log.d("Debug info", "Connection url:" + url);
+        String url=new UrlBuilder(ServerAddres+"/getdata.jsp","SetRace",version)
+                .put("Token",Token)
+                .put("Race",race)
+                .put("UUID",UID)
+                .build();
         runRequest(UUID.randomUUID().toString(), url, ResponseListenerWithUID.SETRACE);
         return true;
     }
-    public boolean GetRating(){
+    /*public boolean GetRating(){
         if (!checkConnection()) return false;
         if (Token==null) return false;
-
-        String url=ServerAddres+"/getdata.jsp"+"?Token="+Token+"&ReqName=GetRate";
+        String UID=UUID.randomUUID().toString();
+        String url=new UrlBuilder(ServerAddres+"/getdata.jsp","GetRate",version)
+                .put("Token",Token)
+                .put("UUID",UID)
+                .build();
         runRequest(UUID.randomUUID().toString(),url,ResponseListenerWithUID.RATING);
         return true;
-    }
+    }*/
 
     private void runRequest(String UID,String request,int type){
         if (busy) requestList.add(new RequestData(UID,request,type));
@@ -329,9 +371,9 @@ public class serverConnect {
             }
     }
 
-    public int getQueueSize(){
+    /*public int getQueueSize(){
         return requestList.size();
-    }
+    }*/
     private void runRequest(String UID,String request,int type, final int try_count){
         Log.d("URLRequest",request);
         busy=true;
@@ -351,6 +393,21 @@ public class serverConnect {
                                     case REGISTER:
                                             for (ServerListener l : listeners) l.onLogin(response);
                                         break;
+                                    case SETRACE:
+                                        //todo:Связность кода - плохо
+                                        String err="";
+                                        if (response.has("Error")) err=response.getString("Error");
+                                        else if (response.has("Result")) err=response.getString("Result");
+                                        switch (err){
+                                            case "L0001":Essages.addEssage("Потеря соединения. Перезапустите клиента.");
+                                            break;
+                                            case "O1101":Essages.addEssage("Вы выбрали не существующую фракцию.");
+                                            break;
+                                            default: if (response.has("Message")) Essages.addEssage(response.getString("Message"));
+                                                else Essages.addEssage("Неизвестная ошибка");
+                                        }
+                                        Player.getPlayer().setRace(0);
+                                        new ChooseFaction(context).show();
                                     default:
                                         for (ServerListener l : listeners) l.onError(response);
                                 }
@@ -371,7 +428,7 @@ public class serverConnect {
                                     case ACTION: for (ServerListener l : listeners) l.onAction(response);
                                         if (listenersMap.get(getUID()) != null) listenersMap.get(getUID()).postAction(response);
                                         break;
-                                    case SETRACE:getPlayerInfo();
+                                    case SETRACE:
                                         break;
                                     case MESSAGE:for (ServerListener l : listeners) l.onMessage(response);
                                         break;

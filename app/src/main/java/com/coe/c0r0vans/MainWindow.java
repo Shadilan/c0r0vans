@@ -430,7 +430,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
             if (serverConnect.getInstance().isLogin() && this.hasWindowFocus()
                     && GPSInfo.getInstance().GetLat() != -1 && GPSInfo.getInstance().GetLng() != -1)
                 if (timeToPlayerRefresh < 1) {
-                    serverConnect.getInstance().getPlayerInfo();
+                    serverConnect.getInstance().callGetPlayerInfo();
                     serverConnect.getInstance().RefreshCurrent();
 
 
@@ -451,7 +451,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
         @Override
         public void run() {
             try {
-                if (serverConnect.getInstance().isLogin()) serverConnect.getInstance().getMessage();
+                if (serverConnect.getInstance().isLogin()) serverConnect.getInstance().callGetMessage();
                 myHandler.removeCallbacks(messageRequest);
                 myHandler.postDelayed(messageRequest, 60000);
             }catch (Exception e){

@@ -8,6 +8,7 @@ import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.coe.c0r0vans.GameObjects.Player;
 import com.coe.c0r0vans.R;
 
 import utility.internet.serverConnect;
@@ -88,7 +89,8 @@ public class ChooseFaction extends RelativeLayout {
         accept.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                serverConnect.getInstance().setRace(faction);
+                serverConnect.getInstance().callSetRace(faction);
+                Player.getPlayer().setRace(faction);
                 hide();
             }
         });

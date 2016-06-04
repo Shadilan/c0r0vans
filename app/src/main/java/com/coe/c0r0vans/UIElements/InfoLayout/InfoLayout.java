@@ -148,7 +148,7 @@ public class InfoLayout extends RelativeLayout implements ShowHideForm {
     }
 
     public void Show(){
-        serverConnect.getInstance().getPlayerInfo();
+        serverConnect.getInstance().callGetPlayerInfo();
         UIControler.getWindowLayout().removeAllViews();
         UIControler.getWindowLayout().addView(this);
 

@@ -83,7 +83,7 @@ public class City extends GameObject{
             public void postAction(JSONObject response) {
                 GameSound.playSound(GameSound.START_ROUTE_SOUND);
                 Essages.addEssage(String.format(ctx.getResources().getString(R.string.route_started), Name));
-                serverConnect.getInstance().getPlayerInfo();
+                serverConnect.getInstance().callGetPlayerInfo();
                 for (GameObject o:GameObjects.getInstance().values()){
                     if (o!=null && o instanceof City) ((City) o).updateColor();
                 }
@@ -124,7 +124,7 @@ public class City extends GameObject{
             public void postAction(JSONObject response) {
                 Essages.addEssage(String.format(ctx.getResources().getString(R.string.route_finish), Name));
                 GameSound.playSound(GameSound.FINISH_ROUTE_SOUND);
-                serverConnect.getInstance().getPlayerInfo();
+                serverConnect.getInstance().callGetPlayerInfo();
                 Player.getPlayer().setCurrentRouteGUID("");
                 for (GameObject o:GameObjects.getInstance().values()){
                     if (o!=null && o instanceof City) ((City) o).updateColor();
@@ -158,12 +158,12 @@ public class City extends GameObject{
             @Override
             public void postAction(JSONObject response) {
                 GameSound.playSound(GameSound.BUY_SOUND);
-                serverConnect.getInstance().getPlayerInfo();
+                serverConnect.getInstance().callGetPlayerInfo();
 
                 Upgrade up = Player.getPlayer().getNextUpgrade(upgrade);
                 if (up != null) Essages.addEssage(String.format(ctx.getResources().getString(R.string.upgrade_bought),up.getName()));
                 else Essages.addEssage(String.format(ctx.getResources().getString(R.string.upgrade_bought), upgrade));
-                serverConnect.getInstance().getPlayerInfo();
+                serverConnect.getInstance().callGetPlayerInfo();
             }
 
             @Override

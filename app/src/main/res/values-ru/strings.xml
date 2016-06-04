@@ -113,5 +113,6 @@
     <string name="server_unavaible">Сервер не доступен.Попытка через 30 сек.</string>
     <string name="city_created" >Поселение возникло в %1$d метрах от вас.</string>
     <string name="build_area_settings">Зоны создания</string>
+    <string name="foundedCities">Поселений основано:</string>
 
 </resources>

@@ -129,4 +129,5 @@ All rights reserved to Circle of Eternity</string>
     <string name="minus">-</string>
     <string name="plus">+</string>
     <string name="build_area_settings">Зоны создания</string>
+    <string name="foundedCities">Поселений основано:</string>
 </resources>
