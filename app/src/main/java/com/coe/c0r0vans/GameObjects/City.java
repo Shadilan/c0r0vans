@@ -22,6 +22,7 @@ import com.coe.c0r0vans.UIElements.ActionView;
 import com.coe.c0r0vans.UIElements.CityLine;
 import com.coe.c0r0vans.UIElements.UIControler;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -51,7 +52,7 @@ public class City extends GameObject{
     private long influence2=0;
     private long influence3=0;
     private boolean owner;
-
+    private Circle buildZone;
     ObjectAction buyAction;
     ObjectAction startRouteAction;
     ObjectAction endRouteAction;
@@ -214,7 +215,7 @@ public class City extends GameObject{
                 CircleOptions circleOptions = new CircleOptions();
                 circleOptions.center(latlng);
                 circleOptions.radius(radius);
-                circleOptions.zIndex(0);
+                circleOptions.zIndex(100);
                 if (Player.checkRoute(GUID)) circleOptions.strokeColor(Color.DKGRAY);
                 else circleOptions.strokeColor(Color.BLUE);
                 circleOptions.strokeWidth(2);
@@ -227,8 +228,31 @@ public class City extends GameObject{
                 else zone.setStrokeColor(Color.BLUE);
 
             }
-
+            if (buildZone==null){
+                CircleOptions circleOptions=new CircleOptions();
+                circleOptions.center(latlng);
+                int dist=250;
+                if (owner) dist=500;
+                Upgrade up=Player.getPlayer().getUpgrade("founder");
+                if (up!=null) dist+=up.getEffect2();
+                else dist+=125;
+                circleOptions.radius(dist);
+                circleOptions.zIndex(0);
+                circleOptions.fillColor(0x30ff0000);
+                circleOptions.strokeWidth(0);
+                buildZone=map.addCircle(circleOptions);
+            } else
+            {
+                buildZone.setCenter(latlng);
+                int dist=250;
+                if (owner) dist=500;
+                Upgrade up=Player.getPlayer().getUpgrade("founder");
+                if (up!=null) dist+=up.getEffect2();
+                else dist+=125;
+                buildZone.setRadius(dist);
+            }
             showRadius();
+            showBuildZone();
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -285,7 +309,15 @@ public class City extends GameObject{
         if (mark!=null) mark.setVisible(visibility);
         zone.setVisible(visibility);
     }
-
+    public void showBuildZone(){
+        String opt= GameSettings.getInstance().get("SHOW_BUILD_AREA");
+        if (opt.equals("Y")){
+            buildZone.setVisible(true);
+        } else
+        {
+            buildZone.setVisible(false);
+        }
+    }
     public void showRadius(){
         String opt= GameSettings.getInstance().get("SHOW_CITY_RADIUS");
         if (opt.equals("Y")){
@@ -548,8 +580,7 @@ public class City extends GameObject{
                         @Override
                         public void preAction() {
                             int priceForOne= (int) (1000*discount());
-                            int price=(amount)*priceForOne;
-                            gold=price;
+                            gold= (amount)*priceForOne;
                             Player.getPlayer().setGold(Player.getPlayer().getGold());
                         }
 
@@ -635,6 +666,7 @@ public class City extends GameObject{
                     };
                     serverConnect.getInstance().hirePeople(hire,GPSInfo.getInstance().GetLat(),GPSInfo.getInstance().GetLng(),city.getGUID(),currentCount);
                     countHire(1);
+                    ((TextView)findViewById(R.id.goldInfo)).setText(String.format(getContext().getString(R.string.gold_amount), StringUtils.intToStr(Player.getPlayer().getGold())));
                 }
             });
             findViewById(R.id.restart_route).setOnClickListener(new OnClickListener() {
@@ -865,6 +897,7 @@ public class City extends GameObject{
                 findViewById(R.id.restart_route).setVisibility(GONE);
                 findViewById(R.id.drop_route).setVisibility(GONE);
             }
+            ((TextView)findViewById(R.id.goldInfo)).setText(StringUtils.intToStr(Player.getPlayer().getGold()));
         }
         public void close(){
             this.setVisibility(GONE);

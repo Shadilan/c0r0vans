@@ -242,7 +242,7 @@ public class Player extends GameObject {
             circleOptions.radius(5);
             circleOptions.strokeColor(Color.parseColor("#FF0000"));
             circleOptions.strokeWidth(5);
-            circleOptions.zIndex(2);
+            circleOptions.zIndex(200);
             circle2=map.addCircle(circleOptions);
         }
     }

@@ -33,7 +33,6 @@ public class GameObjects extends HashMap<String,GameObject> {
             @Override
             public void onRefresh(JSONObject response) {
                 try {
-                    Essages.addEssage("Загрузка данных");
                     //Проверить наличие массива JSON. Objects
                     if (response.has("Objects")) {
                         //Скопировать данные в массив для удаления
@@ -151,6 +150,10 @@ public class GameObjects extends HashMap<String,GameObject> {
                             o.changeMarkerSize();
                         }
                         break;
+                    case "SHOW_BUILD_AREA":
+                        for (GameObject o:instance.values()){
+                            if (o instanceof  City) ((City) o).showBuildZone();
+                        }
                     case "SHOW_CARAVAN_ROUTE":
                         Player.getPlayer().showRoute();
                         break;

@@ -178,6 +178,7 @@ public class ActionView extends LinearLayout {
         } catch (Exception e)
         {
             GATracker.trackException("ActionReload",e);
+            throw e;
         }
     }
 

@@ -94,7 +94,7 @@
     <string name="city_grows">Рост города</string>
     <string name="route_count">Количество маршрутов:</string>
     <string name="market">Покупки</string>
-    <string name="accept_buy_upgrade" >Вы уверены что хотите купить улучшение \"%1$s\" %3$d уровня за %3$s?</string>
+    <string name="accept_buy_upgrade" >Вы уверены что хотите купить улучшение \"%1$s\" %2$d уровня за %3$s?</string>
     <string name="accept_buy_upgrade_unknown" >Вы уверены что хотите купить улучшение \"%1$s\"?</string>
     <string name="nickname">Псевдоним:</string>
     <string name="invite">Приглашение:</string>
@@ -112,5 +112,6 @@
     <string name="hire" >Нанять: %1$d чел. за %2$s золота.</string>
     <string name="server_unavaible">Сервер не доступен.Попытка через 30 сек.</string>
     <string name="city_created" >Поселение возникло в %1$d метрах от вас.</string>
+    <string name="build_area_settings">Зоны создания</string>
 
 </resources>

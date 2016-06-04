@@ -28,6 +28,7 @@ public class Settings extends RelativeLayout {
     CheckBox usePadding;
     CheckBox trackBearing;
     CheckBox closeWindow;
+    CheckBox buildArea;
     private CheckBox vibrateOn;
 
     public Settings(Context context) {
@@ -54,6 +55,8 @@ public class Settings extends RelativeLayout {
         ambushRad= (CheckBox) findViewById(R.id.ambushRad);
         caravanRoute= (CheckBox) findViewById(R.id.routeShow);
         cityRad= (CheckBox) findViewById(R.id.cityRad);
+        buildArea= (CheckBox) findViewById(R.id.buildArea);
+
         soundOn= (CheckBox) findViewById(R.id.soundOn);
         musicOn=(CheckBox) findViewById(R.id.musicOn);
         vibrateOn=(CheckBox) findViewById(R.id.vibrateOn);
@@ -80,6 +83,7 @@ public class Settings extends RelativeLayout {
                 GameSettings.set("SHOW_AMBUSH_RADIUS", ambushRad.isChecked() ? "Y" : "N");
                 GameSettings.set("SHOW_CITY_RADIUS", cityRad.isChecked() ? "Y" : "N");
                 GameSettings.set("SHOW_CARAVAN_ROUTE", caravanRoute.isChecked() ? "Y" : "N");
+                GameSettings.set("SHOW_BUILD_AREA", buildArea.isChecked() ? "Y" : "N");
 
                 GameSettings.set("MUSIC_ON", musicOn.isChecked() ? "Y" : "N");
                 GameSettings.set("SOUND_ON", soundOn.isChecked() ? "Y" : "N");
@@ -115,6 +119,8 @@ public class Settings extends RelativeLayout {
         ambushRad.setChecked("Y".equals(GameSettings.getInstance().get("SHOW_AMBUSH_RADIUS")));
         cityRad.setChecked("Y".equals(GameSettings.getInstance().get("SHOW_CITY_RADIUS")));
         caravanRoute.setChecked("Y".equals(GameSettings.getInstance().get("SHOW_CARAVAN_ROUTE")));
+        buildArea.setChecked("Y".equals(GameSettings.getInstance().get("SHOW_BUILD_AREA")));
+
         musicOn.setChecked("Y".equals(GameSettings.getInstance().get("MUSIC_ON")));
         soundOn.setChecked("Y".equals(GameSettings.getInstance().get("SOUND_ON")));
         vibrateOn.setChecked("Y".equals(GameSettings.getInstance().get("VIBRATE_ON")));

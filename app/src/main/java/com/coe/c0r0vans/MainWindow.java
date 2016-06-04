@@ -187,6 +187,8 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                 try {
                     Player.getPlayer().loadJSON(response);
                     if (Player.getPlayer().getRace() < 1 || Player.getPlayer().getRace() > 3) {
+                        messages.clear();
+                        Essages.clear();
                         new ChooseFaction(getApplicationContext()).show();
                     }
                     SharedPreferences sp = getApplicationContext().getSharedPreferences("player", Context.MODE_PRIVATE);

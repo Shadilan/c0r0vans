@@ -68,7 +68,8 @@
         android:background="@drawable/layouts"
         android:layout_above="@+id/actionPanel"
         android:layout_below="@id/pageChoose"
-        android:layout_margin="5dp">
+        android:layout_margin="5dp"
+        android:id="@+id/scrollView6">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -292,94 +293,98 @@
             </RelativeLayout>
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:id="@+id/buyPanel"
-                android:visibility="gone">
+                android:visibility="visible">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    style="@style/SmallText"
-                    android:id="@+id/skillDesc"
-                    android:layout_alignParentStart="true"
-                    android:layout_alignParentLeft="true"
-                    android:layout_toStartOf="@+id/buyUpgrade"
-                    android:layout_toLeftOf="@+id/buyUpgrade"/>
 
-                <ImageButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    style="@style/CommonButton"
-                    android:id="@+id/buyUpgrade"
-                    android:src="@mipmap/buy_item"
-                    android:layout_alignTop="@+id/skillDesc"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignParentEnd="true"
-                    android:layout_marginRight="3dp"
-                    android:layout_marginLeft="0dp"
-                    android:layout_marginTop="0dp"
-                    android:layout_marginBottom="0dp" />
-                <ImageButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    style="@style/CommonButton"
-                    android:id="@+id/buyAmbush"
-                    android:src="@mipmap/ambush_add"
-                    android:layout_below="@id/buyUpgrade"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignParentEnd="true"
-                    android:layout_marginRight="3dp"
-                    android:layout_marginLeft="0dp"
-                    android:layout_marginTop="0dp"
-                    android:layout_marginBottom="0dp"
-                    android:visibility="visible"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            style="@style/SmallText"
+                            android:id="@+id/skillDesc"
+                            android:layout_alignParentStart="true"
+                            android:layout_alignParentLeft="true"
+                            android:layout_toStartOf="@+id/buyUpgrade"
+                            android:layout_toLeftOf="@+id/buyUpgrade"/>
 
-                <TextView
-                    style="@style/SmallText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/hire_price"
-                    android:visibility="visible"
-                    android:layout_alignTop="@+id/buyAmbush"
-                    android:layout_alignLeft="@+id/hire_minus"
-                    android:layout_alignStart="@+id/hire_minus"
-                    android:gravity="center_vertical|center_horizontal"
-                    android:layout_toLeftOf="@+id/buyAmbush"
-                    android:layout_toStartOf="@+id/buyAmbush"
-                    android:text="@string/hire" />
+                        <ImageButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            style="@style/CommonButton"
+                            android:id="@+id/buyUpgrade"
+                            android:src="@mipmap/buy_item"
+                            android:layout_alignTop="@+id/skillDesc"
+                            android:layout_alignParentRight="true"
+                            android:layout_alignParentEnd="true"
+                            android:layout_marginRight="3dp"
+                            android:layout_marginLeft="0dp"
+                            android:layout_marginTop="0dp"
+                            android:layout_marginBottom="0dp" />
 
-                <Button
-                    style="?android:attr/buttonStyleSmall"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="-"
-                    android:id="@+id/hire_minus"
-                    android:layout_alignParentBottom="true"
-                    android:layout_alignLeft="@+id/skillDesc"
-                    android:layout_alignStart="@+id/skillDesc"
-                    android:layout_below="@+id/hire_price" />
+                        <ImageButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            style="@style/CommonButton"
+                            android:id="@+id/buyAmbush"
+                            android:src="@mipmap/ambush_add"
+                            android:layout_below="@id/buyUpgrade"
+                            android:layout_alignParentRight="true"
+                            android:layout_alignParentEnd="true"
+                            android:layout_marginRight="3dp"
+                            android:layout_marginLeft="0dp"
+                            android:layout_marginTop="0dp"
+                            android:layout_marginBottom="0dp"
+                            android:visibility="visible"/>
 
-                <SeekBar
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/hireCount"
-                    android:layout_alignBottom="@+id/buyAmbush"
-                    android:layout_below="@+id/hire_price"
-                    android:layout_toLeftOf="@+id/hire_plus"
-                    android:layout_toStartOf="@+id/hire_plus"
-                    android:layout_toRightOf="@+id/hire_minus"
-                    android:layout_toEndOf="@+id/hire_minus"
-                    android:indeterminate="false" />
+                        <TextView
+                            style="@style/SmallText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/hire_price"
+                            android:visibility="visible"
+                            android:layout_alignTop="@+id/buyAmbush"
+                            android:layout_alignLeft="@+id/hire_minus"
+                            android:layout_alignStart="@+id/hire_minus"
+                            android:gravity="center_vertical|center_horizontal"
+                            android:layout_toLeftOf="@+id/buyAmbush"
+                            android:layout_toStartOf="@+id/buyAmbush"
+                            android:text="@string/hire" />
 
-                <Button
-                    style="?android:attr/buttonStyleSmall"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="+"
-                    android:id="@+id/hire_plus"
-                    android:layout_toLeftOf="@+id/buyAmbush"
-                    android:layout_toStartOf="@+id/buyAmbush"
-                    android:layout_alignTop="@+id/hireCount" />
+                        <Button
+                            style="?android:attr/buttonStyleSmall"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/minus"
+                            android:id="@+id/hire_minus"
+                            android:layout_alignParentBottom="true"
+                            android:layout_alignLeft="@+id/skillDesc"
+                            android:layout_alignStart="@+id/skillDesc"
+                            android:layout_below="@+id/hire_price" />
+
+                        <SeekBar
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/hireCount"
+                            android:layout_alignBottom="@+id/buyAmbush"
+                            android:layout_below="@+id/hire_price"
+                            android:layout_toLeftOf="@+id/hire_plus"
+                            android:layout_toStartOf="@+id/hire_plus"
+                            android:layout_toRightOf="@+id/hire_minus"
+                            android:layout_toEndOf="@+id/hire_minus"
+                            android:indeterminate="false" />
+
+                        <Button
+                            style="?android:attr/buttonStyleSmall"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/plus"
+                            android:id="@+id/hire_plus"
+                            android:layout_toLeftOf="@+id/buyAmbush"
+                            android:layout_toStartOf="@+id/buyAmbush"
+                            android:layout_alignTop="@+id/hireCount" />
+
+
 
             </RelativeLayout>
 
@@ -442,10 +447,19 @@
         android:layout_height="wrap_content"
         style="@style/MediumText"
         android:id="@+id/distance"
+
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/goldInfo"
+
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        style="@style/MediumText" />
 
 
 </RelativeLayout>

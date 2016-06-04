@@ -19,7 +19,9 @@ public class Essages {
     private static LinearLayout target;
 
     private static ArrayList<Message> list;
-
+    public static void clear(){
+        list.clear();
+    }
     public static void setTarget(LinearLayout target){
         if (handler==null) handler=new Handler();
         Essages.target=target;

@@ -125,4 +125,8 @@ All rights reserved to Circle of Eternity</string>
     <string name="hire">Hire: %1$d  for %2$s</string>
     <string name="server_unavaible">Server unavaible.\nRetry in 30 seconds.</string>
     <string name="city_created">Town appear near you at %1$d meters.</string>
+    <string name="gold_amount" translatable="false">%1$s ❍</string>
+    <string name="minus">-</string>
+    <string name="plus">+</string>
+    <string name="build_area_settings">Зоны создания</string>
 </resources>

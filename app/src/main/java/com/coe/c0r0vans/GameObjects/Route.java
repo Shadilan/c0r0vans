@@ -85,6 +85,7 @@ public class Route extends GameObject{
                 options.geodesic(true);
                 options.add(StartPoint);
                 options.add(FinishPoint);
+                options.zIndex(150);
 
                 if (map!=null) {
                     line = map.addPolyline(options);
