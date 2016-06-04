@@ -203,6 +203,48 @@ public class serverConnect {
         return true;
     }
 
+    public boolean callSetAmbush(ObjectAction action, int Lat,int Lng , int TLat,int TLng){
+        if (!checkConnection()) return false;
+        if (Token==null) return false;
+        if (lockedActions==null) lockedActions=new ArrayList<>();
+        lockedActions.add(action);
+        action.preAction();
+        String UID=UUID.randomUUID().toString();
+        String url=new UrlBuilder(ServerAddres+"/getdata.jsp",action.getCommand(),version)
+                .put("Token",Token)
+                .put("plat",Lat)
+                .put("plng",Lng)
+                .put("lat",TLat)
+                .put("lng",TLng)
+                .put("UUID",UID)
+                .build();
+        listenersMap.put(UID, action);
+        errorMap.put(UID, action);
+        runRequest(UID, url, ResponseListenerWithUID.ACTION);
+        return true;
+    }
+
+    public boolean callDestroyAmbush(ObjectAction action, int Lat,int Lng , int TLat,int TLng){
+        if (!checkConnection()) return false;
+        if (Token==null) return false;
+        if (lockedActions==null) lockedActions=new ArrayList<>();
+        lockedActions.add(action);
+        action.preAction();
+        String UID=UUID.randomUUID().toString();
+        String url=new UrlBuilder(ServerAddres+"/getdata.jsp",action.getCommand(),version)
+                .put("Token",Token)
+                .put("plat",Lat)
+                .put("plng",Lng)
+                .put("lat",TLat)
+                .put("lng",TLng)
+                .put("UUID",UID)
+                .build();
+        listenersMap.put(UID, action);
+        errorMap.put(UID, action);
+        runRequest(UID, url, ResponseListenerWithUID.ACTION);
+        return true;
+    }
+
 
     public boolean RefreshCurrent(){
         return callScanRange((int)(MyGoogleMap.getMap().getCameraPosition().target.latitude*1e6),(int)(MyGoogleMap.getMap().getCameraPosition().target.longitude*1e6));
@@ -408,6 +450,9 @@ public class serverConnect {
                                         }
                                         Player.getPlayer().setRace(0);
                                         new ChooseFaction(context).show();
+                                    case ACTION:
+                                        if (listenersMap.get(getUID()) != null) listenersMap.get(getUID()).postError(response);
+                                        break;
                                     default:
                                         for (ServerListener l : listeners) l.onError(response);
                                 }

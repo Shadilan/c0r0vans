@@ -161,6 +161,11 @@ public class GameObjects extends HashMap<String,GameObject> {
             }
         });
     }
+
+    public HashMap put(GameObject object){
+        put(object.getGUID(),object);
+        return this;
+    }
     public static GameObjects getInstance(){
         return instance;
     }

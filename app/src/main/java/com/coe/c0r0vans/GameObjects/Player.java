@@ -581,27 +581,66 @@ public class Player extends GameObject {
 
                 @Override
                 public void preAction() {
-
+                    Player.getPlayer().setHirelings(Player.getPlayer().getHirelings()-Player.getPlayer().getUpgrade("ambushes").getEffect2()*10);
+                    Player.getPlayer().setAmbushLeft(Player.getPlayer().getAmbushLeft() - 1);
                 }
 
                 @Override
                 public void postAction(JSONObject response) {
-                    serverConnect.getInstance().RefreshCurrent();
-                    GameSound.playSound(GameSound.SET_AMBUSH);
-                    Player.getPlayer().setAmbushLeft(Player.getPlayer().getAmbushLeft() - 1);
-                    Essages.addEssage("Засада создана.");
 
+                    GameSound.playSound(GameSound.SET_AMBUSH);
+
+
+                    Essages.addEssage("Засада создана.");
+                    if (response.has("Ambush")){
+
+                        try {
+                            //todo надо привести к одному типу
+                            GameObjects.getInstance().put(new Ambush(MyGoogleMap.getMap(),response.getJSONObject("Ambush")));
+                            Player.getPlayer().getAmbushes().add(new AmbushItem(response.getJSONObject("Ambush")));
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    } else
+                    serverConnect.getInstance().RefreshCurrent();
                 }
 
                 @Override
                 public void postError(JSONObject response) {
                     //String error="";
+
                     String message="";
                     try {
-                        /*if (response.has("Error"))
-                            error = response.getString("Error");*/
-                        if (response.has("Message"))
-                            message=response.getString("Message");
+                        Player.getPlayer().setHirelings(Player.getPlayer().getHirelings()+Player.getPlayer().getUpgrade("ambushes").getEffect2()*5);
+                        Player.getPlayer().setAmbushLeft(Player.getPlayer().getAmbushLeft() +1);
+                        String err;
+                        if (response.has("Error")) err=response.getString("Error");
+                        else if (response.has("Result")) err=response.getString("Result");
+                        else err="U0000";
+                        switch (err){
+                            case "DB001":
+                                Essages.addEssage("Ошибка сервера.");
+                                break;
+                            case "L0001":
+                                Essages.addEssage("Соединение потеряно.");
+                                break;
+                            case "O0201":
+                                Essages.addEssage("Неподходящее место для засады.");
+                                break;
+                            case "O0202":
+                                Essages.addEssage("Засада слишком далеко.");
+                                break;
+                            case "O0203":
+                                Essages.addEssage("Все засады уже установлены.");
+                                break;
+                            case "O0204":
+                                Essages.addEssage("Не хватает наемников.");
+                                break;
+                            default:
+                                if (response.has("Message")) Essages.addEssage(response.getString("Message"));
+                                else Essages.addEssage("Непредвиденная ошибка.");
+
+                        }
                     } catch (JSONException e) {
                         GATracker.trackException("CreateAmbush",e);
                     }
@@ -611,7 +650,7 @@ public class Player extends GameObject {
             findViewById(R.id.createAmbushAction).setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    serverConnect.getInstance().ExecCommand(createAmbush, Player.getPlayer().getGUID(),
+                    serverConnect.getInstance().callSetAmbush(createAmbush,
                             GPSInfo.getInstance().GetLat(), GPSInfo.getInstance().GetLng(),
                             (int) (SelectedObject.getInstance().getPoint().latitude * 1e6),
                             (int) (SelectedObject.getInstance().getPoint().longitude * 1e6)

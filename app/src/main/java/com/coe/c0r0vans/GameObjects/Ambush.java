@@ -113,7 +113,20 @@ public class Ambush extends GameObject {
             e.printStackTrace();
         }
     }
+    public JSONObject getJSON() throws JSONException {
+        JSONObject object=new JSONObject();
+        object.put("GUID",GUID);
+        if (mark!=null){
+           object.put("Lat",(int)(mark.getPosition().latitude*1e6));
+            object.put("Lng",(int)(mark.getPosition().longitude*1e6));
 
+        }
+        object.put("Owner",faction);
+        object.put("Radius",radius);
+        object.put("Ready",ready);
+        object.put("Name",Name);
+        return object;
+    }
 
 
     private String getInfo() {
