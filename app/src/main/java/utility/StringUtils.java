@@ -1,5 +1,7 @@
 package utility;
 
+import android.content.Context;
+
 import java.text.DateFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
@@ -46,6 +48,14 @@ public class StringUtils {
             GATracker.trackException("MD5","GenrateMD5");
         }
         return null;
+    }
+    private static Context context;
+    public static void init(Context ctx){
+        context=ctx;
+    }
+    public static String getString(int id){
+        if (context==null) return null;
+        return context.getString(id);
     }
 
 }

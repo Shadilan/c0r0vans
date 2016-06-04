@@ -905,7 +905,7 @@ public class City extends GameObject{
                 findViewById(R.id.restart_route).setVisibility(GONE);
                 findViewById(R.id.drop_route).setVisibility(GONE);
             }
-            ((TextView)findViewById(R.id.goldInfo)).setText(StringUtils.intToStr(Player.getPlayer().getGold()));
+            ((TextView)findViewById(R.id.goldInfo)).setText(String.format(getContext().getString(R.string.gold_amount), StringUtils.intToStr(Player.getPlayer().getGold())));
         }
         public void close(){
             this.setVisibility(GONE);

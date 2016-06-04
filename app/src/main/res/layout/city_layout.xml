@@ -295,9 +295,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:id="@+id/buyPanel"
-                android:visibility="visible">
+                android:visibility="gone">
 
-
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/skillPanel">
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -321,14 +324,19 @@
                             android:layout_marginLeft="0dp"
                             android:layout_marginTop="0dp"
                             android:layout_marginBottom="0dp" />
-
+                </RelativeLayout>
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/hirePanel"
+                    android:layout_below="@id/skillPanel">
                         <ImageButton
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             style="@style/CommonButton"
                             android:id="@+id/buyAmbush"
                             android:src="@mipmap/ambush_add"
-                            android:layout_below="@id/buyUpgrade"
+                            android:layout_alignParentTop="true"
                             android:layout_alignParentRight="true"
                             android:layout_alignParentEnd="true"
                             android:layout_marginRight="3dp"
@@ -358,8 +366,8 @@
                             android:text="@string/minus"
                             android:id="@+id/hire_minus"
                             android:layout_alignParentBottom="true"
-                            android:layout_alignLeft="@+id/skillDesc"
-                            android:layout_alignStart="@+id/skillDesc"
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentStart="true"
                             android:layout_below="@+id/hire_price" />
 
                         <SeekBar
@@ -383,7 +391,7 @@
                             android:layout_toLeftOf="@+id/buyAmbush"
                             android:layout_toStartOf="@+id/buyAmbush"
                             android:layout_alignTop="@+id/hireCount" />
-
+                </RelativeLayout>
 
 
             </RelativeLayout>
