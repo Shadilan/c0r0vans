@@ -96,7 +96,7 @@ public class InfoLine extends RelativeLayout {
                 confirmWindow.setConfirmAction(new Runnable() {
                     @Override
                     public void run() {
-                        serverConnect.getInstance().ExecCommand(removeAction, target, 0, 0, 0, 0);
+                        serverConnect.getInstance().callCanelAmbush(removeAction, target);
                         removeButton.setVisibility(INVISIBLE);
                     }
                 });

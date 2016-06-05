@@ -78,7 +78,7 @@ public class Player extends GameObject {
     private ArrayList<Route> Routes;
     private ArrayList<AmbushItem> Ambushes;
 
-    private String currentRoute="";
+
 
     public Player() {
         init();
@@ -111,12 +111,10 @@ public class Player extends GameObject {
                 return "DropUnfinishedRoute";
             }
             private String cancelRouteGuid;
-            private String cancelRouteName;
             private Route cancelRoute;
             @Override
             public void preAction() {
-                cancelRouteGuid=currentRoute;
-                cancelRouteName=currentRouteGuid;
+                cancelRouteGuid=currentRouteGuid;
                 cancelRoute=currentR;
                 GameSound.playSound(GameSound.START_ROUTE_SOUND);
                 Player.getPlayer().setCurrentRouteGUID(null);
@@ -140,15 +138,13 @@ public class Player extends GameObject {
                     switch (err) {
                         case "DB001":
                             Essages.addEssage("Ошибка сервера.");
-                            currentRoute=cancelRouteGuid;
-                            currentRouteGuid=cancelRouteName;
+                            currentRouteGuid=cancelRouteGuid;
                             currentR=cancelRoute;
                             Player.getPlayer().setRouteStart(true);
                             break;
                         case "L0001":
                             Essages.addEssage("Соединение потеряно.");
-                            currentRoute=cancelRouteGuid;
-                            currentRouteGuid=cancelRouteName;
+                            currentRouteGuid=cancelRouteGuid;
                             currentR=cancelRoute;
                             Player.getPlayer().setRouteStart(true);
                             break;
@@ -156,8 +152,7 @@ public class Player extends GameObject {
                             Essages.addEssage("Маршрут не найден.");
                             break;
                         default:
-                            currentRoute=cancelRouteGuid;
-                            currentRouteGuid=cancelRouteName;
+                            currentRouteGuid=cancelRouteGuid;
                             currentR=cancelRoute;
                             Player.getPlayer().setRouteStart(true);
                             if (response.has("Message"))
@@ -366,8 +361,6 @@ public class Player extends GameObject {
             }
             profit=0;
             if (obj.has("Routes")){
-
-                currentRoute="";
                 currentRouteGuid="";
                 JSONArray route=obj.getJSONArray("Routes");
                 for (Route routel:Routes){
@@ -378,7 +371,6 @@ public class Player extends GameObject {
                 for (int i=0;i< route_length;i++) {
                     Route routeObj=new Route(route.getJSONObject(i),map);
                     if (routeObj.getFinishName().equals("null") || routeObj.getFinishName()==null) {
-                        currentRoute=routeObj.getStartName();
                         currentRouteGuid=routeObj.getStartGuid();
                         currentR=routeObj;
                     }
@@ -404,7 +396,7 @@ public class Player extends GameObject {
 
                 }
             }
-            routeStart = currentRoute.equals("");
+            routeStart = currentRouteGuid.equals("");
             //TODO Слишком много одинаковых вызовов.
             for (GameObject o:GameObjects.getInstance().values()){
                 if (o!=null && o instanceof City) ((City) o).updateColor();
@@ -468,7 +460,6 @@ public class Player extends GameObject {
     }
     public ArrayList<AmbushItem> getAmbushes() {return Ambushes;}
     public int getActionDistance(){return ActionDistance;}
-    public String getCurrentRoute(){return currentRoute;}
     public ObjectAction getDropRoute(){return dropRoute;}
 
     public void setRouteStart(boolean routeStart) {
@@ -584,6 +575,18 @@ public class Player extends GameObject {
         this.race = race;
     }
 
+    public HashMap<String, Upgrade> getNextUpgrades() {
+        return NextUpgrades;
+    }
+
+    public String getCurrentRouteGUID() {
+        return currentRouteGuid;
+    }
+
+    public void setCurrentRoute(Route currentRoute) {
+        this.currentR = currentRoute;
+    }
+
 
     class ambushCreate extends RelativeLayout implements GameObjectView{
 
@@ -651,7 +654,7 @@ public class Player extends GameObject {
                 public void postError(JSONObject response) {
                     //String error="";
 
-                    String message="";
+
                     try {
                         Player.getPlayer().setHirelings(Player.getPlayer().getHirelings()+Player.getPlayer().getUpgrade("ambushes").getEffect2()*5);
                         Player.getPlayer().setAmbushLeft(Player.getPlayer().getAmbushLeft() +1);
@@ -686,7 +689,7 @@ public class Player extends GameObject {
                     } catch (JSONException e) {
                         GATracker.trackException("CreateAmbush",e);
                     }
-                    Essages.addEssage(message);
+
                 }
             };
             findViewById(R.id.createAmbushAction).setOnClickListener(new OnClickListener() {
@@ -733,17 +736,37 @@ public class Player extends GameObject {
 
                 @Override
                 public void postError(JSONObject response) {
-                    //String error="";
-                    String message="";
                     try {
-                        /*if (response.has("Error"))
-                            error = response.getString("Error");*/
-                        if (response.has("Message"))
-                            message=response.getString("Message");
+                        Player.getPlayer().setHirelings(Player.getPlayer().getHirelings()+Player.getPlayer().getUpgrade("ambushes").getEffect2()*5);
+                        Player.getPlayer().setAmbushLeft(Player.getPlayer().getAmbushLeft() +1);
+                        String err;
+                        if (response.has("Error")) err=response.getString("Error");
+                        else if (response.has("Result")) err=response.getString("Result");
+                        else err="U0000";
+                        switch (err){
+                            case "DB001":
+                                Essages.addEssage("Ошибка сервера.");
+                                break;
+                            case "L0001":
+                                Essages.addEssage("Соединение потеряно.");
+                                break;
+                            case "O1201":
+                                Essages.addEssage("Точка слишком далеко.");
+                                break;
+                            case "O1202":
+                                Essages.addEssage("Неподходящее место для создания поселения.");
+                                break;
+                            case "O1203":
+                                Essages.addEssage("Нет возможности создавать поселения. (Улучшите умение \"Основание городов\")");
+                                break;
+                            default:
+                                if (response.has("Message")) Essages.addEssage(response.getString("Message"));
+                                else Essages.addEssage("Непредвиденная ошибка.");
+
+                        }
                     } catch (JSONException e) {
-                        GATracker.trackException("CreateCity",e);
+                        GATracker.trackException("CreateAmbush",e);
                     }
-                    Essages.addEssage(message);
 
                 }
 

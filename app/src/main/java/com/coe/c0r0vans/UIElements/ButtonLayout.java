@@ -88,7 +88,7 @@ public class ButtonLayout extends RelativeLayout {
             am.setText(String.valueOf(StringUtils.intToStr(Player.getPlayer().getExp())));
             am = (TextView) findViewById(R.id.goldAmount);
             am.setText(String.valueOf(StringUtils.intToStr(Player.getPlayer().getGold())));
-            if ("".equals(Player.getPlayer().getCurrentRoute()))
+            if ("".equals(Player.getPlayer().getCurrentRouteGUID()))
                 PlayerInfo.setImageResource(R.mipmap.info);
             else PlayerInfo.setImageResource(R.mipmap.info_route);
 
@@ -139,7 +139,7 @@ public class ButtonLayout extends RelativeLayout {
                     am = (TextView) findViewById(R.id.goldAmount);
                     am.setText(String.valueOf(StringUtils.intToStr(Player.getPlayer().getGold())));
                     ImageView btn = (ImageView) findViewById(R.id.infoview);
-                    if ("".equals(Player.getPlayer().getCurrentRoute()))
+                    if ("".equals(Player.getPlayer().getCurrentRouteGUID()))
                         btn.setImageResource(R.mipmap.info);
                     else btn.setImageResource(R.mipmap.info_route);
                     infoLayout.loadFromPlayer();

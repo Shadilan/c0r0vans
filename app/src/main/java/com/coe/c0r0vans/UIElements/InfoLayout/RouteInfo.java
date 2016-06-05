@@ -107,7 +107,7 @@ public class RouteInfo extends RelativeLayout implements PlayerInfoLayout {
             }
         });
                 routeInfo.removeAllViews();
-        if (!Player.getPlayer().getCurrentRoute().equals("")){
+        if (!"".equals(Player.getPlayer().getCurrentRouteGUID())){
             CityLine line=new CityLine(getContext());
 
             routeInfo.addView(line);

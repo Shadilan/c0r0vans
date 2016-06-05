@@ -331,8 +331,7 @@ public class Ambush extends GameObject {
                     @Override
                     public void onClick(View v) {
 
-                            serverConnect.getInstance().callCanelAmbush(removeAction,GPSInfo.getInstance().GetLat(),
-                                    GPSInfo.getInstance().GetLng(),getGUID());
+                            serverConnect.getInstance().callCanelAmbush(removeAction,getGUID());
 
 
                         close();
