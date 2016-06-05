@@ -41,6 +41,7 @@ public class Ambush extends GameObject {
     private int radius=30;
 
     private int ready=0;
+    private int life=1;
 
     public  Ambush(GoogleMap map,JSONObject obj)
     {
@@ -71,6 +72,7 @@ public class Ambush extends GameObject {
             if (obj.has("Radius")) radius=obj.getInt("Radius");
             if (obj.has("Ready")) ready=obj.getInt("Ready");
             if (obj.has("Name")) Name="Засада "+obj.getString("Name");
+            if (obj.has("Life")) life=obj.getInt("Life");
             if (mark==null) {
                 setMarker(map.addMarker(new MarkerOptions().position(new LatLng(Lat / 1e6, Lng / 1e6))));
                 changeMarkerSize();
@@ -255,7 +257,7 @@ public class Ambush extends GameObject {
                     break;
             }
             ((TextView)findViewById(R.id.ambushDesc)).setText(ambush.getInfo());
-            ImageButton removeButton=(ImageButton)findViewById(R.id.ambushActionBtn);
+            final ImageButton removeButton=(ImageButton)findViewById(R.id.ambushActionBtn);
             if (ambush.getFaction()==0)
             {
                 removeButton.setImageResource(R.mipmap.dismiss);
@@ -274,7 +276,6 @@ public class Ambush extends GameObject {
 
                     @Override
                     public void preAction() {
-
                         owner.setVisibility(false);
                     }
 
@@ -282,6 +283,15 @@ public class Ambush extends GameObject {
                     public void postAction(JSONObject response) {
                         GameSound.playSound(GameSound.REMOVE_AMBUSH);
                         Player.getPlayer().setAmbushLeft(Player.getPlayer().getAmbushLeft() + 1);
+                        Player.getPlayer().setHirelings(Player.getPlayer().getHirelings()+owner.getLife()*5);
+                        AmbushItem sa=null;
+                        for (AmbushItem ai:Player.getPlayer().getAmbushes()){
+                            if (ai.getGUID().equals(owner.getGUID())) {
+                                sa=ai;
+                                break;
+                            }
+                        }
+                        if (sa!=null) Player.getPlayer().getAmbushes().remove(sa);
                         Essages.addEssage("Засада распущена");
                         owner.RemoveObject();
                     }
@@ -289,17 +299,42 @@ public class Ambush extends GameObject {
                     @Override
                     public void postError(JSONObject response) {
                         owner.setVisibility(true);
+                        try {
+                            String err;
+                            if (response.has("Error")) err = response.getString("Error");
+                            else if (response.has("Result")) err = response.getString("Result");
+                            else err = "U0000";
+                            switch (err) {
+                                case "DB001":
+                                    Essages.addEssage("Ошибка сервера.");
+                                    break;
+                                case "L0001":
+                                    Essages.addEssage("Соединение потеряно.");
+                                    break;
+                                case "O0401":
+                                    Essages.addEssage("Эта засада уже уничтожена.");
+                                    owner.RemoveObject();
+                                    break;
+                                default:
+                                    if (response.has("Message"))
+                                        Essages.addEssage(response.getString("Message"));
+                                    else Essages.addEssage("Непредвиденная ошибка.");
+
+                            }
+                        }catch (JSONException e)
+                        {
+                            GATracker.trackException("CancelAmbush",e);
+                        }
                     }
                 };
                 removeButton.setOnClickListener(new OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        serverConnect.getInstance().ExecCommand(removeAction,
-                                ambush.getGUID(),
-                                GPSInfo.getInstance().GetLat(),
-                                GPSInfo.getInstance().GetLng(),
-                                (int)(ambush.getMarker().getPosition().latitude*1e6),
-                                (int)(ambush.getMarker().getPosition().longitude*1e6));
+
+                            serverConnect.getInstance().callCanelAmbush(removeAction,GPSInfo.getInstance().GetLat(),
+                                    GPSInfo.getInstance().GetLng(),getGUID());
+
+
                         close();
                     }
 
@@ -313,8 +348,6 @@ public class Ambush extends GameObject {
                     public Bitmap getImage() {
                         return ImageLoader.getImage("attack_ambush");
                     }
-
-
 
                     @Override
                     public String getCommand() {
@@ -330,6 +363,7 @@ public class Ambush extends GameObject {
 
                     @Override
                     public void postAction(JSONObject response) {
+
                         GameSound.playSound(GameSound.KILL_SOUND);
                         if (response.has("Message")) try {
                             Essages.addEssage(response.getString("Message"));
@@ -343,6 +377,41 @@ public class Ambush extends GameObject {
                     @Override
                     public void postError(JSONObject response) {
                         owner.setVisibility(true);
+                          try {
+                            String err;
+                            if (response.has("Error")) err = response.getString("Error");
+                            else if (response.has("Result")) err = response.getString("Result");
+                            else err = "U0000";
+                            switch (err) {
+                                case "DB001":
+                                    Essages.addEssage("Ошибка сервера.");
+                                    break;
+                                case "L0001":
+                                    Essages.addEssage("Соединение потеряно.");
+                                    break;
+                                case "O0301":
+                                    Essages.addEssage("Эта засада уже уничтожена.");
+                                    owner.RemoveObject();
+                                    break;
+                                case "O0302":
+                                    Essages.addEssage("Засада слишком далеко.");
+                                    break;
+                                case "O0303":
+                                    Essages.addEssage("Это ваши соратники.");
+                                    break;
+                                case "O0304":
+                                    Essages.addEssage("Не хватает наемников для уничтожения засады.");
+                                    break;
+                                default:
+                                    if (response.has("Message"))
+                                        Essages.addEssage(response.getString("Message"));
+                                    else Essages.addEssage("Непредвиденная ошибка.");
+
+                            }
+                        }catch (JSONException e)
+                        {
+                            GATracker.trackException("DestroyAmbush",e);
+                        }
                     }
                 };
 
@@ -351,12 +420,8 @@ public class Ambush extends GameObject {
                 @Override
                 public void onClick(View v) {
                     if (ambush.getMarker()!=null) {
-                        serverConnect.getInstance().ExecCommand(removeAction,
-                                ambush.getGUID(),
-                                GPSInfo.getInstance().GetLat(),
-                                GPSInfo.getInstance().GetLng(),
-                                (int) (ambush.getMarker().getPosition().latitude * 1e6),
-                                (int) (ambush.getMarker().getPosition().longitude * 1e6));
+                            serverConnect.getInstance().callDestroyAmbush(removeAction,GPSInfo.getInstance().GetLat(),
+                                    GPSInfo.getInstance().GetLng(),getGUID());
                     }
                     close();
                 }

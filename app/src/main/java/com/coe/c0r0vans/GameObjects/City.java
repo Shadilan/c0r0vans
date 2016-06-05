@@ -569,7 +569,7 @@ public class City extends GameObject{
 
                 }
             });
-            findViewById(R.id.buyAmbush).setOnClickListener(new OnClickListener() {
+            findViewById(R.id.hirePeople).setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     ObjectAction hire=new ObjectAction(city) {
@@ -596,39 +596,12 @@ public class City extends GameObject{
                         public void postAction(JSONObject response) {
                             try {
                                 if (response.has("Result") && "OK".equals(response.getString("Result"))) {
+                                    GameSound.playSound(GameSound.BUY_SOUND);
                                     Player.getPlayer().setHirelings(Player.getPlayer().getHirelings()+amount);
                                     Essages.addEssage("Приобретено "+amount+" наемников за "+gold+" золота.");
                                 } else
                                 {
-                                    Player.getPlayer().setGold(Player.getPlayer().getGold()+gold);
-                                    if (response.has("Result")){
-                                        String err=response.getString("Result");
-                                        switch (err){
-                                            case "L0001":
-                                                //todo:Сделать вызов логина;
-                                                Essages.addEssage("Связь с сервером потеряна. Перезапустите приложение.");
-                                                break;
-                                            case "O1301":
-                                                Essages.addEssage("Действие не выполнено. Такого города не существует.");
-                                                break;
-                                            case "O1302":
-                                                Essages.addEssage("Вы находитесь слишком далеко от города.");
-                                                break;
-                                            case "O1303":
-                                                Essages.addEssage("Недостаточно денег для покупки.");
-                                                break;
-                                            case "O1304":
-                                                Essages.addEssage("Не хватает лидерства для покупки.");
-                                                break;
-                                                default:
-                                                    if (response.has("Message")) Essages.addEssage(response.getString("Message"));
-                                                    else Essages.addEssage("Неопределенная ошибка");
-
-                                        }
-                                    } else
-                                    {
-                                        Essages.addEssage("Неопределенная ошибка");
-                                    }
+                                    postError(response);
                                 }
                             } catch (JSONException e) {
                                 GATracker.trackException("Hire","PostAction Error JSON");
@@ -707,12 +680,7 @@ public class City extends GameObject{
                     confirmWindow.setConfirmAction(new Runnable() {
                         @Override
                         public void run() {
-                            serverConnect.getInstance().ExecCommand(Player.getPlayer().getDropRoute(),
-                                    city.getGUID(),
-                                    GPSInfo.getInstance().GetLat(),
-                                    GPSInfo.getInstance().GetLng(),
-                                    (int) (city.getMarker().getPosition().latitude * 1e6),
-                                    (int) (city.getMarker().getPosition().longitude * 1e6));
+                            serverConnect.getInstance().callDropUnfinishedRoute(Player.getPlayer().getDropRoute());
                             updateInZone(true);
                         }
                     });
@@ -874,7 +842,7 @@ public class City extends GameObject{
                         btn.setAlpha(0.5f);
                     }
                 }
-                ImageButton btn= (ImageButton) findViewById(R.id.buyAmbush);
+                ImageButton btn= (ImageButton) findViewById(R.id.hirePeople);
                 if (currentCount>0 && inZone) {
                     btn.setClickable(true);
                     btn.setEnabled(true);
@@ -897,7 +865,7 @@ public class City extends GameObject{
                     btn.setAlpha(0.5f);
                 }
                 {
-                    ImageButton btn= (ImageButton) findViewById(R.id.buyAmbush);
+                    ImageButton btn= (ImageButton) findViewById(R.id.hirePeople);
                     btn.setClickable(false);
                     btn.setEnabled(false);
                     btn.setAlpha(0.5f);
@@ -1094,12 +1062,7 @@ public class City extends GameObject{
                     confirmWindow.setConfirmAction(new Runnable() {
                         @Override
                         public void run() {
-                            serverConnect.getInstance().ExecCommand(Player.getPlayer().getDropRoute(),
-                                    city.getGUID(),
-                                    GPSInfo.getInstance().GetLat(),
-                                    GPSInfo.getInstance().GetLng(),
-                                    (int) (city.getMarker().getPosition().latitude * 1e6),
-                                    (int) (city.getMarker().getPosition().longitude * 1e6));
+                            serverConnect.getInstance().callDropUnfinishedRoute(Player.getPlayer().getDropRoute());
                             updateInZone(true);
                         }
                     });

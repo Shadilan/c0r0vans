@@ -334,7 +334,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             style="@style/CommonButton"
-                            android:id="@+id/buyAmbush"
+                            android:id="@+id/hirePeople"
                             android:src="@mipmap/ambush_add"
                             android:layout_alignParentTop="true"
                             android:layout_alignParentRight="true"
@@ -351,12 +351,12 @@
                             android:layout_height="wrap_content"
                             android:id="@+id/hire_price"
                             android:visibility="visible"
-                            android:layout_alignTop="@+id/buyAmbush"
+                            android:layout_alignTop="@+id/hirePeople"
                             android:layout_alignLeft="@+id/hire_minus"
                             android:layout_alignStart="@+id/hire_minus"
                             android:gravity="center_vertical|center_horizontal"
-                            android:layout_toLeftOf="@+id/buyAmbush"
-                            android:layout_toStartOf="@+id/buyAmbush"
+                            android:layout_toLeftOf="@+id/hirePeople"
+                            android:layout_toStartOf="@+id/hirePeople"
                             android:text="@string/hire" />
 
                         <Button
@@ -374,7 +374,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:id="@+id/hireCount"
-                            android:layout_alignBottom="@+id/buyAmbush"
+                            android:layout_alignBottom="@+id/hirePeople"
                             android:layout_below="@+id/hire_price"
                             android:layout_toLeftOf="@+id/hire_plus"
                             android:layout_toStartOf="@+id/hire_plus"
@@ -388,8 +388,8 @@
                             android:layout_height="wrap_content"
                             android:text="@string/plus"
                             android:id="@+id/hire_plus"
-                            android:layout_toLeftOf="@+id/buyAmbush"
-                            android:layout_toStartOf="@+id/buyAmbush"
+                            android:layout_toLeftOf="@+id/hirePeople"
+                            android:layout_toStartOf="@+id/hirePeople"
                             android:layout_alignTop="@+id/hireCount" />
                 </RelativeLayout>
 

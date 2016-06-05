@@ -110,25 +110,67 @@ public class Player extends GameObject {
             public String getCommand() {
                 return "DropUnfinishedRoute";
             }
-
+            private String cancelRouteGuid;
+            private String cancelRouteName;
+            private Route cancelRoute;
             @Override
             public void preAction() {
+                cancelRouteGuid=currentRoute;
+                cancelRouteName=currentRouteGuid;
+                cancelRoute=currentR;
                 GameSound.playSound(GameSound.START_ROUTE_SOUND);
-            }
-
-            @Override
-            public void postAction(JSONObject response) {
-                serverConnect.getInstance().callGetPlayerInfo();
-                Essages.addEssage("Незаконченый маршрут отменен.");
-                setCurrentRouteGUID("");
+                Player.getPlayer().setCurrentRouteGUID(null);
+                Player.getPlayer().setRouteStart(false);
                 for (GameObject o:GameObjects.getInstance().values()){
                     if (o!=null && o instanceof City) ((City) o).updateColor();
                 }
             }
+
+            @Override
+            public void postAction(JSONObject response) {
+                Essages.addEssage("Незаконченый маршрут отменен.");
+            }
             @Override
             public void postError(JSONObject response) {
-                //String error="";
+                try {
+                    String err;
+                    if (response.has("Error")) err = response.getString("Error");
+                    else if (response.has("Result")) err = response.getString("Result");
+                    else err = "U0000";
+                    switch (err) {
+                        case "DB001":
+                            Essages.addEssage("Ошибка сервера.");
+                            currentRoute=cancelRouteGuid;
+                            currentRouteGuid=cancelRouteName;
+                            currentR=cancelRoute;
+                            Player.getPlayer().setRouteStart(true);
+                            break;
+                        case "L0001":
+                            Essages.addEssage("Соединение потеряно.");
+                            currentRoute=cancelRouteGuid;
+                            currentRouteGuid=cancelRouteName;
+                            currentR=cancelRoute;
+                            Player.getPlayer().setRouteStart(true);
+                            break;
+                        case "O0801":
+                            Essages.addEssage("Маршрут не найден.");
+                            break;
+                        default:
+                            currentRoute=cancelRouteGuid;
+                            currentRouteGuid=cancelRouteName;
+                            currentR=cancelRoute;
+                            Player.getPlayer().setRouteStart(true);
+                            if (response.has("Message"))
+                                Essages.addEssage(response.getString("Message"));
+                            else Essages.addEssage("Непредвиденная ошибка.");
+
+                    }
+                }catch (JSONException e)
+                {
+                    GATracker.trackException("DestroyAmbush",e);
+                }
                 String message="";
+
                 try {
                     /*if (response.has("Error"))
                         error = response.getString("Error");*/

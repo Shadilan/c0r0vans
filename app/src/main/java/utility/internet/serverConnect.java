@@ -224,7 +224,7 @@ public class serverConnect {
         return true;
     }
 
-    public boolean callDestroyAmbush(ObjectAction action, int Lat,int Lng , int TLat,int TLng){
+    public boolean callDestroyAmbush(ObjectAction action, int Lat,int Lng , String target){
         if (!checkConnection()) return false;
         if (Token==null) return false;
         if (lockedActions==null) lockedActions=new ArrayList<>();
@@ -235,8 +235,7 @@ public class serverConnect {
                 .put("Token",Token)
                 .put("plat",Lat)
                 .put("plng",Lng)
-                .put("lat",TLat)
-                .put("lng",TLng)
+                .put("TGUID",target)
                 .put("UUID",UID)
                 .build();
         listenersMap.put(UID, action);
@@ -244,7 +243,41 @@ public class serverConnect {
         runRequest(UID, url, ResponseListenerWithUID.ACTION);
         return true;
     }
-
+    public boolean callCanelAmbush(ObjectAction action, int Lat,int Lng , String target){
+        if (!checkConnection()) return false;
+        if (Token==null) return false;
+        if (lockedActions==null) lockedActions=new ArrayList<>();
+        lockedActions.add(action);
+        action.preAction();
+        String UID=UUID.randomUUID().toString();
+        String url=new UrlBuilder(ServerAddres+"/getdata.jsp",action.getCommand(),version)
+                .put("Token",Token)
+                .put("plat",Lat)
+                .put("plng",Lng)
+                .put("TGUID",target)
+                .put("UUID",UID)
+                .build();
+        listenersMap.put(UID, action);
+        errorMap.put(UID, action);
+        runRequest(UID, url, ResponseListenerWithUID.ACTION);
+        return true;
+    }
+    public boolean callDropUnfinishedRoute(ObjectAction action){
+        if (!checkConnection()) return false;
+        if (Token==null) return false;
+        if (lockedActions==null) lockedActions=new ArrayList<>();
+        lockedActions.add(action);
+        action.preAction();
+        String UID=UUID.randomUUID().toString();
+        String url=new UrlBuilder(ServerAddres+"/getdata.jsp",action.getCommand(),version)
+                .put("Token",Token)
+                .put("UUID",UID)
+                .build();
+        listenersMap.put(UID, action);
+        errorMap.put(UID, action);
+        runRequest(UID, url, ResponseListenerWithUID.ACTION);
+        return true;
+    }
 
     public boolean RefreshCurrent(){
         return callScanRange((int)(MyGoogleMap.getMap().getCameraPosition().target.latitude*1e6),(int)(MyGoogleMap.getMap().getCameraPosition().target.longitude*1e6));

@@ -20,6 +20,8 @@ public class GameObject {
      public static final float ICON_SMALL = 15;
     public static final float ICON_MEDIUM = 16;
     public static final float ICON_LARGE = 17;
+    private int life;
+
     public static String zoomToPostfix(float zoom){
         String result;
         if (zoom==GameObject.ICON_SMALL)
@@ -135,5 +137,9 @@ public class GameObject {
     }
     public Circle getZone(){
         return zone;
+    }
+
+    public int getLife() {
+        return life;
     }
 }
