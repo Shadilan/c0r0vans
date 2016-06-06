@@ -84,8 +84,9 @@ public class Player extends GameObject {
         init();
     }
     public static boolean checkRoute(String guid){
-        if (player.currentRouteGuid.equals(guid)) return true;
-        if (player.currentRouteGuid.equals("")) return false;
+        if (guid!=null) return false;
+        if (guid.equals(player.currentRouteGuid)) return true;
+        if ("".equals(player.currentRouteGuid)) return false;
         for (Route r:player.Routes){
             if ((r.getStartGuid().equals(player.currentRouteGuid) && r.getFinishGuid().equals(guid))||
                     ((r.getStartGuid().equals(guid) && r.getFinishGuid().equals(player.currentRouteGuid))))
@@ -118,7 +119,7 @@ public class Player extends GameObject {
                 cancelRoute=currentR;
                 GameSound.playSound(GameSound.START_ROUTE_SOUND);
                 Player.getPlayer().setCurrentRouteGUID(null);
-                Player.getPlayer().setRouteStart(false);
+                Player.getPlayer().setRouteStart(true);
                 for (GameObject o:GameObjects.getInstance().values()){
                     if (o!=null && o instanceof City) ((City) o).updateColor();
                 }
