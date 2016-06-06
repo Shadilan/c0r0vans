@@ -44,7 +44,7 @@ import utility.settings.GameSettings;
  * @author Shadilan
  */
 public class City extends GameObject{
-    private int Level=0;
+    private int Level=1;
     private int radius=100;
     private String upgrade;
     private String upgradeName;
@@ -56,6 +56,9 @@ public class City extends GameObject{
     ObjectAction buyAction;
     ObjectAction startRouteAction;
     ObjectAction endRouteAction;
+    private String founder="";
+    private int hirelings=100;
+    private int hireprice=100*1;
 
     private void updateAction(final Context ctx){
         startRouteAction = new ObjectAction(this) {
@@ -358,13 +361,18 @@ public class City extends GameObject{
             if (obj.has("Name")) Name=obj.getString("Name");
             if (obj.has("UpgradeType")) upgrade=obj.getString("UpgradeType");
             if (obj.has("UpgradeName")) upgradeName=obj.getString("UpgradeName");
-            if (obj.has("Level")) Level=obj.getInt("Level");
+            if (obj.has("Level")) {
+                Level=obj.getInt("Level");
+                hireprice=(int)(Math.sqrt(Level)*100);
+            }
             if (obj.has("Radius")) radius=obj.getInt("Radius");
             if (obj.has("Progress")) progress=obj.getInt("Progress");
             if (obj.has("Influence1")) influence1=obj.getLong("Influence1");
             if (obj.has("Influence2")) influence2=obj.getLong("Influence2");
             if (obj.has("Influence3")) influence3=obj.getLong("Influence3");
             if (obj.has("Owner")) owner=obj.getBoolean("Owner"); else owner=false;
+            if (obj.has("Creator")) founder=obj.getString("Creator");
+            if (obj.has("Hirelings")) hirelings=obj.getInt("Hirelings");
             Log.d("tttt","Influence1:"+influence1);
             if (mark==null) {
                 setMarker(map.addMarker(new MarkerOptions().position(latlng)));
@@ -603,6 +611,7 @@ public class City extends GameObject{
             progressBar.setMax(100);
             progressBar.setProgress(city.getProgress());
             ((TextView) findViewById(R.id.skillDesc)).setText(getSkillInfo());
+            ((TextView) findViewById(R.id.cityFounder)).setText(founder);
             findViewById(R.id.buyUpgrade).setEnabled(city.upgradeAvaible());
             updateAction(getContext());
             findViewById(R.id.startRoute).setOnClickListener(new OnClickListener() {
@@ -720,7 +729,7 @@ public class City extends GameObject{
 
                         @Override
                         public void preAction() {
-                            int priceForOne= (int) (1000*discount());
+                            int priceForOne= (int) (hireprice*discount());
                             gold= (amount)*priceForOne;
                             Player.getPlayer().setGold(Player.getPlayer().getGold());
                         }
@@ -731,7 +740,7 @@ public class City extends GameObject{
                                 if (response.has("Result") && "OK".equals(response.getString("Result"))) {
                                     GameSound.playSound(GameSound.BUY_SOUND);
                                     Player.getPlayer().setHirelings(Player.getPlayer().getHirelings()+amount);
-                                    Essages.addEssage("Приобретено "+amount+" наемников за "+gold+" золота.");
+                                    Essages.addEssage("Нанято "+amount+" чел. за "+gold+" золота.");
                                 } else
                                 {
                                     postError(response);
@@ -884,15 +893,15 @@ public class City extends GameObject{
         }
         private boolean countHire(int newValue){
 
-            int priceForOne= (int) (1000*discount());
-            int max=Math.min(Player.getPlayer().getLeftToHire(),Player.getPlayer().getGold()/priceForOne);
+            int priceForOne= (int) (hireprice*discount());
+            int max=Math.min(Math.min(Player.getPlayer().getLeftToHire(),Player.getPlayer().getGold()/priceForOne),hirelings);
             int current=newValue;
             if (current<1) current=1;
             if (current>max) current=currentCount;
             if (current>max) current=max;
             currentCount=current;
             int price=(currentCount)*priceForOne;
-            ((TextView)findViewById(R.id.hire_price)).setText(String.format(getContext().getString(R.string.hire), currentCount, StringUtils.intToStr(price)));
+            ((TextView)findViewById(R.id.hire_price)).setText(String.format(getContext().getString(R.string.hire), currentCount, max,StringUtils.intToStr(price)));
             SeekBar seekBar= (SeekBar) findViewById(R.id.hireCount);
             seekBar.setProgress(currentCount);
             seekBar.setMax(max);

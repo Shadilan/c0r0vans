@@ -26,7 +26,7 @@
     <string name="most_in">Most reach in</string>
     <string name="title_activity_main">Information</string>
     <string name="ambush">Ambush</string>
-
+    <string name="LoginComplete">Login complete. Waiting GPS.</string>
     <string name="settings_display">Display settings</string>
     <string name="settings_ambush_radius">Ambush radius</string>
     <string name="settings_city_radius">City radius</string>
@@ -53,7 +53,7 @@
     <string name="alliance_name">Alliance of Workers</string>
     <string name="legue_name">League of Independent merchants</string>
     <string name="legue_text">Независимые купцы существовали всегда. В поисках выгоды они все время продумывали новые торговые маршруты, сокращали издержки и повышали привлекательность своей продукции для покупателя. Однако конкуренция на рынке не была честной - и Гильдия и Альянс использовали свое влияние для создания неблагоприятных условий успешным купцам. Для защиты своих интересов независимые купцы создали Лигу. Не обладая монопольным положением ни в одной отрасли Лига уверенно чувствует себя во всех областях. Умение Лиги работать с покупателями и максимизировать свою прибыль позволяет ей конкурировать с Гильдией и Альянсом в их традиционных сферах влияния. В настоящее время все три организации обладают примерно равным влиянием и потенциалом.</string>
-    <string name="version" translatable="false">2.0.19a</string>
+    <string name="version" translatable="false">3.0.0a</string>
     <string name="distance">%1$dм</string>
     <string name="upgrade_bought">Upgrade "%s" has bought.</string>
     <string name="route_finish">Rote has finished in "%1$s"</string>
@@ -119,15 +119,15 @@ All rights reserved to Circle of Eternity</string>
     <string name="gps_rating">GPS rating</string>
     <string name="course_on_move">Course by move</string>
     <string name="qiestion" translatable="false">\?</string>
-    <string name="pages">%1$d/%2$d</string>
-    <string name="two_lines" >%1$s\n%2$s</string>
+    <string name="pages" translatable="false">%1$d/%2$d</string>
+    <string name="two_lines" translatable="false" >%1$s\n%2$s</string>
     <string name="leftHirelings">Left to hire:</string>
-    <string name="hire">Hire: %1$d  for %2$s</string>
+    <string name="hire">Hire: %1$d of %2$d for %3$s</string>
     <string name="server_unavaible">Server unavaible.\nRetry in 30 seconds.</string>
     <string name="city_created">Town appear near you at %1$d meters.</string>
     <string name="gold_amount" translatable="false">%1$s ❍</string>
-    <string name="minus">-</string>
-    <string name="plus">+</string>
+    <string name="minus" translatable="false">-</string>
+    <string name="plus" translatable="false">+</string>
     <string name="build_area_settings">Build helper</string>
     <string name="foundedCities">Towns founded:</string>
     <string name="sk_name_speed">Speed</string>
@@ -137,4 +137,5 @@ All rights reserved to Circle of Eternity</string>
     <string name="sk_name_set_ambushes">Ambush\'s Control</string>
     <string name="sk_name_founder">Founder</string>
     <string name="sk_name_paladin">Access Radius</string>
+    <string name="founded">Founded by:</string>
 </resources>

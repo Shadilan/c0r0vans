@@ -342,6 +342,7 @@ public class Player extends GameObject {
             if (obj.has("AmbushRadius")) AmbushRadius=obj.getInt("AmbushRadius");
             if (obj.has("ActionDistance")) ActionDistance=obj.getInt("ActionDistance");
             if (obj.has("Race")) race=obj.getInt("Race");
+            if (race==0) Essages.addEssage("Фракция не выбрана.");
             if (obj.has("Hirelings")) hirelings=obj.getInt("Hirelings"); else hirelings=100;
             if (obj.has("LeftToHire")) leftToHire=obj.getInt("LeftToHire"); else leftToHire=100;
             if (obj.has("FoundedCities")) foundedCities=obj.getInt("FoundedCities"); else foundedCities=0;

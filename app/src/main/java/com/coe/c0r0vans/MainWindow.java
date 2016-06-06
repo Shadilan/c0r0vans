@@ -203,6 +203,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                     timeToPlayerRefresh = 6;
                 } catch (Exception e){
                     GATracker.trackException("LoadPlayer",e);
+                    Essages.addEssage(e.toString());
                 }
             }
 
@@ -606,7 +607,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                 serverConnect.getInstance().removeListener(this);
                 GATracker.trackTimeEnd("System","LoginToServer");
                 if (response.has("Token")) {
-                    ((TextView)findViewById(R.id.status)).setText("Вход выполнен.");
+                    ((TextView)findViewById(R.id.status)).setText("Вход выполнен1.");
                     // Выполнить дальнейшую загрузку
                     initGPS();
                 } else if (response.has("Error")){
@@ -698,7 +699,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                         serverConnect.getInstance().removeListener(this);
                         GATracker.trackTimeEnd("System","RegisterToServer");
                         if (response.has("Token")) {
-                            ((TextView)findViewById(R.id.status)).setText("Вход выполнен.");
+                            ((TextView)findViewById(R.id.status)).setText("Вход выполнен2.");
                             // Выполнить дальнейшую загрузку
                             initGPS();
                         } else if (response.has("Error")){

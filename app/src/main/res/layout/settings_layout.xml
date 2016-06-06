@@ -248,7 +248,8 @@
                 android:text="@string/background_gps"
                 android:layout_alignBottom="@+id/gpsOn"
                 android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true" />
+                android:layout_alignParentStart="true"
+                android:id="@+id/textView" />
 
             <CheckBox
                 android:layout_width="wrap_content"
@@ -278,8 +279,8 @@
                 android:progress="2"
                 android:layout_alignTop="@+id/gpsRatingTitle"
                 android:layout_alignBottom="@+id/gpsRatingTitle"
-                android:layout_alignLeft="@+id/gpsRatingTitle"
-                android:layout_alignStart="@+id/gpsRatingTitle" />
+                android:layout_toEndOf="@+id/textView"
+                android:layout_toRightOf="@+id/textView" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

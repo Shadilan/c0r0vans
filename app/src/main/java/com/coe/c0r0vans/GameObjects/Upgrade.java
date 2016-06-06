@@ -2,13 +2,10 @@ package com.coe.c0r0vans.GameObjects;
 
 import android.graphics.Bitmap;
 
-import com.coe.c0r0vans.R;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import utility.ImageLoader;
-import utility.StringUtils;
 
 /**
  * @author Shadilan
@@ -31,7 +28,7 @@ public class Upgrade {
         if (object.has("Level")) level=object.getInt("Level");
         if (object.has("Effect1")) effect1=object.getInt("Effect1");
         if (object.has("Effect2")) effect2=object.getInt("Effect2");
-        switch (Type){
+        /*switch (Type){
             case "speed":
                 Name= StringUtils.getString(R.string.sk_name_speed);
                 break;
@@ -53,10 +50,10 @@ public class Upgrade {
             case "founder":
                 Name=StringUtils.getString(R.string.sk_name_founder);
                 break;
-            default:
+            default:*/
                 if (object.has("Name")) Name=object.getString("Name");
 
-        }
+        //}
         if (object.has("Description")) Description=object.getString("Description");
         if (object.has("ReqCityLev")) reqCityLev=object.getInt("ReqCityLev");
         if (object.has("Cost")) Cost=object.getInt("Cost");

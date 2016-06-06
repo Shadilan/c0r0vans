@@ -20,6 +20,7 @@ public class Essages {
 
     private static ArrayList<Message> list;
     public static void clear(){
+        if (list!=null && list.size()>0)
         list.clear();
     }
     public static void setTarget(LinearLayout target){

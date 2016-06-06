@@ -13,8 +13,8 @@ android {
         applicationId 'com.coe.c0r0vans'
         minSdkVersion 14
         targetSdkVersion 23
-        versionCode 30
-        versionName "2.0.19a"
+        versionCode 33
+        versionName "3.0.0a"
         signingConfig signingConfigs.Release
     }
     buildTypes {
