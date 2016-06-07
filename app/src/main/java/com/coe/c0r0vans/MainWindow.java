@@ -781,7 +781,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
     private void initGPS(){
         Log.d("ProcedureCall","initGPS");
         GATracker.trackTimeStart("System","LocationStart");
-        ((TextView)findViewById(R.id.status)).setText("Определение метосположения.");
+        ((TextView)findViewById(R.id.status)).setText(R.string.get_location);
         GPSInfo.getInstance(getApplicationContext());
         GPSInfo.getInstance().AddLocationListener(new LocationListener() {
             @Override
@@ -790,7 +790,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
 
                     if (GPSInfo.getInstance().GetLat() != -1 && GPSInfo.getInstance().GetLng() != -1) {
                         GPSInfo.getInstance().RemoveLocationListener(this);
-                        ((TextView)findViewById(R.id.status)).setText("Местоположение определено.");
+                        ((TextView)findViewById(R.id.status)).setText(R.string.location_aquired);
                         GATracker.trackTimeEnd("System","LocationStart");
                         initStart();
                     }

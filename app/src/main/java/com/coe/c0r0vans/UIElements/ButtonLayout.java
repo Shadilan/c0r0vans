@@ -131,7 +131,7 @@ public class ButtonLayout extends RelativeLayout {
             @Override
             public void change(int ChangeType) {
                 try {
-                    if (ChangeType != OnGameObjectChange.EXTERNAL) return;
+                    //if (ChangeType != OnGameObjectChange.EXTERNAL) return;
                     TextView am = (TextView) findViewById(R.id.levelAmount);
                     am.setText(String.valueOf(Player.getPlayer().getLevel()));
                     am = (TextView) findViewById(R.id.expAmount);

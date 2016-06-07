@@ -731,7 +731,8 @@ public class City extends GameObject{
                         public void preAction() {
                             int priceForOne= (int) (hireprice*discount());
                             gold= (amount)*priceForOne;
-                            Player.getPlayer().setGold(Player.getPlayer().getGold());
+                            Player.getPlayer().setGold(Player.getPlayer().getGold()-gold);
+
                         }
 
                         @Override

@@ -163,6 +163,7 @@ public class GameObjects extends HashMap<String,GameObject> {
     }
 
     public HashMap put(GameObject object){
+        if (this.get(object.getGUID())!=null) return this;
         put(object.getGUID(),object);
         return this;
     }

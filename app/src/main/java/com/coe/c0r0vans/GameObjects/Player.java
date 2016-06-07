@@ -84,7 +84,7 @@ public class Player extends GameObject {
         init();
     }
     public static boolean checkRoute(String guid){
-        if (guid!=null) return false;
+        if (guid==null) return false;
         if (guid.equals(player.currentRouteGuid)) return true;
         if ("".equals(player.currentRouteGuid)) return false;
         for (Route r:player.Routes){
@@ -563,6 +563,7 @@ public class Player extends GameObject {
 
     public void setGold(int gold) {
         this.Gold = gold;
+        change(OnGameObjectChange.GAME);
     }
 
     public void setHirelings(int hirelings) {
@@ -729,7 +730,7 @@ public class Player extends GameObject {
                     if (response.has("City")){
                         try {
                             City city=new City(MyGoogleMap.getMap(),response.getJSONObject("City"));
-                            GameObjects.getInstance().put(city.getGUID(),city);
+                            GameObjects.getInstance().put(city);
                         } catch (JSONException e) {
                             GATracker.trackException("CreateCity","PostAction Error.");
                         }
