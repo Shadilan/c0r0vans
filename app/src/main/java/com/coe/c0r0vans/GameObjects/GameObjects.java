@@ -167,6 +167,13 @@ public class GameObjects extends HashMap<String,GameObject> {
         put(object.getGUID(),object);
         return this;
     }
+    public void updateView(){
+        for (GameObject o:this.values()){
+            if (o.getMarker()!=null){
+                o.changeMarkerSize();
+            }
+        }
+    }
     public static GameObjects getInstance(){
         return instance;
     }

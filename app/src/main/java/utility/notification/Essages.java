@@ -20,8 +20,10 @@ public class Essages {
 
     private static ArrayList<Message> list;
     public static void clear(){
-        if (list!=null && list.size()>0)
-        list.clear();
+        if (list!=null && list.size()>0) {
+            list.clear();
+            target.removeAllViews();
+        }
     }
     public static void setTarget(LinearLayout target){
         if (handler==null) handler=new Handler();

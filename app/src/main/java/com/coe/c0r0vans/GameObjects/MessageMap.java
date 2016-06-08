@@ -118,4 +118,14 @@ public class MessageMap extends HashMap<String,Message>{
         }
         return m;
     }
+
+    @Override
+    public void clear() {
+        super.clear();
+        try {
+            save();
+        } catch (JSONException e) {
+            GATracker.trackException("Messages","SaveEmptyList error JSON");
+        }
+    }
 }
