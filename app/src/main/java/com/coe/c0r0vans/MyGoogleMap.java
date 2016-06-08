@@ -16,6 +16,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.util.Date;
+
 import utility.GPSInfo;
 import utility.internet.serverConnect;
 import utility.settings.GameSettings;
@@ -31,6 +33,7 @@ public class MyGoogleMap{
     private static Marker targetMarker;
     private static ImageButton showpointButton;
     static float bearing = 0;
+    private static long lastRotateTime=0;
 
     /**
      * Инициализация карты
@@ -105,7 +108,7 @@ public class MyGoogleMap{
                 float curBearing = map.getCameraPosition().bearing;
                 boolean trackBearing = "Y".equals(GameSettings.getInstance().get("TRACK_BEARING"));
 
-                if (trackBearing && location.hasBearing() && location.hasAccuracy() && location.getAccuracy() < 20 && location.getSpeed() * 60 * 60 / 1000 > 5) {
+                if (trackBearing && location.hasBearing() && location.hasAccuracy() && location.getAccuracy() < 20 && location.getSpeed() * 60 * 60 / 1000 > 5 && new Date().getTime()-lastRotateTime>30000) {
                     if (Math.round(oldBearing / 90) == Math.round(location.getBearing() / 90)) {
                         bearing = location.getBearing();
                         curBearing = bearing;
@@ -284,6 +287,8 @@ public class MyGoogleMap{
         /*if (!moveFixed) moveCamera(targetMarker.getPosition(),map.getCameraPosition().bearing+angle);
         else moveCamera(Player.getPlayer().getMarker().getPosition(), map.getCameraPosition().bearing+angle);*/
         moveCamera(map.getCameraPosition().target, map.getCameraPosition().bearing+angle);
+        lastRotateTime=new Date().getTime();
+
     }
 
     public static void setOldLatLng(int lat, int lng) {
