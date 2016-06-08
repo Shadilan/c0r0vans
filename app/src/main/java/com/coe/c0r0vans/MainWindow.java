@@ -513,7 +513,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
     public void onBackPressed() {
         Log.d("ProcedureCall","onBackPressed");
         try {
-            if (UIControler.getWindowLayout().getChildCount() > 0 && serverConnect.getInstance().isLogin()) {
+            if (UIControler.getWindowLayout().getChildCount() > 0 && serverConnect.getInstance().isLogin() && Player.getPlayer().getRace()!=0) {
                 UIControler.getWindowLayout().removeAllViews();
             } else if (findViewById(R.id.actionView).getVisibility() == View.VISIBLE) {
                 ((ActionView) findViewById(R.id.actionView)).HideView();
