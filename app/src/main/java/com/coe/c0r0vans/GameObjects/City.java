@@ -581,6 +581,9 @@ public class City extends GameObject{
             else return (String.format(getContext().getString(R.string.unknown_upgrade), upgradeName));
         }
         private void applyCity() {
+            ImageButton btn= (ImageButton) findViewById(R.id.buyUpgrade);
+            btn.setEnabled(city.upgradeAvaible());
+            btn.setImageBitmap(ImageLoader.getImage(city.upgrade + "_buy"));
             findViewById(R.id.closeActionButton).setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
