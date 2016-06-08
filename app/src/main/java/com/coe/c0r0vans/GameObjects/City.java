@@ -58,7 +58,7 @@ public class City extends GameObject{
     ObjectAction endRouteAction;
     private String founder="";
     private int hirelings=100;
-    private int hireprice=100*1;
+    private int hireprice=100;
 
     private void updateAction(final Context ctx){
         startRouteAction = new ObjectAction(this) {
@@ -607,12 +607,9 @@ public class City extends GameObject{
             progressBar = (ProgressBar) findViewById(R.id.LigaInf);
             progressBar.setProgress(inf3);
             progressBar.setMax(100);
-            progressBar = (ProgressBar) findViewById(R.id.cityExp);
-            progressBar.setMax(100);
-            progressBar.setProgress(city.getProgress());
-            ((TextView) findViewById(R.id.skillDesc)).setText(getSkillInfo());
+
+            update();
             ((TextView) findViewById(R.id.cityFounder)).setText(founder);
-            findViewById(R.id.buyUpgrade).setEnabled(city.upgradeAvaible());
             updateAction(getContext());
             findViewById(R.id.startRoute).setOnClickListener(new OnClickListener() {
                 @Override
@@ -661,7 +658,104 @@ public class City extends GameObject{
                     confirmWindow.setConfirmAction(new Runnable() {
                         @Override
                         public void run() {
-                            serverConnect.getInstance().callBuyUpgrade(buyAction,
+                            ObjectAction nbuy=new ObjectAction(city) {
+                                @Override
+                                public Bitmap getImage() {
+                                    return ImageLoader.getImage("buy_item");
+                                }
+
+                                int upcost;
+                                @Override
+                                public String getCommand() {
+                                    return "BuyUpgrade";
+                                }
+
+                                @Override
+                                public void preAction() {
+                                    Upgrade up=Player.getPlayer().getNextUpgrade(upgrade);
+                                    if (up!=null) {
+                                        upcost = (int) (up.getCost() * discount());
+                                    }
+                                    Player.getPlayer().setGold(Player.getPlayer().getGold()-upcost);
+                                    update();
+
+                                }
+
+                                @Override
+                                public void postAction(JSONObject response) {
+
+                                    try {
+                                        if ((response.has("Result") && "OK".equals(response.getString("Result"))) || (!response.has("Result")
+                                                && !response.has("Error"))){
+                                            GameSound.playSound(GameSound.BUY_SOUND);
+                                            if (response.has("Upgrade")){
+                                                Upgrade n=new Upgrade(response.getJSONObject("Upgrade"));
+                                                Upgrade r=Player.getPlayer().getUpgrade(n.getType());
+                                                Player.getPlayer().getUpgrades().remove(r);
+                                                Player.getPlayer().getUpgrades().add(n);
+                                            }
+                                            if (response.has("NextUpgrade")){
+                                                Upgrade n=new Upgrade(response.getJSONObject("NexUpgrade"));
+                                                Player.getPlayer().getNextUpgrades().remove(n.getType());
+                                                Player.getPlayer().getNextUpgrades().put(n.getType(),n);
+                                            }
+                                            Upgrade up = Player.getPlayer().getUpgrade(upgrade);
+                                            if (up != null) Essages.addEssage(String.format(getContext().getResources().getString(R.string.upgrade_bought),up.getName()));
+                                            else Essages.addEssage(String.format(getContext().getResources().getString(R.string.upgrade_bought), upgrade));
+                                            update();
+                                        } else postError(response);
+
+
+                                    } catch (JSONException e) {
+                                        GATracker.trackException("BuyUpgrade","JSONResult error");
+                                    }
+
+                                }
+
+                                @Override
+                                public void postError(JSONObject response) {
+                                    try {
+                                        Player.getPlayer().setGold(Player.getPlayer().getGold()-upcost);
+                                        update();
+                                        String err;
+                                        if (response.has("Error")) err=response.getString("Error");
+                                        else if (response.has("Result")) err=response.getString("Result");
+                                        else err="U0000";
+                                        switch (err){
+                                            case "DB001":
+                                                Essages.addEssage("Ошибка сервера.");
+                                                break;
+                                            case "L0001":
+                                                Essages.addEssage("Соединение потеряно.");
+                                                break;
+                                            case "O0701":
+                                                Essages.addEssage("Город не найден.");
+                                                break;
+                                            case "O0702":
+                                                Essages.addEssage("Город слишком далеко.");
+                                                break;
+                                            case "O0703":
+                                                Essages.addEssage("Не хватает золота на покупку.");
+                                                break;
+                                            case "O0704":
+                                                Essages.addEssage("Город слишком мал.");
+                                                break;
+                                            case "O0705":
+                                                Essages.addEssage("Не достаточно уровня для изучения умения.");
+                                                break;
+                                            default:
+                                                if (response.has("Message")) Essages.addEssage(response.getString("Message"));
+                                                else Essages.addEssage("Непредвиденная ошибка.");
+
+                                        }
+                                    } catch (JSONException e) {
+                                        GATracker.trackException("BuyUpgrade",e);
+                                    }
+
+                                }
+                            };
+
+                            serverConnect.getInstance().callBuyUpgrade(nbuy,
                                     GPSInfo.getInstance().GetLat(),
                                     GPSInfo.getInstance().GetLng(),
                                     city.getGUID()
@@ -732,6 +826,9 @@ public class City extends GameObject{
                             int priceForOne= (int) (hireprice*discount());
                             gold= (amount)*priceForOne;
                             Player.getPlayer().setGold(Player.getPlayer().getGold()-gold);
+                            if (owner instanceof City) ((City) owner).hirelings-=amount;
+                            Player.getPlayer().setLeftForHire(Player.getPlayer().getLeftToHire()-amount);
+                            update();
 
                         }
 
@@ -754,6 +851,8 @@ public class City extends GameObject{
                         @Override
                         public void postError(JSONObject response) {
                             Player.getPlayer().setGold(Player.getPlayer().getGold()+gold);
+                            if (owner instanceof City) ((City) owner).hirelings+=amount;
+                            Player.getPlayer().setLeftForHire(Player.getPlayer().getLeftToHire()+amount);
                             try {
                             if (response.has("Result")){
                                 String err=response.getString("Result");
@@ -786,6 +885,7 @@ public class City extends GameObject{
                             } catch (JSONException e) {
                                 GATracker.trackException("Hire","ErrorAction Error JSON");
                             }
+                            update();
                         }
                     };
                     serverConnect.getInstance().hirePeople(hire,GPSInfo.getInstance().GetLat(),GPSInfo.getInstance().GetLng(),city.getGUID(),currentCount);
@@ -892,6 +992,15 @@ public class City extends GameObject{
             }
             countHire(1);
         }
+        private void update(){
+            ProgressBar progressBar = (ProgressBar) findViewById(R.id.cityExp);
+            progressBar.setMax(100);
+            progressBar.setProgress(city.getProgress());
+            findViewById(R.id.buyUpgrade).setEnabled(city.upgradeAvaible());
+            ((TextView) findViewById(R.id.skillDesc)).setText(getSkillInfo());
+            countHire(currentCount);
+
+        }
         private boolean countHire(int newValue){
 
             int priceForOne= (int) (hireprice*discount());
@@ -982,7 +1091,7 @@ public class City extends GameObject{
                     }
                 }
                 ImageButton btn= (ImageButton) findViewById(R.id.hirePeople);
-                if (currentCount>0 && inZone) {
+                if (currentCount>0) {
                     btn.setClickable(true);
                     btn.setEnabled(true);
                     btn.setAlpha(1f);
@@ -1138,6 +1247,7 @@ public class City extends GameObject{
                     confirmWindow.setConfirmAction(new Runnable() {
                         @Override
                         public void run() {
+
                             serverConnect.getInstance().callBuyUpgrade(buyAction,
                                     GPSInfo.getInstance().GetLat(),
                                     GPSInfo.getInstance().GetLng(),city.getGUID()

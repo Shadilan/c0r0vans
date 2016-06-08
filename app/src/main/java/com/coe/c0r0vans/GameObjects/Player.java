@@ -50,6 +50,7 @@ public class Player extends GameObject {
     private int maxHirelings;
     private int leftToHire;
     private int foundedCities;
+    private int leftForHire;
 
     public static void instance(){
         player=new Player();
@@ -588,6 +589,10 @@ public class Player extends GameObject {
 
     public void setCurrentRoute(Route currentRoute) {
         this.currentR = currentRoute;
+    }
+
+    public void setLeftForHire(int leftForHire) {
+        this.leftForHire = leftForHire;
     }
 
 
