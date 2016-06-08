@@ -1,16 +1,24 @@
 package utility.settings;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
+import android.widget.TextView;
 
 import com.coe.c0r0vans.R;
 import com.coe.c0r0vans.UIElements.AboutWindow;
 import com.coe.c0r0vans.UIElements.UIControler;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.common.api.GoogleApiClient;
+
+import utility.GATracker;
 
 public class Settings extends RelativeLayout {
 
@@ -68,6 +76,48 @@ public class Settings extends RelativeLayout {
         usePadding= (CheckBox) findViewById(R.id.usePadding);
         trackBearing= (CheckBox) findViewById(R.id.trackBearing);
         closeWindow= (CheckBox) findViewById(R.id.closeWindow);
+        SharedPreferences sp=getContext().getSharedPreferences("SpiritProto",Context.MODE_PRIVATE);
+        ((TextView)findViewById(R.id.accountName)).setText(sp.getString("AccountName",""));
+        findViewById(R.id.exitAccount).setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (GameSettings.getInstance().mClient!=null) {
+                    SharedPreferences sp = getContext().getSharedPreferences("SpiritProto", Context.MODE_PRIVATE);
+                    String accountName = sp.getString("AccountName", "");
+                    sp.edit().clear().apply();
+                    sp = getContext().getSharedPreferences("MESSAGES", Context.MODE_PRIVATE);
+                    sp.edit().clear().apply();
+                    sp = getContext().getSharedPreferences("player", Context.MODE_PRIVATE);
+                    sp.edit().clear().apply();
+                    if (GameSettings.getInstance().mClient.isConnected()){
+                        Auth.GoogleSignInApi.signOut(GameSettings.getInstance().mClient);
+
+                        GATracker.trackHit("System", "ExitApplication");
+                        //Todo Как корректно завершить приложение
+                        System.exit(0);
+                    } else
+                    {
+                        GameSettings.getInstance().mClient.registerConnectionCallbacks(new GoogleApiClient.ConnectionCallbacks() {
+                            @Override
+                            public void onConnected(@Nullable Bundle bundle) {
+                                Auth.GoogleSignInApi.signOut(GameSettings.getInstance().mClient);
+                                GATracker.trackHit("System", "ExitApplication");
+                                //Todo Как корректно завершить приложение
+                                System.exit(0);
+                            }
+
+                            @Override
+                            public void onConnectionSuspended(int i) {
+
+                            }
+                        });
+                        GameSettings.getInstance().mClient.connect();
+                    }
+
+                }
+
+            }
+        });
 
         cancel_button.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -25,9 +25,37 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 style="@style/MediumText"
+                android:text="@string/security"
+                android:id="@+id/securityTitle"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/MediumText"
+                android:id="@+id/accountName"
+                android:layout_alignBaseline="@+id/exitAccount"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true" />
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/exitAccount"
+                android:text="@string/exit"
+                android:layout_below="@+id/securityTitle"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                style="@style/CommonButton"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/MediumText"
                 android:text="@string/settings_display"
                 android:id="@+id/displayTitle"
-                android:layout_alignParentTop="true"
+                android:layout_below="@id/exitAccount"
                 android:layout_centerHorizontal="true"
                 android:textStyle="bold" />
 
@@ -313,7 +341,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 style="@style/MediumText"
-                android:text="Ошибки сети"
+                android:text="@string/network_error"
                 android:layout_alignBottom="@+id/netErrorLogOn"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true" />

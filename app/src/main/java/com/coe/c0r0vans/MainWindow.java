@@ -120,6 +120,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
     private void ofThreadInit(){
         Log.d("ProcedureCall","ofThreadInit");
         GameSettings.init(getApplicationContext());
+        GameSettings.getInstance().mClient=mGoogleApiClient;
         ImageLoader.Loader(getApplicationContext());
         GameSound.init(getApplicationContext());
         MessageNotification.init(getApplicationContext());
@@ -546,13 +547,21 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
         ((TextView)findViewById(R.id.status)).setText(R.string.enter_google_account);
         SharedPreferences sharedPreferences=getSharedPreferences("SpiritProto", MODE_PRIVATE);
         String accountName=sharedPreferences.getString("AccountName", "");
+        Log.d("SignOff","Account:"+accountName);
         GoogleSignInOptions gso;
-        if ("".equals(accountName))
+
+        if ("".equals(accountName)) {
             gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                     .requestIdToken("818299087088-ooq951dsv5btv7361u4obhlse0apt3al.apps.googleusercontent.com")
                     .requestEmail()
                     .build();
-        else
+            mGoogleApiClient = new GoogleApiClient.Builder(getApplicationContext())
+                    .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                    .build();
+            Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
+            startActivityForResult(signInIntent, 123);
+        }
+        else {
             gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                     .requestIdToken("818299087088-ooq951dsv5btv7361u4obhlse0apt3al.apps.googleusercontent.com")
                     .requestEmail()
@@ -561,9 +570,51 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
             mGoogleApiClient = new GoogleApiClient.Builder(getApplicationContext())
                     .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                     .build();
+            /*OptionalPendingResult<GoogleSignInResult> pendingResult =  Auth.GoogleSignInApi.silentSignIn(mGoogleApiClient);
+            if (pendingResult != null) {
+                if (pendingResult.isDone()) {
+                    System.out.println("pendingResult is done = ");
+                    GoogleSignInResult signInResult = pendingResult.get();
+                    doResult(signInResult);
+                } else {
+                    pendingResult.setResultCallback(new ResultCallback<GoogleSignInResult>() {
+                        @Override
+                        public void onResult(GoogleSignInResult googleSignInResult) {
+                            System.out.println("googleSignInResult = " + googleSignInResult);
+                            doResult(googleSignInResult);
+                        }
+                    });
+                }
+            }*/
             Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
             startActivityForResult(signInIntent, 123);
 
+        }
+
+
+    }
+    private void doResult(GoogleSignInResult result){
+        if (result!=null && result.isSuccess()) {
+
+            GoogleSignInAccount acct = result.getSignInAccount();
+            // Get account information
+            //String accountNAme = acct.get();
+            if (acct!=null) {
+                idToken = acct.getIdToken();
+                String mEmail = acct.getEmail();
+                SharedPreferences sharedPreferences = getSharedPreferences("SpiritProto", MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString("AccountName", mEmail);
+                editor.apply();
+                GATracker.trackTimeEnd("System","SignIn");
+                //Login To Server
+                loginWithToken();
+
+                //initStart();
+            } else signIn();
+        } else {
+            signIn();
+        }
     }
     protected void onActivityResult(final int requestCode, final int resultCode,
                                     final Intent data) {
@@ -574,27 +625,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
             ((TextView)findViewById(R.id.status)).setText(R.string.done_google_account);
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
 
-            if (result!=null && result.isSuccess()) {
-
-                GoogleSignInAccount acct = result.getSignInAccount();
-                // Get account information
-                //String accountNAme = acct.get();
-                if (acct!=null) {
-                    idToken = acct.getIdToken();
-                    String mEmail = acct.getEmail();
-                    SharedPreferences sharedPreferences = getSharedPreferences("SpiritProto", MODE_PRIVATE);
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putString("AccountName", mEmail);
-                    editor.apply();
-                    GATracker.trackTimeEnd("System","SignIn");
-                    //Login To Server
-                    loginWithToken();
-
-                    //initStart();
-                } else signIn();
-            } else {
-                signIn();
-            }
+            doResult(result);
         }
     }
     String idToken;

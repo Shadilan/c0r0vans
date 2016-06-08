@@ -138,6 +138,9 @@ All rights reserved to Circle of Eternity</string>
     <string name="sk_name_founder">Founder</string>
     <string name="sk_name_paladin">Access Radius</string>
     <string name="founded">Founded by:</string>
-    <string name="get_location">Определение местосположения.</string>
-    <string name="location_aquired">Местоположение определено.</string>
+    <string name="get_location">Acquire location.</string>
+    <string name="location_aquired">Location acquired.</string>
+    <string name="exit">Exit</string>
+    <string name="network_error">Network Error</string>
+    <string name="security">Security</string>
 </resources>

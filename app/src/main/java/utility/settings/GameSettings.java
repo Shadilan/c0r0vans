@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.util.Log;
 
 import com.coe.c0r0vans.GameObjects.GameObject;
+import com.google.android.gms.common.api.GoogleApiClient;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,6 +18,7 @@ import java.util.Map;
  */
 public class GameSettings extends HashMap<String,String>{
     private static GameSettings instance;
+    public GoogleApiClient mClient;
     private Context ctx;
     private ArrayList<SettingsListener> settingsListeners;
     private ArrayList<SettingsListener> removedSettingsListeners;
