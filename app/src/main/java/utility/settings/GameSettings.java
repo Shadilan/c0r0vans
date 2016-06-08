@@ -74,7 +74,7 @@ public class GameSettings extends HashMap<String,String>{
         //Отображение
         put("SHOW_AMBUSH_RADIUS","Y");
         put("SHOW_CITY_RADIUS","Y");
-        put("SHOW_CARAVAN_ROUTE","N");
+        put("SHOW_CARAVAN_ROUTE","Y");
         put("SHOW_BUILD_AREA","N");
         //Медия
         put("MUSIC_ON","N");
@@ -82,7 +82,7 @@ public class GameSettings extends HashMap<String,String>{
         put("VIBRATE_ON","N");
         //
         put("USE_TILT","N");
-        put("VIEW_PADDING","N");//Быстрые действия
+        put("VIEW_PADDING","Y");//Быстрые действия
         put("CLOSE_WINDOW","Y");
 
         put("GPS_ON_BACK","N");
