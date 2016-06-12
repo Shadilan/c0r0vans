@@ -591,8 +591,9 @@ public class Player extends GameObject {
         this.currentR = currentRoute;
     }
 
-    public void setLeftForHire(int leftForHire) {
-        this.leftForHire = leftForHire;
+    public void setLeftToHire(int leftToHire) {
+        this.leftToHire = leftToHire;
+
     }
 
 

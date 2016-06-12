@@ -573,7 +573,7 @@ public class City extends GameObject{
                 String dop;
                 if (up.getReqCityLev()>Level) dop= String.format(getContext().getString(R.string.city_lvl_required), up.getReqCityLev());
                 else if ((upcost)>Player.getPlayer().getGold()) dop= String.format(getContext().getString(R.string.need_more_gold), StringUtils.intToStr(upcost - Player.getPlayer().getGold()));
-                else if (up.getLevel()>Player.getPlayer().getLevel()-1) dop= String.format(getContext().getString(R.string.need_higher_lvl), up.getLevel());
+                else if (up.getLevel()>Player.getPlayer().getLevel()-1) dop= String.format(getContext().getString(R.string.need_higher_lvl), up.getLevel()+1);
                 else dop= String.format("Эффект:%s\n", up.getDescription());
 
                 return String.format(getContext().getString(R.string.price), up.getName(), StringUtils.intToStr(upcost),StringUtils.intToStr(up.getCost()), dop);
@@ -830,7 +830,7 @@ public class City extends GameObject{
                             gold= (amount)*priceForOne;
                             Player.getPlayer().setGold(Player.getPlayer().getGold()-gold);
                             if (owner instanceof City) ((City) owner).hirelings-=amount;
-                            Player.getPlayer().setLeftForHire(Player.getPlayer().getLeftToHire()-amount);
+                            Player.getPlayer().setLeftToHire(Player.getPlayer().getLeftToHire()-amount);
                             update();
 
                         }
@@ -855,7 +855,7 @@ public class City extends GameObject{
                         public void postError(JSONObject response) {
                             Player.getPlayer().setGold(Player.getPlayer().getGold()+gold);
                             if (owner instanceof City) ((City) owner).hirelings+=amount;
-                            Player.getPlayer().setLeftForHire(Player.getPlayer().getLeftToHire()+amount);
+                            Player.getPlayer().setLeftToHire(Player.getPlayer().getLeftToHire()+amount);
                             try {
                             if (response.has("Result")){
                                 String err=response.getString("Result");

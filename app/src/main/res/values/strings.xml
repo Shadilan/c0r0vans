@@ -1,4 +1,5 @@
 <resources>
+    <string name="version" translatable="false">3.0.2a</string>
     <string name="app_name">c0r0vans α</string>
     <string name="login_window">Login</string>
     <string name="serveradressOld" translatable="false">https://alpha3-corovans.rhcloud.com</string>
@@ -53,7 +54,7 @@
     <string name="alliance_name">Alliance of Workers</string>
     <string name="legue_name">League of Independent merchants</string>
     <string name="legue_text">Независимые купцы существовали всегда. В поисках выгоды они все время продумывали новые торговые маршруты, сокращали издержки и повышали привлекательность своей продукции для покупателя. Однако конкуренция на рынке не была честной - и Гильдия и Альянс использовали свое влияние для создания неблагоприятных условий успешным купцам. Для защиты своих интересов независимые купцы создали Лигу. Не обладая монопольным положением ни в одной отрасли Лига уверенно чувствует себя во всех областях. Умение Лиги работать с покупателями и максимизировать свою прибыль позволяет ей конкурировать с Гильдией и Альянсом в их традиционных сферах влияния. В настоящее время все три организации обладают примерно равным влиянием и потенциалом.</string>
-    <string name="version" translatable="false">3.0.1a</string>
+
     <string name="distance">%1$dм</string>
     <string name="upgrade_bought">Upgrade "%s" has bought.</string>
     <string name="route_finish">Rote has finished in "%1$s"</string>
