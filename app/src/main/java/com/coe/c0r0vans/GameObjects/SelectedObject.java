@@ -31,7 +31,7 @@ public class SelectedObject {
             circleOptions.radius(Player.getPlayer().getAmbushRad());
             circleOptions.strokeColor(Color.RED);
             circleOptions.strokeWidth(5);
-            circleOptions.zIndex(1);
+            circleOptions.zIndex(200);
             circleOptions.radius(target.getRadius());
             clickpos = MyGoogleMap.getMap().addCircle(circleOptions);
 

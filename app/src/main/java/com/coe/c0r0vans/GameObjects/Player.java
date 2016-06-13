@@ -50,7 +50,7 @@ public class Player extends GameObject {
     private int maxHirelings;
     private int leftToHire;
     private int foundedCities;
-    private int leftForHire;
+    private int cityMax;
 
     public static void instance(){
         player=new Player();
@@ -360,6 +360,7 @@ public class Player extends GameObject {
                     Upgrade upgrade=new Upgrade(upg.getJSONObject(i));
                     Upgrades.add(upgrade);
                     if (upgrade.getType().equals("bargain")) trade=upgrade.getEffect1();
+                    if (upgrade.getType().equals("founder")) cityMax=upgrade.getEffect1();
                 }
 
             }
@@ -597,6 +598,10 @@ public class Player extends GameObject {
 
     }
 
+    public int getCityMax() {
+        return cityMax;
+    }
+
 
     class ambushCreate extends RelativeLayout implements GameObjectView{
 
@@ -737,6 +742,8 @@ public class Player extends GameObject {
                     if (response.has("City")){
                         try {
                             City city=new City(MyGoogleMap.getMap(),response.getJSONObject("City"));
+                            city.setFounder(Player.getPlayer().getName());
+                            city.setOwner(true);
                             GameObjects.getInstance().put(city);
                         } catch (JSONException e) {
                             GATracker.trackException("CreateCity","PostAction Error.");

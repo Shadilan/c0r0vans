@@ -21,7 +21,6 @@ public class MainInfoTable extends LinearLayout implements PlayerInfoLayout {
     private TextView gold;
     private TextView caravans;
     private TextView ambushes;
-    private TextView ambushes_left;
     private ImageView faction;
     private TextView tnl;
     private TextView profit;
@@ -51,7 +50,6 @@ public class MainInfoTable extends LinearLayout implements PlayerInfoLayout {
         gold= (TextView) findViewById(R.id.goldInfo);
         caravans= (TextView) findViewById(R.id.caravanInfo);
         ambushes= (TextView) findViewById(R.id.ambushSetInfo);
-        ambushes_left= (TextView) findViewById(R.id.ambushLeftInfo);
         faction= (ImageView) findViewById(R.id.factionSymbol);
         profit = (TextView) findViewById(R.id.profit);
         hirelings= (TextView) findViewById(R.id.hirelings);
@@ -65,12 +63,12 @@ public class MainInfoTable extends LinearLayout implements PlayerInfoLayout {
             gold.setText(StringUtils.intToStr(Player.getPlayer().getGold()));
             tnl.setText(StringUtils.intToStr(Player.getPlayer().getTNL()));
             caravans.setText(StringUtils.intToStr(Player.getPlayer().getCaravans()));
-            ambushes.setText(StringUtils.intToStr(Player.getPlayer().getAmbushMax() - Player.getPlayer().getAmbushLeft()));
-            ambushes_left.setText(StringUtils.intToStr(Player.getPlayer().getAmbushLeft()));
+            ambushes.setText(StringUtils.intToStr(Player.getPlayer().getAmbushMax() - Player.getPlayer().getAmbushLeft())+"/"+StringUtils.intToStr(Player.getPlayer().getAmbushMax()));
             profit.setText(StringUtils.intToStr(Player.getPlayer().getProfit()));
             hirelings.setText(StringUtils.intToStr(Player.getPlayer().getHirelings()));
             leftToHire.setText(StringUtils.intToStr(Player.getPlayer().getLeftToHire()));
-            foundedCities.setText(StringUtils.intToStr(Player.getPlayer().getFoundedCities()));
+            foundedCities.setText(StringUtils.intToStr(Player.getPlayer().getFoundedCities())+"/"+StringUtils.intToStr(Player.getPlayer().getCityMax()));
+
             if (Player.getPlayer().getRace() == 1) {
                 faction.setImageResource(R.mipmap.guild);
             } else if (Player.getPlayer().getRace() == 2) {

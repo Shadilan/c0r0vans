@@ -31,6 +31,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Arrays;
+
 import utility.GATracker;
 import utility.GPSInfo;
 import utility.GameSound;
@@ -264,6 +266,9 @@ public class City extends GameObject{
                     if ((response.has("Result") && "OK".equals(response.getString("Result"))) || (!response.has("Result")
                             && !response.has("Error"))){
                         GameSound.playSound(GameSound.BUY_SOUND);
+                        Upgrade up = Player.getPlayer().getUpgrade(upgrade);
+                        if (up != null) Essages.addEssage(String.format(ctx.getResources().getString(R.string.upgrade_bought),up.getName()));
+                        else Essages.addEssage(String.format(ctx.getResources().getString(R.string.upgrade_bought), upgrade));
                         if (response.has("Upgrade")){
                             Upgrade n=new Upgrade(response.getJSONObject("Upgrade"));
                             Upgrade r=Player.getPlayer().getUpgrade(n.getType());
@@ -271,18 +276,19 @@ public class City extends GameObject{
                             Player.getPlayer().getUpgrades().add(n);
                         }
                         if (response.has("NextUpgrade")){
-                            Upgrade n=new Upgrade(response.getJSONObject("NexUpgrade"));
+                            Upgrade n=new Upgrade(response.getJSONObject("NextUpgrade"));
                             Player.getPlayer().getNextUpgrades().remove(n.getType());
                             Player.getPlayer().getNextUpgrades().put(n.getType(),n);
                         }
-                        Upgrade up = Player.getPlayer().getUpgrade(upgrade);
-                        if (up != null) Essages.addEssage(String.format(ctx.getResources().getString(R.string.upgrade_bought),up.getName()));
-                        else Essages.addEssage(String.format(ctx.getResources().getString(R.string.upgrade_bought), upgrade));
+
+
+
                     } else postError(response);
 
 
                 } catch (JSONException e) {
                     GATracker.trackException("BuyUpgrade","JSONResult error");
+                    Log.d("BuyUpgrade",e.toString()+ Arrays.toString(e.getStackTrace()));
                 }
 
             }
@@ -518,6 +524,14 @@ public class City extends GameObject{
         return owner;
     }
 
+    public void setOwner(boolean owner) {
+        this.owner = owner;
+    }
+
+    public void setFounder(String founder) {
+        this.founder = founder;
+    }
+
     private class CityWindow extends RelativeLayout implements  GameObjectView,ShowHideForm{
         City city;
         CityWindow self;
@@ -691,6 +705,10 @@ public class City extends GameObject{
                                         if ((response.has("Result") && "OK".equals(response.getString("Result"))) || (!response.has("Result")
                                                 && !response.has("Error"))){
                                             GameSound.playSound(GameSound.BUY_SOUND);
+                                            Upgrade up = Player.getPlayer().getUpgrade(upgrade);
+                                            if (up != null) Essages.addEssage(String.format(getContext().getResources().getString(R.string.upgrade_bought),up.getName()));
+                                            else Essages.addEssage(String.format(getContext().getResources().getString(R.string.upgrade_bought), upgrade));
+
                                             if (response.has("Upgrade")){
                                                 Upgrade n=new Upgrade(response.getJSONObject("Upgrade"));
                                                 Upgrade r=Player.getPlayer().getUpgrade(n.getType());
@@ -698,14 +716,12 @@ public class City extends GameObject{
                                                 Player.getPlayer().getUpgrades().add(n);
                                             }
                                             if (response.has("NextUpgrade")){
-                                                Upgrade n=new Upgrade(response.getJSONObject("NexUpgrade"));
+                                                Upgrade n=new Upgrade(response.getJSONObject("NextUpgrade"));
                                                 Player.getPlayer().getNextUpgrades().remove(n.getType());
                                                 Player.getPlayer().getNextUpgrades().put(n.getType(),n);
                                             }
-                                            Upgrade up = Player.getPlayer().getUpgrade(upgrade);
-                                            if (up != null) Essages.addEssage(String.format(getContext().getResources().getString(R.string.upgrade_bought),up.getName()));
-                                            else Essages.addEssage(String.format(getContext().getResources().getString(R.string.upgrade_bought), upgrade));
                                             update();
+
                                         } else postError(response);
 
 
