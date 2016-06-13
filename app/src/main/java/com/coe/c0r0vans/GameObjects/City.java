@@ -718,7 +718,7 @@ public class City extends GameObject{
                                 @Override
                                 public void postError(JSONObject response) {
                                     try {
-                                        Player.getPlayer().setGold(Player.getPlayer().getGold()-upcost);
+                                        Player.getPlayer().setGold(Player.getPlayer().getGold()+upcost);
                                         update();
                                         String err;
                                         if (response.has("Error")) err=response.getString("Error");
