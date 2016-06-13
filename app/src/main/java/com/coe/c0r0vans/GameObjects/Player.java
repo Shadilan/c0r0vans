@@ -66,7 +66,6 @@ public class Player extends GameObject {
     private int Level=0;
     private int TNL=0;
     private int Exp=0;
-    private int MostIn=0;
     private boolean routeStart=false;
     private int Gold=0;
 
@@ -79,6 +78,8 @@ public class Player extends GameObject {
     private ArrayList<Route> Routes;
     private ArrayList<AmbushItem> Ambushes;
 
+    protected Circle zone1;
+    protected Circle zone2;
 
 
     public Player() {
@@ -200,6 +201,8 @@ public class Player extends GameObject {
     public void setVisibility(boolean visibility) {
         if (mark!=null) mark.setVisible(false);
         zone.setVisible(visibility);
+        zone1.setVisible(visibility);
+        zone2.setVisible(visibility);
         circle2.setVisible(visibility);
     }
 
@@ -220,6 +223,8 @@ public class Player extends GameObject {
     public void setPosition(LatLng target){
         if (mark!=null) mark.setPosition(target);
         if (zone!=null) zone.setCenter(target);
+        if (zone1!=null) zone1.setCenter(target);
+        if (zone2!=null) zone2.setCenter(target);
         if (circle2!=null) circle2.setCenter(target);
         float lastRange=this.getActionDistance();
         if (lastCity==null)lastCity=new ArrayList<>();
@@ -273,6 +278,28 @@ public class Player extends GameObject {
             circleOptions.strokeWidth(5);
             zone=map.addCircle(circleOptions);
 
+        }
+        if (zone1!=null) zone1.setCenter(m.getPosition());
+        else
+        {
+            CircleOptions circleOptions=new CircleOptions();
+            circleOptions.center(m.getPosition());
+            circleOptions.radius(ActionDistance-3);
+            circleOptions.zIndex(2);
+            circleOptions.strokeColor(Color.BLACK);
+            circleOptions.strokeWidth(1);
+            zone1=map.addCircle(circleOptions);
+        }
+        if (zone2!=null) zone2.setCenter(m.getPosition());
+        else
+        {
+            CircleOptions circleOptions=new CircleOptions();
+            circleOptions.center(m.getPosition());
+            circleOptions.radius(ActionDistance+3);
+            circleOptions.zIndex(2);
+            circleOptions.strokeColor(Color.BLACK);
+            circleOptions.strokeWidth(1);
+            zone2=map.addCircle(circleOptions);
         }
         if (circle2!=null) circle2.setCenter(m.getPosition());
         else
@@ -340,7 +367,6 @@ public class Player extends GameObject {
             if (obj.has("Caravans")) Caravans=obj.getInt("Caravans");
             if (obj.has("AmbushesMax")) AmbushesMax=obj.getInt("AmbushesMax");
             if (obj.has("AmbushesLeft")) AmbushesLeft=obj.getInt("AmbushesLeft");
-            if (obj.has("MostIn")) MostIn=obj.getInt("MostIn");
             if (obj.has("AmbushRadius")) AmbushRadius=obj.getInt("AmbushRadius");
             if (obj.has("AmbushRadius")) AmbushRadius=obj.getInt("AmbushRadius");
             if (obj.has("ActionDistance")) ActionDistance=obj.getInt("ActionDistance");
@@ -515,7 +541,7 @@ public class Player extends GameObject {
         circleOptions.center(new LatLng(GPSInfo.getInstance().GetLat() / 1E6, GPSInfo.getInstance().GetLng() / 1E6));
         circleOptions.radius(ActionDistance);
         circleOptions.strokeColor(Color.parseColor("#D08D2E"));
-        circleOptions.strokeWidth(5);
+        circleOptions.strokeWidth(6);
         circleOptions.zIndex(1);
         zone=map.addCircle(circleOptions);
         circleOptions=new CircleOptions();
@@ -524,6 +550,18 @@ public class Player extends GameObject {
         circleOptions.strokeColor(Color.parseColor("#FF0000"));
         circleOptions.strokeWidth(5);
         circle2=map.addCircle(circleOptions);
+        circleOptions.center(new LatLng(GPSInfo.getInstance().GetLat() / 1E6, GPSInfo.getInstance().GetLng() / 1E6));
+        circleOptions.radius(ActionDistance-3);
+        circleOptions.strokeColor(Color.BLACK);
+        circleOptions.strokeWidth(1);
+        circleOptions.zIndex(1);
+        zone1=map.addCircle(circleOptions);
+        circleOptions.center(new LatLng(GPSInfo.getInstance().GetLat() / 1E6, GPSInfo.getInstance().GetLng() / 1E6));
+        circleOptions.radius(ActionDistance+3);
+        circleOptions.strokeColor(Color.BLACK);
+        circleOptions.strokeWidth(1);
+        circleOptions.zIndex(1);
+        zone2=map.addCircle(circleOptions);
         changeMarkerSize();
         mark.setAnchor(0.5f, 0.5f);
         mark.setVisible(false);

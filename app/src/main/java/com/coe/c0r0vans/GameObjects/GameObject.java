@@ -37,6 +37,7 @@ public class GameObject {
     protected Bitmap image;
     protected Marker mark;
     protected Circle zone;
+
     protected GoogleMap map;
 
 
