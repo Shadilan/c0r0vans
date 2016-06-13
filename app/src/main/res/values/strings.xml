@@ -86,7 +86,7 @@ All rights reserved to Circle of Eternity</string>
     <string name="init_object">Object Loading</string>
     <string name="city_lvl_required" >Need town level %1$d\n</string>
     <string name="need_more_gold">Need %1$s more gold!\n</string>
-    <string name="need_higher_lvl">Need Level %1$d\n</string>
+    <string name="need_higher_lvl">Need Player Level %1$d\n</string>
     <string name="price" >%1$s\" for %2$s gold(full price: %3$s).\n%4$s</string>
     <string name="unknown_upgrade">"%1$s\". "</string>
     <string name="Question_Symbol" translatable="false">\?</string>

@@ -342,6 +342,7 @@ public class Player extends GameObject {
             if (obj.has("AmbushesLeft")) AmbushesLeft=obj.getInt("AmbushesLeft");
             if (obj.has("MostIn")) MostIn=obj.getInt("MostIn");
             if (obj.has("AmbushRadius")) AmbushRadius=obj.getInt("AmbushRadius");
+            if (obj.has("AmbushRadius")) AmbushRadius=obj.getInt("AmbushRadius");
             if (obj.has("ActionDistance")) ActionDistance=obj.getInt("ActionDistance");
             if (obj.has("Race")) race=obj.getInt("Race");
             if (race==0) Essages.addEssage("Фракция не выбрана.");
