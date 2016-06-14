@@ -190,6 +190,16 @@ public class Player extends GameObject {
     @Override
     public void changeMarkerSize() {
         //player.mark.setIcon(BitmapDescriptorFactory.fromResource(R.mipmap.marker));
+        if (zone!=null) {
+            if (MyGoogleMap.getClientZoom() == GameObject.ICON_SMALL) {
+                zone.setStrokeWidth(3);
+            } else if (MyGoogleMap.getClientZoom() == GameObject.ICON_LARGE) {
+                zone.setStrokeWidth(9);
+            } else {
+                zone.setStrokeWidth(5);
+            }
+        }
+
     }
 
     @Override
@@ -263,6 +273,7 @@ public class Player extends GameObject {
         }
         lastCity.clear();
         lastCity.addAll(newLastCity);
+        changeMarkerSize();
     }
     @Override
     public void setMarker(Marker m) {
@@ -312,6 +323,7 @@ public class Player extends GameObject {
             circleOptions.zIndex(200);
             circle2=map.addCircle(circleOptions);
         }
+        changeMarkerSize();
     }
 
     public JSONObject getJSON() throws JSONException {
@@ -435,7 +447,9 @@ public class Player extends GameObject {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        changeMarkerSize();
         change(OnGameObjectChange.EXTERNAL);
+
     }
 
     @Override

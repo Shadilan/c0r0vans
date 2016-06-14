@@ -162,6 +162,7 @@ public class ButtonLayout extends RelativeLayout {
                     MyGoogleMap.switchZoom();
                     for (GameObject obj : GameObjects.getInstance().values())
                         if (obj.getMarker() != null) obj.changeMarkerSize();
+                    Player.getPlayer().changeMarkerSize();
                 } catch (Exception e) {
                     GATracker.trackException("ZoomClick",e);
                 }
