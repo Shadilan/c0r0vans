@@ -776,7 +776,9 @@ public class Player extends GameObject {
                 @Override
                 public void postAction(JSONObject response) {
                     int distance= (int) GPSInfo.getDistance(GPSInfo.getInstance().getLatLng(),coord);
+                    foundedCities++;
                     Essages.addEssage("Поселение было создано в "+ distance+" метрах.");
+                    Essages.addEssage("Вы можете создать еще "+ (cityMax-foundedCities)+" поселений.");
                     if (response.has("City")){
                         try {
                             City city=new City(MyGoogleMap.getMap(),response.getJSONObject("City"));
@@ -787,6 +789,7 @@ public class Player extends GameObject {
                             GATracker.trackException("CreateCity","PostAction Error.");
                         }
                     }
+                    change(OnGameObjectChange.EXTERNAL);
                 }
 
                 @Override

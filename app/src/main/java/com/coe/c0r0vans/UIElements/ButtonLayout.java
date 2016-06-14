@@ -27,6 +27,8 @@ import utility.StringUtils;
 import utility.internet.ServerListener;
 import utility.internet.serverConnect;
 import utility.notification.Essages;
+import utility.settings.GameSettings;
+import utility.settings.SettingsListener;
 
 /**
  * Элементы интерфейса
@@ -58,9 +60,9 @@ public class ButtonLayout extends RelativeLayout {
         }
     }
 
-    private void afterInit(){
+    private void afterInit() {
         MyGoogleMap.setShowpointButton((ImageButton) findViewById(R.id.showPosButton));
-        infoLayout=new InfoLayout(getContext());
+        infoLayout = new InfoLayout(getContext());
         infoLayout.init();
         ImageView PlayerInfo = (ImageView) findViewById(R.id.infoview);
 
@@ -81,7 +83,7 @@ public class ButtonLayout extends RelativeLayout {
             }
         });
         TextView am;
-        if (Player.getPlayer()!=null) {
+        if (Player.getPlayer() != null) {
             am = (TextView) findViewById(R.id.levelAmount);
             am.setText(String.valueOf(Player.getPlayer().getLevel()));
             am = (TextView) findViewById(R.id.expAmount);
@@ -92,8 +94,47 @@ public class ButtonLayout extends RelativeLayout {
                 PlayerInfo.setImageResource(R.mipmap.info);
             else PlayerInfo.setImageResource(R.mipmap.info_route);
 
+            am = (TextView) findViewById(R.id.foundedAmount);
+            am.setText(Player.getPlayer().getFoundedCities() + "/" + Player.getPlayer().getCityMax());
+
             infoLayout.loadFromPlayer();
         }
+        if ("Y".equals(GameSettings.getValue("SHOW_BUILD_AREA"))) {
+            findViewById(R.id.foundedTitle).setVisibility(VISIBLE);
+            findViewById(R.id.foundedAmount).setVisibility(VISIBLE);
+        }
+        GameSettings.addSettingsListener(new SettingsListener() {
+            @Override
+            public void onSettingsSave() {
+
+            }
+
+            @Override
+            public void onSettingsLoad() {
+                if ("Y".equals(GameSettings.getValue("SHOW_BUILD_AREA"))) {
+                    findViewById(R.id.foundedTitle).setVisibility(VISIBLE);
+                    findViewById(R.id.foundedAmount).setVisibility(VISIBLE);
+                } else
+                {
+                    findViewById(R.id.foundedTitle).setVisibility(GONE);
+                    findViewById(R.id.foundedAmount).setVisibility(GONE);
+                }
+            }
+
+            @Override
+            public void onSettingChange(String setting) {
+                if ("SHOW_BUILD_AREA".equals(setting)){
+                    if ("Y".equals(GameSettings.getValue("SHOW_BUILD_AREA"))) {
+                        findViewById(R.id.foundedTitle).setVisibility(VISIBLE);
+                        findViewById(R.id.foundedAmount).setVisibility(VISIBLE);
+                    } else
+                    {
+                        findViewById(R.id.foundedTitle).setVisibility(GONE);
+                        findViewById(R.id.foundedAmount).setVisibility(GONE);
+                    }
+                }
+            }
+        });
         Settings.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
@@ -142,6 +183,10 @@ public class ButtonLayout extends RelativeLayout {
                     if ("".equals(Player.getPlayer().getCurrentRouteGUID()))
                         btn.setImageResource(R.mipmap.info);
                     else btn.setImageResource(R.mipmap.info_route);
+
+                    am = (TextView) findViewById(R.id.foundedAmount);
+                    am.setText(Player.getPlayer().getFoundedCities() + "/" + Player.getPlayer().getCityMax());
+
                     infoLayout.loadFromPlayer();
                 } catch (Exception e){
                     GATracker.trackException("PlayerChange",e);

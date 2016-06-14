@@ -131,6 +131,7 @@ All rights reserved to Circle of Eternity</string>
     <string name="plus" translatable="false">+</string>
     <string name="build_area_settings">Build helper</string>
     <string name="foundedCities">Towns founded:</string>
+    <string name="асities">Towns:</string>
     <string name="sk_name_speed">Speed</string>
     <string name="sk_name_cargo">Cargo</string>
     <string name="sk_name_bargain">Bargain</string>
