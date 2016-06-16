@@ -12,6 +12,8 @@ import com.coe.c0r0vans.GameObjects.Upgrade;
 import com.coe.c0r0vans.R;
 import com.coe.c0r0vans.ShowHideForm;
 
+import utility.StringUtils;
+
 /**
  * Информация об апгрейдах
  */
@@ -49,7 +51,11 @@ public class UpgradeInfo extends LinearLayout implements PlayerInfoLayout {
             l.addView(iv);
             TextView info=new TextView(getContext());
             info.setSingleLine(false);
-            info.setText(String.format(getContext().getString(R.string.two_lines), u.getName(), u.getDescription()));
+            String s;
+            if (Player.getPlayer().getNextUpgrade(u.getType())!=null) {
+                 s = StringUtils.intToStr((int) (Player.getPlayer().getNextUpgrade(u.getType()).getCost() * (100f - Player.getPlayer().getTrade() / 100f)));
+            } else  s = StringUtils.intToStr((int) (u.getCost() * (100f - Player.getPlayer().getTrade() / 100f)));
+            info.setText(String.format(getContext().getString(R.string.upgrade_text), u.getName(), u.getDescription(),s));
             info.setTextColor(Color.BLACK);
             l.addView(info);
             l.requestLayout();

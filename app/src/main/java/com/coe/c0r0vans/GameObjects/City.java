@@ -224,6 +224,13 @@ public class City extends GameObject{
                         case "O0605":
                             Essages.addEssage("Маршрут начинается в этом городе.");
                             break;
+                        case "O0606":
+                            if (response.has("Message"))
+                                Essages.addEssage(response.getString("Message"));
+                            else Essages.addEssage("Не хватает наемников.");
+                            Player.getPlayer().setRouteStart(routeStart);
+                            Player.getPlayer().setCurrentRouteGUID(oldRouteGuid);
+                            Player.getPlayer().setCurrentRoute(oldRoute);
                         default:
                             Player.getPlayer().setRouteStart(true);
                             if (response.has("Message"))

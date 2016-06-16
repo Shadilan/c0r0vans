@@ -1,5 +1,5 @@
 <resources>
-    <string name="version" translatable="false">3.0.3a</string>
+    <string name="version" translatable="false">3.0.4a</string>
     <string name="app_name">c0r0vans α</string>
     <string name="login_window">Login</string>
     <string name="serveradressOld" translatable="false">https://alpha3-corovans.rhcloud.com</string>
@@ -121,7 +121,7 @@ All rights reserved to Circle of Eternity</string>
     <string name="course_on_move">Course by move</string>
     <string name="qiestion" translatable="false">\?</string>
     <string name="pages" translatable="false">%1$d/%2$d</string>
-    <string name="two_lines" translatable="false" >%1$s\n%2$s</string>
+    <string name="upgrade_text" translatable="false" >%1$s\n%2$s\n%3$s❍</string>
     <string name="leftHirelings">Left to hire:</string>
     <string name="hire">Hire: %1$d of %2$d for %3$s</string>
     <string name="server_unavaible">Server unavaible.\nRetry in 30 seconds.</string>
