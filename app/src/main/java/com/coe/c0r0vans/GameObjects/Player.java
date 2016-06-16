@@ -47,7 +47,7 @@ public class Player extends GameObject {
     private int trade;
     private int profit=0;
     private int hirelings;
-    private int maxHirelings;
+
     private int leftToHire;
     private int foundedCities;
     private int cityMax;
@@ -405,6 +405,8 @@ public class Player extends GameObject {
             profit=0;
             if (obj.has("Routes")){
                 currentRouteGuid="";
+                currentR=null;
+                setRouteStart(false);
                 JSONArray route=obj.getJSONArray("Routes");
                 for (Route routel:Routes){
                     routel.RemoveObject();
@@ -416,6 +418,7 @@ public class Player extends GameObject {
                     if (routeObj.getFinishName().equals("null") || routeObj.getFinishName()==null) {
                         currentRouteGuid=routeObj.getStartGuid();
                         currentR=routeObj;
+                        setRouteStart(true);
                     }
                     else Routes.add(routeObj);
                     profit+=routeObj.getProfit();
