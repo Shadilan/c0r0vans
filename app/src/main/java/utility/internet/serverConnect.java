@@ -591,7 +591,7 @@ public class serverConnect {
                         }
                     }
                 });
-        jsObjRequest.setRetryPolicy(new DefaultRetryPolicy(20 * 1000, 0,
+        jsObjRequest.setRetryPolicy(new DefaultRetryPolicy(5 * 1000, 0,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         reqq.add(jsObjRequest);
 

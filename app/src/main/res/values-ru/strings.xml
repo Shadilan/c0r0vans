@@ -114,7 +114,7 @@
     <string name="city_created" >Поселение возникло в %1$d метрах от вас.</string>
     <string name="build_area_settings">Зоны создания</string>
     <string name="foundedCities">Поселений основано:</string>
-    <string name="асities">Поселенеий:</string>
+    <string name="асities">Поселений:</string>
     <string name="sk_name_speed">Скорость</string>
     <string name="sk_name_cargo">Грузоподьемность</string>
     <string name="sk_name_bargain">Торговля</string>
