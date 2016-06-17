@@ -626,6 +626,7 @@ public class Player extends GameObject {
 
     public void setHirelings(int hirelings) {
         this.hirelings = hirelings;
+        change(OnGameObjectChange.EXTERNAL);
     }
 
     public int getFoundedCities() {
