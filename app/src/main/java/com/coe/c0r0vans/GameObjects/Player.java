@@ -200,6 +200,7 @@ public class Player extends GameObject {
             }
         }
 
+
     }
 
     @Override
@@ -390,6 +391,10 @@ public class Player extends GameObject {
             if (race!=0) GameSettings.setFaction(race);
             //TODO: Здесь не должно быть нула. Видимо маркер не инициализуерся в игроке.
             if (zone!=null) zone.setRadius(ActionDistance);
+            if (zone1!=null) zone1.setRadius(ActionDistance-3);
+            if (zone2!=null) zone1.setRadius(ActionDistance+3);
+
+
             if (obj.has("Upgrades")){
                 JSONArray upg=obj.getJSONArray("Upgrades");
                 Upgrades.clear();
