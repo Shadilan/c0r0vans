@@ -96,7 +96,7 @@ public class ButtonLayout extends RelativeLayout {
 
             am = (TextView) findViewById(R.id.foundedAmount);
             am.setText(Player.getPlayer().getFoundedCities() + "/" + Player.getPlayer().getCityMax());
-
+            ((TextView) findViewById(R.id.hirelingsAmount)).setText(String.format("%s(%s)", StringUtils.intToStr(Player.getPlayer().getHirelings()), StringUtils.intToStr(Player.getPlayer().getLeftToHire())));
             infoLayout.loadFromPlayer();
         }
         if ("Y".equals(GameSettings.getValue("SHOW_BUILD_AREA"))) {
@@ -187,6 +187,7 @@ public class ButtonLayout extends RelativeLayout {
 
                     am = (TextView) findViewById(R.id.foundedAmount);
                     am.setText(Player.getPlayer().getFoundedCities() + "/" + Player.getPlayer().getCityMax());
+                    ((TextView) findViewById(R.id.hirelingsAmount)).setText(String.format("%s(%s)", StringUtils.intToStr(Player.getPlayer().getHirelings()), StringUtils.intToStr(Player.getPlayer().getLeftToHire())));
 
                     infoLayout.loadFromPlayer();
                 } catch (Exception e){
