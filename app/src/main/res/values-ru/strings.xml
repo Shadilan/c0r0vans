@@ -123,7 +123,7 @@
     <string name="sk_name_founder">Создание городов</string>
     <string name="sk_name_paladin">Радиус действия</string>
     <string name="founded">Основатель </string>
-    <string name="get_location">Определение местосположения.</string>
+    <string name="get_location">Определение местоположения.</string>
     <string name="location_aquired">Местоположение определено.</string>
     <string name="exit">Выход</string>
     <string name="network_error">Ошибки сети</string>
