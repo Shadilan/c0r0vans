@@ -167,49 +167,46 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
         if (isListenersDone) return;
         serverConnect.getInstance().addListener(new ServerListener() {
             @Override
-            public void onLogin(JSONObject response) {
-
-            }
-
-            @Override
-            public void onRefresh(JSONObject response) {
-                SendedRequest = 0;
-                UIControler.getButtonLayout().hideConnectImage();
-
-            }
-
-            @Override
-            public void onAction(JSONObject response) {
-
-            }
-
-            @Override
-            public void onPlayerInfo(JSONObject response) {
-                try {
-                    Player.getPlayer().loadJSON(response);
-                    if (Player.getPlayer().getRace() < 1 || Player.getPlayer().getRace() > 3) {
-                        messages.clear();
-                        Essages.clear();
-                        new ChooseFaction(getApplicationContext()).show();
-                    }
-                    SharedPreferences sp = getApplicationContext().getSharedPreferences("player", Context.MODE_PRIVATE);
-                    SharedPreferences.Editor ed = sp.edit();
+            public void onResponse(int TYPE, JSONObject response) {
+                if (TYPE==REFRESH){
+                    SendedRequest = 0;
+                    UIControler.getButtonLayout().hideConnectImage();
+                } else if (TYPE==PLAYER){
                     try {
-                        ed.putString("player", Player.getPlayer().getJSON().toString());
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    ed.apply();
+                        Player.getPlayer().loadJSON(response);
+                        if (Player.getPlayer().getRace() < 1 || Player.getPlayer().getRace() > 3) {
+                            messages.clear();
+                            Essages.clear();
+                            new ChooseFaction(getApplicationContext()).show();
+                        }
+                        SharedPreferences sp = getApplicationContext().getSharedPreferences("player", Context.MODE_PRIVATE);
+                        SharedPreferences.Editor ed = sp.edit();
+                        try {
+                            ed.putString("player", Player.getPlayer().getJSON().toString());
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        ed.apply();
 
-                    timeToPlayerRefresh = 6;
-                } catch (Exception e){
-                    GATracker.trackException("LoadPlayer",e);
-                    Essages.addEssage(e.toString());
+                        timeToPlayerRefresh = 6;
+                    } catch (Exception e){
+                        GATracker.trackException("LoadPlayer",e);
+                        Essages.addEssage(e.toString());
+                    }
+                } else if (TYPE==MESSAGE){
+                    if (response.has("Messages")) {
+                        try {
+                            messages.loadJSON(response);
+                        } catch (Exception e){
+                            GATracker.trackException("LoadMessage",e);
+                        }
+                    }
                 }
             }
 
             @Override
-            public void onError(JSONObject response) {
+            public void onError(int TYPE, JSONObject response) {
+                //TODO Источник ошибки
                 try {
                     String errorText = "";
                     if (response.has("Error")) {
@@ -228,21 +225,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                 }
             }
 
-            @Override
-            public void onMessage(JSONObject response) {
-                if (response.has("Messages")) {
-                    try {
-                        messages.loadJSON(response);
-                    } catch (Exception e){
-                        GATracker.trackException("LoadMessage",e);
-                    }
-                }
-            }
 
-            @Override
-            public void onRating(JSONObject response) {
-
-            }
         });
         View touchView = findViewById(R.id.touchView);
         touchView.setOnTouchListener(new View.OnTouchListener() {
@@ -634,85 +617,63 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
         GATracker.trackTimeStart("System","LoginToServer");
         serverConnect.getInstance().addListener(new ServerListener() {
             @Override
-            public void onLogin(JSONObject response) {
-                serverConnect.getInstance().removeListener(this);
-                GATracker.trackTimeEnd("System","LoginToServer");
-                if (response.has("Token")) {
-                    ((TextView)findViewById(R.id.status)).setText("Вход выполнен1.");
-                    // Выполнить дальнейшую загрузку
-                    initGPS();
-                } else if (response.has("Error")){
-                    try {
-                        String err=response.getString("Error");
-                        switch (err){
-                            case "H0101":
-                                ((TextView)findViewById(R.id.status)).setText("Сервер отказал запрос.");
-                                break;
-                            //Token не распознан
-                            case "L0201":
-                                //Указать на ошибку
-                                ((TextView)findViewById(R.id.status)).setText("Токен не действителен.");
-                                //Получить новый токен
-                                signIn();
-                                break;
-                            //Пользователь не зарегестрирован
-                            case "L0202":
-                                //Начать процесс регистрации
-                                ((TextView)findViewById(R.id.status)).setText("Регистрация пользователя.");
-                                initRegister();
-                                break;
-                            //Версия не поддерживается
-                            case "L0203":
-                                //Указать ошибку
-                                ((TextView)findViewById(R.id.status)).setText("Ваша версия не поддерживается.");
-                                //Остановить процесс загрузки
-                                break;
-                            default:
-                                ((TextView)findViewById(R.id.status)).setText("Неопознанная ошибка.");
-                                myHandler.postDelayed(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        loginWithToken();
-                                    }
-                                },5000);
+            public void onResponse(int TYPE, JSONObject response) {
+                if (TYPE==LOGIN){
+                    serverConnect.getInstance().removeListener(this);
+                    GATracker.trackTimeEnd("System","LoginToServer");
+                    if (response.has("Token")) {
+                        ((TextView)findViewById(R.id.status)).setText("Вход выполнен1.");
+                        // Выполнить дальнейшую загрузку
+                        initGPS();
+                    } else if (response.has("Error")){
+                        try {
+                            String err=response.getString("Error");
+                            switch (err){
+                                case "H0101":
+                                    ((TextView)findViewById(R.id.status)).setText("Сервер отказал запрос.");
+                                    break;
+                                //Token не распознан
+                                case "L0201":
+                                    //Указать на ошибку
+                                    ((TextView)findViewById(R.id.status)).setText("Токен не действителен.");
+                                    //Получить новый токен
+                                    signIn();
+                                    break;
+                                //Пользователь не зарегестрирован
+                                case "L0202":
+                                    //Начать процесс регистрации
+                                    ((TextView)findViewById(R.id.status)).setText("Регистрация пользователя.");
+                                    initRegister();
+                                    break;
+                                //Версия не поддерживается
+                                case "L0203":
+                                    //Указать ошибку
+                                    ((TextView)findViewById(R.id.status)).setText("Ваша версия не поддерживается.");
+                                    //Остановить процесс загрузки
+                                    break;
+                                default:
+                                    ((TextView)findViewById(R.id.status)).setText("Неопознанная ошибка.");
+                                    myHandler.postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            loginWithToken();
+                                        }
+                                    },5000);
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
                         }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
                     }
+
                 }
-
             }
 
             @Override
-            public void onRefresh(JSONObject response) {
-
-            }
-
-            @Override
-            public void onAction(JSONObject response) {
-
-            }
-
-            @Override
-            public void onPlayerInfo(JSONObject response) {
-
-            }
-
-            @Override
-            public void onError(JSONObject response) {
+            public void onError(int TYPE, JSONObject response) {
+                //TODO После реализации корректной передачи ошибок сделать разделение
                 serverConnect.getInstance().removeListener(this);
                 GATracker.trackTimeEnd("System","RegisterToServer");
                 signIn();
-            }
-
-            @Override
-            public void onMessage(JSONObject response) {
-
-            }
-
-            @Override
-            public void onRating(JSONObject response) {
-
             }
         });
         serverConnect.getInstance().ExecAuthorize(idToken);
@@ -726,76 +687,69 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
 
                 serverConnect.getInstance().addListener(new ServerListener() {
                     @Override
-                    public void onLogin(JSONObject response) {
-                        serverConnect.getInstance().removeListener(this);
-                        GATracker.trackTimeEnd("System","RegisterToServer");
-                        if (response.has("Token")) {
-                            ((TextView)findViewById(R.id.status)).setText("Вход выполнен2.");
-                            // Выполнить дальнейшую загрузку
-                            initGPS();
-                        } else if (response.has("Error")){
-                            try {
-                                String err=response.getString("Error");
-                                switch (err){
-                                    case "H0101":
-                                        ((TextView)findViewById(R.id.status)).setText("Сервер отказал запрос.");
-                                        break;
-                                    //Token не распознан
-                                    case "L0301":
-                                        //Указать на ошибку
-                                        ((TextView)findViewById(R.id.status)).setText("Токен не действителен.");
-                                        //Получить новый токен
-                                        signIn();
-                                        break;
-                                    //Пользователь не зарегестрирован
-                                    case "L0202":
-                                        //Начать процесс регистрации
-                                        ((TextView)findViewById(R.id.status)).setText("Регистрация пользователя.");
-                                        initRegister();
-                                        break;
-                                    //Версия не поддерживается
-                                    case "L0303":
-                                        //Указать ошибку
-                                        ((TextView)findViewById(R.id.status)).setText("Пользователь зарегестрирован ранее.");
-                                        initRegister();
-                                        break;
-                                    //Версия не поддерживается
-                                    case "L0304":
-                                        //Указать ошибку
-                                        ((TextView)findViewById(R.id.status)).setText("Ваша версия не поддерживается.");
-                                        //Остановить процесс загрузки
-                                        break;
-                                    default:
-                                        ((TextView)findViewById(R.id.status)).setText("Неопознанная ошибка.");
-                                        myHandler.postDelayed(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                loginWithToken();
-                                            }
-                                        },5000);
+                    public void onResponse(int TYPE, JSONObject response) {
+                        if (TYPE==LOGIN){
+                            serverConnect.getInstance().removeListener(this);
+                            GATracker.trackTimeEnd("System","RegisterToServer");
+                            if (response.has("Token")) {
+                                ((TextView)findViewById(R.id.status)).setText("Вход выполнен2.");
+                                // Выполнить дальнейшую загрузку
+                                initGPS();
+                            } else if (response.has("Error")){
+                                try {
+                                    String err=response.getString("Error");
+                                    switch (err){
+                                        case "H0101":
+                                            ((TextView)findViewById(R.id.status)).setText("Сервер отказал запрос.");
+                                            break;
+                                        //Token не распознан
+                                        case "L0301":
+                                            //Указать на ошибку
+                                            ((TextView)findViewById(R.id.status)).setText("Токен не действителен.");
+                                            //Получить новый токен
+                                            signIn();
+                                            break;
+                                        //Пользователь не зарегестрирован
+                                        case "L0202":
+                                            //Начать процесс регистрации
+                                            ((TextView)findViewById(R.id.status)).setText("Регистрация пользователя.");
+                                            initRegister();
+                                            break;
+                                        //Версия не поддерживается
+                                        case "L0303":
+                                            //Указать ошибку
+                                            ((TextView)findViewById(R.id.status)).setText("Пользователь зарегестрирован ранее.");
+                                            initRegister();
+                                            break;
+                                        //Версия не поддерживается
+                                        case "L0304":
+                                            //Указать ошибку
+                                            ((TextView)findViewById(R.id.status)).setText("Ваша версия не поддерживается.");
+                                            //Остановить процесс загрузки
+                                            break;
+                                        default:
+                                            ((TextView)findViewById(R.id.status)).setText("Неопознанная ошибка.");
+                                            myHandler.postDelayed(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    loginWithToken();
+                                                }
+                                            },5000);
+                                    }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
                                 }
-                            } catch (JSONException e) {
-                                e.printStackTrace();
                             }
                         }
-
                     }
+
                     @Override
-                    public void onRefresh(JSONObject response) {}
-                    @Override
-                    public void onAction(JSONObject response) {}
-                    @Override
-                    public void onPlayerInfo(JSONObject response) {}
-                    @Override
-                    public void onError(JSONObject response) {
+                    public void onError(int TYPE, JSONObject response) {
+                        //TODO после реализации разделения ошибок сделать здесь разделение
                         serverConnect.getInstance().removeListener(this);
                         GATracker.trackTimeEnd("System","RegisterToServer");
                         signIn();
                     }
-                    @Override
-                    public void onMessage(JSONObject response) {}
-                    @Override
-                    public void onRating(JSONObject response) {}
                 });
                 String userName= ((TextView) findViewById(R.id.regName)).getText().toString();
                 String invite= ((TextView) findViewById(R.id.inviteCode)).getText().toString();

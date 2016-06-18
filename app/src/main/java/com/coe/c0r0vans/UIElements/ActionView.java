@@ -46,39 +46,16 @@ public class ActionView extends LinearLayout {
         //inflate(getContext(), R.layout.actions_layout, this);
         serverConnect.getInstance().addListener(new ServerListener() {
             @Override
-            public void onLogin(JSONObject response) {
-
-            }
-
-            @Override
-            public void onRefresh(JSONObject response) {
-
-            }
-
-            @Override
-            public void onAction(JSONObject response) {
-                if (getVisibility() == VISIBLE) {
-                    reloadActions();
+            public void onResponse(int TYPE, JSONObject response) {
+                if (TYPE==ACTION){
+                    if (getVisibility() == VISIBLE) {
+                        reloadActions();
+                    }
                 }
             }
 
             @Override
-            public void onPlayerInfo(JSONObject response) {
-
-            }
-
-            @Override
-            public void onError(JSONObject response) {
-
-            }
-
-            @Override
-            public void onMessage(JSONObject response) {
-
-            }
-
-            @Override
-            public void onRating(JSONObject response) {
+            public void onError(int TYPE, JSONObject response) {
 
             }
         });

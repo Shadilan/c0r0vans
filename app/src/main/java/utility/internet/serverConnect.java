@@ -36,6 +36,7 @@ import utility.notification.Essages;
  * Объект обеспечивающий соединение с сервером и взаимодействие с сервером. Singleton.
  * @author Shadilan
  */
+//TODO Синхронизировать типы вызовов в листенере и здесь
 public class serverConnect {
     private final int max_retry=3;
     private static serverConnect instance;
@@ -488,7 +489,7 @@ public class serverConnect {
                                 switch (getType()) {
                                     case AUTHORIZE:
                                     case REGISTER:
-                                            for (ServerListener l : listeners) l.onLogin(response);
+                                            for (ServerListener l : listeners) l.onError(ServerListener.LOGIN,response);
                                         break;
                                     case SETRACE:
                                         //todo:Связность кода - плохо
@@ -509,47 +510,47 @@ public class serverConnect {
                                         if (listenersMap.get(getUID()) != null) listenersMap.get(getUID()).postError(response);
                                         break;
                                     default:
-                                        for (ServerListener l : listeners) l.onError(response);
+                                        for (ServerListener l : listeners) l.onError(ServerListener.UNKNOWN,response);
                                 }
                             } else {
                                 switch (getType()){
                                     case LOGIN:
                                         try {
                                             Token = response.getString("Token");
-                                            for (ServerListener l : listeners) l.onLogin(response);
+                                            for (ServerListener l : listeners) l.onResponse(ServerListener.LOGIN,response);
                                         } catch (JSONException e) {
-                                            for (ServerListener l:listeners) l.onError(formResponse(response.toString()));
+                                            for (ServerListener l:listeners) l.onError(ServerListener.LOGIN,formResponse(response.toString()));
                                         }
                                         break;
                                     case REFRESH:
-                                        for (ServerListener l : listeners) l.onRefresh(response);
+                                        for (ServerListener l : listeners) l.onResponse(ServerListener.REFRESH,response);
 
                                         break;
-                                    case ACTION: for (ServerListener l : listeners) l.onAction(response);
+                                    case ACTION: for (ServerListener l : listeners) l.onResponse(ServerListener.ACTION,response);
                                         if (listenersMap.get(getUID()) != null) listenersMap.get(getUID()).postAction(response);
                                         break;
                                     case SETRACE:
                                         break;
-                                    case MESSAGE:for (ServerListener l : listeners) l.onMessage(response);
+                                    case MESSAGE:for (ServerListener l : listeners) l.onResponse(ServerListener.MESSAGE,response);
                                         break;
-                                    case PLAYER:for (ServerListener l : listeners) l.onPlayerInfo(response);
+                                    case PLAYER:for (ServerListener l : listeners) l.onResponse(ServerListener.PLAYER,response);
                                         break;
-                                    case RATING:for (ServerListener l : listeners) l.onRating(response);
+                                    case RATING:for (ServerListener l : listeners) l.onResponse(ServerListener.RATING,response);
                                         break;
                                     case AUTHORIZE:
                                         try {
                                             Token = response.getString("Token");
-                                            for (ServerListener l : listeners) l.onLogin(response);
+                                            for (ServerListener l : listeners) l.onResponse(ServerListener.LOGIN,response);
                                         } catch (JSONException e) {
-                                            for (ServerListener l:listeners) l.onError(formResponse(response.toString()));
+                                            for (ServerListener l:listeners) l.onError(ServerListener.LOGIN,formResponse(response.toString()));
                                         }
                                         break;
                                     case REGISTER:
                                         try {
                                             Token = response.getString("Token");
-                                            for (ServerListener l : listeners) l.onLogin(response);
+                                            for (ServerListener l : listeners) l.onResponse(ServerListener.LOGIN,response);
                                         } catch (JSONException e) {
-                                            for (ServerListener l:listeners) l.onError(formResponse(response.toString()));
+                                            for (ServerListener l:listeners) l.onError(ServerListener.LOGIN,formResponse(response.toString()));
                                         }
                                         break;
                                 }
@@ -580,7 +581,8 @@ public class serverConnect {
                                 if (getType() == 2) if (errorMap.get(getUID()) != null)
                                     errorMap.get(getUID()).postError(new JSONObject().put("Error","U0000").put("Message",error.getMessage()));
                                 for (ServerListener l : listeners)
-                                    l.onError(formResponse(error.toString()));
+                                //TODO передавать корректный тип
+                                    l.onError(ServerListener.UNKNOWN,formResponse(error.toString()));
                                 runNextRequest();
                             }
 

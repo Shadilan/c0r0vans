@@ -8,13 +8,16 @@ import org.json.JSONObject;
  *
  */
 public abstract class ServerListener {
-    public abstract void onLogin(JSONObject response);
-    public abstract void onRefresh(JSONObject response);
-    public abstract void onAction(JSONObject response);
-    public abstract void onPlayerInfo(JSONObject response);
-    public abstract void onError(JSONObject response);
-    public abstract void onMessage(JSONObject response);
-    public abstract void onRating(JSONObject response);
+    public static int UNKNOWN=-1;
+    public static int LOGIN=0;
+    public static int REFRESH=1;
+    public static int ACTION=2;
+    public static int PLAYER=3;
+    public static int MESSAGE=4;
+    public static int RATING=5;
+
+    public abstract void onResponse(int TYPE,JSONObject response);
+    public abstract void onError(int TYPE,JSONObject response);
     public void onChangeQueue(int count){
 
     }

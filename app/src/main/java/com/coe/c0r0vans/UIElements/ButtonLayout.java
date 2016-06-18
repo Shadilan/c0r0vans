@@ -227,37 +227,12 @@ public class ButtonLayout extends RelativeLayout {
         Essages.setTarget(logView);
         serverConnect.getInstance().addListener(new ServerListener() {
             @Override
-            public void onLogin(JSONObject response) {
+            public void onResponse(int TYPE, JSONObject response) {
 
             }
 
             @Override
-            public void onRefresh(JSONObject response) {
-
-            }
-
-            @Override
-            public void onAction(JSONObject response) {
-
-            }
-
-            @Override
-            public void onPlayerInfo(JSONObject response) {
-
-            }
-
-            @Override
-            public void onError(JSONObject response) {
-
-            }
-
-            @Override
-            public void onMessage(JSONObject response) {
-
-            }
-
-            @Override
-            public void onRating(JSONObject response) {
+            public void onError(int TYPE, JSONObject response) {
 
             }
 
