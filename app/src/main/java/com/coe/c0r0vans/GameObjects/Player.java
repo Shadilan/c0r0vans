@@ -392,7 +392,7 @@ public class Player extends GameObject {
             //TODO: Здесь не должно быть нула. Видимо маркер не инициализуерся в игроке.
             if (zone!=null) zone.setRadius(ActionDistance);
             if (zone1!=null) zone1.setRadius(ActionDistance-3);
-            if (zone2!=null) zone1.setRadius(ActionDistance+3);
+            if (zone2!=null) zone2.setRadius(ActionDistance+3);
 
 
             if (obj.has("Upgrades")){
