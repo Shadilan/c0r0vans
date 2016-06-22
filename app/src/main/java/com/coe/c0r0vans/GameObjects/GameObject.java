@@ -6,6 +6,7 @@ import android.widget.RelativeLayout;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.Circle;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 
 import org.json.JSONException;
@@ -142,5 +143,14 @@ public class GameObject {
 
     public int getLife() {
         return life;
+    }
+
+    public void setPostion(LatLng latLng) {
+        if (mark!=null){
+            mark.setPosition(latLng);
+        }
+        if (zone!=null){
+            zone.setCenter(latLng);
+        }
     }
 }

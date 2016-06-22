@@ -74,6 +74,7 @@
             android:textOn="Засады" />
     </GridLayout>
 </HorizontalScrollView>
+
     <LinearLayout
                     android:id="@+id/informationLayout"
                     android:layout_width="match_parent"
@@ -81,7 +82,8 @@
                     android:orientation="vertical"
         android:layout_alignParentBottom="true"
         android:layout_below="@+id/Tabs"
-        >
+        android:weightSum="1"
+        android:clickable="true">
 
 
     </LinearLayout>

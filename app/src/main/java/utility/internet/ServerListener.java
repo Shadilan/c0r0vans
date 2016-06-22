@@ -15,6 +15,7 @@ public abstract class ServerListener {
     public static int PLAYER=3;
     public static int MESSAGE=4;
     public static int RATING=5;
+    public static int FASTSCAN=6;
 
     public abstract void onResponse(int TYPE,JSONObject response);
     public abstract void onError(int TYPE,JSONObject response);

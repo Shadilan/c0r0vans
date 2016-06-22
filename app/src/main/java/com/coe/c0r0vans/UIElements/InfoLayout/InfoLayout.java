@@ -25,6 +25,7 @@ import utility.internet.serverConnect;
 public class InfoLayout extends RelativeLayout implements ShowHideForm {
     LinearLayout informationLayout;
     PlayerInfoLayout current;
+    LinearLayout gest;
     public InfoLayout(Context context) {
         super(context);
     }
@@ -75,7 +76,6 @@ public class InfoLayout extends RelativeLayout implements ShowHideForm {
         ToggleButton upgradeInfo= (ToggleButton) findViewById(R.id.upgradeInfoButton);
         ToggleButton routeInfo= (ToggleButton) findViewById(R.id.routeInfoButton);
         ToggleButton ambushInfo= (ToggleButton) findViewById(R.id.ambushInfoButton);
-
         setCurrent(new MainInfoTable(getContext()));
 
         playerInfo.setOnClickListener(new View.OnClickListener() {

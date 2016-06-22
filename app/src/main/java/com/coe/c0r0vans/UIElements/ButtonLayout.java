@@ -1,6 +1,7 @@
 package com.coe.c0r0vans.UIElements;
 
 import android.content.Context;
+import android.os.Handler;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.view.View;
@@ -36,7 +37,8 @@ import utility.settings.SettingsListener;
 public class ButtonLayout extends RelativeLayout {
     private InfoLayout infoLayout;
     private ScrollView scrollView;
-
+    //События должны приходить на основной слой
+    private Handler handler;
     public ButtonLayout(Context context) {
         super(context);
         init();
@@ -54,6 +56,7 @@ public class ButtonLayout extends RelativeLayout {
     public void init(){
         inflate(getContext(), R.layout.main_button, this);
         try {
+            handler=new Handler();
             afterInit();
         } catch (Exception e){
             GATracker.trackException("ButtonLayout",e);
@@ -95,7 +98,7 @@ public class ButtonLayout extends RelativeLayout {
             else PlayerInfo.setImageResource(R.mipmap.info_route);
 
             am = (TextView) findViewById(R.id.foundedAmount);
-            am.setText(Player.getPlayer().getFoundedCities() + "/" + Player.getPlayer().getCityMax());
+            am.setText(String.format("%d/%d", Player.getPlayer().getFoundedCities(), Player.getPlayer().getCityMax()));
             ((TextView) findViewById(R.id.hirelingsAmount)).setText(String.format("%s(%s)", StringUtils.intToStr(Player.getPlayer().getHirelings()), StringUtils.intToStr(Player.getPlayer().getLeftToHire())));
             infoLayout.loadFromPlayer();
         }
@@ -147,6 +150,7 @@ public class ButtonLayout extends RelativeLayout {
                     serverConnect.getInstance().callGetPlayerInfo();
                     //RunGetMessage
                     serverConnect.getInstance().callGetMessage();
+                    serverConnect.getInstance().callFastScan();
                 } catch (Exception e){
                     GATracker.trackException("ForceSync",e);
                 }
@@ -186,7 +190,7 @@ public class ButtonLayout extends RelativeLayout {
                     else btn.setImageResource(R.mipmap.info_route);
 
                     am = (TextView) findViewById(R.id.foundedAmount);
-                    am.setText(Player.getPlayer().getFoundedCities() + "/" + Player.getPlayer().getCityMax());
+                    am.setText(String.format("%d/%d", Player.getPlayer().getFoundedCities(), Player.getPlayer().getCityMax()));
                     ((TextView) findViewById(R.id.hirelingsAmount)).setText(String.format("%s(%s)", StringUtils.intToStr(Player.getPlayer().getHirelings()), StringUtils.intToStr(Player.getPlayer().getLeftToHire())));
 
                     infoLayout.loadFromPlayer();
@@ -239,14 +243,21 @@ public class ButtonLayout extends RelativeLayout {
             @Override
             public void onChangeQueue(int count) {
                 super.onChangeQueue(count);
-                try {
-                    TextView textView = (TextView) findViewById(R.id.QueueCnt);
-                    if (count == 0) {
-                        textView.setText("");
-                    } else textView.setText(String.valueOf(count));
-                }catch (Exception e) {
-                    GATracker.trackException("ChangeQueue",e);
-                }
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            TextView textView = (TextView) findViewById(R.id.QueueCnt);
+                            int count=serverConnect.getInstance().getQueueSize();
+                            if (count < 2) {
+                                textView.setText("");
+                            } else textView.setText(String.valueOf(count));
+                        }catch (Exception e) {
+                            GATracker.trackException("ChangeQueue",e);
+                        }
+                    }
+                });
+
             }
         });
 

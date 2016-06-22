@@ -418,16 +418,33 @@ public class serverConnect {
         runRequest(UUID.randomUUID().toString(),url,ResponseListenerWithUID.RATING);
         return true;
     }*/
+    public boolean callFastScan(){
+        return callFastScan(GPSInfo.getInstance().GetLat(),GPSInfo.getInstance().GetLng());
+    }
+    public boolean callFastScan(int Lat,int Lng){
+        if (!checkConnection()) return false;
+        if (Token==null) return false;
+        String UID=UUID.randomUUID().toString();
+        String url=new UrlBuilder(ServerAddres+"/getdata.jsp","FastScan",version)
+                .put("Token",Token)
+                .put("plat",Lat)
+                .put("plng",Lng)
+                .put("UUID",UID)
+                .build();
+        runRequest(UUID.randomUUID().toString(), url, ResponseListenerWithUID.FASTSCAN);
+        return true;
+    }
 
     private void runRequest(String UID,String request,int type){
         if (busy) requestList.add(new RequestData(UID,request,type));
         else runRequest(UID, request, type, 0);
-        int queuesize=requestList.size()+1;
-        if (listeners!=null)
-            for (ServerListener l:listeners){
 
-                l.onChangeQueue(queuesize);
-            }
+        final int requestList_size = requestList.size();// Moved  requestList.size() call out of the loop to local variable requestList_size
+        for (ServerListener l:listeners){
+            l.onChangeQueue(requestList_size+1);
+        }
+
+
     }
     boolean busy=false;
     private class RequestData{
@@ -469,9 +486,10 @@ public class serverConnect {
             }
     }
 
-    /*public int getQueueSize(){
-        return requestList.size();
-    }*/
+    public int getQueueSize(){
+        return requestList.size()+1;
+    }
+
     private void runRequest(String UID,String request,int type, final int try_count){
         Log.d("URLRequest",request);
         busy=true;
@@ -508,6 +526,9 @@ public class serverConnect {
                                         new ChooseFaction(context).show();
                                     case ACTION:
                                         if (listenersMap.get(getUID()) != null) listenersMap.get(getUID()).postError(response);
+                                        break;
+                                    case FASTSCAN:
+                                        for (ServerListener l : listeners) l.onError(ServerListener.FASTSCAN,response);
                                         break;
                                     default:
                                         for (ServerListener l : listeners) l.onError(ServerListener.UNKNOWN,response);
@@ -552,6 +573,9 @@ public class serverConnect {
                                         } catch (JSONException e) {
                                             for (ServerListener l:listeners) l.onError(ServerListener.LOGIN,formResponse(response.toString()));
                                         }
+                                        break;
+                                    case FASTSCAN:
+                                        for (ServerListener l : listeners) l.onResponse(ServerListener.FASTSCAN,response);
                                         break;
                                 }
                             }

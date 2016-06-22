@@ -3,6 +3,7 @@ package com.coe.c0r0vans.GameObjects;
 import android.util.Log;
 
 import com.coe.c0r0vans.MyGoogleMap;
+import com.google.android.gms.maps.model.LatLng;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -80,6 +81,49 @@ public class GameObjects extends HashMap<String,GameObject> {
                             }
                             for (GameObject o : remObjects) {
                                 instance.remove(o.getGUID());
+                            }
+
+                        }
+
+                    } catch (JSONException e) {
+                        Essages.addEssage(e.toString());
+                    }
+                } else
+                if (TYPE==FASTSCAN){
+                    try {
+                        //Проверить наличие массива JSON. Objects
+                        if (response.has("FastScan")) {
+                            //Для каждого объекта в GameObjects
+                            JSONArray lst=response.getJSONArray("FastScan");
+                            for (GameObject o:instance.values()) {
+                               //Если это Засада или Караван
+                                if (o instanceof Ambush || o instanceof Caravan) {
+                                    //Если он есть в JSON обновить данные
+                                    final int lst_length = lst.length();// Moved  lst.length() call out of the loop to local variable lst_length
+                                    boolean isChanged=false;
+                                    for (int i = 0; i< lst_length; i++){
+                                        JSONObject obj=lst.getJSONObject(i);
+                                        String guid="";
+                                        int lat=0;
+                                        int lng=0;
+                                        //String type="";
+                                        if (obj.has("GUID"))guid=obj.getString("GUID");
+                                        if (obj.has("Lat"))lat=obj.getInt("Lat");
+                                        if (obj.has("Lng"))lng=obj.getInt("Lng");
+                                        //if (obj.has("Type")) type=obj.getString("Type");
+                                        if (o.getGUID().equals(guid)){
+                                            o.setPostion(new LatLng(lat/1e6,lng/1e6));
+                                            o.setVisibility(true);
+                                            //isChanged=true;
+                                        }
+
+                                    }
+                                    //Пока не очищать типа запомнил ?
+                                    /*if (!isChanged && ((o instanceof Ambush && ((Ambush)o).getFaction()!=0)||(o instanceof Caravan && ((Caravan)o).getFaction()!=0))) {
+                                        //TODO Если нет очистить данные.
+                                        o.setVisibility(false);
+                                    }*/
+                                }
                             }
 
                         }

@@ -41,34 +41,17 @@ public class Caravan extends GameObject {
     public void loadJSON(JSONObject obj) {
         try {
             GUID=obj.getString("GUID");
-            int Lat=obj.getInt("Lat");
-            int Lng=obj.getInt("Lng");
-            LatLng latlng=new LatLng(Lat / 1e6, Lng / 1e6);
-            if (obj.has("Owner")) faction=obj.getInt("Owner");
-/*            if (obj.has("StartName")) startName=obj.getString("StartName");
-            if (obj.has("FinishName")) finishName=obj.getString("FinishName");*/
-            //if (obj.has("Speed")) speed=obj.getDouble("Speed");
-            /*if (obj.has("StartLat") && obj.has("StartLng")){
-                double lat=obj.getInt("StartLat")/1e6;
-                double lng=obj.getInt("StartLng")/1e6;
-                start=new LatLng(lat,lng);
-            } else start=null;
-            if (obj.has("FinishLat") && obj.has("FinishLng")){
-                double lat=obj.getInt("FinishLat")/1e6;
-                double lng=obj.getInt("FinishLng")/1e6;
-                finish=new LatLng(lat,lng);
-            } else finish=null;*/
-
-            if (mark==null) {
-                setMarker(map.addMarker(new MarkerOptions().position(latlng)));
-            } else {
-                mark.setPosition(latlng);
+            if (obj.has("Lat") && obj.has("Lng")) {
+                int Lat = obj.getInt("Lat");
+                int Lng = obj.getInt("Lng");
+                LatLng latlng = new LatLng(Lat / 1e6, Lng / 1e6);
+                if (mark == null) {
+                    setMarker(map.addMarker(new MarkerOptions().position(latlng)));
+                } else {
+                    mark.setPosition(latlng);
+                }
             }
-            mark.setVisible(true);
-
-
-
-
+            if (obj.has("Owner")) faction=obj.getInt("Owner");
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -93,7 +76,7 @@ public class Caravan extends GameObject {
         }
     }
 
-    /*public int getRace(){
+    public int getFaction(){
         return faction;
-    }*/
+    }
 }

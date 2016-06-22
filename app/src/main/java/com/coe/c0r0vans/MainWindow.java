@@ -60,16 +60,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
     MainWindow self=this;
     private boolean ready=false;
     GoogleApiClient mGoogleApiClient;
-    //Security
-    /*private final static String G_PLUS_SCOPE =
-            "oauth2:https://www.googleapis.com/auth/plus.me";
-    private final static String USERINFO_SCOPE =
-            "https://www.googleapis.com/auth/userinfo.profile";
-    private final static String EMAIL_SCOPE =
-            "https://www.googleapis.com/auth/userinfo.email";
-    private final static String SCOPES = G_PLUS_SCOPE + " " + USERINFO_SCOPE + " " + EMAIL_SCOPE;*/
 
-//dfNouaJXqFsNC2Bdru7zYF8q
     @Override
     /**
      * Create form;
@@ -106,7 +97,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
             lay.removeAllViews();
             GameSound.setVolumeControlStream(self);
             messages=new MessageMap(getApplicationContext());
-            messageRequest.run();
+
             ((ActionView)findViewById(R.id.actionView)).init();
             ((ButtonLayout)findViewById(R.id.buttonLayout)).init();
 
@@ -115,6 +106,11 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
             ((ViewGroup) findViewById(R.id.alertLayout)).removeAllViews();
             onTrueResume();
             ready=true;
+            isActive=true;
+            threadFastScan=new Thread(fastScanRequest);
+            threadFastScan.start();
+            Thread messageThread=new Thread(messageRequest);
+            messageThread.start();
             GATracker.trackTimeEnd("System","Init");
     }
     private void ofThreadInit(){
@@ -388,7 +384,6 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
             if (serverConnect.getInstance().isLogin() && (timeToPlayerRefresh != -1) && GPSInfo.getInstance().GetLat() != -1 && GPSInfo.getInstance().GetLng() != -1) {
                 if (GPSInfo.getInstance().getSpeed() < 30) delay = 40000;
                 else if (GPSInfo.getInstance().getSpeed() > 30) delay = 20000;
-
             }
         }
         catch (Exception e){
@@ -411,38 +406,86 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
     int timeToPlayerRefresh=-1;
     private void Tick() {
         Log.d("ProcedureCall","Tick");
-        try {
-            if (serverConnect.getInstance().isLogin() && this.hasWindowFocus()
-                    && GPSInfo.getInstance().GetLat() != -1 && GPSInfo.getInstance().GetLng() != -1)
-                if (timeToPlayerRefresh < 1) {
-                    serverConnect.getInstance().callGetPlayerInfo();
-                    serverConnect.getInstance().RefreshCurrent();
+        if (ready && isActive) {
+            try {
+                if (serverConnect.getInstance().isLogin() && this.hasWindowFocus()
+                        && GPSInfo.getInstance().GetLat() != -1 && GPSInfo.getInstance().GetLng() != -1)
+                    if (timeToPlayerRefresh < 1) {
+                        serverConnect.getInstance().callGetPlayerInfo();
+                        serverConnect.getInstance().RefreshCurrent();
+                        serverConnect.getInstance().callFastScan();
 
 
-                    timeToPlayerRefresh = 6;
-                } else {
-                    SendedRequest++;
-                    if (SendedRequest > 1) UIControler.getButtonLayout().showConnectImage();
-                    timeToPlayerRefresh--;
-                    serverConnect.getInstance().RefreshCurrent();
-                }
-        }
-        catch (Exception e){
-            GATracker.trackException("Timer",e);
+                        timeToPlayerRefresh = 6;
+                    } else {
+                        SendedRequest++;
+                        if (SendedRequest > 1) UIControler.getButtonLayout().showConnectImage();
+                        timeToPlayerRefresh--;
+                        serverConnect.getInstance().RefreshCurrent();
+                    }
+            } catch (Exception e) {
+                GATracker.trackException("Timer", e);
+            }
         }
         StartTickTimer();
     }
+    boolean run=true;
     private Runnable messageRequest=new Runnable() {
         @Override
         public void run() {
-            try {
-                if (serverConnect.getInstance().isLogin()) serverConnect.getInstance().callGetMessage();
-                myHandler.removeCallbacks(messageRequest);
-                myHandler.postDelayed(messageRequest, 60000);
-            }catch (Exception e){
-                GATracker.trackException("Timer",e);
-            }
+            while (run && !threadFastScan.isInterrupted()) {
+                if (ready) {
+                    try {
+                        if (serverConnect.getInstance().isLogin())
+                            serverConnect.getInstance().callGetMessage();
+                    } catch (Exception e) {
+                        GATracker.trackException("Timer", e);
+                    }
+                }
+                synchronized (this) {
+                    try {
+                        wait(60000);
+                    } catch (InterruptedException e) {
+                        GATracker.trackException("Thread.Message",e.toString());
+                    }
+                }
 
+            }
+        }
+    };
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        run=false;
+    }
+
+    Thread threadFastScan;
+    boolean isActive=false;
+    //TODO Гасить поток
+    private LatLng lastFastScan=null;
+    private Runnable fastScanRequest=new Runnable() {
+        @Override
+        public void run() {
+            while (run && !threadFastScan.isInterrupted()) {
+                if (isActive) {
+                    if (serverConnect.getInstance().isLogin())
+                        if (lastFastScan==null ||GPSInfo.getDistance(lastFastScan,GPSInfo.getInstance().getLatLng())>20){
+                            serverConnect.getInstance().callFastScan();
+                            lastFastScan=GPSInfo.getInstance().getLatLng();
+                        }
+
+                    //Log.d("TestThread","Run FastScan");
+                }
+
+                synchronized (this) {
+                    try {
+                        wait(100);
+                    } catch (InterruptedException e) {
+                        GATracker.trackException("Thread.Message",e.toString());
+                    }
+                }
+            }
         }
     };
 
@@ -456,6 +499,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
         try {
 
             if (ready) {
+                isActive=false;
                 myHandler.removeCallbacks(myRunable);
 
                 MessageNotification.appActive = false;
@@ -474,7 +518,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
         Log.d("ProcedureCall","onRestart");
         super.onRestart();
         if (ready) {
-
+            isActive=true;
             try {
                 onTrueResume();
             } catch (Exception e) {

@@ -64,52 +64,56 @@ public class Ambush extends GameObject {
     public void loadJSON(JSONObject obj) {
         try {
             GUID=obj.getString("GUID");
-            int Lat=obj.getInt("Lat");
-            int Lng=obj.getInt("Lng");
-            LatLng latlng=new LatLng(Lat / 1e6, Lng / 1e6);
+            if (obj.has("Lat") && obj.has("Lng")) {
+                int Lat=obj.getInt("Lat");
+                int Lng=obj.getInt("Lng");
+
+                LatLng latlng=new LatLng(Lat / 1e6, Lng / 1e6);
+                if (mark==null) {
+                    setMarker(map.addMarker(new MarkerOptions().position(new LatLng(Lat / 1e6, Lng / 1e6))));
+                    changeMarkerSize();
+                } else {
+                    mark.setPosition(latlng);
+                    changeMarkerSize();
+                }
+                if (zone==null){
+                    CircleOptions circleOptions = new CircleOptions();
+                    circleOptions.center(latlng);
+                    circleOptions.radius(radius);
+                    circleOptions.zIndex(130);
+                    switch (faction){
+                        case 0:
+                            circleOptions.strokeColor(Color.BLUE);
+                            break;
+                        case 1:
+                            circleOptions.strokeColor(Color.MAGENTA);
+                            break;
+                        case 2:
+                            circleOptions.strokeColor(Color.RED);
+                            break;
+                        case 3:
+                            circleOptions.strokeColor(Color.YELLOW);
+                            break;
+                        default:
+                            circleOptions.strokeColor(Color.GREEN);
+                    }
+                    circleOptions.strokeWidth(2);
+                    zone = map.addCircle(circleOptions);
+                } else
+                {
+                    zone.setCenter(latlng);
+                    zone.setRadius(radius);
+                }
+                showRadius();
+                setVisibility(true);
+            }
             if (obj.has("Owner")) faction=obj.getInt("Owner");
             if (faction<0 ||faction>4) faction=4;
             if (obj.has("Radius")) radius=obj.getInt("Radius");
             if (obj.has("Ready")) ready=obj.getInt("Ready");
             if (obj.has("Name")) Name="Засада "+obj.getString("Name");
             if (obj.has("Life")) life=obj.getInt("Life");
-            if (mark==null) {
-                setMarker(map.addMarker(new MarkerOptions().position(new LatLng(Lat / 1e6, Lng / 1e6))));
-                changeMarkerSize();
-            } else {
-                mark.setPosition(latlng);
-                setVisibility(true);
-                changeMarkerSize();
-            }
-            if (zone==null){
-                CircleOptions circleOptions = new CircleOptions();
-                circleOptions.center(latlng);
-                circleOptions.radius(radius);
-                circleOptions.zIndex(130);
-                switch (faction){
-                    case 0:
-                        circleOptions.strokeColor(Color.BLUE);
-                        break;
-                    case 1:
-                        circleOptions.strokeColor(Color.MAGENTA);
-                        break;
-                    case 2:
-                        circleOptions.strokeColor(Color.RED);
-                        break;
-                    case 3:
-                        circleOptions.strokeColor(Color.YELLOW);
-                        break;
-                    default:
-                        circleOptions.strokeColor(Color.GREEN);
-                }
-                circleOptions.strokeWidth(2);
-                zone = map.addCircle(circleOptions);
-            } else
-            {
-                zone.setCenter(latlng);
-                zone.setRadius(radius);
-            }
-            showRadius();
+
 
         } catch (JSONException e) {
             e.printStackTrace();
