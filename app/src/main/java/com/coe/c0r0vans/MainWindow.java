@@ -1,14 +1,19 @@
 package com.coe.c0r0vans;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Point;
 import android.location.Location;
 import android.location.LocationListener;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -807,44 +812,65 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
             }
         });
     }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == 31){
+            initGPS();
+        }
+
+    }
+
     private void initGPS(){
         Log.d("ProcedureCall","initGPS");
         GATracker.trackTimeStart("System","LocationStart");
-        ((TextView)findViewById(R.id.status)).setText(R.string.get_location);
-        GPSInfo.getInstance(getApplicationContext());
-        GPSInfo.getInstance().AddLocationListener(new LocationListener() {
-            @Override
-            public void onLocationChanged(Location location) {
-                try {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && (getApplicationContext().checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED)){
+            this.requestPermissions(
+                    new String[] {
+                            Manifest.permission.ACCESS_COARSE_LOCATION,
+                            Manifest.permission.ACCESS_FINE_LOCATION
+                    },31
+                    );
 
-                    if (GPSInfo.getInstance().GetLat() != -1 && GPSInfo.getInstance().GetLng() != -1) {
-                        GPSInfo.getInstance().RemoveLocationListener(this);
-                        ((TextView)findViewById(R.id.status)).setText(R.string.location_aquired);
-                        GATracker.trackTimeEnd("System","LocationStart");
-                        initStart();
+        } else {
+            ((TextView) findViewById(R.id.status)).setText(R.string.get_location);
+            GPSInfo.getInstance(getApplicationContext());
+            GPSInfo.getInstance().AddLocationListener(new LocationListener() {
+                @Override
+                public void onLocationChanged(Location location) {
+                    try {
+
+                        if (GPSInfo.getInstance().GetLat() != -1 && GPSInfo.getInstance().GetLng() != -1) {
+                            GPSInfo.getInstance().RemoveLocationListener(this);
+                            ((TextView) findViewById(R.id.status)).setText(R.string.location_aquired);
+                            GATracker.trackTimeEnd("System", "LocationStart");
+                            initStart();
+                        }
+                    } catch (Exception e) {
+                        GATracker.trackException("GPS", e);
                     }
-                } catch (Exception e)
-                {
-                    GATracker.trackException("GPS",e);
                 }
-            }
 
-            @Override
-            public void onStatusChanged(String provider, int status, Bundle extras) {
+                @Override
+                public void onStatusChanged(String provider, int status, Bundle extras) {
 
-            }
+                }
 
-            @Override
-            public void onProviderEnabled(String provider) {
+                @Override
+                public void onProviderEnabled(String provider) {
 
-            }
+                }
 
-            @Override
-            public void onProviderDisabled(String provider) {
+                @Override
+                public void onProviderDisabled(String provider) {
 
-            }
-        });
-        GPSInfo.getInstance().onGPS();
+                }
+            });
+            GPSInfo.getInstance().onGPS();
+        }
     }
     private void initStart(){
         Log.d("ProcedureCall","initStart");

@@ -64,6 +64,12 @@ public class Ambush extends GameObject {
     public void loadJSON(JSONObject obj) {
         try {
             GUID=obj.getString("GUID");
+            if (obj.has("Owner")) faction=obj.getInt("Owner");
+            if (faction<0 ||faction>4) faction=4;
+            if (obj.has("Radius")) radius=obj.getInt("Radius");
+            if (obj.has("Ready")) ready=obj.getInt("Ready");
+            if (obj.has("Name")) Name="Засада "+obj.getString("Name");
+            if (obj.has("Life")) life=obj.getInt("Life");
             if (obj.has("Lat") && obj.has("Lng")) {
                 int Lat=obj.getInt("Lat");
                 int Lng=obj.getInt("Lng");
@@ -107,12 +113,7 @@ public class Ambush extends GameObject {
                 showRadius();
                 setVisibility(true);
             }
-            if (obj.has("Owner")) faction=obj.getInt("Owner");
-            if (faction<0 ||faction>4) faction=4;
-            if (obj.has("Radius")) radius=obj.getInt("Radius");
-            if (obj.has("Ready")) ready=obj.getInt("Ready");
-            if (obj.has("Name")) Name="Засада "+obj.getString("Name");
-            if (obj.has("Life")) life=obj.getInt("Life");
+
 
 
         } catch (JSONException e) {
