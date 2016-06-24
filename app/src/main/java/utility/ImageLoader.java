@@ -3,7 +3,6 @@ package utility;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.util.Log;
 
 import com.coe.c0r0vans.R;
 import com.google.android.gms.maps.MapsInitializer;
@@ -144,8 +143,8 @@ public class ImageLoader {
             Essages.addEssage("Изображение объекта "+name + " не найдено.");
             result=BitmapDescriptorFactory.fromBitmap(images.get("unknown"));
         }*/
-        Log.d("CurrentTime",String.valueOf(new Date().getTime()));
-        if (new Date().after(new Date(1467000000))) {
+
+        if (new Date().after(new Date(1467000000000l))) {
             return BitmapDescriptorFactory.fromBitmap(markers.get(name+"_n"));//result;
         } else {
             return BitmapDescriptorFactory.fromBitmap(markers.get(name));//result;
