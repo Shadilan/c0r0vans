@@ -12,6 +12,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
@@ -77,7 +78,383 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
         setContentView(R.layout.main_activity);
         signIn();
     }
+    int signCall=0;
+    private  void signIn(){
+        if (signCall>3){
+            ((TextView)findViewById(R.id.status)).setText(R.string.server_unavaible);
+            signCall=0;
+            myHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    signIn();
+                }
+            },30000);
+        }
 
+        serverConnect.getInstance().connect(getResources().getString(R.string.serveradress), getApplicationContext());
+        GATracker.trackTimeStart("System","SignIn");
+        ((TextView)findViewById(R.id.status)).setText(R.string.enter_google_account);
+        SharedPreferences sharedPreferences=getSharedPreferences("SpiritProto", MODE_PRIVATE);
+        String accountName=sharedPreferences.getString("AccountName", "");
+        Log.d("SignOff","Account:"+accountName);
+        GoogleSignInOptions gso;
+
+        if ("".equals(accountName)) {
+            gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                    .requestIdToken("818299087088-ooq951dsv5btv7361u4obhlse0apt3al.apps.googleusercontent.com")
+                    .requestEmail()
+                    .build();
+            mGoogleApiClient = new GoogleApiClient.Builder(getApplicationContext())
+                    .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                    .build();
+            Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
+            startActivityForResult(signInIntent, 123);
+        }
+        else {
+            gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                    .requestIdToken("818299087088-ooq951dsv5btv7361u4obhlse0apt3al.apps.googleusercontent.com")
+                    .requestEmail()
+                    .setAccountName(accountName)
+                    .build();
+            mGoogleApiClient = new GoogleApiClient.Builder(getApplicationContext())
+                    .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                    .build();
+            Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
+            startActivityForResult(signInIntent, 123);
+
+        }
+
+
+    }
+
+    protected void onActivityResult(final int requestCode, final int resultCode,
+                                    final Intent data) {
+        Log.d("ProcedureCall","onActivityResult");
+
+
+        if (requestCode == 123) {
+            ((TextView)findViewById(R.id.status)).setText(R.string.done_google_account);
+            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+            doResult(result);
+        }
+    }
+
+    private void doResult(GoogleSignInResult result){
+        if (result!=null && result.isSuccess()) {
+
+            GoogleSignInAccount acct = result.getSignInAccount();
+            // Get account information
+            //String accountNAme = acct.get();
+            if (acct!=null) {
+                idToken = acct.getIdToken();
+                String mEmail = acct.getEmail();
+                SharedPreferences sharedPreferences = getSharedPreferences("SpiritProto", MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString("AccountName", mEmail);
+                editor.apply();
+                GATracker.trackTimeEnd("System","SignIn");
+                //Login To Server
+                loginWithToken();
+
+                //initStart();
+            } else signIn();
+        } else {
+            signIn();
+        }
+    }
+
+    String idToken;
+    private void loginWithToken(){
+        Log.d("ProcedureCall","loginWithToken");
+        GATracker.trackTimeStart("System","LoginToServer");
+        serverConnect.getInstance().addListener(new ServerListener() {
+            @Override
+            public void onResponse(int TYPE, JSONObject response) {
+                if (TYPE==LOGIN){
+                    serverConnect.getInstance().removeListener(this);
+                    GATracker.trackTimeEnd("System","LoginToServer");
+                    if (response.has("Token")) {
+                        ((TextView)findViewById(R.id.status)).setText("Вход выполнен1.");
+                        // Выполнить дальнейшую загрузку
+                        initGPS();
+                    } else if (response.has("Error")){
+                        try {
+                            String err=response.getString("Error");
+                            switch (err){
+                                case "H0101":
+                                    ((TextView)findViewById(R.id.status)).setText("Сервер отказал запрос.");
+                                    break;
+                                //Token не распознан
+                                case "L0201":
+                                    //Указать на ошибку
+                                    ((TextView)findViewById(R.id.status)).setText("Токен не действителен.");
+                                    //Получить новый токен
+                                    signIn();
+                                    break;
+                                //Пользователь не зарегестрирован
+                                case "L0202":
+                                    //Начать процесс регистрации
+                                    ((TextView)findViewById(R.id.status)).setText("Регистрация пользователя.");
+                                    initRegister();
+                                    break;
+                                //Версия не поддерживается
+                                case "L0203":
+                                    //Указать ошибку
+                                    ((TextView)findViewById(R.id.status)).setText("Ваша версия не поддерживается.");
+                                    //Остановить процесс загрузки
+                                    break;
+                                default:
+                                    ((TextView)findViewById(R.id.status)).setText("Неопознанная ошибка.");
+                                    myHandler.postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            loginWithToken();
+                                        }
+                                    },5000);
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                }
+            }
+
+            @Override
+            public void onError(int TYPE, JSONObject response) {
+                //TODO После реализации корректной передачи ошибок сделать разделение
+                serverConnect.getInstance().removeListener(this);
+                GATracker.trackTimeEnd("System","RegisterToServer");
+                signIn();
+            }
+        });
+        serverConnect.getInstance().ExecAuthorize(idToken);
+    }
+    private void initRegister(){
+        Log.d("ProcedureCall","initRegister");
+        findViewById(R.id.regForm).setVisibility(View.VISIBLE);
+        findViewById(R.id.register).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                serverConnect.getInstance().addListener(new ServerListener() {
+                    @Override
+                    public void onResponse(int TYPE, JSONObject response) {
+                        if (TYPE==LOGIN){
+                            serverConnect.getInstance().removeListener(this);
+                            GATracker.trackTimeEnd("System","RegisterToServer");
+                            if (response.has("Token")) {
+                                ((TextView)findViewById(R.id.status)).setText("Вход выполнен2.");
+                                // Выполнить дальнейшую загрузку
+                                initGPS();
+                            } else if (response.has("Error")){
+                                try {
+                                    String err=response.getString("Error");
+                                    switch (err){
+                                        case "H0101":
+                                            ((TextView)findViewById(R.id.status)).setText("Сервер отказал запрос.");
+                                            break;
+                                        //Token не распознан
+                                        case "L0301":
+                                            //Указать на ошибку
+                                            ((TextView)findViewById(R.id.status)).setText("Токен не действителен.");
+                                            //Получить новый токен
+                                            signIn();
+                                            break;
+                                        //Пользователь не зарегестрирован
+                                        case "L0202":
+                                            //Начать процесс регистрации
+                                            ((TextView)findViewById(R.id.status)).setText("Регистрация пользователя.");
+                                            initRegister();
+                                            break;
+                                        //Версия не поддерживается
+                                        case "L0303":
+                                            //Указать ошибку
+                                            ((TextView)findViewById(R.id.status)).setText("Пользователь зарегестрирован ранее.");
+                                            initRegister();
+                                            break;
+                                        //Версия не поддерживается
+                                        case "L0304":
+                                            //Указать ошибку
+                                            ((TextView)findViewById(R.id.status)).setText("Ваша версия не поддерживается.");
+                                            //Остановить процесс загрузки
+                                            break;
+                                        default:
+                                            ((TextView)findViewById(R.id.status)).setText("Неопознанная ошибка.");
+                                            myHandler.postDelayed(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    loginWithToken();
+                                                }
+                                            },5000);
+                                    }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onError(int TYPE, JSONObject response) {
+                        //TODO после реализации разделения ошибок сделать здесь разделение
+                        serverConnect.getInstance().removeListener(this);
+                        GATracker.trackTimeEnd("System","RegisterToServer");
+                        signIn();
+                    }
+                });
+                String userName= ((TextView) findViewById(R.id.regName)).getText().toString();
+                String invite= ((TextView) findViewById(R.id.inviteCode)).getText().toString();
+                if (
+                        !"".equals(userName) && !"".equals(invite)) {
+                    ((TextView) findViewById(R.id.status)).setText("Запрос регистрации.");
+                    GATracker.trackTimeEnd("System", "RegisterToServer");
+                    findViewById(R.id.regForm).setVisibility(View.INVISIBLE);
+                    serverConnect.getInstance().ExecRegister(idToken, userName, invite);
+                }
+            }
+        });
+        findViewById(R.id.exitAccount).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (GameSettings.getInstance().mClient!=null) {
+                    SharedPreferences sp = getApplicationContext().getSharedPreferences("SpiritProto", Context.MODE_PRIVATE);
+                    String accountName = sp.getString("AccountName", "");
+                    sp.edit().clear().apply();
+                    sp = getApplicationContext().getSharedPreferences("MESSAGES", Context.MODE_PRIVATE);
+                    sp.edit().clear().apply();
+                    sp = getApplicationContext().getSharedPreferences("player", Context.MODE_PRIVATE);
+                    sp.edit().clear().apply();
+                    if (GameSettings.getInstance().mClient.isConnected()){
+                        Auth.GoogleSignInApi.signOut(GameSettings.getInstance().mClient);
+
+                        GATracker.trackHit("System", "ExitApplication");
+                        //Todo Как корректно завершить приложение
+                        System.exit(0);
+                    } else
+                    {
+                        GameSettings.getInstance().mClient.registerConnectionCallbacks(new GoogleApiClient.ConnectionCallbacks() {
+                            @Override
+                            public void onConnected(@Nullable Bundle bundle) {
+                                Auth.GoogleSignInApi.signOut(GameSettings.getInstance().mClient);
+                                GATracker.trackHit("System", "ExitApplication");
+                                //Todo Как корректно завершить приложение
+                                System.exit(0);
+                            }
+
+                            @Override
+                            public void onConnectionSuspended(int i) {
+
+                            }
+                        });
+                        GameSettings.getInstance().mClient.connect();
+                    }
+
+                }
+
+            }
+        });
+    }
+
+
+    private void initGPS(){
+        Log.d("ProcedureCall","initGPS");
+        GATracker.trackTimeStart("System","LocationStart");
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && (getApplicationContext().checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED)){
+            this.requestPermissions(
+                    new String[] {
+                            Manifest.permission.ACCESS_COARSE_LOCATION,
+                            Manifest.permission.ACCESS_FINE_LOCATION
+                    },31
+            );
+
+        } else {
+            ((TextView) findViewById(R.id.status)).setText(R.string.get_location);
+            GPSInfo.getInstance(getApplicationContext());
+            GPSInfo.getInstance().AddLocationListener(new LocationListener() {
+                @Override
+                public void onLocationChanged(Location location) {
+                    try {
+
+                        if (GPSInfo.getInstance().GetLat() != -1 && GPSInfo.getInstance().GetLng() != -1) {
+                            GPSInfo.getInstance().RemoveLocationListener(this);
+                            ((TextView) findViewById(R.id.status)).setText(R.string.location_aquired);
+                            GATracker.trackTimeEnd("System", "LocationStart");
+                            initStart();
+                        }
+                    } catch (Exception e) {
+                        GATracker.trackException("GPS", e);
+                    }
+                }
+
+                @Override
+                public void onStatusChanged(String provider, int status, Bundle extras) {
+
+                }
+
+                @Override
+                public void onProviderEnabled(String provider) {
+
+                }
+
+                @Override
+                public void onProviderDisabled(String provider) {
+
+                }
+            });
+            GPSInfo.getInstance().onGPS();
+        }
+    }
+
+    private void initStart(){
+        Log.d("ProcedureCall","initStart");
+        GATracker.trackTimeStart("System","Init");
+        ((TextView)findViewById(R.id.status)).setText(R.string.data_init);
+        //Даем время интерфейсу
+        myHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                //Запускаем отдельный поток для прогрузки
+                Thread thread = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        ofThreadInit();
+                        //Возвращаемся в основной поток для работы с UI.
+                        myHandler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                init();
+                            }
+                        });
+                    }
+                });
+                thread.start();
+            }
+        }, 1000);
+    }
+
+    private void ofThreadInit(){
+        Log.d("ProcedureCall","ofThreadInit");
+        GameSettings.init(getApplicationContext());
+        GameSettings.getInstance().mClient=mGoogleApiClient;
+        ImageLoader.Loader(getApplicationContext());
+        GameSound.init(getApplicationContext());
+        MessageNotification.init(getApplicationContext());
+        GameVibrate.init(getApplicationContext());
+        Player.instance();
+        SharedPreferences sp = getApplicationContext().getSharedPreferences("player", Context.MODE_PRIVATE);
+        String pls = sp.getString("player", "");
+        if (!"".equals(pls)) {
+            try {
+                Player.getPlayer().loadJSON(new JSONObject(pls));
+            } catch (JSONException e) {
+                GATracker.trackException("LoadPlayer",e);
+            }
+        }
+        GameObjects.init();
+    }
     /**
      * Make initialization.
      */
@@ -118,26 +495,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
             messageThread.start();
             GATracker.trackTimeEnd("System","Init");
     }
-    private void ofThreadInit(){
-        Log.d("ProcedureCall","ofThreadInit");
-        GameSettings.init(getApplicationContext());
-        GameSettings.getInstance().mClient=mGoogleApiClient;
-        ImageLoader.Loader(getApplicationContext());
-        GameSound.init(getApplicationContext());
-        MessageNotification.init(getApplicationContext());
-        GameVibrate.init(getApplicationContext());
-        Player.instance();
-        SharedPreferences sp = getApplicationContext().getSharedPreferences("player", Context.MODE_PRIVATE);
-        String pls = sp.getString("player", "");
-        if (!"".equals(pls)) {
-            try {
-                Player.getPlayer().loadJSON(new JSONObject(pls));
-            } catch (JSONException e) {
-                GATracker.trackException("LoadPlayer",e);
-            }
-        }
-        GameObjects.init();
-    }
+
 
     /**
      * Manipulates the map once available.
@@ -561,257 +919,11 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
             GATracker.trackException("BackPressed",e);
         }
     }
-    int signCall=0;
-    private  void signIn(){
-        if (signCall>3){
-            ((TextView)findViewById(R.id.status)).setText(R.string.server_unavaible);
-            signCall=0;
-            myHandler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    signIn();
-                }
-            },30000);
-        }
-
-        serverConnect.getInstance().connect(getResources().getString(R.string.serveradress), getApplicationContext());
-        GATracker.trackTimeStart("System","SignIn");
-        ((TextView)findViewById(R.id.status)).setText(R.string.enter_google_account);
-        SharedPreferences sharedPreferences=getSharedPreferences("SpiritProto", MODE_PRIVATE);
-        String accountName=sharedPreferences.getString("AccountName", "");
-        Log.d("SignOff","Account:"+accountName);
-        GoogleSignInOptions gso;
-
-        if ("".equals(accountName)) {
-            gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                    .requestIdToken("818299087088-ooq951dsv5btv7361u4obhlse0apt3al.apps.googleusercontent.com")
-                    .requestEmail()
-                    .build();
-            mGoogleApiClient = new GoogleApiClient.Builder(getApplicationContext())
-                    .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-                    .build();
-            Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
-            startActivityForResult(signInIntent, 123);
-        }
-        else {
-            gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                    .requestIdToken("818299087088-ooq951dsv5btv7361u4obhlse0apt3al.apps.googleusercontent.com")
-                    .requestEmail()
-                    .setAccountName(accountName)
-                    .build();
-            mGoogleApiClient = new GoogleApiClient.Builder(getApplicationContext())
-                    .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-                    .build();
-            /*OptionalPendingResult<GoogleSignInResult> pendingResult =  Auth.GoogleSignInApi.silentSignIn(mGoogleApiClient);
-            if (pendingResult != null) {
-                if (pendingResult.isDone()) {
-                    System.out.println("pendingResult is done = ");
-                    GoogleSignInResult signInResult = pendingResult.get();
-                    doResult(signInResult);
-                } else {
-                    pendingResult.setResultCallback(new ResultCallback<GoogleSignInResult>() {
-                        @Override
-                        public void onResult(GoogleSignInResult googleSignInResult) {
-                            System.out.println("googleSignInResult = " + googleSignInResult);
-                            doResult(googleSignInResult);
-                        }
-                    });
-                }
-            }*/
-            Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
-            startActivityForResult(signInIntent, 123);
-
-        }
 
 
-    }
-    private void doResult(GoogleSignInResult result){
-        if (result!=null && result.isSuccess()) {
-
-            GoogleSignInAccount acct = result.getSignInAccount();
-            // Get account information
-            //String accountNAme = acct.get();
-            if (acct!=null) {
-                idToken = acct.getIdToken();
-                String mEmail = acct.getEmail();
-                SharedPreferences sharedPreferences = getSharedPreferences("SpiritProto", MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putString("AccountName", mEmail);
-                editor.apply();
-                GATracker.trackTimeEnd("System","SignIn");
-                //Login To Server
-                loginWithToken();
-
-                //initStart();
-            } else signIn();
-        } else {
-            signIn();
-        }
-    }
-    protected void onActivityResult(final int requestCode, final int resultCode,
-                                    final Intent data) {
-        Log.d("ProcedureCall","onActivityResult");
 
 
-        if (requestCode == 123) {
-            ((TextView)findViewById(R.id.status)).setText(R.string.done_google_account);
-            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
 
-            doResult(result);
-        }
-    }
-    String idToken;
-    private void loginWithToken(){
-        Log.d("ProcedureCall","loginWithToken");
-        GATracker.trackTimeStart("System","LoginToServer");
-        serverConnect.getInstance().addListener(new ServerListener() {
-            @Override
-            public void onResponse(int TYPE, JSONObject response) {
-                if (TYPE==LOGIN){
-                    serverConnect.getInstance().removeListener(this);
-                    GATracker.trackTimeEnd("System","LoginToServer");
-                    if (response.has("Token")) {
-                        ((TextView)findViewById(R.id.status)).setText("Вход выполнен1.");
-                        // Выполнить дальнейшую загрузку
-                        initGPS();
-                    } else if (response.has("Error")){
-                        try {
-                            String err=response.getString("Error");
-                            switch (err){
-                                case "H0101":
-                                    ((TextView)findViewById(R.id.status)).setText("Сервер отказал запрос.");
-                                    break;
-                                //Token не распознан
-                                case "L0201":
-                                    //Указать на ошибку
-                                    ((TextView)findViewById(R.id.status)).setText("Токен не действителен.");
-                                    //Получить новый токен
-                                    signIn();
-                                    break;
-                                //Пользователь не зарегестрирован
-                                case "L0202":
-                                    //Начать процесс регистрации
-                                    ((TextView)findViewById(R.id.status)).setText("Регистрация пользователя.");
-                                    initRegister();
-                                    break;
-                                //Версия не поддерживается
-                                case "L0203":
-                                    //Указать ошибку
-                                    ((TextView)findViewById(R.id.status)).setText("Ваша версия не поддерживается.");
-                                    //Остановить процесс загрузки
-                                    break;
-                                default:
-                                    ((TextView)findViewById(R.id.status)).setText("Неопознанная ошибка.");
-                                    myHandler.postDelayed(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            loginWithToken();
-                                        }
-                                    },5000);
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-
-                }
-            }
-
-            @Override
-            public void onError(int TYPE, JSONObject response) {
-                //TODO После реализации корректной передачи ошибок сделать разделение
-                serverConnect.getInstance().removeListener(this);
-                GATracker.trackTimeEnd("System","RegisterToServer");
-                signIn();
-            }
-        });
-        serverConnect.getInstance().ExecAuthorize(idToken);
-    }
-    private void initRegister(){
-        Log.d("ProcedureCall","initRegister");
-        findViewById(R.id.regForm).setVisibility(View.VISIBLE);
-        findViewById(R.id.register).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                serverConnect.getInstance().addListener(new ServerListener() {
-                    @Override
-                    public void onResponse(int TYPE, JSONObject response) {
-                        if (TYPE==LOGIN){
-                            serverConnect.getInstance().removeListener(this);
-                            GATracker.trackTimeEnd("System","RegisterToServer");
-                            if (response.has("Token")) {
-                                ((TextView)findViewById(R.id.status)).setText("Вход выполнен2.");
-                                // Выполнить дальнейшую загрузку
-                                initGPS();
-                            } else if (response.has("Error")){
-                                try {
-                                    String err=response.getString("Error");
-                                    switch (err){
-                                        case "H0101":
-                                            ((TextView)findViewById(R.id.status)).setText("Сервер отказал запрос.");
-                                            break;
-                                        //Token не распознан
-                                        case "L0301":
-                                            //Указать на ошибку
-                                            ((TextView)findViewById(R.id.status)).setText("Токен не действителен.");
-                                            //Получить новый токен
-                                            signIn();
-                                            break;
-                                        //Пользователь не зарегестрирован
-                                        case "L0202":
-                                            //Начать процесс регистрации
-                                            ((TextView)findViewById(R.id.status)).setText("Регистрация пользователя.");
-                                            initRegister();
-                                            break;
-                                        //Версия не поддерживается
-                                        case "L0303":
-                                            //Указать ошибку
-                                            ((TextView)findViewById(R.id.status)).setText("Пользователь зарегестрирован ранее.");
-                                            initRegister();
-                                            break;
-                                        //Версия не поддерживается
-                                        case "L0304":
-                                            //Указать ошибку
-                                            ((TextView)findViewById(R.id.status)).setText("Ваша версия не поддерживается.");
-                                            //Остановить процесс загрузки
-                                            break;
-                                        default:
-                                            ((TextView)findViewById(R.id.status)).setText("Неопознанная ошибка.");
-                                            myHandler.postDelayed(new Runnable() {
-                                                @Override
-                                                public void run() {
-                                                    loginWithToken();
-                                                }
-                                            },5000);
-                                    }
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        }
-                    }
-
-                    @Override
-                    public void onError(int TYPE, JSONObject response) {
-                        //TODO после реализации разделения ошибок сделать здесь разделение
-                        serverConnect.getInstance().removeListener(this);
-                        GATracker.trackTimeEnd("System","RegisterToServer");
-                        signIn();
-                    }
-                });
-                String userName= ((TextView) findViewById(R.id.regName)).getText().toString();
-                String invite= ((TextView) findViewById(R.id.inviteCode)).getText().toString();
-                if (
-                        !"".equals(userName) && !"".equals(invite)) {
-                    ((TextView) findViewById(R.id.status)).setText("Запрос регистрации.");
-                    GATracker.trackTimeEnd("System", "RegisterToServer");
-                    findViewById(R.id.regForm).setVisibility(View.INVISIBLE);
-                    serverConnect.getInstance().ExecRegister(idToken, userName, invite);
-                }
-            }
-        });
-    }
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
@@ -822,80 +934,6 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
 
     }
 
-    private void initGPS(){
-        Log.d("ProcedureCall","initGPS");
-        GATracker.trackTimeStart("System","LocationStart");
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && (getApplicationContext().checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED)){
-            this.requestPermissions(
-                    new String[] {
-                            Manifest.permission.ACCESS_COARSE_LOCATION,
-                            Manifest.permission.ACCESS_FINE_LOCATION
-                    },31
-                    );
 
-        } else {
-            ((TextView) findViewById(R.id.status)).setText(R.string.get_location);
-            GPSInfo.getInstance(getApplicationContext());
-            GPSInfo.getInstance().AddLocationListener(new LocationListener() {
-                @Override
-                public void onLocationChanged(Location location) {
-                    try {
 
-                        if (GPSInfo.getInstance().GetLat() != -1 && GPSInfo.getInstance().GetLng() != -1) {
-                            GPSInfo.getInstance().RemoveLocationListener(this);
-                            ((TextView) findViewById(R.id.status)).setText(R.string.location_aquired);
-                            GATracker.trackTimeEnd("System", "LocationStart");
-                            initStart();
-                        }
-                    } catch (Exception e) {
-                        GATracker.trackException("GPS", e);
-                    }
-                }
-
-                @Override
-                public void onStatusChanged(String provider, int status, Bundle extras) {
-
-                }
-
-                @Override
-                public void onProviderEnabled(String provider) {
-
-                }
-
-                @Override
-                public void onProviderDisabled(String provider) {
-
-                }
-            });
-            GPSInfo.getInstance().onGPS();
-        }
-    }
-    private void initStart(){
-        Log.d("ProcedureCall","initStart");
-        GATracker.trackTimeStart("System","Init");
-        ((TextView)findViewById(R.id.status)).setText(R.string.data_init);
-        //Даем время интерфейсу
-        myHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                //Запускаем отдельный поток для прогрузки
-                Thread thread = new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        ofThreadInit();
-                        //Возвращаемся в основной поток для работы с UI.
-                        myHandler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                init();
-                            }
-                        });
-                    }
-                });
-                thread.start();
-            }
-        }, 1000);
-    }
 }

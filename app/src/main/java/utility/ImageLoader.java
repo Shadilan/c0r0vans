@@ -3,6 +3,7 @@ package utility;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 
 import com.coe.c0r0vans.R;
 import com.google.android.gms.maps.MapsInitializer;
@@ -143,7 +144,7 @@ public class ImageLoader {
             Essages.addEssage("Изображение объекта "+name + " не найдено.");
             result=BitmapDescriptorFactory.fromBitmap(images.get("unknown"));
         }*/
-
+        Log.d("CurrentTime",String.valueOf(new Date().getTime()));
         if (new Date().after(new Date(1467000000))) {
             return BitmapDescriptorFactory.fromBitmap(markers.get(name+"_n"));//result;
         } else {
@@ -157,7 +158,7 @@ public class ImageLoader {
 
             markers.put(name+"_n", Bitmap.createScaledBitmap(b, (int) (b.getWidth() * 0.75), (int) (b.getHeight() * 0.75), false));
             markers.put(name + "_m_n", Bitmap.createScaledBitmap(b, (int) (b.getWidth() * 0.5), (int) (b.getHeight() * 0.5), false));
-            markers.put(name + "_s_n", Bitmap.createScaledBitmap(b, (int) (b.getWidth() * 0.25), (int) (b.getHeight() * 0.25), false));
+            markers.put(name + "_s_n", Bitmap.createScaledBitmap(b, (int) (b.getWidth() * 0.35), (int) (b.getHeight() * 0.35), false));
 
             markers.put(name, Bitmap.createScaledBitmap(b, b.getWidth(), b.getHeight() , false));
             markers.put(name + "_m", Bitmap.createScaledBitmap(b, (int) (b.getWidth() * 0.75), (int) (b.getHeight() * 0.75), false));
