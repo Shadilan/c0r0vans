@@ -726,7 +726,7 @@ public class City extends GameObject{
                                                 Player.getPlayer().getNextUpgrades().put(n.getType(),n);
                                             }
                                             update();
-
+                                            serverConnect.getInstance().callScanRange();
                                         } else postError(response);
 
 
