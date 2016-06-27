@@ -145,7 +145,7 @@ public class ButtonLayout extends RelativeLayout {
                     Essages.addEssage("Принудительная загрузка.");
                     serverConnect.getInstance().clearQueue();
                     //Run Refresh
-                    serverConnect.getInstance().RefreshCurrent();
+                    serverConnect.getInstance().callScanRange();
                     //Run Player
                     serverConnect.getInstance().callGetPlayerInfo();
                     //RunGetMessage

@@ -287,7 +287,7 @@ public class City extends GameObject{
                             Player.getPlayer().getNextUpgrades().remove(n.getType());
                             Player.getPlayer().getNextUpgrades().put(n.getType(),n);
                         }
-                        serverConnect.getInstance().RefreshCurrent();
+                        serverConnect.getInstance().callScanRange();
                     } else postError(response);
 
 
@@ -863,7 +863,7 @@ public class City extends GameObject{
                                     GameSound.playSound(GameSound.BUY_SOUND);
                                     Player.getPlayer().setHirelings(Player.getPlayer().getHirelings()+amount);
                                     Essages.addEssage("Нанято "+amount+" чел. за "+gold+" золота.");
-                                    serverConnect.getInstance().RefreshCurrent();
+                                    serverConnect.getInstance().callScanRange();
                                 } else
                                 {
                                     postError(response);

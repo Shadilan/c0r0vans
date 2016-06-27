@@ -775,7 +775,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                         && GPSInfo.getInstance().GetLat() != -1 && GPSInfo.getInstance().GetLng() != -1)
                     if (timeToPlayerRefresh < 1) {
                         serverConnect.getInstance().callGetPlayerInfo();
-                        serverConnect.getInstance().RefreshCurrent();
+                        serverConnect.getInstance().callScanRange();
                         serverConnect.getInstance().callFastScan();
 
 
@@ -784,7 +784,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                         SendedRequest++;
                         if (SendedRequest > 1) UIControler.getButtonLayout().showConnectImage();
                         timeToPlayerRefresh--;
-                        serverConnect.getInstance().RefreshCurrent();
+                        serverConnect.getInstance().callScanRange();
                     }
             } catch (Exception e) {
                 GATracker.trackException("Timer", e);

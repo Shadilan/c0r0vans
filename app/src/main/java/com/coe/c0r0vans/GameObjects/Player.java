@@ -723,7 +723,7 @@ public class Player extends GameObject {
                             e.printStackTrace();
                         }
                     } else
-                    serverConnect.getInstance().RefreshCurrent();
+                    serverConnect.getInstance().callScanRange();
                 }
 
                 @Override

@@ -246,7 +246,7 @@ public class MyGoogleMap{
                             .build()));
 
         if (oldLatLng==null || GPSInfo.getDistance(oldLatLng,target)>300){
-            serverConnect.getInstance().RefreshCurrent();
+            serverConnect.getInstance().callScanRange();
         }
     }
     private static LatLng targetPoint;
@@ -275,7 +275,7 @@ public class MyGoogleMap{
         moveCamera(GPSInfo.getInstance().getLatLng());
         if (targetMarker!=null) targetMarker.setVisible(false);
         if (showpointButton!=null) showpointButton.setVisibility(View.INVISIBLE);
-        serverConnect.getInstance().RefreshCurrent();
+        serverConnect.getInstance().callScanRange();
 
     }
 

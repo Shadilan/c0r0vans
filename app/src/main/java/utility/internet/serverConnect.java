@@ -53,6 +53,10 @@ public class serverConnect {
         }
         return instance;
     }
+    private boolean syncPlayer=false;
+    private boolean syncMap=false;
+    private boolean syncFast=false;
+    private boolean syncMessage=false;
 
     private String ServerAddres;//Адресс сервера
     private Context context;    //Контекст приложения
@@ -158,16 +162,58 @@ public class serverConnect {
     int oldLng=0;
     long oldTime=0;
 
-    /**
-     * Get new data
-     * @param Lat Latitude of position to get data
-     * @param Lng Longtitude of position to get data
-     * @return true
-     */
-    public boolean callScanRange(int Lat, int Lng){
-        String UID= UUID.randomUUID().toString();
+
+
+    public boolean callGetPlayerInfo(){
         if (!checkConnection()) return false;
         if (Token==null) return false;
+        if (busy) syncPlayer=true;
+        else runGetPlayerInfo();
+        return true;
+    }
+    private void runGetPlayerInfo(){
+        String UID=UUID.randomUUID().toString();
+        String url=new UrlBuilder(ServerAddres+"/getdata.jsp","GetPlayerInfo",version)
+                .put("Token",Token)
+                .put("UUID",UID)
+                .build();
+        runRequest(UUID.randomUUID().toString(),url,ResponseListenerWithUID.PLAYER,0);
+        syncPlayer=false;
+    }
+
+    public boolean callGetMessage(){
+        if (!checkConnection()) return false;
+        if (Token==null) return false;
+        if (busy) syncMessage=true;
+        else runGetMessage();
+        return true;
+    }
+    private void runGetMessage(){
+        String UID=UUID.randomUUID().toString();
+        String url=new UrlBuilder(ServerAddres+"/getdata.jsp","GetMessage",version)
+                .put("Token",Token)
+                .put("UUID",UID)
+                .build();
+        runRequest(UUID.randomUUID().toString(),url,ResponseListenerWithUID.MESSAGE,0);
+        syncMessage=false;
+    }
+    public boolean checkRefresh() {
+        long newTime = new Date().getTime();
+        return ((GPSInfo.getDistance(new LatLng(oldLat / 1e6, oldLng / 1e6), GPSInfo.getInstance().getLatLng()) > 500) || newTime - oldTime > 5 * 1000 * 60) && callScanRange();
+    }
+
+    public boolean callScanRange(){
+
+        if (!checkConnection()) return false;
+        if (Token==null) return false;
+        if (busy) syncMap=true;
+        else runScanRange();
+        return true;
+    }
+    private void runScanRange(){
+        int Lat=(int)(MyGoogleMap.getMap().getCameraPosition().target.latitude*1e6);
+        int Lng=(int)(MyGoogleMap.getMap().getCameraPosition().target.longitude*1e6);
+        String UID= UUID.randomUUID().toString();
         MyGoogleMap.setOldLatLng(Lat,Lng);
         String url=new UrlBuilder(ServerAddres+"/getdata.jsp","ScanRange",version)
                 .put("Token",Token)
@@ -175,35 +221,31 @@ public class serverConnect {
                 .put("plng",Lng)
                 .put("UUID",UID)
                 .build();
-        runRequest(UID, url, ResponseListenerWithUID.REFRESH);
+        runRequest(UID, url, ResponseListenerWithUID.REFRESH,0);
         oldLat=Lat;
         oldLng=Lng;
+        syncMap=false;
         oldTime=new Date().getTime();
-        return true;
     }
-
-    public boolean callGetPlayerInfo(){
+    public boolean callFastScan(){
         if (!checkConnection()) return false;
         if (Token==null) return false;
-        String UID=UUID.randomUUID().toString();
-        String url=new UrlBuilder(ServerAddres+"/getdata.jsp","GetPlayerInfo",version)
-                .put("Token",Token)
-                .put("UUID",UID)
-                .build();
-        runRequest(UUID.randomUUID().toString(),url,ResponseListenerWithUID.PLAYER);
+        if (busy) syncFast=true;
+        else runFastScan();
         return true;
     }
-
-    public boolean callGetMessage(){
-        if (!checkConnection()) return false;
-        if (Token==null) return false;
+    private void runFastScan(){
+        int Lat=GPSInfo.getInstance().GetLat();
+        int Lng=GPSInfo.getInstance().GetLng();
         String UID=UUID.randomUUID().toString();
-        String url=new UrlBuilder(ServerAddres+"/getdata.jsp","GetMessage",version)
+        String url=new UrlBuilder(ServerAddres+"/getdata.jsp","FastScan",version)
                 .put("Token",Token)
+                .put("plat",Lat)
+                .put("plng",Lng)
                 .put("UUID",UID)
                 .build();
-        runRequest(UUID.randomUUID().toString(),url,ResponseListenerWithUID.MESSAGE);
-        return true;
+        runRequest(UUID.randomUUID().toString(), url, ResponseListenerWithUID.FASTSCAN,0);
+        syncFast=false;
     }
 
     public boolean callSetAmbush(ObjectAction action, int Lat,int Lng , int TLat,int TLng){
@@ -337,13 +379,7 @@ public class serverConnect {
         return true;
     }
 
-    public boolean RefreshCurrent(){
-        return callScanRange((int)(MyGoogleMap.getMap().getCameraPosition().target.latitude*1e6),(int)(MyGoogleMap.getMap().getCameraPosition().target.longitude*1e6));
-    }
-    public boolean checkRefresh() {
-        long newTime = new Date().getTime();
-        return ((GPSInfo.getDistance(new LatLng(oldLat / 1e6, oldLng / 1e6), GPSInfo.getInstance().getLatLng()) > 500) || newTime - oldTime > 5 * 1000 * 60) && RefreshCurrent();
-    }
+
 
     public boolean createCity(ObjectAction action,int Lat,int Lng , int TLat,int TLng){
         if (!checkConnection()) return false;
@@ -420,22 +456,7 @@ public class serverConnect {
         runRequest(UUID.randomUUID().toString(),url,ResponseListenerWithUID.RATING);
         return true;
     }*/
-    public boolean callFastScan(){
-        return callFastScan(GPSInfo.getInstance().GetLat(),GPSInfo.getInstance().GetLng());
-    }
-    public boolean callFastScan(int Lat,int Lng){
-        if (!checkConnection()) return false;
-        if (Token==null) return false;
-        String UID=UUID.randomUUID().toString();
-        String url=new UrlBuilder(ServerAddres+"/getdata.jsp","FastScan",version)
-                .put("Token",Token)
-                .put("plat",Lat)
-                .put("plng",Lng)
-                .put("UUID",UID)
-                .build();
-        runRequest(UUID.randomUUID().toString(), url, ResponseListenerWithUID.FASTSCAN);
-        return true;
-    }
+
 
     private void runRequest(String UID,String request,int type){
         if (busy) requestList.add(new RequestData(UID,request,type));
@@ -461,22 +482,32 @@ public class serverConnect {
     }
     LinkedList<RequestData> requestList=new LinkedList<>();
     private void runNextRequest(){
-        if (requestList.isEmpty()) {
-            busy=false;
-            if (listeners!=null)
-                for (ServerListener l:listeners){
+        if (syncPlayer){
+            runGetPlayerInfo();
+        } else if (syncMap){
+            runScanRange();
+        } else if (syncMessage){
+            runGetMessage();
+        } else if (syncFast){
+            runFastScan();
+        } else {
+            if (requestList.isEmpty()) {
+                busy = false;
+                if (listeners != null)
+                    for (ServerListener l : listeners) {
 
-                    l.onChangeQueue(0);
-                }
-            return;
-        }
-        RequestData requestData=requestList.poll();
-        runRequest(requestData.UID,requestData.request,requestData.type,0);
-        int queuesize=requestList.size()+1;
-        if (listeners!=null)
-            for (ServerListener l:listeners){
-                l.onChangeQueue(queuesize);
+                        l.onChangeQueue(0);
+                    }
+                return;
             }
+            RequestData requestData = requestList.poll();
+            runRequest(requestData.UID, requestData.request, requestData.type, 0);
+            int queuesize = requestList.size() + 1;
+            if (listeners != null)
+                for (ServerListener l : listeners) {
+                    l.onChangeQueue(queuesize);
+                }
+        }
     }
     public void clearQueue(){
         requestList.clear();
