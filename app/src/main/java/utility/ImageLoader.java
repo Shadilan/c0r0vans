@@ -9,7 +9,6 @@ import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 
-import java.util.Date;
 import java.util.HashMap;
 
 import utility.notification.Essages;
@@ -144,24 +143,19 @@ public class ImageLoader {
             result=BitmapDescriptorFactory.fromBitmap(images.get("unknown"));
         }*/
 
-        if (new Date().after(new Date(1467000000000l))) {
-            return BitmapDescriptorFactory.fromBitmap(markers.get(name+"_n"));//result;
-        } else {
+
             return BitmapDescriptorFactory.fromBitmap(markers.get(name));//result;
-        }
     }
 
     private static void createMarker(Context context,int resource,String name){
         Bitmap b=BitmapFactory.decodeResource(context.getResources(), resource);
         //Workaround for https://code.google.com/p/gmaps-api-issues/issues/detail?id=9765
 
-            markers.put(name+"_n", Bitmap.createScaledBitmap(b, (int) (b.getWidth() * 0.75), (int) (b.getHeight() * 0.75), false));
-            markers.put(name + "_m_n", Bitmap.createScaledBitmap(b, (int) (b.getWidth() * 0.5), (int) (b.getHeight() * 0.5), false));
-            markers.put(name + "_s_n", Bitmap.createScaledBitmap(b, (int) (b.getWidth() * 0.35), (int) (b.getHeight() * 0.35), false));
+            markers.put(name, Bitmap.createScaledBitmap(b, (int) (b.getWidth() * 0.75), (int) (b.getHeight() * 0.75), false));
+            markers.put(name + "_m", Bitmap.createScaledBitmap(b, (int) (b.getWidth() * 0.5), (int) (b.getHeight() * 0.5), false));
+            markers.put(name + "_s", Bitmap.createScaledBitmap(b, (int) (b.getWidth() * 0.35), (int) (b.getHeight() * 0.35), false));
 
-            markers.put(name, Bitmap.createScaledBitmap(b, b.getWidth(), b.getHeight() , false));
-            markers.put(name + "_m", Bitmap.createScaledBitmap(b, (int) (b.getWidth() * 0.75), (int) (b.getHeight() * 0.75), false));
-            markers.put(name + "_s", Bitmap.createScaledBitmap(b, (int) (b.getWidth() * 0.5), (int) (b.getHeight() * 0.5), false));
+
 
 
         /*descriptors.put(name, BitmapDescriptorFactory.fromBitmap(Bitmap.createScaledBitmap(b, b.getWidth(), b.getHeight() , false)));
