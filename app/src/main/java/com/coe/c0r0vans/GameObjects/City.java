@@ -47,7 +47,7 @@ import utility.settings.GameSettings;
  */
 public class City extends GameObject{
     private int Level=1;
-    private int radius=100;
+    private int radius=50;
     private String upgrade;
     private String upgradeName;
     private long influence1=0;
@@ -364,36 +364,36 @@ public class City extends GameObject{
     @Override
     public void loadJSON(JSONObject obj) {
         try {
-            GUID=obj.getString("GUID");
-            int Lat=obj.getInt("Lat");
-            int Lng=obj.getInt("Lng");
-            LatLng latlng=new LatLng(Lat / 1e6, Lng / 1e6);
+            GUID = obj.getString("GUID");
+            int Lat = obj.getInt("Lat");
+            int Lng = obj.getInt("Lng");
+            LatLng latlng = new LatLng(Lat / 1e6, Lng / 1e6);
 
-            if (obj.has("Name")) Name=obj.getString("Name");
-            if (obj.has("UpgradeType")) upgrade=obj.getString("UpgradeType");
-            if (obj.has("UpgradeName")) upgradeName=obj.getString("UpgradeName");
+            if (obj.has("Name")) Name = obj.getString("Name");
+            if (obj.has("UpgradeType")) upgrade = obj.getString("UpgradeType");
+            if (obj.has("UpgradeName")) upgradeName = obj.getString("UpgradeName");
             if (obj.has("Level")) {
-                Level=obj.getInt("Level");
-                hireprice=(int)(Math.sqrt(Level)*100);
+                Level = obj.getInt("Level");
+                hireprice = (int) (Math.sqrt(Level) * 100);
             }
-            if (obj.has("Radius")) radius=obj.getInt("Radius");
-            if (obj.has("Progress")) progress=obj.getInt("Progress");
-            if (obj.has("Influence1")) influence1=obj.getLong("Influence1");
-            if (obj.has("Influence2")) influence2=obj.getLong("Influence2");
-            if (obj.has("Influence3")) influence3=obj.getLong("Influence3");
-            if (obj.has("Owner")) owner=obj.getBoolean("Owner"); else owner=false;
-            if (obj.has("Creator")) founder=obj.getString("Creator");
-            if ("null".equals(founder)) founder="";
-            if (obj.has("Hirelings")) hirelings=obj.getInt("Hirelings");
-            Log.d("tttt","Influence1:"+influence1);
-            if (mark==null) {
+            if (obj.has("Radius")) radius = obj.getInt("Radius");
+            if (obj.has("Progress")) progress = obj.getInt("Progress");
+            if (obj.has("Influence1")) influence1 = obj.getLong("Influence1");
+            if (obj.has("Influence2")) influence2 = obj.getLong("Influence2");
+            if (obj.has("Influence3")) influence3 = obj.getLong("Influence3");
+            owner = obj.has("Owner") && obj.getBoolean("Owner");
+            if (obj.has("Creator")) founder = obj.getString("Creator");
+            if ("null".equals(founder)) founder = "";
+            if (obj.has("Hirelings")) hirelings = obj.getInt("Hirelings");
+            Log.d("tttt", "Influence1:" + influence1);
+            if (mark == null) {
                 setMarker(map.addMarker(new MarkerOptions().position(latlng)));
 
             } else {
                 mark.setPosition(latlng);
                 changeMarkerSize();
             }
-            if (zone==null){
+            if (zone == null) {
                 CircleOptions circleOptions = new CircleOptions();
                 circleOptions.center(latlng);
                 circleOptions.radius(radius);
@@ -402,35 +402,33 @@ public class City extends GameObject{
                 else circleOptions.strokeColor(Color.BLUE);
                 circleOptions.strokeWidth(2);
                 zone = map.addCircle(circleOptions);
-            } else
-            {
+            } else {
                 zone.setCenter(latlng);
                 zone.setRadius(radius);
                 if (Player.checkRoute(GUID)) zone.setStrokeColor(Color.DKGRAY);
                 else zone.setStrokeColor(Color.BLUE);
 
             }
-            if (buildZone==null){
-                CircleOptions circleOptions=new CircleOptions();
+            if (buildZone == null) {
+                CircleOptions circleOptions = new CircleOptions();
                 circleOptions.center(latlng);
-                int dist=125;
-                if (owner) dist=250;
-                Upgrade up=Player.getPlayer().getUpgrade("founder");
-                if (up!=null) dist+=up.getEffect2();
-                else dist+=75;
+                int dist = 125;
+                if (owner) dist = 250;
+                Upgrade up = Player.getPlayer().getUpgrade("founder");
+                if (up != null) dist += up.getEffect2();
+                else dist += 75;
                 circleOptions.radius(dist);
                 circleOptions.zIndex(0);
                 circleOptions.fillColor(0x30ff0000);
                 circleOptions.strokeWidth(0);
-                buildZone=map.addCircle(circleOptions);
-            } else
-            {
+                buildZone = map.addCircle(circleOptions);
+            } else {
                 buildZone.setCenter(latlng);
-                int dist=125;
-                if (owner) dist=250;
-                Upgrade up=Player.getPlayer().getUpgrade("founder");
-                if (up!=null) dist+=up.getEffect2();
-                else dist+=75;
+                int dist = 125;
+                if (owner) dist = 250;
+                Upgrade up = Player.getPlayer().getUpgrade("founder");
+                if (up != null) dist += up.getEffect2();
+                else dist += 75;
                 buildZone.setRadius(dist);
             }
             showRadius();

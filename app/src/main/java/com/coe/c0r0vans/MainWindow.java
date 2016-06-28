@@ -942,7 +942,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
 
     @Override
     protected void onStop() {
-        Log.d("ProcedureCall","onStop");
+        GATracker.trackTimeEnd("System","AppActive");
         super.onStop();
         try {
 
@@ -984,6 +984,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
         StartTickTimer();
         GameSound.playMusic();
         GPSInfo.getInstance().onGPS();
+        GATracker.trackTimeStart("System","AppActive");
     }
     @Override
     public void onBackPressed() {
