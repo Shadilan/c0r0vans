@@ -1,5 +1,7 @@
 package com.coe.c0r0vans.GameObjects;
 
+import android.util.Log;
+
 import com.coe.c0r0vans.MyGoogleMap;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
@@ -58,6 +60,12 @@ public class Caravan extends GameObject {
             e.printStackTrace();
         }
 
+    }
+    public void setPostion(LatLng latLng) {
+        if (mark!=null){
+            Log.d("FastScanTest","MarkExist");
+            mark.setPosition(latLng);
+        } else setMarker(map.addMarker(new MarkerOptions().position(latLng)));
     }
     private String currentMarkName="";
     @Override

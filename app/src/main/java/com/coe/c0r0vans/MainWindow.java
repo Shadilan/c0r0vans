@@ -953,13 +953,19 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                 MessageNotification.appActive = false;
                 GameSound.stopMusic();
                 if (!"Y".equals(GameSettings.getInstance().get("GPS_ON_BACK")))
-                    GPSInfo.getInstance().offGPS();
+                    MainThread.postDelayed(offGPS,30000);
             }
         } catch (Exception e){
             GATracker.trackException("onStop",e);
 
         }
     }
+    Runnable offGPS=new Runnable() {
+        @Override
+        public void run() {
+            GPSInfo.getInstance().offGPS();
+        }
+    };
 
     @Override
     protected void onRestart() {
@@ -983,6 +989,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
         MessageNotification.appActive = true;
         StartTickTimer();
         GameSound.playMusic();
+        MainThread.removeCallbacks(offGPS);
         GPSInfo.getInstance().onGPS();
         GATracker.trackTimeStart("System","AppActive");
     }

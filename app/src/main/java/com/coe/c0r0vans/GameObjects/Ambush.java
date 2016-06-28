@@ -61,6 +61,46 @@ public class Ambush extends GameObject {
     }
 
     @Override
+    public void setPostion(LatLng latLng) {
+        if (mark==null) {
+            setMarker(map.addMarker(new MarkerOptions().position(latLng)));
+            changeMarkerSize();
+        } else {
+            mark.setPosition(latLng);
+            changeMarkerSize();
+        }
+        if (zone==null){
+            CircleOptions circleOptions = new CircleOptions();
+            circleOptions.center(latLng);
+            circleOptions.radius(radius);
+            circleOptions.zIndex(130);
+            switch (faction){
+                case 0:
+                    circleOptions.strokeColor(Color.BLUE);
+                    break;
+                case 1:
+                    circleOptions.strokeColor(Color.MAGENTA);
+                    break;
+                case 2:
+                    circleOptions.strokeColor(Color.RED);
+                    break;
+                case 3:
+                    circleOptions.strokeColor(Color.YELLOW);
+                    break;
+                default:
+                    circleOptions.strokeColor(Color.GREEN);
+            }
+            circleOptions.strokeWidth(2);
+            zone = map.addCircle(circleOptions);
+        } else
+        {
+            zone.setCenter(latLng);
+            zone.setRadius(radius);
+        }
+        showRadius();
+    }
+
+    @Override
     public void loadJSON(JSONObject obj) {
         try {
             GUID=obj.getString("GUID");
@@ -75,42 +115,7 @@ public class Ambush extends GameObject {
                 int Lng=obj.getInt("Lng");
 
                 LatLng latlng=new LatLng(Lat / 1e6, Lng / 1e6);
-                if (mark==null) {
-                    setMarker(map.addMarker(new MarkerOptions().position(new LatLng(Lat / 1e6, Lng / 1e6))));
-                    changeMarkerSize();
-                } else {
-                    mark.setPosition(latlng);
-                    changeMarkerSize();
-                }
-                if (zone==null){
-                    CircleOptions circleOptions = new CircleOptions();
-                    circleOptions.center(latlng);
-                    circleOptions.radius(radius);
-                    circleOptions.zIndex(130);
-                    switch (faction){
-                        case 0:
-                            circleOptions.strokeColor(Color.BLUE);
-                            break;
-                        case 1:
-                            circleOptions.strokeColor(Color.MAGENTA);
-                            break;
-                        case 2:
-                            circleOptions.strokeColor(Color.RED);
-                            break;
-                        case 3:
-                            circleOptions.strokeColor(Color.YELLOW);
-                            break;
-                        default:
-                            circleOptions.strokeColor(Color.GREEN);
-                    }
-                    circleOptions.strokeWidth(2);
-                    zone = map.addCircle(circleOptions);
-                } else
-                {
-                    zone.setCenter(latlng);
-                    zone.setRadius(radius);
-                }
-                showRadius();
+                setPostion(latlng);
                 setVisibility(true);
             }
 

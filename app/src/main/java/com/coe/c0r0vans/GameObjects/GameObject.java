@@ -2,6 +2,7 @@ package com.coe.c0r0vans.GameObjects;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.util.Log;
 import android.widget.RelativeLayout;
 
 import com.google.android.gms.maps.GoogleMap;
@@ -147,9 +148,11 @@ public class GameObject {
 
     public void setPostion(LatLng latLng) {
         if (mark!=null){
+            Log.d("FastScanTest","MarkExist");
             mark.setPosition(latLng);
         }
         if (zone!=null){
+            Log.d("FastScanTest","ZoneExists");
             zone.setCenter(latLng);
         }
     }
