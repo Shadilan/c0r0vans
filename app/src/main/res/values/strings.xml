@@ -145,4 +145,6 @@ All rights reserved to Circle of Eternity</string>
     <string name="exit">Exit</string>
     <string name="network_error">Network Error</string>
     <string name="security">Security</string>
+    <string name="d_d" translatable="false">%1$d/%2$d</string>
+    <string name="s_s" translatable="false">%1$s(%2$s)</string>
 </resources>

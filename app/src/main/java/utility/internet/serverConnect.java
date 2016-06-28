@@ -32,6 +32,7 @@ import java.util.UUID;
 
 import utility.GATracker;
 import utility.GPSInfo;
+import utility.MainThread;
 import utility.notification.Essages;
 
 /**
@@ -461,11 +462,16 @@ public class serverConnect {
     private void runRequest(String UID,String request,int type){
         if (busy) requestList.add(new RequestData(UID,request,type));
         else runRequest(UID, request, type, 0);
+        MainThread.post(new Runnable() {
+            @Override
+            public void run() {
+                if (listeners!=null)
+                    for (ServerListener l:listeners){
+                        l.onChangeQueue(getQueueSize());
+                    }
+            }
+        });
 
-        final int requestList_size = requestList.size();// Moved  requestList.size() call out of the loop to local variable requestList_size
-        for (ServerListener l:listeners){
-            l.onChangeQueue(requestList_size+1);
-        }
 
 
     }
@@ -493,34 +499,51 @@ public class serverConnect {
         } else {
             if (requestList.isEmpty()) {
                 busy = false;
-                if (listeners != null)
-                    for (ServerListener l : listeners) {
-
-                        l.onChangeQueue(0);
-                    }
-                return;
+            } else {
+                RequestData requestData = requestList.poll();
+                runRequest(requestData.UID, requestData.request, requestData.type, 0);
             }
-            RequestData requestData = requestList.poll();
-            runRequest(requestData.UID, requestData.request, requestData.type, 0);
-            int queuesize = requestList.size() + 1;
-            if (listeners != null)
-                for (ServerListener l : listeners) {
-                    l.onChangeQueue(queuesize);
+
+            MainThread.post(new Runnable() {
+                @Override
+                public void run() {
+                    if (listeners != null)
+                        for (ServerListener l : listeners) {
+
+                            l.onChangeQueue(getQueueSize());
+                        }
                 }
+            });
         }
     }
     public void clearQueue(){
         requestList.clear();
         busy=false;
-        if (listeners!=null)
-            for (ServerListener l:listeners){
+        syncFast=false;
+        syncPlayer=false;
+        syncMessage=false;
+        syncMap=false;
+        MainThread.post(new Runnable() {
+            @Override
+            public void run() {
+                if (listeners!=null)
+                    for (ServerListener l:listeners){
 
-                l.onChangeQueue(0);
+                        l.onChangeQueue(getQueueSize());
+                    }
             }
+        });
+
     }
 
     public int getQueueSize(){
-        return requestList.size()+1;
+        int size=0;
+        if (syncMap) size++;
+        if (syncMessage) size++;
+        if (syncPlayer) size++;
+        if (syncFast) size++;
+
+        return size+requestList.size()+1;
     }
 
     private void runRequest(String UID,String request,int type, final int try_count){

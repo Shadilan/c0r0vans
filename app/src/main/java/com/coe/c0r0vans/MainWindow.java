@@ -10,7 +10,6 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
@@ -53,6 +52,7 @@ import utility.GPSInfo;
 import utility.GameSound;
 import utility.GameVibrate;
 import utility.ImageLoader;
+import utility.MainThread;
 import utility.internet.ServerListener;
 import utility.internet.serverConnect;
 import utility.notification.Essages;
@@ -60,7 +60,7 @@ import utility.notification.MessageNotification;
 import utility.settings.GameSettings;
 
 public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
-    private Handler myHandler = new Handler();
+
     private int SendedRequest = 0;
     private MessageMap messages;
     MainWindow self=this;
@@ -75,6 +75,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
         Log.d("ProcedureCall","onCreate");
         super.onCreate(savedInstanceState);
         GATracker.initialize((CorovanApplication) getApplication());
+        MainThread.init();
         setContentView(R.layout.main_activity);
         signIn();
     }
@@ -83,7 +84,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
         if (signCall>3){
             ((TextView)findViewById(R.id.status)).setText(R.string.server_unavaible);
             signCall=0;
-            myHandler.postDelayed(new Runnable() {
+            MainThread.postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     signIn();
@@ -209,7 +210,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                                     break;
                                 default:
                                     ((TextView)findViewById(R.id.status)).setText("Неопознанная ошибка.");
-                                    myHandler.postDelayed(new Runnable() {
+                                    MainThread.postDelayed(new Runnable() {
                                         @Override
                                         public void run() {
                                             loginWithToken();
@@ -257,7 +258,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                             break;
                         default:
                             ((TextView)findViewById(R.id.status)).setText("Неопознанная ошибка.");
-                            myHandler.postDelayed(new Runnable() {
+                            MainThread.postDelayed(new Runnable() {
                                 @Override
                                 public void run() {
                                     loginWithToken();
@@ -322,7 +323,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                                             break;
                                         default:
                                             ((TextView)findViewById(R.id.status)).setText("Неопознанная ошибка.");
-                                            myHandler.postDelayed(new Runnable() {
+                                            MainThread.postDelayed(new Runnable() {
                                                 @Override
                                                 public void run() {
                                                     loginWithToken();
@@ -374,7 +375,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                                     break;
                                 default:
                                     ((TextView)findViewById(R.id.status)).setText("Неопознанная ошибка.");
-                                    myHandler.postDelayed(new Runnable() {
+                                    MainThread.postDelayed(new Runnable() {
                                         @Override
                                         public void run() {
                                             loginWithToken();
@@ -497,7 +498,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
         GATracker.trackTimeStart("System","Init");
         ((TextView)findViewById(R.id.status)).setText(R.string.data_init);
         //Даем время интерфейсу
-        myHandler.postDelayed(new Runnable() {
+        MainThread.postDelayed(new Runnable() {
             @Override
             public void run() {
                 //Запускаем отдельный поток для прогрузки
@@ -506,7 +507,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                     public void run() {
                         ofThreadInit();
                         //Возвращаемся в основной поток для работы с UI.
-                        myHandler.post(new Runnable() {
+                        MainThread.post(new Runnable() {
                             @Override
                             public void run() {
                                 init();
@@ -836,7 +837,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
         catch (Exception e){
             GATracker.trackException("Timer",e);
         }
-        myHandler.postDelayed(myRunable, delay);
+        MainThread.postDelayed(myRunable, delay);
 
     }
 
@@ -947,7 +948,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
 
             if (ready) {
                 isActive=false;
-                myHandler.removeCallbacks(myRunable);
+                MainThread.removeCallbacks(myRunable);
 
                 MessageNotification.appActive = false;
                 GameSound.stopMusic();

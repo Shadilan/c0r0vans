@@ -1,7 +1,6 @@
 package com.coe.c0r0vans.UIElements;
 
 import android.content.Context;
-import android.os.Handler;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.view.View;
@@ -24,6 +23,7 @@ import com.coe.c0r0vans.UIElements.InfoLayout.InfoLayout;
 import org.json.JSONObject;
 
 import utility.GATracker;
+import utility.MainThread;
 import utility.StringUtils;
 import utility.internet.ServerListener;
 import utility.internet.serverConnect;
@@ -38,7 +38,7 @@ public class ButtonLayout extends RelativeLayout {
     private InfoLayout infoLayout;
     private ScrollView scrollView;
     //События должны приходить на основной слой
-    private Handler handler;
+
     public ButtonLayout(Context context) {
         super(context);
         init();
@@ -56,7 +56,6 @@ public class ButtonLayout extends RelativeLayout {
     public void init(){
         inflate(getContext(), R.layout.main_button, this);
         try {
-            handler=new Handler();
             afterInit();
         } catch (Exception e){
             GATracker.trackException("ButtonLayout",e);
@@ -98,8 +97,8 @@ public class ButtonLayout extends RelativeLayout {
             else PlayerInfo.setImageResource(R.mipmap.info_route);
 
             am = (TextView) findViewById(R.id.foundedAmount);
-            am.setText(String.format("%d/%d", Player.getPlayer().getFoundedCities(), Player.getPlayer().getCityMax()));
-            ((TextView) findViewById(R.id.hirelingsAmount)).setText(String.format("%s(%s)", StringUtils.intToStr(Player.getPlayer().getHirelings()), StringUtils.intToStr(Player.getPlayer().getLeftToHire())));
+            am.setText(String.format(getContext().getString(R.string.d_d), Player.getPlayer().getFoundedCities(), Player.getPlayer().getCityMax()));
+            ((TextView) findViewById(R.id.hirelingsAmount)).setText(String.format(getContext().getString(R.string.s_s), StringUtils.intToStr(Player.getPlayer().getHirelings()), StringUtils.intToStr(Player.getPlayer().getLeftToHire())));
             infoLayout.loadFromPlayer();
         }
         if ("Y".equals(GameSettings.getValue("SHOW_BUILD_AREA"))) {
@@ -243,7 +242,7 @@ public class ButtonLayout extends RelativeLayout {
             @Override
             public void onChangeQueue(int count) {
                 super.onChangeQueue(count);
-                handler.post(new Runnable() {
+                MainThread.post(new Runnable() {
                     @Override
                     public void run() {
                         try {
