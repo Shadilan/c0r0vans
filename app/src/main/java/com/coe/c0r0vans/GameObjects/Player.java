@@ -886,15 +886,16 @@ public class Player extends GameObject {
                 }
                 btn= (ImageButton) findViewById(R.id.createCity);
                 btn.setVisibility(VISIBLE);
-                boolean allow=true;
-                for (GameObject o: GameObjects.getInstance().values()){
-                    if (o instanceof City && o.getMarker()!=null){
-                        float dist=250;
-                        float mapper=0;
-                        if (((City) o).getOwner())dist=500;
-                        Upgrade up=Player.getPlayer().getUpgrade("founder");
-                        if (up!=null) dist+=up.getEffect2();
-                        else dist+=125;
+                boolean allow=Player.getPlayer().getCityMax()>Player.getPlayer().getFoundedCities();
+                if (allow) {
+                    for (GameObject o : GameObjects.getInstance().values()) {
+                        if (o instanceof City && o.getMarker() != null) {
+                            float dist = 125;
+                            float mapper = 0;
+                            if (((City) o).getOwner()) dist = 250;
+                            Upgrade up = Player.getPlayer().getUpgrade("founder");
+                            if (up != null) dist += up.getEffect2();
+                            else dist += 125;
                         /*double tlat=SelectedObject.getInstance().getPoint().latitude;
                         double tlng=SelectedObject.getInstance().getPoint().longitude;
                         double lat=o.getMarker().getPosition().latitude;
@@ -906,8 +907,9 @@ public class Player extends GameObject {
                         {
                             allow=false;
                         }*/
-                        if (o.getMarker()!=null && GPSInfo.getDistance(o.getMarker().getPosition(),SelectedObject.getInstance().getPoint())<dist){
-                            allow=false;
+                            if (o.getMarker() != null && GPSInfo.getDistance(o.getMarker().getPosition(), SelectedObject.getInstance().getPoint()) < dist) {
+                                allow = false;
+                            }
                         }
                     }
                 }
