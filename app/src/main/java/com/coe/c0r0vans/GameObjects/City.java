@@ -413,11 +413,11 @@ public class City extends GameObject{
             if (buildZone==null){
                 CircleOptions circleOptions=new CircleOptions();
                 circleOptions.center(latlng);
-                int dist=250;
-                if (owner) dist=500;
+                int dist=125;
+                if (owner) dist=250;
                 Upgrade up=Player.getPlayer().getUpgrade("founder");
                 if (up!=null) dist+=up.getEffect2();
-                else dist+=125;
+                else dist+=75;
                 circleOptions.radius(dist);
                 circleOptions.zIndex(0);
                 circleOptions.fillColor(0x30ff0000);
@@ -426,11 +426,11 @@ public class City extends GameObject{
             } else
             {
                 buildZone.setCenter(latlng);
-                int dist=250;
-                if (owner) dist=500;
+                int dist=125;
+                if (owner) dist=250;
                 Upgrade up=Player.getPlayer().getUpgrade("founder");
                 if (up!=null) dist+=up.getEffect2();
-                else dist+=125;
+                else dist+=75;
                 buildZone.setRadius(dist);
             }
             showRadius();
