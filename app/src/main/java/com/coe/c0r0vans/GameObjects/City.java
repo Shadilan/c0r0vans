@@ -383,6 +383,7 @@ public class City extends GameObject{
             if (obj.has("Influence3")) influence3=obj.getLong("Influence3");
             if (obj.has("Owner")) owner=obj.getBoolean("Owner"); else owner=false;
             if (obj.has("Creator")) founder=obj.getString("Creator");
+            if ("null".equals(founder)) founder="";
             if (obj.has("Hirelings")) hirelings=obj.getInt("Hirelings");
             Log.d("tttt","Influence1:"+influence1);
             if (mark==null) {

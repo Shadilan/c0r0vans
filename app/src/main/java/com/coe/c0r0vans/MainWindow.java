@@ -170,16 +170,20 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
         serverConnect.getInstance().addListener(new ServerListener() {
             @Override
             public void onResponse(int TYPE, JSONObject response) {
+                Log.d("InitR","Type:"+TYPE);
                 if (TYPE==LOGIN){
                     serverConnect.getInstance().removeListener(this);
                     GATracker.trackTimeEnd("System","LoginToServer");
                     if (response.has("Token")) {
+                        Log.d("InitR","Token");
                         ((TextView)findViewById(R.id.status)).setText("Вход выполнен1.");
                         // Выполнить дальнейшую загрузку
                         initGPS();
                     } else if (response.has("Error")){
+                        Log.d("InitR","Error");
                         try {
                             String err=response.getString("Error");
+                            Log.d("InitR",err);
                             switch (err){
                                 case "H0101":
                                     ((TextView)findViewById(R.id.status)).setText("Сервер отказал запрос.");
@@ -225,7 +229,44 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                 //TODO После реализации корректной передачи ошибок сделать разделение
                 serverConnect.getInstance().removeListener(this);
                 GATracker.trackTimeEnd("System","RegisterToServer");
-                signIn();
+                try {
+                    String err=response.getString("Error");
+                    Log.d("InitR",err);
+                    switch (err){
+                        case "H0101":
+                            ((TextView)findViewById(R.id.status)).setText("Сервер отказал запрос.");
+                            break;
+                        //Token не распознан
+                        case "L0201":
+                            //Указать на ошибку
+                            ((TextView)findViewById(R.id.status)).setText("Токен не действителен.");
+                            //Получить новый токен
+                            signIn();
+                            break;
+                        //Пользователь не зарегестрирован
+                        case "L0202":
+                            //Начать процесс регистрации
+                            ((TextView)findViewById(R.id.status)).setText("Регистрация пользователя.");
+                            initRegister();
+                            break;
+                        //Версия не поддерживается
+                        case "L0203":
+                            //Указать ошибку
+                            ((TextView)findViewById(R.id.status)).setText("Ваша версия не поддерживается.");
+                            //Остановить процесс загрузки
+                            break;
+                        default:
+                            ((TextView)findViewById(R.id.status)).setText("Неопознанная ошибка.");
+                            myHandler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    loginWithToken();
+                                }
+                            },5000);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         });
         serverConnect.getInstance().ExecAuthorize(idToken);
@@ -300,7 +341,49 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                         //TODO после реализации разделения ошибок сделать здесь разделение
                         serverConnect.getInstance().removeListener(this);
                         GATracker.trackTimeEnd("System","RegisterToServer");
-                        signIn();
+                        try {
+                            String err=response.getString("Error");
+                            switch (err){
+                                case "H0101":
+                                    ((TextView)findViewById(R.id.status)).setText("Сервер отказал запрос.");
+                                    break;
+                                //Token не распознан
+                                case "L0301":
+                                    //Указать на ошибку
+                                    ((TextView)findViewById(R.id.status)).setText("Токен не действителен.");
+                                    //Получить новый токен
+                                    signIn();
+                                    break;
+                                //Пользователь не зарегестрирован
+                                case "L0202":
+                                    //Начать процесс регистрации
+                                    ((TextView)findViewById(R.id.status)).setText("Регистрация пользователя.");
+                                    initRegister();
+                                    break;
+                                //Версия не поддерживается
+                                case "L0303":
+                                    //Указать ошибку
+                                    ((TextView)findViewById(R.id.status)).setText("Пользователь зарегестрирован ранее.");
+                                    initRegister();
+                                    break;
+                                //Версия не поддерживается
+                                case "L0304":
+                                    //Указать ошибку
+                                    ((TextView)findViewById(R.id.status)).setText("Ваша версия не поддерживается.");
+                                    //Остановить процесс загрузки
+                                    break;
+                                default:
+                                    ((TextView)findViewById(R.id.status)).setText("Неопознанная ошибка.");
+                                    myHandler.postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            loginWithToken();
+                                        }
+                                    },5000);
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
                 });
                 String userName= ((TextView) findViewById(R.id.regName)).getText().toString();
@@ -317,7 +400,8 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
         findViewById(R.id.exitAccount).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (GameSettings.getInstance().mClient!=null) {
+
+                if (mGoogleApiClient!=null) {
                     SharedPreferences sp = getApplicationContext().getSharedPreferences("SpiritProto", Context.MODE_PRIVATE);
                     String accountName = sp.getString("AccountName", "");
                     sp.edit().clear().apply();
@@ -325,18 +409,18 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                     sp.edit().clear().apply();
                     sp = getApplicationContext().getSharedPreferences("player", Context.MODE_PRIVATE);
                     sp.edit().clear().apply();
-                    if (GameSettings.getInstance().mClient.isConnected()){
-                        Auth.GoogleSignInApi.signOut(GameSettings.getInstance().mClient);
+                    if (mGoogleApiClient.isConnected()){
+                        Auth.GoogleSignInApi.signOut(mGoogleApiClient);
 
                         GATracker.trackHit("System", "ExitApplication");
                         //Todo Как корректно завершить приложение
                         System.exit(0);
                     } else
                     {
-                        GameSettings.getInstance().mClient.registerConnectionCallbacks(new GoogleApiClient.ConnectionCallbacks() {
+                        mGoogleApiClient.registerConnectionCallbacks(new GoogleApiClient.ConnectionCallbacks() {
                             @Override
                             public void onConnected(@Nullable Bundle bundle) {
-                                Auth.GoogleSignInApi.signOut(GameSettings.getInstance().mClient);
+                                Auth.GoogleSignInApi.signOut(mGoogleApiClient);
                                 GATracker.trackHit("System", "ExitApplication");
                                 //Todo Как корректно завершить приложение
                                 System.exit(0);
@@ -347,7 +431,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
 
                             }
                         });
-                        GameSettings.getInstance().mClient.connect();
+                        mGoogleApiClient.connect();
                     }
 
                 }
