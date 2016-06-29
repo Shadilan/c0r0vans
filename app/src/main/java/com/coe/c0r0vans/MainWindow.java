@@ -19,6 +19,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.coe.c0r0vans.GameObjects.Ambush;
 import com.coe.c0r0vans.GameObjects.Caravan;
@@ -443,7 +444,6 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
 
 
     private void initGPS(){
-        Log.d("ProcedureCall","initGPS");
         GATracker.trackTimeStart("System","LocationStart");
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && (getApplicationContext().checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
@@ -489,6 +489,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
 
                 }
             });
+            if (!GPSInfo.checkEnabled()) Toast.makeText(getApplicationContext(),"GPS Disabled pls on GPS",120000).show();
             GPSInfo.getInstance().onGPS();
         }
     }

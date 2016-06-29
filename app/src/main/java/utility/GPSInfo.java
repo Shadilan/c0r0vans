@@ -22,6 +22,20 @@ import utility.settings.SettingsListener;
 public class GPSInfo {
     private static GPSInfo instance;
 
+    public static boolean checkEnabled(){
+
+        if (instance.locationManager==null) return false;
+        boolean result=false;
+        for (String prov : instance.locationManager.getAllProviders()) {
+
+            if (!"passive".equals(prov) && instance.locationManager.isProviderEnabled(prov)) {
+
+                result=true ;
+            }
+        }
+        return result;
+    }
+
     public static GPSInfo getInstance(Context mContext) {
         if (instance == null) {
 
