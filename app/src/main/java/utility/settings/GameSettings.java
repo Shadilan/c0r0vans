@@ -3,7 +3,6 @@ package utility.settings;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
 
 import com.coe.c0r0vans.GameObjects.GameObject;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -11,6 +10,8 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+
+import utility.GATracker;
 
 /**
  * @author Shadilan
@@ -120,7 +121,6 @@ public class GameSettings extends HashMap<String,String>{
     public static float getZoom(){
         float result= GameObject.ICON_MEDIUM;
         String zoom=instance.get("ZOOM");
-        Log.d("Clientzoom", "Get zoom " + zoom);
         if (zoom!=null) result=Float.parseFloat(zoom);
         return result;
     }
@@ -147,7 +147,7 @@ public class GameSettings extends HashMap<String,String>{
         try{
             result=Integer.parseInt(oldFaction);
         } catch (Exception e){
-            Log.d("ShitHapens","oldFaction "+oldFaction);
+            GATracker.trackException("GetFaction","ParsInt in Faction.");
         }
         return result;
     }

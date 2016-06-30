@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -30,8 +29,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.Arrays;
 
 import utility.GATracker;
 import utility.GPSInfo;
@@ -293,7 +290,7 @@ public class City extends GameObject{
 
                 } catch (JSONException e) {
                     GATracker.trackException("BuyUpgrade","JSONResult error");
-                    Log.d("BuyUpgrade",e.toString()+ Arrays.toString(e.getStackTrace()));
+
                 }
 
             }
@@ -385,7 +382,7 @@ public class City extends GameObject{
             if (obj.has("Creator")) founder = obj.getString("Creator");
             if ("null".equals(founder)) founder = "";
             if (obj.has("Hirelings")) hirelings = obj.getInt("Hirelings");
-            Log.d("tttt", "Influence1:" + influence1);
+
             if (mark == null) {
                 setMarker(map.addMarker(new MarkerOptions().position(latlng)));
 

@@ -2,7 +2,6 @@ package com.coe.c0r0vans.GameObjects;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -32,7 +31,7 @@ public class MessageMap extends HashMap<String,Message>{
             SharedPreferences sp=ctx.getSharedPreferences("MESSAGES",Context.MODE_PRIVATE);
             try {
                 String sptext=sp.getString("Messages", "");
-                Log.d("MessageLoad",sptext);
+
                 if (!"".equals(sptext))  loadJSON(new JSONObject(sptext));
             } catch (JSONException e) {
                 if ("Y".equals(GameSettings.getInstance().get("SHOW_NETWORK_ERROR")))
@@ -83,7 +82,7 @@ public class MessageMap extends HashMap<String,Message>{
         SharedPreferences.Editor editor =sp.edit();
         String out=getJSON().toString();
         editor.putString("Messages", out);
-        Log.d("MessageSave", out);
+
         editor.apply();
 
     }

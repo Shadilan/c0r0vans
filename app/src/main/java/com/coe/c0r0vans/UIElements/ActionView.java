@@ -5,7 +5,6 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
@@ -59,7 +58,7 @@ public class ActionView extends LinearLayout {
 
             }
         });
-        Log.d("Loader","ErrorPlace");
+
         Player.getPlayer().addOnChange(new OnGameObjectChange() {
             @Override
             public void change(int ChangeType) {
@@ -109,7 +108,7 @@ public class ActionView extends LinearLayout {
         //Очистить вью
         //Загрузить вью
         //Обновить видимость экшенов
-        Log.d("tttt","test_2");
+
         this.removeAllViews();
         GameObject target=SelectedObject.getInstance().getTarget();
         if (target instanceof Player){
@@ -128,7 +127,7 @@ public class ActionView extends LinearLayout {
 
 
 
-        Log.d("tttt", "test_2");
+
     }
     public void setCurrentView(RelativeLayout view){
         currentView= view;

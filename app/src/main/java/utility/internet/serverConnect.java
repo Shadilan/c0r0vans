@@ -4,7 +4,6 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.provider.Settings;
-import android.util.Log;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
@@ -547,7 +546,7 @@ public class serverConnect {
     }
 
     private void runRequest(String UID,String request,int type, final int try_count){
-        Log.d("URLRequest",request);
+
         busy=true;
         if (!checkConnection()) return;
         final JsonObjectRequest jsObjRequest = new JsonObjectRequest
@@ -556,7 +555,7 @@ public class serverConnect {
                     public void onResponse(JSONObject response) {
                         try
                         {
-                            Log.d("URLRequest",response.toString());
+
                             clearListener();
 
                             if (response.has("Error") || (response.has("Result") && !response.getString("Result").equals("OK"))) {

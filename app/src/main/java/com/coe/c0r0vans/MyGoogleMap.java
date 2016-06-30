@@ -140,24 +140,6 @@ public class MyGoogleMap{
             }
         });
 
-
-        /*map.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
-
-
-            @Override
-            public void onCameraChange(CameraPosition cameraPosition) {
-                if (cameraPosition.bearing != bearing) {
-                    bearing = cameraPosition.bearing;
-                    Log.d("Test rotate", "Rotation");
-                    GameSettings.setBearing(bearing);
-                    if (moveFixed) moveCamera(GPSInfo.getInstance().getLatLng());
-                    else moveCamera(targetPoint);
-
-                }
-            }
-
-        });*/
-
         MarkerOptions mo=new MarkerOptions().anchor(0.5f,0.5f).icon(BitmapDescriptorFactory.fromResource(R.mipmap.showbutton)
         ).position(new LatLng(0,0)).visible(false);
         targetMarker=map.addMarker(mo);

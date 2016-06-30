@@ -1,7 +1,6 @@
 package com.coe.c0r0vans.GameObjects;
 
 import android.graphics.Bitmap;
-import android.util.Log;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -31,7 +30,7 @@ public abstract class ObjectAction {
     }
     protected boolean enabled=true;
     public void setEnable(boolean flag){
-        Log.d("DebugAction",getCommand()+":"+flag);
+
         enabled=flag;}
     public boolean isEnabled(){return enabled;}
 }

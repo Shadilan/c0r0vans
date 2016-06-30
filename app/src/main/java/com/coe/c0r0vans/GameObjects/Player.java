@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
@@ -545,7 +544,7 @@ public class Player extends GameObject {
         }
     }
     public Upgrade getNextUpgrade(String type){
-        Log.d("NextUp",type+" "+NextUpgrades.size());
+
 
         return NextUpgrades.get(type);
     }

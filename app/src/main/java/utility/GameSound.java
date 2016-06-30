@@ -6,7 +6,6 @@ import android.media.AudioAttributes;
 import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.Build;
-import android.util.Log;
 
 import com.coe.c0r0vans.R;
 
@@ -25,14 +24,14 @@ public class GameSound {
     private int soundStream=-1;
     private int musicStream=-1;
     public static void init(Context ctx){
-        Log.d("Timing", "Sound-Start");
+
         if (instance==null) instance=new GameSound();
-        Log.d("Timing", "Sound-instance");
+
         instance.context=ctx;
         instance.soundPool=instance.buildSoundPool();
-        Log.d("Timing", "Sound-buildPool");
+
         instance.loadSamples();
-        Log.d("Timing", "Sound-loadSample");
+
         instance.soundPool.setOnLoadCompleteListener(new SoundPool.OnLoadCompleteListener() {
             @Override
             public void onLoadComplete(SoundPool soundPool, int sampleId, int status) {
@@ -42,9 +41,9 @@ public class GameSound {
                 }
             }
         });
-        Log.d("Timing", "Sound-listener");
+
         updateSettings();
-        Log.d("Timing", "Sound-settings");
+
         GameSettings.addSettingsListener(new SettingsListener() {
             @Override
             public void onSettingsSave() {
@@ -73,7 +72,7 @@ public class GameSound {
                 }
             }
         });
-        Log.d("Timing", "Sound-settings");
+
     }
     private int MUSIC=-1;
     public static int SET_AMBUSH;
@@ -106,13 +105,8 @@ public class GameSound {
         }
     };
     private void loadSamples(){
-        Log.d("Timing", "Sound");
         MUSIC=soundPool.load(context, R.raw.drums,0);
-        Log.d("Timing", "Sound-music");
         new Thread(task).start();
-        //task.run();
-        Log.d("Timing", "Sound-thread");
-
     }
     private SoundPool buildSoundPool() {
         SoundPool soundPool;
@@ -161,7 +155,6 @@ public class GameSound {
         else if (!instance.music_on && instance.musicStream!=-1) {stopMusic();}
     }
     public static void playSound(int soundId){
-        Log.d("SoundCheck","SoundID:"+soundId);
         if (soundId==-1) return;
         if (instance.sound_on) {
             if (instance.soundStream!=-1) {

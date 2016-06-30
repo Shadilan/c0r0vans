@@ -61,7 +61,7 @@ public class ButtonLayout extends RelativeLayout {
             GATracker.trackException("ButtonLayout",e);
         }
     }
-
+    TextView zoomCnt;
     private void afterInit() {
         MyGoogleMap.setShowpointButton((ImageButton) findViewById(R.id.showPosButton));
         infoLayout = new InfoLayout(getContext());
@@ -156,7 +156,8 @@ public class ButtonLayout extends RelativeLayout {
                 return true;
             }
         });
-
+        zoomCnt= (TextView) findViewById(R.id.ZoomCnt);
+        updateZoom();
         ImageView zoomButton= (ImageView) findViewById(R.id.zoomButton);
         zoomButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -166,6 +167,7 @@ public class ButtonLayout extends RelativeLayout {
                     for (GameObject obj : GameObjects.getInstance().values())
                         if (obj.getMarker() != null) obj.changeMarkerSize();
                     Player.getPlayer().changeMarkerSize();
+                    updateZoom();
                 } catch (Exception e) {
                     GATracker.trackException("ZoomClick",e);
                 }
@@ -261,6 +263,21 @@ public class ButtonLayout extends RelativeLayout {
         });
 
     }
+
+    private void updateZoom() {
+        float zoom=MyGoogleMap.getClientZoom();
+        if (zoom==GameObject.ICON_LARGE)
+        {
+            zoomCnt.setText("x4");
+        } else if (zoom==GameObject.ICON_MEDIUM)
+        {
+            zoomCnt.setText("x2");
+        } else
+        {
+            zoomCnt.setText("x1");
+        }
+    }
+
     public void showConnectImage(){
         ImageView ci= (ImageView) findViewById(R.id.server_connect);
         ci.setVisibility(VISIBLE);

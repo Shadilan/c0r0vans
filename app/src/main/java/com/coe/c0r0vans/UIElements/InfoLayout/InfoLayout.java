@@ -2,7 +2,6 @@ package com.coe.c0r0vans.UIElements.InfoLayout;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -13,8 +12,6 @@ import android.widget.ToggleButton;
 import com.coe.c0r0vans.R;
 import com.coe.c0r0vans.ShowHideForm;
 import com.coe.c0r0vans.UIElements.UIControler;
-
-import java.util.Date;
 
 import utility.GATracker;
 import utility.internet.serverConnect;
@@ -51,17 +48,17 @@ public class InfoLayout extends RelativeLayout implements ShowHideForm {
         afterInit();
     }
     private void setCurrent(ViewGroup l){
-        Log.d("Timing", "!Время:" + (new Date().getTime()));
+
         informationLayout.removeAllViews();
-        Log.d("Timing", "!Время:" + (new Date().getTime()));
+
         informationLayout.addView(l);
-        Log.d("Timing", "!Время:" + (new Date().getTime()));
+
         current= (PlayerInfoLayout) l;
-        Log.d("Timing", "!Время:" + (new Date().getTime()));
+
         current.setParent(this);
-        Log.d("Timing", "!Время:" + (new Date().getTime()));
+
         current.update();
-        Log.d("Timing", "!Время:" + (new Date().getTime()));
+
     }
     private void afterInit(){
         informationLayout= (LinearLayout) findViewById(R.id.informationLayout);

@@ -89,8 +89,6 @@ public class Route extends GameObject{
 
                 if (map!=null) {
                     line = map.addPolyline(options);
-
-                    //Log.d("RouteTest","Line draw");
                     showRoute();
 
 

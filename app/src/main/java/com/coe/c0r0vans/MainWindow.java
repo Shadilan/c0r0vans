@@ -14,7 +14,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -73,7 +72,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
      * Create form;
      */
     protected void onCreate(Bundle savedInstanceState) {
-        Log.d("ProcedureCall","onCreate");
+
         super.onCreate(savedInstanceState);
         GATracker.initialize((CorovanApplication) getApplication());
         MainThread.init();
@@ -98,7 +97,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
         ((TextView)findViewById(R.id.status)).setText(R.string.enter_google_account);
         SharedPreferences sharedPreferences=getSharedPreferences("SpiritProto", MODE_PRIVATE);
         String accountName=sharedPreferences.getString("AccountName", "");
-        Log.d("SignOff","Account:"+accountName);
+
         GoogleSignInOptions gso;
 
         if ("".equals(accountName)) {
@@ -131,9 +130,6 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
 
     protected void onActivityResult(final int requestCode, final int resultCode,
                                     final Intent data) {
-        Log.d("ProcedureCall","onActivityResult");
-
-
         if (requestCode == 123) {
             ((TextView)findViewById(R.id.status)).setText(R.string.done_google_account);
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
@@ -167,25 +163,25 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
 
     String idToken;
     private void loginWithToken(){
-        Log.d("ProcedureCall","loginWithToken");
+
         GATracker.trackTimeStart("System","LoginToServer");
         serverConnect.getInstance().addListener(new ServerListener() {
             @Override
             public void onResponse(int TYPE, JSONObject response) {
-                Log.d("InitR","Type:"+TYPE);
+
                 if (TYPE==LOGIN){
                     serverConnect.getInstance().removeListener(this);
                     GATracker.trackTimeEnd("System","LoginToServer");
                     if (response.has("Token")) {
-                        Log.d("InitR","Token");
+
                         ((TextView)findViewById(R.id.status)).setText("Вход выполнен1.");
                         // Выполнить дальнейшую загрузку
                         initGPS();
                     } else if (response.has("Error")){
-                        Log.d("InitR","Error");
+
                         try {
                             String err=response.getString("Error");
-                            Log.d("InitR",err);
+
                             switch (err){
                                 case "H0101":
                                     ((TextView)findViewById(R.id.status)).setText("Сервер отказал запрос.");
@@ -233,7 +229,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                 GATracker.trackTimeEnd("System","RegisterToServer");
                 try {
                     String err=response.getString("Error");
-                    Log.d("InitR",err);
+
                     switch (err){
                         case "H0101":
                             ((TextView)findViewById(R.id.status)).setText("Сервер отказал запрос.");
@@ -274,7 +270,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
         serverConnect.getInstance().ExecAuthorize(idToken);
     }
     private void initRegister(){
-        Log.d("ProcedureCall","initRegister");
+
         findViewById(R.id.regForm).setVisibility(View.VISIBLE);
         findViewById(R.id.register).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -489,13 +485,13 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
 
                 }
             });
-            if (!GPSInfo.checkEnabled()) Toast.makeText(getApplicationContext(),"GPS Disabled pls on GPS",120000).show();
+            checkGPS();
             GPSInfo.getInstance().onGPS();
         }
     }
 
     private void initStart(){
-        Log.d("ProcedureCall","initStart");
+
         GATracker.trackTimeStart("System","Init");
         ((TextView)findViewById(R.id.status)).setText(R.string.data_init);
         //Даем время интерфейсу
@@ -522,7 +518,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
     }
 
     private void ofThreadInit(){
-        Log.d("ProcedureCall","ofThreadInit");
+
         GameSettings.init(getApplicationContext());
         GameSettings.getInstance().mClient=mGoogleApiClient;
         ImageLoader.Loader(getApplicationContext());
@@ -546,7 +542,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
      */
 
     private void init() {
-        Log.d("ProcedureCall","init");
+
         //init fields
         GATracker.trackTimeStart("System","Init");
 //            ((TextView)findViewById(R.id.status)).setText(R.string.init_object);
@@ -590,7 +586,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
      */
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        Log.d("ProcedureCall","onMapReady");
+
         try{
 
         Point size=new Point();
@@ -608,7 +604,6 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
      */
 
     private void createListeners() {
-        Log.d("ProcedureCall","createListener");
         if (isListenersDone) return;
         serverConnect.getInstance().addListener(new ServerListener() {
             @Override
@@ -827,7 +822,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
      * Tick Клиента
      */
     private void StartTickTimer() {
-        Log.d("ProcedureCall","StartTickTimer");
+
         int delay = 1000;
         try {
             if (serverConnect.getInstance().isLogin() && (timeToPlayerRefresh != -1) && GPSInfo.getInstance().GetLat() != -1 && GPSInfo.getInstance().GetLng() != -1) {
@@ -854,17 +849,16 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
 
     int timeToPlayerRefresh=-1;
     private void Tick() {
-        Log.d("ProcedureCall","Tick");
+
         if (ready && isActive) {
             try {
+                checkGPS();
                 if (serverConnect.getInstance().isLogin() && this.hasWindowFocus()
                         && GPSInfo.getInstance().GetLat() != -1 && GPSInfo.getInstance().GetLng() != -1)
                     if (timeToPlayerRefresh < 1) {
                         serverConnect.getInstance().callGetPlayerInfo();
                         serverConnect.getInstance().callScanRange();
                         serverConnect.getInstance().callFastScan();
-
-
                         timeToPlayerRefresh = 6;
                     } else {
                         SendedRequest++;
@@ -878,6 +872,14 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
         }
         StartTickTimer();
     }
+
+    private void checkGPS() {
+        if (!GPSInfo.checkEnabled()) {
+            Toast.makeText(getApplicationContext(),"GPS Disabled pls on GPS",120000).show();
+            GATracker.trackHit("System","OffGps");
+        }
+    }
+
     boolean run=true;
     private Runnable messageRequest=new Runnable() {
         @Override
@@ -923,8 +925,6 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                             serverConnect.getInstance().callFastScan();
                             lastFastScan=GPSInfo.getInstance().getLatLng();
                         }
-
-                    //Log.d("TestThread","Run FastScan");
                 }
 
                 synchronized (this) {
@@ -970,7 +970,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
 
     @Override
     protected void onRestart() {
-        Log.d("ProcedureCall","onRestart");
+
         super.onRestart();
         if (ready) {
             isActive=true;
@@ -985,18 +985,19 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
 
 
     private void onTrueResume(){
-        Log.d("ProcedureCall","onTrueResume");
+
         MessageNotification.cancel();
         MessageNotification.appActive = true;
         StartTickTimer();
         GameSound.playMusic();
         MainThread.removeCallbacks(offGPS);
+        checkGPS();
         GPSInfo.getInstance().onGPS();
         GATracker.trackTimeStart("System","AppActive");
     }
     @Override
     public void onBackPressed() {
-        Log.d("ProcedureCall","onBackPressed");
+
         try {
             if (UIControler.getWindowLayout().getChildCount() > 0 && serverConnect.getInstance().isLogin() && Player.getPlayer().getRace()!=0) {
                 UIControler.getWindowLayout().removeAllViews();

@@ -1,7 +1,5 @@
 package utility;
 
-import android.util.Log;
-
 import com.coe.c0r0vans.CorovanApplication;
 import com.coe.c0r0vans.R;
 import com.google.android.gms.analytics.HitBuilders;
@@ -34,7 +32,6 @@ public class GATracker {
         serverConnect.getInstance().sendDebug(category,action,0,time);
     }
     public static void trackException(String action,Exception e){
-        Log.d("Exception",e.toString()+Arrays.toString(e.getStackTrace()));
         mTracker.send(new HitBuilders.ExceptionBuilder().setDescription(action+":"+Arrays.toString(e.getStackTrace())).build());
     }
     public static void trackException(String action,String text){

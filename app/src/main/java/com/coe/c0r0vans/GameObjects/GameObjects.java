@@ -1,7 +1,5 @@
 package com.coe.c0r0vans.GameObjects;
 
-import android.util.Log;
-
 import com.coe.c0r0vans.MyGoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 
@@ -67,11 +65,6 @@ public class GameObjects extends HashMap<String,GameObject> {
 
                                         Caravan caravan = new Caravan(MyGoogleMap.getMap(), JObj.getJSONObject(i));
                                         instance.put(caravan.getGUID(), caravan);
-                                    } else if (JObj.getJSONObject(i).getString("Type").equalsIgnoreCase("Sign")) {
-                                        Log.d("Debug info", "Sign Load:" + JObj.getJSONObject(i).toString());
-                                        Log.d("Game Warning", "Sign object");
-                                    } else {
-                                        Log.d("Game Warning", "Unknown object");
                                     }
                                 }
 
@@ -92,10 +85,9 @@ public class GameObjects extends HashMap<String,GameObject> {
                 if (TYPE==FASTSCAN){
                     try {
                         //Проверить наличие массива JSON. Objects
-                        Log.d("FastScanTest","ListenerOK");
+
                         if (response.has("FastScan")) {
                             //Для каждого объекта в GameObjects
-                            Log.d("FastScanTest","JSONOk");
                             JSONArray lst=response.getJSONArray("FastScan");
                             for (GameObject o:instance.values()) {
                                //Если это Засада или Караван
@@ -115,7 +107,7 @@ public class GameObjects extends HashMap<String,GameObject> {
                                         if (obj.has("Lng"))lng=obj.getInt("Lng");
                                         //if (obj.has("Type")) type=obj.getString("Type");
                                         if (o.getGUID().equals(guid)){
-                                            Log.d("FastScanTest","ObjectFound");
+
                                             o.setPostion(new LatLng(lat/1e6,lng/1e6));
                                             o.setVisibility(true);
                                             //isChanged=true;
