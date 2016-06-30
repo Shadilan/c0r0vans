@@ -270,9 +270,7 @@ public class City extends GameObject{
                     if ((response.has("Result") && "OK".equals(response.getString("Result"))) || (!response.has("Result")
                             && !response.has("Error"))){
                         GameSound.playSound(GameSound.BUY_SOUND);
-                        Upgrade up = Player.getPlayer().getUpgrade(upgrade);
-                        if (up != null) Essages.addEssage(String.format(ctx.getResources().getString(R.string.upgrade_bought),up.getName()));
-                        else Essages.addEssage(String.format(ctx.getResources().getString(R.string.upgrade_bought), upgrade));
+
                         if (response.has("Upgrade")){
                             Upgrade n=new Upgrade(response.getJSONObject("Upgrade"));
                             Upgrade r=Player.getPlayer().getUpgrade(n.getType());
@@ -284,6 +282,9 @@ public class City extends GameObject{
                             Player.getPlayer().getNextUpgrades().remove(n.getType());
                             Player.getPlayer().getNextUpgrades().put(n.getType(),n);
                         }
+                        Upgrade up = Player.getPlayer().getUpgrade(upgrade);
+                        if (up != null) Essages.addEssage(String.format(ctx.getResources().getString(R.string.upgrade_bought),up.getName()));
+                        else Essages.addEssage(String.format(ctx.getResources().getString(R.string.upgrade_bought), upgrade));
                         serverConnect.getInstance().callScanRange();
                     } else postError(response);
 
@@ -706,9 +707,7 @@ public class City extends GameObject{
                                         if ((response.has("Result") && "OK".equals(response.getString("Result"))) || (!response.has("Result")
                                                 && !response.has("Error"))){
                                             GameSound.playSound(GameSound.BUY_SOUND);
-                                            Upgrade up = Player.getPlayer().getUpgrade(upgrade);
-                                            if (up != null) Essages.addEssage(String.format(getContext().getResources().getString(R.string.upgrade_bought),up.getName()));
-                                            else Essages.addEssage(String.format(getContext().getResources().getString(R.string.upgrade_bought), upgrade));
+
 
                                             if (response.has("Upgrade")){
                                                 Upgrade n=new Upgrade(response.getJSONObject("Upgrade"));
@@ -721,6 +720,9 @@ public class City extends GameObject{
                                                 Player.getPlayer().getNextUpgrades().remove(n.getType());
                                                 Player.getPlayer().getNextUpgrades().put(n.getType(),n);
                                             }
+                                            Upgrade up = Player.getPlayer().getUpgrade(upgrade);
+                                            if (up != null) Essages.addEssage(String.format(getContext().getResources().getString(R.string.upgrade_bought),up.getName()));
+                                            else Essages.addEssage(String.format(getContext().getResources().getString(R.string.upgrade_bought), upgrade));
                                             update();
                                             serverConnect.getInstance().callScanRange();
                                         } else postError(response);
