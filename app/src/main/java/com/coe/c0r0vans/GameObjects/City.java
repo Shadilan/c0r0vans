@@ -175,7 +175,8 @@ public class City extends GameObject{
 
             @Override
             public void postAction(JSONObject response) {
-                Essages.addEssage(String.format(ctx.getResources().getString(R.string.route_finish), Name));
+
+                Essages.addEssage(String.format(ctx.getResources().getString(R.string.route_finish), oldRoute.getStartName(),Name));
                 GameSound.playSound(GameSound.FINISH_ROUTE_SOUND);
                 serverConnect.getInstance().callGetPlayerInfo();
                 Player.getPlayer().setCurrentRouteGUID("");

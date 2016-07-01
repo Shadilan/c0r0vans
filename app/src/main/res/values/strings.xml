@@ -57,7 +57,7 @@
 
     <string name="distance">%1$dм</string>
     <string name="upgrade_bought">Upgrade "%s" has bought.</string>
-    <string name="route_finish">Rote has finished in "%1$s"</string>
+    <string name="route_finish">Rote from %1$s has been finished in "%2$s"</string>
     <string name="route_started">Route has started in "%1$s"</string>
     <string name="login_button">Login</string>
     <string name="login_button_run">Login …</string>
