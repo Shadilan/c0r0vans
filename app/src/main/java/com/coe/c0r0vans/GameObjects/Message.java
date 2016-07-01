@@ -12,9 +12,14 @@ import java.util.Date;
  * Контейнер сообщения и загрузчик
  */
 public class Message {
+    public static final int AMBUSH_DESTROYED=2;
+    public static final int CARAVAN_DESTROYED=1;
+    public static final int CARAVAN_CATCHED=3;
+    public static final int UNKNOWN=0;
+    public static final int LORE=10;
     private String GUID;
     private String message;
-    private String type;
+    private int type;
     private String state;
     private LatLng target;
     private Date time;
@@ -29,7 +34,7 @@ public class Message {
     public Message(String text){
         GUID="";
         message=text;
-        type="";
+        type=0;
         state="";
         target=null;
         time=new Date();
@@ -38,7 +43,7 @@ public class Message {
     public Message(String text,Date date){
         GUID="";
         message=text;
-        type="";
+        type=0;
         state="";
         target=null;
         time=date;
@@ -49,7 +54,11 @@ public class Message {
         int lng = 0;
         if (jsonObject.has("GUID")) GUID = jsonObject.getString("GUID");
         if (jsonObject.has("Message")) message = jsonObject.getString("Message");
-        if (jsonObject.has("Type")) type = jsonObject.getString("Type");
+        try {
+            if (jsonObject.has("Type")) type = jsonObject.getInt("Type"); else type=0;
+        } catch (Exception e){
+            type=0;
+        }
         if (jsonObject.has("State")) state = jsonObject.getString("State");
         if (jsonObject.has("Time")) time = new Date(jsonObject.getLong("Time"));
         if (jsonObject.has("TargetLat")) lat = jsonObject.getInt("TargetLat");
@@ -65,7 +74,7 @@ public class Message {
         JSONObject result=new JSONObject();
         if (GUID!=null) result.put("GUID",GUID);
         if (GUID!=null)result.put("Message",message);
-        if (type!=null)result.put("Type",type);
+        if (type!=0)result.put("Type",type);
         if (state!=null)result.put("State",state);
         if (time!=null)result.put("Time",time.getTime());
         result.put("notify",false);
@@ -91,5 +100,9 @@ public class Message {
 
     public void setParent(MessageMap parent) {
         this.parent = parent;
+    }
+
+    public int getType() {
+        return type;
     }
 }

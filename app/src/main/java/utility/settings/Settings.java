@@ -37,6 +37,7 @@ public class Settings extends RelativeLayout {
     CheckBox trackBearing;
     CheckBox closeWindow;
     CheckBox buildArea;
+    CheckBox notifySound;
     private CheckBox vibrateOn;
 
     public Settings(Context context) {
@@ -68,6 +69,8 @@ public class Settings extends RelativeLayout {
         soundOn= (CheckBox) findViewById(R.id.soundOn);
         musicOn=(CheckBox) findViewById(R.id.musicOn);
         vibrateOn=(CheckBox) findViewById(R.id.vibrateOn);
+        notifySound= (CheckBox) findViewById(R.id.notifySound);
+
         useTilt=(CheckBox) findViewById(R.id.useTilt);
         gpsOn=(CheckBox) findViewById(R.id.gpsOn);
         gpsRate=(SeekBar) findViewById(R.id.gpsRate);
@@ -76,6 +79,8 @@ public class Settings extends RelativeLayout {
         usePadding= (CheckBox) findViewById(R.id.usePadding);
         trackBearing= (CheckBox) findViewById(R.id.trackBearing);
         closeWindow= (CheckBox) findViewById(R.id.closeWindow);
+
+
         SharedPreferences sp=getContext().getSharedPreferences("SpiritProto",Context.MODE_PRIVATE);
         ((TextView)findViewById(R.id.accountName)).setText(sp.getString("AccountName",""));
         findViewById(R.id.exitAccount).setOnClickListener(new OnClickListener() {
@@ -138,6 +143,7 @@ public class Settings extends RelativeLayout {
                 GameSettings.set("MUSIC_ON", musicOn.isChecked() ? "Y" : "N");
                 GameSettings.set("SOUND_ON", soundOn.isChecked() ? "Y" : "N");
                 GameSettings.set("VIBRATE_ON", vibrateOn.isChecked() ? "Y" : "N");
+                GameSettings.set("NOTIFY_SOUND", notifySound.isChecked() ? "Y" : "N");
 
                 GameSettings.set("USE_TILT", useTilt.isChecked() ? "Y" : "N");
                 GameSettings.set("VIEW_PADDING", usePadding.isChecked() ? "Y" : "N");
@@ -174,6 +180,8 @@ public class Settings extends RelativeLayout {
         musicOn.setChecked("Y".equals(GameSettings.getInstance().get("MUSIC_ON")));
         soundOn.setChecked("Y".equals(GameSettings.getInstance().get("SOUND_ON")));
         vibrateOn.setChecked("Y".equals(GameSettings.getInstance().get("VIBRATE_ON")));
+        notifySound.setChecked(!"N".equals(GameSettings.getInstance().get("NOTIFY_SOUND")));
+
         useTilt.setChecked("Y".equals(GameSettings.getInstance().get("USE_TILT")));
         gpsOn.setChecked("Y".equals(GameSettings.getInstance().get("GPS_ON_BACK")));
         netErrorLog.setChecked("Y".equals(GameSettings.getInstance().get("SHOW_NETWORK_ERROR")));

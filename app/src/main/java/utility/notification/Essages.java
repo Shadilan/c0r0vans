@@ -69,6 +69,6 @@ public class Essages {
     }
     public static void addEssage(Message msg){
         MainThread.post(new MyRunnable(msg));
-        if (msg.notify) MessageNotification.notify(msg.getMessage(), MessageNotification.DEFAULT);
+        if (msg.notify) MessageNotification.notify(msg.getMessage(), msg.getType());
     }
 }

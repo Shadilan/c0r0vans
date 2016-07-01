@@ -128,5 +128,6 @@
     <string name="exit">Выход</string>
     <string name="network_error">Ошибки сети</string>
     <string name="security">Безопасность</string>
+    <string name="notification">Звук уведомлений</string>
 
 </resources>

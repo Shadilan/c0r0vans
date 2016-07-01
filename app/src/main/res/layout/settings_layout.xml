@@ -194,6 +194,23 @@
                 android:layout_below="@+id/soundOn"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/MediumText"
+                android:text="@string/notification"
+                android:layout_alignBottom="@+id/notifySound"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true" />
+
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/notifySound"
+                android:checked="true"
+                android:layout_below="@+id/vibrateOn"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -202,7 +219,7 @@
                 android:text="@string/settings_graphics"
                 android:id="@+id/graphicsTitle"
                 android:textStyle="bold"
-                android:layout_below="@+id/vibrateOn"
+                android:layout_below="@+id/notifySound"
                 android:layout_centerHorizontal="true" />
             <TextView
                 android:layout_width="wrap_content"

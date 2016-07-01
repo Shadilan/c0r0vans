@@ -13,8 +13,12 @@ import android.net.Uri;
 import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 
+import com.coe.c0r0vans.GameObjects.Message;
 import com.coe.c0r0vans.MainWindow;
 import com.coe.c0r0vans.R;
+
+import utility.ImageLoader;
+import utility.settings.GameSettings;
 
 /**
  * Helper class for showing and canceling message
@@ -27,7 +31,9 @@ public class MessageNotification {
     /**
      * The unique identifier for this type of notification.
      */
+
     private static final String NOTIFICATION_TAG = "Message";
+
     public static final int DESTROY=R.raw.kill;
     public static final int INCOME=R.raw.coins;
     public static final int DEFAULT=R.raw.default_notification;
@@ -75,14 +81,30 @@ public class MessageNotification {
 
                 // Set appropriate defaults for the notification light, sound,
                 // and vibration.
-                .setDefaults(Notification.DEFAULT_LIGHTS | Notification.DEFAULT_VIBRATE)
-                .setSound(Uri.parse("android.resource://"
-                        + context.getPackageName() + "/" + DEFAULT))
+                .setDefaults(Notification.DEFAULT_LIGHTS | Notification.DEFAULT_VIBRATE);
+                if ("Y".equals(GameSettings.getValue("NOTIFY_SOUND"))) {
+                    builder.setSound(Uri.parse("android.resource://"
+                            + context.getPackageName() + "/" + DEFAULT));
+                }
 
-                        // Set required fields, including the small icon, the
+        // Set required fields, including the small icon, the
                         // notification title, and text.
-                .setSmallIcon(R.mipmap.ic_launcher_s)
-                .setContentTitle(title)
+                builder.setSmallIcon(R.mipmap.ic_launcher_s);
+                switch (type) {
+                    case Message.AMBUSH_DESTROYED:
+                        builder.setLargeIcon(ImageLoader.getImage("ambush_destroyed"));
+                        break;
+                    case Message.CARAVAN_CATCHED:
+                        builder.setLargeIcon(ImageLoader.getImage("caravan_catched"));
+                        break;
+                    case Message.CARAVAN_DESTROYED:
+                        builder.setLargeIcon(ImageLoader.getImage("caravan_destroyed"));
+                        break;
+                    default:
+                        builder.setLargeIcon(ImageLoader.getImage("message"));
+                }
+
+                builder.setContentTitle(title)
                 .setContentText(exampleString)
                         // All fields below this line are optional.
 
@@ -92,8 +114,6 @@ public class MessageNotification {
 
                         // Provide a large icon, shown with the notification in the
                         // notification drawer on devices running Android 3.0 or later.
-                .setLargeIcon(picture)
-
                         // Set ticker text (preview) information for this notification.
                 .setTicker(exampleString)
 

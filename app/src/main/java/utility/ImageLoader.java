@@ -88,9 +88,11 @@ public class ImageLoader {
         images.put("remove_ambush",BitmapFactory.decodeResource(context.getResources(), R.mipmap.dismiss));
         images.put("attack_ambush",BitmapFactory.decodeResource(context.getResources(), R.mipmap.rem_ambush));
 
-            //Route
-        images.put("remove_route",BitmapFactory.decodeResource(context.getResources(), R.mipmap.remove_route));
-
+        //notify
+        images.put("caravan_destroyed",BitmapFactory.decodeResource(context.getResources(), R.mipmap.destroyed));
+        images.put("ambush_destroyed",BitmapFactory.decodeResource(context.getResources(), R.mipmap.rip));
+        images.put("caravan_catched",BitmapFactory.decodeResource(context.getResources(), R.mipmap.treasure));
+        images.put("message",BitmapFactory.decodeResource(context.getResources(), R.mipmap.mail));
         //Skills
         images.put("speed",BitmapFactory.decodeResource(context.getResources(), R.mipmap.up_speed));
         images.put("speed_buy",BitmapFactory.decodeResource(context.getResources(), R.mipmap.up_speed_buy));

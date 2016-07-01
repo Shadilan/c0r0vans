@@ -81,6 +81,7 @@ public class GameSettings extends HashMap<String,String>{
         put("MUSIC_ON","N");
         put("SOUND_ON","N");
         put("VIBRATE_ON","N");
+        put("NOTIFY_SOUND","Y");
         //
         put("USE_TILT","N");
         put("VIEW_PADDING","Y");//Быстрые действия
@@ -93,11 +94,11 @@ public class GameSettings extends HashMap<String,String>{
         put("SHOW_NETWORK_ERROR","N");
 
 
+
         put("BEARING","0");
         put("ZOOM","18");
         put("PLAYER_FACTION","0");
         put("AUTOCLOSE_WINDOW","N");
-        put("VIBRATE_ON","N");
         save();
     }
     public static void set(String property,String value){
