@@ -28,7 +28,7 @@ import utility.settings.SettingsListener;
  */
 public class MyGoogleMap{
     private static GoogleMap map;
-    private static float clientZoom = GameObject.ICON_MEDIUM;
+    private static float clientZoom = GameSettings.getZoom();
     private static boolean moveFixed=true;
     private static Marker targetMarker;
     private static ImageButton showpointButton;
