@@ -2,6 +2,23 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="match_parent">
 
+    <ProgressBar
+        style="@style/CommonProgressBar"
+        android:background="@drawable/exp_progress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/expProgress"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_toLeftOf="@+id/QueueCnt"
+        android:layout_toStartOf="@+id/QueueCnt"
+        android:indeterminate="false"
+        android:progress="50"
+        android:max="100"
+        android:maxHeight="3dp"
+        android:minHeight="3dp" />
+
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -57,11 +74,10 @@
     <TableLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_alignParentTop="true"
         android:id="@+id/info"
-        android:layout_centerHorizontal="true"
-        android:background="@color/backOp1">
+        android:background="@color/backOp1"
+        android:layout_below="@+id/expProgress"
+        android:layout_centerHorizontal="true">
         <TableRow>
     <TextView android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -73,21 +89,8 @@
         android:id="@+id/levelAmount"
         android:textColor="#000000"
 />
-        </TableRow>
-    <TableRow>
-    <TextView android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/experience"
-        android:id="@+id/textView4"
-        android:textColor="#000000"
 
-        android:shadowRadius="20"/>
-    <TextView android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/expAmount"
-        android:textColor="#000000"
-        />
-    </TableRow>
+        </TableRow>
     <TableRow>
     <TextView android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -100,6 +103,20 @@
         android:textColor="#000000"
         />
     </TableRow>
+        <TableRow>
+            <TextView android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/ambushes"
+                android:id="@+id/textView4"
+                android:textColor="#000000"
+
+                android:shadowRadius="20"/>
+            <TextView android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/ambush"
+                android:textColor="#000000"
+                />
+        </TableRow>
         <TableRow>
     <TextView android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -213,4 +230,5 @@
         android:layout_above="@+id/chatGroup"
         android:layout_alignRight="@+id/QueueCnt"
         android:layout_alignEnd="@+id/QueueCnt" />
+
 </RelativeLayout>

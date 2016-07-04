@@ -129,5 +129,6 @@
     <string name="network_error">Ошибки сети</string>
     <string name="security">Безопасность</string>
     <string name="notification">Звук уведомлений</string>
+    <string name="screen_off">Гашение экрана</string>
 
 </resources>

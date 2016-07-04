@@ -48,10 +48,12 @@ public class Essages {
         }
         @Override
         public void run() {
-            EssageLine line=new EssageLine(target.getContext());
-            line.setText(msg);
-            line.setParentForm(target);
-            target.addView(line, 0);
+            if (target!=null) {
+                EssageLine line = new EssageLine(target.getContext());
+                line.setText(msg);
+                line.setParentForm(target);
+                target.addView(line, 0);
+            }
         }
     }
     /**

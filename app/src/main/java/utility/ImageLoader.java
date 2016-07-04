@@ -22,7 +22,7 @@ public class ImageLoader {
     //private static ImageLoader instance;
     private static HashMap<String,Bitmap> images=new HashMap<>();
     private static HashMap<String,Bitmap> markers=new HashMap<>();
-    //private static HashMap<String,BitmapDescriptor> descriptors = new HashMap<>();
+    private static HashMap<String,BitmapDescriptor> descriptors = new HashMap<>();
     /**
      * Load images on start;
      * @param context Application Context
@@ -115,7 +115,7 @@ public class ImageLoader {
 
         //Workaround для решения проблемы белых квадратов
         Bitmap b=BitmapFactory.decodeResource(context.getResources(), R.mipmap.unknown);
-        //descriptors.put("unknown", BitmapDescriptorFactory.fromBitmap(Bitmap.createScaledBitmap(b, b.getWidth(), b.getHeight() , false)));
+        descriptors.put("unknown", BitmapDescriptorFactory.fromBitmap(Bitmap.createScaledBitmap(b, b.getWidth(), b.getHeight() , false)));
 
 
     }
@@ -136,32 +136,32 @@ public class ImageLoader {
     }
     public static BitmapDescriptor getDescritor(String name) {
 
-        //BitmapDescriptor result = descriptors.get(name);
+        BitmapDescriptor result = descriptors.get(name);
         //Workaround for https://code.google.com/p/gmaps-api-issues/issues/detail?id=9765
         //BitmapDescriptor result=BitmapDescriptorFactory.fromBitmap(markers.get(name));
-        /*if (result==null) {
+        if (result==null) {
             GATracker.trackException("ImageLoader","ImageNoteFound:"+name);
             Essages.addEssage("Изображение объекта "+name + " не найдено.");
             result=BitmapDescriptorFactory.fromBitmap(images.get("unknown"));
-        }*/
+        }
 
 
-            return BitmapDescriptorFactory.fromBitmap(markers.get(name));//result;
+            return result;
     }
 
     private static void createMarker(Context context,int resource,String name){
         Bitmap b=BitmapFactory.decodeResource(context.getResources(), resource);
         //Workaround for https://code.google.com/p/gmaps-api-issues/issues/detail?id=9765
 
-            markers.put(name, Bitmap.createScaledBitmap(b, (int) (b.getWidth() * 0.75), (int) (b.getHeight() * 0.75), false));
-            markers.put(name + "_m", Bitmap.createScaledBitmap(b, (int) (b.getWidth() * 0.5), (int) (b.getHeight() * 0.5), false));
-            markers.put(name + "_s", Bitmap.createScaledBitmap(b, (int) (b.getWidth() * 0.35), (int) (b.getHeight() * 0.35), false));
+          //  markers.put(name, Bitmap.createScaledBitmap(b, (int) (b.getWidth() * 0.75), (int) (b.getHeight() * 0.75), false));
+          //  markers.put(name + "_m", Bitmap.createScaledBitmap(b, (int) (b.getWidth() * 0.5), (int) (b.getHeight() * 0.5), false));
+          //  markers.put(name + "_s", Bitmap.createScaledBitmap(b, (int) (b.getWidth() * 0.35), (int) (b.getHeight() * 0.35), false));
 
 
 
 
-        /*descriptors.put(name, BitmapDescriptorFactory.fromBitmap(Bitmap.createScaledBitmap(b, b.getWidth(), b.getHeight() , false)));
-        descriptors.put(name+"_m",BitmapDescriptorFactory.fromBitmap(Bitmap.createScaledBitmap(b, (int) (b.getWidth() * 0.75), (int) (b.getHeight() * 0.75), false)));
-        descriptors.put(name + "_s", BitmapDescriptorFactory.fromBitmap(Bitmap.createScaledBitmap(b, (int) (b.getWidth() * 0.5), (int) (b.getHeight() * 0.5), false)));*/
+        descriptors.put(name, BitmapDescriptorFactory.fromBitmap(Bitmap.createScaledBitmap(b, (int) (b.getWidth() * 0.75), (int) (b.getHeight() * 0.75), false)));
+        descriptors.put(name+"_m",BitmapDescriptorFactory.fromBitmap(Bitmap.createScaledBitmap(b, (int) (b.getWidth() * 0.5), (int) (b.getHeight() * 0.5), false)));
+        descriptors.put(name + "_s", BitmapDescriptorFactory.fromBitmap(Bitmap.createScaledBitmap(b, (int) (b.getWidth() * 0.35), (int) (b.getHeight() * 0.35), false)));
     }
 }

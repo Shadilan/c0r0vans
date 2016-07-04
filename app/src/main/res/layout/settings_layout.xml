@@ -132,6 +132,23 @@
                 android:layout_below="@+id/routeShow"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/MediumText"
+                android:text="@string/screen_off"
+                android:layout_alignBottom="@+id/screenOff"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true" />
+
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/screenOff"
+                android:checked="true"
+                android:layout_below="@+id/buildArea"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -140,7 +157,7 @@
                 android:text="@string/setings_media"
                 android:id="@+id/mediaTitle"
                 android:textStyle="bold"
-                android:layout_below="@+id/buildArea"
+                android:layout_below="@+id/screenOff"
                 android:layout_centerHorizontal="true" />
             <TextView
                 android:layout_width="wrap_content"

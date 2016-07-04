@@ -17,6 +17,7 @@ import android.support.v4.content.ContextCompat;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -58,6 +59,7 @@ import utility.internet.serverConnect;
 import utility.notification.Essages;
 import utility.notification.MessageNotification;
 import utility.settings.GameSettings;
+import utility.settings.SettingsListener;
 
 public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
 
@@ -521,6 +523,26 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
 
         GameSettings.init(getApplicationContext());
         GameSettings.getInstance().mClient=mGoogleApiClient;
+        GameSettings.addSettingsListener(new SettingsListener() {
+            @Override
+            public void onSettingsSave() {
+
+            }
+
+            @Override
+            public void onSettingsLoad() {
+
+            }
+
+            @Override
+            public void onSettingChange(String setting) {
+                if ("SCREEN_OFF".equals(setting)){
+                    if ("N".equals(GameSettings.getValue("SCREEN_OFF"))) {
+                        self.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+                    } else self.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+                }
+            }
+        });
         ImageLoader.Loader(getApplicationContext());
         GameSound.init(getApplicationContext());
         MessageNotification.init(getApplicationContext());
@@ -535,6 +557,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                 GATracker.trackException("LoadPlayer",e);
             }
         }
+
         GameObjects.init();
     }
     /**
@@ -575,6 +598,9 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
             threadFastScan.start();
             Thread messageThread=new Thread(messageRequest);
             messageThread.start();
+            if ("N".equals(GameSettings.getValue("SCREEN_OFF"))) {
+                self.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+            } else self.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
             GATracker.trackTimeEnd("System","Init");
     }
 

@@ -3,17 +3,20 @@ package com.coe.c0r0vans.UIElements;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.coe.c0r0vans.GameObjects.GameObject;
 import com.coe.c0r0vans.GameObjects.GameObjects;
+import com.coe.c0r0vans.GameObjects.LevelTable;
 import com.coe.c0r0vans.GameObjects.Player;
 import com.coe.c0r0vans.MyGoogleMap;
 import com.coe.c0r0vans.OnGameObjectChange;
@@ -21,6 +24,8 @@ import com.coe.c0r0vans.R;
 import com.coe.c0r0vans.UIElements.InfoLayout.InfoLayout;
 
 import org.json.JSONObject;
+
+import java.util.Arrays;
 
 import utility.GATracker;
 import utility.MainThread;
@@ -88,8 +93,15 @@ public class ButtonLayout extends RelativeLayout {
         if (Player.getPlayer() != null) {
             am = (TextView) findViewById(R.id.levelAmount);
             am.setText(String.valueOf(Player.getPlayer().getLevel()));
-            am = (TextView) findViewById(R.id.expAmount);
-            am.setText(String.valueOf(StringUtils.intToStr(Player.getPlayer().getExp())));
+            am = (TextView) findViewById(R.id.ambush);
+            am.setText(String.format(getContext().getString(R.string.d_d), Player.getPlayer().getAmbushLeft(), Player.getPlayer().getAmbushMax()));
+            try {
+                ProgressBar expProgress = (ProgressBar) findViewById(R.id.expProgress);
+                expProgress.setMax(LevelTable.getEnd(Player.getPlayer().getLevel()) - LevelTable.getStart(Player.getPlayer().getLevel()));
+                expProgress.setProgress(Player.getPlayer().getExp() - LevelTable.getStart(Player.getPlayer().getLevel()));
+            } catch (Exception e){
+                Log.d("PB",e.toString()+ Arrays.toString(e.getStackTrace()));
+            }
             am = (TextView) findViewById(R.id.goldAmount);
             am.setText(String.valueOf(StringUtils.intToStr(Player.getPlayer().getGold())));
             if ("".equals(Player.getPlayer().getCurrentRouteGUID()))
@@ -181,8 +193,11 @@ public class ButtonLayout extends RelativeLayout {
                     //if (ChangeType != OnGameObjectChange.EXTERNAL) return;
                     TextView am = (TextView) findViewById(R.id.levelAmount);
                     am.setText(String.valueOf(Player.getPlayer().getLevel()));
-                    am = (TextView) findViewById(R.id.expAmount);
-                    am.setText(String.valueOf(StringUtils.intToStr(Player.getPlayer().getExp())));
+                    am = (TextView) findViewById(R.id.ambush);
+                    am.setText(String.format(getContext().getString(R.string.d_d), Player.getPlayer().getAmbushLeft(), Player.getPlayer().getAmbushMax()));
+                    ProgressBar expProgress= (ProgressBar) findViewById(R.id.expProgress);
+                    expProgress.setMax(LevelTable.getEnd(Player.getPlayer().getLevel())-LevelTable.getStart(Player.getPlayer().getLevel()));
+                    expProgress.setProgress(Player.getPlayer().getExp()-LevelTable.getStart(Player.getPlayer().getLevel()));
                     am = (TextView) findViewById(R.id.goldAmount);
                     am.setText(String.valueOf(StringUtils.intToStr(Player.getPlayer().getGold())));
                     ImageView btn = (ImageView) findViewById(R.id.infoview);

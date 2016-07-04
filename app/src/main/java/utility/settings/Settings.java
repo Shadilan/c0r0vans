@@ -38,6 +38,7 @@ public class Settings extends RelativeLayout {
     CheckBox closeWindow;
     CheckBox buildArea;
     CheckBox notifySound;
+    CheckBox screenOff;
     private CheckBox vibrateOn;
 
     public Settings(Context context) {
@@ -65,6 +66,7 @@ public class Settings extends RelativeLayout {
         caravanRoute= (CheckBox) findViewById(R.id.routeShow);
         cityRad= (CheckBox) findViewById(R.id.cityRad);
         buildArea= (CheckBox) findViewById(R.id.buildArea);
+        screenOff= (CheckBox) findViewById(R.id.screenOff);
 
         soundOn= (CheckBox) findViewById(R.id.soundOn);
         musicOn=(CheckBox) findViewById(R.id.musicOn);
@@ -139,6 +141,7 @@ public class Settings extends RelativeLayout {
                 GameSettings.set("SHOW_CITY_RADIUS", cityRad.isChecked() ? "Y" : "N");
                 GameSettings.set("SHOW_CARAVAN_ROUTE", caravanRoute.isChecked() ? "Y" : "N");
                 GameSettings.set("SHOW_BUILD_AREA", buildArea.isChecked() ? "Y" : "N");
+                GameSettings.set("SCREEN_OFF", screenOff.isChecked() ? "Y" : "N");
 
                 GameSettings.set("MUSIC_ON", musicOn.isChecked() ? "Y" : "N");
                 GameSettings.set("SOUND_ON", soundOn.isChecked() ? "Y" : "N");
@@ -176,6 +179,7 @@ public class Settings extends RelativeLayout {
         cityRad.setChecked("Y".equals(GameSettings.getInstance().get("SHOW_CITY_RADIUS")));
         caravanRoute.setChecked("Y".equals(GameSettings.getInstance().get("SHOW_CARAVAN_ROUTE")));
         buildArea.setChecked("Y".equals(GameSettings.getInstance().get("SHOW_BUILD_AREA")));
+        screenOff.setChecked(!"N".equals(GameSettings.getInstance().get("SCREEN_OFF")));
 
         musicOn.setChecked("Y".equals(GameSettings.getInstance().get("MUSIC_ON")));
         soundOn.setChecked("Y".equals(GameSettings.getInstance().get("SOUND_ON")));
