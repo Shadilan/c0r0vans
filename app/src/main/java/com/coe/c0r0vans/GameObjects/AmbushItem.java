@@ -3,7 +3,7 @@ package com.coe.c0r0vans.GameObjects;
 import android.graphics.Bitmap;
 
 import com.coe.c0r0vans.GameObject.GameObject;
-import com.coe.c0r0vans.Logic.Player;
+import com.coe.c0r0vans.Singles.GameObjects;
 import com.google.android.gms.maps.model.LatLng;
 
 import org.json.JSONException;
@@ -72,7 +72,7 @@ public class AmbushItem extends GameObject {
             @Override
             public void postAction(JSONObject response) {
                 GameSound.playSound(GameSound.START_ROUTE_SOUND);
-                Player.getPlayer().setAmbushLeft(Player.getPlayer().getAmbushLeft()+1);
+                GameObjects.getPlayer().setAmbushLeft(GameObjects.getPlayer().getAmbushLeft()+1);
                 Essages.addEssage("Засада распущена");
             }
 

@@ -15,6 +15,7 @@ import com.coe.c0r0vans.GameObjects.AmbushItem;
 import com.coe.c0r0vans.GameObjects.GameObjectView;
 import com.coe.c0r0vans.GameObjects.ObjectAction;
 import com.coe.c0r0vans.R;
+import com.coe.c0r0vans.Singles.GameObjects;
 import com.coe.c0r0vans.Singles.MyGoogleMap;
 import com.coe.c0r0vans.UIElements.ActionView;
 import com.google.android.gms.maps.GoogleMap;
@@ -149,7 +150,7 @@ public class Ambush extends GameObject {
         String count=" Здесь "+(life)+" наемников.";
         if (faction==0) {
             String dop="";
-            Upgrade up=Player.getPlayer().getUpgrade("ambushes");
+            Upgrade up=GameObjects.getPlayer().getUpgrade("ambushes");
             if (up!=null && getRadius()<up.getEffect1()) dop="\nВы можете ставить засады больше.";
 
             if (ready < 0)
@@ -160,7 +161,7 @@ public class Ambush extends GameObject {
                 return "Ваши верные воины засели  в Засаде. На посту уже " + (Math.round(ready / 60 / 24)) + " дней."+count+dop;
             else return "Ваши верные воины засели в Засаде."+count+dop;
         }
-        else if (faction==Player.getPlayer().getRace()){
+        else if (faction==GameObjects.getPlayer().getRace()){
             if (ready < 0)
                 return "Ваши соратники готовят засаду. Работать еще " + (ready * -1) + " минут."+count;
             else if (ready / 60 > 2)
@@ -190,7 +191,7 @@ public class Ambush extends GameObject {
             float type= MyGoogleMap.getClientZoom();
             String mark_name = "ambush";
             if (ready<0) mark_name = mark_name + "_build";
-            if (faction==0) mark_name=mark_name+"_"+faction+Player.getPlayer().getRace();
+            if (faction==0) mark_name=mark_name+"_"+faction+ GameObjects.getPlayer().getRace();
             else mark_name = mark_name + "_"+faction;
             mark_name = mark_name + GameObject.zoomToPostfix(type);
             if (!mark_name.equals(currentMarkName)) {
@@ -256,7 +257,7 @@ public class Ambush extends GameObject {
         private ObjectAction removeAction;
         private void applyAmbush() {
             int f=ambush.getFaction();
-            if (f==0) f=Player.getPlayer().getRace();
+            if (f==0) f=GameObjects.getPlayer().getRace();
             if (f<1 || f>4) f=4;
             switch (f) {
                 case 3:
@@ -298,16 +299,16 @@ public class Ambush extends GameObject {
                     @Override
                     public void postAction(JSONObject response) {
                         GameSound.playSound(GameSound.REMOVE_AMBUSH);
-                        Player.getPlayer().setAmbushLeft(Player.getPlayer().getAmbushLeft() + 1);
-                        Player.getPlayer().setHirelings(Player.getPlayer().getHirelings()+owner.getLife()*5);
+                        GameObjects.getPlayer().setAmbushLeft(GameObjects.getPlayer().getAmbushLeft() + 1);
+                        GameObjects.getPlayer().setHirelings(GameObjects.getPlayer().getHirelings()+owner.getLife()*5);
                         AmbushItem sa=null;
-                        for (AmbushItem ai:Player.getPlayer().getAmbushes()){
+                        for (AmbushItem ai:GameObjects.getPlayer().getAmbushes()){
                             if (ai.getGUID().equals(owner.getGUID())) {
                                 sa=ai;
                                 break;
                             }
                         }
-                        if (sa!=null) Player.getPlayer().getAmbushes().remove(sa);
+                        if (sa!=null) GameObjects.getPlayer().getAmbushes().remove(sa);
                         Essages.addEssage("Засада распущена");
                         owner.RemoveObject();
                     }
@@ -354,7 +355,7 @@ public class Ambush extends GameObject {
                     }
 
                 });
-            } else if(ambush.getFaction()==Player.getPlayer().getRace()){
+            } else if(ambush.getFaction()==GameObjects.getPlayer().getRace()){
                 removeButton.setEnabled(false);
             } else{
                 removeButton.setImageResource(R.mipmap.rem_ambush);
@@ -460,7 +461,7 @@ public class Ambush extends GameObject {
 
                 removeButton.setVisibility(VISIBLE);
 
-            } else if(ambush.getFaction()==Player.getPlayer().getRace()){
+            } else if(ambush.getFaction()==GameObjects.getPlayer().getRace()){
                 removeButton.setVisibility(GONE);
             } else{
                 if (inZone) removeButton.setVisibility(VISIBLE);

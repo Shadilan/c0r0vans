@@ -1,5 +1,11 @@
 package com.coe.c0r0vans.Singles;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.location.Location;
+import android.location.LocationListener;
+import android.os.Bundle;
+
 import com.coe.c0r0vans.GameObject.GameObject;
 import com.coe.c0r0vans.Logic.Ambush;
 import com.coe.c0r0vans.Logic.Caravan;
@@ -14,6 +20,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import utility.GATracker;
+import utility.GPSInfo;
 import utility.internet.ServerListener;
 import utility.internet.serverConnect;
 import utility.notification.Essages;
@@ -25,8 +33,23 @@ import utility.settings.SettingsListener;
  * Перечень игровых объектов на карте
  */
 public class GameObjects{
-    private static HashMap<String,GameObject> objects = new HashMap<>();
-    public static void init(){
+    private static HashMap<String,GameObject> objects;
+    private static Player player;
+
+
+    public static void init(Context context){
+        player=new Player();
+        objects=new HashMap<>();
+        SharedPreferences sp = context.getSharedPreferences("player", Context.MODE_PRIVATE);
+        String pls = sp.getString("player", "");
+        if (!"".equals(pls)) {
+            try {
+                GameObjects.getPlayer().loadJSON(new JSONObject(pls));
+            } catch (JSONException e) {
+                GATracker.trackException("LoadPlayer",e);
+            }
+        }
+
         serverConnect.getInstance().addListener(new ServerListener() {
             @Override
             public void onResponse(int TYPE, JSONObject response) {
@@ -54,7 +77,7 @@ public class GameObjects{
                                 } else {
                                     if (JObj.getJSONObject(i).getString("Type").equalsIgnoreCase("Player")) {
 
-                                        Player.getPlayer().loadJSON(JObj.getJSONObject(i));
+                                        GameObjects.getPlayer().loadJSON(JObj.getJSONObject(i));
 
                                     } else if (JObj.getJSONObject(i).getString("Type").equalsIgnoreCase("City")) {
 
@@ -175,9 +198,31 @@ public class GameObjects{
                             if (o instanceof  City) ((City) o).showBuildZone();
                         }
                     case "SHOW_CARAVAN_ROUTE":
-                        Player.getPlayer().showRoute();
+                        GameObjects.getPlayer().showRoute();
                         break;
                 }
+            }
+        });
+        GPSInfo.getInstance().AddLocationListener(new LocationListener() {
+            @Override
+            public void onLocationChanged(Location location) {
+                LatLng target = new LatLng(location.getLatitude(), location.getLongitude());
+                GameObjects.getPlayer().setPosition(target);
+            }
+
+            @Override
+            public void onStatusChanged(String provider, int status, Bundle extras) {
+
+            }
+
+            @Override
+            public void onProviderEnabled(String provider) {
+
+            }
+
+            @Override
+            public void onProviderDisabled(String provider) {
+
             }
         });
     }
@@ -190,5 +235,8 @@ public class GameObjects{
 
     public static HashMap<String, GameObject> getInstance(){
         return objects;
+    }
+    public static Player getPlayer(){
+        return player;
     }
 }

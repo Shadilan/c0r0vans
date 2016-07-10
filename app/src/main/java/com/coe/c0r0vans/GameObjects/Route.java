@@ -4,8 +4,8 @@ import android.graphics.Color;
 
 import com.coe.c0r0vans.GameObject.GameObject;
 import com.coe.c0r0vans.Logic.City;
-import com.coe.c0r0vans.Logic.Player;
 import com.coe.c0r0vans.Logic.Upgrade;
+import com.coe.c0r0vans.Singles.GameObjects;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Polyline;
@@ -100,7 +100,7 @@ public class Route extends GameObject {
             }
 
             //time=S/v + (v*v-(1+a)*(1+a))/2/(a)/v-0.7
-            Upgrade up= Player.getPlayer().getUpgrade("speed");
+            Upgrade up= GameObjects.getPlayer().getUpgrade("speed");
             if (up!=null && up.getEffect2()>0) {
                 int v=up.getEffect2();
                 int a=up.getEffect1();

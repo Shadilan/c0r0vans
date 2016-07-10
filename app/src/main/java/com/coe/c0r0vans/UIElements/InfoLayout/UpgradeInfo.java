@@ -7,10 +7,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.coe.c0r0vans.Logic.Player;
 import com.coe.c0r0vans.Logic.Upgrade;
 import com.coe.c0r0vans.R;
 import com.coe.c0r0vans.ShowHideForm;
+import com.coe.c0r0vans.Singles.GameObjects;
 
 import utility.StringUtils;
 
@@ -41,7 +41,7 @@ public class UpgradeInfo extends LinearLayout implements PlayerInfoLayout {
     @Override
     public void update() {
         upgradeInfo.removeAllViews();
-        for (Upgrade u: Player.getPlayer().getUpgrades()){
+        for (Upgrade u: GameObjects.getPlayer().getUpgrades()){
             LinearLayout l=new LinearLayout(getContext());
             l.setBackgroundResource(R.drawable.layouts_bordered);
             l.setOrientation(LinearLayout.HORIZONTAL);
@@ -52,9 +52,9 @@ public class UpgradeInfo extends LinearLayout implements PlayerInfoLayout {
             TextView info=new TextView(getContext());
             info.setSingleLine(false);
             String s;
-            if (Player.getPlayer().getNextUpgrade(u.getType())!=null) {
-                 s = StringUtils.intToStr((int) (Player.getPlayer().getNextUpgrade(u.getType()).getCost() * (100f - Player.getPlayer().getTrade()) / 100f));
-            } else  s = StringUtils.intToStr((int) (u.getCost() * (100f - Player.getPlayer().getTrade()) / 100f));
+            if (GameObjects.getPlayer().getNextUpgrade(u.getType())!=null) {
+                 s = StringUtils.intToStr((int) (GameObjects.getPlayer().getNextUpgrade(u.getType()).getCost() * (100f - GameObjects.getPlayer().getTrade()) / 100f));
+            } else  s = StringUtils.intToStr((int) (u.getCost() * (100f - GameObjects.getPlayer().getTrade()) / 100f));
             info.setText(String.format(getContext().getString(R.string.upgrade_text), u.getName(), u.getDescription(),s));
             info.setTextColor(Color.BLACK);
             l.addView(info);

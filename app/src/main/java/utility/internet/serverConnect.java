@@ -14,8 +14,8 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.coe.c0r0vans.GameObjects.ObjectAction;
-import com.coe.c0r0vans.Logic.Player;
 import com.coe.c0r0vans.R;
+import com.coe.c0r0vans.Singles.GameObjects;
 import com.coe.c0r0vans.Singles.MyGoogleMap;
 import com.coe.c0r0vans.UIElements.ChooseFaction;
 import com.google.android.gms.maps.model.LatLng;
@@ -565,7 +565,7 @@ public class serverConnect {
                                             for (ServerListener l : listeners) l.onError(ServerListener.LOGIN,response);
                                         break;
                                     case SETRACE:
-                                        //todo:Связность кода - плохо
+
                                         String err="";
                                         if (response.has("Error")) err=response.getString("Error");
                                         else if (response.has("Result")) err=response.getString("Result");
@@ -577,7 +577,8 @@ public class serverConnect {
                                             default: if (response.has("Message")) Essages.addEssage(response.getString("Message"));
                                                 else Essages.addEssage("Неизвестная ошибка");
                                         }
-                                        Player.getPlayer().setRace(0);
+                                        //todo:Связность кода - плохо
+                                        GameObjects.getPlayer().setRace(0);
                                         new ChooseFaction(context).show();
                                     case ACTION:
                                         if (listenersMap.get(getUID()) != null) listenersMap.get(getUID()).postError(response);
@@ -690,7 +691,8 @@ public class serverConnect {
             android_id="";
         }
         String user="";
-        if (Player.getPlayer()!=null) user=Player.getPlayer().getName();
+        //TODO:Получать имя другим способом возможно gmail.
+        if (GameObjects.getPlayer()!=null) user=GameObjects.getPlayer().getName();
         //String version=context.getResources().getString(R.string.version);
 
         try {

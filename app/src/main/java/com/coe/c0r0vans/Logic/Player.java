@@ -46,7 +46,6 @@ import utility.settings.GameSettings;
  * @author Shadilan
  */
 public class Player extends GameObject {
-    private static Player player;
     private int race=0;
     private String currentRouteGuid="";
     private Route currentR;
@@ -57,13 +56,6 @@ public class Player extends GameObject {
     private int leftToHire;
     private int foundedCities;
     private int cityMax;
-
-    public static void instance(){
-        player=new Player();
-    }
-    public static Player getPlayer(){
-        return player;
-    }
 
     //Fields
     private int Caravans=0;
@@ -91,13 +83,13 @@ public class Player extends GameObject {
     public Player() {
         init();
     }
-    public static boolean checkRoute(String guid){
+    public boolean checkRoute(String guid){
         if (guid==null) return false;
-        if (guid.equals(player.currentRouteGuid)) return true;
-        if ("".equals(player.currentRouteGuid)) return false;
-        for (Route r:player.Routes){
-            if ((r.getStartGuid().equals(player.currentRouteGuid) && r.getFinishGuid().equals(guid))||
-                    ((r.getStartGuid().equals(guid) && r.getFinishGuid().equals(player.currentRouteGuid))))
+        if (guid.equals(currentRouteGuid)) return true;
+        if ("".equals(currentRouteGuid)) return false;
+        for (Route r:Routes){
+            if ((r.getStartGuid().equals(currentRouteGuid) && r.getFinishGuid().equals(guid))||
+                    ((r.getStartGuid().equals(guid) && r.getFinishGuid().equals(currentRouteGuid))))
                 return true;
 
         }
@@ -126,8 +118,8 @@ public class Player extends GameObject {
                 cancelRouteGuid=currentRouteGuid;
                 cancelRoute=currentR;
                 GameSound.playSound(GameSound.START_ROUTE_SOUND);
-                Player.getPlayer().setCurrentRouteGUID(null);
-                Player.getPlayer().setRouteStart(true);
+                GameObjects.getPlayer().setCurrentRouteGUID(null);
+                GameObjects.getPlayer().setRouteStart(true);
                 for (GameObject o: GameObjects.getInstance().values()){
                     if (o!=null && o instanceof City) ((City) o).updateColor();
                 }
@@ -149,13 +141,13 @@ public class Player extends GameObject {
                             Essages.addEssage("Ошибка сервера.");
                             currentRouteGuid=cancelRouteGuid;
                             currentR=cancelRoute;
-                            Player.getPlayer().setRouteStart(true);
+                            GameObjects.getPlayer().setRouteStart(true);
                             break;
                         case "L0001":
                             Essages.addEssage("Соединение потеряно.");
                             currentRouteGuid=cancelRouteGuid;
                             currentR=cancelRoute;
-                            Player.getPlayer().setRouteStart(true);
+                            GameObjects.getPlayer().setRouteStart(true);
                             break;
                         case "O0801":
                             Essages.addEssage("Маршрут не найден.");
@@ -163,7 +155,7 @@ public class Player extends GameObject {
                         default:
                             currentRouteGuid=cancelRouteGuid;
                             currentR=cancelRoute;
-                            Player.getPlayer().setRouteStart(true);
+                            GameObjects.getPlayer().setRouteStart(true);
                             if (response.has("Message"))
                                 Essages.addEssage(response.getString("Message"));
                             else Essages.addEssage("Непредвиденная ошибка.");
@@ -190,7 +182,7 @@ public class Player extends GameObject {
 
     }
 
-    public int getAmbushRad(){return player.AmbushRadius;}
+    public int getAmbushRad(){return AmbushRadius;}
 
 
     @Override
@@ -211,7 +203,7 @@ public class Player extends GameObject {
 
     @Override
     public int getProgress() {
-        return (player.Exp*100/player.TNL);
+        return (Exp*100/TNL);
     }
 
     @Override
@@ -259,7 +251,7 @@ public class Player extends GameObject {
             if ((o instanceof City && o.getMarker()!=null)||
                 (o instanceof Ambush && o.getMarker()!=null &&
                         ((Ambush)o).getFaction()!=0 &&
-                        ((Ambush)o).getFaction()!=Player.getPlayer().getRace()))
+                        ((Ambush)o).getFaction()!=getRace()))
             {
                 float range=GPSInfo.getDistance(target,o.getMarker().getPosition());
                 if (range<=lastRange) {
@@ -683,7 +675,7 @@ public class Player extends GameObject {
                     close();
                 }
             });
-            createAmbush=new ObjectAction(Player.getPlayer()) {
+            createAmbush=new ObjectAction(GameObjects.getPlayer()) {
                 @Override
                 public Bitmap getImage() {
                     return ImageLoader.getImage("create_ambush");
@@ -697,8 +689,8 @@ public class Player extends GameObject {
 
                 @Override
                 public void preAction() {
-                    Player.getPlayer().setHirelings(Player.getPlayer().getHirelings()-Player.getPlayer().getUpgrade("ambushes").getEffect2()*10);
-                    Player.getPlayer().setAmbushLeft(Player.getPlayer().getAmbushLeft() - 1);
+                    GameObjects.getPlayer().setHirelings(GameObjects.getPlayer().getHirelings()-GameObjects.getPlayer().getUpgrade("ambushes").getEffect2()*10);
+                    GameObjects.getPlayer().setAmbushLeft(GameObjects.getPlayer().getAmbushLeft() - 1);
                 }
 
                 @Override
@@ -714,7 +706,7 @@ public class Player extends GameObject {
                             Ambush ambush=new Ambush(MyGoogleMap.getMap(),response.getJSONObject("Ambush"));
                             //todo надо привести к одному типу
                             GameObjects.put(ambush);
-                            Player.getPlayer().getAmbushes().add(new AmbushItem(response.getJSONObject("Ambush")));
+                            GameObjects.getPlayer().getAmbushes().add(new AmbushItem(response.getJSONObject("Ambush")));
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -728,8 +720,8 @@ public class Player extends GameObject {
 
 
                     try {
-                        Player.getPlayer().setHirelings(Player.getPlayer().getHirelings()+Player.getPlayer().getUpgrade("ambushes").getEffect2()*5);
-                        Player.getPlayer().setAmbushLeft(Player.getPlayer().getAmbushLeft() +1);
+                        GameObjects.getPlayer().setHirelings(GameObjects.getPlayer().getHirelings()+GameObjects.getPlayer().getUpgrade("ambushes").getEffect2()*5);
+                        GameObjects.getPlayer().setAmbushLeft(GameObjects.getPlayer().getAmbushLeft() +1);
                         String err;
                         if (response.has("Error")) err=response.getString("Error");
                         else if (response.has("Result")) err=response.getString("Result");
@@ -775,7 +767,7 @@ public class Player extends GameObject {
                     close();
                 }
             });
-            createCity=new ObjectAction(Player.getPlayer()) {
+            createCity=new ObjectAction(GameObjects.getPlayer()) {
                 LatLng coord=new LatLng(SelectedObject.getInstance().getPoint().latitude,SelectedObject.getInstance().getPoint().longitude);
                 @Override
                 public Bitmap getImage() {
@@ -801,7 +793,7 @@ public class Player extends GameObject {
                     if (response.has("City")){
                         try {
                             City city=new City(MyGoogleMap.getMap(),response.getJSONObject("City"));
-                            city.setFounder(Player.getPlayer().getName());
+                            city.setFounder(GameObjects.getPlayer().getName());
                             city.setOwner(true);
                             GameObjects.put(city);
                         } catch (JSONException e) {
@@ -814,8 +806,8 @@ public class Player extends GameObject {
                 @Override
                 public void postError(JSONObject response) {
                     try {
-                        Player.getPlayer().setHirelings(Player.getPlayer().getHirelings()+Player.getPlayer().getUpgrade("ambushes").getEffect2()*5);
-                        Player.getPlayer().setAmbushLeft(Player.getPlayer().getAmbushLeft() +1);
+                        GameObjects.getPlayer().setHirelings(GameObjects.getPlayer().getHirelings()+GameObjects.getPlayer().getUpgrade("ambushes").getEffect2()*5);
+                        GameObjects.getPlayer().setAmbushLeft(GameObjects.getPlayer().getAmbushLeft() +1);
                         String err;
                         if (response.has("Error")) err=response.getString("Error");
                         else if (response.has("Result")) err=response.getString("Result");
@@ -870,7 +862,7 @@ public class Player extends GameObject {
             if (inZone){
                 ImageButton btn= (ImageButton) findViewById(R.id.createAmbushAction);
                 btn.setVisibility(VISIBLE);
-                if (Player.getPlayer().getAmbushLeft()>0){
+                if (GameObjects.getPlayer().getAmbushLeft()>0){
                     btn.setClickable(true);
                     btn.setEnabled(true);
                     btn.setAlpha(1f);
@@ -882,14 +874,14 @@ public class Player extends GameObject {
                 }
                 btn= (ImageButton) findViewById(R.id.createCity);
                 btn.setVisibility(VISIBLE);
-                boolean allow=Player.getPlayer().getCityMax()>Player.getPlayer().getFoundedCities();
+                boolean allow=GameObjects.getPlayer().getCityMax()>GameObjects.getPlayer().getFoundedCities();
                 if (allow) {
                     for (GameObject o : GameObjects.getInstance().values()) {
                         if (o instanceof City && o.getMarker() != null) {
                             float dist = 125;
                             float mapper = 0;
                             if (((City) o).getOwner()) dist = 250;
-                            Upgrade up = Player.getPlayer().getUpgrade("founder");
+                            Upgrade up = GameObjects.getPlayer().getUpgrade("founder");
                             if (up != null) dist += up.getEffect2();
                             else dist += 125;
                         /*double tlat=SelectedObject.getInstance().getPoint().latitude;

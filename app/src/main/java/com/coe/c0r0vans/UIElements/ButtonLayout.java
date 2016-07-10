@@ -17,7 +17,6 @@ import android.widget.TextView;
 import com.coe.c0r0vans.GameObject.GameObject;
 import com.coe.c0r0vans.GameObject.OnGameObjectChange;
 import com.coe.c0r0vans.GameObjects.LevelTable;
-import com.coe.c0r0vans.Logic.Player;
 import com.coe.c0r0vans.R;
 import com.coe.c0r0vans.Singles.GameObjects;
 import com.coe.c0r0vans.Singles.MyGoogleMap;
@@ -90,27 +89,27 @@ public class ButtonLayout extends RelativeLayout {
             }
         });
         TextView am;
-        if (Player.getPlayer() != null) {
+        if (GameObjects.getPlayer() != null) {
             am = (TextView) findViewById(R.id.levelAmount);
-            am.setText(String.valueOf(Player.getPlayer().getLevel()));
+            am.setText(String.valueOf(GameObjects.getPlayer().getLevel()));
             am = (TextView) findViewById(R.id.ambush);
-            am.setText(String.format(getContext().getString(R.string.d_d), Player.getPlayer().getAmbushLeft(), Player.getPlayer().getAmbushMax()));
+            am.setText(String.format(getContext().getString(R.string.d_d), GameObjects.getPlayer().getAmbushLeft(), GameObjects.getPlayer().getAmbushMax()));
             try {
                 ProgressBar expProgress = (ProgressBar) findViewById(R.id.expProgress);
-                expProgress.setMax(LevelTable.getEnd(Player.getPlayer().getLevel()) - LevelTable.getStart(Player.getPlayer().getLevel()));
-                expProgress.setProgress(Player.getPlayer().getExp() - LevelTable.getStart(Player.getPlayer().getLevel()));
+                expProgress.setMax(LevelTable.getEnd(GameObjects.getPlayer().getLevel()) - LevelTable.getStart(GameObjects.getPlayer().getLevel()));
+                expProgress.setProgress(GameObjects.getPlayer().getExp() - LevelTable.getStart(GameObjects.getPlayer().getLevel()));
             } catch (Exception e){
                 Log.d("PB",e.toString()+ Arrays.toString(e.getStackTrace()));
             }
             am = (TextView) findViewById(R.id.goldAmount);
-            am.setText(String.valueOf(StringUtils.intToStr(Player.getPlayer().getGold())));
-            if ("".equals(Player.getPlayer().getCurrentRouteGUID()))
+            am.setText(String.valueOf(StringUtils.intToStr(GameObjects.getPlayer().getGold())));
+            if ("".equals(GameObjects.getPlayer().getCurrentRouteGUID()))
                 PlayerInfo.setImageResource(R.mipmap.info);
             else PlayerInfo.setImageResource(R.mipmap.info_route);
 
             am = (TextView) findViewById(R.id.foundedAmount);
-            am.setText(String.format(getContext().getString(R.string.d_d), Player.getPlayer().getFoundedCities(), Player.getPlayer().getCityMax()));
-            ((TextView) findViewById(R.id.hirelingsAmount)).setText(String.format(getContext().getString(R.string.s_s), StringUtils.intToStr(Player.getPlayer().getHirelings()), StringUtils.intToStr(Player.getPlayer().getLeftToHire())));
+            am.setText(String.format(getContext().getString(R.string.d_d), GameObjects.getPlayer().getFoundedCities(), GameObjects.getPlayer().getCityMax()));
+            ((TextView) findViewById(R.id.hirelingsAmount)).setText(String.format(getContext().getString(R.string.s_s), StringUtils.intToStr(GameObjects.getPlayer().getHirelings()), StringUtils.intToStr(GameObjects.getPlayer().getLeftToHire())));
             infoLayout.loadFromPlayer();
         }
         if ("Y".equals(GameSettings.getValue("SHOW_BUILD_AREA"))) {
@@ -178,7 +177,7 @@ public class ButtonLayout extends RelativeLayout {
                     MyGoogleMap.switchZoom();
                     for (GameObject obj : GameObjects.getInstance().values())
                         if (obj.getMarker() != null) obj.changeMarkerSize();
-                    Player.getPlayer().changeMarkerSize();
+                    GameObjects.getPlayer().changeMarkerSize();
                     updateZoom();
                 } catch (Exception e) {
                     GATracker.trackException("ZoomClick",e);
@@ -186,28 +185,28 @@ public class ButtonLayout extends RelativeLayout {
 
             }
         });
-        Player.getPlayer().addOnChangeListeners(new OnGameObjectChange() {
+        GameObjects.getPlayer().addOnChangeListeners(new OnGameObjectChange() {
 
             @Override
             public void onChange(int TYPE) {
                 try {
                     TextView am = (TextView) findViewById(R.id.levelAmount);
-                    am.setText(String.valueOf(Player.getPlayer().getLevel()));
+                    am.setText(String.valueOf(GameObjects.getPlayer().getLevel()));
                     am = (TextView) findViewById(R.id.ambush);
-                    am.setText(String.format(getContext().getString(R.string.d_d), Player.getPlayer().getAmbushLeft(), Player.getPlayer().getAmbushMax()));
+                    am.setText(String.format(getContext().getString(R.string.d_d), GameObjects.getPlayer().getAmbushLeft(), GameObjects.getPlayer().getAmbushMax()));
                     ProgressBar expProgress= (ProgressBar) findViewById(R.id.expProgress);
-                    expProgress.setMax(LevelTable.getEnd(Player.getPlayer().getLevel())-LevelTable.getStart(Player.getPlayer().getLevel()));
-                    expProgress.setProgress(Player.getPlayer().getExp()-LevelTable.getStart(Player.getPlayer().getLevel()));
+                    expProgress.setMax(LevelTable.getEnd(GameObjects.getPlayer().getLevel())-LevelTable.getStart(GameObjects.getPlayer().getLevel()));
+                    expProgress.setProgress(GameObjects.getPlayer().getExp()-LevelTable.getStart(GameObjects.getPlayer().getLevel()));
                     am = (TextView) findViewById(R.id.goldAmount);
-                    am.setText(String.valueOf(StringUtils.intToStr(Player.getPlayer().getGold())));
+                    am.setText(String.valueOf(StringUtils.intToStr(GameObjects.getPlayer().getGold())));
                     ImageView btn = (ImageView) findViewById(R.id.infoview);
-                    if ("".equals(Player.getPlayer().getCurrentRouteGUID()))
+                    if ("".equals(GameObjects.getPlayer().getCurrentRouteGUID()))
                         btn.setImageResource(R.mipmap.info);
                     else btn.setImageResource(R.mipmap.info_route);
 
                     am = (TextView) findViewById(R.id.foundedAmount);
-                    am.setText(String.format(getContext().getString(R.string.d_d), Player.getPlayer().getFoundedCities(), Player.getPlayer().getCityMax()));
-                    ((TextView) findViewById(R.id.hirelingsAmount)).setText(String.format(getContext().getString(R.string.s_s), StringUtils.intToStr(Player.getPlayer().getHirelings()), StringUtils.intToStr(Player.getPlayer().getLeftToHire())));
+                    am.setText(String.format(getContext().getString(R.string.d_d), GameObjects.getPlayer().getFoundedCities(), GameObjects.getPlayer().getCityMax()));
+                    ((TextView) findViewById(R.id.hirelingsAmount)).setText(String.format(getContext().getString(R.string.s_s), StringUtils.intToStr(GameObjects.getPlayer().getHirelings()), StringUtils.intToStr(GameObjects.getPlayer().getLeftToHire())));
 
                     infoLayout.loadFromPlayer();
                 } catch (Exception e){

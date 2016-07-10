@@ -9,9 +9,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.coe.c0r0vans.GameObjects.Route;
-import com.coe.c0r0vans.Logic.Player;
 import com.coe.c0r0vans.R;
 import com.coe.c0r0vans.ShowHideForm;
+import com.coe.c0r0vans.Singles.GameObjects;
 import com.coe.c0r0vans.UIElements.CityLine;
 
 import java.util.Collections;
@@ -55,8 +55,8 @@ public class RouteInfo extends RelativeLayout implements PlayerInfoLayout {
                 page = 0;
             }
         }
-        max_page=Math.abs((Player.getPlayer().getRoutes().size()-1)/pageSize)+1;
-        if (page+1>max_page) page=Player.getPlayer().getRoutes().size()/pageSize;
+        max_page=Math.abs((GameObjects.getPlayer().getRoutes().size()-1)/pageSize)+1;
+        if (page+1>max_page) page=GameObjects.getPlayer().getRoutes().size()/pageSize;
         btn.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -99,7 +99,7 @@ public class RouteInfo extends RelativeLayout implements PlayerInfoLayout {
         GATracker.trackTimeStart("InfoLayout","RoutesUpdate");
 
         routeInfo=(LinearLayout) findViewById(R.id.routeInfo);
-        Collections.sort(Player.getPlayer().getRoutes(), new Comparator<Route>() {
+        Collections.sort(GameObjects.getPlayer().getRoutes(), new Comparator<Route>() {
             @Override
             public int compare(Route lhs, Route rhs) {
 
@@ -107,17 +107,17 @@ public class RouteInfo extends RelativeLayout implements PlayerInfoLayout {
             }
         });
                 routeInfo.removeAllViews();
-        if (!"".equals(Player.getPlayer().getCurrentRouteGUID())){
+        if (!"".equals(GameObjects.getPlayer().getCurrentRouteGUID())){
             CityLine line=new CityLine(getContext());
 
             routeInfo.addView(line);
-            line.setData(Player.getPlayer().getCurrentR());
-            //line.setOnRemoveClick(Player.getPlayer().getDropRoute());
+            line.setData(GameObjects.getPlayer().getCurrentR());
+            //line.setOnRemoveClick(GameObjects.getPlayer().getDropRoute());
             line.setTarget("");
         }
 
         int i=0;
-        for (Route r:Player.getPlayer().getRoutes()){
+        for (Route r:GameObjects.getPlayer().getRoutes()){
             if (i>=page*pageSize && i<(page+1)*pageSize) {
                 CityLine line = new CityLine(getContext());
                 routeInfo.addView(line);
@@ -129,7 +129,7 @@ public class RouteInfo extends RelativeLayout implements PlayerInfoLayout {
             i++;
         }
 
-        max_page=Math.abs((Player.getPlayer().getRoutes().size()-2)/pageSize)+1;
+        max_page=Math.abs((GameObjects.getPlayer().getRoutes().size()-2)/pageSize)+1;
         if (page<1) {
             Button btn= (Button) findViewById(R.id.previous);
             btn.setClickable(false);

@@ -3,7 +3,7 @@ package com.coe.c0r0vans.GameObjects;
 import android.graphics.Color;
 
 import com.coe.c0r0vans.GameObject.GameObject;
-import com.coe.c0r0vans.Logic.Player;
+import com.coe.c0r0vans.Singles.GameObjects;
 import com.coe.c0r0vans.Singles.MyGoogleMap;
 import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
@@ -30,7 +30,7 @@ public class SelectedObject {
         } else {
             CircleOptions circleOptions = new CircleOptions();
             circleOptions.center(point);
-            circleOptions.radius(Player.getPlayer().getAmbushRad());
+            circleOptions.radius(GameObjects.getPlayer().getAmbushRad());
             circleOptions.strokeColor(Color.RED);
             circleOptions.strokeWidth(5);
             circleOptions.zIndex(200);

@@ -1,6 +1,7 @@
 package com.coe.c0r0vans.Logic;
 
 import com.coe.c0r0vans.GameObject.GameObject;
+import com.coe.c0r0vans.Singles.GameObjects;
 import com.coe.c0r0vans.Singles.MyGoogleMap;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
@@ -72,7 +73,7 @@ public class Caravan extends GameObject {
         if (mark!=null) {
             String markname = "caravan";
             if (faction<0 || faction>4) faction=4;
-            if (faction==0) markname=markname+"_"+faction+Player.getPlayer().getRace();
+            if (faction==0) markname=markname+"_"+faction+ GameObjects.getPlayer().getRace();
             else markname=markname+"_"+faction;
             markname = markname + GameObject.zoomToPostfix(MyGoogleMap.getClientZoom());
             if (!markname.equals(currentMarkName)) {

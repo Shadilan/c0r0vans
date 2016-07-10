@@ -6,9 +6,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.coe.c0r0vans.Logic.Player;
 import com.coe.c0r0vans.R;
 import com.coe.c0r0vans.ShowHideForm;
+import com.coe.c0r0vans.Singles.GameObjects;
 
 import utility.StringUtils;
 
@@ -57,23 +57,23 @@ public class MainInfoTable extends LinearLayout implements PlayerInfoLayout {
         foundedCities= (TextView) findViewById(R.id.foundedCities);
     }
     public void update(){
-        if (Player.getPlayer()!=null) {
-            level.setText(StringUtils.intToStr(Player.getPlayer().getLevel()));
-            exp.setText(StringUtils.intToStr(Player.getPlayer().getExp()));
-            gold.setText(StringUtils.intToStr(Player.getPlayer().getGold()));
-            tnl.setText(StringUtils.intToStr(Player.getPlayer().getTNL()));
-            caravans.setText(StringUtils.intToStr(Player.getPlayer().getCaravans()));
-            ambushes.setText(StringUtils.intToStr(Player.getPlayer().getAmbushMax() - Player.getPlayer().getAmbushLeft())+"/"+StringUtils.intToStr(Player.getPlayer().getAmbushMax()));
-            profit.setText(StringUtils.intToStr(Player.getPlayer().getProfit()));
-            hirelings.setText(StringUtils.intToStr(Player.getPlayer().getHirelings()));
-            leftToHire.setText(StringUtils.intToStr(Player.getPlayer().getLeftToHire()));
-            foundedCities.setText(StringUtils.intToStr(Player.getPlayer().getFoundedCities())+"/"+StringUtils.intToStr(Player.getPlayer().getCityMax()));
+        if (GameObjects.getPlayer()!=null) {
+            level.setText(StringUtils.intToStr(GameObjects.getPlayer().getLevel()));
+            exp.setText(StringUtils.intToStr(GameObjects.getPlayer().getExp()));
+            gold.setText(StringUtils.intToStr(GameObjects.getPlayer().getGold()));
+            tnl.setText(StringUtils.intToStr(GameObjects.getPlayer().getTNL()));
+            caravans.setText(StringUtils.intToStr(GameObjects.getPlayer().getCaravans()));
+            ambushes.setText(StringUtils.intToStr(GameObjects.getPlayer().getAmbushMax() - GameObjects.getPlayer().getAmbushLeft())+"/"+StringUtils.intToStr(GameObjects.getPlayer().getAmbushMax()));
+            profit.setText(StringUtils.intToStr(GameObjects.getPlayer().getProfit()));
+            hirelings.setText(StringUtils.intToStr(GameObjects.getPlayer().getHirelings()));
+            leftToHire.setText(StringUtils.intToStr(GameObjects.getPlayer().getLeftToHire()));
+            foundedCities.setText(StringUtils.intToStr(GameObjects.getPlayer().getFoundedCities())+"/"+StringUtils.intToStr(GameObjects.getPlayer().getCityMax()));
 
-            if (Player.getPlayer().getRace() == 1) {
+            if (GameObjects.getPlayer().getRace() == 1) {
                 faction.setImageResource(R.mipmap.guild);
-            } else if (Player.getPlayer().getRace() == 2) {
+            } else if (GameObjects.getPlayer().getRace() == 2) {
                 faction.setImageResource(R.mipmap.alliance);
-            } else if (Player.getPlayer().getRace() == 3) {
+            } else if (GameObjects.getPlayer().getRace() == 3) {
                 faction.setImageResource(R.mipmap.legue);
             }
         }

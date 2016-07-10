@@ -6,9 +6,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.coe.c0r0vans.GameObjects.AmbushItem;
-import com.coe.c0r0vans.Logic.Player;
 import com.coe.c0r0vans.R;
 import com.coe.c0r0vans.ShowHideForm;
+import com.coe.c0r0vans.Singles.GameObjects;
 import com.coe.c0r0vans.UIElements.InfoLine;
 
 import java.util.Collections;
@@ -44,21 +44,21 @@ public class AmbushInfo extends LinearLayout implements PlayerInfoLayout {
 
     @Override
     public void update() {
-        Collections.sort(Player.getPlayer().getAmbushes(), new Comparator<AmbushItem>() {
+        Collections.sort(GameObjects.getPlayer().getAmbushes(), new Comparator<AmbushItem>() {
             @Override
             public int compare(AmbushItem lhs, AmbushItem rhs) {
-                return (int) (GPSInfo.getDistance(lhs.getLatLng(),Player.getPlayer().getMarker().getPosition())-
-                                        GPSInfo.getDistance(rhs.getLatLng(),Player.getPlayer().getMarker().getPosition()));
+                return (int) (GPSInfo.getDistance(lhs.getLatLng(),GameObjects.getPlayer().getMarker().getPosition())-
+                                        GPSInfo.getDistance(rhs.getLatLng(),GameObjects.getPlayer().getMarker().getPosition()));
             }
         });
         ambushInfo.removeAllViews();
-        for (AmbushItem r: Player.getPlayer().getAmbushes()){
+        for (AmbushItem r: GameObjects.getPlayer().getAmbushes()){
             InfoLine line=new InfoLine(getContext());
             //float[] distances = new float[1];
             String ready="";
             if (r.getProgress()<0) ready=" ⌛"+Math.abs(r.getProgress()) + " мин.";
             else if (r.getProgress()>0) ready=""+r.getProgress()+" мин.";
-            line.setLabelText(String.format(" %s. расстояние: %sм.%s", r.getName(), (int)GPSInfo.getDistance(Player.getPlayer().getMarker().getPosition(), r.getLatLng()),ready));
+            line.setLabelText(String.format(" %s. расстояние: %sм.%s", r.getName(), (int)GPSInfo.getDistance(GameObjects.getPlayer().getMarker().getPosition(), r.getLatLng()),ready));
             line.setOnRemoveClick(r.getAction(true));
             line.setTarget(r.getGUID());
             line.setPoint(r.getPoint());

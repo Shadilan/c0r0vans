@@ -7,7 +7,6 @@ import android.view.View;
 import android.widget.ImageButton;
 
 import com.coe.c0r0vans.GameObject.GameObject;
-import com.coe.c0r0vans.Logic.Player;
 import com.coe.c0r0vans.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -121,7 +120,6 @@ public class MyGoogleMap{
                 if (moveFixed) {
                     moveCamera(target, curBearing);
                 }
-                Player.getPlayer().setPosition(target);
                 serverConnect.getInstance().checkRefresh();
             }
 
@@ -268,7 +266,7 @@ public class MyGoogleMap{
 
     public static void rotate(float angle) {
         /*if (!moveFixed) moveCamera(targetMarker.getPosition(),map.getCameraPosition().bearing+angle);
-        else moveCamera(Player.getPlayer().getMarker().getPosition(), map.getCameraPosition().bearing+angle);*/
+        else moveCamera(GameObjects.getPlayer().getMarker().getPosition(), map.getCameraPosition().bearing+angle);*/
         moveCamera(map.getCameraPosition().target, map.getCameraPosition().bearing+angle);
         lastRotateTime=new Date().getTime();
 

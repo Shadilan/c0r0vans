@@ -15,6 +15,7 @@ import com.coe.c0r0vans.GameObjects.SelectedObject;
 import com.coe.c0r0vans.Logic.Ambush;
 import com.coe.c0r0vans.Logic.City;
 import com.coe.c0r0vans.Logic.Player;
+import com.coe.c0r0vans.Singles.GameObjects;
 
 import org.json.JSONObject;
 
@@ -59,7 +60,7 @@ public class ActionView extends LinearLayout {
             }
         });
 
-        Player.getPlayer().addOnChangeListeners(new OnGameObjectChange() {
+        GameObjects.getPlayer().addOnChangeListeners(new OnGameObjectChange() {
 
             @Override
             public void onChange(int TYPE) {
@@ -99,7 +100,7 @@ public class ActionView extends LinearLayout {
         SelectedObject.getInstance().hidePoint();
         SelectedObject.getInstance().setTarget(null);
         this.removeAllViews();
-        Player.getPlayer().higlight(null);
+        GameObjects.getPlayer().higlight(null);
     }
 
     private LocationListener locationListener;
@@ -119,7 +120,7 @@ public class ActionView extends LinearLayout {
         if (target instanceof City)
         {
             setCurrentView(target.getObjectView(getContext()));
-            Player.getPlayer().higlight(target.getGUID());
+            GameObjects.getPlayer().higlight(target.getGUID());
         } else if (target instanceof Ambush)
         {
             setCurrentView(target.getObjectView(getContext()));
@@ -145,10 +146,10 @@ public class ActionView extends LinearLayout {
                 float[] distances = new float[1];
                 Location.distanceBetween(SelectedObject.getInstance().getTarget().getMarker().getPosition().latitude,
                         SelectedObject.getInstance().getTarget().getMarker().getPosition().longitude,
-                        Player.getPlayer().getMarker().getPosition().latitude,
-                        Player.getPlayer().getMarker().getPosition().longitude, distances);
+                        GameObjects.getPlayer().getMarker().getPosition().latitude,
+                        GameObjects.getPlayer().getMarker().getPosition().longitude, distances);
 
-                boolean inZone = (distances.length > 0 && distances[0] <= (Player.getPlayer().getActionDistance()));
+                boolean inZone = (distances.length > 0 && distances[0] <= (GameObjects.getPlayer().getActionDistance()));
                 ((GameObjectView) currentView).updateInZone(inZone);
                 ((GameObjectView) currentView).setDistance((int) Math.ceil(distances[0]));
             }

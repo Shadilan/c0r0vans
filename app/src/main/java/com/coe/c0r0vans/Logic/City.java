@@ -83,11 +83,11 @@ public class City extends GameObject {
             @Override
             public void preAction() {
                 //Todo уменьшить количество наемников
-                oldRouteGuid=Player.getPlayer().getCurrentRouteGUID();
-                oldRoute=Player.getPlayer().getCurrentR();
-                routeStart=Player.getPlayer().getRouteStart();
-                Player.getPlayer().setRouteStart(false);
-                Player.getPlayer().setCurrentRouteGUID(getGUID());
+                oldRouteGuid=GameObjects.getPlayer().getCurrentRouteGUID();
+                oldRoute=GameObjects.getPlayer().getCurrentR();
+                routeStart=GameObjects.getPlayer().getRouteStart();
+                GameObjects.getPlayer().setRouteStart(false);
+                GameObjects.getPlayer().setCurrentRouteGUID(getGUID());
             }
 
             @Override
@@ -96,7 +96,7 @@ public class City extends GameObject {
                 Essages.addEssage(String.format(ctx.getResources().getString(R.string.route_started), Name));
                 if (response.has("Route")){
                     try {
-                        Player.getPlayer().setCurrentRoute(new Route(response.getJSONObject("Route"),MyGoogleMap.getMap()));
+                        GameObjects.getPlayer().setCurrentRoute(new Route(response.getJSONObject("Route"),MyGoogleMap.getMap()));
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -111,9 +111,9 @@ public class City extends GameObject {
             public void postError(JSONObject response) {
                 //todo вернуть количество наемников
                 try {
-                    Player.getPlayer().setCurrentRouteGUID(oldRouteGuid);
-                    Player.getPlayer().setRouteStart(true);
-                    Player.getPlayer().setCurrentRoute(oldRoute);
+                    GameObjects.getPlayer().setCurrentRouteGUID(oldRouteGuid);
+                    GameObjects.getPlayer().setRouteStart(true);
+                    GameObjects.getPlayer().setCurrentRoute(oldRoute);
                     String err;
                     if (response.has("Error")) err = response.getString("Error");
                     else if (response.has("Result")) err = response.getString("Result");
@@ -124,7 +124,7 @@ public class City extends GameObject {
                             break;
                         case "L0001":
                             Essages.addEssage("Соединение потеряно.");
-                            Player.getPlayer().setRouteStart(true);
+                            GameObjects.getPlayer().setRouteStart(true);
                             break;
                         case "O0501":
                             Essages.addEssage("Город не найден.");
@@ -136,7 +136,7 @@ public class City extends GameObject {
                             Essages.addEssage("Маршрут незакончен.");
                             break;
                         default:
-                            Player.getPlayer().setRouteStart(true);
+                            GameObjects.getPlayer().setRouteStart(true);
                             if (response.has("Message"))
                                 Essages.addEssage(response.getString("Message"));
                             else Essages.addEssage("Непредвиденная ошибка.");
@@ -150,7 +150,7 @@ public class City extends GameObject {
             }
             @Override
             public void serverError(){
-                Player.getPlayer().setRouteStart(true);
+                GameObjects.getPlayer().setRouteStart(true);
             }
         };
         endRouteAction = new ObjectAction(this) {
@@ -170,12 +170,12 @@ public class City extends GameObject {
 
             @Override
             public void preAction() {
-                oldRouteGuid=Player.getPlayer().getCurrentRouteGUID();
-                oldRoute=Player.getPlayer().getCurrentR();
-                routeStart=Player.getPlayer().getRouteStart();
-                Player.getPlayer().setCurrentRouteGUID("");
-                Player.getPlayer().setCurrentRoute(null);
-                Player.getPlayer().setRouteStart(true);
+                oldRouteGuid=GameObjects.getPlayer().getCurrentRouteGUID();
+                oldRoute=GameObjects.getPlayer().getCurrentR();
+                routeStart=GameObjects.getPlayer().getRouteStart();
+                GameObjects.getPlayer().setCurrentRouteGUID("");
+                GameObjects.getPlayer().setCurrentRoute(null);
+                GameObjects.getPlayer().setRouteStart(true);
             }
 
             @Override
@@ -186,7 +186,7 @@ public class City extends GameObject {
 
                 GameSound.playSound(GameSound.FINISH_ROUTE_SOUND);
                 serverConnect.getInstance().callGetPlayerInfo();
-                Player.getPlayer().setCurrentRouteGUID("");
+                GameObjects.getPlayer().setCurrentRouteGUID("");
                 for (GameObject o:GameObjects.getInstance().values()){
                     if (o!=null && o instanceof City) ((City) o).updateColor();
                 }
@@ -194,9 +194,9 @@ public class City extends GameObject {
 
             @Override
             public void postError(JSONObject response) {
-                Player.getPlayer().setRouteStart(routeStart);
-                Player.getPlayer().setCurrentRouteGUID(oldRouteGuid);
-                Player.getPlayer().setCurrentRoute(oldRoute);
+                GameObjects.getPlayer().setRouteStart(routeStart);
+                GameObjects.getPlayer().setCurrentRouteGUID(oldRouteGuid);
+                GameObjects.getPlayer().setCurrentRoute(oldRoute);
                 try {
 
                     String err;
@@ -209,7 +209,7 @@ public class City extends GameObject {
                             break;
                         case "L0001":
                             Essages.addEssage("Соединение потеряно.");
-                            Player.getPlayer().setRouteStart(true);
+                            GameObjects.getPlayer().setRouteStart(true);
                             break;
                         case "O0601":
                             Essages.addEssage("Город не найден.");
@@ -219,9 +219,9 @@ public class City extends GameObject {
                             break;
                         case "O0603":
                             Essages.addEssage("Маршрут не начат.");
-                            Player.getPlayer().setRouteStart(false);
-                            Player.getPlayer().setCurrentRouteGUID("");
-                            Player.getPlayer().setCurrentRoute(null);
+                            GameObjects.getPlayer().setRouteStart(false);
+                            GameObjects.getPlayer().setCurrentRouteGUID("");
+                            GameObjects.getPlayer().setCurrentRoute(null);
                             break;
                         case "O0604":
                             Essages.addEssage("Такой маршрут уже есть.");
@@ -233,11 +233,11 @@ public class City extends GameObject {
                             if (response.has("Message"))
                                 Essages.addEssage(response.getString("Message"));
                             else Essages.addEssage("Не хватает наемников.");
-                            Player.getPlayer().setRouteStart(routeStart);
-                            Player.getPlayer().setCurrentRouteGUID(oldRouteGuid);
-                            Player.getPlayer().setCurrentRoute(oldRoute);
+                            GameObjects.getPlayer().setRouteStart(routeStart);
+                            GameObjects.getPlayer().setCurrentRouteGUID(oldRouteGuid);
+                            GameObjects.getPlayer().setCurrentRoute(oldRoute);
                         default:
-                            Player.getPlayer().setRouteStart(true);
+                            GameObjects.getPlayer().setRouteStart(true);
                             if (response.has("Message"))
                                 Essages.addEssage(response.getString("Message"));
                             else Essages.addEssage("Непредвиденная ошибка.");
@@ -264,11 +264,11 @@ public class City extends GameObject {
 
             @Override
             public void preAction() {
-                Upgrade up=Player.getPlayer().getNextUpgrade(upgrade);
+                Upgrade up=GameObjects.getPlayer().getNextUpgrade(upgrade);
                 if (up!=null) {
                     upcost = (int) (up.getCost() * discount());
                 }
-                Player.getPlayer().setGold(Player.getPlayer().getGold()-upcost);
+                GameObjects.getPlayer().setGold(GameObjects.getPlayer().getGold()-upcost);
             }
 
             @Override
@@ -281,16 +281,16 @@ public class City extends GameObject {
 
                         if (response.has("Upgrade")){
                             Upgrade n=new Upgrade(response.getJSONObject("Upgrade"));
-                            Upgrade r=Player.getPlayer().getUpgrade(n.getType());
-                            Player.getPlayer().getUpgrades().remove(r);
-                            Player.getPlayer().getUpgrades().add(n);
+                            Upgrade r=GameObjects.getPlayer().getUpgrade(n.getType());
+                            GameObjects.getPlayer().getUpgrades().remove(r);
+                            GameObjects.getPlayer().getUpgrades().add(n);
                         }
                         if (response.has("NextUpgrade")){
                             Upgrade n=new Upgrade(response.getJSONObject("NextUpgrade"));
-                            Player.getPlayer().getNextUpgrades().remove(n.getType());
-                            Player.getPlayer().getNextUpgrades().put(n.getType(),n);
+                            GameObjects.getPlayer().getNextUpgrades().remove(n.getType());
+                            GameObjects.getPlayer().getNextUpgrades().put(n.getType(),n);
                         }
-                        Upgrade up = Player.getPlayer().getUpgrade(upgrade);
+                        Upgrade up = GameObjects.getPlayer().getUpgrade(upgrade);
                         if (up != null) Essages.addEssage(String.format(ctx.getResources().getString(R.string.upgrade_bought),up.getName()));
                         else Essages.addEssage(String.format(ctx.getResources().getString(R.string.upgrade_bought), upgrade));
                         serverConnect.getInstance().callScanRange();
@@ -307,7 +307,7 @@ public class City extends GameObject {
             @Override
             public void postError(JSONObject response) {
                 try {
-                    Player.getPlayer().setGold(Player.getPlayer().getGold()-upcost);
+                    GameObjects.getPlayer().setGold(GameObjects.getPlayer().getGold()-upcost);
                     String err;
                     if (response.has("Error")) err=response.getString("Error");
                     else if (response.has("Result")) err=response.getString("Result");
@@ -404,14 +404,14 @@ public class City extends GameObject {
                 circleOptions.center(latlng);
                 circleOptions.radius(radius);
                 circleOptions.zIndex(100);
-                if (Player.checkRoute(GUID)) circleOptions.strokeColor(Color.DKGRAY);
+                if (GameObjects.getPlayer().checkRoute(GUID)) circleOptions.strokeColor(Color.DKGRAY);
                 else circleOptions.strokeColor(Color.BLUE);
                 circleOptions.strokeWidth(2);
                 zone = map.addCircle(circleOptions);
             } else {
                 zone.setCenter(latlng);
                 zone.setRadius(radius);
-                if (Player.checkRoute(GUID)) zone.setStrokeColor(Color.DKGRAY);
+                if (GameObjects.getPlayer().checkRoute(GUID)) zone.setStrokeColor(Color.DKGRAY);
                 else zone.setStrokeColor(Color.BLUE);
 
             }
@@ -420,7 +420,7 @@ public class City extends GameObject {
                 circleOptions.center(latlng);
                 int dist = 125;
                 if (owner) dist = 250;
-                Upgrade up = Player.getPlayer().getUpgrade("founder");
+                Upgrade up = GameObjects.getPlayer().getUpgrade("founder");
                 if (up != null) dist += up.getEffect2();
                 else dist += 75;
                 circleOptions.radius(dist);
@@ -432,7 +432,7 @@ public class City extends GameObject {
                 buildZone.setCenter(latlng);
                 int dist = 125;
                 if (owner) dist = 250;
-                Upgrade up = Player.getPlayer().getUpgrade("founder");
+                Upgrade up = GameObjects.getPlayer().getUpgrade("founder");
                 if (up != null) dist += up.getEffect2();
                 else dist += 75;
                 buildZone.setRadius(dist);
@@ -446,20 +446,20 @@ public class City extends GameObject {
     }
 
     private boolean upgradeAvaible(){
-        Upgrade up=Player.getPlayer().getNextUpgrade(upgrade);
+        Upgrade up=GameObjects.getPlayer().getNextUpgrade(upgrade);
         if (up == null ) return true;
         float raceBonus=discount();
         int upcost= (int) (up.getCost()*raceBonus);
 
         return !( (up.getReqCityLev() > Level)
-                || (upcost >= Player.getPlayer().getGold())
-                || (up.getLevel() > Player.getPlayer().getLevel() - 1));
+                || (upcost >= GameObjects.getPlayer().getGold())
+                || (up.getLevel() > GameObjects.getPlayer().getLevel() - 1));
     }
     private float discount(){
         float raceBonus=0;
         long infsum=influence1+influence2+influence3;
         if (infsum>0) {
-            switch (Player.getPlayer().getRace()) {
+            switch (GameObjects.getPlayer().getRace()) {
                 case 1:raceBonus=(float)influence1/infsum;
                     break;
                 case 2:raceBonus=(float)influence2/infsum;
@@ -468,7 +468,7 @@ public class City extends GameObject {
                     break;
             }
         }
-        return ((1f-raceBonus/4)*(100f-Player.getPlayer().getTrade())/100f);
+        return ((1f-raceBonus/4)*(100f-GameObjects.getPlayer().getTrade())/100f);
     }
     public String getName(){return (Name+" ур."+Level) ;}
 
@@ -514,7 +514,7 @@ public class City extends GameObject {
         }
     }
     public void updateColor(){
-            if (!Player.checkRoute(GUID)) zone.setStrokeColor(Color.BLUE);
+            if (!GameObjects.getPlayer().checkRoute(GUID)) zone.setStrokeColor(Color.BLUE);
             else zone.setStrokeColor(Color.DKGRAY);
 
     }
@@ -576,13 +576,13 @@ public class City extends GameObject {
 
 
         public String getSkillInfo() {
-            Upgrade up=Player.getPlayer().getNextUpgrade(upgrade);
+            Upgrade up=GameObjects.getPlayer().getNextUpgrade(upgrade);
 
             if (up!=null) {
                 float raceBonus=0;
                 long infsum=city.influence1+city.influence2+city.influence3;
                 if (infsum>0) {
-                    switch (Player.getPlayer().getRace()) {
+                    switch (GameObjects.getPlayer().getRace()) {
                         case 1:raceBonus=(float)city.influence1/infsum;
                             break;
                         case 2:raceBonus=(float)city.influence2/infsum;
@@ -591,13 +591,13 @@ public class City extends GameObject {
                             break;
                     }
                 }
-                raceBonus=((1f-raceBonus/4)*(100f-Player.getPlayer().getTrade())/100f);
+                raceBonus=((1f-raceBonus/4)*(100f-GameObjects.getPlayer().getTrade())/100f);
                 int upcost= (int) (up.getCost()*raceBonus);
 
                 String dop;
                 if (up.getReqCityLev()>Level) dop= String.format(getContext().getString(R.string.city_lvl_required), up.getReqCityLev());
-                else if ((upcost)>Player.getPlayer().getGold()) dop= String.format(getContext().getString(R.string.need_more_gold), StringUtils.intToStr(upcost - Player.getPlayer().getGold()));
-                else if (up.getLevel()>Player.getPlayer().getLevel()-1) dop= String.format(getContext().getString(R.string.need_higher_lvl), up.getLevel()+1);
+                else if ((upcost)>GameObjects.getPlayer().getGold()) dop= String.format(getContext().getString(R.string.need_more_gold), StringUtils.intToStr(upcost - GameObjects.getPlayer().getGold()));
+                else if (up.getLevel()>GameObjects.getPlayer().getLevel()-1) dop= String.format(getContext().getString(R.string.need_higher_lvl), up.getLevel()+1);
                 else dop= String.format("Эффект:%s\n", up.getDescription());
 
                 return String.format(getContext().getString(R.string.price), up.getName(), StringUtils.intToStr(upcost),StringUtils.intToStr(up.getCost()), dop);
@@ -677,7 +677,7 @@ public class City extends GameObject {
                 @Override
                 public void onClick(View v) {
                     ConfirmWindow confirmWindow=new ConfirmWindow(getContext());
-                    Upgrade up=Player.getPlayer().getNextUpgrade(upgrade);
+                    Upgrade up=GameObjects.getPlayer().getNextUpgrade(upgrade);
                     if (up!=null) {
                         int upcost = (int) (up.getCost() * discount());
                         confirmWindow.setText(String.format(getContext().getString(R.string.accept_buy_upgrade), up.getName(), up.getLevel(), StringUtils.intToStr(upcost)));
@@ -699,11 +699,11 @@ public class City extends GameObject {
 
                                 @Override
                                 public void preAction() {
-                                    Upgrade up=Player.getPlayer().getNextUpgrade(upgrade);
+                                    Upgrade up=GameObjects.getPlayer().getNextUpgrade(upgrade);
                                     if (up!=null) {
                                         upcost = (int) (up.getCost() * discount());
                                     }
-                                    Player.getPlayer().setGold(Player.getPlayer().getGold()-upcost);
+                                    GameObjects.getPlayer().setGold(GameObjects.getPlayer().getGold()-upcost);
                                     update();
 
                                 }
@@ -719,16 +719,16 @@ public class City extends GameObject {
 
                                             if (response.has("Upgrade")){
                                                 Upgrade n=new Upgrade(response.getJSONObject("Upgrade"));
-                                                Upgrade r=Player.getPlayer().getUpgrade(n.getType());
-                                                Player.getPlayer().getUpgrades().remove(r);
-                                                Player.getPlayer().getUpgrades().add(n);
+                                                Upgrade r=GameObjects.getPlayer().getUpgrade(n.getType());
+                                                GameObjects.getPlayer().getUpgrades().remove(r);
+                                                GameObjects.getPlayer().getUpgrades().add(n);
                                             }
                                             if (response.has("NextUpgrade")){
                                                 Upgrade n=new Upgrade(response.getJSONObject("NextUpgrade"));
-                                                Player.getPlayer().getNextUpgrades().remove(n.getType());
-                                                Player.getPlayer().getNextUpgrades().put(n.getType(),n);
+                                                GameObjects.getPlayer().getNextUpgrades().remove(n.getType());
+                                                GameObjects.getPlayer().getNextUpgrades().put(n.getType(),n);
                                             }
-                                            Upgrade up = Player.getPlayer().getUpgrade(upgrade);
+                                            Upgrade up = GameObjects.getPlayer().getUpgrade(upgrade);
                                             if (up != null) Essages.addEssage(String.format(getContext().getResources().getString(R.string.upgrade_bought),up.getName()));
                                             else Essages.addEssage(String.format(getContext().getResources().getString(R.string.upgrade_bought), upgrade));
                                             update();
@@ -745,7 +745,7 @@ public class City extends GameObject {
                                 @Override
                                 public void postError(JSONObject response) {
                                     try {
-                                        Player.getPlayer().setGold(Player.getPlayer().getGold()+upcost);
+                                        GameObjects.getPlayer().setGold(GameObjects.getPlayer().getGold()+upcost);
                                         update();
                                         String err;
                                         if (response.has("Error")) err=response.getString("Error");
@@ -855,9 +855,9 @@ public class City extends GameObject {
                         public void preAction() {
                             int priceForOne= (int) (hireprice*discount());
                             gold= (amount)*priceForOne;
-                            Player.getPlayer().setGold(Player.getPlayer().getGold()-gold);
+                            GameObjects.getPlayer().setGold(GameObjects.getPlayer().getGold()-gold);
                             if (owner instanceof City) ((City) owner).hirelings-=amount;
-                            Player.getPlayer().setLeftToHire(Player.getPlayer().getLeftToHire()-amount);
+                            GameObjects.getPlayer().setLeftToHire(GameObjects.getPlayer().getLeftToHire()-amount);
                             update();
 
                         }
@@ -867,7 +867,7 @@ public class City extends GameObject {
                             try {
                                 if (response.has("Result") && "OK".equals(response.getString("Result"))) {
                                     GameSound.playSound(GameSound.BUY_SOUND);
-                                    Player.getPlayer().setHirelings(Player.getPlayer().getHirelings()+amount);
+                                    GameObjects.getPlayer().setHirelings(GameObjects.getPlayer().getHirelings()+amount);
                                     Essages.addEssage("Нанято "+amount+" чел. за "+gold+" золота.");
                                     serverConnect.getInstance().callScanRange();
                                 } else
@@ -881,9 +881,9 @@ public class City extends GameObject {
 
                         @Override
                         public void postError(JSONObject response) {
-                            Player.getPlayer().setGold(Player.getPlayer().getGold()+gold);
+                            GameObjects.getPlayer().setGold(GameObjects.getPlayer().getGold()+gold);
                             if (owner instanceof City) ((City) owner).hirelings+=amount;
-                            Player.getPlayer().setLeftToHire(Player.getPlayer().getLeftToHire()+amount);
+                            GameObjects.getPlayer().setLeftToHire(GameObjects.getPlayer().getLeftToHire()+amount);
                             try {
                             if (response.has("Result")){
                                 String err=response.getString("Result");
@@ -921,7 +921,7 @@ public class City extends GameObject {
                     };
                     serverConnect.getInstance().hirePeople(hire,GPSInfo.getInstance().GetLat(),GPSInfo.getInstance().GetLng(),city.getGUID(),currentCount);
                     countHire(1);
-                    ((TextView)findViewById(R.id.goldInfo)).setText(String.format(getContext().getString(R.string.gold_amount), StringUtils.intToStr(Player.getPlayer().getGold())));
+                    ((TextView)findViewById(R.id.goldInfo)).setText(String.format(getContext().getString(R.string.gold_amount), StringUtils.intToStr(GameObjects.getPlayer().getGold())));
                 }
             });
             findViewById(R.id.restart_route).setOnClickListener(new OnClickListener() {
@@ -950,7 +950,7 @@ public class City extends GameObject {
                     confirmWindow.setConfirmAction(new Runnable() {
                         @Override
                         public void run() {
-                            serverConnect.getInstance().callDropUnfinishedRoute(Player.getPlayer().getDropRoute());
+                            serverConnect.getInstance().callDropUnfinishedRoute(GameObjects.getPlayer().getDropRoute());
                             updateInZone(true);
                         }
                     });
@@ -1035,7 +1035,7 @@ public class City extends GameObject {
         private boolean countHire(int newValue){
 
             int priceForOne= (int) (hireprice*discount());
-            int max=Math.min(Math.min(Player.getPlayer().getLeftToHire(),Player.getPlayer().getGold()/priceForOne),hirelings);
+            int max=Math.min(Math.min(GameObjects.getPlayer().getLeftToHire(),GameObjects.getPlayer().getGold()/priceForOne),hirelings);
             int current=newValue;
             if (current<1) current=1;
             if (current>max) current=currentCount;
@@ -1053,7 +1053,7 @@ public class City extends GameObject {
             int income=0;
             LinearLayout l= (LinearLayout) findViewById(R.id.routePanel);
             l.removeAllViews();
-            for (Route r:Player.getPlayer().getRoutes()){
+            for (Route r:GameObjects.getPlayer().getRoutes()){
                 if (r.getStartGuid().equals(city.getGUID())||r.getFinishGuid().equals(city.getGUID())){
                     CityLine line = new CityLine(getContext());
                     amount++;
@@ -1079,14 +1079,14 @@ public class City extends GameObject {
                 }
                 findViewById(R.id.restart_route).setVisibility(GONE);
                 findViewById(R.id.drop_route).setVisibility(GONE);
-                if (Player.getPlayer().getRouteStart()) findViewById(R.id.startRoute).setVisibility(VISIBLE);
-                if (!Player.getPlayer().getRouteStart() && (city!=null))
+                if (GameObjects.getPlayer().getRouteStart()) findViewById(R.id.startRoute).setVisibility(VISIBLE);
+                if (!GameObjects.getPlayer().getRouteStart() && (city!=null))
                 {
                     ImageButton btn= (ImageButton) findViewById(R.id.finishRoute);
                     ImageButton btn2= (ImageButton) findViewById(R.id.restart_route);
                     btn.setVisibility(VISIBLE);
                     btn2.setVisibility(VISIBLE);
-                    if (!Player.checkRoute(city.getGUID())) {
+                    if (!GameObjects.getPlayer().checkRoute(city.getGUID())) {
                         btn.setClickable(true);
                         btn.setEnabled(true);
                         btn.setAlpha(1f);
@@ -1152,7 +1152,7 @@ public class City extends GameObject {
                 findViewById(R.id.restart_route).setVisibility(GONE);
                 findViewById(R.id.drop_route).setVisibility(GONE);
             }
-            ((TextView)findViewById(R.id.goldInfo)).setText(String.format(getContext().getString(R.string.gold_amount), StringUtils.intToStr(Player.getPlayer().getGold())));
+            ((TextView)findViewById(R.id.goldInfo)).setText(String.format(getContext().getString(R.string.gold_amount), StringUtils.intToStr(GameObjects.getPlayer().getGold())));
         }
         public void close(){
             this.setVisibility(GONE);
@@ -1254,12 +1254,12 @@ public class City extends GameObject {
                 @Override
                 public void onClick(View v) {
                     ConfirmWindow confirmWindow=new ConfirmWindow(getContext());
-                    Upgrade up=Player.getPlayer().getNextUpgrade(upgrade);
+                    Upgrade up=GameObjects.getPlayer().getNextUpgrade(upgrade);
                     if (up!=null) {
                         float raceBonus = 0;
                         long infsum = city.influence1 + city.influence2 + city.influence3;
                         if (infsum > 0) {
-                            switch (Player.getPlayer().getRace()) {
+                            switch (GameObjects.getPlayer().getRace()) {
                                 case 1:
                                     raceBonus = (float) city.influence1 / infsum;
                                     break;
@@ -1271,7 +1271,7 @@ public class City extends GameObject {
                                     break;
                             }
                         }
-                        raceBonus = ((1f - raceBonus / 4) * (100f - Player.getPlayer().getTrade()) / 100f);
+                        raceBonus = ((1f - raceBonus / 4) * (100f - GameObjects.getPlayer().getTrade()) / 100f);
                         int upcost = (int) (up.getCost() * raceBonus);
                         confirmWindow.setText(String.format(getContext().getString(R.string.accept_buy_upgrade), up.getName(), up.getLevel(), StringUtils.intToStr(upcost)));
                     } else confirmWindow.setText(String.format(getContext().getString(R.string.accept_buy_upgrade_unknown), upgradeName));
@@ -1332,7 +1332,7 @@ public class City extends GameObject {
                     confirmWindow.setConfirmAction(new Runnable() {
                         @Override
                         public void run() {
-                            serverConnect.getInstance().callDropUnfinishedRoute(Player.getPlayer().getDropRoute());
+                            serverConnect.getInstance().callDropUnfinishedRoute(GameObjects.getPlayer().getDropRoute());
                             updateInZone(true);
                         }
                     });
@@ -1349,14 +1349,14 @@ public class City extends GameObject {
                 findViewById(R.id.buy).setVisibility(INVISIBLE);
                 findViewById(R.id.restart_route).setVisibility(INVISIBLE);
                 findViewById(R.id.drop_route).setVisibility(INVISIBLE);
-                if (Player.getPlayer().getRouteStart()) findViewById(R.id.start).setVisibility(VISIBLE);
-                if (!Player.getPlayer().getRouteStart() && (city!=null))
+                if (GameObjects.getPlayer().getRouteStart()) findViewById(R.id.start).setVisibility(VISIBLE);
+                if (!GameObjects.getPlayer().getRouteStart() && (city!=null))
                 {
                     ImageButton btn= (ImageButton) findViewById(R.id.end);
                     ImageButton btn2= (ImageButton) findViewById(R.id.restart_route);
                     btn.setVisibility(VISIBLE);
                     btn2.setVisibility(VISIBLE);
-                    if (!Player.checkRoute(city.getGUID())) {
+                    if (!GameObjects.getPlayer().checkRoute(city.getGUID())) {
                         btn.setClickable(true);
                         btn.setEnabled(true);
                         btn.setAlpha(1f);
