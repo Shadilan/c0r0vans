@@ -1,9 +1,10 @@
-package com.coe.c0r0vans.GameObjects;
+package com.coe.c0r0vans.GameObject;
 
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.widget.RelativeLayout;
 
+import com.coe.c0r0vans.GameObjects.ObjectAction;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.LatLng;
@@ -90,19 +91,7 @@ public class GameObject {
     /**
      * Actions to do on remove object
      */
-    public void RemoveObject() {
-        if (mark!=null){
-            mark.remove();
-            mark=null;
-        }
 
-        if (zone!=null) {
-            zone.remove();
-            zone=null;
-        }
-
-
-    }
 
 
     /**
@@ -155,4 +144,48 @@ public class GameObject {
             zone.setCenter(latLng);
         }
     }
+
+    private ArrayList<OnGameObjectChange> changeListeners;
+    private ArrayList<OnGameObjectRemove> removeListeners;
+
+    public void addOnChangeListeners(OnGameObjectChange onGameObjectChange){
+        if (onGameObjectChange==null) return;
+        if (changeListeners==null) changeListeners=new ArrayList<>();
+        changeListeners.add(onGameObjectChange);
+    }
+    public void addOnRemoveListeners(OnGameObjectRemove onGameObjectRemove){
+        if (onGameObjectRemove==null) return;
+        if (removeListeners==null) removeListeners=new ArrayList<>();
+        removeListeners.add(onGameObjectRemove);
+    }
+    public void removeChangeListeners(OnGameObjectChange onGameObjectChange){
+        if (removeListeners==null || onGameObjectChange==null) return;
+        changeListeners.remove(onGameObjectChange);
+    }
+    protected void change(int type){
+        if (changeListeners!=null){
+            for (OnGameObjectChange onGameObjectChange:changeListeners){
+                onGameObjectChange.onChange(type);
+            }
+        }
+    }
+    public void RemoveObject() {
+        if (removeListeners!=null){
+            for (OnGameObjectRemove onGameObjectRemove:removeListeners){
+                onGameObjectRemove.onRemove();
+            }
+        }
+        if (mark!=null){
+            mark.remove();
+            mark=null;
+        }
+
+        if (zone!=null) {
+            zone.remove();
+            zone=null;
+        }
+
+
+    }
+
 }

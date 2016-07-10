@@ -149,4 +149,7 @@ All rights reserved to Circle of Eternity</string>
     <string name="s_s" translatable="false">%1$s(%2$s)</string>
     <string name="notification">Notify sound</string>
     <string name="screen_off">Allow screen off</string>
+    <string name="x4" translatable="false">x4</string>
+    <string name="x2" translatable="false">x2</string>
+    <string name="x1" translatable="false">x1</string>
 </resources>

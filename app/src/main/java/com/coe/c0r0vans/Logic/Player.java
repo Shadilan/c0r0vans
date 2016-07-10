@@ -1,4 +1,4 @@
-package com.coe.c0r0vans.GameObjects;
+package com.coe.c0r0vans.Logic;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -8,9 +8,16 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 
-import com.coe.c0r0vans.MyGoogleMap;
-import com.coe.c0r0vans.OnGameObjectChange;
+import com.coe.c0r0vans.GameObject.GameObject;
+import com.coe.c0r0vans.GameObject.OnGameObjectChange;
+import com.coe.c0r0vans.GameObjects.AmbushItem;
+import com.coe.c0r0vans.GameObjects.GameObjectView;
+import com.coe.c0r0vans.GameObjects.ObjectAction;
+import com.coe.c0r0vans.GameObjects.Route;
+import com.coe.c0r0vans.GameObjects.SelectedObject;
 import com.coe.c0r0vans.R;
+import com.coe.c0r0vans.Singles.GameObjects;
+import com.coe.c0r0vans.Singles.MyGoogleMap;
 import com.coe.c0r0vans.UIElements.ActionView;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.Circle;
@@ -121,7 +128,7 @@ public class Player extends GameObject {
                 GameSound.playSound(GameSound.START_ROUTE_SOUND);
                 Player.getPlayer().setCurrentRouteGUID(null);
                 Player.getPlayer().setRouteStart(true);
-                for (GameObject o:GameObjects.getInstance().values()){
+                for (GameObject o: GameObjects.getInstance().values()){
                     if (o!=null && o instanceof City) ((City) o).updateColor();
                 }
             }
@@ -419,7 +426,7 @@ public class Player extends GameObject {
                 final int route_length = route.length();// Moved  route.length() call out of the loop to local variable route_length
                 for (int i=0;i< route_length;i++) {
                     Route routeObj=new Route(route.getJSONObject(i),map);
-                    if (routeObj.getFinishName().equals("null") || routeObj.getFinishName()==null) {
+                    if (routeObj.getFinishName()==null || routeObj.getFinishName().equals("null") ) {
                         currentRouteGuid=routeObj.getStartGuid();
                         currentR=routeObj;
                         setRouteStart(true);
@@ -446,7 +453,8 @@ public class Player extends GameObject {
 
                 }
             }
-            routeStart = currentRouteGuid.equals("");
+            routeStart=(currentRouteGuid ==null || currentRouteGuid.equals(""));
+
             //TODO Слишком много одинаковых вызовов.
             for (GameObject o:GameObjects.getInstance().values()){
                 if (o!=null && o instanceof City) ((City) o).updateColor();
@@ -530,19 +538,7 @@ public class Player extends GameObject {
         }
     }
 
-    private ArrayList<OnGameObjectChange> onChangeList;
-    public void addOnChange(OnGameObjectChange onGameObjectChange){
-        if (onChangeList==null) onChangeList=new ArrayList<>();
-        onChangeList.add(onGameObjectChange);
-    }
 
-    public void change(int type){
-        if (onChangeList==null) return;
-
-        for (OnGameObjectChange ev:onChangeList){
-            ev.change(type);
-        }
-    }
     public Upgrade getNextUpgrade(String type){
 
 
@@ -625,7 +621,7 @@ public class Player extends GameObject {
 
     public void setGold(int gold) {
         this.Gold = gold;
-        change(OnGameObjectChange.GAME);
+        change(OnGameObjectChange.INTERNAL);
     }
 
     public void setHirelings(int hirelings) {
@@ -663,7 +659,7 @@ public class Player extends GameObject {
     }
 
 
-    class ambushCreate extends RelativeLayout implements GameObjectView{
+    class ambushCreate extends RelativeLayout implements GameObjectView {
 
         public ambushCreate(Context context) {
             super(context);
@@ -715,8 +711,9 @@ public class Player extends GameObject {
                     if (response.has("Ambush")){
 
                         try {
+                            Ambush ambush=new Ambush(MyGoogleMap.getMap(),response.getJSONObject("Ambush"));
                             //todo надо привести к одному типу
-                            GameObjects.getInstance().put(new Ambush(MyGoogleMap.getMap(),response.getJSONObject("Ambush")));
+                            GameObjects.put(ambush);
                             Player.getPlayer().getAmbushes().add(new AmbushItem(response.getJSONObject("Ambush")));
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -806,7 +803,7 @@ public class Player extends GameObject {
                             City city=new City(MyGoogleMap.getMap(),response.getJSONObject("City"));
                             city.setFounder(Player.getPlayer().getName());
                             city.setOwner(true);
-                            GameObjects.getInstance().put(city);
+                            GameObjects.put(city);
                         } catch (JSONException e) {
                             GATracker.trackException("CreateCity","PostAction Error.");
                         }

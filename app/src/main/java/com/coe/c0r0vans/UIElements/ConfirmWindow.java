@@ -1,4 +1,4 @@
-package com.coe.c0r0vans;
+package com.coe.c0r0vans.UIElements;
 
 import android.content.Context;
 import android.util.AttributeSet;
@@ -7,7 +7,7 @@ import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.coe.c0r0vans.UIElements.UIControler;
+import com.coe.c0r0vans.R;
 
 /**
  * Запрос подтверждения

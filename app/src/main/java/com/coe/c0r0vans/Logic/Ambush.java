@@ -1,4 +1,4 @@
-package com.coe.c0r0vans.GameObjects;
+package com.coe.c0r0vans.Logic;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -10,8 +10,12 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.coe.c0r0vans.MyGoogleMap;
+import com.coe.c0r0vans.GameObject.GameObject;
+import com.coe.c0r0vans.GameObjects.AmbushItem;
+import com.coe.c0r0vans.GameObjects.GameObjectView;
+import com.coe.c0r0vans.GameObjects.ObjectAction;
 import com.coe.c0r0vans.R;
+import com.coe.c0r0vans.Singles.MyGoogleMap;
 import com.coe.c0r0vans.UIElements.ActionView;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.Circle;
@@ -222,7 +226,7 @@ public class Ambush extends GameObject {
         return faction;
     }
 
-    class AmbushLayout extends RelativeLayout implements GameObjectView{
+    class AmbushLayout extends RelativeLayout implements GameObjectView {
 
         public AmbushLayout(Context context) {
             super(context);

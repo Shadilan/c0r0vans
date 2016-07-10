@@ -1,6 +1,10 @@
-package com.coe.c0r0vans.GameObjects;
+package com.coe.c0r0vans.Singles;
 
-import com.coe.c0r0vans.MyGoogleMap;
+import com.coe.c0r0vans.GameObject.GameObject;
+import com.coe.c0r0vans.Logic.Ambush;
+import com.coe.c0r0vans.Logic.Caravan;
+import com.coe.c0r0vans.Logic.City;
+import com.coe.c0r0vans.Logic.Player;
 import com.google.android.gms.maps.model.LatLng;
 
 import org.json.JSONArray;
@@ -20,8 +24,8 @@ import utility.settings.SettingsListener;
 /**
  * Перечень игровых объектов на карте
  */
-public class GameObjects extends HashMap<String,GameObject> {
-    private static GameObjects instance = new GameObjects();
+public class GameObjects{
+    private static HashMap<String,GameObject> objects = new HashMap<>();
     public static void init(){
         serverConnect.getInstance().addListener(new ServerListener() {
             @Override
@@ -31,7 +35,7 @@ public class GameObjects extends HashMap<String,GameObject> {
                         //Проверить наличие массива JSON. Objects
                         if (response.has("Objects")) {
                             //Скопировать данные в массив для удаления
-                            ArrayList<GameObject> remObjects = new ArrayList<>(instance.values());
+                            ArrayList<GameObject> remObjects = new ArrayList<>(objects.values());
                             JSONArray JObj = response.getJSONArray("Objects");
                             int leng = JObj.length();
 
@@ -55,16 +59,16 @@ public class GameObjects extends HashMap<String,GameObject> {
                                     } else if (JObj.getJSONObject(i).getString("Type").equalsIgnoreCase("City")) {
 
                                         City city = new City(MyGoogleMap.getMap(), JObj.getJSONObject(i));
-                                        instance.put(city.getGUID(), city);
+                                        objects.put(city.getGUID(), city);
                                     } else if (JObj.getJSONObject(i).getString("Type").equalsIgnoreCase("Ambush")) {
 
                                         Ambush ambush = new Ambush(MyGoogleMap.getMap(), JObj.getJSONObject(i));
 
-                                        instance.put(ambush.getGUID(), ambush);
+                                        objects.put(ambush.getGUID(), ambush);
                                     } else if (JObj.getJSONObject(i).getString("Type").equalsIgnoreCase("Caravan")) {
 
                                         Caravan caravan = new Caravan(MyGoogleMap.getMap(), JObj.getJSONObject(i));
-                                        instance.put(caravan.getGUID(), caravan);
+                                        objects.put(caravan.getGUID(), caravan);
                                     }
                                 }
 
@@ -73,7 +77,7 @@ public class GameObjects extends HashMap<String,GameObject> {
                                 obj.RemoveObject();
                             }
                             for (GameObject o : remObjects) {
-                                instance.remove(o.getGUID());
+                                objects.remove(o.getGUID());
                             }
 
                         }
@@ -89,7 +93,7 @@ public class GameObjects extends HashMap<String,GameObject> {
                         if (response.has("FastScan")) {
                             //Для каждого объекта в GameObjects
                             JSONArray lst=response.getJSONArray("FastScan");
-                            for (GameObject o:instance.values()) {
+                            for (GameObject o:objects.values()) {
                                //Если это Засада или Караван
                                 if (o instanceof Ambush || o instanceof Caravan) {
 
@@ -107,18 +111,17 @@ public class GameObjects extends HashMap<String,GameObject> {
                                         if (obj.has("Lng"))lng=obj.getInt("Lng");
                                         //if (obj.has("Type")) type=obj.getString("Type");
                                         if (o.getGUID().equals(guid)){
-
                                             o.setPostion(new LatLng(lat/1e6,lng/1e6));
                                             o.setVisibility(true);
-                                            //isChanged=true;
+                                            isChanged=true;
                                         }
 
                                     }
                                     //Пока не очищать типа запомнил ?
-                                    /*if (!isChanged && ((o instanceof Ambush && ((Ambush)o).getFaction()!=0)||(o instanceof Caravan && ((Caravan)o).getFaction()!=0))) {
+                                    if (!isChanged && ((o instanceof Ambush && ((Ambush)o).getFaction()!=0)||(o instanceof Caravan && ((Caravan)o).getFaction()!=0))) {
                                         //TODO Если нет очистить данные.
                                         o.setVisibility(false);
-                                    }*/
+                                    }
                                 }
                             }
 
@@ -149,10 +152,10 @@ public class GameObjects extends HashMap<String,GameObject> {
 
             @Override
             public void onSettingChange(String setting) {
-                if (instance == null) return;
+                if (objects == null) return;
                 switch (setting) {
                     case "SHOW_AMBUSH_RADIUS":
-                        for (GameObject o : instance.values()) {
+                        for (GameObject o : objects.values()) {
                             if (o instanceof Ambush) {
                                 ((Ambush) o).showRadius();
                             }
@@ -160,7 +163,7 @@ public class GameObjects extends HashMap<String,GameObject> {
                         }
                         break;
                     case "SHOW_CITY_RADIUS":
-                        for (GameObject o : instance.values()) {
+                        for (GameObject o : objects.values()) {
                             if (o instanceof City) {
                                 ((City) o).showRadius();
                             }
@@ -168,7 +171,7 @@ public class GameObjects extends HashMap<String,GameObject> {
                         }
                         break;
                     case "SHOW_BUILD_AREA":
-                        for (GameObject o:instance.values()){
+                        for (GameObject o:objects.values()){
                             if (o instanceof  City) ((City) o).showBuildZone();
                         }
                     case "SHOW_CARAVAN_ROUTE":
@@ -179,19 +182,13 @@ public class GameObjects extends HashMap<String,GameObject> {
         });
     }
 
-    public HashMap put(GameObject object){
-        if (this.get(object.getGUID())!=null) return this;
-        put(object.getGUID(),object);
-        return this;
+    public static HashMap put(GameObject object){
+        if (objects.get(object.getGUID())!=null) return objects;
+        objects.put(object.getGUID(),object);
+        return objects;
     }
-    public void updateView(){
-        for (GameObject o:this.values()){
-            if (o.getMarker()!=null){
-                o.changeMarkerSize();
-            }
-        }
-    }
-    public static GameObjects getInstance(){
-        return instance;
+
+    public static HashMap<String, GameObject> getInstance(){
+        return objects;
     }
 }

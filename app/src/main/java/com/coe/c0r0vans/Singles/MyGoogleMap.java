@@ -1,4 +1,4 @@
-package com.coe.c0r0vans;
+package com.coe.c0r0vans.Singles;
 
 import android.location.Location;
 import android.location.LocationListener;
@@ -6,8 +6,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
 
-import com.coe.c0r0vans.GameObjects.GameObject;
-import com.coe.c0r0vans.GameObjects.Player;
+import com.coe.c0r0vans.GameObject.GameObject;
+import com.coe.c0r0vans.Logic.Player;
+import com.coe.c0r0vans.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;

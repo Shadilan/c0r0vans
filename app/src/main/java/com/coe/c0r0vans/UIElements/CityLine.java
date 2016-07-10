@@ -8,9 +8,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.coe.c0r0vans.GameObjects.Route;
-import com.coe.c0r0vans.MyGoogleMap;
 import com.coe.c0r0vans.R;
 import com.coe.c0r0vans.ShowHideForm;
+import com.coe.c0r0vans.Singles.MyGoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 
 import utility.GATracker;

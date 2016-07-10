@@ -6,7 +6,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.coe.c0r0vans.GameObjects.AmbushItem;
-import com.coe.c0r0vans.GameObjects.Player;
+import com.coe.c0r0vans.Logic.Player;
 import com.coe.c0r0vans.R;
 import com.coe.c0r0vans.ShowHideForm;
 import com.coe.c0r0vans.UIElements.InfoLine;

@@ -1,4 +1,4 @@
-package com.coe.c0r0vans.GameObjects;
+package com.coe.c0r0vans.Logic;
 
 import android.graphics.Bitmap;
 

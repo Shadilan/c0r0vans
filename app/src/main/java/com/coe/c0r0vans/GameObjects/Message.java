@@ -1,5 +1,6 @@
 package com.coe.c0r0vans.GameObjects;
 
+import com.coe.c0r0vans.Singles.MessageMap;
 import com.google.android.gms.maps.model.LatLng;
 
 import org.json.JSONException;

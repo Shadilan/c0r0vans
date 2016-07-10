@@ -21,14 +21,15 @@ import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.coe.c0r0vans.GameObjects.Ambush;
-import com.coe.c0r0vans.GameObjects.Caravan;
-import com.coe.c0r0vans.GameObjects.City;
-import com.coe.c0r0vans.GameObjects.GameObject;
-import com.coe.c0r0vans.GameObjects.GameObjects;
-import com.coe.c0r0vans.GameObjects.MessageMap;
-import com.coe.c0r0vans.GameObjects.Player;
+import com.coe.c0r0vans.GameObject.GameObject;
 import com.coe.c0r0vans.GameObjects.SelectedObject;
+import com.coe.c0r0vans.Logic.Ambush;
+import com.coe.c0r0vans.Logic.Caravan;
+import com.coe.c0r0vans.Logic.City;
+import com.coe.c0r0vans.Logic.Player;
+import com.coe.c0r0vans.Singles.GameObjects;
+import com.coe.c0r0vans.Singles.MessageMap;
+import com.coe.c0r0vans.Singles.MyGoogleMap;
 import com.coe.c0r0vans.UIElements.ActionView;
 import com.coe.c0r0vans.UIElements.ButtonLayout;
 import com.coe.c0r0vans.UIElements.ChooseFaction;
@@ -901,7 +902,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
 
     private void checkGPS() {
         if (!GPSInfo.checkEnabled()) {
-            Toast.makeText(getApplicationContext(),"GPS Disabled pls on GPS",120000).show();
+            Toast.makeText(getApplicationContext(),"GPS Disabled pls on GPS",Toast.LENGTH_LONG).show();
             GATracker.trackHit("System","OffGps");
         }
     }

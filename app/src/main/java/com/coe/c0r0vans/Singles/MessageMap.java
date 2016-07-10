@@ -1,7 +1,9 @@
-package com.coe.c0r0vans.GameObjects;
+package com.coe.c0r0vans.Singles;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+
+import com.coe.c0r0vans.GameObjects.Message;
 
 import org.json.JSONArray;
 import org.json.JSONException;

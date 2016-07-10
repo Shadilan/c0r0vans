@@ -1,6 +1,7 @@
-package com.coe.c0r0vans.GameObjects;
+package com.coe.c0r0vans.Logic;
 
-import com.coe.c0r0vans.MyGoogleMap;
+import com.coe.c0r0vans.GameObject.GameObject;
+import com.coe.c0r0vans.Singles.MyGoogleMap;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;

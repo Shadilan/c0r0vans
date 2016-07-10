@@ -8,7 +8,7 @@ import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.coe.c0r0vans.GameObjects.Player;
+import com.coe.c0r0vans.Logic.Player;
 import com.coe.c0r0vans.R;
 
 import utility.internet.serverConnect;

@@ -2,7 +2,9 @@ package com.coe.c0r0vans.GameObjects;
 
 import android.graphics.Color;
 
-import com.coe.c0r0vans.MyGoogleMap;
+import com.coe.c0r0vans.GameObject.GameObject;
+import com.coe.c0r0vans.Logic.Player;
+import com.coe.c0r0vans.Singles.MyGoogleMap;
 import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;

@@ -8,13 +8,13 @@ import android.util.AttributeSet;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
-import com.coe.c0r0vans.GameObjects.Ambush;
-import com.coe.c0r0vans.GameObjects.City;
-import com.coe.c0r0vans.GameObjects.GameObject;
+import com.coe.c0r0vans.GameObject.GameObject;
+import com.coe.c0r0vans.GameObject.OnGameObjectChange;
 import com.coe.c0r0vans.GameObjects.GameObjectView;
-import com.coe.c0r0vans.GameObjects.Player;
 import com.coe.c0r0vans.GameObjects.SelectedObject;
-import com.coe.c0r0vans.OnGameObjectChange;
+import com.coe.c0r0vans.Logic.Ambush;
+import com.coe.c0r0vans.Logic.City;
+import com.coe.c0r0vans.Logic.Player;
 
 import org.json.JSONObject;
 
@@ -59,9 +59,10 @@ public class ActionView extends LinearLayout {
             }
         });
 
-        Player.getPlayer().addOnChange(new OnGameObjectChange() {
+        Player.getPlayer().addOnChangeListeners(new OnGameObjectChange() {
+
             @Override
-            public void change(int ChangeType) {
+            public void onChange(int TYPE) {
                 reloadActions();
             }
         });

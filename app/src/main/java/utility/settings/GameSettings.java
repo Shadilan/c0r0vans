@@ -4,7 +4,7 @@ package utility.settings;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.coe.c0r0vans.GameObjects.GameObject;
+import com.coe.c0r0vans.GameObject.GameObject;
 import com.google.android.gms.common.api.GoogleApiClient;
 
 import java.util.ArrayList;

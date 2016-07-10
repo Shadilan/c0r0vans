@@ -2,6 +2,8 @@ package com.coe.c0r0vans.GameObjects;
 
 import android.graphics.Bitmap;
 
+import com.coe.c0r0vans.GameObject.GameObject;
+import com.coe.c0r0vans.Logic.Player;
 import com.google.android.gms.maps.model.LatLng;
 
 import org.json.JSONException;
@@ -18,7 +20,7 @@ import utility.notification.Essages;
  * Элемент списка засад
  */
 //// TODO: 21.05.2016 Привести к Ambush объекту.
-public class AmbushItem extends GameObject{
+public class AmbushItem extends GameObject {
     private int Lat;
     private int Lng;
 

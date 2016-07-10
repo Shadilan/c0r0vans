@@ -1,4 +1,4 @@
-package com.coe.c0r0vans.GameObjects;
+package com.coe.c0r0vans.Logic;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -13,12 +13,17 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
-import com.coe.c0r0vans.ConfirmWindow;
-import com.coe.c0r0vans.MyGoogleMap;
+import com.coe.c0r0vans.GameObject.GameObject;
+import com.coe.c0r0vans.GameObjects.GameObjectView;
+import com.coe.c0r0vans.GameObjects.ObjectAction;
+import com.coe.c0r0vans.GameObjects.Route;
 import com.coe.c0r0vans.R;
 import com.coe.c0r0vans.ShowHideForm;
+import com.coe.c0r0vans.Singles.GameObjects;
+import com.coe.c0r0vans.Singles.MyGoogleMap;
 import com.coe.c0r0vans.UIElements.ActionView;
 import com.coe.c0r0vans.UIElements.CityLine;
+import com.coe.c0r0vans.UIElements.ConfirmWindow;
 import com.coe.c0r0vans.UIElements.UIControler;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.Circle;
@@ -42,7 +47,7 @@ import utility.settings.GameSettings;
 /**
  * @author Shadilan
  */
-public class City extends GameObject{
+public class City extends GameObject {
     private int Level=1;
     private int radius=50;
     private String upgrade;
@@ -97,7 +102,7 @@ public class City extends GameObject{
                     }
                 }
                 serverConnect.getInstance().callGetPlayerInfo();
-                for (GameObject o:GameObjects.getInstance().values()){
+                for (GameObject o: GameObjects.getInstance().values()){
                     if (o!=null && o instanceof City) ((City) o).updateColor();
                 }
             }
@@ -537,7 +542,7 @@ public class City extends GameObject{
         this.founder = founder;
     }
 
-    private class CityWindow extends RelativeLayout implements  GameObjectView,ShowHideForm{
+    private class CityWindow extends RelativeLayout implements GameObjectView,ShowHideForm{
         City city;
         CityWindow self;
         private int currentCount=1;

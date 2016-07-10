@@ -14,13 +14,13 @@ import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-import com.coe.c0r0vans.GameObjects.GameObject;
-import com.coe.c0r0vans.GameObjects.GameObjects;
+import com.coe.c0r0vans.GameObject.GameObject;
+import com.coe.c0r0vans.GameObject.OnGameObjectChange;
 import com.coe.c0r0vans.GameObjects.LevelTable;
-import com.coe.c0r0vans.GameObjects.Player;
-import com.coe.c0r0vans.MyGoogleMap;
-import com.coe.c0r0vans.OnGameObjectChange;
+import com.coe.c0r0vans.Logic.Player;
 import com.coe.c0r0vans.R;
+import com.coe.c0r0vans.Singles.GameObjects;
+import com.coe.c0r0vans.Singles.MyGoogleMap;
 import com.coe.c0r0vans.UIElements.InfoLayout.InfoLayout;
 
 import org.json.JSONObject;
@@ -186,11 +186,11 @@ public class ButtonLayout extends RelativeLayout {
 
             }
         });
-        Player.getPlayer().addOnChange(new OnGameObjectChange() {
+        Player.getPlayer().addOnChangeListeners(new OnGameObjectChange() {
+
             @Override
-            public void change(int ChangeType) {
+            public void onChange(int TYPE) {
                 try {
-                    //if (ChangeType != OnGameObjectChange.EXTERNAL) return;
                     TextView am = (TextView) findViewById(R.id.levelAmount);
                     am.setText(String.valueOf(Player.getPlayer().getLevel()));
                     am = (TextView) findViewById(R.id.ambush);
@@ -206,8 +206,8 @@ public class ButtonLayout extends RelativeLayout {
                     else btn.setImageResource(R.mipmap.info_route);
 
                     am = (TextView) findViewById(R.id.foundedAmount);
-                    am.setText(String.format("%d/%d", Player.getPlayer().getFoundedCities(), Player.getPlayer().getCityMax()));
-                    ((TextView) findViewById(R.id.hirelingsAmount)).setText(String.format("%s(%s)", StringUtils.intToStr(Player.getPlayer().getHirelings()), StringUtils.intToStr(Player.getPlayer().getLeftToHire())));
+                    am.setText(String.format(getContext().getString(R.string.d_d), Player.getPlayer().getFoundedCities(), Player.getPlayer().getCityMax()));
+                    ((TextView) findViewById(R.id.hirelingsAmount)).setText(String.format(getContext().getString(R.string.s_s), StringUtils.intToStr(Player.getPlayer().getHirelings()), StringUtils.intToStr(Player.getPlayer().getLeftToHire())));
 
                     infoLayout.loadFromPlayer();
                 } catch (Exception e){
@@ -283,13 +283,13 @@ public class ButtonLayout extends RelativeLayout {
         float zoom=MyGoogleMap.getClientZoom();
         if (zoom==GameObject.ICON_LARGE)
         {
-            zoomCnt.setText("x4");
+            zoomCnt.setText(R.string.x4);
         } else if (zoom==GameObject.ICON_MEDIUM)
         {
-            zoomCnt.setText("x2");
+            zoomCnt.setText(R.string.x2);
         } else
         {
-            zoomCnt.setText("x1");
+            zoomCnt.setText(R.string.x1);
         }
     }
 

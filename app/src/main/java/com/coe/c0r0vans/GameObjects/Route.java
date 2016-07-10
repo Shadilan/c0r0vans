@@ -2,6 +2,10 @@ package com.coe.c0r0vans.GameObjects;
 
 import android.graphics.Color;
 
+import com.coe.c0r0vans.GameObject.GameObject;
+import com.coe.c0r0vans.Logic.City;
+import com.coe.c0r0vans.Logic.Player;
+import com.coe.c0r0vans.Logic.Upgrade;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Polyline;
@@ -16,7 +20,7 @@ import utility.settings.GameSettings;
  * @author Shadilan
  */
 //// TODO: 21.05.2016 Привести к объекту караван
-public class Route extends GameObject{
+public class Route extends GameObject {
     private String StartName;
     private String FinishName;
     private String StartGUID;
@@ -94,9 +98,9 @@ public class Route extends GameObject{
 
                 }
             }
-            Player.getPlayer().getUpgrade("speed");
+
             //time=S/v + (v*v-(1+a)*(1+a))/2/(a)/v-0.7
-            Upgrade up=Player.getPlayer().getUpgrade("speed");
+            Upgrade up= Player.getPlayer().getUpgrade("speed");
             if (up!=null && up.getEffect2()>0) {
                 int v=up.getEffect2();
                 int a=up.getEffect1();

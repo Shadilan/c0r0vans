@@ -2,6 +2,8 @@ package com.coe.c0r0vans.GameObjects;
 
 import android.graphics.Bitmap;
 
+import com.coe.c0r0vans.GameObject.GameObject;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
