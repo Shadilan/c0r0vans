@@ -32,7 +32,6 @@ import com.coe.c0r0vans.Singles.MessageMap;
 import com.coe.c0r0vans.Singles.MyGoogleMap;
 import com.coe.c0r0vans.UIElements.ActionView;
 import com.coe.c0r0vans.UIElements.ButtonLayout;
-import com.coe.c0r0vans.UIElements.ChooseFaction;
 import com.coe.c0r0vans.UIElements.UIControler;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -609,13 +608,13 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
 
         try{
 
-        Point size=new Point();
-        MyGoogleMap.init(googleMap, size.y);
-            GameObjects.getPlayer().setMap(MyGoogleMap.getMap());
-        createListeners();
+            Point size=new Point();
+            MyGoogleMap.init(googleMap, size.y);
+            GameObjects.setMap(MyGoogleMap.getMap());
+            createListeners();
         }
         catch (Exception e){
-            GATracker.trackException("LoadPlayer",e);
+            GATracker.trackException("MapReady",e);
         }
     }
     boolean isListenersDone=false;
@@ -633,20 +632,6 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                     UIControler.getButtonLayout().hideConnectImage();
                 } else if (TYPE==PLAYER){
                     try {
-                        GameObjects.getPlayer().loadJSON(response);
-                        if (GameObjects.getPlayer().getRace() < 1 || GameObjects.getPlayer().getRace() > 3) {
-                            messages.clear();
-                            Essages.clear();
-                            new ChooseFaction(getApplicationContext()).show();
-                        }
-                        SharedPreferences sp = getApplicationContext().getSharedPreferences("player", Context.MODE_PRIVATE);
-                        SharedPreferences.Editor ed = sp.edit();
-                        try {
-                            ed.putString("player", GameObjects.getPlayer().getJSON().toString());
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                        ed.apply();
 
                         timeToPlayerRefresh = 6;
                     } catch (Exception e){
