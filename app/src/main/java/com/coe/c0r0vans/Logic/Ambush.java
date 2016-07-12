@@ -110,6 +110,7 @@ public class Ambush extends GameObject {
         try {
             GUID=obj.getString("GUID");
             if (obj.has("Owner")) faction=obj.getInt("Owner");
+            owner=faction==0;
             if (faction<0 ||faction>4) faction=4;
             if (obj.has("Radius")) radius=obj.getInt("Radius");
             if (obj.has("Ready")) ready=obj.getInt("Ready");

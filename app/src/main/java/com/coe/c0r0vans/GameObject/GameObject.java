@@ -19,10 +19,12 @@ import java.util.ArrayList;
  * @author Shadilan
  */
 public class GameObject {
-     public static final float ICON_SMALL = 15;
+
+    public static final float ICON_SMALL = 15;
     public static final float ICON_MEDIUM = 16;
     public static final float ICON_LARGE = 17;
     private int life;
+    protected boolean owner=false;
 
     public static String zoomToPostfix(float zoom){
         String result;
@@ -145,8 +147,8 @@ public class GameObject {
         }
     }
 
-    private ArrayList<OnGameObjectChange> changeListeners;
-    private ArrayList<OnGameObjectRemove> removeListeners;
+    protected ArrayList<OnGameObjectChange> changeListeners;
+    protected ArrayList<OnGameObjectRemove> removeListeners;
 
     public void addOnChangeListeners(OnGameObjectChange onGameObjectChange){
         if (onGameObjectChange==null) return;
@@ -186,6 +188,10 @@ public class GameObject {
         }
 
 
+    }
+
+    public boolean isOwner() {
+        return owner;
     }
 
 }

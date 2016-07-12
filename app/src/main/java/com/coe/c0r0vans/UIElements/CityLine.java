@@ -7,7 +7,7 @@ import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.coe.c0r0vans.GameObjects.Route;
+import com.coe.c0r0vans.Logic.Caravan;
 import com.coe.c0r0vans.R;
 import com.coe.c0r0vans.ShowHideForm;
 import com.coe.c0r0vans.Singles.MyGoogleMap;
@@ -34,10 +34,10 @@ public class CityLine extends RelativeLayout {
     public void setParentForm(ShowHideForm form){
         parentForm=form;
     }
-    public void setData(Route r){
+    public void setData(Caravan r){
         point=r.getPoint();
-        startCity=r.getStarPoint();
-        endCity=r.getEndPoint();
+        startCity=r.getStartPoint();
+        endCity=r.getFinishPoint();
 
         if (lengthView!=null)
             if (r.getDistance()>0) lengthView.setText(String.format(getContext().getString(R.string.route_info_line), r.getDistance(), StringUtils.intToStr(r.getProfit()),StringUtils.intToStr(r.getTime())));

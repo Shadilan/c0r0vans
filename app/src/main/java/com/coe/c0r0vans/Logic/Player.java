@@ -13,7 +13,6 @@ import com.coe.c0r0vans.GameObject.OnGameObjectChange;
 import com.coe.c0r0vans.GameObjects.AmbushItem;
 import com.coe.c0r0vans.GameObjects.GameObjectView;
 import com.coe.c0r0vans.GameObjects.ObjectAction;
-import com.coe.c0r0vans.GameObjects.Route;
 import com.coe.c0r0vans.GameObjects.SelectedObject;
 import com.coe.c0r0vans.R;
 import com.coe.c0r0vans.Singles.GameObjects;
@@ -48,7 +47,7 @@ import utility.settings.GameSettings;
 public class Player extends GameObject {
     private int race=0;
     private String currentRouteGuid="";
-    private Route currentR;
+    private Caravan currentR;
     private int trade;
     private int profit=0;
     private int hirelings;
@@ -73,7 +72,7 @@ public class Player extends GameObject {
     //Arrays
     private ArrayList<Upgrade> Upgrades;
     private HashMap<String,Upgrade> NextUpgrades;
-    private ArrayList<Route> Routes;
+    private HashMap<String,Caravan> Routes;
     private ArrayList<AmbushItem> Ambushes;
 
     protected Circle zone1;
@@ -87,9 +86,9 @@ public class Player extends GameObject {
         if (guid==null) return false;
         if (guid.equals(currentRouteGuid)) return true;
         if ("".equals(currentRouteGuid)) return false;
-        for (Route r:Routes){
-            if ((r.getStartGuid().equals(currentRouteGuid) && r.getFinishGuid().equals(guid))||
-                    ((r.getStartGuid().equals(guid) && r.getFinishGuid().equals(currentRouteGuid))))
+        for (Caravan r:Routes.values()){
+            if ((r.getStartGUID().equals(currentRouteGuid) && r.getFinishGUID().equals(guid))||
+                    ((r.getStartGUID().equals(guid) && r.getFinishGUID().equals(currentRouteGuid))))
                 return true;
 
         }
@@ -99,8 +98,9 @@ public class Player extends GameObject {
         //image= ImageLoader.getImage("hero");
         Upgrades=new ArrayList<>();
         NextUpgrades=new HashMap<>();
-        Routes=new ArrayList<>();
+        Routes=new HashMap<>();
         Ambushes=new ArrayList<>();
+        owner=true;
         if (dropRoute==null) dropRoute = new ObjectAction(this) {
             @Override
             public Bitmap getImage() {
@@ -112,7 +112,7 @@ public class Player extends GameObject {
                 return "DropUnfinishedRoute";
             }
             private String cancelRouteGuid;
-            private Route cancelRoute;
+            private Caravan cancelRoute;
             @Override
             public void preAction() {
                 cancelRouteGuid=currentRouteGuid;
@@ -354,7 +354,7 @@ public class Player extends GameObject {
         result.put("NextUpgrades",upg);
 
         JSONArray r=new JSONArray();
-        for (Route u:Routes){
+        for (Caravan u:Routes.values()){
             r.put(u.getJSON());
         }
         result.put("Routes",r);
@@ -410,21 +410,39 @@ public class Player extends GameObject {
                 currentRouteGuid="";
                 currentR=null;
                 setRouteStart(false);
-                JSONArray route=obj.getJSONArray("Routes");
-                for (Route routel:Routes){
+                JSONArray jroutes=obj.getJSONArray("Routes");
+                ArrayList<String> GUIDS=new ArrayList<>(Routes.keySet());
+
+
+                /*for (Caravan routel:Routes){
                     routel.RemoveObject();
                 }
-                Routes.clear();
-                final int route_length = route.length();// Moved  route.length() call out of the loop to local variable route_length
+                Routes.clear();*/
+                final int route_length = jroutes.length();// Moved  route.length() call out of the loop to local variable route_length
                 for (int i=0;i< route_length;i++) {
-                    Route routeObj=new Route(route.getJSONObject(i),map);
-                    if (routeObj.getFinishName()==null || routeObj.getFinishName().equals("null") ) {
-                        currentRouteGuid=routeObj.getStartGuid();
-                        currentR=routeObj;
-                        setRouteStart(true);
+                    JSONObject jobj=jroutes.getJSONObject(i);
+                    String newGUID=jobj.getString("GUID");
+                    Caravan newObj=Routes.get(newGUID);
+                    if (newObj!=null) {
+                        newObj.loadJSON(jobj);
+                        GUIDS.remove(newGUID);
                     }
-                    else Routes.add(routeObj);
-                    profit+=routeObj.getProfit();
+                    else {
+                        newObj=new Caravan(map,jobj);
+                        newObj.setFaction(0);
+                        if (newObj.getFinishName()==null || newObj.getFinishName().equals("null") ) {
+                            currentRouteGuid=newObj.getStartGUID();
+                            currentR=newObj;
+                            setRouteStart(true);
+                        } else Routes.put(newGUID,newObj);
+                    }
+
+
+                    profit+=newObj.getProfit();
+                }
+                for (String lGUID:GUIDS){
+                    Routes.get(lGUID).RemoveObject();
+                    Routes.remove(lGUID);
                 }
 
             }
@@ -507,7 +525,7 @@ public class Player extends GameObject {
         return Upgrades;
     }
 
-    public ArrayList<Route> getRoutes() {
+    public HashMap<String,Caravan> getRoutes() {
         return Routes;
     }
     public ArrayList<AmbushItem> getAmbushes() {return Ambushes;}
@@ -524,7 +542,7 @@ public class Player extends GameObject {
     }
     public void showRoute(){
         if (Routes!=null){
-            for (Route route:Routes){
+            for (Caravan route:Routes.values()){
                 route.showRoute();
             }
         }
@@ -574,6 +592,9 @@ public class Player extends GameObject {
         changeMarkerSize();
         mark.setAnchor(0.5f, 0.5f);
         mark.setVisible(false);
+        for (Caravan caravan:Routes.values()){
+            caravan.setMap(map);
+        }
     }
 
     public int getRace() {
@@ -591,7 +612,7 @@ public class Player extends GameObject {
         return trade;
     }
 
-    public Route getCurrentR() {
+    public Caravan getCurrentR() {
         return currentR;
     }
 
@@ -637,7 +658,7 @@ public class Player extends GameObject {
         return currentRouteGuid;
     }
 
-    public void setCurrentRoute(Route currentRoute) {
+    public void setCurrentRoute(Caravan currentRoute) {
         this.currentR = currentRoute;
     }
 
@@ -879,7 +900,7 @@ public class Player extends GameObject {
                     for (GameObject o : GameObjects.getInstance().values()) {
                         if (o instanceof City && o.getMarker() != null) {
                             float dist = 125;
-                            float mapper = 0;
+                            //float mapper = 0;
                             if (((City) o).getOwner()) dist = 250;
                             Upgrade up = GameObjects.getPlayer().getUpgrade("founder");
                             if (up != null) dist += up.getEffect2();
@@ -940,12 +961,12 @@ public class Player extends GameObject {
 
     }
     public void higlight(String city){
-        if (city==null) for (Route r:Routes){
+        if (city==null) for (Caravan r:Routes.values()){
              r.releaseFade();
         }
             else
-        for (Route r:Routes){
-            if (!(city.equals(r.getStartGuid()) || city.equals(r.getFinishGuid()))) r.fadeRoute();
+        for (Caravan r:Routes.values()){
+            if (!(city.equals(r.getStartGUID()) || city.equals(r.getFinishGUID()))) r.fadeRoute();
         }
     }
 }

@@ -631,13 +631,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                     SendedRequest = 0;
                     UIControler.getButtonLayout().hideConnectImage();
                 } else if (TYPE==PLAYER){
-                    try {
-
                         timeToPlayerRefresh = 6;
-                    } catch (Exception e){
-                        GATracker.trackException("LoadPlayer",e);
-                        Essages.addEssage(e.toString());
-                    }
                 } else if (TYPE==MESSAGE){
                     if (response.has("Messages")) {
                         try {

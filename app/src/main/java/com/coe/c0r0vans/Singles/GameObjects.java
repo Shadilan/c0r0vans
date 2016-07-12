@@ -11,6 +11,8 @@ import com.coe.c0r0vans.Logic.Ambush;
 import com.coe.c0r0vans.Logic.Caravan;
 import com.coe.c0r0vans.Logic.City;
 import com.coe.c0r0vans.Logic.Player;
+import com.coe.c0r0vans.UIElements.ChooseFaction;
+import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 
 import org.json.JSONArray;
@@ -35,9 +37,10 @@ import utility.settings.SettingsListener;
 public class GameObjects{
     private static HashMap<String,GameObject> objects;
     private static Player player;
+    private static GoogleMap map;
 
 
-    public static void init(Context context){
+    public static void init(final Context context){
         player=new Player();
         objects=new HashMap<>();
         SharedPreferences sp = context.getSharedPreferences("player", Context.MODE_PRIVATE);
@@ -63,17 +66,22 @@ public class GameObjects{
                             int leng = JObj.length();
 
                             for (int i = 0; i < leng; i++) {
-                                GameObject robj = null;
-                                for (GameObject obj : remObjects) {
+                                GameObject robj;
+                                String GUID=JObj.getJSONObject(i).getString("GUID");
+                                robj=objects.get(GUID);
+                                /*for (GameObject obj : remObjects) {
                                     if (obj.getGUID().equals(JObj.getJSONObject(i).getString("GUID"))) {
                                         robj = obj;
                                         break;
                                     }
-                                }
+                                }*/
+                                //if (robj==null) robj=player.getAmbushes().get(GUID);
+                                if (robj==null) robj=player.getRoutes().get(GUID);
                                 if (robj != null) {
 
                                     remObjects.remove(robj);
                                     robj.loadJSON(JObj.getJSONObject(i));
+
                                 } else {
                                     if (JObj.getJSONObject(i).getString("Type").equalsIgnoreCase("Player")) {
 
@@ -88,10 +96,12 @@ public class GameObjects{
                                         Ambush ambush = new Ambush(MyGoogleMap.getMap(), JObj.getJSONObject(i));
 
                                         objects.put(ambush.getGUID(), ambush);
+
                                     } else if (JObj.getJSONObject(i).getString("Type").equalsIgnoreCase("Caravan")) {
 
                                         Caravan caravan = new Caravan(MyGoogleMap.getMap(), JObj.getJSONObject(i));
-                                        objects.put(caravan.getGUID(), caravan);
+                                        if (caravan.isOwner()) player.getRoutes().put(caravan.getGUID(), caravan);
+                                        else objects.put(caravan.getGUID(), caravan);
                                     }
                                 }
 
@@ -147,12 +157,42 @@ public class GameObjects{
                                     }
                                 }
                             }
+                            final int lst_length = lst.length();// Moved  lst.length() call out of the loop to local variable lst_length
+                            for (int i = 0; i< lst_length; i++){
+                                JSONObject obj=lst.getJSONObject(i);
+                                String guid="";
+                                int lat=0;
+                                int lng=0;
+                                //String type="";
+                                if (obj.has("GUID"))guid=obj.getString("GUID");
+                                if (obj.has("Lat"))lat=obj.getInt("Lat");
+                                if (obj.has("Lng"))lng=obj.getInt("Lng");
+                                //if (obj.has("Type")) type=obj.getString("Type");
+                                Caravan c=player.getRoutes().get(guid);
+                                if (c!=null) c.setPostion(new LatLng(lat/1e6,lng/1e6));
+                            }
+
 
                         }
 
                     } catch (JSONException e) {
                         Essages.addEssage(e.toString());
                     }
+                } else if (TYPE==PLAYER){
+                    GameObjects.getPlayer().loadJSON(response);
+                    if (GameObjects.getPlayer().getRace() < 1 || GameObjects.getPlayer().getRace() > 3) {
+                        MessageMap.clearAll();
+                        Essages.clear();
+                        new ChooseFaction(context).show();
+                    }
+                    SharedPreferences sp = context.getSharedPreferences("player", Context.MODE_PRIVATE);
+                    SharedPreferences.Editor ed = sp.edit();
+                    try {
+                        ed.putString("player", GameObjects.getPlayer().getJSON().toString());
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    ed.apply();
                 }
             }
 
@@ -238,5 +278,12 @@ public class GameObjects{
     }
     public static Player getPlayer(){
         return player;
+    }
+
+    public static void setMap(GoogleMap map) {
+        if (player!=null) player.setMap(map);
+        if (objects!=null) for (GameObject object:objects.values()){
+            object.setMap(map);
+        }
     }
 }

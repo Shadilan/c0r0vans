@@ -23,9 +23,14 @@ import utility.settings.GameSettings;
  * @author Shadilan
  * Контейнер сообщений
  */
+//Do Single
 public class MessageMap extends HashMap<String,Message>{
     Context ctx;
     Boolean load=false;
+    public static void clearAll(){
+        //TODO: Clear messages
+
+    }
     Runnable task=new Runnable() {
         @Override
         public void run() {

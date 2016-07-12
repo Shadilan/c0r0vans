@@ -16,7 +16,6 @@ import android.widget.ToggleButton;
 import com.coe.c0r0vans.GameObject.GameObject;
 import com.coe.c0r0vans.GameObjects.GameObjectView;
 import com.coe.c0r0vans.GameObjects.ObjectAction;
-import com.coe.c0r0vans.GameObjects.Route;
 import com.coe.c0r0vans.R;
 import com.coe.c0r0vans.ShowHideForm;
 import com.coe.c0r0vans.Singles.GameObjects;
@@ -67,7 +66,7 @@ public class City extends GameObject {
     private void updateAction(final Context ctx){
         startRouteAction = new ObjectAction(this) {
             String oldRouteGuid;
-            Route oldRoute;
+            Caravan oldRoute;
             boolean routeStart;
 
             @Override
@@ -96,7 +95,7 @@ public class City extends GameObject {
                 Essages.addEssage(String.format(ctx.getResources().getString(R.string.route_started), Name));
                 if (response.has("Route")){
                     try {
-                        GameObjects.getPlayer().setCurrentRoute(new Route(response.getJSONObject("Route"),MyGoogleMap.getMap()));
+                        GameObjects.getPlayer().setCurrentRoute(new Caravan(MyGoogleMap.getMap(),response.getJSONObject("Route")));
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -155,7 +154,7 @@ public class City extends GameObject {
         };
         endRouteAction = new ObjectAction(this) {
             String oldRouteGuid;
-            Route oldRoute;
+            Caravan oldRoute;
             boolean routeStart;
 
             @Override
@@ -1053,8 +1052,8 @@ public class City extends GameObject {
             int income=0;
             LinearLayout l= (LinearLayout) findViewById(R.id.routePanel);
             l.removeAllViews();
-            for (Route r:GameObjects.getPlayer().getRoutes()){
-                if (r.getStartGuid().equals(city.getGUID())||r.getFinishGuid().equals(city.getGUID())){
+            for (Caravan r: GameObjects.getPlayer().getRoutes().values()){
+                if (r.getStartGUID().equals(city.getGUID())||r.getFinishGUID().equals(city.getGUID())){
                     CityLine line = new CityLine(getContext());
                     amount++;
                     income+=r.getProfit();

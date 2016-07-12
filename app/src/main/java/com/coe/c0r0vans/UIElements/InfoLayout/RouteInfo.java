@@ -8,12 +8,13 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.coe.c0r0vans.GameObjects.Route;
+import com.coe.c0r0vans.Logic.Caravan;
 import com.coe.c0r0vans.R;
 import com.coe.c0r0vans.ShowHideForm;
 import com.coe.c0r0vans.Singles.GameObjects;
 import com.coe.c0r0vans.UIElements.CityLine;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
@@ -28,6 +29,7 @@ public class RouteInfo extends RelativeLayout implements PlayerInfoLayout {
     int page=0;
     int pageSize=50;
     int max_page=1;
+    ArrayList<Caravan> routes;
     ShowHideForm parent;
     public RouteInfo(Context context) {
         super(context);
@@ -99,9 +101,10 @@ public class RouteInfo extends RelativeLayout implements PlayerInfoLayout {
         GATracker.trackTimeStart("InfoLayout","RoutesUpdate");
 
         routeInfo=(LinearLayout) findViewById(R.id.routeInfo);
-        Collections.sort(GameObjects.getPlayer().getRoutes(), new Comparator<Route>() {
+        routes=new ArrayList(GameObjects.getPlayer().getRoutes().values());
+        Collections.sort(routes, new Comparator<Caravan>() {
             @Override
-            public int compare(Route lhs, Route rhs) {
+            public int compare(Caravan lhs, Caravan rhs) {
 
                 return lhs.getDistance() - rhs.getDistance();
             }
@@ -117,7 +120,7 @@ public class RouteInfo extends RelativeLayout implements PlayerInfoLayout {
         }
 
         int i=0;
-        for (Route r:GameObjects.getPlayer().getRoutes()){
+        for (Caravan r:routes){
             if (i>=page*pageSize && i<(page+1)*pageSize) {
                 CityLine line = new CityLine(getContext());
                 routeInfo.addView(line);
