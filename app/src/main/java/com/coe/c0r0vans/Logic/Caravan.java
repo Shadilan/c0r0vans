@@ -89,10 +89,14 @@ public class Caravan extends GameObject {
         result.put("Lng",mark.getPosition().longitude*1e6);
         result.put("Distance",distance);
         result.put("profit",profit);
-        result.put("StartLat",startPoint.latitude*1e6);
-        result.put("StartLng",startPoint.longitude*1e6);
-        result.put("FinishLat",finishPoint.latitude*1e6);
-        result.put("FinishLng",finishPoint.longitude*1e6);
+        if (startPoint!=null) {
+            result.put("StartLat", startPoint.latitude * 1e6);
+            result.put("StartLng", startPoint.longitude * 1e6);
+        }
+        if (finishPoint!=null) {
+            result.put("FinishLat", finishPoint.latitude * 1e6);
+            result.put("FinishLng", finishPoint.longitude * 1e6);
+        }
 
         return result;
     }
@@ -100,7 +104,7 @@ public class Caravan extends GameObject {
     public void loadJSON(JSONObject obj) {
         try {
             GUID=obj.getString("GUID");
-            if (obj.has("Owner")) faction=obj.getInt("Owner"); else faction=4;
+            if (obj.has("Owner")) faction=obj.getInt("Owner"); else faction=0;
             owner=faction==0;
             if (obj.has("StartName")) startName = obj.getString("StartName");
             if (obj.has("FinishName")) finishName = obj.getString("FinishName");

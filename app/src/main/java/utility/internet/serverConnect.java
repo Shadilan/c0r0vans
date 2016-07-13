@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.provider.Settings;
+import android.util.Log;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
@@ -549,6 +550,7 @@ public class serverConnect {
 
         busy=true;
         if (!checkConnection()) return;
+        Log.d("server",request);
         final JsonObjectRequest jsObjRequest = new JsonObjectRequest
                 (Request.Method.GET, request, null, new ResponseListenerWithUID(UID,request,type){
                     @Override
