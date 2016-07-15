@@ -10,12 +10,11 @@ import android.widget.RelativeLayout;
 
 import com.coe.c0r0vans.GameObject.GameObject;
 import com.coe.c0r0vans.GameObject.OnGameObjectChange;
-import com.coe.c0r0vans.GameObjects.GameObjectView;
-import com.coe.c0r0vans.GameObjects.SelectedObject;
 import com.coe.c0r0vans.Logic.Ambush;
 import com.coe.c0r0vans.Logic.City;
 import com.coe.c0r0vans.Logic.Player;
 import com.coe.c0r0vans.Singles.GameObjects;
+import com.coe.c0r0vans.Singles.SelectedObject;
 
 import org.json.JSONObject;
 

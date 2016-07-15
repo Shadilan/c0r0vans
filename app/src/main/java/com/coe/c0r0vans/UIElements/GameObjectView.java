@@ -1,6 +1,4 @@
-package com.coe.c0r0vans.GameObjects;
-
-import com.coe.c0r0vans.UIElements.ActionView;
+package com.coe.c0r0vans.UIElements;
 
 /**
  * @author Shadilan

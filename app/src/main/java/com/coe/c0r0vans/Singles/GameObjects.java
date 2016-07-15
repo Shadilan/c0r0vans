@@ -6,6 +6,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
 
+import com.coe.c0r0vans.GameObject.ActiveObject;
 import com.coe.c0r0vans.GameObject.GameObject;
 import com.coe.c0r0vans.Logic.Ambush;
 import com.coe.c0r0vans.Logic.Caravan;
@@ -39,6 +40,29 @@ public class GameObjects{
     private static Player player;
     private static GoogleMap map;
 
+    public static GameObject getClosestObject(LatLng latLng){
+        float closest=1000;
+        GameObject closestObject=null;
+        for (GameObject o:objects.values()){
+            if (o instanceof ActiveObject && o.getMarker()!=null) {
+                float dist = GPSInfo.getDistance(latLng, o.getMarker().getPosition());
+                if (dist < closest && dist < o.getRadius()){
+                    closest=dist;
+                    closestObject=o;
+                }
+            }
+        }
+        for (GameObject o:player.getAmbushes().values()){
+            if (o instanceof ActiveObject && o.getMarker()!=null) {
+                float dist = GPSInfo.getDistance(latLng, o.getMarker().getPosition());
+                if (dist < closest && dist < o.getRadius()){
+                    closest=dist;
+                    closestObject=o;
+                }
+            }
+        }
+        return closestObject;
+    }
 
     public static void init(final Context context){
         player=new Player();
@@ -75,7 +99,7 @@ public class GameObjects{
                                         break;
                                     }
                                 }*/
-                                //if (robj==null) robj=player.getAmbushes().get(GUID);
+                                if (robj==null) robj=player.getAmbushes().get(GUID);
                                 if (robj==null) robj=player.getRoutes().get(GUID);
                                 if (robj != null) {
 
@@ -94,8 +118,8 @@ public class GameObjects{
                                     } else if (JObj.getJSONObject(i).getString("Type").equalsIgnoreCase("Ambush")) {
 
                                         Ambush ambush = new Ambush(MyGoogleMap.getMap(), JObj.getJSONObject(i));
-
-                                        objects.put(ambush.getGUID(), ambush);
+                                        if (ambush.isOwner()) player.getAmbushes().put(ambush.getGUID(),ambush);
+                                        else objects.put(ambush.getGUID(), ambush);
 
                                     } else if (JObj.getJSONObject(i).getString("Type").equalsIgnoreCase("Caravan")) {
 

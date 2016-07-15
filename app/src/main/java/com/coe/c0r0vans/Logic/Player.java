@@ -10,14 +10,13 @@ import android.widget.RelativeLayout;
 
 import com.coe.c0r0vans.GameObject.GameObject;
 import com.coe.c0r0vans.GameObject.OnGameObjectChange;
-import com.coe.c0r0vans.GameObjects.AmbushItem;
-import com.coe.c0r0vans.GameObjects.GameObjectView;
 import com.coe.c0r0vans.GameObjects.ObjectAction;
-import com.coe.c0r0vans.GameObjects.SelectedObject;
 import com.coe.c0r0vans.R;
 import com.coe.c0r0vans.Singles.GameObjects;
 import com.coe.c0r0vans.Singles.MyGoogleMap;
+import com.coe.c0r0vans.Singles.SelectedObject;
 import com.coe.c0r0vans.UIElements.ActionView;
+import com.coe.c0r0vans.UIElements.GameObjectView;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
@@ -73,7 +72,7 @@ public class Player extends GameObject {
     private ArrayList<Upgrade> Upgrades;
     private HashMap<String,Upgrade> NextUpgrades;
     private HashMap<String,Caravan> Routes;
-    private ArrayList<AmbushItem> Ambushes;
+    private HashMap<String,Ambush> Ambushes;
 
     protected Circle zone1;
     protected Circle zone2;
@@ -99,7 +98,7 @@ public class Player extends GameObject {
         Upgrades=new ArrayList<>();
         NextUpgrades=new HashMap<>();
         Routes=new HashMap<>();
-        Ambushes=new ArrayList<>();
+        Ambushes=new HashMap<>();
         owner=true;
         if (dropRoute==null) dropRoute = new ObjectAction(this) {
             @Override
@@ -359,7 +358,7 @@ public class Player extends GameObject {
         }
         result.put("Routes",r);
         JSONArray a=new JSONArray();
-        for (AmbushItem u:Ambushes){
+        for (Ambush u:Ambushes.values()){
             a.put(u.getJSON());
         }
         result.put("Ambushes", a);
@@ -447,10 +446,32 @@ public class Player extends GameObject {
 
             }
             if (obj.has("Ambushes")){
-                JSONArray ambush=obj.getJSONArray("Ambushes");
-                Ambushes.clear();
-                final int ambush_length = ambush.length();// Moved  ambush.length() call out of the loop to local variable ambush_length
-                for (int i=0;i< ambush_length;i++) Ambushes.add(new AmbushItem(ambush.getJSONObject(i)));
+                JSONArray jambushs=obj.getJSONArray("Ambushes");
+                ArrayList<String> GUIDS=new ArrayList<>(Ambushes.keySet());
+
+
+                /*for (Caravan routel:Routes){
+                    routel.RemoveObject();
+                }
+                Routes.clear();*/
+                final int ambush_length = jambushs.length();// Moved  route.length() call out of the loop to local variable route_length
+                for (int i=0;i< ambush_length;i++) {
+                    JSONObject jobj=jambushs.getJSONObject(i);
+                    String newGUID=jobj.getString("GUID");
+                    Ambush newObj=Ambushes.get(newGUID);
+                    if (newObj!=null) {
+                        newObj.loadJSON(jobj);
+                        GUIDS.remove(newGUID);
+                    }
+                    else {
+                        newObj=new Ambush(map,jobj);
+                        Ambushes.put(newGUID,newObj);
+                    }
+                }
+                for (String lGUID:GUIDS){
+                    Ambushes.get(lGUID).RemoveObject();
+                    Ambushes.remove(lGUID);
+                }
             }
             if (obj.has("NextUpgrades")){
                 JSONArray nextUpgrade=obj.getJSONArray("NextUpgrades");
@@ -528,7 +549,7 @@ public class Player extends GameObject {
     public HashMap<String,Caravan> getRoutes() {
         return Routes;
     }
-    public ArrayList<AmbushItem> getAmbushes() {return Ambushes;}
+    public HashMap<String,Ambush> getAmbushes() {return Ambushes;}
     public int getActionDistance(){return ActionDistance;}
     public ObjectAction getDropRoute(){return dropRoute;}
 
@@ -594,6 +615,9 @@ public class Player extends GameObject {
         mark.setVisible(false);
         for (Caravan caravan:Routes.values()){
             caravan.setMap(map);
+        }
+        for (Ambush ambush:Ambushes.values()){
+            ambush.setMap(map);
         }
     }
 
@@ -725,9 +749,7 @@ public class Player extends GameObject {
 
                         try {
                             Ambush ambush=new Ambush(MyGoogleMap.getMap(),response.getJSONObject("Ambush"));
-                            //todo надо привести к одному типу
-                            GameObjects.put(ambush);
-                            GameObjects.getPlayer().getAmbushes().add(new AmbushItem(response.getJSONObject("Ambush")));
+                            GameObjects.getPlayer().getAmbushes().put(ambush.getGUID(),ambush);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }

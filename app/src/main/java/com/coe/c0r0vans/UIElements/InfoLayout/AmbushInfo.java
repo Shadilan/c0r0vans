@@ -5,12 +5,13 @@ import android.util.AttributeSet;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.coe.c0r0vans.GameObjects.AmbushItem;
+import com.coe.c0r0vans.Logic.Ambush;
 import com.coe.c0r0vans.R;
 import com.coe.c0r0vans.ShowHideForm;
 import com.coe.c0r0vans.Singles.GameObjects;
 import com.coe.c0r0vans.UIElements.InfoLine;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
@@ -44,24 +45,25 @@ public class AmbushInfo extends LinearLayout implements PlayerInfoLayout {
 
     @Override
     public void update() {
-        Collections.sort(GameObjects.getPlayer().getAmbushes(), new Comparator<AmbushItem>() {
+        ArrayList<Ambush> list=new ArrayList<>(GameObjects.getPlayer().getAmbushes().values());
+        Collections.sort(list, new Comparator<Ambush>() {
             @Override
-            public int compare(AmbushItem lhs, AmbushItem rhs) {
-                return (int) (GPSInfo.getDistance(lhs.getLatLng(),GameObjects.getPlayer().getMarker().getPosition())-
-                                        GPSInfo.getDistance(rhs.getLatLng(),GameObjects.getPlayer().getMarker().getPosition()));
+            public int compare(Ambush lhs, Ambush rhs) {
+                return (int) (GPSInfo.getDistance(lhs.getMarker().getPosition(),GameObjects.getPlayer().getMarker().getPosition())-
+                                        GPSInfo.getDistance(rhs.getMarker().getPosition(),GameObjects.getPlayer().getMarker().getPosition()));
             }
         });
         ambushInfo.removeAllViews();
-        for (AmbushItem r: GameObjects.getPlayer().getAmbushes()){
+        for (Ambush r: list){
             InfoLine line=new InfoLine(getContext());
             //float[] distances = new float[1];
             String ready="";
             if (r.getProgress()<0) ready=" ⌛"+Math.abs(r.getProgress()) + " мин.";
             else if (r.getProgress()>0) ready=""+r.getProgress()+" мин.";
-            line.setLabelText(String.format(" %s. расстояние: %sм.%s", r.getName(), (int)GPSInfo.getDistance(GameObjects.getPlayer().getMarker().getPosition(), r.getLatLng()),ready));
-            line.setOnRemoveClick(r.getAction(true));
+            line.setLabelText(String.format(" %s. расстояние: %sм.%s", r.getName(), (int)GPSInfo.getDistance(GameObjects.getPlayer().getMarker().getPosition(), r.getMarker().getPosition()),ready));
+            line.setOnRemoveClick(r.getRemoveAction());
             line.setTarget(r.getGUID());
-            line.setPoint(r.getPoint());
+            line.setPoint(r.getMarker().getPosition());
             line.setParentForm(parent);
             ambushInfo.addView(line);
 

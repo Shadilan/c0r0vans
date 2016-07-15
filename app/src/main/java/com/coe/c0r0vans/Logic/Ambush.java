@@ -10,14 +10,14 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.coe.c0r0vans.GameObject.ActiveObject;
 import com.coe.c0r0vans.GameObject.GameObject;
-import com.coe.c0r0vans.GameObjects.AmbushItem;
-import com.coe.c0r0vans.GameObjects.GameObjectView;
 import com.coe.c0r0vans.GameObjects.ObjectAction;
 import com.coe.c0r0vans.R;
 import com.coe.c0r0vans.Singles.GameObjects;
 import com.coe.c0r0vans.Singles.MyGoogleMap;
 import com.coe.c0r0vans.UIElements.ActionView;
+import com.coe.c0r0vans.UIElements.GameObjectView;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
@@ -39,14 +39,154 @@ import utility.settings.GameSettings;
 /**
  * @author Shadilan
  */
-public class Ambush extends GameObject {
+public class Ambush extends GameObject implements ActiveObject {
 
 
     private int faction;
-    private int radius=30;
+    protected int radius=30;
 
     private int ready=0;
     private int life=1;
+    private LatLng latlng;
+
+    private ObjectAction removeAction;
+    public ObjectAction getRemoveAction(){
+        if (removeAction==null){
+            if (isOwner()){
+                removeAction=new ObjectAction(this){
+                    @Override
+                    public Bitmap getImage() {
+                        return ImageLoader.getImage("remove_ambush");
+                    }
+                    @Override
+                    public String getCommand() {
+                        return "CancelAmbush";
+                    }
+
+                    @Override
+                    public void preAction() {
+                        setVisibility(false);
+                    }
+
+                    @Override
+                    public void postAction(JSONObject response) {
+                        GameSound.playSound(GameSound.REMOVE_AMBUSH);
+                        GameObjects.getPlayer().setAmbushLeft(GameObjects.getPlayer().getAmbushLeft() + 1);
+                        GameObjects.getPlayer().setHirelings(GameObjects.getPlayer().getHirelings()+getLife()*5);
+                        Ambush sa=GameObjects.getPlayer().getAmbushes().get(getGUID());
+                        if (sa!=null) GameObjects.getPlayer().getAmbushes().remove(sa.getGUID());
+                        Essages.addEssage("Засада распущена");
+                        RemoveObject();
+                    }
+
+                    @Override
+                    public void postError(JSONObject response) {
+                        setVisibility(true);
+                        try {
+                            String err;
+                            if (response.has("Error")) err = response.getString("Error");
+                            else if (response.has("Result")) err = response.getString("Result");
+                            else err = "U0000";
+                            switch (err) {
+                                case "DB001":
+                                    Essages.addEssage("Ошибка сервера.");
+                                    break;
+                                case "L0001":
+                                    Essages.addEssage("Соединение потеряно.");
+                                    break;
+                                case "O0401":
+                                    Essages.addEssage("Эта засада уже уничтожена.");
+                                    RemoveObject();
+                                    break;
+                                default:
+                                    if (response.has("Message"))
+                                        Essages.addEssage(response.getString("Message"));
+                                    else Essages.addEssage("Непредвиденная ошибка.");
+
+                            }
+                        }catch (JSONException e)
+                        {
+                            GATracker.trackException("CancelAmbush",e);
+                        }
+                    }
+                };
+            } else
+            {
+                removeAction=new ObjectAction(this) {
+                    @Override
+                    public Bitmap getImage() {
+                        return ImageLoader.getImage("attack_ambush");
+                    }
+
+                    @Override
+                    public String getCommand() {
+                        return "DestroyAmbush";
+                    }
+
+                    @Override
+
+                    public void preAction() {
+
+                        setVisibility(false);
+                    }
+
+                    @Override
+                    public void postAction(JSONObject response) {
+
+                        GameSound.playSound(GameSound.KILL_SOUND);
+                        if (response.has("Message")) try {
+                            Essages.addEssage(response.getString("Message"));
+                        } catch (JSONException e) {
+                            GATracker.trackException("ObjectAction",e);
+                        }
+                        else Essages.addEssage("Разбойники уничтожены.");
+                        RemoveObject();
+                    }
+
+                    @Override
+                    public void postError(JSONObject response) {
+                        setVisibility(true);
+                        try {
+                            String err;
+                            if (response.has("Error")) err = response.getString("Error");
+                            else if (response.has("Result")) err = response.getString("Result");
+                            else err = "U0000";
+                            switch (err) {
+                                case "DB001":
+                                    Essages.addEssage("Ошибка сервера.");
+                                    break;
+                                case "L0001":
+                                    Essages.addEssage("Соединение потеряно.");
+                                    break;
+                                case "O0301":
+                                    Essages.addEssage("Эта засада уже уничтожена.");
+                                    RemoveObject();
+                                    break;
+                                case "O0302":
+                                    Essages.addEssage("Засада слишком далеко.");
+                                    break;
+                                case "O0303":
+                                    Essages.addEssage("Это ваши соратники.");
+                                    break;
+                                case "O0304":
+                                    Essages.addEssage("Не хватает наемников для уничтожения засады.");
+                                    break;
+                                default:
+                                    if (response.has("Message"))
+                                        Essages.addEssage(response.getString("Message"));
+                                    else Essages.addEssage("Непредвиденная ошибка.");
+
+                            }
+                        }catch (JSONException e)
+                        {
+                            GATracker.trackException("DestroyAmbush",e);
+                        }
+                    }
+                };
+            }
+        }
+        return removeAction;
+    }
 
     public  Ambush(GoogleMap map,JSONObject obj)
     {
@@ -68,35 +208,39 @@ public class Ambush extends GameObject {
     @Override
     public void setPostion(LatLng latLng) {
         if (mark==null) {
-            setMarker(map.addMarker(new MarkerOptions().position(latLng)));
-            changeMarkerSize();
+            if (map!=null) {
+                setMarker(map.addMarker(new MarkerOptions().position(latLng)));
+                changeMarkerSize();
+            }
         } else {
             mark.setPosition(latLng);
             changeMarkerSize();
         }
         if (zone==null){
-            CircleOptions circleOptions = new CircleOptions();
-            circleOptions.center(latLng);
-            circleOptions.radius(radius);
-            circleOptions.zIndex(130);
-            switch (faction){
-                case 0:
-                    circleOptions.strokeColor(Color.BLUE);
-                    break;
-                case 1:
-                    circleOptions.strokeColor(Color.MAGENTA);
-                    break;
-                case 2:
-                    circleOptions.strokeColor(Color.RED);
-                    break;
-                case 3:
-                    circleOptions.strokeColor(Color.YELLOW);
-                    break;
-                default:
-                    circleOptions.strokeColor(Color.GREEN);
+            if (map!=null) {
+                CircleOptions circleOptions = new CircleOptions();
+                circleOptions.center(latLng);
+                circleOptions.radius(radius);
+                circleOptions.zIndex(130);
+                switch (faction) {
+                    case 0:
+                        circleOptions.strokeColor(Color.BLUE);
+                        break;
+                    case 1:
+                        circleOptions.strokeColor(Color.MAGENTA);
+                        break;
+                    case 2:
+                        circleOptions.strokeColor(Color.RED);
+                        break;
+                    case 3:
+                        circleOptions.strokeColor(Color.YELLOW);
+                        break;
+                    default:
+                        circleOptions.strokeColor(Color.GREEN);
+                }
+                circleOptions.strokeWidth(2);
+                zone = map.addCircle(circleOptions);
             }
-            circleOptions.strokeWidth(2);
-            zone = map.addCircle(circleOptions);
         } else
         {
             zone.setCenter(latLng);
@@ -109,7 +253,7 @@ public class Ambush extends GameObject {
     public void loadJSON(JSONObject obj) {
         try {
             GUID=obj.getString("GUID");
-            if (obj.has("Owner")) faction=obj.getInt("Owner");
+            if (obj.has("Owner")) faction=obj.getInt("Owner"); else faction=0;
             owner=faction==0;
             if (faction<0 ||faction>4) faction=4;
             if (obj.has("Radius")) radius=obj.getInt("Radius");
@@ -120,7 +264,7 @@ public class Ambush extends GameObject {
                 int Lat=obj.getInt("Lat");
                 int Lng=obj.getInt("Lng");
 
-                LatLng latlng=new LatLng(Lat / 1e6, Lng / 1e6);
+                latlng=new LatLng(Lat / 1e6, Lng / 1e6);
                 setPostion(latlng);
                 setVisibility(true);
             }
@@ -218,10 +362,10 @@ public class Ambush extends GameObject {
     public void showRadius(){
         String opt= GameSettings.getInstance().get("SHOW_AMBUSH_RADIUS");
         if (opt.equals("Y") && mark!=null && mark.isVisible()){
-            zone.setVisible(true);
+            if (zone!=null) zone.setVisible(true);
         } else
         {
-            zone.setVisible(false);
+            if (zone!=null) zone.setVisible(false);
         }
     }
     public int getFaction() {
@@ -255,7 +399,7 @@ public class Ambush extends GameObject {
             this.ambush=ambush;
             applyAmbush();
         }
-        private ObjectAction removeAction;
+
         private void applyAmbush() {
             int f=ambush.getFaction();
             if (f==0) f=GameObjects.getPlayer().getRace();
@@ -279,160 +423,13 @@ public class Ambush extends GameObject {
             if (ambush.getFaction()==0)
             {
                 removeButton.setImageResource(R.mipmap.dismiss);
-                removeAction = new ObjectAction(ambush){
-                    @Override
-                    public Bitmap getImage() {
-                        return ImageLoader.getImage("remove_ambush");
-                    }
 
-
-
-                    @Override
-                    public String getCommand() {
-                        return "CancelAmbush";
-                    }
-
-                    @Override
-                    public void preAction() {
-                        owner.setVisibility(false);
-                    }
-
-                    @Override
-                    public void postAction(JSONObject response) {
-                        GameSound.playSound(GameSound.REMOVE_AMBUSH);
-                        GameObjects.getPlayer().setAmbushLeft(GameObjects.getPlayer().getAmbushLeft() + 1);
-                        GameObjects.getPlayer().setHirelings(GameObjects.getPlayer().getHirelings()+owner.getLife()*5);
-                        AmbushItem sa=null;
-                        for (AmbushItem ai:GameObjects.getPlayer().getAmbushes()){
-                            if (ai.getGUID().equals(owner.getGUID())) {
-                                sa=ai;
-                                break;
-                            }
-                        }
-                        if (sa!=null) GameObjects.getPlayer().getAmbushes().remove(sa);
-                        Essages.addEssage("Засада распущена");
-                        owner.RemoveObject();
-                    }
-
-                    @Override
-                    public void postError(JSONObject response) {
-                        owner.setVisibility(true);
-                        try {
-                            String err;
-                            if (response.has("Error")) err = response.getString("Error");
-                            else if (response.has("Result")) err = response.getString("Result");
-                            else err = "U0000";
-                            switch (err) {
-                                case "DB001":
-                                    Essages.addEssage("Ошибка сервера.");
-                                    break;
-                                case "L0001":
-                                    Essages.addEssage("Соединение потеряно.");
-                                    break;
-                                case "O0401":
-                                    Essages.addEssage("Эта засада уже уничтожена.");
-                                    owner.RemoveObject();
-                                    break;
-                                default:
-                                    if (response.has("Message"))
-                                        Essages.addEssage(response.getString("Message"));
-                                    else Essages.addEssage("Непредвиденная ошибка.");
-
-                            }
-                        }catch (JSONException e)
-                        {
-                            GATracker.trackException("CancelAmbush",e);
-                        }
-                    }
-                };
-                removeButton.setOnClickListener(new OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-
-                            serverConnect.getInstance().callCanelAmbush(removeAction,getGUID());
-
-
-                        close();
-                    }
-
-                });
             } else if(ambush.getFaction()==GameObjects.getPlayer().getRace()){
                 removeButton.setEnabled(false);
             } else{
                 removeButton.setImageResource(R.mipmap.rem_ambush);
-                removeAction = new ObjectAction(ambush) {
-                    @Override
-                    public Bitmap getImage() {
-                        return ImageLoader.getImage("attack_ambush");
-                    }
-
-                    @Override
-                    public String getCommand() {
-                        return "DestroyAmbush";
-                    }
-
-                    @Override
-
-                    public void preAction() {
-
-                        owner.setVisibility(false);
-                    }
-
-                    @Override
-                    public void postAction(JSONObject response) {
-
-                        GameSound.playSound(GameSound.KILL_SOUND);
-                        if (response.has("Message")) try {
-                            Essages.addEssage(response.getString("Message"));
-                        } catch (JSONException e) {
-                            GATracker.trackException("ObjectAction",e);
-                        }
-                        else Essages.addEssage("Разбойники уничтожены.");
-                        owner.RemoveObject();
-                    }
-
-                    @Override
-                    public void postError(JSONObject response) {
-                        owner.setVisibility(true);
-                          try {
-                            String err;
-                            if (response.has("Error")) err = response.getString("Error");
-                            else if (response.has("Result")) err = response.getString("Result");
-                            else err = "U0000";
-                            switch (err) {
-                                case "DB001":
-                                    Essages.addEssage("Ошибка сервера.");
-                                    break;
-                                case "L0001":
-                                    Essages.addEssage("Соединение потеряно.");
-                                    break;
-                                case "O0301":
-                                    Essages.addEssage("Эта засада уже уничтожена.");
-                                    owner.RemoveObject();
-                                    break;
-                                case "O0302":
-                                    Essages.addEssage("Засада слишком далеко.");
-                                    break;
-                                case "O0303":
-                                    Essages.addEssage("Это ваши соратники.");
-                                    break;
-                                case "O0304":
-                                    Essages.addEssage("Не хватает наемников для уничтожения засады.");
-                                    break;
-                                default:
-                                    if (response.has("Message"))
-                                        Essages.addEssage(response.getString("Message"));
-                                    else Essages.addEssage("Непредвиденная ошибка.");
-
-                            }
-                        }catch (JSONException e)
-                        {
-                            GATracker.trackException("DestroyAmbush",e);
-                        }
-                    }
-                };
-
             }
+            removeAction = getRemoveAction();
             removeButton.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -496,5 +493,47 @@ public class Ambush extends GameObject {
     }
     public Circle getZone(){
         return zone;
+    }
+
+    @Override
+    public void setMap(GoogleMap map) {
+        super.setMap(map);
+        if (latlng==null) return;
+        if (mark==null) {
+            if (map!=null) {
+                setMarker(map.addMarker(new MarkerOptions().position(latlng)));
+                changeMarkerSize();
+            }
+        } else {
+            mark.setPosition(latlng);
+            changeMarkerSize();
+        }
+        if (zone==null){
+            if (map!=null) {
+                CircleOptions circleOptions = new CircleOptions();
+                circleOptions.center(latlng);
+                circleOptions.radius(radius);
+                circleOptions.zIndex(130);
+                switch (faction) {
+                    case 0:
+                        circleOptions.strokeColor(Color.BLUE);
+                        break;
+                    case 1:
+                        circleOptions.strokeColor(Color.MAGENTA);
+                        break;
+                    case 2:
+                        circleOptions.strokeColor(Color.RED);
+                        break;
+                    case 3:
+                        circleOptions.strokeColor(Color.YELLOW);
+                        break;
+                    default:
+                        circleOptions.strokeColor(Color.GREEN);
+                }
+                circleOptions.strokeWidth(2);
+                zone = map.addCircle(circleOptions);
+            }
+        }
+        showRadius();
     }
 }

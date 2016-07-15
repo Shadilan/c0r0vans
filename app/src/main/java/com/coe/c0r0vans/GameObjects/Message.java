@@ -25,9 +25,8 @@ public class Message {
     private LatLng target;
     private Date time;
     public boolean notify=true;
-    private MessageMap parent;
     public void remove(){
-        if (parent!=null) parent.remove(GUID);
+        MessageMap.remove(GUID);
     }
     public Message(JSONObject jsonObject) throws JSONException {
         loadJSON(jsonObject);
@@ -99,9 +98,7 @@ public class Message {
 
     public LatLng getTarget(){ return target;}
 
-    public void setParent(MessageMap parent) {
-        this.parent = parent;
-    }
+
 
     public int getType() {
         return type;

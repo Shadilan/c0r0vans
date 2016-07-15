@@ -13,8 +13,8 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
+import com.coe.c0r0vans.GameObject.ActiveObject;
 import com.coe.c0r0vans.GameObject.GameObject;
-import com.coe.c0r0vans.GameObjects.GameObjectView;
 import com.coe.c0r0vans.GameObjects.ObjectAction;
 import com.coe.c0r0vans.R;
 import com.coe.c0r0vans.ShowHideForm;
@@ -23,6 +23,7 @@ import com.coe.c0r0vans.Singles.MyGoogleMap;
 import com.coe.c0r0vans.UIElements.ActionView;
 import com.coe.c0r0vans.UIElements.CityLine;
 import com.coe.c0r0vans.UIElements.ConfirmWindow;
+import com.coe.c0r0vans.UIElements.GameObjectView;
 import com.coe.c0r0vans.UIElements.UIControler;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.Circle;
@@ -46,9 +47,9 @@ import utility.settings.GameSettings;
 /**
  * @author Shadilan
  */
-public class City extends GameObject {
+public class City extends GameObject implements ActiveObject {
     private int Level=1;
-    private int radius=50;
+    protected int radius=50;
     private String upgrade;
     private String upgradeName;
     private long influence1=0;

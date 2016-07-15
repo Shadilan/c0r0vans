@@ -4,9 +4,9 @@ import android.graphics.Color;
 
 import com.coe.c0r0vans.GameObject.GameObject;
 import com.coe.c0r0vans.GameObject.OnGameObjectRemove;
-import com.coe.c0r0vans.GameObjects.SelectedObject;
 import com.coe.c0r0vans.Singles.GameObjects;
 import com.coe.c0r0vans.Singles.MyGoogleMap;
+import com.coe.c0r0vans.Singles.SelectedObject;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;

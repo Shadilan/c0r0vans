@@ -193,7 +193,7 @@ public class ButtonLayout extends RelativeLayout {
                     TextView am = (TextView) findViewById(R.id.levelAmount);
                     am.setText(String.valueOf(GameObjects.getPlayer().getLevel()));
                     am = (TextView) findViewById(R.id.ambush);
-                    am.setText(String.format(getContext().getString(R.string.d_d), GameObjects.getPlayer().getAmbushLeft(), GameObjects.getPlayer().getAmbushMax()));
+                    am.setText(String.format(getContext().getString(R.string.d_d), GameObjects.getPlayer().getAmbushMax()-GameObjects.getPlayer().getAmbushLeft(), GameObjects.getPlayer().getAmbushMax()));
                     ProgressBar expProgress= (ProgressBar) findViewById(R.id.expProgress);
                     expProgress.setMax(LevelTable.getEnd(GameObjects.getPlayer().getLevel())-LevelTable.getStart(GameObjects.getPlayer().getLevel()));
                     expProgress.setProgress(GameObjects.getPlayer().getExp()-LevelTable.getStart(GameObjects.getPlayer().getLevel()));

@@ -24,53 +24,60 @@ import utility.settings.GameSettings;
  * Контейнер сообщений
  */
 //Do Single
-public class MessageMap extends HashMap<String,Message>{
-    Context ctx;
-    Boolean load=false;
+public class MessageMap {
+    private static Context context;
+    private static boolean load=false;
+    private static HashMap<String,Message> messages;
     public static void clearAll(){
-        //TODO: Clear messages
+        if (messages!=null) messages.clear();
+        try {
+            save();
+        } catch (JSONException e) {
+            GATracker.trackException("MessageSubsystem","Error Clear");
+        }
 
     }
-    Runnable task=new Runnable() {
-        @Override
-        public void run() {
-            load=true;
-            SharedPreferences sp=ctx.getSharedPreferences("MESSAGES",Context.MODE_PRIVATE);
-            try {
-                String sptext=sp.getString("Messages", "");
 
-                if (!"".equals(sptext))  loadJSON(new JSONObject(sptext));
-            } catch (JSONException e) {
-                if ("Y".equals(GameSettings.getInstance().get("SHOW_NETWORK_ERROR")))
-                    Essages.addEssage("Error Loading:"+ e.toString());
-                GATracker.trackException("MessageLoad",e);
-
-            }
-            load=false;
-        }
-    };
-    public MessageMap(Context ctx){
-        this.ctx=ctx;
+    public static void init(Context ctx){
+        context=ctx;
         //todo вынести в отдельный поток после переноса визуальной части в хэндлер
         try {
-            new Thread(task).start();
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    load=true;
+                    SharedPreferences sp=context.getSharedPreferences("MESSAGES",Context.MODE_PRIVATE);
+                    try {
+                        String sptext=sp.getString("Messages", "");
+                        if (!"".equals(sptext))  loadJSON(new JSONObject(sptext));
+                    } catch (JSONException e) {
+                        if ("Y".equals(GameSettings.getInstance().get("SHOW_NETWORK_ERROR")))
+                            Essages.addEssage("Error Loading:"+ e.toString());
+                        GATracker.trackException("MessageSubsystem",e);
+
+                    }
+                    load=false;
+                }
+            }).start();
         } catch(Exception e){
-            GATracker.trackException("LoadMessage",e);
+            GATracker.trackException("MessageSubsystem",e);
 
         }
 
     }
-    public boolean put(Message message){
-        if (this.get(message.getGUID())!=null) return false;
-        message.setParent(this);
-        put(message.getGUID(),message);
+    public static boolean put(Message message){
+        if (messages==null) messages=new HashMap<>();
+        if (messages.get(message.getGUID())!=null) return false;
+
+        messages.put(message.getGUID(),message);
         return true;
     }
-    public void loadJSON(JSONObject jsonObject) throws JSONException {
+
+    public static void loadJSON(JSONObject jsonObject) throws JSONException {
         JSONArray jsonArray;
         if (jsonObject.has("Messages")){
             jsonArray=jsonObject.getJSONArray("Messages");
-
+            if (messages==null) messages=new HashMap<>();
             for (int i=0;i<jsonArray.length();i++){
                 Message message=new Message(jsonArray.getJSONObject(i));
 
@@ -84,17 +91,15 @@ public class MessageMap extends HashMap<String,Message>{
             }
         }
     }
-    private void save() throws JSONException {
-        SharedPreferences sp=ctx.getSharedPreferences("MESSAGES",Context.MODE_PRIVATE);
+    private static void save() throws JSONException {
+        SharedPreferences sp=context.getSharedPreferences("MESSAGES",Context.MODE_PRIVATE);
         SharedPreferences.Editor editor =sp.edit();
         String out=getJSON().toString();
         editor.putString("Messages", out);
-
         editor.apply();
-
     }
-    private JSONObject getJSON() throws JSONException {
-        List<Message> msg=new LinkedList<>(this.values());
+    private static JSONObject getJSON() throws JSONException {
+        List<Message> msg=new LinkedList<>(messages.values());
         Collections.sort(msg, new Comparator<Message>() {
             @Override
             public int compare(Message lhs, Message rhs) {
@@ -114,24 +119,17 @@ public class MessageMap extends HashMap<String,Message>{
         return resultM;
     }
 
-    @Override
-    public Message remove(Object key) {
-        Message m =super.remove(key);
+    public static Message remove(Object key) {
+        if (messages==null) return null;
+        Message m =messages.remove(key);
         try {
             save();
         } catch (JSONException e) {
-            e.printStackTrace();
+            GATracker.trackException("MessageSubsystem","Error Remove");
         }
         return m;
     }
 
-    @Override
-    public void clear() {
-        super.clear();
-        try {
-            save();
-        } catch (JSONException e) {
-            GATracker.trackException("Messages","SaveEmptyList error JSON");
-        }
-    }
+
+
 }

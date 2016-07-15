@@ -22,14 +22,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.coe.c0r0vans.GameObject.GameObject;
-import com.coe.c0r0vans.GameObjects.SelectedObject;
 import com.coe.c0r0vans.Logic.Ambush;
-import com.coe.c0r0vans.Logic.Caravan;
 import com.coe.c0r0vans.Logic.City;
-import com.coe.c0r0vans.Logic.Player;
 import com.coe.c0r0vans.Singles.GameObjects;
 import com.coe.c0r0vans.Singles.MessageMap;
 import com.coe.c0r0vans.Singles.MyGoogleMap;
+import com.coe.c0r0vans.Singles.SelectedObject;
 import com.coe.c0r0vans.UIElements.ActionView;
 import com.coe.c0r0vans.UIElements.ButtonLayout;
 import com.coe.c0r0vans.UIElements.UIControler;
@@ -64,7 +62,7 @@ import utility.settings.SettingsListener;
 public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
 
     private int SendedRequest = 0;
-    private MessageMap messages;
+
     MainWindow self=this;
     private boolean ready=false;
     GoogleApiClient mGoogleApiClient;
@@ -576,7 +574,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
             UIControler.setActionLayout((ActionView) findViewById(R.id.actionView));
             lay.removeAllViews();
             GameSound.setVolumeControlStream(self);
-            messages=new MessageMap(getApplicationContext());
+            MessageMap.init(getApplicationContext());
 
             ((ActionView)findViewById(R.id.actionView)).init();
             ((ButtonLayout)findViewById(R.id.buttonLayout)).init();
@@ -635,7 +633,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                 } else if (TYPE==MESSAGE){
                     if (response.has("Messages")) {
                         try {
-                            messages.loadJSON(response);
+                            MessageMap.loadJSON(response);
                         } catch (Exception e){
                             GATracker.trackException("LoadMessage",e);
                         }
@@ -670,7 +668,6 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
         touchView.setOnTouchListener(new View.OnTouchListener() {
             long tm = -1;
             Point oldPos;
-            //float oldBearing=0;
             Point f1;
             Point f2;
             int firstId;
@@ -692,42 +689,21 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                         if (Math.abs(oldPos.x - event.getX()) < 20 && Math.abs(oldPos.y - event.getY()) < 20 && (new Date().getTime()) - tm > 1500) {
                             tm = -1;
                         } else if (Math.abs(oldPos.x - event.getX()) < 20 && Math.abs(oldPos.y - event.getY()) < 20) {
-                            int distance = 50;
-                            GameObject target = null;
+                            LatLng latLng=MyGoogleMap.getMap().getProjection().fromScreenLocation(oldPos);
+                            GameObject target = GameObjects.getClosestObject(latLng);
                             //Marker
-                            for (GameObject o : GameObjects.getInstance().values()) {
-                                if (o != null && o.getMarker() != null) {
-                                    Point p = MyGoogleMap.getMap().getProjection().toScreenLocation(o.getMarker().getPosition());
-                                    int calc = (int) Math.sqrt(Math.pow(p.x - oldPos.x, 2) + Math.pow(p.y - oldPos.y, 2));
-                                    if (!(o instanceof Player || o instanceof Caravan) && calc < distance && o.getMarker().isVisible()) {
-                                        target = o;
-                                        distance = calc;
-                                    }
-                                }
-                            }
                             if (target != null) {
-
                                 SelectedObject.getInstance().setTarget(target);
                                 SelectedObject.getInstance().setPoint(target.getMarker().getPosition());
                                 ((ActionView) findViewById(R.id.actionView)).ShowView();
                             } else if (GameObjects.getPlayer() != null & GameObjects.getPlayer().getMarker() != null) {
                                 //Ambush
-                                LatLng latLng = MyGoogleMap.getMap().getProjection().fromScreenLocation(oldPos);
                                 float distances = GPSInfo.getDistance(latLng, GameObjects.getPlayer().getMarker().getPosition());
                                 if (distances != -1 && distances < GameObjects.getPlayer().getActionDistance()) {
-                                    boolean setAmush = true;
-                                    for (GameObject o : GameObjects.getInstance().values()) {
-                                        if ((o instanceof City || o instanceof Ambush) && o.getMarker() != null && o.getMarker().isVisible()) {
-                                            float d = GPSInfo.getDistance(latLng, o.getMarker().getPosition());
-                                            if (d < o.getRadius()) setAmush = false;
-                                        }
-                                    }
-                                    if (setAmush) {
-                                        SelectedObject.getInstance().setTarget(GameObjects.getPlayer());
-                                        SelectedObject.getInstance().setPoint(latLng);
-                                        ActionView actionView = (ActionView) findViewById(R.id.actionView);
-                                        actionView.ShowView();
-                                    }
+                                    SelectedObject.getInstance().setTarget(GameObjects.getPlayer());
+                                    SelectedObject.getInstance().setPoint(latLng);
+                                    ActionView actionView = (ActionView) findViewById(R.id.actionView);
+                                    actionView.ShowView();
                                 }
                             }
                         } else {
@@ -735,8 +711,6 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                         }
                         f1 = null;
                         f2 = null;
-
-
                     } else if (event.getActionMasked() == MotionEvent.ACTION_POINTER_DOWN) {
                         closeCity = false;
                         firstId = event.getPointerId(0);
