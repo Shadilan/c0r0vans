@@ -1,6 +1,7 @@
 package com.coe.c0r0vans.Logic;
 
 import android.graphics.Color;
+import android.util.Log;
 
 import com.coe.c0r0vans.GameObject.GameObject;
 import com.coe.c0r0vans.GameObject.OnGameObjectRemove;
@@ -55,18 +56,23 @@ public class Caravan extends GameObject {
         LatLng latLng=new LatLng(lat/1e6,lng/1e6);
         setMarker(map.addMarker(new MarkerOptions().position(latLng)));
         if (startPoint!=null && finishPoint!=null) {
-            if (line != null) line.remove();
-            PolylineOptions options = new PolylineOptions();
-            options.width(3);
-            GameObject target = SelectedObject.getInstance().getTarget();
-            if (target != null && target instanceof City && !(target.getGUID().equals(startGUID) || target.getGUID().equals(finishGUID)))
-                options.color(Color.LTGRAY);
-            else options.color(Color.BLUE);
-            options.geodesic(true);
-            options.add(startPoint);
-            options.add(finishPoint);
-            options.zIndex(150);
-            line = map.addPolyline(options);
+            if (line != null)
+            {
+                line.getPoints().set(0,startPoint);
+                line.getPoints().set(1,finishPoint);
+            } else {
+                PolylineOptions options = new PolylineOptions();
+                options.width(3);
+                GameObject target = SelectedObject.getInstance().getTarget();
+                if (target != null && target instanceof City && !(target.getGUID().equals(startGUID) || target.getGUID().equals(finishGUID)))
+                    options.color(Color.LTGRAY);
+                else options.color(Color.BLUE);
+                options.geodesic(true);
+                options.add(startPoint);
+                options.add(finishPoint);
+                options.zIndex(150);
+                line = map.addPolyline(options);
+            }
             showRoute();
         }
     }
@@ -134,10 +140,12 @@ public class Caravan extends GameObject {
                         finishPoint = new LatLng(obj.getInt("FinishLat") / 1e6, obj.getInt("FinishLng") / 1e6);
 
                 }
-                if (startPoint != null && finishPoint != null) {
-
-
-                    if (map != null) {
+                if (startPoint!=null && finishPoint!=null & map!=null) {
+                    if (line != null)
+                    {
+                        line.getPoints().set(0,startPoint);
+                        line.getPoints().set(1,finishPoint);
+                    } else {
                         PolylineOptions options = new PolylineOptions();
                         options.width(3);
                         GameObject target = SelectedObject.getInstance().getTarget();
@@ -149,9 +157,10 @@ public class Caravan extends GameObject {
                         options.add(finishPoint);
                         options.zIndex(150);
                         line = map.addPolyline(options);
-                        showRoute();
                     }
+                    showRoute();
                 }
+
             }
             //time=S/v + (v*v-(1+a)*(1+a))/2/(a)/v-0.7
             Upgrade up= GameObjects.getPlayer().getUpgrade("speed");
@@ -257,7 +266,10 @@ public class Caravan extends GameObject {
     public int getTime() {
         return time;
     }
+
+    @Override
     public void RemoveObject() {
+
         if (removeListeners!=null){
             for (OnGameObjectRemove onGameObjectRemove:removeListeners){
                 onGameObjectRemove.onRemove();
@@ -269,6 +281,7 @@ public class Caravan extends GameObject {
         }
 
         if (line!=null) {
+            Log.d("Leak","LineRemoved");
             line.remove();
             line=null;
         }

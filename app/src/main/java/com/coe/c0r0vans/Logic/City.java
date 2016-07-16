@@ -186,7 +186,7 @@ public class City extends GameObject implements ActiveObject {
 
                 GameSound.playSound(GameSound.FINISH_ROUTE_SOUND);
                 serverConnect.getInstance().callGetPlayerInfo();
-                GameObjects.getPlayer().setCurrentRouteGUID("");
+
                 for (GameObject o:GameObjects.getInstance().values()){
                     if (o!=null && o instanceof City) ((City) o).updateColor();
                 }

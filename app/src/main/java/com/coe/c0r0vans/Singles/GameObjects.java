@@ -89,16 +89,11 @@ public class GameObjects{
                             JSONArray JObj = response.getJSONArray("Objects");
                             int leng = JObj.length();
 
+
                             for (int i = 0; i < leng; i++) {
                                 GameObject robj;
                                 String GUID=JObj.getJSONObject(i).getString("GUID");
                                 robj=objects.get(GUID);
-                                /*for (GameObject obj : remObjects) {
-                                    if (obj.getGUID().equals(JObj.getJSONObject(i).getString("GUID"))) {
-                                        robj = obj;
-                                        break;
-                                    }
-                                }*/
                                 if (robj==null) robj=player.getAmbushes().get(GUID);
                                 if (robj==null) robj=player.getRoutes().get(GUID);
                                 if (robj != null) {

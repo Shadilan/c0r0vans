@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
@@ -413,10 +414,7 @@ public class Player extends GameObject {
                 ArrayList<String> GUIDS=new ArrayList<>(Routes.keySet());
 
 
-                /*for (Caravan routel:Routes){
-                    routel.RemoveObject();
-                }
-                Routes.clear();*/
+
                 final int route_length = jroutes.length();// Moved  route.length() call out of the loop to local variable route_length
                 for (int i=0;i< route_length;i++) {
                     JSONObject jobj=jroutes.getJSONObject(i);
@@ -443,7 +441,8 @@ public class Player extends GameObject {
                     Routes.get(lGUID).RemoveObject();
                     Routes.remove(lGUID);
                 }
-
+                Log.d("Leak","InArray"+Routes.size());
+                Log.d("Leak","ToDel"+GUIDS.size());
             }
             if (obj.has("Ambushes")){
                 JSONArray jambushs=obj.getJSONArray("Ambushes");
@@ -472,6 +471,8 @@ public class Player extends GameObject {
                     Ambushes.get(lGUID).RemoveObject();
                     Ambushes.remove(lGUID);
                 }
+                Log.d("Leak","InArray"+Ambushes.size());
+                Log.d("Leak","ToDel"+GUIDS.size());
             }
             if (obj.has("NextUpgrades")){
                 JSONArray nextUpgrade=obj.getJSONArray("NextUpgrades");
