@@ -14,6 +14,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,7 +36,10 @@ import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.OptionalPendingResult;
+import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -82,7 +86,12 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
     int signCall=0;
     private  void signIn(){
         if (signCall>3){
-            ((TextView)findViewById(R.id.status)).setText(R.string.server_unavaible);
+            MainThread.post(new Runnable() {
+                @Override
+                public void run() {
+                    ((TextView)findViewById(R.id.status)).setText(R.string.server_unavaible);
+                }
+            });
             signCall=0;
             MainThread.postDelayed(new Runnable() {
                 @Override
@@ -120,8 +129,43 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
             mGoogleApiClient = new GoogleApiClient.Builder(getApplicationContext())
                     .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                     .build();
-            Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
-            startActivityForResult(signInIntent, 123);
+            Log.d("SignIn","Enter");
+            Thread signing=new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        Log.d("SignIn","Start");
+                        ConnectionResult res = mGoogleApiClient.blockingConnect();
+                        OptionalPendingResult<GoogleSignInResult> pendingResult = Auth.GoogleSignInApi.silentSignIn(mGoogleApiClient);
+                        //pendingResult.await();
+                        if (pendingResult != null) {
+                            Log.d("SignIn","pending");
+                            if (pendingResult.isDone()) {
+                                Log.d("SignIn","Done");
+                                GoogleSignInResult signInResult = pendingResult.get();
+                                 doResult(signInResult);
+                            } else {
+                                Log.d("SignIn","NotDone");
+                                pendingResult.setResultCallback(new ResultCallback<GoogleSignInResult>() {
+                                    @Override
+                                    public void onResult(@NonNull GoogleSignInResult googleSignInResult) {
+                                        Log.d("SignIn","WaitOver");
+                                        doResult(googleSignInResult);
+                                    }
+                                });
+                            }
+                        } else {
+                            Log.d("SignIn","Noresult");
+                            doResult(null);
+                        }
+                    } finally {
+                        mGoogleApiClient.disconnect();
+                    }
+                }
+            });
+            signing.start();
+            //Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
+            //startActivityForResult(signInIntent, 123);
 
         }
 
@@ -152,7 +196,12 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                 editor.apply();
                 GATracker.trackTimeEnd("System","SignIn");
                 //Login To Server
-                loginWithToken();
+                MainThread.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        loginWithToken();
+                    }
+                });
 
                 //initStart();
             } else signIn();
