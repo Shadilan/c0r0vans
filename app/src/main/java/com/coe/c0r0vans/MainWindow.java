@@ -260,7 +260,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                                     //Остановить процесс загрузки
                                     break;
                                 default:
-                                    ((TextView)findViewById(R.id.status)).setText("Неопознанная ошибка.");
+                                    ((TextView)findViewById(R.id.status)).setText("Сервер не доступен.");
                                     MainThread.postDelayed(new Runnable() {
                                         @Override
                                         public void run() {
@@ -308,7 +308,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                             //Остановить процесс загрузки
                             break;
                         default:
-                            ((TextView)findViewById(R.id.status)).setText("Неопознанная ошибка.");
+                            ((TextView)findViewById(R.id.status)).setText("Сервер не доступен.");
                             MainThread.postDelayed(new Runnable() {
                                 @Override
                                 public void run() {
@@ -373,7 +373,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                                             //Остановить процесс загрузки
                                             break;
                                         default:
-                                            ((TextView)findViewById(R.id.status)).setText("Неопознанная ошибка.");
+                                            ((TextView)findViewById(R.id.status)).setText("Сервер не доступен.");
                                             MainThread.postDelayed(new Runnable() {
                                                 @Override
                                                 public void run() {
@@ -425,7 +425,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                                     //Остановить процесс загрузки
                                     break;
                                 default:
-                                    ((TextView)findViewById(R.id.status)).setText("Неопознанная ошибка.");
+                                    ((TextView)findViewById(R.id.status)).setText("Сервере не доступен.");
                                     MainThread.postDelayed(new Runnable() {
                                         @Override
                                         public void run() {
