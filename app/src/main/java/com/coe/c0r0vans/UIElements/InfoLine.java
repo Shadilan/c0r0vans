@@ -29,6 +29,7 @@ public class InfoLine extends RelativeLayout {
     private String labelString;
     private LatLng point;
     private ShowHideForm parentForm;
+    InfoLine self=this;
 
     public void setParentForm(ShowHideForm form){
         parentForm=form;
@@ -84,6 +85,7 @@ public class InfoLine extends RelativeLayout {
     }
 
     private void afterInit() {
+
         labelText= (TextView) findViewById(R.id.infoLineText);
         labelText.setText(labelString);
         removeButton= (ImageButton) findViewById(R.id.removeButton);
@@ -97,6 +99,8 @@ public class InfoLine extends RelativeLayout {
                     public void run() {
                         serverConnect.getInstance().callCanelAmbush(removeAction, target);
                         removeButton.setVisibility(INVISIBLE);
+                        self.setVisibility(GONE);
+
                     }
                 });
                 confirmWindow.show();

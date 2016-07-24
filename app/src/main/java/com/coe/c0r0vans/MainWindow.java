@@ -137,14 +137,18 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                         Log.d("SignIn","Start");
                         ConnectionResult res = mGoogleApiClient.blockingConnect();
                         OptionalPendingResult<GoogleSignInResult> pendingResult = Auth.GoogleSignInApi.silentSignIn(mGoogleApiClient);
-                        //pendingResult.await();
+
                         if (pendingResult != null) {
                             Log.d("SignIn","pending");
                             if (pendingResult.isDone()) {
                                 Log.d("SignIn","Done");
                                 GoogleSignInResult signInResult = pendingResult.get();
                                  doResult(signInResult);
-                            } else {
+                            } else if (pendingResult.isCanceled()){
+                                Log.d("SignIn","Canceled");
+                                doResult(null);
+                            }
+                            else {
                                 Log.d("SignIn","NotDone");
                                 pendingResult.setResultCallback(new ResultCallback<GoogleSignInResult>() {
                                     @Override
@@ -153,6 +157,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                                         doResult(googleSignInResult);
                                     }
                                 });
+
                             }
                         } else {
                             Log.d("SignIn","Noresult");
