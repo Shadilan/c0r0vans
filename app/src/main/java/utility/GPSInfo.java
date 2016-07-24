@@ -21,6 +21,7 @@ import utility.settings.SettingsListener;
 
 public class GPSInfo {
     private static GPSInfo instance;
+    private boolean on=false;
 
     public static boolean checkEnabled(){
 
@@ -182,12 +183,16 @@ public class GPSInfo {
         });
     }
     public void onGPS(){
+
         for (String prov : locationManager.getAllProviders()) {
             RequestUpdate(prov);
         }
+        on=true;
     }
     public void offGPS(){
+
         locationManager.removeUpdates(locationListener);
+        on=false;
     }
     LocationListener locationListener;
     /**
@@ -231,5 +236,9 @@ public class GPSInfo {
         Location.distanceBetween(p1.latitude, p1.longitude, p2.latitude, p2.longitude, distances);
         if (distances.length<1) return -1;
         else return distances[0];
+    }
+
+    public boolean isOn() {
+        return on;
     }
 }

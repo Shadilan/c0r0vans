@@ -34,6 +34,8 @@ import utility.GATracker;
 import utility.GPSInfo;
 import utility.MainThread;
 import utility.notification.Essages;
+import utility.sign.SignIn;
+import utility.sign.SignInListener;
 
 /**
  * Объект обеспечивающий соединение с сервером и взаимодействие с сервером. Singleton.
@@ -140,10 +142,12 @@ public class serverConnect {
      * @return true
      */
     public boolean ExecAuthorize(String googleToken){
+        Log.d("LoginIn","Start");
         if (!checkConnection()) return false;
         String url=new UrlBuilder(ServerAddres+"/authorize.jsp","Authorize",version)
                 .put("GoogleToken",googleToken)
                 .build();
+        Log.d("LoginIn",url);
         runRequest(UUID.randomUUID().toString(),url,ResponseListenerWithUID.AUTHORIZE);
         return true;
     }
@@ -555,41 +559,101 @@ public class serverConnect {
                 (Request.Method.GET, request, null, new ResponseListenerWithUID(UID,request,type){
                     @Override
                     public void onResponse(JSONObject response) {
+                        Log.d("TYPE"+getType(),response.toString());
                         try
                         {
 
                             clearListener();
 
                             if (response.has("Error") || (response.has("Result") && !response.getString("Result").equals("OK"))) {
-                                switch (getType()) {
-                                    case AUTHORIZE:
-                                    case REGISTER:
-                                            for (ServerListener l : listeners) l.onError(ServerListener.LOGIN,response);
-                                        break;
-                                    case SETRACE:
+                                String err = "";
+                                if (response.has("Error")) err = response.getString("Error");
+                                else if (response.has("Result")) err = response.getString("Result");
+                                if ("No player found.".equals(err) || "L0001".equals(err)) {
+                                    Token=null;
+                                    Essages.addEssage("Восстанавливаем соединение.");
+                                    SignIn.setListener(new SignInListener() {
+                                        @Override
+                                        public void onComplete(String token) {
+                                            GATracker.trackTimeStart("System", "LoginToServer");
+                                            serverConnect.getInstance().addListener(new ServerListener() {
+                                                @Override
+                                                public void onResponse(int TYPE, JSONObject response) {
 
-                                        String err="";
-                                        if (response.has("Error")) err=response.getString("Error");
-                                        else if (response.has("Result")) err=response.getString("Result");
-                                        switch (err){
-                                            case "L0001":Essages.addEssage("Потеря соединения. Перезапустите клиента.");
-                                            break;
-                                            case "O1101":Essages.addEssage("Вы выбрали не существующую фракцию.");
-                                            break;
-                                            default: if (response.has("Message")) Essages.addEssage(response.getString("Message"));
-                                                else Essages.addEssage("Неизвестная ошибка");
+                                                    if (TYPE == LOGIN) {
+                                                        serverConnect.getInstance().removeListener(this);
+                                                        GATracker.trackTimeEnd("System", "LoginToServer");
+                                                        if (response.has("Token")) {
+                                                            syncPlayer=true;
+                                                            syncMap=true;
+                                                            syncFast=true;
+                                                        } else if (response.has("Error")) {
+                                                            onError(TYPE, response);
+                                                        }
+
+                                                    }
+                                                }
+
+                                                @Override
+                                                public void onError(int TYPE, JSONObject response) {
+                                                    //TODO А если сервер не доступен?
+                                                    serverConnect.getInstance().removeListener(this);
+
+                                                }
+                                            });
+                                            serverConnect.getInstance().ExecAuthorize(token);
                                         }
-                                        //todo:Связность кода - плохо
-                                        GameObjects.getPlayer().setRace(0);
-                                        new ChooseFaction(context).show();
-                                    case ACTION:
-                                        if (listenersMap.get(getUID()) != null) listenersMap.get(getUID()).postError(response);
-                                        break;
-                                    case FASTSCAN:
-                                        for (ServerListener l : listeners) l.onError(ServerListener.FASTSCAN,response);
-                                        break;
-                                    default:
-                                        for (ServerListener l : listeners) l.onError(ServerListener.UNKNOWN,response);
+
+                                        @Override
+                                        public void onCanceled() {
+
+                                        }
+
+                                        @Override
+                                        public void onSignOff() {
+
+                                        }
+                                    });
+                                    SignIn.getToken();
+                                } else {
+
+
+                                    switch (getType()) {
+                                        case AUTHORIZE:
+                                        case REGISTER:
+                                            for (ServerListener l : listeners)
+                                                l.onError(ServerListener.LOGIN, response);
+                                            break;
+                                        case SETRACE:
+
+
+                                            switch (err) {
+                                                case "L0001":
+                                                    Essages.addEssage("Потеря соединения. Перезапустите клиента.");
+                                                    break;
+                                                case "O1101":
+                                                    Essages.addEssage("Вы выбрали не существующую фракцию.");
+                                                    break;
+                                                default:
+                                                    if (response.has("Message"))
+                                                        Essages.addEssage(response.getString("Message"));
+                                                    else Essages.addEssage("Неизвестная ошибка");
+                                            }
+                                            //todo:Связность кода - плохо
+                                            GameObjects.getPlayer().setRace(0);
+                                            new ChooseFaction(context).show();
+                                        case ACTION:
+                                            if (listenersMap.get(getUID()) != null)
+                                                listenersMap.get(getUID()).postError(response);
+                                            break;
+                                        case FASTSCAN:
+                                            for (ServerListener l : listeners)
+                                                l.onError(ServerListener.FASTSCAN, response);
+                                            break;
+                                        default:
+                                            for (ServerListener l : listeners)
+                                                l.onError(ServerListener.UNKNOWN, response);
+                                    }
                                 }
                             } else {
                                 switch (getType()){
@@ -648,6 +712,7 @@ public class serverConnect {
                         catch (Exception e){
                             GATracker.trackException("NetworkError",e);
                         }
+
                         runNextRequest();
 
 

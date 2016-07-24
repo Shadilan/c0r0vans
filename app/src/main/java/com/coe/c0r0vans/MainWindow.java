@@ -14,7 +14,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,13 +32,8 @@ import com.coe.c0r0vans.UIElements.ActionView;
 import com.coe.c0r0vans.UIElements.ButtonLayout;
 import com.coe.c0r0vans.UIElements.UIControler;
 import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
-import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.OptionalPendingResult;
-import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -62,6 +56,8 @@ import utility.notification.Essages;
 import utility.notification.MessageNotification;
 import utility.settings.GameSettings;
 import utility.settings.SettingsListener;
+import utility.sign.SignIn;
+import utility.sign.SignInListener;
 
 public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
 
@@ -84,140 +80,53 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
         signIn();
     }
     int signCall=0;
+    //!
     private  void signIn(){
-        if (signCall>3){
-            MainThread.post(new Runnable() {
-                @Override
-                public void run() {
-                    ((TextView)findViewById(R.id.status)).setText(R.string.server_unavaible);
-                }
-            });
-            signCall=0;
-            MainThread.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    signIn();
-                }
-            },30000);
+        TextView status=((TextView)findViewById(R.id.status));
+        if (status!=null) {
+            status.setText("Выполнение Авторизации Google.");
         }
+        SignIn.init(this);
+        SignIn.setListener(new SignInListener() {
+            @Override
+            public void onComplete(String token) {
 
-        serverConnect.getInstance().connect(getResources().getString(R.string.serveradress), getApplicationContext());
-        GATracker.trackTimeStart("System","SignIn");
-        ((TextView)findViewById(R.id.status)).setText(R.string.enter_google_account);
-        SharedPreferences sharedPreferences=getSharedPreferences("SpiritProto", MODE_PRIVATE);
-        String accountName=sharedPreferences.getString("AccountName", "");
-
-        GoogleSignInOptions gso;
-
-        if ("".equals(accountName)) {
-            gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                    .requestIdToken("818299087088-ooq951dsv5btv7361u4obhlse0apt3al.apps.googleusercontent.com")
-                    .requestEmail()
-                    .build();
-            mGoogleApiClient = new GoogleApiClient.Builder(getApplicationContext())
-                    .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-                    .build();
-            Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
-            startActivityForResult(signInIntent, 123);
-        }
-        else {
-            gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                    .requestIdToken("818299087088-ooq951dsv5btv7361u4obhlse0apt3al.apps.googleusercontent.com")
-                    .requestEmail()
-                    .setAccountName(accountName)
-                    .build();
-            mGoogleApiClient = new GoogleApiClient.Builder(getApplicationContext())
-                    .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-                    .build();
-            Log.d("SignIn","Enter");
-            Thread signing=new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        Log.d("SignIn","Start");
-                        ConnectionResult res = mGoogleApiClient.blockingConnect();
-                        OptionalPendingResult<GoogleSignInResult> pendingResult = Auth.GoogleSignInApi.silentSignIn(mGoogleApiClient);
-
-                        if (pendingResult != null) {
-                            Log.d("SignIn","pending");
-                            if (pendingResult.isDone()) {
-                                Log.d("SignIn","Done");
-                                GoogleSignInResult signInResult = pendingResult.get();
-                                 doResult(signInResult);
-                            } else if (pendingResult.isCanceled()){
-                                Log.d("SignIn","Canceled");
-                                doResult(null);
-                            }
-                            else {
-                                Log.d("SignIn","NotDone");
-                                pendingResult.setResultCallback(new ResultCallback<GoogleSignInResult>() {
-                                    @Override
-                                    public void onResult(@NonNull GoogleSignInResult googleSignInResult) {
-                                        Log.d("SignIn","WaitOver");
-                                        doResult(googleSignInResult);
-                                    }
-                                });
-
-                            }
-                        } else {
-                            Log.d("SignIn","Noresult");
-                            doResult(null);
-                        }
-                    } finally {
-                        mGoogleApiClient.disconnect();
-                    }
+                SignIn.setListener(null);
+                idToken=token;
+                TextView status=((TextView)findViewById(R.id.status));
+                if (status!=null) {
+                    status.setText("Google Авторизация выполнена.");
                 }
-            });
-            signing.start();
-            //Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
-            //startActivityForResult(signInIntent, 123);
+                loginWithToken();
+            }
 
-        }
+            @Override
+            public void onCanceled() {
 
+            }
 
+            @Override
+            public void onSignOff() {
+
+            }
+        });
+        SignIn.getToken();
     }
-
+    //!
     protected void onActivityResult(final int requestCode, final int resultCode,
                                     final Intent data) {
         if (requestCode == 123) {
             ((TextView)findViewById(R.id.status)).setText(R.string.done_google_account);
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
-            doResult(result);
+            SignIn.intentResult(result);
         }
     }
+    //!
 
-    private void doResult(GoogleSignInResult result){
-        if (result!=null && result.isSuccess()) {
-
-            GoogleSignInAccount acct = result.getSignInAccount();
-            // Get account information
-            //String accountNAme = acct.get();
-            if (acct!=null) {
-                idToken = acct.getIdToken();
-                String mEmail = acct.getEmail();
-                SharedPreferences sharedPreferences = getSharedPreferences("SpiritProto", MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putString("AccountName", mEmail);
-                editor.apply();
-                GATracker.trackTimeEnd("System","SignIn");
-                //Login To Server
-                MainThread.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        loginWithToken();
-                    }
-                });
-
-                //initStart();
-            } else signIn();
-        } else {
-            signIn();
-        }
-    }
 
     String idToken;
     private void loginWithToken(){
-
+        serverConnect.getInstance().connect(getString(R.string.serveradress),getApplicationContext());
         GATracker.trackTimeStart("System","LoginToServer");
         serverConnect.getInstance().addListener(new ServerListener() {
             @Override
@@ -227,50 +136,15 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                     serverConnect.getInstance().removeListener(this);
                     GATracker.trackTimeEnd("System","LoginToServer");
                     if (response.has("Token")) {
-
-                        ((TextView)findViewById(R.id.status)).setText("Вход выполнен1.");
+                        TextView status=((TextView)findViewById(R.id.status));
+                        if (status!=null) {
+                            status.setText("Вход выполнен.");
+                        }
                         // Выполнить дальнейшую загрузку
                         initGPS();
+
                     } else if (response.has("Error")){
-
-                        try {
-                            String err=response.getString("Error");
-
-                            switch (err){
-                                case "H0101":
-                                    ((TextView)findViewById(R.id.status)).setText("Сервер отказал запрос.");
-                                    break;
-                                //Token не распознан
-                                case "L0201":
-                                    //Указать на ошибку
-                                    ((TextView)findViewById(R.id.status)).setText("Токен не действителен.");
-                                    //Получить новый токен
-                                    signIn();
-                                    break;
-                                //Пользователь не зарегестрирован
-                                case "L0202":
-                                    //Начать процесс регистрации
-                                    ((TextView)findViewById(R.id.status)).setText("Регистрация пользователя.");
-                                    initRegister();
-                                    break;
-                                //Версия не поддерживается
-                                case "L0203":
-                                    //Указать ошибку
-                                    ((TextView)findViewById(R.id.status)).setText("Ваша версия не поддерживается.");
-                                    //Остановить процесс загрузки
-                                    break;
-                                default:
-                                    ((TextView)findViewById(R.id.status)).setText("Сервер не доступен.");
-                                    MainThread.postDelayed(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            loginWithToken();
-                                        }
-                                    },5000);
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
+                        onError(TYPE,response);
                     }
 
                 }
@@ -337,7 +211,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                             serverConnect.getInstance().removeListener(this);
                             GATracker.trackTimeEnd("System","RegisterToServer");
                             if (response.has("Token")) {
-                                ((TextView)findViewById(R.id.status)).setText("Вход выполнен2.");
+                                ((TextView)findViewById(R.id.status)).setText("Вход выполнен.");
                                 // Выполнить дальнейшую загрузку
                                 initGPS();
                             } else if (response.has("Error")){
