@@ -147,7 +147,7 @@ public class Caravan extends GameObject {
                         line.getPoints().set(1,finishPoint);
                     } else {
                         PolylineOptions options = new PolylineOptions();
-                        options.width(3);
+                        options.width(3*GameSettings.getMetric());
                         GameObject target = SelectedObject.getInstance().getTarget();
                         if (target != null && target instanceof City && !(target.getGUID().equals(startGUID) || target.getGUID().equals(finishGUID)))
                             options.color(Color.LTGRAY);

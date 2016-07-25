@@ -3,6 +3,7 @@ package utility.settings;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.DisplayMetrics;
 
 import com.coe.c0r0vans.GameObject.GameObject;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -23,6 +24,16 @@ public class GameSettings extends HashMap<String,String>{
     private Context ctx;
     private ArrayList<SettingsListener> settingsListeners;
     private ArrayList<SettingsListener> removedSettingsListeners;
+    private int dpi=-1;
+    public static int getMetric(){
+
+        if (instance==null) return 1;
+        if (instance.dpi!=-1) return instance.dpi;
+        DisplayMetrics metrics = instance.ctx.getResources().getDisplayMetrics();
+        if (metrics.densityDpi>=DisplayMetrics.DENSITY_XHIGH) instance.dpi=2;
+        else instance.dpi=1;
+        return instance.dpi;
+    }
     public static void addSettingsListener(SettingsListener listener){
         if (instance.settingsListeners==null){
             instance.settingsListeners=new ArrayList<>();

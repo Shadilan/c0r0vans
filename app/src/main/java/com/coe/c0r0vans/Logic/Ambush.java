@@ -238,7 +238,7 @@ public class Ambush extends GameObject implements ActiveObject {
                     default:
                         circleOptions.strokeColor(Color.GREEN);
                 }
-                circleOptions.strokeWidth(2);
+                circleOptions.strokeWidth(2*GameSettings.getMetric());
                 zone = map.addCircle(circleOptions);
             }
         } else
@@ -530,7 +530,7 @@ public class Ambush extends GameObject implements ActiveObject {
                     default:
                         circleOptions.strokeColor(Color.GREEN);
                 }
-                circleOptions.strokeWidth(2);
+                circleOptions.strokeWidth(2*GameSettings.getMetric());
                 zone = map.addCircle(circleOptions);
             }
         }

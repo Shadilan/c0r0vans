@@ -82,7 +82,9 @@ public class SignIn {
                         OptionalPendingResult<GoogleSignInResult> pendingResult = Auth.GoogleSignInApi.silentSignIn(mGoogleApiClient);
 
                         if (pendingResult != null) {
-                            Log.d("SignIn","pending");
+                            GoogleSignInResult signInResult=pendingResult.await();
+                            doSignIn(signInResult);
+                            /*Log.d("SignIn","pending");
                             if (pendingResult.isDone()) {
                                 Log.d("SignIn","Done");
                                 GoogleSignInResult signInResult = pendingResult.get();
@@ -93,9 +95,10 @@ public class SignIn {
                             }
                             else {
                                 Log.d("SignIn","NotDone");
+                                mGoogleApiClient.disconnect();
                                 getToken();
 
-                            }
+                            }*/
                         } else {
                             Log.d("SignIn","Noresult");
                             doSignIn(null);

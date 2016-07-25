@@ -32,6 +32,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -60,6 +61,7 @@ public class City extends GameObject implements ActiveObject {
     ObjectAction buyAction;
     ObjectAction startRouteAction;
     ObjectAction endRouteAction;
+    ObjectAction startFinishRouteAction;
     private String founder="";
     private int hirelings=100;
     private int hireprice=100;
@@ -250,6 +252,116 @@ public class City extends GameObject implements ActiveObject {
 
             }
         };
+        startFinishRouteAction = new ObjectAction(this) {
+            String oldRouteGuid;
+            Caravan oldRoute;
+            boolean routeStart;
+            //TODO: Зачем это?
+            @Override
+            public Bitmap getImage() {
+                return null;
+            }
+
+            @Override
+            public String getCommand() {
+                return "FinishStartRoute";
+            }
+
+            @Override
+            public void preAction() {
+                oldRouteGuid=GameObjects.getPlayer().getCurrentRouteGUID();
+                oldRoute=GameObjects.getPlayer().getCurrentR();
+                routeStart=GameObjects.getPlayer().getRouteStart();
+                GameObjects.getPlayer().setRouteStart(true);
+                GameObjects.getPlayer().setCurrentRouteGUID(getGUID());
+            }
+
+            @Override
+            public void postAction(JSONObject response) {
+                if (oldRoute !=null )
+                    Essages.addEssage(String.format(ctx.getResources().getString(R.string.route_finish), oldRoute.getStartName(),Name));
+                else Essages.addEssage(String.format(ctx.getResources().getString(R.string.route_finish), "",Name));
+                GameSound.playSound(GameSound.START_ROUTE_SOUND);
+                Essages.addEssage(String.format(ctx.getResources().getString(R.string.route_started), Name));
+                serverConnect.getInstance().callGetPlayerInfo();
+
+                for (GameObject o:GameObjects.getInstance().values()){
+                    if (o!=null && o instanceof City) ((City) o).updateColor();
+                }
+                try {
+                    if (response.has("Route")) {
+                        JSONArray array=response.getJSONArray("Route");
+                        final int array_length = array.length();// Moved  array.length() call out of the loop to local variable array_length
+                        for (int i = 0; i< array_length; i++){
+                            JSONObject obj=array.getJSONObject(i);
+                            String guid="";
+                            if (obj.has("GUID")) guid=obj.getString("GUID");
+                            if (GameObjects.getPlayer().getCurrentR().getGUID().equals(guid)){
+                                GameObjects.getPlayer().setCurrentRoute(new Caravan(MyGoogleMap.getMap(),obj));
+                            } else {
+                                Caravan caravan=GameObjects.getPlayer().getRoutes().get(guid);
+                                if (caravan!=null) caravan.loadJSON(obj);
+                                else GameObjects.getPlayer().getRoutes().put(guid,new Caravan(MyGoogleMap.getMap(),obj));
+                            }
+                        }
+
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void postError(JSONObject response) {
+                GameObjects.getPlayer().setRouteStart(routeStart);
+                GameObjects.getPlayer().setCurrentRouteGUID(oldRouteGuid);
+                GameObjects.getPlayer().setCurrentRoute(oldRoute);
+                try {
+
+                    String err;
+                    if (response.has("Error")) err = response.getString("Error");
+                    else if (response.has("Result")) err = response.getString("Result");
+                    else err = "U0000";
+                    switch (err) {
+                        case "DB001":
+                            Essages.addEssage("Ошибка сервера.");
+                            break;
+                        case "L0001":
+                            //TODO: Опасное место может надо всетаки отдавать управление при потере токена
+                            Essages.addEssage("Соединение потеряно.");
+                            GameObjects.getPlayer().setRouteStart(true);
+                            break;
+                        case "O0601":
+                            Essages.addEssage("Город не найден.");
+                            break;
+                        case "O0602":
+                            Essages.addEssage("Город далеко.");
+                            break;
+                        case "O0604":
+                            Essages.addEssage("Такой маршрут уже есть.");
+                            break;
+                        case "O0605":
+                            Essages.addEssage("Маршрут начинается в этом городе.");
+                            break;
+                        case "O0606":
+                            if (response.has("Message"))
+                                Essages.addEssage(response.getString("Message"));
+                            else Essages.addEssage("Не хватает наемников.");
+                            break;
+                        default:
+                            GameObjects.getPlayer().setRouteStart(true);
+                            if (response.has("Message"))
+                                Essages.addEssage(response.getString("Message"));
+                            else Essages.addEssage("Непредвиденная ошибка.");
+
+                    }
+                }catch (JSONException e)
+                {
+                    GATracker.trackException("StarFinishRoute",e);
+                }
+
+            }
+        };
         buyAction = new ObjectAction(this) {
             @Override
             public Bitmap getImage() {
@@ -406,7 +518,7 @@ public class City extends GameObject implements ActiveObject {
                 circleOptions.zIndex(100);
                 if (GameObjects.getPlayer().checkRoute(GUID)) circleOptions.strokeColor(Color.DKGRAY);
                 else circleOptions.strokeColor(Color.BLUE);
-                circleOptions.strokeWidth(2);
+                circleOptions.strokeWidth(2*GameSettings.getMetric());
                 zone = map.addCircle(circleOptions);
             } else {
                 zone.setCenter(latlng);
@@ -927,11 +1039,7 @@ public class City extends GameObject implements ActiveObject {
             findViewById(R.id.restart_route).setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    serverConnect.getInstance().callFinishRoute(endRouteAction,
-                            GPSInfo.getInstance().GetLat(),
-                            GPSInfo.getInstance().GetLng(),
-                            city.getGUID());
-                    serverConnect.getInstance().callStartRoute(startRouteAction,
+                    serverConnect.getInstance().callStartFinishRoute(startFinishRouteAction,
                             GPSInfo.getInstance().GetLat(),
                             GPSInfo.getInstance().GetLng(),
                             city.getGUID());
@@ -1307,11 +1415,7 @@ public class City extends GameObject implements ActiveObject {
                 @Override
                 public void onClick(View v) {
                     if (city.getMarker()!=null) {
-                        serverConnect.getInstance().callFinishRoute(endRouteAction,
-                                GPSInfo.getInstance().GetLat(),
-                                GPSInfo.getInstance().GetLng(),
-                                city.getGUID());
-                        serverConnect.getInstance().callStartRoute(startRouteAction,
+                        serverConnect.getInstance().callStartFinishRoute(startFinishRouteAction,
                                 GPSInfo.getInstance().GetLat(),
                                 GPSInfo.getInstance().GetLng(),
                                 city.getGUID());

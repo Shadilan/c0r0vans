@@ -384,6 +384,27 @@ public class serverConnect {
         return true;
     }
 
+    public boolean callStartFinishRoute(ObjectAction action,int Lat,int Lng,String target){
+        if (!checkConnection()) return false;
+        if (Token==null) return false;
+        if (lockedActions==null) lockedActions=new ArrayList<>();
+        lockedActions.add(action);
+        action.preAction();
+        String UID=UUID.randomUUID().toString();
+        String url=new UrlBuilder(ServerAddres+"/getdata.jsp",action.getCommand(),version)
+                .put("Token",Token)
+                .put("plat",Lat)
+                .put("plng",Lng)
+                .put("TGUID",target)
+                .put("UUID",UID)
+                .build();
+        Log.d("StartFinish",url);
+        listenersMap.put(UID, action);
+        errorMap.put(UID, action);
+        runRequest(UID, url, ResponseListenerWithUID.ACTION);
+        return true;
+    }
+
 
 
     public boolean createCity(ObjectAction action,int Lat,int Lng , int TLat,int TLng){
