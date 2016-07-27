@@ -590,7 +590,7 @@ public class serverConnect {
                                 String err = "";
                                 if (response.has("Error")) err = response.getString("Error");
                                 else if (response.has("Result")) err = response.getString("Result");
-                                if ("No player found.".equals(err) || "L0001".equals(err)) {
+                                if ("No player found.".equals(err) || "L0001".equals(err) || "DB001".equals(err)) {
                                     Token=null;
                                     Essages.addEssage("Восстанавливаем соединение.");
                                     SignIn.setListener(new SignInListener() {

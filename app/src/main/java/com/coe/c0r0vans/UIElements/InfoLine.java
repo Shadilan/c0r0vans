@@ -99,7 +99,7 @@ public class InfoLine extends RelativeLayout {
                     public void run() {
                         serverConnect.getInstance().callCanelAmbush(removeAction, target);
                         removeButton.setVisibility(INVISIBLE);
-                        self.setVisibility(GONE);
+                        //self.setVisibility(GONE);
 
                     }
                 });

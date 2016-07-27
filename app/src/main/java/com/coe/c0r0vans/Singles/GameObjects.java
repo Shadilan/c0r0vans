@@ -44,7 +44,7 @@ public class GameObjects{
         float closest=1000;
         GameObject closestObject=null;
         for (GameObject o:objects.values()){
-            if (o instanceof ActiveObject && o.getMarker()!=null) {
+            if (o instanceof ActiveObject && o.getMarker()!=null && o.getMarker().isVisible()) {
                 float dist = GPSInfo.getDistance(latLng, o.getMarker().getPosition());
                 if (dist < closest && dist < o.getRadius()){
                     closest=dist;

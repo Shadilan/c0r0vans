@@ -73,4 +73,14 @@
         android:layout_alignLeft="@+id/info"
         android:layout_alignStart="@+id/info" />
 
+    <TextView
+        android:background="@drawable/layouts"
+        style="@style/SmallText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:id="@+id/distance"
+        android:layout_alignBottom="@+id/info"
+        android:layout_centerHorizontal="true" />
+
 </RelativeLayout>

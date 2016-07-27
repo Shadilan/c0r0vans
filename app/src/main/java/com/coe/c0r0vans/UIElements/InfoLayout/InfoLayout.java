@@ -9,8 +9,10 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ToggleButton;
 
+import com.coe.c0r0vans.GameObject.OnGameObjectChange;
 import com.coe.c0r0vans.R;
 import com.coe.c0r0vans.ShowHideForm;
+import com.coe.c0r0vans.Singles.GameObjects;
 import com.coe.c0r0vans.UIElements.UIControler;
 
 import utility.GATracker;
@@ -137,7 +139,12 @@ public class InfoLayout extends RelativeLayout implements ShowHideForm {
                 b.setChecked(true);
             }
         });
-
+        GameObjects.getPlayer().addOnChangeListeners(new OnGameObjectChange() {
+            @Override
+            public void onChange(int TYPE) {
+                loadFromPlayer();
+            }
+        });
     }
 
     public void loadFromPlayer() {

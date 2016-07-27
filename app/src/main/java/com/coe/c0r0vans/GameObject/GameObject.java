@@ -165,6 +165,7 @@ public class GameObject {
         if (removeListeners==null || onGameObjectChange==null) return;
         changeListeners.remove(onGameObjectChange);
     }
+
     protected void change(int type){
         if (changeListeners!=null){
             for (OnGameObjectChange onGameObjectChange:changeListeners){

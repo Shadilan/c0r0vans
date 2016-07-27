@@ -44,7 +44,7 @@ public class CityLine extends RelativeLayout {
             else lengthView.setText("↝");
         if (startCityView!=null) startCityView.setText(r.getStartName());
         if (endCityView!=null)
-            if (!r.getFinishName().equals("null")) endCityView.setText(r.getFinishName());
+            if (!"null".equals(r.getFinishName())) endCityView.setText(r.getFinishName());
             else endCityView.setVisibility(GONE);
         if (point!=null && showButton!=null) showButton.setVisibility(VISIBLE);
 

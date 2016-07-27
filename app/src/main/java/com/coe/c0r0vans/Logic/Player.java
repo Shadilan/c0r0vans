@@ -488,6 +488,14 @@ public class Player extends GameObject {
         change(OnGameObjectChange.EXTERNAL);
 
     }
+    public void removeAmbush(String guid){
+        Ambush sa=Ambushes.get(guid);
+        setHirelings(hirelings+sa.getLife()*10);
+        setAmbushLeft(AmbushesLeft+1);
+        sa.RemoveObject();
+        Ambushes.remove(guid);
+        change(OnGameObjectChange.EXTERNAL);
+    }
 
     @Override
     public void RemoveObject() {

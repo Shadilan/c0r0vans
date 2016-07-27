@@ -3,7 +3,7 @@ package com.coe.c0r0vans.UIElements;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
-import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageButton;
@@ -13,6 +13,7 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.coe.c0r0vans.GameObject.GameObject;
 import com.coe.c0r0vans.GameObject.OnGameObjectChange;
@@ -23,8 +24,6 @@ import com.coe.c0r0vans.Singles.MyGoogleMap;
 import com.coe.c0r0vans.UIElements.InfoLayout.InfoLayout;
 
 import org.json.JSONObject;
-
-import java.util.Arrays;
 
 import utility.GATracker;
 import utility.MainThread;
@@ -88,30 +87,7 @@ public class ButtonLayout extends RelativeLayout {
 
             }
         });
-        TextView am;
-        if (GameObjects.getPlayer() != null) {
-            am = (TextView) findViewById(R.id.levelAmount);
-            am.setText(String.valueOf(GameObjects.getPlayer().getLevel()));
-            am = (TextView) findViewById(R.id.ambush);
-            am.setText(String.format(getContext().getString(R.string.d_d), GameObjects.getPlayer().getAmbushLeft(), GameObjects.getPlayer().getAmbushMax()));
-            try {
-                ProgressBar expProgress = (ProgressBar) findViewById(R.id.expProgress);
-                expProgress.setMax(LevelTable.getEnd(GameObjects.getPlayer().getLevel()) - LevelTable.getStart(GameObjects.getPlayer().getLevel()));
-                expProgress.setProgress(GameObjects.getPlayer().getExp() - LevelTable.getStart(GameObjects.getPlayer().getLevel()));
-            } catch (Exception e){
-                Log.d("PB",e.toString()+ Arrays.toString(e.getStackTrace()));
-            }
-            am = (TextView) findViewById(R.id.goldAmount);
-            am.setText(String.valueOf(StringUtils.intToStr(GameObjects.getPlayer().getGold())));
-            if ("".equals(GameObjects.getPlayer().getCurrentRouteGUID()))
-                PlayerInfo.setImageResource(R.mipmap.info);
-            else PlayerInfo.setImageResource(R.mipmap.info_route);
-
-            am = (TextView) findViewById(R.id.foundedAmount);
-            am.setText(String.format(getContext().getString(R.string.d_d), GameObjects.getPlayer().getFoundedCities(), GameObjects.getPlayer().getCityMax()));
-            ((TextView) findViewById(R.id.hirelingsAmount)).setText(String.format(getContext().getString(R.string.s_s), StringUtils.intToStr(GameObjects.getPlayer().getHirelings()), StringUtils.intToStr(GameObjects.getPlayer().getLeftToHire())));
-            infoLayout.loadFromPlayer();
-        }
+        loadFromPlayer();
         if ("Y".equals(GameSettings.getValue("SHOW_BUILD_AREA"))) {
             findViewById(R.id.foundedTitle).setVisibility(VISIBLE);
             findViewById(R.id.foundedAmount).setVisibility(VISIBLE);
@@ -185,33 +161,21 @@ public class ButtonLayout extends RelativeLayout {
 
             }
         });
+        ProgressBar expProgress= (ProgressBar) findViewById(R.id.expProgress);
+        expProgress.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CharSequence text=StringUtils.intToStr(GameObjects.getPlayer().getExp()-LevelTable.getStart(GameObjects.getPlayer().getLevel()))+"/"+StringUtils.intToStr(LevelTable.getEnd(GameObjects.getPlayer().getLevel())-LevelTable.getStart(GameObjects.getPlayer().getLevel()));
+                Toast toast=Toast.makeText(getContext(),text,Toast.LENGTH_SHORT);
+                toast.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL,toast.getXOffset(),toast.getXOffset());
+                toast.show();
+            }
+        });
         GameObjects.getPlayer().addOnChangeListeners(new OnGameObjectChange() {
 
             @Override
             public void onChange(int TYPE) {
-                try {
-                    TextView am = (TextView) findViewById(R.id.levelAmount);
-                    am.setText(String.valueOf(GameObjects.getPlayer().getLevel()));
-                    am = (TextView) findViewById(R.id.ambush);
-                    am.setText(String.format(getContext().getString(R.string.d_d), GameObjects.getPlayer().getAmbushMax()-GameObjects.getPlayer().getAmbushLeft(), GameObjects.getPlayer().getAmbushMax()));
-                    ProgressBar expProgress= (ProgressBar) findViewById(R.id.expProgress);
-                    expProgress.setMax(LevelTable.getEnd(GameObjects.getPlayer().getLevel())-LevelTable.getStart(GameObjects.getPlayer().getLevel()));
-                    expProgress.setProgress(GameObjects.getPlayer().getExp()-LevelTable.getStart(GameObjects.getPlayer().getLevel()));
-                    am = (TextView) findViewById(R.id.goldAmount);
-                    am.setText(String.valueOf(StringUtils.intToStr(GameObjects.getPlayer().getGold())));
-                    ImageView btn = (ImageView) findViewById(R.id.infoview);
-                    if ("".equals(GameObjects.getPlayer().getCurrentRouteGUID()))
-                        btn.setImageResource(R.mipmap.info);
-                    else btn.setImageResource(R.mipmap.info_route);
-
-                    am = (TextView) findViewById(R.id.foundedAmount);
-                    am.setText(String.format(getContext().getString(R.string.d_d), GameObjects.getPlayer().getFoundedCities(), GameObjects.getPlayer().getCityMax()));
-                    ((TextView) findViewById(R.id.hirelingsAmount)).setText(String.format(getContext().getString(R.string.s_s), StringUtils.intToStr(GameObjects.getPlayer().getHirelings()), StringUtils.intToStr(GameObjects.getPlayer().getLeftToHire())));
-
-                    infoLayout.loadFromPlayer();
-                } catch (Exception e){
-                    GATracker.trackException("PlayerChange",e);
-                }
+                loadFromPlayer();
             }
         });
         LinearLayout logView = (LinearLayout) findViewById(R.id.chatBox);
@@ -275,6 +239,35 @@ public class ButtonLayout extends RelativeLayout {
 
             }
         });
+
+    }
+
+    private void loadFromPlayer() {
+        if (GameObjects.getPlayer() == null) return;
+        try {
+            TextView am = (TextView) findViewById(R.id.levelAmount);
+            am.setText(String.valueOf(GameObjects.getPlayer().getLevel()));
+            am = (TextView) findViewById(R.id.ambush);
+            am.setText(String.format(getContext().getString(R.string.d_d), GameObjects.getPlayer().getAmbushMax()-GameObjects.getPlayer().getAmbushLeft(), GameObjects.getPlayer().getAmbushMax()));
+            ProgressBar expProgress= (ProgressBar) findViewById(R.id.expProgress);
+            expProgress.setMax(LevelTable.getEnd(GameObjects.getPlayer().getLevel())-LevelTable.getStart(GameObjects.getPlayer().getLevel()));
+            expProgress.setProgress(GameObjects.getPlayer().getExp()-LevelTable.getStart(GameObjects.getPlayer().getLevel()));
+
+            expProgress.setClickable(true);
+            am = (TextView) findViewById(R.id.goldAmount);
+            am.setText(String.valueOf(StringUtils.intToStr(GameObjects.getPlayer().getGold())));
+            ImageView btn = (ImageView) findViewById(R.id.infoview);
+            if ("".equals(GameObjects.getPlayer().getCurrentRouteGUID()))
+                btn.setImageResource(R.mipmap.info);
+            else btn.setImageResource(R.mipmap.info_route);
+
+            am = (TextView) findViewById(R.id.foundedAmount);
+            am.setText(String.format(getContext().getString(R.string.d_d), GameObjects.getPlayer().getFoundedCities(), GameObjects.getPlayer().getCityMax()));
+            ((TextView) findViewById(R.id.hirelingsAmount)).setText(String.format(getContext().getString(R.string.s_s), StringUtils.intToStr(GameObjects.getPlayer().getHirelings()), StringUtils.intToStr(GameObjects.getPlayer().getLeftToHire())));
+
+        } catch (Exception e){
+            GATracker.trackException("PlayerChange",e);
+        }
 
     }
 

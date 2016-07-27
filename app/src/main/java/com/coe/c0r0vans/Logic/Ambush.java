@@ -73,8 +73,7 @@ public class Ambush extends GameObject implements ActiveObject {
                         GameSound.playSound(GameSound.REMOVE_AMBUSH);
                         GameObjects.getPlayer().setAmbushLeft(GameObjects.getPlayer().getAmbushLeft() + 1);
                         GameObjects.getPlayer().setHirelings(GameObjects.getPlayer().getHirelings()+getLife()*5);
-                        Ambush sa=GameObjects.getPlayer().getAmbushes().get(getGUID());
-                        if (sa!=null) GameObjects.getPlayer().getAmbushes().remove(sa.getGUID());
+                        GameObjects.getPlayer().removeAmbush(getGUID());
                         Essages.addEssage("Засада распущена");
                         RemoveObject();
                     }
@@ -406,16 +405,16 @@ public class Ambush extends GameObject implements ActiveObject {
             if (f<1 || f>4) f=4;
             switch (f) {
                 case 3:
-                    ((ImageView)findViewById(R.id.ambushFaction)).setImageResource(R.mipmap.legue);
+                    ((ImageView)findViewById(R.id.ambushFaction)).setImageResource(R.mipmap.legue_btn);
                     break;
                 case 2:
-                    ((ImageView)findViewById(R.id.ambushFaction)).setImageResource(R.mipmap.alliance);
+                    ((ImageView)findViewById(R.id.ambushFaction)).setImageResource(R.mipmap.alliance_btn);
                     break;
                 case 1:
-                    ((ImageView)findViewById(R.id.ambushFaction)).setImageResource(R.mipmap.guild);
+                    ((ImageView)findViewById(R.id.ambushFaction)).setImageResource(R.mipmap.guild_btn);
                     break;
                 default:
-                    ((ImageView)findViewById(R.id.ambushFaction)).setImageResource(R.mipmap.neutral);
+                    ((ImageView)findViewById(R.id.ambushFaction)).setImageResource(R.mipmap.neutral_btn);
                     break;
             }
             ((TextView)findViewById(R.id.ambushDesc)).setText(ambush.getInfo());
@@ -442,7 +441,7 @@ public class Ambush extends GameObject implements ActiveObject {
 
             });
             removeButton.setVisibility(INVISIBLE);
-            findViewById(R.id.closeActionButton).setOnClickListener(new OnClickListener() {
+            findViewById(R.id.cancel).setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     close();
@@ -460,10 +459,10 @@ public class Ambush extends GameObject implements ActiveObject {
                 removeButton.setVisibility(VISIBLE);
 
             } else if(ambush.getFaction()==GameObjects.getPlayer().getRace()){
-                removeButton.setVisibility(GONE);
+                removeButton.setVisibility(INVISIBLE);
             } else{
                 if (inZone) removeButton.setVisibility(VISIBLE);
-                else removeButton.setVisibility(GONE);
+                else removeButton.setVisibility(INVISIBLE);
 
             }
         }

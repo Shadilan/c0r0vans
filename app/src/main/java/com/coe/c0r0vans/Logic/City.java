@@ -199,6 +199,7 @@ public class City extends GameObject implements ActiveObject {
                 GameObjects.getPlayer().setRouteStart(routeStart);
                 GameObjects.getPlayer().setCurrentRouteGUID(oldRouteGuid);
                 GameObjects.getPlayer().setCurrentRoute(oldRoute);
+                GameObjects.getPlayer().setRouteStart(false);
                 try {
 
                     String err;
@@ -211,7 +212,6 @@ public class City extends GameObject implements ActiveObject {
                             break;
                         case "L0001":
                             Essages.addEssage("Соединение потеряно.");
-                            GameObjects.getPlayer().setRouteStart(true);
                             break;
                         case "O0601":
                             Essages.addEssage("Город не найден.");
@@ -221,7 +221,7 @@ public class City extends GameObject implements ActiveObject {
                             break;
                         case "O0603":
                             Essages.addEssage("Маршрут не начат.");
-                            GameObjects.getPlayer().setRouteStart(false);
+                            GameObjects.getPlayer().setRouteStart(true);
                             GameObjects.getPlayer().setCurrentRouteGUID("");
                             GameObjects.getPlayer().setCurrentRoute(null);
                             break;
@@ -235,11 +235,8 @@ public class City extends GameObject implements ActiveObject {
                             if (response.has("Message"))
                                 Essages.addEssage(response.getString("Message"));
                             else Essages.addEssage("Не хватает наемников.");
-                            GameObjects.getPlayer().setRouteStart(routeStart);
-                            GameObjects.getPlayer().setCurrentRouteGUID(oldRouteGuid);
-                            GameObjects.getPlayer().setCurrentRoute(oldRoute);
+                            break;
                         default:
-                            GameObjects.getPlayer().setRouteStart(true);
                             if (response.has("Message"))
                                 Essages.addEssage(response.getString("Message"));
                             else Essages.addEssage("Непредвиденная ошибка.");
@@ -272,7 +269,7 @@ public class City extends GameObject implements ActiveObject {
                 oldRouteGuid=GameObjects.getPlayer().getCurrentRouteGUID();
                 oldRoute=GameObjects.getPlayer().getCurrentR();
                 routeStart=GameObjects.getPlayer().getRouteStart();
-                GameObjects.getPlayer().setRouteStart(true);
+                GameObjects.getPlayer().setRouteStart(false);
                 GameObjects.getPlayer().setCurrentRouteGUID(getGUID());
             }
 
@@ -313,9 +310,12 @@ public class City extends GameObject implements ActiveObject {
 
             @Override
             public void postError(JSONObject response) {
+
                 GameObjects.getPlayer().setRouteStart(routeStart);
                 GameObjects.getPlayer().setCurrentRouteGUID(oldRouteGuid);
                 GameObjects.getPlayer().setCurrentRoute(oldRoute);
+                GameObjects.getPlayer().setRouteStart(false);
+
                 try {
 
                     String err;
@@ -329,7 +329,6 @@ public class City extends GameObject implements ActiveObject {
                         case "L0001":
                             //TODO: Опасное место может надо всетаки отдавать управление при потере токена
                             Essages.addEssage("Соединение потеряно.");
-                            GameObjects.getPlayer().setRouteStart(true);
                             break;
                         case "O0601":
                             Essages.addEssage("Город не найден.");
@@ -349,7 +348,6 @@ public class City extends GameObject implements ActiveObject {
                             else Essages.addEssage("Не хватает наемников.");
                             break;
                         default:
-                            GameObjects.getPlayer().setRouteStart(true);
                             if (response.has("Message"))
                                 Essages.addEssage(response.getString("Message"));
                             else Essages.addEssage("Непредвиденная ошибка.");
@@ -359,6 +357,7 @@ public class City extends GameObject implements ActiveObject {
                 {
                     GATracker.trackException("StarFinishRoute",e);
                 }
+
 
             }
         };
@@ -1517,7 +1516,7 @@ public class City extends GameObject implements ActiveObject {
 
         @Override
         public void setDistance(int distance) {
-
+            ((TextView) findViewById(R.id.distance)).setText(String.format(getContext().getString(R.string.distance_mesure), distance));
         }
     }
     public RelativeLayout getObjectView(Context context){

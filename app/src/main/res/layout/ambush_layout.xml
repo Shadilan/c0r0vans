@@ -4,46 +4,39 @@
     android:layout_height="wrap_content"
     android:background="@android:color/transparent">
 
+    <Space
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentTop="true"
+        android:minHeight="64dp"
+        android:minWidth="64dp"
+        android:id="@+id/space"
+        android:layout_margin="10dp" />
     <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="@style/CommonButton"
-        android:id="@+id/closeActionButton"
-        android:src="@mipmap/closebutton"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        />
+        android:id="@+id/cancel"
+        android:background="@drawable/action_button"
+        android:src="@mipmap/cancel"
 
+        android:layout_below="@id/space"
+        android:layout_toRightOf="@id/space"
+        android:layout_toEndOf="@id/space"
+        android:layout_margin="10dp"/>
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/ambushFaction"
-        android:src="@mipmap/legue"
-        android:minHeight="100dp"
-        android:minWidth="100dp"
-        android:maxWidth="100dp"
-        android:maxHeight="100dp"
+        android:src="@mipmap/legue_btn"
+        android:clickable="false"
+        android:padding="10dp"
+        android:background="@drawable/layouts_gray"
+        android:layout_below="@id/space"
+        android:layout_toLeftOf="@id/space"
+        android:layout_toStartOf="@id/space"
+        android:layout_margin="10dp"/>
 
-        android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"
-        android:layout_centerVertical="true"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-
-        style="@style/MediumText"
-        android:text="Medium Text"
-        android:id="@+id/ambushDesc"
-        android:singleLine="false"
-        android:background="@drawable/layouts"
-        android:layout_below="@+id/closeActionButton"
-        android:layout_toEndOf="@+id/ambushFaction"
-        android:layout_toRightOf="@+id/ambushFaction"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:padding="2dp" />
 
     <ImageButton
         android:layout_width="wrap_content"
@@ -51,17 +44,35 @@
         android:id="@+id/ambushActionBtn"
         android:src="@mipmap/rem_ambush"
         style="@style/CommonButton"
-        android:layout_below="@+id/ambushDesc"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/ambushFaction"
+        android:layout_margin="10dp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         style="@style/MediumText"
         android:text=""
+        android:id="@+id/ambushDesc"
+        android:singleLine="false"
+        android:background="@drawable/layouts"
+        android:padding="2dp"
+        android:layout_centerHorizontal="true"
+        android:layout_above="@id/cancel"
+        android:layout_margin="10dp" />
+
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/SmallText"
+        android:background="@drawable/layouts"
+        android:text=""
         android:id="@+id/distance"
-        android:layout_below="@+id/ambushActionBtn"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignBottom="@id/cancel"
+        android:layout_centerHorizontal="true" />
+
+
 
 </RelativeLayout>
