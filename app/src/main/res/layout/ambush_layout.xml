@@ -58,7 +58,8 @@
         android:background="@drawable/layouts"
         android:padding="2dp"
         android:layout_centerHorizontal="true"
-        android:layout_above="@id/cancel"
+        android:layout_alignBaseline="@id/space"
+
         android:layout_margin="10dp" />
 
 

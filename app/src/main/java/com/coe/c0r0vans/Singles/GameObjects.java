@@ -240,16 +240,17 @@ public class GameObjects{
                         for (GameObject o : objects.values()) {
                             if (o instanceof Ambush) {
                                 ((Ambush) o).showRadius();
+                                o.changeMarkerSize();
                             }
-                            o.changeMarkerSize();
                         }
                         break;
                     case "SHOW_CITY_RADIUS":
                         for (GameObject o : objects.values()) {
                             if (o instanceof City) {
                                 ((City) o).showRadius();
+                                o.changeMarkerSize();
                             }
-                            o.changeMarkerSize();
+
                         }
                         break;
                     case "SHOW_BUILD_AREA":

@@ -35,6 +35,7 @@ public class CityLine extends RelativeLayout {
         parentForm=form;
     }
     public void setData(Caravan r){
+        if (r==null) return;
         point=r.getPoint();
         startCity=r.getStartPoint();
         endCity=r.getFinishPoint();

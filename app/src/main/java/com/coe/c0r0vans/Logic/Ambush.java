@@ -360,7 +360,7 @@ public class Ambush extends GameObject implements ActiveObject {
 
     public void showRadius(){
         String opt= GameSettings.getInstance().get("SHOW_AMBUSH_RADIUS");
-        if (opt.equals("Y") && mark!=null && mark.isVisible()){
+        if ("Y".equals("opt") && mark!=null && mark.isVisible()){
             if (zone!=null) zone.setVisible(true);
         } else
         {
