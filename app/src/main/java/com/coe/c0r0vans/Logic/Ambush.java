@@ -71,8 +71,6 @@ public class Ambush extends GameObject implements ActiveObject {
                     @Override
                     public void postAction(JSONObject response) {
                         GameSound.playSound(GameSound.REMOVE_AMBUSH);
-                        GameObjects.getPlayer().setAmbushLeft(GameObjects.getPlayer().getAmbushLeft() + 1);
-                        GameObjects.getPlayer().setHirelings(GameObjects.getPlayer().getHirelings()+getLife()*5);
                         GameObjects.getPlayer().removeAmbush(getGUID());
                         Essages.addEssage("Засада распущена");
                         RemoveObject();
