@@ -230,12 +230,16 @@ public class Caravan extends GameObject {
         return finishName;
     }
     public void fadeRoute(){
-        if (line!=null)
+        if (line!=null) {
             line.setColor(Color.LTGRAY);
+            line.setZIndex(149);
+        }
     }
     public void releaseFade(){
-        if (line!=null)
+        if (line!=null) {
             line.setColor(Color.BLUE);
+            line.setZIndex(150);
+        }
 
     }
 
