@@ -84,10 +84,10 @@ public class Player extends GameObject {
     public boolean checkRoute(String guid){
         if (guid==null) return false;
         if (guid.equals(currentRouteGuid)) return true;
-        if ("".equals(currentRouteGuid)) return false;
+        if ("".equals(currentRouteGuid)|| currentRouteGuid==null) return false;
         for (Caravan r:Routes.values()){
-            if ((r.getStartGUID().equals(currentRouteGuid) && r.getFinishGUID().equals(guid))||
-                    ((r.getStartGUID().equals(guid) && r.getFinishGUID().equals(currentRouteGuid))))
+            if (r!=null && ((currentRouteGuid.equals(r.getStartGUID()) && guid.equals(r.getFinishGUID()))||
+                    ((guid.equals(r.getStartGUID()) && currentRouteGuid.equals(r.getFinishGUID())))))
                 return true;
 
         }

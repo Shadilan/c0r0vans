@@ -448,7 +448,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
     private void ofThreadInit(){
 
         GameSettings.init(getApplicationContext());
-        GameSettings.getInstance().mClient=mGoogleApiClient;
+        //GameSettings.getInstance().mClient=mGoogleApiClient;
         GameSettings.addSettingsListener(new SettingsListener() {
             @Override
             public void onSettingsSave() {
