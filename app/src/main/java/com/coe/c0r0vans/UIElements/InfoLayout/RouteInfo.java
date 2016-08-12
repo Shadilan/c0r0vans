@@ -71,7 +71,7 @@ public class RouteInfo extends RelativeLayout implements PlayerInfoLayout {
         // выделяем элемент
         String s=GameSettings.getValue("RouteSort");
         if (s ==null) sort=0;
-        sort = Integer.valueOf(s);
+        else sort = Integer.valueOf(s);
         spinner.setSelection(sort);
         // устанавливаем обработчик нажатия
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {

@@ -664,8 +664,10 @@ public class serverConnect {
                                             GameObjects.getPlayer().setRace(0);
                                             new ChooseFaction(context).show();
                                         case ACTION:
-                                            if (listenersMap.get(getUID()) != null)
+                                            if (listenersMap.get(getUID()) != null) {
+                                                GATracker.trackHit("ErrAction",listenersMap.get(getUID()).getCommand());
                                                 listenersMap.get(getUID()).postError(response);
+                                            }
                                             break;
                                         case FASTSCAN:
                                             for (ServerListener l : listeners)
@@ -691,7 +693,10 @@ public class serverConnect {
 
                                         break;
                                     case ACTION: for (ServerListener l : listeners) l.onResponse(ServerListener.ACTION,response);
-                                        if (listenersMap.get(getUID()) != null) listenersMap.get(getUID()).postAction(response);
+                                        if (listenersMap.get(getUID()) != null) {
+                                            GATracker.trackHit("Action",listenersMap.get(getUID()).getCommand());
+                                            listenersMap.get(getUID()).postAction(response);
+                                        }
                                         break;
                                     case SETRACE:
                                         break;

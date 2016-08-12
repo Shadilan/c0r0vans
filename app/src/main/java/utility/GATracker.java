@@ -29,6 +29,10 @@ public class GATracker {
         serverConnect.getInstance().sendDebug(category,action,1,0);
 
     }
+    public static void trackHit(String category,String action,int count){
+        mTracker.send(new HitBuilders.EventBuilder().setCategory(category).setAction(action).setLabel("Hit").setValue(count).build());
+        serverConnect.getInstance().sendDebug(category,action,count,0);
+    }
     private static void trackTime(String category, String action, long time){
         mTracker.send(new HitBuilders.TimingBuilder().setCategory(category).setVariable(action).setLabel("Time").setValue(time).build());
         serverConnect.getInstance().sendDebug(category,action,0,time);
