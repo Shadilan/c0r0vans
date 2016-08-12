@@ -199,6 +199,11 @@ public class Player extends GameObject {
                 zone1.setStrokeWidth(5+2);
             }
         }
+        for (GameObject obj : this.getAmbushes().values())
+            if (obj.getMarker() != null) obj.changeMarkerSize();
+        for (GameObject obj : this.getRoutes().values())
+            if (obj.getMarker() != null) obj.changeMarkerSize();
+
 
 
     }
