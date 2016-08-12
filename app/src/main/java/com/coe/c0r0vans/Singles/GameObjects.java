@@ -43,7 +43,7 @@ public class GameObjects{
     public static GameObject getClosestObject(LatLng latLng){
         float closest=1000;
         GameObject closestObject=null;
-        for (GameObject o:objects.values()){
+        for (GameObject o:activeObjects.values()){
             if (o instanceof ActiveObject && o.getMarker()!=null && o.getMarker().isVisible()) {
                 float dist = GPSInfo.getDistance(latLng, o.getMarker().getPosition());
                 if (dist < closest && dist < o.getRadius()){
@@ -67,6 +67,7 @@ public class GameObjects{
     public static void init(final Context context){
         player=new Player();
         objects=new HashMap<>();
+        activeObjects=new HashMap<>();
         SharedPreferences sp = context.getSharedPreferences("player", Context.MODE_PRIVATE);
         String pls = sp.getString("player", "");
         if (!"".equals(pls)) {
@@ -109,24 +110,28 @@ public class GameObjects{
                                     } else if (JObj.getJSONObject(i).getString("Type").equalsIgnoreCase("City")) {
 
                                         City city = new City(MyGoogleMap.getMap(), JObj.getJSONObject(i));
-                                        objects.put(city.getGUID(), city);
+                                        put(city);
+                                        //objects.put(city.getGUID(), city);
                                     } else if (JObj.getJSONObject(i).getString("Type").equalsIgnoreCase("Ambush")) {
 
                                         Ambush ambush = new Ambush(MyGoogleMap.getMap(), JObj.getJSONObject(i));
-                                        if (ambush.isOwner()) player.getAmbushes().put(ambush.getGUID(),ambush);
-                                        else objects.put(ambush.getGUID(), ambush);
+                                        /*if (ambush.isOwner()) player.getAmbushes().put(ambush.getGUID(),ambush);
+                                        else objects.put(ambush.getGUID(), ambush);*/
+                                        put(ambush);
 
                                     } else if (JObj.getJSONObject(i).getString("Type").equalsIgnoreCase("Caravan")) {
 
                                         Caravan caravan = new Caravan(MyGoogleMap.getMap(), JObj.getJSONObject(i));
-                                        if (caravan.isOwner()) player.getRoutes().put(caravan.getGUID(), caravan);
-                                        else objects.put(caravan.getGUID(), caravan);
+                                        /*if (caravan.isOwner()) player.getRoutes().put(caravan.getGUID(), caravan);
+                                        else objects.put(caravan.getGUID(), caravan);*/
+                                        put(caravan);
                                     }
                                 }
 
                             }
                             for (GameObject obj : remObjects) {
                                 obj.RemoveObject();
+                                removeActive(obj);
                             }
                             for (GameObject o : remObjects) {
                                 objects.remove(o.getGUID());
@@ -289,10 +294,29 @@ public class GameObjects{
 
     public static HashMap put(GameObject object){
         if (objects.get(object.getGUID())!=null) return objects;
+        if (!(object instanceof City) && object.isOwner()){
+            player.putObject(object);
+            return objects;
+        }
         objects.put(object.getGUID(),object);
+        if (object instanceof  ActiveObject) {
+            //Добавить в перечень активных объектов.
+            putActive(object);
+        }
         return objects;
     }
-
+    private static HashMap<String,GameObject> activeObjects;
+    public static HashMap<String,GameObject> putActive(GameObject object){
+        if (!(object instanceof ActiveObject)) return null;
+        if (activeObjects.get(object.getGUID())!=null) return activeObjects;
+        activeObjects.put(object.getGUID(),object);
+        return activeObjects;
+    }
+    public static HashMap<String,GameObject> removeActive(GameObject object){
+        if (!(object instanceof ActiveObject)) return null;
+        activeObjects.remove(object.getGUID());
+        return activeObjects;
+    }
     public static HashMap<String, GameObject> getInstance(){
         return objects;
     }
