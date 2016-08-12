@@ -32,6 +32,7 @@ public class GATracker {
     private static void trackTime(String category, String action, long time){
         mTracker.send(new HitBuilders.TimingBuilder().setCategory(category).setVariable(action).setLabel("Time").setValue(time).build());
         serverConnect.getInstance().sendDebug(category,action,0,time);
+        Log.d("TrackedTimer",category+"."+action+":"+time);
     }
     public static void trackException(String action,Exception e){
         Log.d("TrackedError",e.toString()+":"+Arrays.toString(e.getStackTrace()));

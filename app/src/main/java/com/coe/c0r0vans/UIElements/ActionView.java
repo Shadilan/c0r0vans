@@ -113,16 +113,23 @@ public class ActionView extends LinearLayout {
         this.removeAllViews();
         GameObject target=SelectedObject.getInstance().getTarget();
         if (target instanceof Player){
+            GATracker.trackTimeStart("System","OpenFormPlayer");
             setCurrentView(target.getObjectView(getContext()));
-
+            GATracker.trackTimeEnd("System","OpenFormPlayer");
         } else
         if (target instanceof City)
         {
+            GATracker.trackTimeStart("System","OpenFormCity");
             setCurrentView(target.getObjectView(getContext()));
+            GATracker.trackTimeEnd("System","OpenFormCity");
+            GATracker.trackTimeStart("System","higlight");
             GameObjects.getPlayer().higlight(target.getGUID());
+            GATracker.trackTimeEnd("System","higlight");
         } else if (target instanceof Ambush)
         {
+            GATracker.trackTimeStart("System","OpenFormAmbush");
             setCurrentView(target.getObjectView(getContext()));
+            GATracker.trackTimeEnd("System","OpenFormAmbush");
 
         }
 

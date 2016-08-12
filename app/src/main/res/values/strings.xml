@@ -1,5 +1,5 @@
 <resources>
-    <string name="version" translatable="false">3.0.12a</string>
+    <string name="version" translatable="false">3.0.13a</string>
     <string name="app_name">c0r0vans α</string>
     <string name="login_window">Login</string>
     <string name="serveradressOld" translatable="false">https://alpha3-corovans.rhcloud.com</string>
@@ -96,7 +96,7 @@ All rights reserved to Circle of Eternity</string>
     <string name="next" translatable="false"><![CDATA[>]]></string>
     <string name="income">Income per hour:</string>
     <string name="ambush_left">Ambushes left:</string>
-    <string name="ambush_set">Ambushes set:</string>
+    <string name="ambush_set">Ambushes:</string>
     <string name="caravans_count">Caravans:</string>
     <string name="back" translatable="false">↩</string>
     <string name="ambushs">Ambushes</string>
@@ -130,7 +130,7 @@ All rights reserved to Circle of Eternity</string>
     <string name="minus" translatable="false">-</string>
     <string name="plus" translatable="false">+</string>
     <string name="build_area_settings">Build helper</string>
-    <string name="foundedCities">Towns founded:</string>
+    <string name="foundedCities">Towns:</string>
     <string name="асities">Towns:</string>
     <string name="sk_name_speed">Speed</string>
     <string name="sk_name_cargo">Cargo</string>
@@ -152,4 +152,9 @@ All rights reserved to Circle of Eternity</string>
     <string name="x4" translatable="false">x4</string>
     <string name="x2" translatable="false">x2</string>
     <string name="x1" translatable="false">x1</string>
+    <string name="sortby">Sort</string>
+    <string name="lngth">by length</string>
+    <string name="byincome">by income</string>
+    <string name="citydistance">by distance to city</string>
+    <string name="caravandistance">by distance to corovan</string>
 </resources>

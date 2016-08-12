@@ -43,6 +43,7 @@ public class GameObjects{
     public static GameObject getClosestObject(LatLng latLng){
         float closest=1000;
         GameObject closestObject=null;
+        GATracker.trackTimeStart("System","ClossestChoice");
         for (GameObject o:activeObjects.values()){
             if (o instanceof ActiveObject && o.getMarker()!=null && o.getMarker().isVisible()) {
                 float dist = GPSInfo.getDistance(latLng, o.getMarker().getPosition());
@@ -52,15 +53,7 @@ public class GameObjects{
                 }
             }
         }
-        for (GameObject o:player.getAmbushes().values()){
-            if (o instanceof ActiveObject && o.getMarker()!=null) {
-                float dist = GPSInfo.getDistance(latLng, o.getMarker().getPosition());
-                if (dist < closest && dist < o.getRadius()){
-                    closest=dist;
-                    closestObject=o;
-                }
-            }
-        }
+        GATracker.trackTimeEnd("System","ClossestChoice");
         return closestObject;
     }
 
