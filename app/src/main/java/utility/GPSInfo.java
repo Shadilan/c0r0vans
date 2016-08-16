@@ -107,13 +107,14 @@ public class GPSInfo {
                 if (location.hasAccuracy()) {
                     hasAccuracy=true;
                     accur=location.getAccuracy();
-                    GATracker.trackHit("GPS","Accuracy",(int)accur);
+
                 }
                 if (location.hasAccuracy()!=hasAccuracy) doEvent=false;
 
 
 
                 if (doEvent) {
+                    GATracker.trackHit("GPS","Accuracy",(int)accur);
                     if (location.hasSpeed()){
                         speed = (int) (location.getSpeed() * 60 *60 / 1000);
                         GATracker.trackHit("GPS","Speed",speed);

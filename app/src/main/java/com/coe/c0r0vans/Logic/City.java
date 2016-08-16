@@ -314,7 +314,6 @@ public class City extends GameObject implements ActiveObject {
                 GameObjects.getPlayer().setRouteStart(routeStart);
                 GameObjects.getPlayer().setCurrentRouteGUID(oldRouteGuid);
                 GameObjects.getPlayer().setCurrentRoute(oldRoute);
-                GameObjects.getPlayer().setRouteStart(false);
 
                 try {
 
