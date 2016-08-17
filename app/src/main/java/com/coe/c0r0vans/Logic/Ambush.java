@@ -46,7 +46,7 @@ public class Ambush extends GameObject implements ActiveObject {
     protected int radius=30;
 
     private int ready=0;
-    private int life=1;
+    private int life=10;
     private LatLng latlng;
 
     private ObjectAction removeAction;
@@ -255,7 +255,7 @@ public class Ambush extends GameObject implements ActiveObject {
             if (faction<0 ||faction>4) faction=4;
             if (obj.has("Radius")) radius=obj.getInt("Radius");
             if (obj.has("Ready")) ready=obj.getInt("Ready");
-            if (obj.has("Name")) Name="Засада "+obj.getString("Name");
+            if (obj.has("Name")) Name=obj.getString("Name");
             if (obj.has("Life")) life=obj.getInt("Life");
             if (obj.has("Lat") && obj.has("Lng")) {
                 int Lat=obj.getInt("Lat");

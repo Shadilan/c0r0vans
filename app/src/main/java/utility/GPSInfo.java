@@ -107,13 +107,19 @@ public class GPSInfo {
                 if (location.hasAccuracy()) {
                     hasAccuracy=true;
                     accur=location.getAccuracy();
+
                 }
                 if (location.hasAccuracy()!=hasAccuracy) doEvent=false;
 
 
-                if (doEvent) {
 
-                    speed = (int) (location.getSpeed() * 60 *60 / 1000);
+                if (doEvent) {
+                    GATracker.trackHit("GPS","Accuracy",(int)accur);
+                    if (location.hasSpeed()){
+                        speed = (int) (location.getSpeed() * 60 *60 / 1000);
+                        GATracker.trackHit("GPS","Speed",speed);
+                    }
+
                     if (location.getLongitude() != -1 && location.getLatitude() != -1) {
                         lat = (int) (location.getLatitude() * 1000000);
                         lng = (int) (location.getLongitude() * 1000000);

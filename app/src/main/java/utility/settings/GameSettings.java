@@ -107,6 +107,7 @@ public class GameSettings extends HashMap<String,String>{
 
 
 
+
         put("BEARING","0");
         put("ZOOM","18");
         put("PLAYER_FACTION","0");

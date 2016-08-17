@@ -62,11 +62,9 @@ public class Caravan extends GameObject {
                 line.getPoints().set(1,finishPoint);
             } else {
                 PolylineOptions options = new PolylineOptions();
-                options.width(3);
+                options.width(3*GameSettings.getMetric());
                 GameObject target = SelectedObject.getInstance().getTarget();
-                if (target != null && target instanceof City && !(target.getGUID().equals(startGUID) || target.getGUID().equals(finishGUID)))
-                    options.color(Color.LTGRAY);
-                else options.color(Color.BLUE);
+                options.color(Color.BLUE);
                 options.geodesic(true);
                 options.add(startPoint);
                 options.add(finishPoint);
@@ -149,10 +147,8 @@ public class Caravan extends GameObject {
                         PolylineOptions options = new PolylineOptions();
                         options.width(3*GameSettings.getMetric());
                         GameObject target = SelectedObject.getInstance().getTarget();
-                        if (target != null && target instanceof City && !(target.getGUID().equals(startGUID) || target.getGUID().equals(finishGUID)))
-                            options.color(Color.LTGRAY);
-                        else options.color(Color.BLUE);
                         options.geodesic(true);
+                        options.color(Color.BLUE);
                         options.add(startPoint);
                         options.add(finishPoint);
                         options.zIndex(150);
@@ -215,7 +211,10 @@ public class Caravan extends GameObject {
     public void showRoute(){
         if (line!=null)
         {
-            line.setVisible("Y".equals(GameSettings.getInstance().get("SHOW_CARAVAN_ROUTE")));
+            GameObject target = SelectedObject.getInstance().getTarget();
+            if (target != null && target instanceof City && !(target.getGUID().equals(startGUID) || target.getGUID().equals(finishGUID)))
+                line.setVisible(false);
+            else line.setVisible("Y".equals(GameSettings.getInstance().get("SHOW_CARAVAN_ROUTE")));
         }
     }
 
@@ -230,17 +229,10 @@ public class Caravan extends GameObject {
         return finishName;
     }
     public void fadeRoute(){
-        if (line!=null) {
-            line.setColor(Color.LTGRAY);
-            line.setZIndex(149);
-        }
+        showRoute();
     }
     public void releaseFade(){
-        if (line!=null) {
-            line.setColor(Color.BLUE);
-            line.setZIndex(150);
-        }
-
+        showRoute();
     }
 
     public int getProfit() {

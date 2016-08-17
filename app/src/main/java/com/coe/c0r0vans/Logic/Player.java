@@ -84,10 +84,10 @@ public class Player extends GameObject {
     public boolean checkRoute(String guid){
         if (guid==null) return false;
         if (guid.equals(currentRouteGuid)) return true;
-        if ("".equals(currentRouteGuid)) return false;
+        if ("".equals(currentRouteGuid)|| currentRouteGuid==null) return false;
         for (Caravan r:Routes.values()){
-            if ((r.getStartGUID().equals(currentRouteGuid) && r.getFinishGUID().equals(guid))||
-                    ((r.getStartGUID().equals(guid) && r.getFinishGUID().equals(currentRouteGuid))))
+            if (r!=null && ((currentRouteGuid.equals(r.getStartGUID()) && guid.equals(r.getFinishGUID()))||
+                    ((guid.equals(r.getStartGUID()) && currentRouteGuid.equals(r.getFinishGUID())))))
                 return true;
 
         }
@@ -199,6 +199,11 @@ public class Player extends GameObject {
                 zone1.setStrokeWidth(5+2);
             }
         }
+        for (GameObject obj : this.getAmbushes().values())
+            if (obj.getMarker() != null) obj.changeMarkerSize();
+        for (GameObject obj : this.getRoutes().values())
+            if (obj.getMarker() != null) obj.changeMarkerSize();
+
 
 
     }
@@ -455,10 +460,13 @@ public class Player extends GameObject {
                     else {
                         newObj=new Ambush(map,jobj);
                         Ambushes.put(newGUID,newObj);
+                        GameObjects.putActive(newObj);
                     }
                 }
                 for (String lGUID:GUIDS){
-                    Ambushes.get(lGUID).RemoveObject();
+                    Ambush rem=Ambushes.get(lGUID);
+                    GameObjects.removeActive(rem);
+                    rem.RemoveObject();
                     Ambushes.remove(lGUID);
                 }
                 Log.d("Leak","InArray"+Ambushes.size());
@@ -547,6 +555,17 @@ public class Player extends GameObject {
 
     public HashMap<String,Caravan> getRoutes() {
         return Routes;
+    }
+    public void putObject(GameObject object){
+        if (object instanceof Ambush){
+            if (Ambushes.get(object.getGUID())!=null) return;
+            Ambushes.put(object.getGUID(), (Ambush) object);
+            GameObjects.putActive(object);
+        } else if (object instanceof Caravan){
+            if (Routes.get(object.getGUID())!=null) return;
+            Routes.put(object.getGUID(), (Caravan) object);
+        }
+        return;
     }
     public HashMap<String,Ambush> getAmbushes() {return Ambushes;}
     public int getActionDistance(){return ActionDistance;}
@@ -745,6 +764,7 @@ public class Player extends GameObject {
                         try {
                             Ambush ambush=new Ambush(MyGoogleMap.getMap(),response.getJSONObject("Ambush"));
                             GameObjects.getPlayer().getAmbushes().put(ambush.getGUID(),ambush);
+                            GameObjects.putActive(ambush);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -975,7 +995,6 @@ public class Player extends GameObject {
     }
     public int getRadius(){
         return AmbushRadius;
-
     }
     public void higlight(String city){
         if (city==null) for (Caravan r:Routes.values()){

@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.google.android.gms.auth.api.Auth;
@@ -72,12 +74,12 @@ public class SignIn {
             mGoogleApiClient = new GoogleApiClient.Builder(activity.getApplicationContext())
                     .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                     .build();
-            Log.d("SignIn","Enter");
+
             Thread signing=new Thread(new Runnable() {
                 @Override
                 public void run() {
                     try {
-                        Log.d("SignIn","Start");
+
                         ConnectionResult res = mGoogleApiClient.blockingConnect();
                         OptionalPendingResult<GoogleSignInResult> pendingResult = Auth.GoogleSignInApi.silentSignIn(mGoogleApiClient);
 
@@ -100,7 +102,6 @@ public class SignIn {
 
                             }*/
                         } else {
-                            Log.d("SignIn","Noresult");
                             doSignIn(null);
                         }
                     } finally {
@@ -116,6 +117,48 @@ public class SignIn {
     }
 
     private static String idToken;
+    public static void doSignOut(){
+        if (mGoogleApiClient!=null) {
+
+            SharedPreferences sp = activity.getApplicationContext().getSharedPreferences("SpiritProto", Context.MODE_PRIVATE);
+            String accountName = sp.getString("AccountName", "");
+            sp.edit().clear().apply();
+            sp = activity.getSharedPreferences("MESSAGES", Context.MODE_PRIVATE);
+            sp.edit().clear().apply();
+            sp = activity.getSharedPreferences("player", Context.MODE_PRIVATE);
+            sp.edit().clear().apply();
+
+            if (mGoogleApiClient.isConnected()){
+
+                Auth.GoogleSignInApi.signOut(mGoogleApiClient);
+
+                GATracker.trackHit("System", "ExitApplication");
+                //Todo Как корректно завершить приложение
+                System.exit(0);
+            } else
+            {
+
+                mGoogleApiClient.registerConnectionCallbacks(new GoogleApiClient.ConnectionCallbacks() {
+                    @Override
+                    public void onConnected(@Nullable Bundle bundle) {
+
+                        Auth.GoogleSignInApi.signOut(mGoogleApiClient);
+                        GATracker.trackHit("System", "ExitApplication");
+                        //Todo Как корректно завершить приложение
+                        System.exit(0);
+                    }
+
+                    @Override
+                    public void onConnectionSuspended(int i) {
+                        Log.d("SignOut","Connection suspended");
+                    }
+                });
+                mGoogleApiClient.connect();
+
+            }
+
+        }
+    }
     private static void doSignIn(GoogleSignInResult result){
         if (result!=null && result.isSuccess()) {
 
