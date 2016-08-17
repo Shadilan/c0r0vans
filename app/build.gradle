@@ -3,7 +3,7 @@ apply plugin: 'com.android.application'
 android {
     signingConfigs {
         Release {
-            storeFile file('D:/Android.SRC/CoE.jks')
+
 
         }
     }
