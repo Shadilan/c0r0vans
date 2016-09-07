@@ -18,6 +18,7 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import utility.GATracker;
 import utility.ImageLoader;
 import utility.settings.GameSettings;
 
@@ -52,6 +53,7 @@ public class Caravan extends GameObject {
     public void setMap(GoogleMap map) {
         super.setMap(map);
 
+
         if (mark!=null) mark.remove();
         LatLng latLng=new LatLng(lat/1e6,lng/1e6);
         setMarker(map.addMarker(new MarkerOptions().position(latLng)));
@@ -77,6 +79,7 @@ public class Caravan extends GameObject {
 
     @Override
     public void setMarker(Marker m) {
+
         mark=m;
         changeMarkerSize();
     }
@@ -106,6 +109,7 @@ public class Caravan extends GameObject {
     }
     @Override
     public void loadJSON(JSONObject obj) {
+
         try {
             GUID=obj.getString("GUID");
             if (obj.has("Owner")) faction=obj.getInt("Owner"); else faction=0;
@@ -126,6 +130,7 @@ public class Caravan extends GameObject {
                 } else {
                     mark.setPosition(latlng);
                 }
+
             }
             if (owner) {
                 if (obj.has("StartLat") && obj.has("StartLng")) {
@@ -172,9 +177,9 @@ public class Caravan extends GameObject {
                 }
             }
 
-
+            changeMarkerSize();
         } catch (JSONException e) {
-            e.printStackTrace();
+            GATracker.trackException("LoadCaravan", e);
         }
 
     }
@@ -187,7 +192,7 @@ public class Caravan extends GameObject {
     private String currentMarkName="";
     @Override
     public void changeMarkerSize() {
-        if (mark!=null) {
+         if (mark!=null) {
             String markname = "caravan";
             if (faction<0 || faction>4) faction=4;
             if (faction==0) markname=markname+"_"+faction+ GameObjects.getPlayer().getRace();
@@ -200,7 +205,16 @@ public class Caravan extends GameObject {
                 else mark.setAnchor(0.5f, 0.5f);
                 currentMarkName=markname;
             }
+            if (MyGoogleMap.getClientZoom()==ICON_SMALL){
+                mark.setVisible(false);
+                if (line!=null) line.setWidth(1*GameSettings.getMetric());
+            } else {
+                mark.setVisible(true);
+                if (line!=null) line.setWidth(3*GameSettings.getMetric());
+            }
+
         }
+
     }
 
 
@@ -288,5 +302,8 @@ public class Caravan extends GameObject {
     public void setFaction(int faction) {
         this.faction = faction;
         owner = faction == 0;
+    }
+    public void setVisibility(boolean visibility) {
+        if (mark!=null) changeMarkerSize();
     }
 }

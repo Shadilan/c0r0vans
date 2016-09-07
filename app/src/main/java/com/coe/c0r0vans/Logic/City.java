@@ -36,6 +36,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Date;
+
 import utility.GATracker;
 import utility.GPSInfo;
 import utility.GameSound;
@@ -65,6 +67,7 @@ public class City extends GameObject implements ActiveObject {
     private String founder="";
     private int hirelings=100;
     private int hireprice=100;
+    private Date updated;
 
     private void updateAction(final Context ctx){
         startRouteAction = new ObjectAction(this) {
@@ -480,9 +483,11 @@ public class City extends GameObject implements ActiveObject {
     @Override
     public void loadJSON(JSONObject obj) {
         try {
+
             GUID = obj.getString("GUID");
             int Lat = obj.getInt("Lat");
             int Lng = obj.getInt("Lng");
+            updated=new Date();
             LatLng latlng = new LatLng(Lat / 1e6, Lng / 1e6);
 
             if (obj.has("Name")) Name = obj.getString("Name");
@@ -502,18 +507,21 @@ public class City extends GameObject implements ActiveObject {
             if ("null".equals(founder)) founder = "";
             if (obj.has("Hirelings")) hirelings = obj.getInt("Hirelings");
 
+
             if (mark == null) {
                 setMarker(map.addMarker(new MarkerOptions().position(latlng)));
 
             } else {
                 mark.setPosition(latlng);
-                changeMarkerSize();
+
             }
+
             if (zone == null) {
                 CircleOptions circleOptions = new CircleOptions();
                 circleOptions.center(latlng);
                 circleOptions.radius(radius);
                 circleOptions.zIndex(100);
+                //circleOptions.visible(false);
                 if (GameObjects.getPlayer().checkRoute(GUID)) circleOptions.strokeColor(Color.DKGRAY);
                 else circleOptions.strokeColor(Color.BLUE);
                 circleOptions.strokeWidth(2*GameSettings.getMetric());
@@ -525,9 +533,11 @@ public class City extends GameObject implements ActiveObject {
                 else zone.setStrokeColor(Color.BLUE);
 
             }
+
             if (buildZone == null) {
                 CircleOptions circleOptions = new CircleOptions();
                 circleOptions.center(latlng);
+                //circleOptions.visible(false);
                 int dist = 125;
                 if (owner) dist = 250;
                 Upgrade up = GameObjects.getPlayer().getUpgrade("founder");
@@ -547,8 +557,7 @@ public class City extends GameObject implements ActiveObject {
                 else dist += 75;
                 buildZone.setRadius(dist);
             }
-            showRadius();
-            showBuildZone();
+            changeMarkerSize();
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -597,6 +606,8 @@ public class City extends GameObject implements ActiveObject {
                 currentMarkName=markname;
             }
         }
+        showBuildZone();
+        showRadius();
     }
 
 
@@ -606,6 +617,7 @@ public class City extends GameObject implements ActiveObject {
         zone.setVisible(visibility);
     }
     public void showBuildZone(){
+        if (buildZone==null) return;
         String opt= GameSettings.getInstance().get("SHOW_BUILD_AREA");
         if (opt.equals("Y")){
             buildZone.setVisible(true);
@@ -615,8 +627,9 @@ public class City extends GameObject implements ActiveObject {
         }
     }
     public void showRadius(){
+        if (zone==null) return;
         String opt= GameSettings.getInstance().get("SHOW_CITY_RADIUS");
-        if (opt.equals("Y")){
+        if (opt.equals("Y") && MyGoogleMap.getClientZoom()!=ICON_SMALL){
             zone.setVisible(true);
         } else
         {
@@ -650,6 +663,10 @@ public class City extends GameObject implements ActiveObject {
 
     public void setFounder(String founder) {
         this.founder = founder;
+    }
+
+    public Date getUpdated() {
+        return updated;
     }
 
     private class CityWindow extends RelativeLayout implements GameObjectView,ShowHideForm{

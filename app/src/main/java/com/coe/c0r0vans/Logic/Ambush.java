@@ -343,23 +343,21 @@ public class Ambush extends GameObject implements ActiveObject {
                 else mark.setAnchor(0.5f, 0.5f);
                 currentMarkName=mark_name;
             }
+            showRadius();
         }
     }
 
     @Override
     public void setVisibility(boolean visibility) {
-        if ("Y".equals(GameSettings.getInstance().get("SHOW_AMBUSH_RADIUS"))) {
-            if (zone != null)
-                zone.setVisible(visibility);
-        }
-        else if (zone!=null) zone.setVisible(false);
         if (mark!=null) mark.setVisible(visibility);
+        showRadius();
+
     }
 
     public void showRadius(){
         String opt= GameSettings.getInstance().get("SHOW_AMBUSH_RADIUS");
-        if ("Y".equals("opt") && mark!=null && mark.isVisible()){
-            if (zone!=null) zone.setVisible(true);
+        if ("Y".equals(opt) && mark!=null && mark.isVisible() && MyGoogleMap.getClientZoom()!=ICON_SMALL){
+            if (zone!=null) zone.setVisible(mark!=null && mark.isVisible());
         } else
         {
             if (zone!=null) zone.setVisible(false);

@@ -3,18 +3,20 @@ apply plugin: 'com.android.application'
 android {
     signingConfigs {
         Release {
-
-
+            storeFile file('D:/Android.SRC/CoE.jks')
+            keyAlias 'MainKey'
+            keyPassword 'Enternity8'
+            storePassword 'Enternity8'
         }
     }
-    compileSdkVersion 23
+    compileSdkVersion 24
     buildToolsVersion "23.0.2"
     defaultConfig {
         applicationId 'com.coe.c0r0vans'
         minSdkVersion 14
         targetSdkVersion 23
-        versionCode 48
-        versionName "3.0.13a"
+        versionCode 49
+        versionName "3.0.14a"
         signingConfig signingConfigs.Release
     }
     buildTypes {
@@ -37,13 +39,16 @@ dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
     compile project(':volley')
-    compile 'com.android.support:appcompat-v7:23.4.0'
-    compile 'com.android.support:design:23.4.0'
-    compile 'com.android.support:support-v4:23.4.0'
     /*Версия 9 почему то вызывает зависание.*/
+
+
+    compile 'com.android.support:appcompat-v7:24.2.0'
+    compile 'com.android.support:design:24.2.0'
+    compile 'com.android.support:support-v4:24.2.0'
     compile 'com.google.android.gms:play-services:8.4.0'
     compile 'com.google.android.gms:play-services-ads:8.4.0'
     compile 'com.google.android.gms:play-services-identity:8.4.0'
-
+    compile 'com.google.android.gms:play-services-auth:8.4.0'
+    compile 'com.google.android.gms:play-services-gcm:8.4.0'
 }
 apply plugin: 'com.google.gms.google-services'

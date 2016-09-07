@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.coe.c0r0vans.GameObject.ActiveObject;
 import com.coe.c0r0vans.GameObject.GameObject;
@@ -21,6 +22,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 
 import utility.GATracker;
@@ -43,7 +46,7 @@ public class GameObjects{
     public static GameObject getClosestObject(LatLng latLng){
         float closest=1000;
         GameObject closestObject=null;
-        GATracker.trackTimeStart("System","ClossestChoice");
+
         for (GameObject o:activeObjects.values()){
             if (o instanceof ActiveObject && o.getMarker()!=null && o.getMarker().isVisible()) {
                 float dist = GPSInfo.getDistance(latLng, o.getMarker().getPosition());
@@ -53,7 +56,7 @@ public class GameObjects{
                 }
             }
         }
-        GATracker.trackTimeEnd("System","ClossestChoice");
+
         return closestObject;
     }
 
@@ -79,12 +82,14 @@ public class GameObjects{
                         //Проверить наличие массива JSON. Objects
                         if (response.has("Objects")) {
                             //Скопировать данные в массив для удаления
+                            GATracker.trackTimeStart("DonwloadData","ReadyMassive");
                             ArrayList<GameObject> remObjects = new ArrayList<>(objects.values());
                             JSONArray JObj = response.getJSONArray("Objects");
                             int leng = JObj.length();
 
-
+                            GATracker.trackTimeEnd("DonwloadData","ReadyMassive");
                             for (int i = 0; i < leng; i++) {
+
                                 GameObject robj;
                                 String GUID=JObj.getJSONObject(i).getString("GUID");
                                 robj=objects.get(GUID);
@@ -100,11 +105,11 @@ public class GameObjects{
 
                                         GameObjects.getPlayer().loadJSON(JObj.getJSONObject(i));
 
-                                    } else if (JObj.getJSONObject(i).getString("Type").equalsIgnoreCase("City")) {
 
-                                        City city = new City(MyGoogleMap.getMap(), JObj.getJSONObject(i));
-                                        put(city);
-                                        //objects.put(city.getGUID(), city);
+                                    } else if (JObj.getJSONObject(i).getString("Type").equalsIgnoreCase("City")) {
+                                        put(new City(MyGoogleMap.getMap(), JObj.getJSONObject(i)));
+
+
                                     } else if (JObj.getJSONObject(i).getString("Type").equalsIgnoreCase("Ambush")) {
 
                                         Ambush ambush = new Ambush(MyGoogleMap.getMap(), JObj.getJSONObject(i));
@@ -118,18 +123,25 @@ public class GameObjects{
                                         /*if (caravan.isOwner()) player.getRoutes().put(caravan.getGUID(), caravan);
                                         else objects.put(caravan.getGUID(), caravan);*/
                                         put(caravan);
+
                                     }
                                 }
 
                             }
+                            Calendar calendar = Calendar.getInstance();
+                            calendar.setTime(new Date());
+                            calendar.add(Calendar.MINUTE,-20);
+                            Log.d("TimeSpent","T:"+calendar.getTime().toString());
                             for (GameObject obj : remObjects) {
-                                obj.RemoveObject();
-                                removeActive(obj);
-                            }
-                            for (GameObject o : remObjects) {
-                                objects.remove(o.getGUID());
-                            }
+                                //Если город то не удаляем в течении 20 минут.
 
+                                if (!(obj instanceof City && ((City) obj).getUpdated().after(calendar.getTime()))) {
+                                    if (obj instanceof City) Log.d("TimeSpent","C:"+((City) obj).getUpdated().toString());
+                                    obj.RemoveObject();
+                                    removeActive(obj);
+                                    objects.remove(obj.getGUID());
+                                }
+                            }
                         }
 
                     } catch (JSONException e) {
