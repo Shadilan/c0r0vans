@@ -25,6 +25,9 @@ public class InfoLayout extends RelativeLayout implements ShowHideForm {
     LinearLayout informationLayout;
     PlayerInfoLayout current;
     LinearLayout gest;
+    ShowHideForm form=this;
+
+
     public InfoLayout(Context context) {
         super(context);
     }
@@ -75,6 +78,7 @@ public class InfoLayout extends RelativeLayout implements ShowHideForm {
         ToggleButton upgradeInfo= (ToggleButton) findViewById(R.id.upgradeInfoButton);
         ToggleButton routeInfo= (ToggleButton) findViewById(R.id.routeInfoButton);
         ToggleButton ambushInfo= (ToggleButton) findViewById(R.id.ambushInfoButton);
+        ToggleButton atlas= (ToggleButton) findViewById(R.id.atlasButton);
         setCurrent(new MainInfoTable(getContext()));
 
         playerInfo.setOnClickListener(new View.OnClickListener() {
@@ -89,6 +93,8 @@ public class InfoLayout extends RelativeLayout implements ShowHideForm {
                 b = (ToggleButton) findViewById(R.id.routeInfoButton);
                 b.setChecked(false);
                 b = (ToggleButton) findViewById(R.id.ambushInfoButton);
+                b.setChecked(false);
+                b = (ToggleButton) findViewById(R.id.atlasButton);
                 b.setChecked(false);
             }
         });
@@ -106,6 +112,8 @@ public class InfoLayout extends RelativeLayout implements ShowHideForm {
                 b.setChecked(false);
                 b = (ToggleButton) findViewById(R.id.ambushInfoButton);
                 b.setChecked(false);
+                b = (ToggleButton) findViewById(R.id.atlasButton);
+                b.setChecked(false);
             }
         });
         routeInfo.setOnClickListener(new View.OnClickListener() {
@@ -120,6 +128,8 @@ public class InfoLayout extends RelativeLayout implements ShowHideForm {
                 b = (ToggleButton) findViewById(R.id.routeInfoButton);
                 b.setChecked(true);
                 b = (ToggleButton) findViewById(R.id.ambushInfoButton);
+                b.setChecked(false);
+                b = (ToggleButton) findViewById(R.id.atlasButton);
                 b.setChecked(false);
             }
         });
@@ -136,6 +146,25 @@ public class InfoLayout extends RelativeLayout implements ShowHideForm {
                 b = (ToggleButton) findViewById(R.id.routeInfoButton);
                 b.setChecked(false);
                 b = (ToggleButton) findViewById(R.id.ambushInfoButton);
+                b.setChecked(true);
+                b = (ToggleButton) findViewById(R.id.atlasButton);
+                b.setChecked(false);
+            }
+        });
+        atlas.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setCurrent(new Atlas(getContext(),form));
+
+                ToggleButton b = (ToggleButton) findViewById(R.id.playerInfoButton);
+                b.setChecked(false);
+                b = (ToggleButton) findViewById(R.id.upgradeInfoButton);
+                b.setChecked(false);
+                b = (ToggleButton) findViewById(R.id.routeInfoButton);
+                b.setChecked(false);
+                b = (ToggleButton) findViewById(R.id.ambushInfoButton);
+                b.setChecked(false);
+                b = (ToggleButton) findViewById(R.id.atlasButton);
                 b.setChecked(true);
             }
         });

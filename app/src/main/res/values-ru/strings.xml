@@ -135,5 +135,7 @@
     <string name="byincome">По доходу</string>
     <string name="citydistance">По растоянию до города</string>
     <string name="caravandistance">По растоянию до каравана</string>
+    <string name="city_indo">Расстояние: %1$dm Цена:%2$d❍</string>
+    <string name="atlas">Атлас</string>
 
 </resources>

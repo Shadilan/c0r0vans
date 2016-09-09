@@ -70,8 +70,17 @@
             android:text="@string/ambushs"
             android:id="@+id/ambushInfoButton"
             style="@style/TabButton"
-            android:textOff="Засады"
-            android:textOn="Засады" />
+            android:textOff="@string/ambushs"
+            android:textOn="@string/ambushs" />
+
+        <ToggleButton
+            style="@style/TabButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/atlas"
+            android:id="@+id/atlasButton"
+            android:textOff="@string/atlas"
+            android:textOn="@string/atlas" />
     </GridLayout>
 </HorizontalScrollView>
 

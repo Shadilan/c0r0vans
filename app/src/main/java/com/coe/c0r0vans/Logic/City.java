@@ -669,6 +669,40 @@ public class City extends GameObject implements ActiveObject {
         return updated;
     }
 
+    public String getUpgrade() {
+        return upgrade;
+    }
+
+    public int getLevel() {
+        return Level;
+    }
+
+    public int getUpgradeCost() {
+        int res=0;
+        Upgrade up=GameObjects.getPlayer().getNextUpgrade(upgrade);
+
+        if (up!=null) {
+            float raceBonus = 0;
+            long infsum = influence1 + influence2 + influence3;
+            if (infsum > 0) {
+                switch (GameObjects.getPlayer().getRace()) {
+                    case 1:
+                        raceBonus = (float) influence1 / infsum;
+                        break;
+                    case 2:
+                        raceBonus = (float) influence2 / infsum;
+                        break;
+                    case 3:
+                        raceBonus = (float) influence3 / infsum;
+                        break;
+                }
+            }
+            raceBonus = ((1f - raceBonus / 4) * (100f - GameObjects.getPlayer().getTrade()) / 100f);
+            res = (int) (up.getCost() * raceBonus);
+        }
+        return res;
+    }
+
     private class CityWindow extends RelativeLayout implements GameObjectView,ShowHideForm{
         City city;
         CityWindow self;
@@ -706,20 +740,7 @@ public class City extends GameObject implements ActiveObject {
             Upgrade up=GameObjects.getPlayer().getNextUpgrade(upgrade);
 
             if (up!=null) {
-                float raceBonus=0;
-                long infsum=city.influence1+city.influence2+city.influence3;
-                if (infsum>0) {
-                    switch (GameObjects.getPlayer().getRace()) {
-                        case 1:raceBonus=(float)city.influence1/infsum;
-                            break;
-                        case 2:raceBonus=(float)city.influence2/infsum;
-                            break;
-                        case 3:raceBonus=(float)city.influence3/infsum;
-                            break;
-                    }
-                }
-                raceBonus=((1f-raceBonus/4)*(100f-GameObjects.getPlayer().getTrade())/100f);
-                int upcost= (int) (up.getCost()*raceBonus);
+                int upcost= city.getUpgradeCost();
 
                 String dop;
                 if (up.getReqCityLev()>Level) dop= String.format(getContext().getString(R.string.city_lvl_required), up.getReqCityLev());
@@ -1379,23 +1400,8 @@ public class City extends GameObject implements ActiveObject {
                     ConfirmWindow confirmWindow=new ConfirmWindow(getContext());
                     Upgrade up=GameObjects.getPlayer().getNextUpgrade(upgrade);
                     if (up!=null) {
-                        float raceBonus = 0;
-                        long infsum = city.influence1 + city.influence2 + city.influence3;
-                        if (infsum > 0) {
-                            switch (GameObjects.getPlayer().getRace()) {
-                                case 1:
-                                    raceBonus = (float) city.influence1 / infsum;
-                                    break;
-                                case 2:
-                                    raceBonus = (float) city.influence2 / infsum;
-                                    break;
-                                case 3:
-                                    raceBonus = (float) city.influence3 / infsum;
-                                    break;
-                            }
-                        }
-                        raceBonus = ((1f - raceBonus / 4) * (100f - GameObjects.getPlayer().getTrade()) / 100f);
-                        int upcost = (int) (up.getCost() * raceBonus);
+
+                        int upcost = getUpgradeCost();
                         confirmWindow.setText(String.format(getContext().getString(R.string.accept_buy_upgrade), up.getName(), up.getLevel(), StringUtils.intToStr(upcost)));
                     } else confirmWindow.setText(String.format(getContext().getString(R.string.accept_buy_upgrade_unknown), upgradeName));
                     confirmWindow.setConfirmAction(new Runnable() {
