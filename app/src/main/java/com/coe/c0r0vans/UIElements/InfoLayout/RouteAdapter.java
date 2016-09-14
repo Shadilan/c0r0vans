@@ -5,19 +5,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
-import com.coe.c0r0vans.Logic.City;
+import com.coe.c0r0vans.Logic.Caravan;
 import com.coe.c0r0vans.ShowHideForm;
+import com.coe.c0r0vans.UIElements.CityLine;
 
 import java.util.ArrayList;
 
 /**
- * Адаптер для ListView для отражения информации о городах
+ * Адаптер ListView для отражения информации о маршрутах
  */
-public class AtlasAdapter extends BaseAdapter {
-    ArrayList<City> list;
+public class RouteAdapter extends BaseAdapter {
+    ArrayList<Caravan> list;
     ShowHideForm parent;
     Context context;
-    public AtlasAdapter(Context context,ArrayList<City> list,ShowHideForm parent){
+    public RouteAdapter(Context context,ArrayList<Caravan> list,ShowHideForm parent){
         this.context=context;
         this.list=list;
         this.parent=parent;
@@ -28,7 +29,7 @@ public class AtlasAdapter extends BaseAdapter {
     }
 
     @Override
-    public City getItem(int i) {
+    public Caravan getItem(int i) {
         return list.get(i);
     }
 
@@ -39,7 +40,8 @@ public class AtlasAdapter extends BaseAdapter {
 
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
-        AtlasLine l=new AtlasLine(context,list.get(i));
+        CityLine l=new CityLine(context);
+        l.setData(getItem(i));
         l.setParentForm(parent);
         return l;
     }

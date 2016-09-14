@@ -107,6 +107,13 @@ public class Caravan extends GameObject {
 
         return result;
     }
+    LatLng latlng;
+
+    @Override
+    public LatLng getPosition() {
+        return latlng;
+    }
+
     @Override
     public void loadJSON(JSONObject obj) {
 
@@ -124,7 +131,7 @@ public class Caravan extends GameObject {
 
                 lat = obj.getInt("Lat");
                 lng = obj.getInt("Lng");
-                LatLng latlng = new LatLng(lat / 1e6, lng / 1e6);
+                latlng = new LatLng(lat / 1e6, lng / 1e6);
                 if (mark == null) {
                     if (map!=null) setMarker(map.addMarker(new MarkerOptions().position(latlng)));
                 } else {
@@ -207,7 +214,7 @@ public class Caravan extends GameObject {
             }
             if (MyGoogleMap.getClientZoom()==ICON_SMALL){
                 mark.setVisible(false);
-                if (line!=null) line.setWidth(1*GameSettings.getMetric());
+                if (line!=null) line.setWidth(GameSettings.getMetric());
             } else {
                 mark.setVisible(true);
                 if (line!=null) line.setWidth(3*GameSettings.getMetric());

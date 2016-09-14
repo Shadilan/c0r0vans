@@ -496,6 +496,12 @@ public class Player extends GameObject {
         change(OnGameObjectChange.EXTERNAL);
 
     }
+
+
+    @Override
+    public LatLng getPosition() {
+        return GPSInfo.getInstance().getLatLng();
+    }
     public void removeAmbush(String guid){
         Ambush sa=Ambushes.get(guid);
         setHirelings(hirelings+sa.getLife()*10);
@@ -565,7 +571,6 @@ public class Player extends GameObject {
             if (Routes.get(object.getGUID())!=null) return;
             Routes.put(object.getGUID(), (Caravan) object);
         }
-        return;
     }
     public HashMap<String,Ambush> getAmbushes() {return Ambushes;}
     public int getActionDistance(){return ActionDistance;}

@@ -191,7 +191,7 @@ public class GameObject {
 
 
     }
-
+    public LatLng getPosition() {return null;}
     public boolean isOwner() {
         return owner;
     }

@@ -47,7 +47,12 @@ public class Ambush extends GameObject implements ActiveObject {
 
     private int ready=0;
     private int life=10;
-    private LatLng latlng;
+    LatLng latlng;
+
+    @Override
+    public LatLng getPosition() {
+        return latlng;
+    }
 
     private ObjectAction removeAction;
     public ObjectAction getRemoveAction(){

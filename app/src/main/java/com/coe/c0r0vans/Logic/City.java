@@ -479,7 +479,12 @@ public class City extends GameObject implements ActiveObject {
         changeMarkerSize();
 
     }
+    LatLng latlng;
 
+    @Override
+    public LatLng getPosition() {
+        return latlng;
+    }
     @Override
     public void loadJSON(JSONObject obj) {
         try {
@@ -488,7 +493,7 @@ public class City extends GameObject implements ActiveObject {
             int Lat = obj.getInt("Lat");
             int Lng = obj.getInt("Lng");
             updated=new Date();
-            LatLng latlng = new LatLng(Lat / 1e6, Lng / 1e6);
+            latlng = new LatLng(Lat / 1e6, Lng / 1e6);
 
             if (obj.has("Name")) Name = obj.getString("Name");
             if (obj.has("UpgradeType")) upgrade = obj.getString("UpgradeType");
@@ -520,7 +525,7 @@ public class City extends GameObject implements ActiveObject {
                 CircleOptions circleOptions = new CircleOptions();
                 circleOptions.center(latlng);
                 circleOptions.radius(radius);
-                circleOptions.zIndex(100);
+                //circleOptions.zIndex(100);
                 //circleOptions.visible(false);
                 if (GameObjects.getPlayer().checkRoute(GUID)) circleOptions.strokeColor(Color.DKGRAY);
                 else circleOptions.strokeColor(Color.BLUE);
@@ -544,7 +549,7 @@ public class City extends GameObject implements ActiveObject {
                 if (up != null) dist += up.getEffect2();
                 else dist += 75;
                 circleOptions.radius(dist);
-                circleOptions.zIndex(0);
+                //circleOptions.zIndex(0);
                 circleOptions.fillColor(0x30ff0000);
                 circleOptions.strokeWidth(0);
                 buildZone = map.addCircle(circleOptions);

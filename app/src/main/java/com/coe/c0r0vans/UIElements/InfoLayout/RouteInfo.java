@@ -1,21 +1,21 @@
 package com.coe.c0r0vans.UIElements.InfoLayout;
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.util.AttributeSet;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.LinearLayout;
+import android.widget.BaseAdapter;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
-import android.widget.TextView;
 
 import com.coe.c0r0vans.Logic.Caravan;
 import com.coe.c0r0vans.R;
 import com.coe.c0r0vans.ShowHideForm;
 import com.coe.c0r0vans.Singles.GameObjects;
-import com.coe.c0r0vans.UIElements.CityLine;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
@@ -30,12 +30,11 @@ import utility.settings.GameSettings;
  * Список маршрутов
  */
 public class RouteInfo extends RelativeLayout implements PlayerInfoLayout {
-    LinearLayout routeInfo;
-    int page=0;
-    int pageSize=50;
-    int max_page=1;
-    ArrayList<Caravan> routes;
-    ShowHideForm parent;
+    ListView routeInfo;
+
+    ArrayList<Caravan> routes; //Список Маршрутов
+    ArrayList<Caravan> routesA; //Список в Листе
+    ShowHideForm parent; //Parent
     int sort=0;
     public RouteInfo(Context context) {
         super(context);
@@ -53,7 +52,7 @@ public class RouteInfo extends RelativeLayout implements PlayerInfoLayout {
     }
     private void init(){
         inflate(getContext(), R.layout.info_route, this);
-        routeInfo= (LinearLayout) findViewById(R.id.routeInfo);
+        routeInfo= (ListView) findViewById(R.id.routeInfo);
         // адаптер
         ArrayList<String> lst=new ArrayList<>();
         lst.add(getContext().getString(R.string.lngth));
@@ -61,7 +60,7 @@ public class RouteInfo extends RelativeLayout implements PlayerInfoLayout {
         lst.add(getContext().getString(R.string.citydistance));
         lst.add(getContext().getString(R.string.caravandistance));
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, lst);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, lst);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         Spinner spinner = (Spinner) findViewById(R.id.spinner);
@@ -87,161 +86,124 @@ public class RouteInfo extends RelativeLayout implements PlayerInfoLayout {
             public void onNothingSelected(AdapterView<?> arg0) {
             }
         });
-        Button btn= (Button) findViewById(R.id.previous);
-        String spage=GameSettings.getInstance().get("RoutePage");
-        if (spage==null) page=0; else {
-            try {
-                page = Integer.parseInt(spage);
-            } catch (Exception e) {
-                page = 0;
+        routes=new ArrayList<>();
+        routesA=new ArrayList<>();
+        routeInfo.setOnScrollListener(new AbsListView.OnScrollListener() {
+            public int totalItemCount;
+            public int currentVisibleItemCount;
+            public int currentFirstVisibleItem;
+
+            @Override
+            public void onScrollStateChanged(AbsListView absListView, int scrollState) {
+
             }
 
-        }
-        max_page=Math.abs((GameObjects.getPlayer().getRoutes().size()-1)/pageSize)+1;
-        if (page+1>max_page) page=GameObjects.getPlayer().getRoutes().size()/pageSize;
-        btn.setOnClickListener(new OnClickListener() {
             @Override
-            public void onClick(View v) {
-                page--;
-                update();
+            public void onScroll(AbsListView absListView, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                GATracker.trackTimeStart("Interface","Routes.ScrollChange");
+                this.currentFirstVisibleItem = firstVisibleItem;
+                this.currentVisibleItemCount = visibleItemCount;
+                this.totalItemCount = totalItemCount;
+                final int list_size = routes.size();// Moved  list.size() call out of the loop to local variable list_size
+                final int listA_size = routesA.size();// Moved  listA.size() call out of the loop to local variable listA_size
+                if (this.currentVisibleItemCount > 0 && this.totalItemCount-5 <= (currentFirstVisibleItem + currentVisibleItemCount) && list_size>listA_size) {
+                    GATracker.trackTimeStart("Interface","Atlas.AddItemsToList");
+                    routesA.addAll(routes.subList(listA_size,Math.min(list_size,listA_size+10)));
+                    ((BaseAdapter)routeInfo.getAdapter()).notifyDataSetChanged();
+                    GATracker.trackTimeEnd("Interface","Routes.AddItemsToList");
+                }
+                GATracker.trackTimeEnd("Interface","Routes.ScrollChange");
             }
         });
-        if (page<1) {
-            btn.setClickable(false);
-            btn.setEnabled(false);
-        } else
-        {
-            btn.setClickable(true);
-            btn.setEnabled(true);
-        }
-        btn= (Button) findViewById(R.id.next);
-        btn.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                page++;
-                update();
-            }
-        });
-
-        if (page+2>max_page) {
-            btn.setClickable(false);
-            btn.setEnabled(false);
-        } else
-        {
-            btn.setClickable(true);
-            btn.setEnabled(true);
-        }
-
-        TextView tv= (TextView) findViewById(R.id.pageNumber);
-        tv.setText(String.valueOf(page));
-
+        RouteAdapter la =new RouteAdapter(getContext(),routesA,parent);
+        routeInfo.setAdapter(la);
+        ((BaseAdapter)routeInfo.getAdapter()).notifyDataSetChanged();
     }
     @Override
     public void update() {
         GATracker.trackTimeStart("InfoLayout","RoutesUpdate");
+        AsyncTask<Void, Void, Void> task=new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                findViewById(R.id.loading).setVisibility(VISIBLE);
+            }
 
-        routeInfo=(LinearLayout) findViewById(R.id.routeInfo);
-        routes=new ArrayList(GameObjects.getPlayer().getRoutes().values());
-        switch (sort){
+            @Override
+            protected Void doInBackground(Void... voids) {
+                routes = new ArrayList(GameObjects.getPlayer().getRoutes().values());
+                switch (sort) {
 
-            case 1:
-                Collections.sort(routes, new Comparator<Caravan>() {
+                    case 1:
+                        Collections.sort(routes, new Comparator<Caravan>() {
+                            @Override
+                            public int compare(Caravan lhs, Caravan rhs) {
+
+                                return lhs.getProfit() - rhs.getProfit();
+                            }
+                        });
+                        break;
+                    case 2:
+                        Collections.sort(routes, new Comparator<Caravan>() {
+                            @Override
+                            public int compare(Caravan lhs, Caravan rhs) {
+                                LatLng pl = GPSInfo.getInstance().getLatLng();
+                                LatLng c1 = lhs.getStartPoint();
+                                LatLng c2 = lhs.getFinishPoint();
+                                float d1 = Math.min(GPSInfo.getDistance(pl, c1), GPSInfo.getDistance(pl, c2));
+                                c1 = rhs.getStartPoint();
+                                c2 = rhs.getFinishPoint();
+                                float d2 = Math.min(GPSInfo.getDistance(pl, c1), GPSInfo.getDistance(pl, c2));
+                                return (int) (d1 - d2);
+                            }
+                        });
+                        break;
+                    case 3:
+                        Collections.sort(routes, new Comparator<Caravan>() {
+                            @Override
+                            public int compare(Caravan lhs, Caravan rhs) {
+                                LatLng pl = GPSInfo.getInstance().getLatLng();
+                                LatLng c1 = lhs.getMarker().getPosition();
+                                float d1 = GPSInfo.getDistance(pl, c1);
+                                c1 = rhs.getStartPoint();
+                                float d2 = GPSInfo.getDistance(pl, c1);
+                                return (int) (d1 - d2);
+                            }
+                        });
+                        break;
+                    default:
+                        Collections.sort(routes, new Comparator<Caravan>() {
+                            @Override
+                            public int compare(Caravan lhs, Caravan rhs) {
+
+                                return lhs.getDistance() - rhs.getDistance();
+                            }
+                        });
+                }
+
+                routesA.clear();
+
+                routesA.addAll(routes.subList(0, Math.min(30, routes.size())));
+
+                GATracker.trackTimeStart("InfoLayout", "RoutesUpdate ");
+                return null;
+            }
+            @Override
+            protected void onPostExecute(Void result) {
+                super.onPostExecute(result);
+                routeInfo.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+
                     @Override
-                    public int compare(Caravan lhs, Caravan rhs) {
-
-                        return lhs.getProfit() - rhs.getProfit();
+                    public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
+                        routeInfo.removeOnLayoutChangeListener(this);
+                        findViewById(R.id.loading).setVisibility(INVISIBLE);
+                        GATracker.trackTimeEnd("Interface","Routes.NotifyData");
                     }
                 });
-                break;
-            case 2:
-                Collections.sort(routes, new Comparator<Caravan>() {
-                    @Override
-                    public int compare(Caravan lhs, Caravan rhs) {
-                        LatLng pl= GPSInfo.getInstance().getLatLng();
-                        LatLng c1=lhs.getStartPoint();
-                        LatLng c2=lhs.getFinishPoint();
-                        float d1=Math.min(GPSInfo.getDistance(pl,c1),GPSInfo.getDistance(pl,c2));
-                        c1=rhs.getStartPoint();
-                        c2=rhs.getFinishPoint();
-                        float d2=Math.min(GPSInfo.getDistance(pl,c1),GPSInfo.getDistance(pl,c2));
-                        return (int)(d1-d2);
-                    }
-                });
-                break;
-            case 3:
-                Collections.sort(routes, new Comparator<Caravan>() {
-                    @Override
-                    public int compare(Caravan lhs, Caravan rhs) {
-                        LatLng pl= GPSInfo.getInstance().getLatLng();
-                        LatLng c1=lhs.getMarker().getPosition();
-                        float d1=GPSInfo.getDistance(pl,c1);
-                        c1=rhs.getStartPoint();
-                        float d2=GPSInfo.getDistance(pl,c1);
-                        return (int)(d1-d2);
-                    }
-                });
-                break;
-            default:
-                Collections.sort(routes, new Comparator<Caravan>() {
-                    @Override
-                    public int compare(Caravan lhs, Caravan rhs) {
-
-                        return lhs.getDistance() - rhs.getDistance();
-                    }
-                });
-        }
-
-                routeInfo.removeAllViews();
-        if (!"".equals(GameObjects.getPlayer().getCurrentRouteGUID())){
-            CityLine line=new CityLine(getContext());
-
-            routeInfo.addView(line);
-            line.setData(GameObjects.getPlayer().getCurrentR());
-            //line.setOnRemoveClick(GameObjects.getPlayer().getDropRoute());
-            line.setTarget("");
-        }
-
-        int i=0;
-        for (Caravan r:routes){
-            if (i>=page*pageSize && i<(page+1)*pageSize) {
-                CityLine line = new CityLine(getContext());
-                routeInfo.addView(line);
-                line.setData(r);
-                line.setParentForm(parent);
-                //line.setOnRemoveClick(r.getAction(true));
-                line.setTarget(r.getGUID());
-            } else if (i>(page+1)*pageSize) break;
-            i++;
-        }
-
-        max_page=Math.abs((GameObjects.getPlayer().getRoutes().size()-2)/pageSize)+1;
-        if (page<1) {
-            Button btn= (Button) findViewById(R.id.previous);
-            btn.setClickable(false);
-            btn.setEnabled(false);
-        } else
-        {
-            Button btn= (Button) findViewById(R.id.previous);
-            btn.setClickable(true);
-            btn.setEnabled(true);
-        }
-        if (page+2>max_page) {
-            Button btn= (Button) findViewById(R.id.next);
-            btn.setClickable(false);
-            btn.setEnabled(false);
-        } else
-        {
-            Button btn= (Button) findViewById(R.id.next);
-            btn.setClickable(true);
-            btn.setEnabled(true);
-        }
-        TextView tv= (TextView) findViewById(R.id.pageNumber);
-
-        tv.setText(String.format(getContext().getString(R.string.pages), page + 1, max_page));
-        GameSettings.getInstance().put("RoutePage", String.valueOf(page));
-        //GameSettings.getInstance().save();
-        GATracker.trackTimeStart("InfoLayout","RoutesUpdate ");
-
+                ((BaseAdapter)routeInfo.getAdapter()).notifyDataSetChanged();
+            }
+        };
+        task.execute();
     }
 
     @Override

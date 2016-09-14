@@ -4,41 +4,7 @@
     android:layout_height="match_parent"
     >
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:id="@+id/relativeLayout">
 
-        <Button
-            style="@style/CommonButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/previous"
-            android:id="@+id/previous"
-            android:layout_alignParentTop="true"
-            android:layout_toLeftOf="@+id/pageNumber"
-            android:layout_toStartOf="@+id/pageNumber" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            style="@style/LargeText"
-            android:id="@+id/pageNumber"
-            android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true" />
-
-        <Button
-            style="@style/CommonButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/next"
-            android:id="@+id/next"
-            android:layout_alignParentTop="true"
-            android:layout_toRightOf="@+id/pageNumber"
-            android:layout_toEndOf="@+id/pageNumber" />
-
-    </RelativeLayout>
     <Spinner
         android:padding="2dp"
         android:layout_margin="2dp"
@@ -46,22 +12,25 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/spinner" />
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="fill_parent"
-        android:fillViewport="false"
-        android:layout_above="@+id/relativeLayout"
-        android:layout_below="@+id/spinner">
 
-        <LinearLayout
+
+        <ListView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/routeInfo"
             android:alignmentMode="alignBounds"
-            android:orientation="vertical">
-        </LinearLayout>
-    </ScrollView>
+            android:orientation="vertical"
+            android:layout_below="@id/spinner"
+            android:layout_alignParentBottom="true">
+        </ListView>
 
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/loading"
+        android:visibility="visible"/>
 
 
 </RelativeLayout>
