@@ -166,9 +166,9 @@ public class RouteInfo extends RelativeLayout implements PlayerInfoLayout {
                             @Override
                             public int compare(Caravan lhs, Caravan rhs) {
                                 LatLng pl = GPSInfo.getInstance().getLatLng();
-                                LatLng c1 = lhs.getMarker().getPosition();
+                                LatLng c1 = lhs.getPosition();
                                 float d1 = GPSInfo.getDistance(pl, c1);
-                                c1 = rhs.getStartPoint();
+                                c1 = rhs.getPosition();
                                 float d2 = GPSInfo.getDistance(pl, c1);
                                 return (int) (d1 - d2);
                             }
