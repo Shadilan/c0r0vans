@@ -29,6 +29,7 @@ import com.coe.c0r0vans.Singles.GameObjects;
 import com.coe.c0r0vans.Singles.MessageMap;
 import com.coe.c0r0vans.Singles.MyGoogleMap;
 import com.coe.c0r0vans.Singles.SelectedObject;
+import com.coe.c0r0vans.Singles.ToastSend;
 import com.coe.c0r0vans.UIElements.ActionView;
 import com.coe.c0r0vans.UIElements.ButtonLayout;
 import com.coe.c0r0vans.UIElements.UIControler;
@@ -494,6 +495,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                     .findFragmentById(R.id.map);
             mapFragment.getMapAsync(this);
             //Компонент управления слоями
+        ToastSend.init(this);
             ViewGroup lay = (ViewGroup) findViewById(R.id.windowLayout);
             UIControler.setWindowLayout(lay);
             UIControler.setButtonLayout((ButtonLayout) findViewById(R.id.buttonLayout));

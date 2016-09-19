@@ -20,6 +20,7 @@ import com.coe.c0r0vans.R;
 import com.coe.c0r0vans.ShowHideForm;
 import com.coe.c0r0vans.Singles.GameObjects;
 import com.coe.c0r0vans.Singles.MyGoogleMap;
+import com.coe.c0r0vans.Singles.ToastSend;
 import com.coe.c0r0vans.UIElements.ActionView;
 import com.coe.c0r0vans.UIElements.ConfirmWindow;
 import com.coe.c0r0vans.UIElements.GameObjectView;
@@ -235,9 +236,11 @@ public class City extends GameObject implements ActiveObject {
                             Essages.addEssage("Маршрут начинается в этом городе.");
                             break;
                         case "O0606":
-                            if (response.has("Message"))
-                                Essages.addEssage(response.getString("Message"));
-                            else Essages.addEssage("Не хватает наемников.");
+                            String msg;
+                            if (response.has("Message")) msg=response.getString("Message");
+                            else msg="Не достаточно наемников";
+                            Essages.addEssage(msg);
+                            ToastSend.send(msg);
                             break;
                         default:
                             if (response.has("Message"))
@@ -345,9 +348,11 @@ public class City extends GameObject implements ActiveObject {
                             Essages.addEssage("Маршрут начинается в этом городе.");
                             break;
                         case "O0606":
-                            if (response.has("Message"))
-                                Essages.addEssage(response.getString("Message"));
-                            else Essages.addEssage("Не хватает наемников.");
+                            String msg;
+                            if (response.has("Message")) msg=response.getString("Message");
+                            else msg="Не достаточно наемников";
+                            Essages.addEssage(msg);
+                            ToastSend.send(msg);
                             break;
                         default:
                             if (response.has("Message"))
@@ -439,14 +444,21 @@ public class City extends GameObject implements ActiveObject {
                             Essages.addEssage("Город слишком далеко.");
                             break;
                         case "O0703":
-                            Essages.addEssage("Не хватает золота на покупку.");
+                            ToastSend.send("Не хватает золота на оплату обучения.");
+                            Essages.addEssage("Не хватает золота на оплату обучения.");
                             break;
                         case "O0704":
+                            ToastSend.send("Город слишком мал.");
                             Essages.addEssage("Город слишком мал.");
+
                             break;
                         case "O0705":
+                            ToastSend.send("Не достаточно уровня для изучения умения.");
                             Essages.addEssage("Не достаточно уровня для изучения умения.");
                             break;
+                        case "O0706":
+                            ToastSend.send("Вы уже обучились максимальному навыку.");
+                            Essages.addEssage("Вы уже обучились максимальному навыку.");
                         default:
                             if (response.has("Message")) Essages.addEssage(response.getString("Message"));
                             else Essages.addEssage("Непредвиденная ошибка.");
@@ -918,14 +930,21 @@ public class City extends GameObject implements ActiveObject {
                                                 Essages.addEssage("Город слишком далеко.");
                                                 break;
                                             case "O0703":
-                                                Essages.addEssage("Не хватает золота на покупку.");
+                                                ToastSend.send("Не хватает золота на оплату обучения.");
+                                                Essages.addEssage("Не хватает золота на оплату обучения.");
                                                 break;
                                             case "O0704":
+                                                ToastSend.send("Город слишком мал.");
                                                 Essages.addEssage("Город слишком мал.");
+
                                                 break;
                                             case "O0705":
+                                                ToastSend.send("Не достаточно уровня для изучения умения.");
                                                 Essages.addEssage("Не достаточно уровня для изучения умения.");
                                                 break;
+                                            case "O0706":
+                                                ToastSend.send("Вы уже обучились максимальному навыку.");
+                                                Essages.addEssage("Вы уже обучились максимальному навыку.");
                                             default:
                                                 if (response.has("Message")) Essages.addEssage(response.getString("Message"));
                                                 else Essages.addEssage("Непредвиденная ошибка.");

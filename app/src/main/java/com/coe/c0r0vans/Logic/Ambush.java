@@ -16,6 +16,7 @@ import com.coe.c0r0vans.GameObjects.ObjectAction;
 import com.coe.c0r0vans.R;
 import com.coe.c0r0vans.Singles.GameObjects;
 import com.coe.c0r0vans.Singles.MyGoogleMap;
+import com.coe.c0r0vans.Singles.ToastSend;
 import com.coe.c0r0vans.UIElements.ActionView;
 import com.coe.c0r0vans.UIElements.GameObjectView;
 import com.google.android.gms.maps.GoogleMap;
@@ -181,6 +182,7 @@ public class Ambush extends GameObject implements ActiveObject {
                                     break;
                                 case "O0304":
                                     Essages.addEssage("Не хватает наемников для уничтожения засады.");
+                                    ToastSend.send("Не достаточно наемников.");
                                     break;
                                 default:
                                     if (response.has("Message"))
