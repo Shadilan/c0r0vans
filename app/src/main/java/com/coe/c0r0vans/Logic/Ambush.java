@@ -46,7 +46,16 @@ public class Ambush extends GameObject implements ActiveObject {
     protected int radius=30;
 
     private int ready=0;
+    public int getReady(){
+        return ready;
+    }
     private int life=10;
+
+    @Override
+    public int getLife() {
+        return life;
+    }
+
     LatLng latlng;
 
     @Override

@@ -1,5 +1,6 @@
 package com.coe.c0r0vans;
 
+
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
@@ -535,6 +536,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
         try{
 
             Point size=new Point();
+
             MyGoogleMap.init(googleMap, size.y);
             GameObjects.setMap(MyGoogleMap.getMap());
             createListeners();

@@ -36,9 +36,11 @@ public class RouteInfo extends RelativeLayout implements PlayerInfoLayout {
     ArrayList<Caravan> routesA; //Список в Листе
     ShowHideForm parent; //Parent
     int sort=0;
-    public RouteInfo(Context context) {
+    public RouteInfo(Context context,ShowHideForm form) {
         super(context);
+        this.parent=form;
         init();
+
     }
 
     public RouteInfo(Context context, AttributeSet attrs) {
@@ -107,7 +109,7 @@ public class RouteInfo extends RelativeLayout implements PlayerInfoLayout {
                 final int list_size = routes.size();// Moved  list.size() call out of the loop to local variable list_size
                 final int listA_size = routesA.size();// Moved  listA.size() call out of the loop to local variable listA_size
                 if (this.currentVisibleItemCount > 0 && this.totalItemCount-5 <= (currentFirstVisibleItem + currentVisibleItemCount) && list_size>listA_size) {
-                    GATracker.trackTimeStart("Interface","Atlas.AddItemsToList");
+                    GATracker.trackTimeStart("Interface","Routes.AddItemsToList");
                     routesA.addAll(routes.subList(listA_size,Math.min(list_size,listA_size+10)));
                     ((BaseAdapter)routeInfo.getAdapter()).notifyDataSetChanged();
                     GATracker.trackTimeEnd("Interface","Routes.AddItemsToList");
@@ -117,6 +119,7 @@ public class RouteInfo extends RelativeLayout implements PlayerInfoLayout {
         });
         RouteAdapter la =new RouteAdapter(getContext(),routesA,parent);
         routeInfo.setAdapter(la);
+
         ((BaseAdapter)routeInfo.getAdapter()).notifyDataSetChanged();
     }
     @Override

@@ -81,7 +81,12 @@ public class MyGoogleMap{
      * Настройка карты
      */
     private static  void setupMap(){
-        map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+        map.setMapType(5);
+        //String myMapID = "mapbox.dark";
+        //String accesToken = "pk.eyJ1Ijoic2hhZGlsYW4iLCJhIjoiY2l0OHJxbXE5MDAxeTJ5cGh6OHFsb2hqaiJ9.r1_D8boC9ZHBJpJEI4FDfA";
+        //MapBoxOnlineTileProvider provider = new MapBoxOnlineTileProvider(myMapID, accesToken);
+
+        //googleMap.addTileOverlay(new TileOverlayOptions().tileProvider(provider));
         map.setBuildingsEnabled(false);
         map.getUiSettings().setScrollGesturesEnabled(false);
         map.getUiSettings().setTiltGesturesEnabled(false);

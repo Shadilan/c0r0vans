@@ -1,71 +1,45 @@
-package com.coe.c0r0vans.UIElements;
+package com.coe.c0r0vans.UIElements.InfoLayout;
 
 import android.content.Context;
-import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.coe.c0r0vans.GameObjects.ObjectAction;
+import com.coe.c0r0vans.Logic.Ambush;
 import com.coe.c0r0vans.R;
 import com.coe.c0r0vans.ShowHideForm;
+import com.coe.c0r0vans.Singles.GameObjects;
 import com.coe.c0r0vans.Singles.MyGoogleMap;
+import com.coe.c0r0vans.UIElements.ConfirmWindow;
 import com.google.android.gms.maps.model.LatLng;
 
 import utility.GATracker;
+import utility.GPSInfo;
 import utility.internet.serverConnect;
 
 
 /**
  * Информационная строка для засад
  */
-public class InfoLine extends RelativeLayout {
-    private TextView labelText;
+public class AmbushLine extends RelativeLayout {
+    private final Ambush ambush;
+
     private ImageButton removeButton;
-    private ObjectAction removeAction;
+
     private ImageButton showButton;
-    private String target;
-    private String labelString;
     private LatLng point;
     private ShowHideForm parentForm;
-    InfoLine self=this;
 
-    public void setParentForm(ShowHideForm form){
-        parentForm=form;
-    }
-    public void setLabelText(String text){
-        labelString=text;
-
-        if (labelText!=null) {
-            labelText.setText(text);
-
-        }
-
-
-    }
     public void setPoint(LatLng point){
         this.point=point;
         showButton.setVisibility(VISIBLE);
     }
-    public void setTarget(String guid){
-        target=guid;
-    }
-    public void setOnRemoveClick(ObjectAction removeAction){
-        this.removeAction=removeAction;
-    }
-    public InfoLine(Context context) {
+
+    public AmbushLine(Context context, Ambush ambush,ShowHideForm parentForm) {
         super(context);
-        init();
-    }
-
-    public InfoLine(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        init();
-    }
-
-    public InfoLine(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
+        this.ambush=ambush;
+        this.parentForm=parentForm;
         init();
     }
 
@@ -86,8 +60,15 @@ public class InfoLine extends RelativeLayout {
 
     private void afterInit() {
 
-        labelText= (TextView) findViewById(R.id.infoLineText);
-        labelText.setText(labelString);
+        TextView labelText= (TextView) findViewById(R.id.infoLineText);
+        labelText.setText(ambush.getName());
+        labelText= (TextView) findViewById(R.id.infoLineText2);
+        String t="";
+        if (ambush.getReady()<0) t="⌛";
+        else t="";
+
+        labelText.setText((int) GPSInfo.getDistance(GameObjects.getPlayer().getPosition(), ambush.getPosition())+
+                "m " +t+ (ambush.getLife())+"⚔");
         removeButton= (ImageButton) findViewById(R.id.removeButton);
         removeButton.setOnClickListener(new OnClickListener() {
             @Override
@@ -97,7 +78,7 @@ public class InfoLine extends RelativeLayout {
                 confirmWindow.setConfirmAction(new Runnable() {
                     @Override
                     public void run() {
-                        serverConnect.getInstance().callCanelAmbush(removeAction, target);
+                        serverConnect.getInstance().callCanelAmbush(ambush.getRemoveAction(), ambush.getGUID());
                         removeButton.setVisibility(INVISIBLE);
                         //self.setVisibility(GONE);
 
@@ -110,8 +91,8 @@ public class InfoLine extends RelativeLayout {
         showButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (point!=null) {
-                    MyGoogleMap.showPoint(point);
+                if (ambush.getPosition()!=null) {
+                    MyGoogleMap.showPoint(ambush.getPosition());
                     if (parentForm!=null) parentForm.Hide();
                 }
             }

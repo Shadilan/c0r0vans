@@ -45,6 +45,10 @@ import utility.sign.SignInListener;
 public class serverConnect {
     private final int max_retry=3;
     private static serverConnect instance;
+    private String currentRequest="";
+    public String getCurrentRequest(){
+        return currentRequest;
+    }
 
     /**
      * Получить объект
@@ -576,10 +580,30 @@ public class serverConnect {
         busy=true;
         if (!checkConnection()) return;
         Log.d("server",request);
+        currentRequest=request;
+        if (type!=ResponseListenerWithUID.FASTSCAN) {
+            String typeS;
+            if (type == ResponseListenerWithUID.ACTION) {
+                if (listenersMap.get(UID) != null)
+                    typeS = "Type_" + type + "_" + listenersMap.get(UID).getCommand();
+                else typeS = "Type_" + type + "_UNKNOWN";
+            } else typeS = "Type_" + type;
+            GATracker.trackTimeStart("Network", "Type" + typeS);
+        }
         final JsonObjectRequest jsObjRequest = new JsonObjectRequest
                 (Request.Method.GET, request, null, new ResponseListenerWithUID(UID,request,type){
                     @Override
                     public void onResponse(JSONObject response) {
+                        currentRequest="";
+                        if (getType()!=ResponseListenerWithUID.FASTSCAN) {
+                            String typeS;
+                            if (getType() == ResponseListenerWithUID.ACTION) {
+                                if (listenersMap.get(getUID()) != null)
+                                    typeS = "Type_" + getType() + "_" + listenersMap.get(getUID()).getCommand();
+                                else typeS = "Type_" + getType() + "_UNKNOWN";
+                            } else typeS = "Type_" + getType();
+                            GATracker.trackTimeEnd("Network", "Type" + typeS);
+                        }
                         Log.d("TYPE"+getType(),response.toString());
                         try
                         {
@@ -747,6 +771,16 @@ public class serverConnect {
                 }, new ResponseErrorListenerWithUID(UID,request,type) {
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        currentRequest="";
+                        if (getType()!=ResponseListenerWithUID.FASTSCAN) {
+                            String typeS;
+                            if (getType() == ResponseListenerWithUID.ACTION) {
+                                if (listenersMap.get(getUID()) != null)
+                                    typeS = "Type_" + getType() + "_" + listenersMap.get(getUID()).getCommand();
+                                else typeS = "Type_" + getType() + "_UNKNOWN";
+                            } else typeS = "Type_" + getType();
+                            GATracker.trackTimeEnd("Network", "Type" + typeS);
+                        }
                         try {
 
                             if (error.networkResponse == null && error.getClass().equals(TimeoutError.class) && try_count<max_retry) runRequest(getUID(), getRequest(), getType(),try_count+1);

@@ -11,14 +11,15 @@
         android:id="@+id/removeButton"
         android:src="@mipmap/closebutton"
         android:layout_centerVertical="true"/>
-    <ScrollView
-        android:layout_width="fill_parent"
+    <ImageButton
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toLeftOf="@+id/showButton"
-        android:layout_toStartOf="@+id/showButton"
-        android:layout_toRightOf="@+id/removeButton"
-        android:layout_toEndOf="@+id/removeButton"
-        android:gravity="center_vertical|center_horizontal">
+        android:id="@+id/showButton"
+        android:visibility="visible"
+        android:src="@mipmap/showbutton"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 
 
     <TextView
@@ -26,18 +27,26 @@
         android:layout_height="wrap_content"
         style="@style/MediumText"
         android:id="@+id/infoLineText"
+        android:layout_toRightOf="@id/removeButton"
+        android:layout_toEndOf="@id/removeButton"
+        android:layout_toLeftOf="@id/showButton"
+        android:layout_toStartOf="@id/showButton"
+        android:layout_alignParentTop="true"
 
         />
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            style="@style/MediumText"
+            android:id="@+id/infoLineText2"
+            android:layout_toRightOf="@id/removeButton"
+            android:layout_toEndOf="@id/removeButton"
+            android:layout_toLeftOf="@id/showButton"
+            android:layout_toStartOf="@id/showButton"
+            android:layout_below="@id/infoLineText"
+            />
 
-    </ScrollView>
-    <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/showButton"
-        android:visibility="invisible"
-        android:src="@mipmap/showbutton"
-        android:layout_centerVertical="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+
+
 
 </RelativeLayout>

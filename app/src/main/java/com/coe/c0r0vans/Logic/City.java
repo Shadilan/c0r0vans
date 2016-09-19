@@ -21,9 +21,9 @@ import com.coe.c0r0vans.ShowHideForm;
 import com.coe.c0r0vans.Singles.GameObjects;
 import com.coe.c0r0vans.Singles.MyGoogleMap;
 import com.coe.c0r0vans.UIElements.ActionView;
-import com.coe.c0r0vans.UIElements.CityLine;
 import com.coe.c0r0vans.UIElements.ConfirmWindow;
 import com.coe.c0r0vans.UIElements.GameObjectView;
+import com.coe.c0r0vans.UIElements.InfoLayout.CityLine;
 import com.coe.c0r0vans.UIElements.UIControler;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.Circle;
@@ -1210,7 +1210,7 @@ public class City extends GameObject implements ActiveObject {
                     l.addView(line);
                     line.setData(r);
                     line.setParentForm(self);
-                    line.setTarget(r.getGUID());
+
                 }
                 ((TextView)findViewById(R.id.routeCount)).setText(String.valueOf(amount));
                 ((TextView)findViewById(R.id.routeIncome)).setText(String.valueOf(income));

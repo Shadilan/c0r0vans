@@ -4,8 +4,11 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.coe.c0r0vans.R;
+
+import utility.internet.serverConnect;
 
 /**
  * About Layout
@@ -43,5 +46,6 @@ public class AboutWindow extends RelativeLayout {
         if (UIControler.getAlertLayout()==null) return;
         UIControler.getAlertLayout().removeAllViews();
         UIControler.getAlertLayout().addView(this);
+        ((TextView) findViewById(R.id.textView30)).setText(serverConnect.getInstance().getCurrentRequest());
     }
 }
