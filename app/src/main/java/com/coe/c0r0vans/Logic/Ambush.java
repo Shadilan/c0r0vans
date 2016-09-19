@@ -33,6 +33,7 @@ import utility.GATracker;
 import utility.GPSInfo;
 import utility.GameSound;
 import utility.ImageLoader;
+import utility.StringUtils;
 import utility.internet.serverConnect;
 import utility.notification.Essages;
 import utility.settings.GameSettings;
@@ -312,28 +313,22 @@ public class Ambush extends GameObject implements ActiveObject {
             if (up!=null && getRadius()<up.getEffect1()) dop="\nВы можете ставить засады больше.";
 
             if (ready < 0)
-                return "Ваши верные воины готовят засаду. Работать еще " + (ready * -1) + " минут."+count+dop;
-            else if (ready / 60 > 2)
-                return "Ваши верные воины засели в Засаде. На посту уже " + (Math.round(ready / 60)) + " часов."+count+dop;
-            else if (ready / 60 / 24 > 2)
-                return "Ваши верные воины засели  в Засаде. На посту уже " + (Math.round(ready / 60 / 24)) + " дней."+count+dop;
+                return "Ваши верные воины готовят засаду. Работать еще" + StringUtils.getTime(ready) +"."+count+dop;
+            else if (ready > 0)
+                return "Ваши верные воины засели в Засаде. На посту " + StringUtils.getTime(ready) +"."+count+dop;
             else return "Ваши верные воины засели в Засаде."+count+dop;
         }
         else if (faction==GameObjects.getPlayer().getRace()){
             if (ready < 0)
-                return "Ваши соратники готовят засаду. Работать еще " + (ready * -1) + " минут."+count;
-            else if (ready / 60 > 2)
-                return "Ваши соратники засели в Засаде. На посту уже " + (Math.round(ready / 60)) + " часов."+count;
-            else if (ready / 60 / 24 > 2)
-                return "Ваши соратники засели в Засаде. На посту уже " + (Math.round(ready / 60 / 24)) + " дней."+count;
+                return "Ваши соратники готовят засаду. Работать еще " + StringUtils.getTime(ready) +"."+count;
+            else if (ready  > 0)
+                return "Ваши соратники засели в Засаде. На посту " + StringUtils.getTime(ready) +"."+count;
             else return "Ваши соратники засели в Засаде."+count;
         } else {
             if (ready < 0)
-                return "Разбойники решили разбить здесь лагерь. Станут опасны через " + (ready * -1) + " минут."+count;
-            else if (ready / 60 > 2)
-                return "Засада ожидает здесь неосторожных караванщиков. Cтоят около " + (Math.round(ready / 60)) + " часов."+count;
-            else if (ready / 60 / 24 > 2)
-                return "Засада ожидает здесь неосторожных караванщиков. Cтоят около " + (Math.round(ready / 60 / 24)) + " дней."+count;
+                return "Разбойники решили разбить здесь лагерь. Станут опасны через " + StringUtils.getTime(ready) +"."+count;
+            else if (ready > 0)
+                return "Засада ожидает здесь неосторожных караванщиков. Cтоят " + StringUtils.getTime(ready) +"."+count;
             else return "Засада ожидает здесь неосторожных караванщиков."+count;
         }
 

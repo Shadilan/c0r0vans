@@ -16,6 +16,7 @@ import com.google.android.gms.maps.model.LatLng;
 
 import utility.GATracker;
 import utility.GPSInfo;
+import utility.StringUtils;
 import utility.internet.serverConnect;
 
 
@@ -68,7 +69,7 @@ public class AmbushLine extends RelativeLayout {
         else t="";
 
         labelText.setText((int) GPSInfo.getDistance(GameObjects.getPlayer().getPosition(), ambush.getPosition())+
-                "m " +t+ (ambush.getLife())+"⚔");
+                "m " +t+ StringUtils.getTime(ambush.getReady()) +"."+ (ambush.getLife())+" наемников.");
         removeButton= (ImageButton) findViewById(R.id.removeButton);
         removeButton.setOnClickListener(new OnClickListener() {
             @Override

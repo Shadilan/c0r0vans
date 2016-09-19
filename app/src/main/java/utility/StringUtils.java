@@ -57,5 +57,16 @@ public class StringUtils {
         if (context==null) return null;
         return context.getString(id);
     }
+    public static String getTime(int time){
+        String result="";
+        if (Math.abs(time) == 1 ) result= "1"+ " минуту";
+        else if (Math.abs(time) == 2 || Math.abs(time)  == 3) result= Math.abs(time)+ " минуты";
+        else if (Math.abs(time) <=120 ) result= Math.abs(time)+ " минут";
+        else if (Math.abs(time) > 120 && Math.abs(time) < 270) result= Math.abs(Math.round(time/60))+ " часа";
+        else if (Math.abs(time) > 270 && Math.abs(time) < 2*60*24) result= Math.abs(Math.round(time/60))+ " часа";
+        else if (Math.abs(time) >= 4*30*24 && Math.abs(time) < 9*30*24) result= (Math.round(time / 60 / 24)) + " дня";
+        else if (Math.abs(time) >= 9*30*24) result= (Math.round(time / 60 / 24)) + " дней";
+        return result;
+    }
 
 }
