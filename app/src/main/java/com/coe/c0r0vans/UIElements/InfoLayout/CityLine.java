@@ -19,7 +19,7 @@ import utility.StringUtils;
 
 
 /**
- * Строка информации о городе
+ * Строка информации о городе в Атласе
  */
 public class CityLine extends RelativeLayout {
     private TextView startCityView;
