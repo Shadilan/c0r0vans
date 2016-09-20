@@ -1,7 +1,5 @@
 package utility;
 
-import android.util.Log;
-
 import com.google.android.gms.maps.model.UrlTileProvider;
 
 import java.net.MalformedURLException;
@@ -13,7 +11,8 @@ public class MapBoxOnlineTileProvider extends UrlTileProvider {
     private static final String FORMAT;
 
     static {
-        FORMAT = "%s://api.tiles.mapbox.com/v4/%s/%d/%d/%d.png32?access_token=%s";
+        //FORMAT = "%s://api.tiles.mapbox.com/v4/%s/%d/%d/%d.png32?access_token=%s";
+        FORMAT="http://tile.stamen.com/watercolor/%d/%d/%d.jpg";
     }
 
 
@@ -85,10 +84,11 @@ public class MapBoxOnlineTileProvider extends UrlTileProvider {
     @Override
     public URL getTileUrl(int x, int y, int z) {
         try {
-            String protocol = this.mHttpsEnabled ? "https" : "http";
+            /*String protocol = this.mHttpsEnabled ? "https" : "http";
             final String url = String.format(FORMAT,
                     protocol, this.mMapIdentifier, z, x, y, this.mAccessToken);
-            Log.d(TAG, url);
+            Log.d(TAG, url);*/
+            final String url = String.format(FORMAT,z,x,y);
             return new URL(url);
         } catch (MalformedURLException e) {
             return null;

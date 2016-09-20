@@ -59,13 +59,29 @@ public class StringUtils {
     }
     public static String getTime(int time){
         String result="";
-        if (Math.abs(time) == 1 ) result= "1"+ " минуту";
-        else if (Math.abs(time) == 2 || Math.abs(time)  == 3) result= Math.abs(time)+ " минуты";
-        else if (Math.abs(time) <=120 ) result= Math.abs(time)+ " минут";
-        else if (Math.abs(time) > 120 && Math.abs(time) < 270) result= Math.abs(Math.round(time/60))+ " часа";
-        else if (Math.abs(time) > 270 && Math.abs(time) < 2*60*24) result= Math.abs(Math.round(time/60))+ " часа";
-        else if (Math.abs(time) >= 4*30*24 && Math.abs(time) < 9*30*24) result= (Math.round(time / 60 / 24)) + " дня";
-        else if (Math.abs(time) >= 9*30*24) result= (Math.round(time / 60 / 24)) + " дней";
+        int val=Math.abs(time);
+        if (val<=120) {
+            if (String.valueOf(val).endsWith("1")) result = val + " минуту";
+            else if (String.valueOf(val).endsWith("2") || String.valueOf(val).endsWith("3")
+                    || String.valueOf(val).endsWith("4"))
+                result = val + " минуты";
+            else result=val + " минут";
+        }
+        else if (val > 120 && val < 2*60*24){
+            val=time/60;
+            if (String.valueOf(val).endsWith("1")) result = val + " час";
+            else if (String.valueOf(val).endsWith("2") || String.valueOf(val).endsWith("3")
+                    || String.valueOf(val).endsWith("4"))
+                result = val + " часа";
+            else result=val + " часов";
+        } else if (val>=2*60*24){
+            val=time/60/24;
+            if (String.valueOf(val).endsWith("1")) result = val + " день";
+            else if (String.valueOf(val).endsWith("2") || String.valueOf(val).endsWith("3")
+                    || String.valueOf(val).endsWith("4"))
+                result = val + " дня";
+            else result=val + " дней";
+        }
         return result;
     }
 

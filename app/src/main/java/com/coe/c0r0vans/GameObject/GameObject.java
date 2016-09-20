@@ -126,9 +126,6 @@ public class GameObject {
     public RelativeLayout getObjectView(Context context){
         return null;
     }
-    public int getRadius(){
-        return radius;
-    }
     public Circle getZone(){
         return zone;
     }

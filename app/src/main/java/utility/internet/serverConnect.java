@@ -368,6 +368,27 @@ public class serverConnect {
         runRequest(UID, url, ResponseListenerWithUID.ACTION);
         return true;
     }
+
+    public boolean callOpenChest(ObjectAction chestAction, int Lat, int Lng, String guid) {
+        if (!checkConnection()) return false;
+        if (Token==null) return false;
+        if (lockedActions==null) lockedActions=new ArrayList<>();
+        lockedActions.add(chestAction);
+        chestAction.preAction();
+        String UID=UUID.randomUUID().toString();
+        String url=new UrlBuilder(ServerAddres+"/getdata.jsp",chestAction.getCommand(),version)
+                .put("Token",Token)
+                .put("plat",Lat)
+                .put("plng",Lng)
+                .put("TGUID",guid)
+                .put("UUID",UID)
+                .build();
+        listenersMap.put(UID, chestAction);
+        errorMap.put(UID, chestAction);
+        runRequest(UID, url, ResponseListenerWithUID.ACTION);
+        return true;
+    }
+
     public boolean callFinishRoute(ObjectAction action,int Lat,int Lng,String target){
         if (!checkConnection()) return false;
         if (Token==null) return false;
@@ -505,6 +526,9 @@ public class serverConnect {
 
     }
     boolean busy=false;
+
+
+
     private class RequestData{
         public RequestData(String UID,String request, int type){
             this.request=request;

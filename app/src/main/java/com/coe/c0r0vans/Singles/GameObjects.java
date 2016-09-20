@@ -11,6 +11,7 @@ import com.coe.c0r0vans.GameObject.ActiveObject;
 import com.coe.c0r0vans.GameObject.GameObject;
 import com.coe.c0r0vans.Logic.Ambush;
 import com.coe.c0r0vans.Logic.Caravan;
+import com.coe.c0r0vans.Logic.Chest;
 import com.coe.c0r0vans.Logic.City;
 import com.coe.c0r0vans.Logic.Player;
 import com.coe.c0r0vans.UIElements.ChooseFaction;
@@ -50,7 +51,7 @@ public class GameObjects{
         for (GameObject o:activeObjects.values()){
             if (o instanceof ActiveObject && o.getMarker()!=null && o.getMarker().isVisible()) {
                 float dist = GPSInfo.getDistance(latLng, o.getMarker().getPosition());
-                if (dist < closest && dist < o.getRadius()){
+                if (dist < closest && dist < ((ActiveObject) o).getRadius()){
                     closest=dist;
                     closestObject=o;
                 }
@@ -157,7 +158,7 @@ public class GameObjects{
                             JSONArray lst=response.getJSONArray("FastScan");
                             for (GameObject o:objects.values()) {
                                //Если это Засада или Караван
-                                if (o instanceof Ambush || o instanceof Caravan) {
+                                if (o instanceof Ambush || o instanceof Caravan || o instanceof Chest) {
 
                                     //Если он есть в JSON обновить данные
                                     final int lst_length = lst.length();// Moved  lst.length() call out of the loop to local variable lst_length
@@ -167,11 +168,11 @@ public class GameObjects{
                                         String guid="";
                                         int lat=0;
                                         int lng=0;
-                                        //String type="";
+                                        String type="";
                                         if (obj.has("GUID"))guid=obj.getString("GUID");
                                         if (obj.has("Lat"))lat=obj.getInt("Lat");
                                         if (obj.has("Lng"))lng=obj.getInt("Lng");
-                                        //if (obj.has("Type")) type=obj.getString("Type");
+                                        if (obj.has("Type")) type=obj.getString("Type");
                                         if (o.getGUID().equals(guid)){
                                             o.setPostion(new LatLng(lat/1e6,lng/1e6));
                                             o.setVisibility(true);
@@ -192,13 +193,20 @@ public class GameObjects{
                                 String guid="";
                                 int lat=0;
                                 int lng=0;
-                                //String type="";
+                                String type="";
                                 if (obj.has("GUID"))guid=obj.getString("GUID");
                                 if (obj.has("Lat"))lat=obj.getInt("Lat");
                                 if (obj.has("Lng"))lng=obj.getInt("Lng");
-                                //if (obj.has("Type")) type=obj.getString("Type");
-                                Caravan c=player.getRoutes().get(guid);
-                                if (c!=null) c.setPostion(new LatLng(lat/1e6,lng/1e6));
+                                if (obj.has("Type")) type=obj.getString("Type");
+                                if ("Caravan".equals(type)) {
+                                    Caravan c = player.getRoutes().get(guid);
+                                    if (c != null) c.setPostion(new LatLng(lat / 1e6, lng / 1e6));
+                                } else if ("Chest".equals(type)){
+                                    if (objects.get(guid)==null){
+                                        objects.put(guid,new Chest(MyGoogleMap.getMap(),obj));
+                                    }
+                                }
+
                             }
 
 

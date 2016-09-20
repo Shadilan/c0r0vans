@@ -83,6 +83,7 @@ public class GameSound {
     public static int REMOVE_AMBUSH;
     public static int GATE_OPEN;
     public static int ROGUE_CAMP;
+    public static int OPENCHEST;
     private Runnable task=new Runnable() {
         @Override
         public void run() {

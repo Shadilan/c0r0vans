@@ -64,12 +64,12 @@ public class AmbushLine extends RelativeLayout {
         TextView labelText= (TextView) findViewById(R.id.infoLineText);
         labelText.setText(ambush.getName());
         labelText= (TextView) findViewById(R.id.infoLineText2);
-        String t="";
+        String t;
         if (ambush.getReady()<0) t="⌛";
         else t="";
 
         labelText.setText((int) GPSInfo.getDistance(GameObjects.getPlayer().getPosition(), ambush.getPosition())+
-                "m " +t+ StringUtils.getTime(ambush.getReady()) +"."+ (ambush.getLife())+" наемников.");
+                "m " +t+ StringUtils.getTime(ambush.getReady()) +" "+ (ambush.getLife())+" наемников.");
         removeButton= (ImageButton) findViewById(R.id.removeButton);
         removeButton.setOnClickListener(new OnClickListener() {
             @Override

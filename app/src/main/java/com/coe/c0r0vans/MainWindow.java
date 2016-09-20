@@ -22,9 +22,8 @@ import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.coe.c0r0vans.GameObject.ActiveObject;
 import com.coe.c0r0vans.GameObject.GameObject;
-import com.coe.c0r0vans.Logic.Ambush;
-import com.coe.c0r0vans.Logic.City;
 import com.coe.c0r0vans.Singles.GameObjects;
 import com.coe.c0r0vans.Singles.MessageMap;
 import com.coe.c0r0vans.Singles.MyGoogleMap;
@@ -674,9 +673,9 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                                 if (distances != -1 && distances < GameObjects.getPlayer().getActionDistance()) {
                                     boolean setAmush = true;
                                     for (GameObject o : GameObjects.getInstance().values()) {
-                                        if ((o instanceof City || o instanceof Ambush) && o.getMarker().isVisible()) {
+                                        if ((o instanceof ActiveObject) && o.getMarker().isVisible()) {
                                             float d = GPSInfo.getDistance(latLng, o.getMarker().getPosition());
-                                            if (d < o.getRadius()) setAmush = false;
+                                            if (d < ((ActiveObject) o).getRadius()) setAmush = false;
                                         }
                                     }
                                     if (setAmush) {

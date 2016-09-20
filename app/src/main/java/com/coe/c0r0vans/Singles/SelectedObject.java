@@ -2,6 +2,7 @@ package com.coe.c0r0vans.Singles;
 
 import android.graphics.Color;
 
+import com.coe.c0r0vans.GameObject.ActiveObject;
 import com.coe.c0r0vans.GameObject.GameObject;
 import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
@@ -23,17 +24,19 @@ public class SelectedObject {
         this.point=point;
         if (clickpos != null) {
             clickpos.setCenter(point);
-            clickpos.setRadius(target.getRadius());
+            if (target instanceof ActiveObject) clickpos.setRadius(((ActiveObject) target).getRadius());
 
         } else {
-            CircleOptions circleOptions = new CircleOptions();
-            circleOptions.center(point);
-            circleOptions.radius(GameObjects.getPlayer().getAmbushRad());
-            circleOptions.strokeColor(Color.RED);
-            circleOptions.strokeWidth(5);
-            circleOptions.zIndex(200);
-            circleOptions.radius(target.getRadius());
-            clickpos = MyGoogleMap.getMap().addCircle(circleOptions);
+            if (target instanceof ActiveObject) {
+                CircleOptions circleOptions = new CircleOptions();
+                circleOptions.center(point);
+                circleOptions.radius(GameObjects.getPlayer().getAmbushRad());
+                circleOptions.strokeColor(Color.RED);
+                circleOptions.strokeWidth(5);
+                circleOptions.zIndex(200);
+                circleOptions.radius(((ActiveObject) target).getRadius());
+                clickpos = MyGoogleMap.getMap().addCircle(circleOptions);
+            }
 
         }
         if (clickPoint != null) {
