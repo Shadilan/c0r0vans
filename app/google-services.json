@@ -1,0 +1,51 @@
+{
+  "project_info": {
+    "project_number": "818299087088",
+    "project_id": "skilful-bloom-111416"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:818299087088:android:567137405d45fb17",
+        "android_client_info": {
+          "package_name": "com.coe.c0r0vans"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "818299087088-v573i62e7flakbu5uupkp06gs76ct8le.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.coe.c0r0vans",
+            "certificate_hash": "1E625ABBE6B3CAB97717C8F644F5A7FC5A62FD00"
+          }
+        },
+        {
+          "client_id": "818299087088-ooq951dsv5btv7361u4obhlse0apt3al.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCPjMEtkNwCXcLoc6mqyKMPRxW-nbpLiOo"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 2,
+          "analytics_property": {
+            "tracking_id": "UA-78112646-1"
+          }
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
