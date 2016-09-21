@@ -622,13 +622,15 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                         } else if (Math.abs(oldPos.x - event.getX()) < 20 && Math.abs(oldPos.y - event.getY()) < 20) {
                             GATracker.trackTimeStart("System","ChooseObject");
                             LatLng latLng=MyGoogleMap.getMap().getProjection().fromScreenLocation(oldPos);
-                            GameObject target = GameObjects.getClosestObject(latLng);
+                            ActiveObject target = GameObjects.getClosestObject(latLng);
                             //Marker
                             if (target != null) {
+
                                 GATracker.trackTimeStart("System","ObjectForm");
-                                SelectedObject.getInstance().setTarget(target);
+                                target.useObject();
+                                /*SelectedObject.getInstance().setTarget(target);
                                 SelectedObject.getInstance().setPoint(target.getMarker().getPosition());
-                                ((ActionView) findViewById(R.id.actionView)).ShowView();
+                                ((ActionView) findViewById(R.id.actionView)).ShowView();*/
                                 GATracker.trackTimeEnd("System","ObjectForm");
                             } else if (GameObjects.getPlayer() != null & GameObjects.getPlayer().getMarker() != null) {
                                 //Ambush

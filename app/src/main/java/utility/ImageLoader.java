@@ -75,6 +75,8 @@ public class ImageLoader {
         createMarker(context, R.mipmap.caravan_3, "caravan_3");
         createMarker(context, R.mipmap.caravan_4, "caravan_4");
 
+        createMarker(context,R.mipmap.chest,"chest");
+
 
         //Actions
             //City

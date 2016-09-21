@@ -44,16 +44,16 @@ public class GameObjects{
     private static Player player;
     private static GoogleMap map;
 
-    public static GameObject getClosestObject(LatLng latLng){
+    public static ActiveObject getClosestObject(LatLng latLng){
         float closest=1000;
-        GameObject closestObject=null;
+        ActiveObject closestObject=null;
 
         for (GameObject o:activeObjects.values()){
             if (o instanceof ActiveObject && o.getMarker()!=null && o.getMarker().isVisible()) {
                 float dist = GPSInfo.getDistance(latLng, o.getMarker().getPosition());
                 if (dist < closest && dist < ((ActiveObject) o).getRadius()){
                     closest=dist;
-                    closestObject=o;
+                    closestObject=(ActiveObject)o;
                 }
             }
         }

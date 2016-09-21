@@ -1013,4 +1013,5 @@ public class Player extends GameObject {
             if (!(city.equals(r.getStartGUID()) || city.equals(r.getFinishGUID()))) r.fadeRoute();
         }
     }
+
 }

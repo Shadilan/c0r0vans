@@ -102,6 +102,7 @@ public class GameSound {
             REMOVE_AMBUSH=soundPool.load(context,R.raw.remove_ambush,0);
             GATE_OPEN=soundPool.load(context,R.raw.gate,0);
             ROGUE_CAMP=soundPool.load(context,R.raw.rogue_camp,0);
+            OPENCHEST=soundPool.load(context,R.raw.openchest,0);
 
         }
     };

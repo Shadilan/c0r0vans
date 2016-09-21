@@ -2,8 +2,8 @@
     <string name="version" translatable="false">3.0.13a</string>
     <string name="app_name">c0r0vans α</string>
     <string name="login_window">Login</string>
-    <string name="serveradressOld" translatable="false">https://alpha3-corovans.rhcloud.com</string>
-    <string name="serveradress" translatable="false">https://alpha4-corovans.rhcloud.com</string>
+    <string name="serveradressOld" translatable="false">https://alpha4-corovans.rhcloud.com</string>
+    <string name="serveradress" translatable="false">https://alpha5-corovans.rhcloud.com</string>
     <string name="supportdress" translatable="false">https://support-merchantarg.rhcloud.com</string>
     <string name="title_activity_main_window">c0r0vans</string>
     <string name="action_window">Actions</string>

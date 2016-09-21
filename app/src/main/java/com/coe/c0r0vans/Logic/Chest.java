@@ -1,21 +1,14 @@
 package com.coe.c0r0vans.Logic;
 
-import android.content.Context;
 import android.graphics.Bitmap;
-import android.util.AttributeSet;
-import android.view.View;
-import android.widget.ImageButton;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.coe.c0r0vans.GameObject.ActiveObject;
 import com.coe.c0r0vans.GameObject.GameObject;
 import com.coe.c0r0vans.GameObject.OnGameObjectRemove;
 import com.coe.c0r0vans.GameObjects.ObjectAction;
-import com.coe.c0r0vans.R;
+import com.coe.c0r0vans.Singles.GameObjects;
 import com.coe.c0r0vans.Singles.MyGoogleMap;
-import com.coe.c0r0vans.UIElements.ActionView;
-import com.coe.c0r0vans.UIElements.GameObjectView;
+import com.coe.c0r0vans.Singles.ToastSend;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -122,6 +115,16 @@ public class Chest extends GameObject implements ActiveObject {
     public int getRadius() {
         return 30;
     }
+
+    @Override
+    public void useObject() {
+        if (this.getMarker()!=null
+                && GPSInfo.getDistance(GameObjects.getPlayer().getPosition(),getPosition())<GameObjects.getPlayer().getRadius()) {
+            serverConnect.getInstance().callOpenChest(getChestAction(), GPSInfo.getInstance().GetLat(),
+                    GPSInfo.getInstance().GetLng(),getGUID());
+        }
+    }
+
     ObjectAction chestAction;
     public ObjectAction getChestAction(){
         if (chestAction==null){
@@ -143,6 +146,16 @@ public class Chest extends GameObject implements ActiveObject {
 
                     @Override
                     public void postAction(JSONObject response) {
+                        if (response.has("Gold")) {
+                            try {
+                                int gold=response.getInt("Gold");
+                                GameObjects.getPlayer().setGold(GameObjects.getPlayer().getGold()+gold);
+                                ToastSend.send("Получено "+gold+" золота.");
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+
+                        }
                         GameSound.playSound(GameSound.OPENCHEST);
                         Essages.addEssage("Награда получена");
                         RemoveObject();
@@ -187,78 +200,5 @@ public class Chest extends GameObject implements ActiveObject {
         }
         return chestAction;
     }
-    class ChestLayout extends RelativeLayout implements GameObjectView {
 
-        public ChestLayout(Context context) {
-            super(context);
-            init();
-        }
-
-        public ChestLayout(Context context, AttributeSet attrs) {
-            super(context, attrs);
-            init();
-        }
-
-        public ChestLayout(Context context, AttributeSet attrs, int defStyleAttr) {
-            super(context, attrs, defStyleAttr);
-            init();
-        }
-        private void init(){
-            inflate(this.getContext(), R.layout.chest_layout, this);
-        }
-        Chest chest;
-
-        public void setAmbush(Chest chest){
-            this.chest=chest;
-            apply();
-        }
-
-        private void apply() {
-            final ImageButton openButton=(ImageButton)findViewById(R.id.openButton);
-            openButton.setImageResource(R.mipmap.dismiss);
-
-            openButton.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (chest.getMarker()!=null) {
-                        serverConnect.getInstance().callOpenChest(getChestAction(), GPSInfo.getInstance().GetLat(),
-                                GPSInfo.getInstance().GetLng(),getGUID());
-                    }
-                    close();
-                }
-
-            });
-            openButton.setVisibility(INVISIBLE);
-            findViewById(R.id.cancel).setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    close();
-                }
-            });
-
-        }
-
-        @Override
-        public void updateInZone(boolean inZone) {
-            ImageButton openButton=(ImageButton)findViewById(R.id.ambushActionBtn);
-            if (inZone) openButton.setVisibility(VISIBLE);
-                else openButton.setVisibility(INVISIBLE);
-
-        }
-
-        @Override
-        public void close() {
-            actionView.HideView();
-        }
-        ActionView actionView;
-        @Override
-        public void setContainer(ActionView av) {
-            actionView=av;
-        }
-
-        @Override
-        public void setDistance(int distance) {
-            ((TextView) findViewById(R.id.distance)).setText(String.format(getContext().getString(R.string.distance_mesure), distance));
-        }
-    }
 }

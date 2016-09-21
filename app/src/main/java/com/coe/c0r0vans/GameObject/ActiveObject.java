@@ -5,4 +5,5 @@ package com.coe.c0r0vans.GameObject;
  */
 public interface ActiveObject {
     int getRadius();
+    void useObject();
 }

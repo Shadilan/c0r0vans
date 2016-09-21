@@ -20,6 +20,7 @@ import com.coe.c0r0vans.R;
 import com.coe.c0r0vans.ShowHideForm;
 import com.coe.c0r0vans.Singles.GameObjects;
 import com.coe.c0r0vans.Singles.MyGoogleMap;
+import com.coe.c0r0vans.Singles.SelectedObject;
 import com.coe.c0r0vans.Singles.ToastSend;
 import com.coe.c0r0vans.UIElements.ActionView;
 import com.coe.c0r0vans.UIElements.ConfirmWindow;
@@ -1579,5 +1580,12 @@ public class City extends GameObject implements ActiveObject {
     }
     public int getRadius(){
         return radius;
+    }
+
+    @Override
+    public void useObject() {
+        SelectedObject.getInstance().setTarget(this);
+        SelectedObject.getInstance().setPoint(this.getPosition());
+        UIControler.getActionLayout().ShowView();
     }
 }

@@ -16,9 +16,11 @@ import com.coe.c0r0vans.GameObjects.ObjectAction;
 import com.coe.c0r0vans.R;
 import com.coe.c0r0vans.Singles.GameObjects;
 import com.coe.c0r0vans.Singles.MyGoogleMap;
+import com.coe.c0r0vans.Singles.SelectedObject;
 import com.coe.c0r0vans.Singles.ToastSend;
 import com.coe.c0r0vans.UIElements.ActionView;
 import com.coe.c0r0vans.UIElements.GameObjectView;
+import com.coe.c0r0vans.UIElements.UIControler;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
@@ -313,7 +315,7 @@ public class Ambush extends GameObject implements ActiveObject {
             if (up!=null && getRadius()<up.getEffect1()) dop="\nВы можете ставить засады больше.";
 
             if (ready < 0)
-                return "Ваши верные воины готовят засаду. Работать еще" + StringUtils.getTime(ready) +"."+count+dop;
+                return "Ваши верные воины готовят засаду. Работать еще " + StringUtils.getTime(ready) +"."+count+dop;
             else if (ready > 0)
                 return "Ваши верные воины засели в Засаде. На посту " + StringUtils.getTime(ready) +"."+count+dop;
             else return "Ваши верные воины засели в Засаде."+count+dop;
@@ -497,6 +499,14 @@ public class Ambush extends GameObject implements ActiveObject {
     public int getRadius(){
         return this.radius;
     }
+
+    @Override
+    public void useObject() {
+        SelectedObject.getInstance().setTarget(this);
+        SelectedObject.getInstance().setPoint(this.getPosition());
+        UIControler.getActionLayout().ShowView();
+    }
+
     public Circle getZone(){
         return zone;
     }
