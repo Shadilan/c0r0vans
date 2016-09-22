@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import com.coe.c0r0vans.R;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -51,10 +52,26 @@ public class SignIn {
 
         SharedPreferences sharedPreferences=activity.getApplicationContext().getSharedPreferences("SpiritProto", Context.MODE_PRIVATE);
         String accountName=sharedPreferences.getString("AccountName", "");
-
+        String server=sharedPreferences.getString("Server","");
+        String defServer=activity.getString(R.string.serveradress);
+        if (!defServer.equals(server)){
+            SharedPreferences sp;
+            sp = activity.getSharedPreferences("MESSAGES", Context.MODE_PRIVATE);
+            sp.edit().clear().apply();
+            sp = activity.getSharedPreferences("player", Context.MODE_PRIVATE);
+            sp.edit().clear().apply();
+            SharedPreferences.Editor ed=sharedPreferences.edit();
+            ed.putString("Server",defServer);
+            ed.apply();
+        }
         GoogleSignInOptions gso;
 
         if ("".equals(accountName)) {
+            SharedPreferences sp;
+            sp = activity.getSharedPreferences("MESSAGES", Context.MODE_PRIVATE);
+            sp.edit().clear().apply();
+            sp = activity.getSharedPreferences("player", Context.MODE_PRIVATE);
+            sp.edit().clear().apply();
             gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                     .requestIdToken("818299087088-ooq951dsv5btv7361u4obhlse0apt3al.apps.googleusercontent.com")
                     .requestEmail()

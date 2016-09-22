@@ -68,14 +68,14 @@ public class StringUtils {
             else result=val + " минут";
         }
         else if (val > 120 && val < 2*60*24){
-            val=time/60;
+            val=Math.round(Math.abs(time)/60);
             if (String.valueOf(val).endsWith("1")) result = val + " час";
             else if (String.valueOf(val).endsWith("2") || String.valueOf(val).endsWith("3")
                     || String.valueOf(val).endsWith("4"))
                 result = val + " часа";
             else result=val + " часов";
         } else if (val>=2*60*24){
-            val=time/60/24;
+            val=Math.round(Math.abs(time)/60/24);
             if (String.valueOf(val).endsWith("1")) result = val + " день";
             else if (String.valueOf(val).endsWith("2") || String.valueOf(val).endsWith("3")
                     || String.valueOf(val).endsWith("4"))

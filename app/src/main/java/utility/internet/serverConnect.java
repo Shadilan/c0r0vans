@@ -253,6 +253,7 @@ public class serverConnect {
                 .put("plng",Lng)
                 .put("UUID",UID)
                 .build();
+        Log.d("FastScan",url);
         runRequest(UUID.randomUUID().toString(), url, ResponseListenerWithUID.FASTSCAN,0);
         syncFast=false;
     }
@@ -370,6 +371,7 @@ public class serverConnect {
     }
 
     public boolean callOpenChest(ObjectAction chestAction, int Lat, int Lng, String guid) {
+        Log.d("Chest","CallNetwork");
         if (!checkConnection()) return false;
         if (Token==null) return false;
         if (lockedActions==null) lockedActions=new ArrayList<>();
@@ -383,6 +385,7 @@ public class serverConnect {
                 .put("TGUID",guid)
                 .put("UUID",UID)
                 .build();
+        Log.d("server",url);
         listenersMap.put(UID, chestAction);
         errorMap.put(UID, chestAction);
         runRequest(UID, url, ResponseListenerWithUID.ACTION);
@@ -541,17 +544,17 @@ public class serverConnect {
     }
     LinkedList<RequestData> requestList=new LinkedList<>();
     private void runNextRequest(){
-        if (syncPlayer){
-            runGetPlayerInfo();
-        } else if (syncMap){
+        if (syncMap){
             runScanRange();
-        } else if (syncMessage){
-            runGetMessage();
-        } else if (syncFast){
+        }  else if (syncFast){
             runFastScan();
         } else {
             if (requestList.isEmpty()) {
-                busy = false;
+                if (syncPlayer){
+                    runGetPlayerInfo();
+                }else if (syncMessage){
+                    runGetMessage();
+                } else busy=false;
             } else {
                 RequestData requestData = requestList.poll();
                 runRequest(requestData.UID, requestData.request, requestData.type, 0);
@@ -738,6 +741,7 @@ public class serverConnect {
                                         break;
                                     case REFRESH:
                                         for (ServerListener l : listeners) l.onResponse(ServerListener.REFRESH,response);
+                                        callFastScan();
 
                                         break;
                                     case ACTION: for (ServerListener l : listeners) l.onResponse(ServerListener.ACTION,response);

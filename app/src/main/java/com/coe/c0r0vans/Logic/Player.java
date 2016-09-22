@@ -505,7 +505,7 @@ public class Player extends GameObject {
     }
     public void removeAmbush(String guid){
         Ambush sa=Ambushes.get(guid);
-        setHirelings(hirelings+sa.getLife()*10);
+        setHirelings(hirelings+sa.getLife());
         setAmbushLeft(AmbushesLeft+1);
         sa.RemoveObject();
         Ambushes.remove(guid);

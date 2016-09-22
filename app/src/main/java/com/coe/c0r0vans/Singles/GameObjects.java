@@ -50,10 +50,16 @@ public class GameObjects{
 
         for (GameObject o:activeObjects.values()){
             if (o instanceof ActiveObject && o.getMarker()!=null && o.getMarker().isVisible()) {
-                float dist = GPSInfo.getDistance(latLng, o.getMarker().getPosition());
-                if (dist < closest && dist < ((ActiveObject) o).getRadius()){
+                float dist = GPSInfo.getDistance(latLng, o.getPosition());
+                Log.d("Chest",o.getClass().toString());
+                if (o instanceof  Chest && dist<((ActiveObject) o).getRadius()){
+                    closestObject=(ActiveObject)o;
+                    break;
+                } else
+                if (dist < closest && dist < ((ActiveObject) o).getRadius() ){
                     closest=dist;
                     closestObject=(ActiveObject)o;
+                    if (o instanceof Chest) break;
                 }
             }
         }
@@ -136,7 +142,7 @@ public class GameObjects{
                             for (GameObject obj : remObjects) {
                                 //Если город то не удаляем в течении 20 минут.
 
-                                if (!(obj instanceof City && ((City) obj).getUpdated().after(calendar.getTime()))) {
+                                if (!(obj instanceof City &&  ((City) obj).getUpdated().after(calendar.getTime())) && !(obj instanceof Chest)) {
                                     if (obj instanceof City) Log.d("TimeSpent","C:"+((City) obj).getUpdated().toString());
                                     obj.RemoveObject();
                                     removeActive(obj);
@@ -201,9 +207,10 @@ public class GameObjects{
                                 if ("Caravan".equals(type)) {
                                     Caravan c = player.getRoutes().get(guid);
                                     if (c != null) c.setPostion(new LatLng(lat / 1e6, lng / 1e6));
-                                } else if ("Chest".equals(type)){
+                                } else if ("Chest".equalsIgnoreCase(type)){
                                     if (objects.get(guid)==null){
-                                        objects.put(guid,new Chest(MyGoogleMap.getMap(),obj));
+                                        Log.d("Chest","GUID:"+guid);
+                                        put(new Chest(MyGoogleMap.getMap(),obj));
                                     }
                                 }
 

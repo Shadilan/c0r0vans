@@ -24,21 +24,19 @@ public class SelectedObject {
         this.point=point;
         if (clickpos != null) {
             clickpos.setCenter(point);
-            if (target instanceof ActiveObject) clickpos.setRadius(((ActiveObject) target).getRadius());
-
         } else {
-            if (target instanceof ActiveObject) {
                 CircleOptions circleOptions = new CircleOptions();
                 circleOptions.center(point);
-                circleOptions.radius(GameObjects.getPlayer().getAmbushRad());
+                circleOptions.radius(0);
                 circleOptions.strokeColor(Color.RED);
                 circleOptions.strokeWidth(5);
                 circleOptions.zIndex(200);
-                circleOptions.radius(((ActiveObject) target).getRadius());
                 clickpos = MyGoogleMap.getMap().addCircle(circleOptions);
-            }
-
         }
+
+        if (target instanceof ActiveObject)
+            clickpos.setRadius(((ActiveObject) target).getRadius());
+        else clickpos.setRadius(GameObjects.getPlayer().getAmbushRad());
         if (clickPoint != null) {
             clickPoint.setCenter(point);
         } else {
