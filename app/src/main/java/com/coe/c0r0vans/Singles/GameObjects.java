@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
-import android.util.Log;
 
 import com.coe.c0r0vans.GameObject.ActiveObject;
 import com.coe.c0r0vans.GameObject.GameObject;
@@ -51,7 +50,6 @@ public class GameObjects{
         for (GameObject o:activeObjects.values()){
             if (o instanceof ActiveObject && o.getMarker()!=null && o.getMarker().isVisible()) {
                 float dist = GPSInfo.getDistance(latLng, o.getPosition());
-                Log.d("Chest",o.getClass().toString());
                 if (o instanceof  Chest && dist<((ActiveObject) o).getRadius()){
                     closestObject=(ActiveObject)o;
                     break;
@@ -138,12 +136,9 @@ public class GameObjects{
                             Calendar calendar = Calendar.getInstance();
                             calendar.setTime(new Date());
                             calendar.add(Calendar.MINUTE,-20);
-                            Log.d("TimeSpent","T:"+calendar.getTime().toString());
                             for (GameObject obj : remObjects) {
                                 //Если город то не удаляем в течении 20 минут.
-
                                 if (!(obj instanceof City &&  ((City) obj).getUpdated().after(calendar.getTime())) && !(obj instanceof Chest)) {
-                                    if (obj instanceof City) Log.d("TimeSpent","C:"+((City) obj).getUpdated().toString());
                                     obj.RemoveObject();
                                     removeActive(obj);
                                     objects.remove(obj.getGUID());
@@ -152,7 +147,7 @@ public class GameObjects{
                         }
 
                     } catch (JSONException e) {
-                        Essages.addEssage(e.toString());
+                       GATracker.trackException("ScanRange",e);
                     }
                 } else
                 if (TYPE==FASTSCAN){
@@ -209,7 +204,6 @@ public class GameObjects{
                                     if (c != null) c.setPostion(new LatLng(lat / 1e6, lng / 1e6));
                                 } else if ("Chest".equalsIgnoreCase(type)){
                                     if (objects.get(guid)==null){
-                                        Log.d("Chest","GUID:"+guid);
                                         put(new Chest(MyGoogleMap.getMap(),obj));
                                     }
                                 }
@@ -220,7 +214,7 @@ public class GameObjects{
                         }
 
                     } catch (JSONException e) {
-                        Essages.addEssage(e.toString());
+                        GATracker.trackException("FastScan",e);
                     }
                 } else if (TYPE==PLAYER){
                     GameObjects.getPlayer().loadJSON(response);

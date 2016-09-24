@@ -15,7 +15,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -628,7 +627,6 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                             if (target != null) {
 
                                 GATracker.trackTimeStart("System","ObjectForm");
-                                Log.d("ObjectChoice",target.getClass().toString());
                                 target.useObject();
                                 /*SelectedObject.getInstance().setTarget(target);
                                 SelectedObject.getInstance().setPoint(target.getMarker().getPosition());
@@ -836,11 +834,8 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                 if (isActive) {
 
                     if (serverConnect.getInstance().isLogin()) {
-
-                        Log.d("FastScan", "Call from thread Logind");
                         //TODO По времени тоже обновлять.
                         if (lastFastScan == null || GPSInfo.getDistance(lastFastScan, GPSInfo.getInstance().getLatLng()) > 20) {
-                            Log.d("FastScan", "Call from thread");
                             serverConnect.getInstance().callFastScan();
                             lastFastScan = GPSInfo.getInstance().getLatLng();
                         }

@@ -1,7 +1,6 @@
 package com.coe.c0r0vans.Logic;
 
 import android.graphics.Color;
-import android.util.Log;
 
 import com.coe.c0r0vans.GameObject.GameObject;
 import com.coe.c0r0vans.GameObject.OnGameObjectRemove;
@@ -298,7 +297,6 @@ public class Caravan extends GameObject {
         }
 
         if (line!=null) {
-            Log.d("Leak","LineRemoved");
             line.remove();
             line=null;
         }

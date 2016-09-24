@@ -378,7 +378,7 @@ public class Player extends GameObject {
             if (obj.has("AmbushRadius")) AmbushRadius=obj.getInt("AmbushRadius");
             if (obj.has("ActionDistance")) ActionDistance=obj.getInt("ActionDistance");
             if (obj.has("Race")) race=obj.getInt("Race");
-            if (race==0) Essages.addEssage("Фракция не выбрана.");
+            //if (race==0) Essages.addEssage("Фракция не выбрана.");
             if (obj.has("Hirelings")) hirelings=obj.getInt("Hirelings"); else hirelings=100;
             if (obj.has("LeftToHire")) leftToHire=obj.getInt("LeftToHire"); else leftToHire=100;
             if (obj.has("FoundedCities")) foundedCities=obj.getInt("FoundedCities"); else foundedCities=0;
@@ -754,8 +754,11 @@ public class Player extends GameObject {
 
                 @Override
                 public void preAction() {
-                    GameObjects.getPlayer().setHirelings(GameObjects.getPlayer().getHirelings()-GameObjects.getPlayer().getUpgrade("ambushes").getEffect2()*10);
-                    GameObjects.getPlayer().setAmbushLeft(GameObjects.getPlayer().getAmbushLeft() - 1);
+                    Upgrade up=GameObjects.getPlayer().getUpgrade("ambushes");
+                    if (up!=null) {
+                        GameObjects.getPlayer().setHirelings(GameObjects.getPlayer().getHirelings() - up.getEffect2() * 10);
+                        GameObjects.getPlayer().setAmbushLeft(GameObjects.getPlayer().getAmbushLeft() - 1);
+                    }
                 }
 
                 @Override
@@ -784,8 +787,11 @@ public class Player extends GameObject {
 
 
                     try {
-                        GameObjects.getPlayer().setHirelings(GameObjects.getPlayer().getHirelings()+GameObjects.getPlayer().getUpgrade("ambushes").getEffect2()*5);
-                        GameObjects.getPlayer().setAmbushLeft(GameObjects.getPlayer().getAmbushLeft() +1);
+                        Upgrade up=GameObjects.getPlayer().getUpgrade("ambushes");
+                        if (up!=null) {
+                            GameObjects.getPlayer().setHirelings(GameObjects.getPlayer().getHirelings() + up.getEffect2() * 5);
+                            GameObjects.getPlayer().setAmbushLeft(GameObjects.getPlayer().getAmbushLeft() + 1);
+                        }
                         String err;
                         if (response.has("Error")) err=response.getString("Error");
                         else if (response.has("Result")) err=response.getString("Result");
@@ -872,8 +878,11 @@ public class Player extends GameObject {
                 @Override
                 public void postError(JSONObject response) {
                     try {
-                        GameObjects.getPlayer().setHirelings(GameObjects.getPlayer().getHirelings()+GameObjects.getPlayer().getUpgrade("ambushes").getEffect2()*5);
-                        GameObjects.getPlayer().setAmbushLeft(GameObjects.getPlayer().getAmbushLeft() +1);
+                        Upgrade up=GameObjects.getPlayer().getUpgrade("ambushes");
+                        if (up!=null) {
+                            GameObjects.getPlayer().setHirelings(GameObjects.getPlayer().getHirelings() + up.getEffect2() * 5);
+                            GameObjects.getPlayer().setAmbushLeft(GameObjects.getPlayer().getAmbushLeft() + 1);
+                        }
                         String err;
                         if (response.has("Error")) err=response.getString("Error");
                         else if (response.has("Result")) err=response.getString("Result");

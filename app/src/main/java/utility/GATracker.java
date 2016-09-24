@@ -1,7 +1,5 @@
 package utility;
 
-import android.util.Log;
-
 import com.coe.c0r0vans.CorovanApplication;
 import com.coe.c0r0vans.R;
 import com.google.android.gms.analytics.HitBuilders;
@@ -36,10 +34,10 @@ public class GATracker {
     private static void trackTime(String category, String action, long time){
         //mTracker.send(new HitBuilders.TimingBuilder().setCategory(category).setVariable(action).setLabel("Time").setValue(time).build());
         serverConnect.getInstance().sendDebug(category,action,0,time);
-        Log.d("TrackedTimer",category+"."+action+":"+time);
+
     }
     public static void trackException(String action,Exception e){
-        Log.d("TrackedError",e.toString()+":"+Arrays.toString(e.getStackTrace()));
+
         mTracker.send(new HitBuilders.ExceptionBuilder().setDescription(action+":"+Arrays.toString(e.getStackTrace())).build());
     }
     public static void trackException(String action,String text){

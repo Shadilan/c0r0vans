@@ -2,7 +2,6 @@ package com.coe.c0r0vans.UIElements.InfoLayout;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -73,9 +72,7 @@ public class AtlasLine extends RelativeLayout {
             public void onClick(View v) {
                 if (point!=null) {
                     MyGoogleMap.showPoint(point);
-
                     if (parentForm!=null) parentForm.Hide();
-                    else Log.d("ParentForm","ParentNULL");
                 }
             }
         });

@@ -4,7 +4,6 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.provider.Settings;
-import android.util.Log;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
@@ -146,12 +145,10 @@ public class serverConnect {
      * @return true
      */
     public boolean ExecAuthorize(String googleToken){
-        Log.d("LoginIn","Start");
         if (!checkConnection()) return false;
         String url=new UrlBuilder(ServerAddres+"/authorize.jsp","Authorize",version)
                 .put("GoogleToken",googleToken)
                 .build();
-        Log.d("LoginIn",url);
         runRequest(UUID.randomUUID().toString(),url,ResponseListenerWithUID.AUTHORIZE);
         return true;
     }
@@ -253,7 +250,6 @@ public class serverConnect {
                 .put("plng",Lng)
                 .put("UUID",UID)
                 .build();
-        Log.d("FastScan",url);
         runRequest(UUID.randomUUID().toString(), url, ResponseListenerWithUID.FASTSCAN,0);
         syncFast=false;
     }
@@ -371,7 +367,6 @@ public class serverConnect {
     }
 
     public boolean callOpenChest(ObjectAction chestAction, int Lat, int Lng, String guid) {
-        Log.d("Chest","CallNetwork");
         if (!checkConnection()) return false;
         if (Token==null) return false;
         if (lockedActions==null) lockedActions=new ArrayList<>();
@@ -385,7 +380,6 @@ public class serverConnect {
                 .put("TGUID",guid)
                 .put("UUID",UID)
                 .build();
-        Log.d("server",url);
         listenersMap.put(UID, chestAction);
         errorMap.put(UID, chestAction);
         runRequest(UID, url, ResponseListenerWithUID.ACTION);
@@ -426,7 +420,6 @@ public class serverConnect {
                 .put("TGUID",target)
                 .put("UUID",UID)
                 .build();
-        Log.d("StartFinish",url);
         listenersMap.put(UID, action);
         errorMap.put(UID, action);
         runRequest(UID, url, ResponseListenerWithUID.ACTION);
@@ -606,7 +599,6 @@ public class serverConnect {
 
         busy=true;
         if (!checkConnection()) return;
-        Log.d("server",request);
         currentRequest=request;
         if (type!=ResponseListenerWithUID.FASTSCAN) {
             String typeS;
@@ -631,7 +623,6 @@ public class serverConnect {
                             } else typeS = "Type_" + getType();
                             GATracker.trackTimeEnd("Network", "Type" + typeS);
                         }
-                        Log.d("TYPE"+getType(),response.toString());
                         try
                         {
 

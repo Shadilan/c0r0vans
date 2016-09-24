@@ -1,7 +1,6 @@
 package com.coe.c0r0vans.Logic;
 
 import android.graphics.Bitmap;
-import android.util.Log;
 
 import com.coe.c0r0vans.GameObject.ActiveObject;
 import com.coe.c0r0vans.GameObject.GameObject;
@@ -112,6 +111,8 @@ public class Chest extends GameObject implements ActiveObject {
             mark.remove();
             mark=null;
         }
+        GameObjects.removeActive(this);
+
     }
 
     @Override
@@ -123,10 +124,8 @@ public class Chest extends GameObject implements ActiveObject {
     public void useObject() {
 
         int dist= (int) GPSInfo.getDistance(GameObjects.getPlayer().getPosition(),getPosition());
-        Log.d("Chest","Used:"+dist+" "+GameObjects.getPlayer().getActionDistance());
         if (this.getMarker()!=null
                 && dist <GameObjects.getPlayer().getActionDistance()) {
-            Log.d("Chest","Used2");
             serverConnect.getInstance().callOpenChest(getChestAction(), GPSInfo.getInstance().GetLat(),
                     GPSInfo.getInstance().GetLng(),getGUID());
         }

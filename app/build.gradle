@@ -13,10 +13,10 @@ android {
     buildToolsVersion "23.0.2"
     defaultConfig {
         applicationId 'com.coe.c0r0vans'
-        minSdkVersion 15
+        minSdkVersion 14
         targetSdkVersion 23
-        versionCode 49
-        versionName "3.0.14a"
+        versionCode 51
+        versionName "3.0.15a"
         signingConfig signingConfigs.Release
     }
     buildTypes {

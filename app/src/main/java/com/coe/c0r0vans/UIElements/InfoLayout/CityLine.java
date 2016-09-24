@@ -2,7 +2,6 @@ package com.coe.c0r0vans.UIElements.InfoLayout;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
@@ -92,7 +91,6 @@ public class CityLine extends RelativeLayout {
                 if(startCity!=null){
                     MyGoogleMap.showPoint(startCity);
                     if (parentForm!=null) parentForm.Hide();
-                    else Log.d("ParentForm","ParentNULL");
                 }
             }
         });
@@ -102,7 +100,6 @@ public class CityLine extends RelativeLayout {
                 if(endCity!=null){
                     MyGoogleMap.showPoint(endCity);
                     if (parentForm!=null) parentForm.Hide();
-                    else Log.d("ParentForm","ParentNULL");
                 }
             }
         });
@@ -113,7 +110,6 @@ public class CityLine extends RelativeLayout {
                 if (point!=null) {
                     MyGoogleMap.showPoint(point);
                     if (parentForm!=null) parentForm.Hide();
-                    else Log.d("ParentForm","ParentNULL");
                 }
             }
         });
