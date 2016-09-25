@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -584,23 +585,22 @@ public class City extends GameObject implements ActiveObject {
 
     private boolean upgradeAvaible(){
         Upgrade up=GameObjects.getPlayer().getNextUpgrade(upgrade);
-        if (up == null ) return true;
-        float raceBonus=discount();
-        int upcost= (int) (up.getCost()*raceBonus);
-
-        return !( (up.getReqCityLev() > Level)
+        int upcost= getUpgradeCost();
+        boolean result=!( (up.getReqCityLev() > Level)
                 || (upcost >= GameObjects.getPlayer().getGold())
                 || (up.getLevel() > GameObjects.getPlayer().getLevel() - 1));
+
+        return result;
     }
     private float discount(){
 
         float raceBonus=0;
         long infsum=influence1+influence2+influence3;
         long maxInfluence = Math.max(Math.max(influence1,influence2),influence3);
-        long conc=1;
+        long conc=0;
 
         if (infsum>0) {
-                 conc= (3*maxInfluence-influence1-influence2-influence3)/4*infsum;
+                 conc= (3*maxInfluence-infsum)/(4*infsum);
             switch (GameObjects.getPlayer().getRace()) {
                 case 1:raceBonus=(float)influence1/infsum;
                     break;
@@ -610,7 +610,8 @@ public class City extends GameObject implements ActiveObject {
                     break;
             }
         }
-        return (1+conc)*((1f-raceBonus/4)*(100f-GameObjects.getPlayer().getTrade())/100f);
+        Log.d("CheckPrice","Concurency:"+(1f+conc)+" RaceBonus:"+(1f-raceBonus/4)+" TradeBonus:"+(100f-GameObjects.getPlayer().getTrade()));
+        return (1f+conc)*((1f-raceBonus/4)*(100f-GameObjects.getPlayer().getTrade())/100f);
     }
     public String getName(){return (Name+" ур."+Level) ;}
 
@@ -705,23 +706,7 @@ public class City extends GameObject implements ActiveObject {
         Upgrade up=GameObjects.getPlayer().getNextUpgrade(upgrade);
 
         if (up!=null) {
-            float raceBonus = 0;
-            long infsum = influence1 + influence2 + influence3;
-            if (infsum > 0) {
-                switch (GameObjects.getPlayer().getRace()) {
-                    case 1:
-                        raceBonus = (float) influence1 / infsum;
-                        break;
-                    case 2:
-                        raceBonus = (float) influence2 / infsum;
-                        break;
-                    case 3:
-                        raceBonus = (float) influence3 / infsum;
-                        break;
-                }
-            }
-            raceBonus = ((1f - raceBonus / 4) * (100f - GameObjects.getPlayer().getTrade()) / 100f);
-            res = (int) (up.getCost() * raceBonus);
+            res = (int) (up.getCost() * discount());
         }
         return res;
     }
