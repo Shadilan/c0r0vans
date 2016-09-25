@@ -273,15 +273,15 @@ public class ButtonLayout extends RelativeLayout {
 
     private void updateZoom() {
         float zoom=MyGoogleMap.getClientZoom();
-        if (zoom==GameObject.ICON_LARGE)
+        if (zoom==GameObject.ICON_SMALL)
         {
-            zoomCnt.setText(R.string.x4);
+            zoomCnt.setText(R.string.x1);
         } else if (zoom==GameObject.ICON_MEDIUM)
         {
             zoomCnt.setText(R.string.x2);
         } else
         {
-            zoomCnt.setText(R.string.x1);
+            zoomCnt.setText(R.string.x4);
         }
     }
 

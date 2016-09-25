@@ -19,7 +19,9 @@
         style="@style/SmallText"
         android:layout_toRightOf="@id/skill"
         android:layout_toEndOf="@id/skill"
-        android:layout_alignParentTop="true"/>
+        android:layout_alignParentTop="true"
+        android:layout_toLeftOf="@+id/showButton"
+        android:layout_toStartOf="@+id/showButton"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -28,7 +30,9 @@
 
         android:layout_toRightOf="@id/skill"
         android:layout_toEndOf="@id/skill"
-        android:layout_below="@id/cityName"/>
+        android:layout_below="@id/cityName"
+        android:layout_toLeftOf="@+id/showButton"
+        android:layout_toStartOf="@+id/showButton"/>
     <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

@@ -5,8 +5,8 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.ToggleButton;
 
 import com.coe.c0r0vans.GameObject.OnGameObjectChange;
@@ -16,12 +16,14 @@ import com.coe.c0r0vans.Singles.GameObjects;
 import com.coe.c0r0vans.UIElements.UIControler;
 
 import utility.GATracker;
+import utility.OnSwipeListener;
+import utility.SwipeDetectLayout;
 import utility.internet.serverConnect;
 
 /**
  * Информация об игроке
  */
-public class InfoLayout extends RelativeLayout implements ShowHideForm {
+public class InfoLayout extends SwipeDetectLayout implements ShowHideForm {
     LinearLayout informationLayout;
     PlayerInfoLayout current;
     LinearLayout gest;
@@ -67,6 +69,7 @@ public class InfoLayout extends RelativeLayout implements ShowHideForm {
     }
     private void afterInit(){
         informationLayout= (LinearLayout) findViewById(R.id.informationLayout);
+
         Button backButton= (Button) findViewById(R.id.back_button);
         backButton.setOnClickListener(new OnClickListener() {
             @Override
@@ -80,7 +83,92 @@ public class InfoLayout extends RelativeLayout implements ShowHideForm {
         ToggleButton ambushInfo= (ToggleButton) findViewById(R.id.ambushInfoButton);
         ToggleButton atlas= (ToggleButton) findViewById(R.id.atlasButton);
         setCurrent(new MainInfoTable(getContext()));
+        this.setOnSwipeListener(new OnSwipeListener() {
+            @Override
+            public void onSwipeRight() {
+                HorizontalScrollView tabs= (HorizontalScrollView) findViewById(R.id.Tabs);
 
+                if (((ToggleButton) findViewById(R.id.upgradeInfoButton)).isChecked()) {
+                    setCurrent(new MainInfoTable(getContext()));
+                    ToggleButton b = (ToggleButton) findViewById(R.id.upgradeInfoButton);
+                    b.setChecked(false);
+                    b = (ToggleButton) findViewById(R.id.playerInfoButton);
+                    b.setChecked(true);
+                    tabs.requestChildFocus(b,b);
+                }
+                else if (((ToggleButton) findViewById(R.id.routeInfoButton)).isChecked()) {
+                    setCurrent(new UpgradeInfo(getContext()));
+                    ToggleButton b = (ToggleButton) findViewById(R.id.routeInfoButton);
+                    b.setChecked(false);
+                    b = (ToggleButton) findViewById(R.id.upgradeInfoButton);
+                    b.setChecked(true);
+                    tabs.requestChildFocus(b,b);
+                }
+                else if (((ToggleButton) findViewById(R.id.ambushInfoButton)).isChecked()) {
+                    setCurrent(new RouteInfo(getContext(),form));
+                    ToggleButton b = (ToggleButton) findViewById(R.id.ambushInfoButton);
+                    b.setChecked(false);
+                    b = (ToggleButton) findViewById(R.id.routeInfoButton);
+                    b.setChecked(true);
+                    tabs.requestChildFocus(b,b);
+                }
+                else if (((ToggleButton) findViewById(R.id.atlasButton)).isChecked()) {
+                    setCurrent(new AmbushInfo(getContext(),form));
+                    ToggleButton b = (ToggleButton) findViewById(R.id.atlasButton);
+                    b.setChecked(false);
+                    b = (ToggleButton) findViewById(R.id.ambushInfoButton);
+                    b.setChecked(true);
+                    tabs.requestChildFocus(b,b);
+                }
+            }
+
+            @Override
+            public void onSwipeLeft() {
+                HorizontalScrollView tabs= (HorizontalScrollView) findViewById(R.id.Tabs);
+                if (((ToggleButton) findViewById(R.id.playerInfoButton)).isChecked()) {
+                    setCurrent(new UpgradeInfo(getContext()));
+                    ToggleButton b = (ToggleButton) findViewById(R.id.playerInfoButton);
+                    b.setChecked(false);
+                    b = (ToggleButton) findViewById(R.id.upgradeInfoButton);
+                    b.setChecked(true);
+                    tabs.requestChildFocus(b,b);
+                }
+                else if (((ToggleButton) findViewById(R.id.upgradeInfoButton)).isChecked()) {
+                    setCurrent(new RouteInfo(getContext(),form));
+                    ToggleButton b = (ToggleButton) findViewById(R.id.upgradeInfoButton);
+                    b.setChecked(false);
+                    b = (ToggleButton) findViewById(R.id.routeInfoButton);
+                    b.setChecked(true);
+                    tabs.requestChildFocus(b,b);
+                }
+                else if (((ToggleButton) findViewById(R.id.routeInfoButton)).isChecked()) {
+                    setCurrent(new AmbushInfo(getContext(),form));
+                    ToggleButton b = (ToggleButton) findViewById(R.id.routeInfoButton);
+                    b.setChecked(false);
+                    b = (ToggleButton) findViewById(R.id.ambushInfoButton);
+                    b.setChecked(true);
+                    tabs.requestChildFocus(b,b);
+                }
+                else if (((ToggleButton) findViewById(R.id.ambushInfoButton)).isChecked()) {
+                    setCurrent(new Atlas(getContext(),form));
+                    ToggleButton b = (ToggleButton) findViewById(R.id.ambushInfoButton);
+                    b.setChecked(false);
+                    b = (ToggleButton) findViewById(R.id.atlasButton);
+                    b.setChecked(true);
+                    tabs.requestChildFocus(b,b);
+                }
+            }
+
+            @Override
+            public void onSwipeUp() {
+
+            }
+
+            @Override
+            public void onSwipeDown() {
+
+            }
+        });
         playerInfo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

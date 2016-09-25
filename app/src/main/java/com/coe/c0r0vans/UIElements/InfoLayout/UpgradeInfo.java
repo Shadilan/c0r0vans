@@ -45,12 +45,18 @@ public class UpgradeInfo extends LinearLayout implements PlayerInfoLayout {
             LinearLayout l=new LinearLayout(getContext());
             l.setBackgroundResource(R.drawable.layouts_bordered);
             l.setOrientation(LinearLayout.HORIZONTAL);
+            l.setClickable(false);
+            l.setFocusable(false);
             upgradeInfo.addView(l);
             ImageView iv=new ImageView(getContext());
             iv.setImageBitmap(u.getImage());
+            iv.setClickable(false);
+            iv.setFocusable(false);
             l.addView(iv);
             TextView info=new TextView(getContext());
             info.setSingleLine(false);
+            info.setClickable(false);
+            info.setFocusable(false);
             String s;
             if (GameObjects.getPlayer().getNextUpgrade(u.getType())!=null) {
                  s = StringUtils.intToStr((int) (GameObjects.getPlayer().getNextUpgrade(u.getType()).getCost() * (100f - GameObjects.getPlayer().getTrade()) / 100f));
