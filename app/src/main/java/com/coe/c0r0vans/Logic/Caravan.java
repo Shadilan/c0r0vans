@@ -190,6 +190,7 @@ public class Caravan extends GameObject {
 
     }
     public void setPostion(LatLng latLng) {
+        this.latlng=latLng;
         if (mark!=null){
 
             mark.setPosition(latLng);

@@ -62,7 +62,7 @@ public class AtlasLine extends RelativeLayout {
         TextView txt= (TextView) findViewById(R.id.cityName);
         txt.setText(city.getName());
         txt= (TextView) findViewById(R.id.info);
-        int dst= (int) GPSInfo.getDistance(GameObjects.getPlayer().getMarker().getPosition(),city.getMarker().getPosition());
+        int dst= (int) GPSInfo.getDistance(GameObjects.getPlayer().getPosition(),city.getPosition());
         txt.setText(String.format(getContext().getString(R.string.city_indo), dst, city.getUpgradeCost()));
         ImageButton showButton= (ImageButton) findViewById(R.id.showPosButton);
         point=city.getMarker().getPosition();

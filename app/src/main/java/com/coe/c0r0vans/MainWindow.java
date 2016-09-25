@@ -15,6 +15,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -622,7 +623,10 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                         } else if (Math.abs(oldPos.x - event.getX()) < 20 && Math.abs(oldPos.y - event.getY()) < 20) {
                             GATracker.trackTimeStart("System","ChooseObject");
                             LatLng latLng=MyGoogleMap.getMap().getProjection().fromScreenLocation(oldPos);
+                            Log.d("Click",latLng.toString());
                             ActiveObject target = GameObjects.getClosestObject(latLng);
+
+
                             //Marker
                             if (target != null) {
 

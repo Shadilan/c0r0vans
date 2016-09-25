@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.coe.c0r0vans.GameObject.ActiveObject;
 import com.coe.c0r0vans.GameObject.GameObject;
@@ -49,15 +50,18 @@ public class GameObjects{
 
         for (GameObject o:activeObjects.values()){
             if (o instanceof ActiveObject && o.getMarker()!=null && o.getMarker().isVisible()) {
-                float dist = GPSInfo.getDistance(latLng, o.getPosition());
-                if (o instanceof  Chest && dist<((ActiveObject) o).getRadius()){
-                    closestObject=(ActiveObject)o;
-                    break;
-                } else
-                if (dist < closest && dist < ((ActiveObject) o).getRadius() ){
-                    closest=dist;
-                    closestObject=(ActiveObject)o;
-                    if (o instanceof Chest) break;
+                Log.d("Click","Obj:"+o.getClass().toString());
+                if (o.getPosition()!= null) {
+                    Log.d("Click","Success");
+                    float dist = GPSInfo.getDistance(latLng, o.getPosition());
+                    if (o instanceof Chest && dist < ((ActiveObject) o).getRadius()) {
+                        closestObject = (ActiveObject) o;
+                        break;
+                    } else if (dist < closest && dist < ((ActiveObject) o).getRadius()) {
+                        closest = dist;
+                        closestObject = (ActiveObject) o;
+                        if (o instanceof Chest) break;
+                    }
                 }
             }
         }

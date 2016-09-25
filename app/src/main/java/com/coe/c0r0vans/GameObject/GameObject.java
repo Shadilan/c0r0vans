@@ -135,6 +135,7 @@ public class GameObject {
     }
 
     public void setPostion(LatLng latLng) {
+
         if (mark!=null){
 
             mark.setPosition(latLng);

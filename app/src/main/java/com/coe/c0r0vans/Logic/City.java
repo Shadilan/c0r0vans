@@ -593,9 +593,14 @@ public class City extends GameObject implements ActiveObject {
                 || (up.getLevel() > GameObjects.getPlayer().getLevel() - 1));
     }
     private float discount(){
+
         float raceBonus=0;
         long infsum=influence1+influence2+influence3;
+        long maxInfluence = Math.max(Math.max(influence1,influence2),influence3);
+        long conc=1;
+
         if (infsum>0) {
+                 conc= (3*maxInfluence-influence1-influence2-influence3)/4*infsum;
             switch (GameObjects.getPlayer().getRace()) {
                 case 1:raceBonus=(float)influence1/infsum;
                     break;
@@ -605,7 +610,7 @@ public class City extends GameObject implements ActiveObject {
                     break;
             }
         }
-        return ((1f-raceBonus/4)*(100f-GameObjects.getPlayer().getTrade())/100f);
+        return (1+conc)*((1f-raceBonus/4)*(100f-GameObjects.getPlayer().getTrade())/100f);
     }
     public String getName(){return (Name+" ур."+Level) ;}
 

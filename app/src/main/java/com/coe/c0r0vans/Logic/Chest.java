@@ -53,6 +53,13 @@ public class Chest extends GameObject implements ActiveObject {
         }
 
     }
+    public void setPostion(LatLng latLng) {
+        this.latlng=latLng;
+        if (mark!=null){
+
+            mark.setPosition(latLng);
+        } else setMarker(map.addMarker(new MarkerOptions().position(latLng)));
+    }
     public Chest(GoogleMap map, JSONObject jsonObject){
         super();
         loadJSON(jsonObject);

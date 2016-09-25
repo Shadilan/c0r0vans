@@ -223,6 +223,7 @@ public class Ambush extends GameObject implements ActiveObject {
 
     @Override
     public void setPostion(LatLng latLng) {
+        this.latlng=latLng;
         if (mark==null) {
             if (map!=null) {
                 setMarker(map.addMarker(new MarkerOptions().position(latLng)));
