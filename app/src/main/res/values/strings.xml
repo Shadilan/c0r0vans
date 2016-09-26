@@ -1,5 +1,5 @@
 <resources>
-    <string name="version" translatable="false">3.0.13a</string>
+    <string name="version" translatable="false">3.0.15a</string>
     <string name="app_name">c0r0vans α</string>
     <string name="login_window">Login</string>
     <string name="serveradressOld" translatable="false">https://alpha3-corovans.rhcloud.com</string>
@@ -87,7 +87,7 @@ All rights reserved to Circle of Eternity</string>
     <string name="city_lvl_required" >Need town level %1$d\n</string>
     <string name="need_more_gold">Need %1$s more gold!\n</string>
     <string name="need_higher_lvl">Need Player Level %1$d\n</string>
-    <string name="price" >%1$s\" for %2$s gold(full price: %3$s).\n%4$s</string>
+    <string name="price" >%1$s\" for %2$s gold(base price: %3$s).\n%4$s</string>
     <string name="unknown_upgrade">"%1$s\". "</string>
     <string name="Question_Symbol" translatable="false">\?</string>
     <string name="choose_faction">Choose Faction.</string>

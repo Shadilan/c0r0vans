@@ -81,7 +81,7 @@
     <string name="city_lvl_required" >Требуется уровень города %d\n</string>
     <string name="need_more_gold" >Нужно больше золота!!! Еще %s золота!\n</string>
     <string name="need_higher_lvl" >Требуется уровень игрока %d\n</string>
-    <string name="price" >%1$s\" за %2$s золота(без скидки %3$s).\n%4$s</string>
+    <string name="price" >%1$s\" за %2$s золота(базовая цена %3$s).\n%4$s</string>
     <string name="unknown_upgrade">"%s\". "</string>
     <string name="choose_faction">Выбери Фракцию.</string>
     <string name="accept">Принять</string>

@@ -164,13 +164,14 @@ public class Chest extends GameObject implements ActiveObject {
                                 int gold=response.getInt("Gold");
                                 GameObjects.getPlayer().setGold(GameObjects.getPlayer().getGold()+gold);
                                 ToastSend.send("Получено "+gold+" золота.");
+                                Essages.addEssage("В сундуке обнаружено "+gold+" золота.");
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
 
                         }
                         GameSound.playSound(GameSound.OPENCHEST);
-                        Essages.addEssage("Награда получена");
+
                         RemoveObject();
                     }
 
@@ -191,6 +192,7 @@ public class Chest extends GameObject implements ActiveObject {
                                     break;
                                 case "O1401":
                                     Essages.addEssage("Сундук пуст.");
+                                    ToastSend.send("Пусто.");
                                     RemoveObject();
                                     break;
                                 case "O1402":

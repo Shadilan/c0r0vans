@@ -1,4 +1,4 @@
-package utility;
+package utility.SwipeDetectLayout;
 
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -35,7 +35,7 @@ public class SwipeDetectLayout extends RelativeLayout {
     }
     private float x1,x2;
     private float y1,y2;
-    static final int MIN_DISTANCE=50;
+    static final int MIN_DISTANCE=150;
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {

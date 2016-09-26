@@ -597,10 +597,11 @@ public class City extends GameObject implements ActiveObject {
         float raceBonus=0;
         long infsum=influence1+influence2+influence3;
         long maxInfluence = Math.max(Math.max(influence1,influence2),influence3);
-        long conc=0;
+        float conc=0;
 
         if (infsum>0) {
-                 conc= (3*maxInfluence-infsum)/(4*infsum);
+                 conc= (3f*maxInfluence-infsum)/(4f*infsum);
+
             switch (GameObjects.getPlayer().getRace()) {
                 case 1:raceBonus=(float)influence1/infsum;
                     break;

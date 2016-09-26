@@ -1,4 +1,4 @@
-package utility;
+package utility.SwipeDetectLayout;
 
 import java.util.EventListener;
 

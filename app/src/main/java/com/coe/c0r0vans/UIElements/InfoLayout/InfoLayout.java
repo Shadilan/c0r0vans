@@ -16,8 +16,8 @@ import com.coe.c0r0vans.Singles.GameObjects;
 import com.coe.c0r0vans.UIElements.UIControler;
 
 import utility.GATracker;
-import utility.OnSwipeListener;
-import utility.SwipeDetectLayout;
+import utility.SwipeDetectLayout.OnSwipeListener;
+import utility.SwipeDetectLayout.SwipeDetectLayout;
 import utility.internet.serverConnect;
 
 /**
