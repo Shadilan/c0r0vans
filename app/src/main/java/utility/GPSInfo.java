@@ -12,6 +12,7 @@ import android.util.Log;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 import utility.settings.GameSettings;
 import utility.settings.SettingsListener;
@@ -23,6 +24,7 @@ import utility.settings.SettingsListener;
 public class GPSInfo {
     private static GPSInfo instance;
     private boolean on=false;
+    private Long lastTime=0l;
 
     public static boolean checkEnabled(){
 
@@ -97,44 +99,60 @@ public class GPSInfo {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
                     if (location.isFromMockProvider()){
                         //Essages.addEssage("Вы используете фальшивые координаты. Информация отправлена администраторам.");
-                        GATracker.trackHit("System","SpoofingWithMock");
+                        GATracker.trackHit("GPS","SpoofingWithMock");
                         return;
 
                     }
                 }
 
-                boolean doEvent=true;
-                if (location.hasAccuracy() && location.getAccuracy()>accur+5) doEvent=false;
+                Long curTime=new Date().getTime();
+                LatLng newCord=new LatLng(location.getLatitude(),location.getLongitude());
+                LatLng oldCord=getLatLng();
+                if (oldCord.latitude==-1 && oldCord.longitude==-1) oldCord=newCord;
+                float timespeed=20f;
+                if (location.hasSpeed() &&location.getSpeed()>0){
+                    timespeed = (int) (location.getSpeed());
+                }
+                Log.d("GPSInfo","Speed:"+timespeed+" time:"+(curTime-lastTime)+" Distance:"+getDistance(getLatLng(),newCord));
+                if (timespeed*(curTime-lastTime)/1000<getDistance(getLatLng(),newCord)){
+                    GATracker.trackHit("GPS","ToFast");
+                    return;
+                }
+                if (curTime-lastTime<30000 && ((location.hasAccuracy() && location.getAccuracy()>100)|| !location.hasAccuracy())) {
+                    GATracker.trackHit("GPS", "NotAccurate");
+                    return;
+                }
+
+                lastTime=curTime;
+
                 if (location.hasAccuracy()) {
                     hasAccuracy=true;
                     accur=location.getAccuracy();
-
-                }
-                if (location.hasAccuracy()!=hasAccuracy) doEvent=false;
-
-
-
-                if (doEvent) {
                     GATracker.trackHit("GPS","Accuracy",(int)accur);
-                    if (location.hasSpeed()){
-                        speed = (int) (location.getSpeed() * 60 *60 / 1000);
-                        GATracker.trackHit("GPS","Speed",speed);
-                    }
 
-                    if (location.getLongitude() != -1 && location.getLatitude() != -1) {
-                        lat = (int) (location.getLatitude() * 1000000);
-                        lng = (int) (location.getLongitude() * 1000000);
-                    }
+                }
 
-                    //RequestUpdate(location.getProvider());
-                    if (locationListeners != null) {
-                        if (locationListenersRem != null)
-                            locationListeners.removeAll(locationListenersRem);
-                        for (LocationListener ll : locationListeners) {
-                            ll.onLocationChanged(location);
-                        }
+                if (location.hasSpeed()){
+                    speed = (int) (timespeed * 60 *60 / 1000);
+                    GATracker.trackHit("GPS","Speed",speed);
+                }
+
+                if (location.getLongitude() != -1 && location.getLatitude() != -1) {
+                    lat = (int) (location.getLatitude() * 1000000);
+                    lng = (int) (location.getLongitude() * 1000000);
+                    Log.d("GPS","SetCoord");
+
+                }
+
+                //RequestUpdate(location.getProvider());
+                if (locationListeners != null) {
+                    if (locationListenersRem != null)
+                        locationListeners.removeAll(locationListenersRem);
+                    for (LocationListener ll : locationListeners) {
+                        ll.onLocationChanged(location);
                     }
                 }
+
             }
 
             @Override
@@ -237,7 +255,8 @@ public class GPSInfo {
     public int GetLng(){
         return lng;
     }
-    public LatLng getLatLng(){return new LatLng(lat/1e6,lng/1e6);}
+    public LatLng getLatLng(){
+        return new LatLng(lat/1e6,lng/1e6);}
     public static float getDistance(LatLng p1,LatLng p2){
         if (p1==null ||p2==null) return 0f;
         Log.d("Test1",p1.toString());
