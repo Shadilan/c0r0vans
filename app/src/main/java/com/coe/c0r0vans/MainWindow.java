@@ -698,7 +698,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                                 Point c = new Point (metric.widthPixels/2,metric.heightPixels/2);
                                 Point p1 = new Point((int) event.getX(event.findPointerIndex(firstId)), (int) event.getY(event.findPointerIndex(firstId)));
 
-                                double angle = getAngle(oldPos, c) -getAngle(p1,c);
+                                double angle = getAngle(oldPos, c) - getAngle(p1,c);
                                 MyGoogleMap.rotate((float) angle);
                                 //Essages.addEssage("Угол"+angle);
                                 oldPos=p1;
