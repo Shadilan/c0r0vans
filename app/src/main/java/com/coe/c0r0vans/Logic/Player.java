@@ -935,9 +935,12 @@ public class Player extends GameObject {
         @Override
         public void updateInZone(boolean inZone) {
             if (inZone){
+                Upgrade up=getUpgrade("ambushes");
+                int cnt=10;
+                if (up!=null) cnt=up.getEffect2();
                 ImageButton btn= (ImageButton) findViewById(R.id.createAmbushAction);
                 btn.setVisibility(VISIBLE);
-                if (GameObjects.getPlayer().getAmbushLeft()>0){
+                if (GameObjects.getPlayer().getAmbushLeft()>0 && GameObjects.getPlayer().getHirelings()>=cnt){
                     btn.setClickable(true);
                     btn.setEnabled(true);
                     btn.setAlpha(1f);
@@ -956,7 +959,7 @@ public class Player extends GameObject {
                             float dist = 125;
                             //float mapper = 0;
                             if (((City) o).getOwner()) dist = 250;
-                            Upgrade up = GameObjects.getPlayer().getUpgrade("founder");
+                            up = GameObjects.getPlayer().getUpgrade("founder");
                             if (up != null) dist += up.getEffect2();
                             else dist += 125;
                         /*double tlat=SelectedObject.getInstance().getPoint().latitude;

@@ -18,15 +18,19 @@ public class SwipeDetectLayout extends RelativeLayout {
 
     public SwipeDetectLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
+
     }
 
     public SwipeDetectLayout(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public SwipeDetectLayout(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
+
+
     }
 
     OnSwipeListener listener;
@@ -35,10 +39,12 @@ public class SwipeDetectLayout extends RelativeLayout {
     }
     private float x1,x2;
     private float y1,y2;
-    static final int MIN_DISTANCE=150;
+    static  int MIN_DISTANCE=200;
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
+
+        Log.d("SwipeDetect","Length:"+MIN_DISTANCE);
         switch(ev.getActionMasked())
         {
             case MotionEvent.ACTION_DOWN:
@@ -73,6 +79,12 @@ public class SwipeDetectLayout extends RelativeLayout {
                 break;
         }
         return super.dispatchTouchEvent(ev);
+    }
+
+    @Override
+    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+        super.onSizeChanged(w, h, oldw, oldh);
+        MIN_DISTANCE=this.getWidth()*1/2;
     }
 
     /*@Override

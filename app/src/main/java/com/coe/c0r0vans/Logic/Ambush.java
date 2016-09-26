@@ -473,8 +473,18 @@ public class Ambush extends GameObject implements ActiveObject {
             } else{
                 if (inZone) removeButton.setVisibility(VISIBLE);
                 else removeButton.setVisibility(INVISIBLE);
-
+                if (ambush.getLife()/2>GameObjects.getPlayer().getHirelings()){
+                    removeButton.setClickable(false);
+                    removeButton.setEnabled(false);
+                    removeButton.setAlpha(0.5f);
+                } else
+                {
+                    removeButton.setClickable(true);
+                    removeButton.setEnabled(true);
+                    removeButton.setAlpha(1f);
+                }
             }
+
         }
 
         @Override

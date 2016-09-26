@@ -46,6 +46,8 @@ import utility.GPSInfo;
 import utility.GameSound;
 import utility.ImageLoader;
 import utility.StringUtils;
+import utility.SwipeDetectLayout.OnSwipeListener;
+import utility.SwipeDetectLayout.SwipeDetectLayout;
 import utility.internet.serverConnect;
 import utility.notification.Essages;
 import utility.settings.GameSettings;
@@ -712,7 +714,7 @@ public class City extends GameObject implements ActiveObject {
         return res;
     }
 
-    private class CityWindow extends RelativeLayout implements GameObjectView,ShowHideForm{
+    private class CityWindow extends SwipeDetectLayout implements GameObjectView,ShowHideForm{
         City city;
         CityWindow self;
         private int currentCount=1;
@@ -1161,6 +1163,61 @@ public class City extends GameObject implements ActiveObject {
                     findViewById(R.id.infoPanel).setVisibility(GONE);
                     findViewById(R.id.routePanel).setVisibility(VISIBLE);
                     GameSettings.set("CityTab","Route");
+                }
+            });
+            this.setOnSwipeListener(new OnSwipeListener() {
+                @Override
+                public void onSwipeRight() {
+                    ToggleButton info = (ToggleButton) findViewById(R.id.infoToggle);
+                    ToggleButton market = (ToggleButton) findViewById(R.id.marketToggle);
+                    ToggleButton route = (ToggleButton) findViewById(R.id.routeToggle);
+                    if (info.isChecked())
+                    {
+                        info.setChecked(false);
+                        market.setChecked(true);
+                        findViewById(R.id.buyPanel).setVisibility(VISIBLE);
+                        findViewById(R.id.infoPanel).setVisibility(GONE);
+                        GameSettings.set("CityTab","Market");
+                    } else if (route.isChecked())
+                    {
+                        route.setChecked(false);
+                        info.setChecked(true);
+                        findViewById(R.id.infoPanel).setVisibility(VISIBLE);
+                        findViewById(R.id.routePanel).setVisibility(GONE);
+                        GameSettings.set("CityTab","Info");
+                    }
+                }
+
+                @Override
+                public void onSwipeLeft() {
+                    ToggleButton info = (ToggleButton) findViewById(R.id.infoToggle);
+                    ToggleButton market = (ToggleButton) findViewById(R.id.marketToggle);
+                    ToggleButton route = (ToggleButton) findViewById(R.id.routeToggle);
+                    if (info.isChecked())
+                    {
+                        info.setChecked(false);
+                        route.setChecked(true);
+                        findViewById(R.id.routePanel).setVisibility(VISIBLE);
+                        findViewById(R.id.infoPanel).setVisibility(GONE);
+                        GameSettings.set("CityTab","Route");
+                    } else if (market.isChecked())
+                    {
+                        market.setChecked(false);
+                        info.setChecked(true);
+                        findViewById(R.id.infoPanel).setVisibility(VISIBLE);
+                        findViewById(R.id.buyPanel).setVisibility(GONE);
+                        GameSettings.set("CityTab","Info");
+                    }
+                }
+
+                @Override
+                public void onSwipeUp() {
+
+                }
+
+                @Override
+                public void onSwipeDown() {
+
                 }
             });
 
