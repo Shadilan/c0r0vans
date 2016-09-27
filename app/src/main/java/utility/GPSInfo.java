@@ -14,6 +14,7 @@ import com.google.android.gms.maps.model.LatLng;
 import java.util.ArrayList;
 import java.util.Date;
 
+import utility.notification.Essages;
 import utility.settings.GameSettings;
 import utility.settings.SettingsListener;
 
@@ -105,17 +106,19 @@ public class GPSInfo {
                     }
                 }
 
-                Long curTime=new Date().getTime();
+                Long curTime=new Date().getTime()/1000;
                 LatLng newCord=new LatLng(location.getLatitude(),location.getLongitude());
                 LatLng oldCord=getLatLng();
                 if (oldCord.latitude==-1 && oldCord.longitude==-1) oldCord=newCord;
-                float timespeed=20f;
+                float timespeed=20f ;
                 if (location.hasSpeed() &&location.getSpeed()>0){
-                    timespeed = (int) (location.getSpeed());
+                    timespeed = location.getSpeed();
                 }
-                Log.d("GPSInfo","Speed:"+timespeed+" time:"+(curTime-lastTime)+" Distance:"+getDistance(getLatLng(),newCord));
-                if (timespeed*(curTime-lastTime)/1000<getDistance(getLatLng(),newCord)){
+
+                if ((timespeed)*(curTime-lastTime+1)*4<getDistance(oldCord,newCord)){
                     GATracker.trackHit("GPS","ToFast");
+                    Essages.addEssage("Speed:"+timespeed+" time:"+(curTime-lastTime));
+                    Essages.addEssage("DistCount:"+(timespeed*(curTime-lastTime))+" Distance:"+getDistance(getLatLng(),newCord));
                     return;
                 }
                 if (curTime-lastTime<30000 && ((location.hasAccuracy() && location.getAccuracy()>100)|| !location.hasAccuracy())) {
