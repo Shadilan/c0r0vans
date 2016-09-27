@@ -14,7 +14,6 @@ import com.google.android.gms.maps.model.LatLng;
 import java.util.ArrayList;
 import java.util.Date;
 
-import utility.notification.Essages;
 import utility.settings.GameSettings;
 import utility.settings.SettingsListener;
 
@@ -25,7 +24,7 @@ import utility.settings.SettingsListener;
 public class GPSInfo {
     private static GPSInfo instance;
     private boolean on=false;
-    private Long lastTime=0l;
+    private Long lastTime= 0L;
 
     public static boolean checkEnabled(){
 
@@ -110,23 +109,25 @@ public class GPSInfo {
                 LatLng newCord=new LatLng(location.getLatitude(),location.getLongitude());
                 LatLng oldCord=getLatLng();
                 if (oldCord.latitude==-1 && oldCord.longitude==-1) oldCord=newCord;
-                float timespeed=20f ;
+                float timespeed;
                 if (location.hasSpeed() &&location.getSpeed()>0){
                     timespeed = location.getSpeed();
+                } else {
+                    timespeed=Math.max(speed*5/18,1);
+
+                    GATracker.trackHit("GPS","NoSpeed."+location.getProvider());
                 }
 
-                if ((timespeed)*(curTime-lastTime+1)*4<getDistance(oldCord,newCord)){
-                    GATracker.trackHit("GPS","ToFast");
-                    Essages.addEssage("Speed:"+timespeed+" time:"+(curTime-lastTime));
-                    Essages.addEssage("DistCount:"+(timespeed*(curTime-lastTime))+" Distance:"+getDistance(getLatLng(),newCord));
+                if ((timespeed)*(curTime-lastTime+1)*10<getDistance(oldCord,newCord) && curTime-lastTime<30000){
+                    GATracker.trackHit("GPS","ToFast."+location.getProvider());
                     return;
                 }
                 if (curTime-lastTime<30000 && ((location.hasAccuracy() && location.getAccuracy()>100)|| !location.hasAccuracy())) {
-                    GATracker.trackHit("GPS", "NotAccurate");
+                    GATracker.trackHit("GPS", "NotAccurate."+location.getProvider());
                     return;
                 }
 
-                lastTime=curTime;
+
 
                 if (location.hasAccuracy()) {
                     hasAccuracy=true;
@@ -143,6 +144,7 @@ public class GPSInfo {
                 if (location.getLongitude() != -1 && location.getLatitude() != -1) {
                     lat = (int) (location.getLatitude() * 1000000);
                     lng = (int) (location.getLongitude() * 1000000);
+                    lastTime=curTime;
                     Log.d("GPS","SetCoord");
 
                 }
@@ -274,3 +276,4 @@ public class GPSInfo {
         return on;
     }
 }
+

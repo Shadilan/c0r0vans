@@ -60,14 +60,14 @@ public class StringUtils {
     public static String getTime(int time){
         String result="";
         int val=Math.abs(time);
-        if (val<=120) {
+        if (val<=180) {
             if (String.valueOf(val).endsWith("1")) result = val + " минуту";
             else if (String.valueOf(val).endsWith("2") || String.valueOf(val).endsWith("3")
                     || String.valueOf(val).endsWith("4"))
                 result = val + " минуты";
             else result=val + " минут";
         }
-        else if (val > 120 && val < 2*60*24){
+        else if (val > 180 && val < 2*60*24){
             val=Math.round(Math.abs(time)/60);
             if (String.valueOf(val).endsWith("1")) result = val + " час";
             else if (String.valueOf(val).endsWith("2") || String.valueOf(val).endsWith("3")
