@@ -5,9 +5,12 @@ import android.os.AsyncTask;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.AbsListView;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.Spinner;
 
 import com.coe.c0r0vans.Logic.Ambush;
 import com.coe.c0r0vans.R;
@@ -20,6 +23,7 @@ import java.util.Comparator;
 
 import utility.GATracker;
 import utility.GPSInfo;
+import utility.settings.GameSettings;
 
 /**
  * Информация о засадах
@@ -30,6 +34,7 @@ public class AmbushInfo extends LinearLayout implements PlayerInfoLayout {
 
      ArrayList<Ambush> list;
     ArrayList<Ambush> lista;
+    private int sort;
 
     public AmbushInfo(Context context,ShowHideForm form) {
         super(context);
@@ -51,6 +56,24 @@ public class AmbushInfo extends LinearLayout implements PlayerInfoLayout {
         ambushInfo= (ListView) findViewById(R.id.routeInfo);
         list=new ArrayList<>();
         lista=new ArrayList<>();
+
+        ArrayList<String> lst=new ArrayList<>();
+        lst.add("Растояние");
+        lst.add("Время");
+        lst.add("Количество");
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, lst);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        Spinner spinner = (Spinner) findViewById(R.id.spinner);
+        spinner.setAdapter(adapter);
+        // заголовок
+        spinner.setPrompt(getContext().getString(R.string.sortby));
+        // выделяем элемент
+        String s= GameSettings.getValue("AmbushSort");
+        if (s ==null) sort=0;
+        else sort = Integer.valueOf(s);
+        spinner.setSelection(sort);
+
+
         ambushInfo.setOnScrollListener(new AbsListView.OnScrollListener() {
             public int totalItemCount;
             public int currentVisibleItemCount;
@@ -80,8 +103,21 @@ public class AmbushInfo extends LinearLayout implements PlayerInfoLayout {
         });
         AmbushAdapter la =new AmbushAdapter(getContext(),lista,parent);
         ambushInfo.setAdapter(la);
-
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view,
+                                       int position, long id) {
+                // показываем позиция нажатого элемента
+                sort=position;
+                GameSettings.set("AmbushSort",String.valueOf(sort));
+                update();
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> arg0) {
+            }
+        });
         ((BaseAdapter)ambushInfo.getAdapter()).notifyDataSetChanged();
+
     }
 
     @Override
@@ -104,8 +140,20 @@ public class AmbushInfo extends LinearLayout implements PlayerInfoLayout {
         Collections.sort(list, new Comparator<Ambush>() {
             @Override
             public int compare(Ambush lhs, Ambush rhs) {
-                return (int) (GPSInfo.getDistance(lhs.getPosition(),GameObjects.getPlayer().getPosition())-
-                                        GPSInfo.getDistance(rhs.getPosition(),GameObjects.getPlayer().getPosition()));
+                int result=0;
+                switch (sort){
+                    case 1:
+                        result= lhs.getReady()-rhs.getReady();
+                        break;
+                    case 2:
+                        result= lhs.getLife()-rhs.getLife();
+                        break;
+                    default:
+                        result= (int) (GPSInfo.getDistance(lhs.getPosition(),GameObjects.getPlayer().getPosition())-
+                                GPSInfo.getDistance(rhs.getPosition(),GameObjects.getPlayer().getPosition()));
+                }
+                return result;
+
             }
         });
         lista.clear();
