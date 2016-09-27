@@ -28,15 +28,15 @@ import utility.settings.GameSettings;
 /**
  * Информация о засадах
  */
-public class AmbushInfo extends LinearLayout implements PlayerInfoLayout {
+class AmbushInfo extends LinearLayout implements PlayerInfoLayout {
     private ListView ambushInfo;
     private ShowHideForm parent;
 
-     ArrayList<Ambush> list;
-    ArrayList<Ambush> lista;
+     private ArrayList<Ambush> list;
+    private ArrayList<Ambush> lista;
     private int sort;
 
-    public AmbushInfo(Context context,ShowHideForm form) {
+    AmbushInfo(Context context, ShowHideForm form) {
         super(context);
         this.parent=form;
         init();
@@ -75,9 +75,9 @@ public class AmbushInfo extends LinearLayout implements PlayerInfoLayout {
 
 
         ambushInfo.setOnScrollListener(new AbsListView.OnScrollListener() {
-            public int totalItemCount;
-            public int currentVisibleItemCount;
-            public int currentFirstVisibleItem;
+            int totalItemCount;
+            int currentVisibleItemCount;
+            int currentFirstVisibleItem;
 
             @Override
             public void onScrollStateChanged(AbsListView absListView, int scrollState) {
@@ -134,16 +134,16 @@ public class AmbushInfo extends LinearLayout implements PlayerInfoLayout {
                 try {
                     list=new ArrayList<>(GameObjects.getPlayer().getAmbushes().values());
                 }catch (Exception e){
-
+                    GATracker.trackException("AmbushInfo",e);
                 }
 
         Collections.sort(list, new Comparator<Ambush>() {
             @Override
             public int compare(Ambush lhs, Ambush rhs) {
-                int result=0;
+                int result;
                 switch (sort){
                     case 1:
-                        result= lhs.getReady()-rhs.getReady();
+                        result= rhs.getReady()-lhs.getReady();
                         break;
                     case 2:
                         result= lhs.getLife()-rhs.getLife();
