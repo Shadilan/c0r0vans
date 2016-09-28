@@ -11,18 +11,24 @@
         android:background="@drawable/layouts_bordered"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/spinner" />
+        android:id="@+id/spinner"
+        />
 
-
+    <com.coe.c0r0vans.UIElements.InfoLayout.CityLine
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/unfinishedRoute"
+        android:visibility="gone"/>
         <ListView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/routeInfo"
             android:alignmentMode="alignBounds"
             android:orientation="vertical"
-            android:layout_below="@id/spinner"
-            android:layout_alignParentBottom="true">
-        </ListView>
+            android:layout_below="@id/unfinishedRoute"
+            android:layout_alignParentBottom="true"
+            />
+
 
     <ProgressBar
         android:layout_width="wrap_content"

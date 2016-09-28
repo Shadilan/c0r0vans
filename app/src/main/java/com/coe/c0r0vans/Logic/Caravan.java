@@ -82,7 +82,7 @@ public class Caravan extends GameObject {
         mark=m;
         changeMarkerSize();
     }
-    public JSONObject getJSON() throws JSONException {
+    JSONObject getJSON() throws JSONException {
         JSONObject result=new JSONObject();
 
         result.put("GUID",GUID);
@@ -106,7 +106,7 @@ public class Caravan extends GameObject {
 
         return result;
     }
-    LatLng latlng;
+    private LatLng latlng;
 
     @Override
     public LatLng getPosition() {
@@ -229,7 +229,7 @@ public class Caravan extends GameObject {
         return faction;
     }
 
-    public void showRoute(){
+    void showRoute(){
         if (line!=null)
         {
             GameObject target = SelectedObject.getInstance().getTarget();
@@ -239,20 +239,20 @@ public class Caravan extends GameObject {
         }
     }
 
-    public String getStartGUID() {
+    String getStartGUID() {
         return startGUID;
     }
-    public String getFinishGUID() {
+    String getFinishGUID() {
         return finishGUID;
     }
 
     public String getFinishName() {
         return finishName;
     }
-    public void fadeRoute(){
+    void fadeRoute(){
         showRoute();
     }
-    public void releaseFade(){
+    void releaseFade(){
         showRoute();
     }
 
@@ -268,9 +268,7 @@ public class Caravan extends GameObject {
         return finishPoint;
     }
 
-    public LatLng getPoint() {
-        return mark.getPosition();
-    }
+
 
     public int getDistance() {
         return distance;
@@ -305,7 +303,7 @@ public class Caravan extends GameObject {
 
     }
 
-    public void setFaction(int faction) {
+    void setFaction(int faction) {
         this.faction = faction;
         owner = faction == 0;
     }

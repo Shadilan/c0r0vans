@@ -1,6 +1,7 @@
 package com.coe.c0r0vans.UIElements;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
@@ -64,7 +65,7 @@ public class ButtonLayout extends RelativeLayout {
             GATracker.trackException("ButtonLayout",e);
         }
     }
-    TextView zoomCnt;
+    private TextView zoomCnt;
     private void afterInit() {
         MyGoogleMap.setShowpointButton((ImageButton) findViewById(R.id.showPosButton));
         infoLayout = new InfoLayout(getContext());
@@ -263,7 +264,12 @@ public class ButtonLayout extends RelativeLayout {
 
             am = (TextView) findViewById(R.id.foundedAmount);
             am.setText(String.format(getContext().getString(R.string.d_d), GameObjects.getPlayer().getFoundedCities(), GameObjects.getPlayer().getCityMax()));
-            ((TextView) findViewById(R.id.hirelingsAmount)).setText(String.format(getContext().getString(R.string.s_s), StringUtils.intToStr(GameObjects.getPlayer().getHirelings()), StringUtils.intToStr(GameObjects.getPlayer().getLeftToHire())));
+
+            am=(TextView) findViewById(R.id.hirelingsAmount);
+            am.setText(String.format(getContext().getString(R.string.s_s), StringUtils.intToStr(GameObjects.getPlayer().getHirelings()), StringUtils.intToStr(GameObjects.getPlayer().getLeftToHire())));
+            if (GameObjects.getPlayer().getHirelings()<50){
+                am.setTextColor(Color.RED);
+            } else am.setTextColor(Color.BLACK);
 
         } catch (Exception e){
             GATracker.trackException("PlayerChange",e);

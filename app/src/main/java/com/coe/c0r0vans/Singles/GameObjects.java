@@ -189,11 +189,13 @@ public class GameObjects{
                                         if (!isChanged && ((o instanceof Ambush && ((Ambush) o).getFaction() != 0) || (o instanceof Caravan && ((Caravan) o).getFaction() != 0))) {
                                             //TODO Если нет очистить данные.
                                             o.setVisibility(false);
+                                            o.setPostion(null);
                                             //o.RemoveObject();
                                             //objects.remove(o.getGUID());
                                             //activeObjects.remove(o.getGUID());
                                         } else if (!isChanged && o instanceof Chest) {
                                             o.RemoveObject();
+                                            o.setPostion(null);
                                             objects.remove(o.getGUID());
                                             activeObjects.remove(o.getGUID());
                                         }

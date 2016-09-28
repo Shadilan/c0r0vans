@@ -29,14 +29,14 @@ import utility.settings.GameSettings;
 /**
  * Список маршрутов
  */
-public class RouteInfo extends RelativeLayout implements PlayerInfoLayout {
-    ListView routeInfo;
+class RouteInfo extends RelativeLayout implements PlayerInfoLayout {
+    private ListView routeInfo;
 
-    ArrayList<Caravan> routes; //Список Маршрутов
-    ArrayList<Caravan> routesA; //Список в Листе
-    ShowHideForm parent; //Parent
-    int sort=0;
-    public RouteInfo(Context context,ShowHideForm form) {
+    private ArrayList<Caravan> routes; //Список Маршрутов
+    private ArrayList<Caravan> routesA; //Список в Листе
+    private ShowHideForm parent; //Parent
+    private int sort=0;
+    RouteInfo(Context context, ShowHideForm form) {
         super(context);
         this.parent=form;
         init();
@@ -54,6 +54,7 @@ public class RouteInfo extends RelativeLayout implements PlayerInfoLayout {
     }
     private void init(){
         inflate(getContext(), R.layout.info_route, this);
+
         routeInfo= (ListView) findViewById(R.id.routeInfo);
         // адаптер
         ArrayList<String> lst=new ArrayList<>();
@@ -91,9 +92,9 @@ public class RouteInfo extends RelativeLayout implements PlayerInfoLayout {
         routes=new ArrayList<>();
         routesA=new ArrayList<>();
         routeInfo.setOnScrollListener(new AbsListView.OnScrollListener() {
-            public int totalItemCount;
-            public int currentVisibleItemCount;
-            public int currentFirstVisibleItem;
+            int totalItemCount;
+            int currentVisibleItemCount;
+            int currentFirstVisibleItem;
 
             @Override
             public void onScrollStateChanged(AbsListView absListView, int scrollState) {
@@ -124,6 +125,13 @@ public class RouteInfo extends RelativeLayout implements PlayerInfoLayout {
     }
     @Override
     public void update() {
+        CityLine l= (CityLine) findViewById(R.id.unfinishedRoute);
+        if (GameObjects.getPlayer().getCurrentR()!=null){
+            l.setParentForm(parent);
+            l.setData(GameObjects.getPlayer().getCurrentR());
+
+            l.setVisibility(VISIBLE);
+        } else l.setVisibility(GONE);
         GATracker.trackTimeStart("InfoLayout","RoutesUpdate");
         AsyncTask<Void, Void, Void> task=new AsyncTask<Void, Void, Void>() {
             @Override

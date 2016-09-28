@@ -36,7 +36,7 @@ public class CityLine extends RelativeLayout {
     }
     public void setData(Caravan r){
         if (r==null) return;
-        point=r.getPoint();
+        point=r.getPosition();
         startCity=r.getStartPoint();
         endCity=r.getFinishPoint();
 
@@ -48,6 +48,9 @@ public class CityLine extends RelativeLayout {
             if (!"null".equals(r.getFinishName())) endCityView.setText(r.getFinishName());
             else endCityView.setVisibility(GONE);
         if (point!=null && showButton!=null) showButton.setVisibility(VISIBLE);
+        else if (showButton != null) {
+            showButton.setVisibility(INVISIBLE);
+        }
 
     }
 
