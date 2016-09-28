@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
@@ -437,8 +436,7 @@ public class Player extends GameObject {
                     Routes.get(lGUID).RemoveObject();
                     Routes.remove(lGUID);
                 }
-                Log.d("Leak","InArray"+Routes.size());
-                Log.d("Leak","ToDel"+GUIDS.size());
+
             }
             if (obj.has("Ambushes")){
                 JSONArray jambushs=obj.getJSONArray("Ambushes");
@@ -470,8 +468,7 @@ public class Player extends GameObject {
                     rem.RemoveObject();
                     Ambushes.remove(lGUID);
                 }
-                Log.d("Leak","InArray"+Ambushes.size());
-                Log.d("Leak","ToDel"+GUIDS.size());
+
             }
             if (obj.has("NextUpgrades")){
                 JSONArray nextUpgrade=obj.getJSONArray("NextUpgrades");

@@ -25,13 +25,13 @@ public class GATracker {
         mTracker.setAppVersion(application.getResources().getString(R.string.version));
     }
     public static void trackHit(String category,String action){
-        mTracker.send(new HitBuilders.EventBuilder().setCategory(category).setAction(action).setLabel("Hit").build());
+        //mTracker.send(new HitBuilders.EventBuilder().setCategory(category).setAction(action).setLabel("Hit").build());
         serverConnect.getInstance().sendDebug(category,action,1,0);
         Log.d(category,action);
 
     }
     public static void trackHit(String category,String action,int count){
-        mTracker.send(new HitBuilders.EventBuilder().setCategory(category).setAction(action).setLabel("Hit").setValue(count).build());
+        //mTracker.send(new HitBuilders.EventBuilder().setCategory(category).setAction(action).setLabel("Hit").setValue(count).build());
         serverConnect.getInstance().sendDebug(category,action,count,0);
         Log.d(category,action+"="+count);
     }

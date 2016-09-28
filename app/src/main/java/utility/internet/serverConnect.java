@@ -614,6 +614,7 @@ public class serverConnect {
                     @Override
                     public void onResponse(JSONObject response) {
                         currentRequest="";
+                        GATracker.trackTimeEnd("Network","Timeout.Time");
                         if (getType()!=ResponseListenerWithUID.FASTSCAN) {
                             String typeS;
                             if (getType() == ResponseListenerWithUID.ACTION) {
@@ -790,6 +791,7 @@ public class serverConnect {
                 }, new ResponseErrorListenerWithUID(UID,request,type) {
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        GATracker.trackTimeEnd("Network","Timeout.Time");
                         currentRequest="";
                         if (getType()!=ResponseListenerWithUID.FASTSCAN) {
                             String typeS;
@@ -802,7 +804,13 @@ public class serverConnect {
                         }
                         try {
 
-                            if (error.networkResponse == null && error.getClass().equals(TimeoutError.class) && try_count<max_retry) runRequest(getUID(), getRequest(), getType(),try_count+1);
+                            if (error.getClass().equals(TimeoutError.class) && try_count<max_retry){
+                                GATracker.trackHit("Network","Timeout.Hit");
+                                GATracker.trackTimeStart("Network","Timeout.Time");
+                                runRequest(getUID(), getRequest(), getType(),try_count+1);
+
+                            }
+
                             else {
                                 if (getType() == 2) if (errorMap.get(getUID()) != null)
                                     errorMap.get(getUID()).postError(new JSONObject().put("Error","U0000").put("Message",error.getMessage()));

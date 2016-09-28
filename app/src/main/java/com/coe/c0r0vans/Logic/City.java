@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -613,7 +612,6 @@ public class City extends GameObject implements ActiveObject {
                     break;
             }
         }
-        Log.d("CheckPrice","Concurency:"+(1f+conc)+" RaceBonus:"+(1f-raceBonus/4)+" TradeBonus:"+(100f-GameObjects.getPlayer().getTrade()));
         return (1f+conc)*((1f-raceBonus/4)*(100f-GameObjects.getPlayer().getTrade())/100f);
     }
     public String getName(){return (Name+" ур."+Level) ;}
@@ -757,9 +755,9 @@ public class City extends GameObject implements ActiveObject {
                 if (up.getReqCityLev()>Level) dop= String.format(getContext().getString(R.string.city_lvl_required), up.getReqCityLev());
                 else if ((upcost)>GameObjects.getPlayer().getGold()) dop= String.format(getContext().getString(R.string.need_more_gold), StringUtils.intToStr(upcost - GameObjects.getPlayer().getGold()));
                 else if (up.getLevel()>GameObjects.getPlayer().getLevel()-1) dop= String.format(getContext().getString(R.string.need_higher_lvl), up.getLevel()+1);
-                else dop= String.format("Эффект:%s\n", up.getDescription());
+                else dop= String.format(getContext().getString(R.string.effect), up.getDescription());
 
-                return String.format(getContext().getString(R.string.price), up.getName(), StringUtils.intToStr(upcost),StringUtils.intToStr(up.getCost()), dop);
+                return String.format(getContext().getString(R.string.price), up.getName(), StringUtils.intToStr(upcost),StringUtils.intToStr((int)(up.getCost()/up.getOUC())),String.valueOf(up.getOUC()), dop);
             }
             else return (String.format(getContext().getString(R.string.unknown_upgrade), upgradeName));
         }
@@ -1108,7 +1106,7 @@ public class City extends GameObject implements ActiveObject {
                 @Override
                 public void onClick(View v) {
                     ConfirmWindow confirmWindow=new ConfirmWindow(getContext());
-                    confirmWindow.setText("Вы уверены что хотите отменить не завершенный маршрут?");
+                    confirmWindow.setText(getContext().getString(R.string.approve_route_remove));
                     confirmWindow.setConfirmAction(new Runnable() {
                         @Override
                         public void run() {

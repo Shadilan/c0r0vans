@@ -58,10 +58,16 @@ public class UpgradeInfo extends LinearLayout implements PlayerInfoLayout {
             info.setClickable(false);
             info.setFocusable(false);
             String s;
-            if (GameObjects.getPlayer().getNextUpgrade(u.getType())!=null) {
-                 s = StringUtils.intToStr((int) (GameObjects.getPlayer().getNextUpgrade(u.getType()).getCost() * (100f - GameObjects.getPlayer().getTrade()) / 100f));
-            } else  s = StringUtils.intToStr((int) (u.getCost() * (100f - GameObjects.getPlayer().getTrade()) / 100f));
-            info.setText(String.format(getContext().getString(R.string.upgrade_text), u.getName(), u.getDescription(),s));
+            Upgrade nu=GameObjects.getPlayer().getNextUpgrade(u.getType());
+            String ouc;
+            if (nu!=null) {
+                 s = StringUtils.intToStr((int) (nu.getCost() * (100f - GameObjects.getPlayer().getTrade()) / 100f));
+                 ouc=String.valueOf(nu.getOUC());
+            } else{
+                s = StringUtils.intToStr((int) (u.getCost() * (100f - GameObjects.getPlayer().getTrade()) / 100f));
+                ouc=String.valueOf(u.getOUC());
+            }
+            info.setText(String.format(getContext().getString(R.string.upgrade_text), u.getName(), u.getDescription(),s,ouc));
             info.setTextColor(Color.BLACK);
             l.addView(info);
             l.requestLayout();

@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
-import android.util.Log;
 
 import com.coe.c0r0vans.GameObject.ActiveObject;
 import com.coe.c0r0vans.GameObject.GameObject;
@@ -50,9 +49,9 @@ public class GameObjects{
 
         for (GameObject o:activeObjects.values()){
             if (o instanceof ActiveObject && o.getMarker()!=null && o.getMarker().isVisible()) {
-                Log.d("Click","Obj:"+o.getClass().toString());
+
                 if (o.getPosition()!= null) {
-                    Log.d("Click","Success");
+
                     float dist = GPSInfo.getDistance(latLng, o.getPosition());
                     if (o instanceof Chest && dist < ((ActiveObject) o).getRadius()) {
                         closestObject = (ActiveObject) o;
@@ -177,7 +176,7 @@ public class GameObjects{
                                         if (obj.has("GUID"))guid=obj.getString("GUID");
                                         if (obj.has("Lat"))lat=obj.getInt("Lat");
                                         if (obj.has("Lng"))lng=obj.getInt("Lng");
-                                        if (obj.has("Type")) type=obj.getString("Type");
+                                        //if (obj.has("Type")) type=obj.getString("Type");
                                         if (o.getGUID().equals(guid)){
                                             o.setPostion(new LatLng(lat/1e6,lng/1e6));
                                             o.setVisibility(true);
@@ -188,10 +187,13 @@ public class GameObjects{
                                     //Пока не очищать типа запомнил ?
                                     if (!isChanged && ((o instanceof Ambush && ((Ambush)o).getFaction()!=0)||(o instanceof Caravan && ((Caravan)o).getFaction()!=0))) {
                                         //TODO Если нет очистить данные.
-                                        o.setVisibility(false);
+                                        o.RemoveObject();
+                                        objects.remove(o.getGUID());
+                                        activeObjects.remove(o.getGUID());
                                     } else if (!isChanged && o instanceof Chest){
                                         o.RemoveObject();
                                         objects.remove(o.getGUID());
+                                        activeObjects.remove(o.getGUID());
                                     }
                                 }
                             }

@@ -4,12 +4,11 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.os.Build;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.widget.RelativeLayout;
 
 /**
- * Created by Shadilan on 25.09.2016.
+ * Layout react on swipe
  */
 public class SwipeDetectLayout extends RelativeLayout {
     public SwipeDetectLayout(Context context) {
@@ -44,19 +43,17 @@ public class SwipeDetectLayout extends RelativeLayout {
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
 
-        Log.d("SwipeDetect","Length:"+MIN_DISTANCE);
+
         switch(ev.getActionMasked())
         {
             case MotionEvent.ACTION_DOWN:
                 x1 = ev.getX();
                 y1 =ev.getY();
-                Log.d("Test","TestCallDown");
                 break;
             case MotionEvent.ACTION_CANCEL:
             case MotionEvent.ACTION_UP:
                 x2 = ev.getX();
                 y2 = ev.getY();
-                Log.d("Test","TestCallUp");
                 if (listener!=null) {
                     float deltaX = x2 - x1;
                     float deltaY = y2 - y1;
@@ -84,7 +81,7 @@ public class SwipeDetectLayout extends RelativeLayout {
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
-        MIN_DISTANCE=this.getWidth()*1/2;
+        MIN_DISTANCE=this.getWidth()/2;
     }
 
     /*@Override

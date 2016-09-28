@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
 
 import com.coe.c0r0vans.R;
 import com.google.android.gms.auth.api.Auth;
@@ -21,7 +20,7 @@ import utility.GATracker;
 import utility.MainThread;
 
 /**
- * Created by Shadilan on 24.07.2016.
+ *  Google SignIn helper
  */
 public class SignIn {
     private static Activity activity;
@@ -167,7 +166,7 @@ public class SignIn {
 
                     @Override
                     public void onConnectionSuspended(int i) {
-                        Log.d("SignOut","Connection suspended");
+                        GATracker.trackHit("System","SignIn.Suspend");
                     }
                 });
                 mGoogleApiClient.connect();

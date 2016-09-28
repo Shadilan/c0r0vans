@@ -20,6 +20,7 @@ public class Upgrade {
     private int reqCityLev=0;
     private int level;
     private int effect2;
+    private double OUC=1;
 
 
     public void loadJSON(JSONObject object) throws JSONException {
@@ -28,6 +29,7 @@ public class Upgrade {
         if (object.has("Level")) level=object.getInt("Level");
         if (object.has("Effect1")) effect1=object.getInt("Effect1");
         if (object.has("Effect2")) effect2=object.getInt("Effect2");
+        if (object.has("OUC")) OUC=object.getDouble("OUC");
         /*switch (Type){
             case "speed":
                 Name= StringUtils.getString(R.string.sk_name_speed);
@@ -57,6 +59,7 @@ public class Upgrade {
         if (object.has("Description")) Description=object.getString("Description");
         if (object.has("ReqCityLev")) reqCityLev=object.getInt("ReqCityLev");
         if (object.has("Cost")) Cost=object.getInt("Cost");
+
     }
     public Upgrade(JSONObject object){
         try {
@@ -103,5 +106,9 @@ public class Upgrade {
 
     public int getEffect2() {
         return effect2;
+    }
+
+    public double getOUC() {
+        return OUC;
     }
 }

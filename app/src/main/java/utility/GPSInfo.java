@@ -7,7 +7,6 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -145,7 +144,6 @@ public class GPSInfo {
                     lat = (int) (location.getLatitude() * 1000000);
                     lng = (int) (location.getLongitude() * 1000000);
                     lastTime=curTime;
-                    Log.d("GPS","SetCoord");
 
                 }
 
@@ -264,8 +262,6 @@ public class GPSInfo {
         return new LatLng(lat/1e6,lng/1e6);}
     public static float getDistance(LatLng p1,LatLng p2){
         if (p1==null ||p2==null) return 0f;
-        Log.d("Test1",p1.toString());
-        Log.d("Test1",p2.toString());
         float[] distances = new float[1];
         Location.distanceBetween(p1.latitude, p1.longitude, p2.latitude, p2.longitude, distances);
         if (distances.length<1) return -1;

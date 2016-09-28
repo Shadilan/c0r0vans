@@ -81,7 +81,8 @@
     <string name="city_lvl_required" >Требуется уровень города %d\n</string>
     <string name="need_more_gold" >Нужно больше золота!!! Еще %s золота!\n</string>
     <string name="need_higher_lvl" >Требуется уровень игрока %d\n</string>
-    <string name="price" >%1$s\" за %2$s золота(базовая цена %3$s).\n%4$s</string>
+    <string name="price" >%1$s\" за %2$s золота(базовая цена %3$s. Множитель умения %4$s).\n%5$s</string>
+    <string name="upgrade_text">%1$s\n%2$s\n%3$s❍(Множитель умения:%4$s)</string>
     <string name="unknown_upgrade">"%s\". "</string>
     <string name="choose_faction">Выбери Фракцию.</string>
     <string name="accept">Принять</string>
@@ -137,5 +138,7 @@
     <string name="caravandistance">По растоянию до каравана</string>
     <string name="city_indo">Расстояние: %1$dm Цена:%2$d❍</string>
     <string name="atlas">Атлас</string>
+    <string name="approve_route_remove">Вы уверены что хотите отменить не завершенный маршрут?</string>
+    <string name="effect">Эффект:%s\n</string>
 
 </resources>
