@@ -94,12 +94,16 @@ public class Chest extends GameObject implements ActiveObject {
             if (MyGoogleMap.getClientZoom()==ICON_SMALL){
                 mark.setVisible(false);
             } else {
-                mark.setVisible(true);
+                mark.setVisible(visible);
             }
         }
     }
+    private boolean visible=true;
     public void setVisibility(boolean visibility) {
-        if (mark!=null) changeMarkerSize();
+        if (mark!=null) {
+            visible=visibility;
+            changeMarkerSize();
+        }
     }
 
     @Override
@@ -138,8 +142,8 @@ public class Chest extends GameObject implements ActiveObject {
         }
     }
 
-    ObjectAction chestAction;
-    public ObjectAction getChestAction(){
+    private ObjectAction chestAction;
+    private ObjectAction getChestAction(){
         if (chestAction==null){
 
                 chestAction=new ObjectAction(this){

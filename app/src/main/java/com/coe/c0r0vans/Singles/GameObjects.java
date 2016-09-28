@@ -185,15 +185,20 @@ public class GameObjects{
 
                                     }
                                     //Пока не очищать типа запомнил ?
-                                    if (!isChanged && ((o instanceof Ambush && ((Ambush)o).getFaction()!=0)||(o instanceof Caravan && ((Caravan)o).getFaction()!=0))) {
-                                        //TODO Если нет очистить данные.
-                                        o.RemoveObject();
-                                        objects.remove(o.getGUID());
-                                        activeObjects.remove(o.getGUID());
-                                    } else if (!isChanged && o instanceof Chest){
-                                        o.RemoveObject();
-                                        objects.remove(o.getGUID());
-                                        activeObjects.remove(o.getGUID());
+                                    try {
+                                        if (!isChanged && ((o instanceof Ambush && ((Ambush) o).getFaction() != 0) || (o instanceof Caravan && ((Caravan) o).getFaction() != 0))) {
+                                            //TODO Если нет очистить данные.
+                                            o.getMarker().setVisible(false);
+                                            //o.RemoveObject();
+                                            //objects.remove(o.getGUID());
+                                            //activeObjects.remove(o.getGUID());
+                                        } else if (!isChanged && o instanceof Chest) {
+                                            o.RemoveObject();
+                                            objects.remove(o.getGUID());
+                                            activeObjects.remove(o.getGUID());
+                                        }
+                                    } catch (Exception e){
+                                        GATracker.trackException("FastScan",e);
                                     }
                                 }
                             }
