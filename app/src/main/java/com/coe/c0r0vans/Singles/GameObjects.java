@@ -188,7 +188,7 @@ public class GameObjects{
                                     try {
                                         if (!isChanged && ((o instanceof Ambush && ((Ambush) o).getFaction() != 0) || (o instanceof Caravan && ((Caravan) o).getFaction() != 0))) {
                                             //TODO Если нет очистить данные.
-                                            o.getMarker().setVisible(false);
+                                            o.setVisibility(false);
                                             //o.RemoveObject();
                                             //objects.remove(o.getGUID());
                                             //activeObjects.remove(o.getGUID());
