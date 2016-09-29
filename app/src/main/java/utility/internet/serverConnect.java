@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.provider.Settings;
+import android.util.Log;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
@@ -24,6 +25,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -871,6 +873,95 @@ public class serverConnect {
                     @Override
                     public void onErrorResponse(VolleyError error) {
 
+                    }
+                });
+        jsObjRequest.setRetryPolicy(new DefaultRetryPolicy(20 * 1000, 0,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        reqq.add(jsObjRequest);
+    }
+    public void sendException(String group, Exception se){
+        if (!checkConnection()) return;
+        String request="https://support-merchantarg.rhcloud.com/statistics.jsp?Oper=doException";
+
+        JSONObject reqTest= null;
+        String android_id;
+        try {
+            android_id = Settings.Secure.getString(context.getContentResolver(),
+                    Settings.Secure.ANDROID_ID);
+        } catch(Exception e){
+            android_id="";
+        }
+        String user="";
+        //TODO:Получать имя другим способом возможно gmail.
+        if (GameObjects.getPlayer()!=null) user=GameObjects.getPlayer().getName();
+        //String version=context.getResources().getString(R.string.version);
+
+        try {
+            reqTest = new JSONObject().put("Key","1ac7659f-574c-4b9d-a036-2b343e8c63fc")
+                    .put("User", user)
+                    .put("Device",android_id)
+                    .put("Version",version)
+                    .put("Group", group)
+                    .put("Title", se.toString())
+                    .put("Description", Arrays.toString(se.getStackTrace()));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        final JsonObjectRequest jsObjRequest = new JsonObjectRequest
+                (Request.Method.POST, request, reqTest, new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                });
+        jsObjRequest.setRetryPolicy(new DefaultRetryPolicy(20 * 1000, 0,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        reqq.add(jsObjRequest);
+    }
+    public void sendException(String group, String se){
+        if (!checkConnection()) return;
+        String request="https://support-merchantarg.rhcloud.com/statistics.jsp?Oper=doException";
+
+        JSONObject reqTest= null;
+        String android_id;
+        try {
+            android_id = Settings.Secure.getString(context.getContentResolver(),
+                    Settings.Secure.ANDROID_ID);
+        } catch(Exception e){
+            android_id="";
+        }
+        String user="";
+        //TODO:Получать имя другим способом возможно gmail.
+        if (GameObjects.getPlayer()!=null) user=GameObjects.getPlayer().getName();
+        //String version=context.getResources().getString(R.string.version);
+
+        try {
+            reqTest = new JSONObject().put("Key","1ac7659f-574c-4b9d-a036-2b343e8c63fc")
+                    .put("User", user)
+                    .put("Device",android_id)
+                    .put("Version",version)
+                    .put("Group", group)
+                    .put("Title", se);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        Log.d("Resp","Send");
+        final JsonObjectRequest jsObjRequest = new JsonObjectRequest
+                (Request.Method.POST, request, reqTest, new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d("Resp",response.toString());
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d("Resp",error.toString());
                     }
                 });
         jsObjRequest.setRetryPolicy(new DefaultRetryPolicy(20 * 1000, 0,

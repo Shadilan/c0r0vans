@@ -751,6 +751,7 @@ public class Player extends GameObject {
 
                 @Override
                 public void preAction() {
+
                     Upgrade up=GameObjects.getPlayer().getUpgrade("ambushes");
                     if (up!=null) {
                         GameObjects.getPlayer().setHirelings(GameObjects.getPlayer().getHirelings() - up.getEffect2() * 10);

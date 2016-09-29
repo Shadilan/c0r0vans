@@ -1,6 +1,7 @@
 package com.coe.c0r0vans.Logic;
 
 import android.graphics.Bitmap;
+import android.util.Log;
 
 import com.coe.c0r0vans.GameObject.ActiveObject;
 import com.coe.c0r0vans.GameObject.GameObject;
@@ -31,6 +32,9 @@ import utility.settings.GameSettings;
 public class Chest extends GameObject implements ActiveObject {
     private String currentMarkName;
     private LatLng latlng;
+    public boolean isVisible(){
+        return visible;
+    }
     @Override
     public void loadJSON(JSONObject obj) {
 
@@ -47,7 +51,7 @@ public class Chest extends GameObject implements ActiveObject {
                 }
 
             }
-            changeMarkerSize();
+            refresh();
         } catch (JSONException e) {
             GATracker.trackException("LoadChest", e);
         }
@@ -78,11 +82,22 @@ public class Chest extends GameObject implements ActiveObject {
         super.setMarker(m);
         changeMarkerSize();
     }
+    boolean inZone=false;
+    public void refresh(){
 
+        boolean oldInZone=inZone;
+        float dist=GPSInfo.getDistance(GameObjects.getPlayer().getPosition(),getPosition());
+        inZone = dist < GameObjects.getPlayer().getActionDistance();
+        if (inZone!=oldInZone){
+            changeMarkerSize();
+        }
+    }
     @Override
     public void changeMarkerSize() {
         if (mark!=null) {
-            String markname = "chest";
+            String markname;
+            if (inZone)   markname="openchest";
+            else markname = "chest";
             markname = markname + GameObject.zoomToPostfix(MyGoogleMap.getClientZoom());
             if (!markname.equals(currentMarkName)) {
                 mark.setIcon(ImageLoader.getDescritor(markname));
@@ -118,9 +133,10 @@ public class Chest extends GameObject implements ActiveObject {
                 onGameObjectRemove.onRemove();
             }
         }
+        latlng=null;
         if (mark!=null){
             mark.remove();
-            mark=null;
+            Log.d("Chests","MarkRemove");
         }
         GameObjects.removeActive(this);
 

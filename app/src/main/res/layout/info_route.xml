@@ -18,6 +18,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/unfinishedRoute"
+        android:layout_below="@id/spinner"
         android:visibility="gone"/>
         <ListView
             android:layout_width="match_parent"

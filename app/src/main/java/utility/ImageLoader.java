@@ -76,6 +76,7 @@ public class ImageLoader {
         createMarker(context, R.mipmap.caravan_4, "caravan_4");
 
         createMarker(context,R.mipmap.chest,"chest");
+        createMarker(context,R.mipmap.openchest,"openchest");
 
 
         //Actions

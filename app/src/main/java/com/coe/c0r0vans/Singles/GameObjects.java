@@ -42,24 +42,35 @@ public class GameObjects{
     private static HashMap<String,GameObject> objects;
     private static Player player;
     private static GoogleMap map;
+    private static HashMap<String,Chest> chests;
 
     public static ActiveObject getClosestObject(LatLng latLng){
         float closest=1000;
         ActiveObject closestObject=null;
+        for (Chest o:chests.values()){
+            if (o.getMarker()!=null && o.isVisible() && o.getMarker().isVisible() && o.getPosition()!=null){
+                float dist = GPSInfo.getDistance(latLng, o.getPosition());
+                if (dist <  o.getRadius()) {
+                    closestObject = o;
+                    break;
+                }
+            }
+        }
+        if (closestObject==null) {
+            for (GameObject o : activeObjects.values()) {
+                if (o instanceof ActiveObject && o.getMarker() != null && o.getMarker().isVisible()) {
 
-        for (GameObject o:activeObjects.values()){
-            if (o instanceof ActiveObject && o.getMarker()!=null && o.getMarker().isVisible()) {
+                    if (o.getPosition() != null) {
 
-                if (o.getPosition()!= null) {
-
-                    float dist = GPSInfo.getDistance(latLng, o.getPosition());
-                    if (o instanceof Chest && dist < ((ActiveObject) o).getRadius()) {
-                        closestObject = (ActiveObject) o;
-                        break;
-                    } else if (dist < closest && dist < ((ActiveObject) o).getRadius()) {
-                        closest = dist;
-                        closestObject = (ActiveObject) o;
-                        if (o instanceof Chest) break;
+                        float dist = GPSInfo.getDistance(latLng, o.getPosition());
+                        if (o instanceof Chest && dist < ((ActiveObject) o).getRadius()) {
+                            closestObject = (ActiveObject) o;
+                            break;
+                        } else if (dist < closest && dist < ((ActiveObject) o).getRadius()) {
+                            closest = dist;
+                            closestObject = (ActiveObject) o;
+                            if (o instanceof Chest) break;
+                        }
                     }
                 }
             }
@@ -72,6 +83,7 @@ public class GameObjects{
         player=new Player();
         objects=new HashMap<>();
         activeObjects=new HashMap<>();
+        chests =new HashMap<>();
         SharedPreferences sp = context.getSharedPreferences("player", Context.MODE_PRIVATE);
         String pls = sp.getString("player", "");
         if (!"".equals(pls)) {
@@ -162,7 +174,7 @@ public class GameObjects{
                             JSONArray lst=response.getJSONArray("FastScan");
                             for (GameObject o:objects.values()) {
                                //Если это Засада или Караван
-                                if (o instanceof Ambush || o instanceof Caravan || o instanceof Chest) {
+                                if (o instanceof Ambush || o instanceof Caravan) {
 
                                     //Если он есть в JSON обновить данные
                                     final int lst_length = lst.length();// Moved  lst.length() call out of the loop to local variable lst_length
@@ -184,6 +196,7 @@ public class GameObjects{
                                         }
 
                                     }
+
                                     //Пока не очищать типа запомнил ?
                                     try {
                                         if (!isChanged && ((o instanceof Ambush && ((Ambush) o).getFaction() != 0) || (o instanceof Caravan && ((Caravan) o).getFaction() != 0))) {
@@ -193,17 +206,14 @@ public class GameObjects{
                                             //o.RemoveObject();
                                             //objects.remove(o.getGUID());
                                             //activeObjects.remove(o.getGUID());
-                                        } else if (!isChanged && o instanceof Chest) {
-                                            o.RemoveObject();
-                                            o.setPostion(null);
-                                            objects.remove(o.getGUID());
-                                            activeObjects.remove(o.getGUID());
                                         }
                                     } catch (Exception e){
                                         GATracker.trackException("FastScan",e);
                                     }
                                 }
                             }
+                            for (Chest o:chests.values()) o.getMarker().remove();
+                            chests.clear();
                             final int lst_length = lst.length();// Moved  lst.length() call out of the loop to local variable lst_length
                             for (int i = 0; i< lst_length; i++){
                                 JSONObject obj=lst.getJSONObject(i);
@@ -220,7 +230,7 @@ public class GameObjects{
                                     if (c != null) c.setPostion(new LatLng(lat / 1e6, lng / 1e6));
                                 } else if ("Chest".equalsIgnoreCase(type)){
                                     if (objects.get(guid)==null){
-                                        put(new Chest(MyGoogleMap.getMap(),obj));
+                                        chests.put(guid,new Chest(MyGoogleMap.getMap(),obj));
                                     }
                                 }
 
@@ -303,6 +313,12 @@ public class GameObjects{
             public void onLocationChanged(Location location) {
                 LatLng target = new LatLng(location.getLatitude(), location.getLongitude());
                 GameObjects.getPlayer().setPosition(target);
+                try {
+                    for (Chest o:chests.values()) o.refresh();
+                } catch (Exception e){
+                    GATracker.trackException("ChestRefresh",e);
+                }
+
             }
 
             @Override
@@ -344,6 +360,10 @@ public class GameObjects{
     }
     public static HashMap<String,GameObject> removeActive(GameObject object){
         if (!(object instanceof ActiveObject)) return null;
+        if (object instanceof Chest){
+            chests.remove(object.getGUID());
+            return activeObjects;
+        }
         activeObjects.remove(object.getGUID());
         return activeObjects;
     }
