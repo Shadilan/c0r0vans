@@ -40,6 +40,7 @@ public class Caravan extends GameObject {
     private String finishGUID;
     private int lat;
     private int lng;
+    private boolean visible=true;
 
 
     public Caravan(GoogleMap map,JSONObject obj) throws JSONException {
@@ -191,10 +192,12 @@ public class Caravan extends GameObject {
     }
     public void setPostion(LatLng latLng) {
         this.latlng=latLng;
-        if (mark!=null){
+        if (latLng!=null) {
+            if (mark != null) {
 
-            mark.setPosition(latLng);
-        } else setMarker(map.addMarker(new MarkerOptions().position(latLng)));
+                mark.setPosition(latLng);
+            } else setMarker(map.addMarker(new MarkerOptions().position(latLng)));
+        }
     }
     private String currentMarkName="";
     @Override
@@ -216,7 +219,8 @@ public class Caravan extends GameObject {
                 mark.setVisible(false);
                 if (line!=null) line.setWidth(GameSettings.getMetric());
             } else {
-                mark.setVisible(true);
+
+                mark.setVisible(visible);
                 if (line!=null) line.setWidth(3*GameSettings.getMetric());
             }
 
@@ -308,6 +312,7 @@ public class Caravan extends GameObject {
         owner = faction == 0;
     }
     public void setVisibility(boolean visibility) {
+        visible=visibility;
         if (mark!=null) changeMarkerSize();
     }
 }

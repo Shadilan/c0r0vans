@@ -152,9 +152,7 @@ public class ButtonLayout extends RelativeLayout {
             public void onClick(View v) {
                 try {
                     MyGoogleMap.switchZoom();
-                    for (GameObject obj : GameObjects.getInstance().values())
-                        if (obj.getMarker() != null) obj.changeMarkerSize();
-                    GameObjects.getPlayer().changeMarkerSize();
+                    GameObjects.updateZoom();
                     updateZoom();
                 } catch (Exception e) {
                     GATracker.trackException("ZoomClick",e);

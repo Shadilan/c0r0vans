@@ -615,9 +615,10 @@ public class serverConnect {
                 (Request.Method.GET, request, null, new ResponseListenerWithUID(UID,request,type){
                     @Override
                     public void onResponse(JSONObject response) {
+
                         currentRequest="";
                         GATracker.trackTimeEnd("Network","Timeout.Time");
-                        if (getType()!=ResponseListenerWithUID.FASTSCAN) {
+                        //if (getType()!=ResponseListenerWithUID.FASTSCAN) {
                             String typeS;
                             if (getType() == ResponseListenerWithUID.ACTION) {
                                 if (listenersMap.get(getUID()) != null)
@@ -625,7 +626,8 @@ public class serverConnect {
                                 else typeS = "Type_" + getType() + "_UNKNOWN";
                             } else typeS = "Type_" + getType();
                             GATracker.trackTimeEnd("Network", "Type" + typeS);
-                        }
+                        //}
+                        runNextRequest();
                         try
                         {
 
@@ -715,8 +717,11 @@ public class serverConnect {
                                             }
                                             break;
                                         case FASTSCAN:
+                                            Long lt=new Date().getTime();
                                             for (ServerListener l : listeners)
                                                 l.onError(ServerListener.FASTSCAN, response);
+                                            lt=new Date().getTime()-lt;
+                                            Log.d("FastScanMS","Long:"+lt);
                                             break;
                                         default:
                                             for (ServerListener l : listeners)
@@ -769,7 +774,9 @@ public class serverConnect {
                                         }
                                         break;
                                     case FASTSCAN:
+                                        GATracker.trackTimeStart("Network","FastScanWork");
                                         for (ServerListener l : listeners) l.onResponse(ServerListener.FASTSCAN,response);
+                                        GATracker.trackTimeEnd("Network","FastScanWork");
                                         break;
                                 }
                             }
@@ -785,7 +792,7 @@ public class serverConnect {
                             GATracker.trackException("NetworkError",e);
                         }
 
-                        runNextRequest();
+
 
 
                     }
@@ -951,7 +958,6 @@ public class serverConnect {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        Log.d("Resp","Send");
         final JsonObjectRequest jsObjRequest = new JsonObjectRequest
                 (Request.Method.POST, request, reqTest, new Response.Listener<JSONObject>() {
                     @Override

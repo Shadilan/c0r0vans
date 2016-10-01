@@ -691,12 +691,14 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                                     }
                                 }
                             } else if (Math.abs(oldPos.x-event.getX())>20 || Math.abs(oldPos.y-event.getY())>20){
+                                closeCity=false;
                                 DisplayMetrics metric=new DisplayMetrics();
                                 self.getWindowManager().getDefaultDisplay().getMetrics(metric);
                                 Point c = new Point (metric.widthPixels/2,metric.heightPixels/2);
                                 Point p1 = new Point((int) event.getX(event.findPointerIndex(firstId)), (int) event.getY(event.findPointerIndex(firstId)));
 
                                 double angle = getAngle(oldPos, c) - getAngle(p1,c);
+
                                 MyGoogleMap.rotate((float) angle);
                                 //Essages.addEssage("Угол"+angle);
                                 oldPos=p1;
@@ -823,7 +825,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                     try {
                         wait(60000);
                     } catch (InterruptedException e) {
-                        GATracker.trackException("Thread.Message",e.toString());
+                        GATracker.trackException("Thread.Message",e);
                     }
                 }
 
@@ -860,7 +862,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                     try {
                         wait(100);
                     } catch (InterruptedException e) {
-                        GATracker.trackException("Thread.Message",e.toString());
+                        GATracker.trackException("Thread.Message",e);
                     }
                 }
             }

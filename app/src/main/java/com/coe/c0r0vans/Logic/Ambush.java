@@ -62,6 +62,7 @@ public class Ambush extends GameObject implements ActiveObject {
 
     LatLng latlng;
 
+
     @Override
     public LatLng getPosition() {
         return latlng;
@@ -224,46 +225,47 @@ public class Ambush extends GameObject implements ActiveObject {
     @Override
     public void setPostion(LatLng latLng) {
         this.latlng=latLng;
-        if (mark==null) {
-            if (map!=null) {
-                setMarker(map.addMarker(new MarkerOptions().position(latLng)));
+        if (latLng!=null) {
+            if (mark == null) {
+                if (map != null) {
+                    setMarker(map.addMarker(new MarkerOptions().position(latLng)));
+                    changeMarkerSize();
+                }
+            } else {
+                mark.setPosition(latLng);
                 changeMarkerSize();
             }
-        } else {
-            mark.setPosition(latLng);
-            changeMarkerSize();
-        }
-        if (zone==null){
-            if (map!=null) {
-                CircleOptions circleOptions = new CircleOptions();
-                circleOptions.center(latLng);
-                circleOptions.radius(radius);
-                circleOptions.zIndex(130);
-                switch (faction) {
-                    case 0:
-                        circleOptions.strokeColor(Color.BLUE);
-                        break;
-                    case 1:
-                        circleOptions.strokeColor(Color.MAGENTA);
-                        break;
-                    case 2:
-                        circleOptions.strokeColor(Color.RED);
-                        break;
-                    case 3:
-                        circleOptions.strokeColor(Color.YELLOW);
-                        break;
-                    default:
-                        circleOptions.strokeColor(Color.GREEN);
+            if (zone == null) {
+                if (map != null) {
+                    CircleOptions circleOptions = new CircleOptions();
+                    circleOptions.center(latLng);
+                    circleOptions.radius(radius);
+                    circleOptions.zIndex(130);
+                    switch (faction) {
+                        case 0:
+                            circleOptions.strokeColor(Color.BLUE);
+                            break;
+                        case 1:
+                            circleOptions.strokeColor(Color.MAGENTA);
+                            break;
+                        case 2:
+                            circleOptions.strokeColor(Color.RED);
+                            break;
+                        case 3:
+                            circleOptions.strokeColor(Color.YELLOW);
+                            break;
+                        default:
+                            circleOptions.strokeColor(Color.GREEN);
+                    }
+                    circleOptions.strokeWidth(2 * GameSettings.getMetric());
+                    zone = map.addCircle(circleOptions);
                 }
-                circleOptions.strokeWidth(2*GameSettings.getMetric());
-                zone = map.addCircle(circleOptions);
+            } else {
+                zone.setCenter(latLng);
+                zone.setRadius(radius);
             }
-        } else
-        {
-            zone.setCenter(latLng);
-            zone.setRadius(radius);
+            showRadius();
         }
-        showRadius();
     }
 
     @Override
@@ -357,15 +359,16 @@ public class Ambush extends GameObject implements ActiveObject {
                 else mark.setAnchor(0.5f, 0.5f);
                 currentMarkName=mark_name;
             }
+            if (visible) mark.setVisible(true);
+                    else mark.setVisible(false);
             showRadius();
         }
     }
-
+        private boolean visible=true;
     @Override
     public void setVisibility(boolean visibility) {
-        if (mark!=null) mark.setVisible(visibility);
-        showRadius();
-
+        visible=visibility;
+        changeMarkerSize();
     }
 
     public void showRadius(){

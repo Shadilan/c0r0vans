@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.coe.c0r0vans.GameObject.ActiveObject;
 import com.coe.c0r0vans.GameObject.GameObject;
@@ -25,6 +26,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Set;
 
 import utility.GATracker;
 import utility.GPSInfo;
@@ -41,16 +43,22 @@ import utility.settings.SettingsListener;
 public class GameObjects{
     private static HashMap<String,GameObject> objects;
     private static Player player;
-    private static GoogleMap map;
-    private static HashMap<String,Chest> chests;
 
+    private static HashMap<String,Chest> chests;
+    public static void updateZoom(){
+        for (GameObject obj : getInstance().values())
+            if (obj.getMarker() != null) obj.changeMarkerSize();
+        for (Chest chest:chests.values()) chest.changeMarkerSize();
+        player.changeMarkerSize();
+    }
     public static ActiveObject getClosestObject(LatLng latLng){
         float closest=1000;
         ActiveObject closestObject=null;
         for (Chest o:chests.values()){
             if (o.getMarker()!=null && o.isVisible() && o.getMarker().isVisible() && o.getPosition()!=null){
                 float dist = GPSInfo.getDistance(latLng, o.getPosition());
-                if (dist <  o.getRadius()) {
+                float pdist = GPSInfo.getDistance(player.getPosition(),o.getPosition());
+                if (dist <  o.getRadius() && pdist<=player.getActionDistance()) {
                     closestObject = o;
                     break;
                 }
@@ -171,49 +179,12 @@ public class GameObjects{
 
                         if (response.has("FastScan")) {
                             //Для каждого объекта в GameObjects
+                            //Собрать список гуидов
+                            ArrayList<String> guids=new ArrayList<>();
+
                             JSONArray lst=response.getJSONArray("FastScan");
-                            for (GameObject o:objects.values()) {
-                               //Если это Засада или Караван
-                                if (o instanceof Ambush || o instanceof Caravan) {
 
-                                    //Если он есть в JSON обновить данные
-                                    final int lst_length = lst.length();// Moved  lst.length() call out of the loop to local variable lst_length
-                                    boolean isChanged=false;
-                                    for (int i = 0; i< lst_length; i++){
-                                        JSONObject obj=lst.getJSONObject(i);
-                                        String guid="";
-                                        int lat=0;
-                                        int lng=0;
-                                        String type="";
-                                        if (obj.has("GUID"))guid=obj.getString("GUID");
-                                        if (obj.has("Lat"))lat=obj.getInt("Lat");
-                                        if (obj.has("Lng"))lng=obj.getInt("Lng");
-                                        //if (obj.has("Type")) type=obj.getString("Type");
-                                        if (o.getGUID().equals(guid)){
-                                            o.setPostion(new LatLng(lat/1e6,lng/1e6));
-                                            o.setVisibility(true);
-                                            isChanged=true;
-                                        }
-
-                                    }
-
-                                    //Пока не очищать типа запомнил ?
-                                    try {
-                                        if (!isChanged && ((o instanceof Ambush && ((Ambush) o).getFaction() != 0) || (o instanceof Caravan && ((Caravan) o).getFaction() != 0))) {
-                                            //TODO Если нет очистить данные.
-                                            o.setVisibility(false);
-                                            o.setPostion(null);
-                                            //o.RemoveObject();
-                                            //objects.remove(o.getGUID());
-                                            //activeObjects.remove(o.getGUID());
-                                        }
-                                    } catch (Exception e){
-                                        GATracker.trackException("FastScan",e);
-                                    }
-                                }
-                            }
-                            for (Chest o:chests.values()) o.getMarker().remove();
-                            chests.clear();
+                            //Если он есть в JSON обновить данные
                             final int lst_length = lst.length();// Moved  lst.length() call out of the loop to local variable lst_length
                             for (int i = 0; i< lst_length; i++){
                                 JSONObject obj=lst.getJSONObject(i);
@@ -225,21 +196,93 @@ public class GameObjects{
                                 if (obj.has("Lat"))lat=obj.getInt("Lat");
                                 if (obj.has("Lng"))lng=obj.getInt("Lng");
                                 if (obj.has("Type")) type=obj.getString("Type");
-                                if ("Caravan".equals(type)) {
-                                    Caravan c = player.getRoutes().get(guid);
-                                    if (c != null) c.setPostion(new LatLng(lat / 1e6, lng / 1e6));
-                                } else if ("Chest".equalsIgnoreCase(type)){
-                                    if (objects.get(guid)==null){
+                                if (type.equalsIgnoreCase("Chest")){
+                                    Chest chest=chests.get(guid);
+                                    if (chest!=null){
+                                        chest.setPostion(new LatLng(lat/1e6,lng/1e6));
+
+
+                                    } else
+                                    {
                                         chests.put(guid,new Chest(MyGoogleMap.getMap(),obj));
                                     }
+                                } else
+                                {
+                                    GameObject loaded=objects.get(guid);
+                                    if (loaded!=null){
+                                        loaded.setPostion(new LatLng(lat/1e6,lng/1e6));
+                                        loaded.setVisibility(true);
+
+                                    } else
+                                    {
+                                        if (type.equalsIgnoreCase("Caravan")){
+                                            loaded=player.getRoutes().get(guid);
+                                            if (loaded!=null){
+                                                loaded.setPostion(new LatLng(lat/1e6,lng/1e6));
+                                                loaded.setVisibility(true);
+
+                                            }
+                                            else {
+                                                serverConnect.getInstance().callScanRange();
+
+                                            }
+                                        }
+                                    }
+
+                                }
+                                guids.add(guid);
+
+                            }
+
+                            Set<String> remove=chests.keySet();
+
+                            for (String guid:remove){
+                                boolean isChanged=false;
+                                String guid_b="";
+                                for (String guid2:guids){
+                                    if (guid.equals(guid2)){
+                                        isChanged=true;
+                                        guid_b=guid2;
+                                        break;
+
+                                    }
+                                }
+                                if (!isChanged){
+                                    chests.get(guid).RemoveObject();
+                                    chests.remove(guid);
+                                } else guids.remove(guid_b);
+
+                            }
+                            remove=objects.keySet();
+
+                            for (String guid:remove){
+                                GameObject rem=objects.get(guid);
+
+                                if (rem instanceof Ambush || rem instanceof Caravan) {
+                                    boolean isChanged=false;
+                                    String guid_b="";
+                                    for (String guid2 : guids) {
+                                        if (guid.equals(guid2)) {
+
+                                            isChanged=true;
+                                            guid_b=guid2;
+                                            break;
+                                        }
+                                    }
+                                    if (!isChanged){
+
+                                        rem.setVisibility(false);
+                                        rem.setPostion(null);
+
+                                    } else guids.remove(guid_b);
                                 }
 
                             }
 
-
                         }
 
                     } catch (JSONException e) {
+                        Log.d("FastScanMS", "Exception");
                         GATracker.trackException("FastScan",e);
                     }
                 } else if (TYPE==PLAYER){

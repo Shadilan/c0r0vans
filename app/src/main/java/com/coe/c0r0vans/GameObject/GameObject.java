@@ -116,6 +116,7 @@ public class GameObject {
     }
 
     public void setVisibility(boolean visibility) {
+
         if (mark!=null) mark.setVisible(visibility);
     }
 

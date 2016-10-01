@@ -127,7 +127,6 @@ public class Chest extends GameObject implements ActiveObject {
     }
     @Override
     public void RemoveObject() {
-
         if (removeListeners!=null){
             for (OnGameObjectRemove onGameObjectRemove:removeListeners){
                 onGameObjectRemove.onRemove();
