@@ -1,8 +1,11 @@
 package com.coe.c0r0vans.Singles;
 
+import android.content.Context;
+import android.content.res.Resources;
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 
@@ -13,13 +16,16 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.Date;
 
+import utility.GATracker;
 import utility.GPSInfo;
 import utility.internet.serverConnect;
+import utility.notification.Essages;
 import utility.settings.GameSettings;
 import utility.settings.SettingsListener;
 
@@ -40,12 +46,13 @@ public class MyGoogleMap{
      * @param mMap переменная карты
      * @param Height размер по вертикали экнара карты
      */
-    public static void init(GoogleMap mMap,int Height){
+    public static void init(Context context, GoogleMap mMap, int Height){
         map=mMap;
-        setupMap();
+        setupMap(context);
         GameSettings.addSettingsListener(new SettingsListener() {
             @Override
             public void onSettingsSave() {
+
 
             }
 
@@ -80,8 +87,9 @@ public class MyGoogleMap{
     /**
      * Настройка карты
      */
-    private static  void setupMap(){
-        map.setMapType(5);
+    private static  void setupMap(Context context){
+        map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+
         /*String myMapID = "mapbox.dark";
         String accesToken = "pk.eyJ1Ijoic2hhZGlsYW4iLCJhIjoiY2l0OHJxbXE5MDAxeTJ5cGh6OHFsb2hqaiJ9.r1_D8boC9ZHBJpJEI4FDfA";
         MapBoxOnlineTileProvider provider = new MapBoxOnlineTileProvider(myMapID, accesToken);
@@ -147,7 +155,19 @@ public class MyGoogleMap{
         MarkerOptions mo=new MarkerOptions().anchor(0.5f,0.5f).icon(BitmapDescriptorFactory.fromResource(R.mipmap.showbutton)
         ).position(new LatLng(0,0)).visible(false);
         targetMarker=map.addMarker(mo);
+        try {
+            // Customise the styling of the base map using a JSON object defined
+            // in a raw resource file.
+            MapStyleOptions m=MapStyleOptions.loadRawResourceStyle(context, R.raw.style_json);
 
+            boolean success = map.setMapStyle(m);
+
+            if (!success) {
+                GATracker.trackException("MAP", "CantLoad");
+            }
+        } catch (Resources.NotFoundException e) {
+            GATracker.trackException("MAP",e);
+        }
     }
 
     /**

@@ -539,7 +539,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
 
             Point size=new Point();
 
-            MyGoogleMap.init(googleMap, size.y);
+            MyGoogleMap.init(getApplicationContext(),googleMap, size.y);
             GameObjects.setMap(MyGoogleMap.getMap());
             createListeners();
         }
