@@ -118,6 +118,7 @@ public class Caravan extends GameObject {
     public void loadJSON(JSONObject obj) {
 
         try {
+            update();
             GUID=obj.getString("GUID");
             if (obj.has("Owner")) faction=obj.getInt("Owner"); else faction=0;
             owner=faction==0;
@@ -191,6 +192,7 @@ public class Caravan extends GameObject {
 
     }
     public void setPostion(LatLng latLng) {
+        update();
         this.latlng=latLng;
         if (latLng!=null) {
             if (mark != null) {

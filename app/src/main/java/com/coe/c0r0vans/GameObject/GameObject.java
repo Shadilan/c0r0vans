@@ -14,6 +14,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * @author Shadilan
@@ -23,6 +24,23 @@ public class GameObject {
     public static final float ICON_SMALL = 15;
     public static final float ICON_MEDIUM = 16;
     public static final float ICON_LARGE = 17;
+    public void update(){
+        updated=new Date();
+    }
+    private boolean forceRemove=false;
+    public void forceRemove(){
+        forceRemove=true;
+    }
+    public boolean getForceRemove(){
+        return forceRemove;
+    }
+
+    public Date getUpdated() {
+        return updated;
+    }
+
+    private Date updated;
+
     private int life;
     protected boolean owner=false;
 
@@ -88,7 +106,7 @@ public class GameObject {
      * @param obj JSON to Load
      */
     public void loadJSON(JSONObject obj) throws JSONException {
-
+        update();
     }
 
     /**
@@ -136,7 +154,7 @@ public class GameObject {
     }
 
     public void setPostion(LatLng latLng) {
-
+        update();
         if (mark!=null){
 
             mark.setPosition(latLng);

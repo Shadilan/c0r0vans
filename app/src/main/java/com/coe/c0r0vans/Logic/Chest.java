@@ -39,6 +39,7 @@ public class Chest extends GameObject implements ActiveObject {
     public void loadJSON(JSONObject obj) {
 
         try {
+            update();
             GUID=obj.getString("GUID");
             if (obj.has("Lat") && obj.has("Lng")) {
                 int lat = obj.getInt("Lat");
@@ -58,6 +59,7 @@ public class Chest extends GameObject implements ActiveObject {
 
     }
     public void setPostion(LatLng latLng) {
+        update();
         this.latlng=latLng;
         if (mark!=null){
 
@@ -103,7 +105,7 @@ public class Chest extends GameObject implements ActiveObject {
                 mark.setIcon(ImageLoader.getDescritor(markname));
                 if ("Y".equals(GameSettings.getInstance().get("USE_TILT")))
                     mark.setAnchor(0.5f, 1f);
-                else mark.setAnchor(0.5f, 0.5f);
+                else mark.setAnchor(0.5f, 1f);
                 currentMarkName=markname;
             }
             if (MyGoogleMap.getClientZoom()==ICON_SMALL){
@@ -184,6 +186,7 @@ public class Chest extends GameObject implements ActiveObject {
                                 GameObjects.getPlayer().setGold(GameObjects.getPlayer().getGold()+gold);
                                 ToastSend.send("Получено "+gold+" золота.");
                                 Essages.addEssage("В сундуке обнаружено "+gold+" золота.");
+                                forceRemove();
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
@@ -211,8 +214,9 @@ public class Chest extends GameObject implements ActiveObject {
                                     break;
                                 case "O1401":
                                     Essages.addEssage("Сундук пуст.");
+                                    forceRemove();
+                                    setVisibility(false);
                                     ToastSend.send("Пусто.");
-                                    RemoveObject();
                                     break;
                                 case "O1402":
                                     Essages.addEssage("Сундук слишком далеко.");

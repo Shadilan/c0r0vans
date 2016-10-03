@@ -503,7 +503,7 @@ public class City extends GameObject implements ActiveObject {
     @Override
     public void loadJSON(JSONObject obj) {
         try {
-
+            update();
             GUID = obj.getString("GUID");
             int Lat = obj.getInt("Lat");
             int Lng = obj.getInt("Lng");
@@ -690,9 +690,6 @@ public class City extends GameObject implements ActiveObject {
         this.founder = founder;
     }
 
-    public Date getUpdated() {
-        return updated;
-    }
 
     public String getUpgrade() {
         return upgrade;

@@ -92,6 +92,7 @@ public class Ambush extends GameObject implements ActiveObject {
                         GameSound.playSound(GameSound.REMOVE_AMBUSH);
                         GameObjects.getPlayer().removeAmbush(getGUID());
                         Essages.addEssage("Засада распущена");
+                        forceRemove();
                         RemoveObject();
                     }
 
@@ -112,6 +113,7 @@ public class Ambush extends GameObject implements ActiveObject {
                                     break;
                                 case "O0401":
                                     Essages.addEssage("Эта засада уже уничтожена.");
+                                    forceRemove();
                                     RemoveObject();
                                     break;
                                 default:
@@ -156,6 +158,7 @@ public class Ambush extends GameObject implements ActiveObject {
                             GATracker.trackException("ObjectAction",e);
                         }
                         else Essages.addEssage("Разбойники уничтожены.");
+                        forceRemove();
                         RemoveObject();
                     }
 
@@ -176,6 +179,7 @@ public class Ambush extends GameObject implements ActiveObject {
                                     break;
                                 case "O0301":
                                     Essages.addEssage("Эта засада уже уничтожена.");
+                                    forceRemove();
                                     RemoveObject();
                                     break;
                                 case "O0302":
@@ -224,6 +228,7 @@ public class Ambush extends GameObject implements ActiveObject {
 
     @Override
     public void setPostion(LatLng latLng) {
+        update();
         this.latlng=latLng;
         if (latLng!=null) {
             if (mark == null) {
@@ -271,6 +276,7 @@ public class Ambush extends GameObject implements ActiveObject {
     @Override
     public void loadJSON(JSONObject obj) {
         try {
+            update();
             GUID=obj.getString("GUID");
             if (obj.has("Owner")) faction=obj.getInt("Owner"); else faction=0;
             owner=faction==0;

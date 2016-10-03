@@ -161,7 +161,7 @@ public class GameObjects{
                             calendar.add(Calendar.MINUTE,-20);
                             for (GameObject obj : remObjects) {
                                 //Если город то не удаляем в течении 20 минут.
-                                if (!(obj instanceof City &&  ((City) obj).getUpdated().after(calendar.getTime())) && !(obj instanceof Chest)) {
+                                if (!(obj instanceof City &&  obj.getUpdated().after(calendar.getTime())) && !(obj instanceof Chest)) {
                                     obj.RemoveObject();
                                     removeActive(obj);
                                     objects.remove(obj.getGUID());
@@ -235,22 +235,16 @@ public class GameObjects{
                             }
 
                             Set<String> remove=chests.keySet();
-
+                            Calendar calendar = Calendar.getInstance();
+                            calendar.setTime(new Date());
+                            calendar.add(Calendar.SECOND,-15);
                             for (String guid:remove){
-                                boolean isChanged=false;
-                                String guid_b="";
-                                for (String guid2:guids){
-                                    if (guid.equals(guid2)){
-                                        isChanged=true;
-                                        guid_b=guid2;
-                                        break;
 
-                                    }
-                                }
-                                if (!isChanged){
-                                    chests.get(guid).RemoveObject();
+                                Chest chest=chests.get(guid);
+                                if (chest.getForceRemove() || (chest.getUpdated().before(calendar.getTime()))){
+                                    chest.RemoveObject();
                                     chests.remove(guid);
-                                } else guids.remove(guid_b);
+                                }
 
                             }
                             remove=objects.keySet();
@@ -259,22 +253,10 @@ public class GameObjects{
                                 GameObject rem=objects.get(guid);
 
                                 if (rem instanceof Ambush || rem instanceof Caravan) {
-                                    boolean isChanged=false;
-                                    String guid_b="";
-                                    for (String guid2 : guids) {
-                                        if (guid.equals(guid2)) {
-
-                                            isChanged=true;
-                                            guid_b=guid2;
-                                            break;
-                                        }
-                                    }
-                                    if (!isChanged){
-
+                                    if (rem.getForceRemove() || (rem.getUpdated().before(calendar.getTime()))){
                                         rem.setVisibility(false);
                                         rem.setPostion(null);
-
-                                    } else guids.remove(guid_b);
+                                    }
                                 }
 
                             }
