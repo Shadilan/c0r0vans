@@ -214,12 +214,21 @@ public class Caravan extends GameObject {
              String markname="caravan_4";
              if (startPoint!=null && finishPoint==null){
                  markname="route_start";
+                 mark.setVisible(visible);
              } else if (latlng!=null) {
                  markname = "caravan";
                  if (faction < 0 || faction > 4) faction = 4;
                  if (faction == 0)
                      markname = markname + "_" + faction + GameObjects.getPlayer().getRace();
                  else markname = markname + "_" + faction;
+                 if (MyGoogleMap.getClientZoom()==ICON_SMALL){
+                     mark.setVisible(false);
+                     if (line!=null) line.setWidth(GameSettings.getMetric());
+                 } else {
+
+                     mark.setVisible(visible);
+                     if (line!=null) line.setWidth(3*GameSettings.getMetric());
+                 }
              }
             markname = markname + GameObject.zoomToPostfix(MyGoogleMap.getClientZoom());
             if (!markname.equals(currentMarkName)) {
@@ -229,14 +238,7 @@ public class Caravan extends GameObject {
                 else mark.setAnchor(0.5f, 0.5f);
                 currentMarkName=markname;
             }
-            if (MyGoogleMap.getClientZoom()==ICON_SMALL){
-                mark.setVisible(false);
-                if (line!=null) line.setWidth(GameSettings.getMetric());
-            } else {
 
-                mark.setVisible(visible);
-                if (line!=null) line.setWidth(3*GameSettings.getMetric());
-            }
 
         }
 

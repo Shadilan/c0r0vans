@@ -202,7 +202,7 @@ public class Player extends GameObject {
             if (obj.getMarker() != null) obj.changeMarkerSize();
         for (GameObject obj : this.getRoutes().values())
             if (obj.getMarker() != null) obj.changeMarkerSize();
-
+        if (currentR!=null) currentR.changeMarkerSize();
 
 
     }

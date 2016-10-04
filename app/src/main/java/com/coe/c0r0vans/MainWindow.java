@@ -844,6 +844,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
     boolean isActive=false;
     //TODO Гасить поток
     private LatLng lastFastScan=null;
+    private long lastFastScanTime=0;
     private Runnable fastScanRequest=new Runnable() {
         @Override
         public void run() {
@@ -852,8 +853,11 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
 
                     if (serverConnect.getInstance().isLogin()) {
                         //TODO По времени тоже обновлять.
-                        if (lastFastScan == null || GPSInfo.getDistance(lastFastScan, GPSInfo.getInstance().getLatLng()) > 20) {
+                        long fastScanTime=new Date().getTime();
+                        if (lastFastScan == null || (GPSInfo.getDistance(lastFastScan, GPSInfo.getInstance().getLatLng()) > 20)
+                                || lastFastScanTime+5*60*100<fastScanTime) {
                             serverConnect.getInstance().callFastScan();
+                            lastFastScanTime=fastScanTime;
                             lastFastScan = GPSInfo.getInstance().getLatLng();
                         }
                     }
