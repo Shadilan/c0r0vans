@@ -151,7 +151,7 @@ public class Caravan extends GameObject {
                         finishPoint = new LatLng(obj.getInt("FinishLat") / 1e6, obj.getInt("FinishLng") / 1e6);
 
                 }
-                if (startPoint!=null && finishPoint!=null & map!=null) {
+                if (startPoint!=null && finishPoint!=null && map!=null) {
                     if (line != null)
                     {
                         line.getPoints().set(0,startPoint);
@@ -168,6 +168,12 @@ public class Caravan extends GameObject {
                         line = map.addPolyline(options);
                     }
                     showRoute();
+                } else if(startPoint!=null && finishPoint==null && map!=null){
+                    if (mark == null) {
+                        if (map!=null) setMarker(map.addMarker(new MarkerOptions().position(startPoint)));
+                    } else {
+                        mark.setPosition(startPoint);
+                    }
                 }
 
             }
@@ -205,10 +211,16 @@ public class Caravan extends GameObject {
     @Override
     public void changeMarkerSize() {
          if (mark!=null) {
-            String markname = "caravan";
-            if (faction<0 || faction>4) faction=4;
-            if (faction==0) markname=markname+"_"+faction+ GameObjects.getPlayer().getRace();
-            else markname=markname+"_"+faction;
+             String markname="caravan_4";
+             if (latlng!=null) {
+                 markname = "caravan";
+                 if (faction < 0 || faction > 4) faction = 4;
+                 if (faction == 0)
+                     markname = markname + "_" + faction + GameObjects.getPlayer().getRace();
+                 else markname = markname + "_" + faction;
+             } else if (startPoint!=null && finishPoint==null){
+                 markname="route_start";
+             }
             markname = markname + GameObject.zoomToPostfix(MyGoogleMap.getClientZoom());
             if (!markname.equals(currentMarkName)) {
                 mark.setIcon(ImageLoader.getDescritor(markname));

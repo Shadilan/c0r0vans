@@ -185,6 +185,7 @@ public class City extends GameObject implements ActiveObject {
                 GameObjects.getPlayer().setCurrentRouteGUID("");
                 GameObjects.getPlayer().setCurrentRoute(null);
                 GameObjects.getPlayer().setRouteStart(true);
+                updateColor();
             }
 
             @Override
@@ -251,6 +252,7 @@ public class City extends GameObject implements ActiveObject {
                             else Essages.addEssage("Непредвиденная ошибка.");
 
                     }
+                    updateColor();
                 }catch (JSONException e)
                 {
                     GATracker.trackException("FinishRoute",e);
@@ -280,6 +282,7 @@ public class City extends GameObject implements ActiveObject {
                 routeStart=GameObjects.getPlayer().getRouteStart();
                 GameObjects.getPlayer().setRouteStart(false);
                 GameObjects.getPlayer().setCurrentRouteGUID(getGUID());
+                updateColor();
             }
 
             @Override
@@ -363,6 +366,7 @@ public class City extends GameObject implements ActiveObject {
                             else Essages.addEssage("Непредвиденная ошибка.");
 
                     }
+                    updateColor();
                 }catch (JSONException e)
                 {
                     GATracker.trackException("StarFinishRoute",e);

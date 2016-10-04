@@ -104,8 +104,8 @@ public class Chest extends GameObject implements ActiveObject {
             if (!markname.equals(currentMarkName)) {
                 mark.setIcon(ImageLoader.getDescritor(markname));
                 if ("Y".equals(GameSettings.getInstance().get("USE_TILT")))
-                    mark.setAnchor(0.5f, 1f);
-                else mark.setAnchor(0.5f, 1f);
+                    mark.setAnchor(0.5f, 0.8f);
+                else mark.setAnchor(0.5f, 0.5f);
                 currentMarkName=markname;
             }
             if (MyGoogleMap.getClientZoom()==ICON_SMALL){

@@ -115,10 +115,11 @@ public class Player extends GameObject {
             @Override
             public void preAction() {
                 cancelRouteGuid=currentRouteGuid;
-                cancelRoute=currentR;
+                cancelRoute=getCurrentR();
                 GameSound.playSound(GameSound.START_ROUTE_SOUND);
                 GameObjects.getPlayer().setCurrentRouteGUID(null);
                 GameObjects.getPlayer().setRouteStart(true);
+                setCurrentRoute(null);
                 for (GameObject o: GameObjects.getInstance().values()){
                     if (o!=null && o instanceof City) ((City) o).updateColor();
                 }
@@ -135,26 +136,24 @@ public class Player extends GameObject {
                     if (response.has("Error")) err = response.getString("Error");
                     else if (response.has("Result")) err = response.getString("Result");
                     else err = "U0000";
+                    setCurrentRouteGUID(cancelRouteGuid);
+                    //TODO Восстановить отображение флажка.
+                    setCurrentRoute(cancelRoute);
+                    GameObjects.getPlayer().setRouteStart(true);
                     switch (err) {
                         case "DB001":
                             Essages.addEssage("Ошибка сервера.");
-                            currentRouteGuid=cancelRouteGuid;
-                            currentR=cancelRoute;
-                            GameObjects.getPlayer().setRouteStart(true);
                             break;
                         case "L0001":
                             Essages.addEssage("Соединение потеряно.");
-                            currentRouteGuid=cancelRouteGuid;
-                            currentR=cancelRoute;
-                            GameObjects.getPlayer().setRouteStart(true);
                             break;
                         case "O0801":
                             Essages.addEssage("Маршрут не найден.");
+                            GameObjects.getPlayer().setCurrentRouteGUID(null);
+                            GameObjects.getPlayer().setRouteStart(true);
+                            setCurrentRoute(null);
                             break;
                         default:
-                            currentRouteGuid=cancelRouteGuid;
-                            currentR=cancelRoute;
-                            GameObjects.getPlayer().setRouteStart(true);
                             if (response.has("Message"))
                                 Essages.addEssage(response.getString("Message"));
                             else Essages.addEssage("Непредвиденная ошибка.");
@@ -403,7 +402,7 @@ public class Player extends GameObject {
             profit=0;
             if (obj.has("Routes")){
                 currentRouteGuid="";
-                currentR=null;
+                setCurrentRoute(null);
                 setRouteStart(false);
                 JSONArray jroutes=obj.getJSONArray("Routes");
                 ArrayList<String> GUIDS=new ArrayList<>(Routes.keySet());
@@ -423,8 +422,8 @@ public class Player extends GameObject {
                         newObj=new Caravan(map,jobj);
                         newObj.setFaction(0);
                         if (newObj.getFinishName()==null || newObj.getFinishName().equals("null") ) {
-                            currentRouteGuid=newObj.getStartGUID();
-                            currentR=newObj;
+                            setCurrentRouteGUID(newObj.getStartGUID());
+                            setCurrentRoute(newObj);
                             setRouteStart(true);
                         } else Routes.put(newGUID,newObj);
                     }
@@ -700,7 +699,9 @@ public class Player extends GameObject {
     }
 
     public void setCurrentRoute(Caravan currentRoute) {
+        if (this.currentR!=null) this.currentR.RemoveObject();
         this.currentR = currentRoute;
+
     }
 
     public void setLeftToHire(int leftToHire) {
