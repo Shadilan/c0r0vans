@@ -546,14 +546,14 @@ public class City extends GameObject implements ActiveObject {
                 circleOptions.radius(radius);
                 //circleOptions.zIndex(100);
                 //circleOptions.visible(false);
-                if (GameObjects.getPlayer().checkRoute(GUID)) circleOptions.strokeColor(Color.DKGRAY);
+                if (GameObjects.getPlayer().checkRoute(GUID)) circleOptions.strokeColor(Color.GRAY);
                 else circleOptions.strokeColor(Color.BLUE);
                 circleOptions.strokeWidth(2*GameSettings.getMetric());
                 zone = map.addCircle(circleOptions);
             } else {
                 zone.setCenter(latlng);
                 zone.setRadius(radius);
-                if (GameObjects.getPlayer().checkRoute(GUID)) zone.setStrokeColor(Color.DKGRAY);
+                if (GameObjects.getPlayer().checkRoute(GUID)) zone.setStrokeColor(Color.GRAY);
                 else zone.setStrokeColor(Color.BLUE);
 
             }
@@ -667,7 +667,7 @@ public class City extends GameObject implements ActiveObject {
     }
     public void updateColor(){
             if (!GameObjects.getPlayer().checkRoute(GUID)) zone.setStrokeColor(Color.BLUE);
-            else zone.setStrokeColor(Color.DKGRAY);
+            else zone.setStrokeColor(Color.GRAY);
 
     }
     private long getInfluence1() {

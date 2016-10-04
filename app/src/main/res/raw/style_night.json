@@ -23,20 +23,8 @@
     ]
   },
   {
-    "featureType": "administrative",
-    "elementType": "geometry",
-    "stylers": [
-      {
-        "visibility": "off"
-      }
-    ]
-  },
-  {
     "featureType": "landscape",
     "stylers": [
-      {
-        "color": "#000000"
-      },
       {
         "visibility": "on"
       }
@@ -52,10 +40,44 @@
     ]
   },
   {
-    "featureType": "poi",
+    "featureType": "landscape.man_made",
+    "elementType": "geometry.fill",
     "stylers": [
       {
-        "visibility": "off"
+        "color": "#061b38"
+      },
+      {
+        "visibility": "on"
+      }
+    ]
+  },
+  {
+    "featureType": "landscape.natural",
+    "elementType": "geometry.fill",
+    "stylers": [
+      {
+        "color": "#064029"
+      }
+    ]
+  },
+  {
+    "featureType": "landscape.natural.landcover",
+    "elementType": "geometry.fill",
+    "stylers": [
+      {
+        "color": "#064029"
+      }
+    ]
+  },
+  {
+    "featureType": "landscape.natural.terrain",
+    "elementType": "geometry.fill",
+    "stylers": [
+      {
+        "color": "#064029"
+      },
+      {
+        "visibility": "on"
       }
     ]
   },
@@ -64,7 +86,7 @@
     "elementType": "geometry.fill",
     "stylers": [
       {
-        "color": "#526444"
+        "color": "#064029"
       },
       {
         "visibility": "on"
@@ -76,39 +98,10 @@
     "elementType": "geometry",
     "stylers": [
       {
-        "color": "#ce8b2b"
+        "color": "#573808"
       },
       {
         "visibility": "on"
-      },
-    ]
-  },
-  {
-    "featureType": "road",
-    "elementType": "geometry.stroke",
-    "stylers": [
-      {
-        "color": "#ba7712"
-      },
-      {
-        "visibility": "on"
-      }
-    ]
-  },
-  {
-    "featureType": "road",
-    "elementType": "labels.icon",
-    "stylers": [
-      {
-        "visibility": "off"
-      }
-    ]
-  },
-  {
-    "featureType": "transit",
-    "stylers": [
-      {
-        "visibility": "off"
       }
     ]
   },
@@ -117,19 +110,7 @@
     "elementType": "geometry.fill",
     "stylers": [
       {
-        "color": "#393298"
-      },
-      {
-        "visibility": "on"
-      }
-    ]
-  },
-  {
-    "featureType": "water",
-    "elementType": "geometry.stroke",
-    "stylers": [
-      {
-        "color": "#e0e1fe"
+        "color": "#082757"
       },
       {
         "visibility": "on"

@@ -608,7 +608,7 @@ public class Player extends GameObject {
         CircleOptions circleOptions=new CircleOptions();
         circleOptions.center(new LatLng(GPSInfo.getInstance().GetLat() / 1E6, GPSInfo.getInstance().GetLng() / 1E6));
         circleOptions.radius(ActionDistance);
-        circleOptions.strokeColor(Color.parseColor("#D08D2E"));
+        circleOptions.strokeColor(Color.parseColor("#a67125"));
         circleOptions.strokeWidth(6);
         circleOptions.zIndex(2);
         zone=map.addCircle(circleOptions);

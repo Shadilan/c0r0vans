@@ -4,7 +4,7 @@
         <shape>
             <size android:height="3dp"/>
             <stroke android:color="@color/colorAccent" android:width="1dp"/>
-            <solid android:color="@android:color/white"/>
+            <solid android:color="@color/backOp1"/>
         </shape>
     </item>
     <item android:id="@android:id/progress">

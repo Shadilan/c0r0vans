@@ -140,5 +140,7 @@
     <string name="atlas">Атлас</string>
     <string name="approve_route_remove">Вы уверены что хотите отменить не завершенный маршрут?</string>
     <string name="effect">Эффект:%s\n</string>
+    <string name="settings">Настройки</string>
+    <string name="night_mode">Ночной режим</string>
 
 </resources>

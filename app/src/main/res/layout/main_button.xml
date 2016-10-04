@@ -207,7 +207,7 @@
                 android:id="@+id/chatBox"
                 android:scrollbarAlwaysDrawVerticalTrack="true"
                 android:gravity="bottom"
-                android:background="@android:color/white"
+                android:background="@color/backOp1"
                 android:focusable="true"
                 android:orientation="vertical" />
         </ScrollView>

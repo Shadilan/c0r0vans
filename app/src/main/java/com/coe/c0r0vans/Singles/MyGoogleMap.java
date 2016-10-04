@@ -5,7 +5,6 @@ import android.content.res.Resources;
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 
@@ -25,7 +24,6 @@ import java.util.Date;
 import utility.GATracker;
 import utility.GPSInfo;
 import utility.internet.serverConnect;
-import utility.notification.Essages;
 import utility.settings.GameSettings;
 import utility.settings.SettingsListener;
 
@@ -40,15 +38,17 @@ public class MyGoogleMap{
     private static ImageButton showpointButton;
     static float bearing = 0;
     private static long lastRotateTime=0;
+    private static Context context;
 
     /**
      * Инициализация карты
      * @param mMap переменная карты
      * @param Height размер по вертикали экнара карты
      */
-    public static void init(Context context, GoogleMap mMap, int Height){
+    public static void init(Context ctx, GoogleMap mMap, int Height){
+        context=ctx;
         map=mMap;
-        setupMap(context);
+        setupMap();
         GameSettings.addSettingsListener(new SettingsListener() {
             @Override
             public void onSettingsSave() {
@@ -66,6 +66,25 @@ public class MyGoogleMap{
                 if (setting.equals("USE_TILT") ||
                         setting.equals("TRACK_BEARING")
                         ) MyGoogleMap.changeSettings();
+                if (setting.equals("NIGHT_MODE")){
+                    try {
+                        // Customise the styling of the base map using a JSON object defined
+                        // in a raw resource file.
+                        MapStyleOptions m;
+                        if (!"Y".equals(GameSettings.getInstance().get("NIGHT_MODE"))){
+                            m=MapStyleOptions.loadRawResourceStyle(context, R.raw.style_json);
+                        } else m=MapStyleOptions.loadRawResourceStyle(context, R.raw.style_night);
+
+
+                        boolean success = map.setMapStyle(m);
+
+                        if (!success) {
+                            GATracker.trackException("MAP", "CantLoad");
+                        }
+                    } catch (Resources.NotFoundException e) {
+                        GATracker.trackException("MAP",e);
+                    }
+                }
             }
         });
     }
@@ -87,7 +106,8 @@ public class MyGoogleMap{
     /**
      * Настройка карты
      */
-    private static  void setupMap(Context context){
+    private static  void setupMap(){
+
         map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
 
         /*String myMapID = "mapbox.dark";
@@ -158,7 +178,11 @@ public class MyGoogleMap{
         try {
             // Customise the styling of the base map using a JSON object defined
             // in a raw resource file.
-            MapStyleOptions m=MapStyleOptions.loadRawResourceStyle(context, R.raw.style_json);
+            MapStyleOptions m;
+            if (!"Y".equals(GameSettings.getInstance().get("NIGHT_MODE"))){
+                m=MapStyleOptions.loadRawResourceStyle(context, R.raw.style_json);
+            } else m=MapStyleOptions.loadRawResourceStyle(context, R.raw.style_night);
+
 
             boolean success = map.setMapStyle(m);
 

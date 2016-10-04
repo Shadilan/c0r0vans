@@ -162,4 +162,6 @@ All rights reserved to Circle of Eternity</string>
     <string name="atlas">Atlas</string>
     <string name="approve_route_remove">You are going to delete unfinished route. Are you sure?</string>
     <string name="effect">Effect:%s\n</string>
+    <string name="settings">Settings</string>
+    <string name="night_mode">Night mode</string>
 </resources>
