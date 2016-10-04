@@ -3,6 +3,10 @@ package utility;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.ColorMatrix;
+import android.graphics.ColorMatrixColorFilter;
+import android.graphics.Paint;
 
 import com.coe.c0r0vans.R;
 import com.google.android.gms.maps.MapsInitializer;
@@ -77,6 +81,7 @@ public class ImageLoader {
 
         createMarker(context,R.mipmap.chest,"chest");
         createMarker(context,R.mipmap.openchest,"openchest");
+        createMarker(context,R.mipmap.route_start,"route_start");
 
 
         //Actions
@@ -150,6 +155,27 @@ public class ImageLoader {
 
 
             return result;
+    }
+
+    public static Bitmap changeBitmapContrastBrightness(Bitmap bmp, float contrast, float brightness)
+    {
+        ColorMatrix cm = new ColorMatrix(new float[]
+                {
+                        contrast, 0, 0, 0, brightness,
+                        0, contrast, 0, 0, brightness,
+                        0, 0, contrast, 0, brightness,
+                        0, 0, 0, 1, 0
+                });
+
+        Bitmap ret = Bitmap.createBitmap(bmp.getWidth(), bmp.getHeight(), bmp.getConfig());
+
+        Canvas canvas = new Canvas(ret);
+
+        Paint paint = new Paint();
+        paint.setColorFilter(new ColorMatrixColorFilter(cm));
+        canvas.drawBitmap(bmp, 0, 0, paint);
+
+        return ret;
     }
 
     private static void createMarker(Context context,int resource,String name){

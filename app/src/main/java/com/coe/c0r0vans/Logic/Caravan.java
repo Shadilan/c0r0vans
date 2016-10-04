@@ -212,14 +212,14 @@ public class Caravan extends GameObject {
     public void changeMarkerSize() {
          if (mark!=null) {
              String markname="caravan_4";
-             if (latlng!=null) {
+             if (startPoint!=null && finishPoint==null){
+                 markname="route_start";
+             } else if (latlng!=null) {
                  markname = "caravan";
                  if (faction < 0 || faction > 4) faction = 4;
                  if (faction == 0)
                      markname = markname + "_" + faction + GameObjects.getPlayer().getRace();
                  else markname = markname + "_" + faction;
-             } else if (startPoint!=null && finishPoint==null){
-                 markname="route_start";
              }
             markname = markname + GameObject.zoomToPostfix(MyGoogleMap.getClientZoom());
             if (!markname.equals(currentMarkName)) {
