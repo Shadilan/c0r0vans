@@ -142,5 +142,6 @@
     <string name="effect">Эффект:%s\n</string>
     <string name="settings">Настройки</string>
     <string name="night_mode">Ночной режим</string>
+    <string name="obsidian">Обсидиан:</string>
 
 </resources>

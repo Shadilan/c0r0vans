@@ -6,6 +6,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.coe.c0r0vans.GameObject.GameObject;
 import com.coe.c0r0vans.R;
 import com.coe.c0r0vans.ShowHideForm;
 import com.coe.c0r0vans.Singles.GameObjects;
@@ -27,6 +28,7 @@ public class MainInfoTable extends LinearLayout implements PlayerInfoLayout {
     private TextView hirelings;
     private TextView leftToHire;
     private TextView foundedCities;
+    private TextView obsidian;
 
     public MainInfoTable(Context context) {
         super(context);
@@ -48,6 +50,7 @@ public class MainInfoTable extends LinearLayout implements PlayerInfoLayout {
         exp= (TextView) findViewById(R.id.expInfo);
         tnl= (TextView) findViewById(R.id.tnlInfo);
         gold= (TextView) findViewById(R.id.goldInfo);
+        obsidian=(TextView) findViewById(R.id.obsidianInfo);
         caravans= (TextView) findViewById(R.id.caravanInfo);
         ambushes= (TextView) findViewById(R.id.ambushSetInfo);
         faction= (ImageView) findViewById(R.id.factionSymbol);
@@ -55,12 +58,16 @@ public class MainInfoTable extends LinearLayout implements PlayerInfoLayout {
         hirelings= (TextView) findViewById(R.id.hirelings);
         leftToHire= (TextView) findViewById(R.id.leftHirelings);
         foundedCities= (TextView) findViewById(R.id.foundedCities);
+
     }
     public void update(){
         if (GameObjects.getPlayer()!=null) {
             level.setText(StringUtils.intToStr(GameObjects.getPlayer().getLevel()));
             exp.setText(StringUtils.intToStr(GameObjects.getPlayer().getExp()));
             gold.setText(StringUtils.intToStr(GameObjects.getPlayer().getGold()));
+            obsidian.setText(StringUtils.intToStr(GameObjects.getPlayer().getGold()));
+
+
             tnl.setText(StringUtils.intToStr(GameObjects.getPlayer().getTNL()));
             caravans.setText(StringUtils.intToStr(GameObjects.getPlayer().getCaravans()));
             ambushes.setText(StringUtils.intToStr(GameObjects.getPlayer().getAmbushMax() - GameObjects.getPlayer().getAmbushLeft())+"/"+StringUtils.intToStr(GameObjects.getPlayer().getAmbushMax()));

@@ -21,7 +21,7 @@
             android:layout_height="wrap_content"
             style="@style/MediumTextNP"
             android:id="@+id/levelInfo"
-            android:layout_gravity="right"/>
+            android:layout_gravity="end"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -34,7 +34,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/expInfo"
             style="@style/MediumTextNP"
-            android:layout_gravity="right"/>
+            android:layout_gravity="end"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -46,7 +46,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/tnlInfo"
-            android:layout_gravity="right"
+            android:layout_gravity="end"
             style="@style/MediumTextNP"/>
 
         <TextView
@@ -58,8 +58,8 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/goldInfo"
-            android:layout_gravity="right"
+            android:id="@+id/obsidianInfo"
+            android:layout_gravity="end"
             style="@style/MediumTextNP"/>
         <TextView
             android:layout_width="wrap_content"
@@ -67,12 +67,22 @@
             android:text="@string/income"
             style="@style/MediumTextNP"
             />
-
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/goldInfo"
+            android:layout_gravity="end"
+            style="@style/MediumTextNP"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/obsidian"
+            style="@style/MediumTextNP"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/profit"
-            android:layout_gravity="right"
+            android:layout_gravity="end"
             style="@style/MediumTextNP" />
 
         <TextView
@@ -85,7 +95,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/caravanInfo"
-            android:layout_gravity="right"
+            android:layout_gravity="end"
             style="@style/MediumTextNP"/>
 
         <TextView
@@ -98,7 +108,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/ambushSetInfo"
-            android:layout_gravity="right"
+            android:layout_gravity="end"
             style="@style/MediumTextNP"/>
         <TextView
             android:layout_width="wrap_content"
@@ -110,7 +120,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/hirelings"
-            android:layout_gravity="right"
+            android:layout_gravity="end"
             style="@style/MediumTextNP"/>
         <TextView
             android:layout_width="wrap_content"
@@ -122,7 +132,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/leftHirelings"
-            android:layout_gravity="right"
+            android:layout_gravity="end"
             style="@style/MediumTextNP"/>
         <TextView
             android:layout_width="wrap_content"
@@ -134,7 +144,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/foundedCities"
-            android:layout_gravity="right"
+            android:layout_gravity="end"
             style="@style/MediumTextNP"/>
     </GridLayout>
 
@@ -142,6 +152,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:id="@+id/factionSymbol"
+        android:contentDescription="@string/choose_faction"
         android:layout_gravity="center_horizontal" />
 
 </LinearLayout>

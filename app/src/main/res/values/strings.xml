@@ -164,4 +164,5 @@ All rights reserved to Circle of Eternity</string>
     <string name="effect">Effect:%s\n</string>
     <string name="settings">Settings</string>
     <string name="night_mode">Night mode</string>
+    <string name="obsidian">Obsidian:</string>
 </resources>
