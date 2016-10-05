@@ -160,6 +160,15 @@ public class ButtonLayout extends RelativeLayout {
 
             }
         });
+        zoomButton.setOnLongClickListener(new OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                if ("Y".equals(GameSettings.getValue("NIGHT_MODE")))
+                GameSettings.set("NIGHT_MODE","N");
+                else GameSettings.set("NIGHT_MODE","Y");
+                return true;
+            }
+        });
         ProgressBar expProgress= (ProgressBar) findViewById(R.id.expProgress);
         expProgress.setOnClickListener(new OnClickListener() {
             @Override
