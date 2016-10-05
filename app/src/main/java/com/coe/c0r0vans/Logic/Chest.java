@@ -186,12 +186,23 @@ public class Chest extends GameObject implements ActiveObject {
                                 GameObjects.getPlayer().setGold(GameObjects.getPlayer().getGold()+gold);
                                 ToastSend.send("Получено "+gold+" золота.");
                                 Essages.addEssage("В сундуке обнаружено "+gold+" золота.");
-                                forceRemove();
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
 
                         }
+                        if (response.has("Obsidian")){
+                            try {
+                                int obsidian=response.getInt("obsidian");
+                                GameObjects.getPlayer().setGold(GameObjects.getPlayer().getGold()+obsidian);
+                                //TODO: Extract resources
+                                ToastSend.send(String.format("Получено одсидиана:%1$d.", obsidian));
+                                Essages.addEssage(String.format("Получено одсидиана:%1$d.", obsidian));
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        forceRemove();
                         GameSound.playSound(GameSound.OPENCHEST);
 
                         RemoveObject();

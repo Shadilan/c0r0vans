@@ -65,6 +65,8 @@ public class Player extends GameObject {
     private int Exp=0;
     private boolean routeStart=false;
     private int Gold=0;
+    private int obsidian=0;
+
 
     private int AmbushRadius=30;
     private int ActionDistance=50;
@@ -327,6 +329,7 @@ public class Player extends GameObject {
         result.put("TNL",TNL);
         result.put("Exp",Exp);
         result.put("Gold",Gold);
+        result.put("Obsidian",obsidian);
         result.put("Caravans",Caravans);
         result.put("AmbushesMax",AmbushesMax);
         result.put("AmbushesLeft",AmbushesLeft);
@@ -369,6 +372,7 @@ public class Player extends GameObject {
             if (obj.has("TNL")) TNL=obj.getInt("TNL");
             if (obj.has("Exp")) Exp=obj.getInt("Exp");
             if (obj.has("Gold")) Gold=obj.getInt("Gold");
+            if (obj.has("Obsidian")) obsidian=obj.getInt("Obsidian");
             if (obj.has("Caravans")) Caravans=obj.getInt("Caravans");
             if (obj.has("AmbushesMax")) AmbushesMax=obj.getInt("AmbushesMax");
             if (obj.has("AmbushesLeft")) AmbushesLeft=obj.getInt("AmbushesLeft");
@@ -532,7 +536,9 @@ public class Player extends GameObject {
     public int getGold() {
         return Gold;
     }
-
+    public int getObsidian() {
+        return obsidian;
+    }
 
     public int getCaravans() {
         return Caravans;
@@ -674,6 +680,10 @@ public class Player extends GameObject {
 
     public void setGold(int gold) {
         this.Gold = gold;
+        change(OnGameObjectChange.INTERNAL);
+    }
+    public void setObsidian(int obsidian) {
+        this.obsidian = obsidian;
         change(OnGameObjectChange.INTERNAL);
     }
 
