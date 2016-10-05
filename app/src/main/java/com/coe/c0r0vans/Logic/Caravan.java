@@ -35,6 +35,7 @@ public class Caravan extends GameObject {
     private LatLng startPoint;
     private LatLng finishPoint;
     private Polyline line;
+    private Polyline line2;
     private int time;
     private String startGUID;
     private String finishGUID;
@@ -64,14 +65,31 @@ public class Caravan extends GameObject {
                 line.getPoints().set(1,finishPoint);
             } else {
                 PolylineOptions options = new PolylineOptions();
-                options.width(3*GameSettings.getMetric());
+                options.width(3*GameSettings.getMetric()+2);
                 GameObject target = SelectedObject.getInstance().getTarget();
-                options.color(Color.BLUE);
+                options.color(Color.rgb(90,58,0));
                 options.geodesic(true);
                 options.add(startPoint);
                 options.add(finishPoint);
                 options.zIndex(150);
                 line = map.addPolyline(options);
+            }
+            if (line2 != null)
+            {
+                line2.getPoints().set(0,startPoint);
+                line2.getPoints().set(1,finishPoint);
+            } else {
+                PolylineOptions options = new PolylineOptions();
+                options.width(3*GameSettings.getMetric());
+                GameObject target = SelectedObject.getInstance().getTarget();
+                if ("Y".equals(GameSettings.getValue("NIGHT_MODE")))
+                    options.color(Color.GRAY);
+                else options.color(Color.CYAN);
+                options.geodesic(true);
+                options.add(startPoint);
+                options.add(finishPoint);
+                options.zIndex(150);
+                line2 = map.addPolyline(options);
             }
             showRoute();
         }
@@ -158,14 +176,31 @@ public class Caravan extends GameObject {
                         line.getPoints().set(1,finishPoint);
                     } else {
                         PolylineOptions options = new PolylineOptions();
-                        options.width(3*GameSettings.getMetric());
+                        options.width(3*GameSettings.getMetric()+2);
                         GameObject target = SelectedObject.getInstance().getTarget();
                         options.geodesic(true);
-                        options.color(Color.BLUE);
+                        options.color(Color.rgb(90,58,0));
                         options.add(startPoint);
                         options.add(finishPoint);
                         options.zIndex(150);
                         line = map.addPolyline(options);
+                    }
+                    if (line2 != null)
+                    {
+                        line2.getPoints().set(0,startPoint);
+                        line2.getPoints().set(1,finishPoint);
+                    } else {
+                        PolylineOptions options = new PolylineOptions();
+                        options.width(3*GameSettings.getMetric());
+                        GameObject target = SelectedObject.getInstance().getTarget();
+                        options.geodesic(true);
+                        if ("Y".equals(GameSettings.getValue("NIGHT_MODE")))
+                        options.color(Color.GRAY);
+                        else options.color(Color.CYAN);
+                        options.add(startPoint);
+                        options.add(finishPoint);
+                        options.zIndex(150);
+                        line2 = map.addPolyline(options);
                     }
                     showRoute();
                 } else if(startPoint!=null && finishPoint==null && map!=null){
@@ -223,11 +258,13 @@ public class Caravan extends GameObject {
                  else markname = markname + "_" + faction;
                  if (MyGoogleMap.getClientZoom()==ICON_SMALL){
                      mark.setVisible(false);
-                     if (line!=null) line.setWidth(GameSettings.getMetric());
+                     if (line!=null) line.setWidth(GameSettings.getMetric()+2);
+                     if (line2!=null) line2.setWidth(GameSettings.getMetric());
                  } else {
 
                      mark.setVisible(visible);
-                     if (line!=null) line.setWidth(3*GameSettings.getMetric());
+                     if (line!=null) line.setWidth(3*GameSettings.getMetric()+2);
+                     if (line2!=null) line2.setWidth(3*GameSettings.getMetric());
                  }
              }
             markname = markname + GameObject.zoomToPostfix(MyGoogleMap.getClientZoom());
@@ -250,12 +287,24 @@ public class Caravan extends GameObject {
     }
 
     void showRoute(){
+        GameObject target = SelectedObject.getInstance().getTarget();
+        boolean night_mode="Y".equals(GameSettings.getValue("NIGHT_MODE"));
         if (line!=null)
         {
-            GameObject target = SelectedObject.getInstance().getTarget();
+
             if (target != null && target instanceof City && !(target.getGUID().equals(startGUID) || target.getGUID().equals(finishGUID)))
                 line.setVisible(false);
             else line.setVisible("Y".equals(GameSettings.getInstance().get("SHOW_CARAVAN_ROUTE")));
+
+        }
+        if (line2!=null)
+        {
+            if (target != null && target instanceof City && !(target.getGUID().equals(startGUID) || target.getGUID().equals(finishGUID)))
+                line2.setVisible(false);
+            else line2.setVisible("Y".equals(GameSettings.getInstance().get("SHOW_CARAVAN_ROUTE")));
+            if ("Y".equals(GameSettings.getValue("NIGHT_MODE")))
+                line2.setColor(Color.GRAY);
+            else line2.setColor(Color.CYAN);
         }
     }
 
@@ -318,6 +367,10 @@ public class Caravan extends GameObject {
         if (line!=null) {
             line.remove();
             line=null;
+        }
+        if (line2!=null) {
+            line2.remove();
+            line2=null;
         }
 
 

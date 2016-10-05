@@ -328,8 +328,10 @@ public class GameObjects{
                             if (o instanceof  City) ((City) o).showBuildZone();
                         }
                     case "SHOW_CARAVAN_ROUTE":
+                    case "NIGHT_MODE":
                         GameObjects.getPlayer().showRoute();
                         break;
+
                 }
             }
         });
