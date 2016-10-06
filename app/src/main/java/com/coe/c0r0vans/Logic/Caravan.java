@@ -196,7 +196,7 @@ public class Caravan extends GameObject {
                         options.geodesic(true);
                         if ("Y".equals(GameSettings.getValue("NIGHT_MODE")))
                         options.color(Color.GRAY);
-                        else options.color(Color.CYAN);
+                        else options.color(Color.rgb(70,90,100));
                         options.add(startPoint);
                         options.add(finishPoint);
                         options.zIndex(150);

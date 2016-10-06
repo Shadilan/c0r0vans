@@ -568,7 +568,7 @@ public class City extends GameObject implements ActiveObject {
                 circleOptions.radius(radius);
                 //circleOptions.zIndex(100);
                 //circleOptions.visible(false);
-                circleOptions.strokeColor(Color.DKGRAY);
+                circleOptions.strokeColor(Color.GRAY);
 
                 circleOptions.strokeWidth(2*GameSettings.getMetric());
                 zone = map.addCircle(circleOptions);
