@@ -58,7 +58,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/obsidianInfo"
+            android:id="@+id/goldInfo"
             android:layout_gravity="end"
             style="@style/MediumTextNP"/>
         <TextView
@@ -70,7 +70,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/goldInfo"
+            android:id="@+id/profit"
             android:layout_gravity="end"
             style="@style/MediumTextNP"/>
         <TextView
@@ -81,7 +81,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/profit"
+            android:id="@+id/obsidianInfo"
             android:layout_gravity="end"
             style="@style/MediumTextNP" />
 
