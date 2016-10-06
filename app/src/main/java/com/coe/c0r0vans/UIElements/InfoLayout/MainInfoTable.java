@@ -65,7 +65,7 @@ public class MainInfoTable extends LinearLayout implements PlayerInfoLayout {
             level.setText(StringUtils.intToStr(GameObjects.getPlayer().getLevel()));
             exp.setText(StringUtils.intToStr(GameObjects.getPlayer().getExp()));
             gold.setText(StringUtils.intToStr(GameObjects.getPlayer().getGold()));
-            obsidian.setText(StringUtils.intToStr(GameObjects.getPlayer().getGold()));
+            obsidian.setText(StringUtils.intToStr(GameObjects.getPlayer().getObsidian()));
 
 
             tnl.setText(StringUtils.intToStr(GameObjects.getPlayer().getTNL()));
