@@ -500,7 +500,8 @@ public class City extends GameObject implements ActiveObject {
     public void setMarker(Marker m) {
         mark=m;
         if (addMark==null){
-            addMark=map.addMarker(new MarkerOptions().position(m.getPosition()).icon(ImageLoader.getDescritor("route_finish")).visible(false));
+            addMark=map.addMarker(new MarkerOptions().position(m.getPosition()).icon(ImageLoader.getDescritor("route_finish")).visible(false).anchor(0.5f,1f));
+            updateColor();
         }
         changeMarkerSize();
 
@@ -567,7 +568,8 @@ public class City extends GameObject implements ActiveObject {
                 circleOptions.radius(radius);
                 //circleOptions.zIndex(100);
                 //circleOptions.visible(false);
-                circleOptions.strokeColor(Color.GRAY);
+                circleOptions.strokeColor(Color.DKGRAY);
+
                 circleOptions.strokeWidth(2*GameSettings.getMetric());
                 zone = map.addCircle(circleOptions);
             } else {
@@ -658,7 +660,10 @@ public class City extends GameObject implements ActiveObject {
             markName=markName+GameObject.zoomToPostfix(MyGoogleMap.getClientZoom());
             if (!markName.equals(addMarkName)){
                 addMark.setIcon(ImageLoader.getDescritor(markName));
-                addMark.setAnchor(0.5f, 0.1f);
+                /*if ("Y".equals(GameSettings.getInstance().get("USE_TILT")))
+                    addMark.setAnchor(0.5f, 0.5f);
+                else addMark.setAnchor(0.5f, 0.5f);*/
+                addMark.setAnchor(0.5f, 0.5f);
                 addMarkName=markName;
             }
         }
@@ -666,7 +671,7 @@ public class City extends GameObject implements ActiveObject {
         showRadius();
     }
 
-    private boolean visibility;
+    private boolean visibility=true;
     @Override
     public void setVisibility(boolean visibility) {
         this.visibility=visibility;
@@ -698,7 +703,7 @@ public class City extends GameObject implements ActiveObject {
         }
     }
     void updateColor(){
-        if (!GameObjects.getPlayer().checkRoute(GUID) && GameObjects.getPlayer().getRouteStart()) addMark.setVisible(visibility);
+        if (!GameObjects.getPlayer().checkRoute(GUID) && !GameObjects.getPlayer().getRouteStart()) addMark.setVisible(visibility);
         else addMark.setVisible(false);
     }
     private long getInfluence1() {
