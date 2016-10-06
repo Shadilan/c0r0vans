@@ -39,7 +39,7 @@ public class RouteAdapter extends BaseAdapter {
 
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
-        CityLine l=new CityLine(context);
+        RouteInfoLine l=new RouteInfoLine(context);
         l.setData(getItem(i));
         l.setParentForm(parent);
         return l;

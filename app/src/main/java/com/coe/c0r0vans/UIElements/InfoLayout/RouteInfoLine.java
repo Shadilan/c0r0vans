@@ -20,7 +20,7 @@ import utility.StringUtils;
 /**
  * Строка информации о городе в Атласе
  */
-public class CityLine extends RelativeLayout {
+public class RouteInfoLine extends RelativeLayout {
     private TextView startCityView;
     private TextView endCityView;
     private TextView lengthView;
@@ -54,17 +54,17 @@ public class CityLine extends RelativeLayout {
 
     }
 
-    public CityLine(Context context) {
+    public RouteInfoLine(Context context) {
         super(context);
         init();
     }
 
-    public CityLine(Context context, AttributeSet attrs) {
+    public RouteInfoLine(Context context, AttributeSet attrs) {
         super(context, attrs);
         init();
     }
 
-    public CityLine(Context context, AttributeSet attrs, int defStyleAttr) {
+    public RouteInfoLine(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init();
     }

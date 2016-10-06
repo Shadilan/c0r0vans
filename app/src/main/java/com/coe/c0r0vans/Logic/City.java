@@ -25,7 +25,7 @@ import com.coe.c0r0vans.Singles.ToastSend;
 import com.coe.c0r0vans.UIElements.ActionView;
 import com.coe.c0r0vans.UIElements.ConfirmWindow;
 import com.coe.c0r0vans.UIElements.GameObjectView;
-import com.coe.c0r0vans.UIElements.InfoLayout.CityLine;
+import com.coe.c0r0vans.UIElements.InfoLayout.RouteInfoLine;
 import com.coe.c0r0vans.UIElements.UIControler;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.Circle;
@@ -1307,7 +1307,7 @@ public class City extends GameObject implements ActiveObject {
             l.removeAllViews();
             for (Caravan r: GameObjects.getPlayer().getRoutes().values()){
                 if (r.getStartGUID().equals(city.getGUID())||r.getFinishGUID().equals(city.getGUID())){
-                    CityLine line = new CityLine(getContext());
+                    RouteInfoLine line = new RouteInfoLine(getContext());
                     amount++;
                     income+=r.getProfit();
                     l.addView(line);

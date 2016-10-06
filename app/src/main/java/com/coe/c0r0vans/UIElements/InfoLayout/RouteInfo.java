@@ -125,7 +125,7 @@ class RouteInfo extends RelativeLayout implements PlayerInfoLayout {
     }
     @Override
     public void update() {
-        CityLine l= (CityLine) findViewById(R.id.unfinishedRoute);
+        RouteInfoLine l= (RouteInfoLine) findViewById(R.id.unfinishedRoute);
         if (GameObjects.getPlayer().getCurrentR()!=null){
             l.setParentForm(parent);
             l.setData(GameObjects.getPlayer().getCurrentR());
