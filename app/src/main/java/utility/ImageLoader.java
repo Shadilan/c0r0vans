@@ -82,6 +82,7 @@ public class ImageLoader {
         createMarker(context,R.mipmap.chest,"chest");
         createMarker(context,R.mipmap.openchest,"openchest");
         createMarker(context,R.mipmap.route_start,"route_start");
+        createMarker(context,R.mipmap.route_finish,"route_finish");
 
 
         //Actions

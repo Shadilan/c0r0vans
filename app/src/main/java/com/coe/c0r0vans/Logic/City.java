@@ -64,14 +64,18 @@ public class City extends GameObject implements ActiveObject {
     private long influence3=0;
     private boolean owner;
     private Circle buildZone;
-    ObjectAction buyAction;
-    ObjectAction startRouteAction;
-    ObjectAction endRouteAction;
-    ObjectAction startFinishRouteAction;
+    private ObjectAction buyAction;
+    private ObjectAction startRouteAction;
+    private ObjectAction endRouteAction;
+    private ObjectAction startFinishRouteAction;
     private String founder="";
     private int hirelings=100;
     private int hireprice=100;
     private Date updated;
+    private Marker addMark;
+    private String addMarkName="";
+    private Circle zoneAdd;
+
 
     private void updateAction(final Context ctx){
         startRouteAction = new ObjectAction(this) {
@@ -495,10 +499,13 @@ public class City extends GameObject implements ActiveObject {
     @Override
     public void setMarker(Marker m) {
         mark=m;
+        if (addMark==null){
+            addMark=map.addMarker(new MarkerOptions().position(m.getPosition()).icon(ImageLoader.getDescritor("route_finish")).visible(false));
+        }
         changeMarkerSize();
 
     }
-    LatLng latlng;
+    private LatLng latlng;
 
     @Override
     public LatLng getPosition() {
@@ -537,7 +544,21 @@ public class City extends GameObject implements ActiveObject {
 
             } else {
                 mark.setPosition(latlng);
+                addMark.setPosition(latlng);
 
+            }
+            if (zoneAdd==null){
+                CircleOptions circleOptions = new CircleOptions();
+                circleOptions.center(latlng);
+                circleOptions.radius(radius);
+                //circleOptions.zIndex(100);
+                //circleOptions.visible(false);
+                circleOptions.strokeColor(Color.BLACK);
+                circleOptions.strokeWidth(2*GameSettings.getMetric()+2);
+                zoneAdd = map.addCircle(circleOptions);
+            } else {
+                zoneAdd.setCenter(latlng);
+                zoneAdd.setRadius(radius);
             }
 
             if (zone == null) {
@@ -546,17 +567,14 @@ public class City extends GameObject implements ActiveObject {
                 circleOptions.radius(radius);
                 //circleOptions.zIndex(100);
                 //circleOptions.visible(false);
-                if (GameObjects.getPlayer().checkRoute(GUID)) circleOptions.strokeColor(Color.GRAY);
-                else circleOptions.strokeColor(Color.BLUE);
+                circleOptions.strokeColor(Color.GRAY);
                 circleOptions.strokeWidth(2*GameSettings.getMetric());
                 zone = map.addCircle(circleOptions);
             } else {
                 zone.setCenter(latlng);
                 zone.setRadius(radius);
-                if (GameObjects.getPlayer().checkRoute(GUID)) zone.setStrokeColor(Color.GRAY);
-                else zone.setStrokeColor(Color.BLUE);
-
             }
+
 
             if (buildZone == null) {
                 CircleOptions circleOptions = new CircleOptions();
@@ -582,6 +600,7 @@ public class City extends GameObject implements ActiveObject {
                 buildZone.setRadius(dist);
             }
             changeMarkerSize();
+            updateColor();
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -591,11 +610,10 @@ public class City extends GameObject implements ActiveObject {
     private boolean upgradeAvaible(){
         Upgrade up=GameObjects.getPlayer().getNextUpgrade(upgrade);
         int upcost= getUpgradeCost();
-        boolean result=!( (up.getReqCityLev() > Level)
+
+        return !( (up.getReqCityLev() > Level)
                 || (upcost >= GameObjects.getPlayer().getGold())
                 || (up.getLevel() > GameObjects.getPlayer().getLevel() - 1));
-
-        return result;
     }
     private float discount(){
 
@@ -635,15 +653,26 @@ public class City extends GameObject implements ActiveObject {
                 currentMarkName=markname;
             }
         }
+        if (addMark!=null){
+            String markName="route_finish";
+            markName=markName+GameObject.zoomToPostfix(MyGoogleMap.getClientZoom());
+            if (!markName.equals(addMarkName)){
+                addMark.setIcon(ImageLoader.getDescritor(markName));
+                addMark.setAnchor(0.5f, 0.1f);
+                addMarkName=markName;
+            }
+        }
         showBuildZone();
         showRadius();
     }
 
-
+    private boolean visibility;
     @Override
     public void setVisibility(boolean visibility) {
+        this.visibility=visibility;
         if (mark!=null) mark.setVisible(visibility);
         zone.setVisible(visibility);
+        zoneAdd.setVisible(visibility);
     }
     public void showBuildZone(){
         if (buildZone==null) return;
@@ -656,19 +685,21 @@ public class City extends GameObject implements ActiveObject {
         }
     }
     public void showRadius(){
-        if (zone==null) return;
+        if (zone==null || zoneAdd==null) return;
+
         String opt= GameSettings.getInstance().get("SHOW_CITY_RADIUS");
         if (opt.equals("Y") && MyGoogleMap.getClientZoom()!=ICON_SMALL){
-            zone.setVisible(true);
+            zone.setVisible(visibility);
+            zoneAdd.setVisible(visibility);
         } else
         {
             zone.setVisible(false);
+            zoneAdd.setVisible(false);
         }
     }
-    public void updateColor(){
-            if (!GameObjects.getPlayer().checkRoute(GUID)) zone.setStrokeColor(Color.BLUE);
-            else zone.setStrokeColor(Color.GRAY);
-
+    void updateColor(){
+        if (!GameObjects.getPlayer().checkRoute(GUID) && GameObjects.getPlayer().getRouteStart()) addMark.setVisible(visibility);
+        else addMark.setVisible(false);
     }
     private long getInfluence1() {
         return influence1;
@@ -682,15 +713,15 @@ public class City extends GameObject implements ActiveObject {
         return influence3;
     }
 
-    public boolean getOwner() {
+    boolean getOwner() {
         return owner;
     }
 
-    public void setOwner(boolean owner) {
+    void setOwner(boolean owner) {
         this.owner = owner;
     }
 
-    public void setFounder(String founder) {
+    void setFounder(String founder) {
         this.founder = founder;
     }
 
@@ -1004,8 +1035,8 @@ public class City extends GameObject implements ActiveObject {
                 @Override
                 public void onClick(View v) {
                     ObjectAction hire=new ObjectAction(city) {
-                        public int amount=currentCount;
-                        public int gold=0;
+                        int amount=currentCount;
+                        int gold=0;
                         @Override
                         public Bitmap getImage() {
                             return null;
