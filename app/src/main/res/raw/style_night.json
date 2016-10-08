@@ -52,6 +52,15 @@
     ]
   },
   {
+    "featureType": "landscape.man_made",
+    "elementType": "geometry.stroke",
+    "stylers": [
+      {
+        "visibility": "off"
+      }
+    ]
+  },
+  {
     "featureType": "landscape.natural",
     "elementType": "geometry.fill",
     "stylers": [
@@ -114,7 +123,6 @@
       }
     ]
   },
-
   {
     "featureType": "water",
     "elementType": "geometry.fill",
