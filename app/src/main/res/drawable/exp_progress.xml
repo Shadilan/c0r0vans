@@ -3,13 +3,13 @@
     <item android:id="@android:id/background">
         <shape>
             <size android:height="3dp"/>
-            <stroke android:color="@android:color/black" android:width="1dp"/>
-            <solid android:color="@color/backOp1"/>
+            <stroke android:color="@color/colorExp" android:width="1dp"/>
+            <solid android:color="@color/colorBack"/>
         </shape>
     </item>
     <item android:id="@android:id/progress">
         <clip>
-            <color android:color="@color/colorControls"/>
+            <color android:color="@color/colorExp"/>
         </clip>
     </item>
 </layer-list>

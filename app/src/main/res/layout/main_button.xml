@@ -11,8 +11,8 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_toLeftOf="@+id/QueueCnt"
-        android:layout_toStartOf="@+id/QueueCnt"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
         android:indeterminate="false"
         android:progress="50"
         android:max="100"
@@ -221,7 +221,9 @@
         android:layout_alignRight="@+id/settings"
         android:layout_alignEnd="@+id/settings"
         android:layout_marginBottom="5dp"
-        android:layout_marginRight="5dp" />
+        android:layout_marginRight="5dp"
+        android:layout_marginEnd="5dp"
+        />
 
     <TextView
         android:layout_width="wrap_content"

@@ -93,6 +93,18 @@ public class ButtonLayout extends RelativeLayout {
             findViewById(R.id.foundedTitle).setVisibility(VISIBLE);
             findViewById(R.id.foundedAmount).setVisibility(VISIBLE);
         }
+        if ("Y".equals(GameSettings.getValue("NIGHT_MODE"))){
+            TextView textView = (TextView) findViewById(R.id.ZoomCnt);
+            textView.setTextColor(Color.GRAY);
+            textView = (TextView) findViewById(R.id.QueueCnt);
+            textView.setTextColor(Color.GRAY);
+        } else
+        {
+            TextView textView = (TextView) findViewById(R.id.ZoomCnt);
+            textView.setTextColor(Color.BLACK);
+             textView = (TextView) findViewById(R.id.QueueCnt);
+            textView.setTextColor(Color.BLACK);
+        }
         GameSettings.addSettingsListener(new SettingsListener() {
             @Override
             public void onSettingsSave() {
@@ -109,6 +121,7 @@ public class ButtonLayout extends RelativeLayout {
                     findViewById(R.id.foundedTitle).setVisibility(GONE);
                     findViewById(R.id.foundedAmount).setVisibility(GONE);
                 }
+
             }
 
             @Override
@@ -122,6 +135,19 @@ public class ButtonLayout extends RelativeLayout {
                         findViewById(R.id.foundedTitle).setVisibility(GONE);
                         findViewById(R.id.foundedAmount).setVisibility(GONE);
                     }
+                }
+                else if ("NIGHT_MODE".equals(setting)){
+                    if ("Y".equals(GameSettings.getValue("NIGHT_MODE"))){
+                        zoomCnt.setTextColor(Color.GRAY);
+                        TextView textView = (TextView) findViewById(R.id.QueueCnt);
+                        textView.setTextColor(Color.GRAY);
+                    } else
+                    {
+                        zoomCnt.setTextColor(Color.BLACK);
+                        TextView textView = (TextView) findViewById(R.id.QueueCnt);
+                        textView.setTextColor(Color.BLACK);
+                    }
+
                 }
             }
         });
