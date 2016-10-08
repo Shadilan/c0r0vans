@@ -489,11 +489,10 @@ public class City extends GameObject implements ActiveObject {
 
     @Override
     public void RemoveObject() {
-        super.RemoveObject();
-        if (buildZone!=null){
-            buildZone.remove();
-            buildZone=null;
-        }
+        mark.remove();
+        zone.remove();
+        addMark.remove();
+        zoneAdd.remove();
     }
 
     @Override

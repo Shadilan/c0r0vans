@@ -44,7 +44,7 @@ public class GameObject {
     private int life;
     protected boolean owner=false;
 
-    public static String zoomToPostfix(float zoom){
+    protected static String zoomToPostfix(float zoom){
         String result;
         if (zoom==GameObject.ICON_SMALL)
             result = "_s";
@@ -205,6 +205,7 @@ public class GameObject {
             zone.remove();
             zone=null;
         }
+
 
 
     }
