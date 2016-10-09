@@ -106,7 +106,7 @@ public class City extends GameObject implements ActiveObject {
             @Override
             public void postAction(JSONObject response) {
                 GameSound.playSound(GameSound.START_ROUTE_SOUND);
-                Essages.addEssage(String.format(ctx.getResources().getString(R.string.route_started), Name));
+                Essages.addEssage(Essages.SYSTEM,String.format(ctx.getResources().getString(R.string.route_started), Name));
                 if (response.has("Route")){
                     try {
                         GameObjects.getPlayer().setCurrentRoute(new Caravan(MyGoogleMap.getMap(),response.getJSONObject("Route")));
@@ -133,26 +133,26 @@ public class City extends GameObject implements ActiveObject {
                     else err = "U0000";
                     switch (err) {
                         case "DB001":
-                            Essages.addEssage("Ошибка сервера.");
+                            Essages.addEssage(Essages.SYSTEM,"Ошибка сервера.");
                             break;
                         case "L0001":
-                            Essages.addEssage("Соединение потеряно.");
+                            Essages.addEssage(Essages.SYSTEM,"Соединение потеряно.");
                             GameObjects.getPlayer().setRouteStart(true);
                             break;
                         case "O0501":
-                            Essages.addEssage("Город не найден.");
+                            Essages.addEssage(Essages.SYSTEM,"Город не найден.");
                             break;
                         case "O0502":
-                            Essages.addEssage("Город далеко.");
+                            Essages.addEssage(Essages.SYSTEM,"Город далеко.");
                             break;
                         case "O0503":
-                            Essages.addEssage("Маршрут незакончен.");
+                            Essages.addEssage(Essages.SYSTEM,"Маршрут незакончен.");
                             break;
                         default:
                             GameObjects.getPlayer().setRouteStart(true);
                             if (response.has("Message"))
-                                Essages.addEssage(response.getString("Message"));
-                            else Essages.addEssage("Непредвиденная ошибка.");
+                                Essages.addEssage(Essages.SYSTEM,response.getString("Message"));
+                            else Essages.addEssage(Essages.SYSTEM,"Непредвиденная ошибка.");
 
                     }
                 }catch (JSONException e)
@@ -195,8 +195,8 @@ public class City extends GameObject implements ActiveObject {
             @Override
             public void postAction(JSONObject response) {
                 if (oldRoute !=null )
-                Essages.addEssage(String.format(ctx.getResources().getString(R.string.route_finish), oldRoute.getStartName(),Name));
-                else Essages.addEssage(String.format(ctx.getResources().getString(R.string.route_finish), "",Name));
+                Essages.addEssage(Essages.SYSTEM,String.format(ctx.getResources().getString(R.string.route_finish), oldRoute.getStartName(),Name));
+                else Essages.addEssage(Essages.SYSTEM,String.format(ctx.getResources().getString(R.string.route_finish), "",Name));
 
                 GameSound.playSound(GameSound.FINISH_ROUTE_SOUND);
                 serverConnect.getInstance().callGetPlayerInfo();
@@ -220,40 +220,40 @@ public class City extends GameObject implements ActiveObject {
                     else err = "U0000";
                     switch (err) {
                         case "DB001":
-                            Essages.addEssage("Ошибка сервера.");
+                            Essages.addEssage(Essages.SYSTEM,"Ошибка сервера.");
                             break;
                         case "L0001":
-                            Essages.addEssage("Соединение потеряно.");
+                            Essages.addEssage(Essages.SYSTEM,"Соединение потеряно.");
                             break;
                         case "O0601":
-                            Essages.addEssage("Город не найден.");
+                            Essages.addEssage(Essages.SYSTEM,"Город не найден.");
                             break;
                         case "O0602":
-                            Essages.addEssage("Город далеко.");
+                            Essages.addEssage(Essages.SYSTEM,"Город далеко.");
                             break;
                         case "O0603":
-                            Essages.addEssage("Маршрут не начат.");
+                            Essages.addEssage(Essages.SYSTEM,"Маршрут не начат.");
                             GameObjects.getPlayer().setRouteStart(true);
                             GameObjects.getPlayer().setCurrentRouteGUID("");
                             GameObjects.getPlayer().setCurrentRoute(null);
                             break;
                         case "O0604":
-                            Essages.addEssage("Такой маршрут уже есть.");
+                            Essages.addEssage(Essages.SYSTEM,"Такой маршрут уже есть.");
                             break;
                         case "O0605":
-                            Essages.addEssage("Маршрут начинается в этом городе.");
+                            Essages.addEssage(Essages.SYSTEM,"Маршрут начинается в этом городе.");
                             break;
                         case "O0606":
                             String msg;
                             if (response.has("Message")) msg=response.getString("Message");
                             else msg="Не достаточно наемников";
-                            Essages.addEssage(msg);
+                            Essages.addEssage(Essages.SYSTEM,msg);
                             ToastSend.send(msg);
                             break;
                         default:
                             if (response.has("Message"))
-                                Essages.addEssage(response.getString("Message"));
-                            else Essages.addEssage("Непредвиденная ошибка.");
+                                Essages.addEssage(Essages.SYSTEM,response.getString("Message"));
+                            else Essages.addEssage(Essages.SYSTEM,"Непредвиденная ошибка.");
 
                     }
                     updateColor();
@@ -292,10 +292,10 @@ public class City extends GameObject implements ActiveObject {
             @Override
             public void postAction(JSONObject response) {
                 if (oldRoute !=null )
-                    Essages.addEssage(String.format(ctx.getResources().getString(R.string.route_finish), oldRoute.getStartName(),Name));
-                else Essages.addEssage(String.format(ctx.getResources().getString(R.string.route_finish), "",Name));
+                    Essages.addEssage(Essages.SYSTEM,String.format(ctx.getResources().getString(R.string.route_finish), oldRoute.getStartName(),Name));
+                else Essages.addEssage(Essages.SYSTEM,String.format(ctx.getResources().getString(R.string.route_finish), "",Name));
                 GameSound.playSound(GameSound.START_ROUTE_SOUND);
-                Essages.addEssage(String.format(ctx.getResources().getString(R.string.route_started), Name));
+                Essages.addEssage(Essages.SYSTEM,String.format(ctx.getResources().getString(R.string.route_started), Name));
                 serverConnect.getInstance().callGetPlayerInfo();
 
                 for (GameObject o:GameObjects.getInstance().values()){
@@ -339,35 +339,35 @@ public class City extends GameObject implements ActiveObject {
                     else err = "U0000";
                     switch (err) {
                         case "DB001":
-                            Essages.addEssage("Ошибка сервера.");
+                            Essages.addEssage(Essages.SYSTEM,"Ошибка сервера.");
                             break;
                         case "L0001":
                             //TODO: Опасное место может надо всетаки отдавать управление при потере токена
-                            Essages.addEssage("Соединение потеряно.");
+                            Essages.addEssage(Essages.SYSTEM,"Соединение потеряно.");
                             break;
                         case "O0601":
-                            Essages.addEssage("Город не найден.");
+                            Essages.addEssage(Essages.SYSTEM,"Город не найден.");
                             break;
                         case "O0602":
-                            Essages.addEssage("Город далеко.");
+                            Essages.addEssage(Essages.SYSTEM,"Город далеко.");
                             break;
                         case "O0604":
-                            Essages.addEssage("Такой маршрут уже есть.");
+                            Essages.addEssage(Essages.SYSTEM,"Такой маршрут уже есть.");
                             break;
                         case "O0605":
-                            Essages.addEssage("Маршрут начинается в этом городе.");
+                            Essages.addEssage(Essages.SYSTEM,"Маршрут начинается в этом городе.");
                             break;
                         case "O0606":
                             String msg;
                             if (response.has("Message")) msg=response.getString("Message");
                             else msg="Не достаточно наемников";
-                            Essages.addEssage(msg);
+                            Essages.addEssage(Essages.SYSTEM,msg);
                             ToastSend.send(msg);
                             break;
                         default:
                             if (response.has("Message"))
-                                Essages.addEssage(response.getString("Message"));
-                            else Essages.addEssage("Непредвиденная ошибка.");
+                                Essages.addEssage(Essages.SYSTEM,response.getString("Message"));
+                            else Essages.addEssage(Essages.SYSTEM,"Непредвиденная ошибка.");
 
                     }
                     updateColor();
@@ -420,8 +420,8 @@ public class City extends GameObject implements ActiveObject {
                             GameObjects.getPlayer().getNextUpgrades().put(n.getType(),n);
                         }
                         Upgrade up = GameObjects.getPlayer().getUpgrade(upgrade);
-                        if (up != null) Essages.addEssage(String.format(ctx.getResources().getString(R.string.upgrade_bought),up.getName()));
-                        else Essages.addEssage(String.format(ctx.getResources().getString(R.string.upgrade_bought), upgrade));
+                        if (up != null) Essages.addEssage(Essages.SYSTEM,String.format(ctx.getResources().getString(R.string.upgrade_bought),up.getName()));
+                        else Essages.addEssage(Essages.SYSTEM,String.format(ctx.getResources().getString(R.string.upgrade_bought), upgrade));
                         serverConnect.getInstance().callScanRange();
                     } else postError(response);
 
@@ -443,36 +443,36 @@ public class City extends GameObject implements ActiveObject {
                     else err="U0000";
                     switch (err){
                         case "DB001":
-                            Essages.addEssage("Ошибка сервера.");
+                            Essages.addEssage(Essages.SYSTEM,"Ошибка сервера.");
                             break;
                         case "L0001":
-                            Essages.addEssage("Соединение потеряно.");
+                            Essages.addEssage(Essages.SYSTEM,"Соединение потеряно.");
                             break;
                         case "O0701":
-                            Essages.addEssage("Город не найден.");
+                            Essages.addEssage(Essages.SYSTEM,"Город не найден.");
                             break;
                         case "O0702":
-                            Essages.addEssage("Город слишком далеко.");
+                            Essages.addEssage(Essages.SYSTEM,"Город слишком далеко.");
                             break;
                         case "O0703":
                             ToastSend.send("Не хватает золота на оплату обучения.");
-                            Essages.addEssage("Не хватает золота на оплату обучения.");
+                            Essages.addEssage(Essages.SYSTEM,"Не хватает золота на оплату обучения.");
                             break;
                         case "O0704":
                             ToastSend.send("Город слишком мал.");
-                            Essages.addEssage("Город слишком мал.");
+                            Essages.addEssage(Essages.SYSTEM,"Город слишком мал.");
 
                             break;
                         case "O0705":
                             ToastSend.send("Не достаточно уровня для изучения умения.");
-                            Essages.addEssage("Не достаточно уровня для изучения умения.");
+                            Essages.addEssage(Essages.SYSTEM,"Не достаточно уровня для изучения умения.");
                             break;
                         case "O0706":
                             ToastSend.send("Вы уже обучились максимальному навыку.");
-                            Essages.addEssage("Вы уже обучились максимальному навыку.");
+                            Essages.addEssage(Essages.SYSTEM,"Вы уже обучились максимальному навыку.");
                         default:
-                            if (response.has("Message")) Essages.addEssage(response.getString("Message"));
-                            else Essages.addEssage("Непредвиденная ошибка.");
+                            if (response.has("Message")) Essages.addEssage(Essages.SYSTEM,response.getString("Message"));
+                            else Essages.addEssage(Essages.SYSTEM,"Непредвиденная ошибка.");
 
                     }
                 } catch (JSONException e) {
@@ -922,8 +922,8 @@ public class City extends GameObject implements ActiveObject {
                                                 GameObjects.getPlayer().getNextUpgrades().put(n.getType(),n);
                                             }
                                             Upgrade up = GameObjects.getPlayer().getUpgrade(upgrade);
-                                            if (up != null) Essages.addEssage(String.format(getContext().getResources().getString(R.string.upgrade_bought),up.getName()));
-                                            else Essages.addEssage(String.format(getContext().getResources().getString(R.string.upgrade_bought), upgrade));
+                                            if (up != null) Essages.addEssage(Essages.SYSTEM,String.format(getContext().getResources().getString(R.string.upgrade_bought),up.getName()));
+                                            else Essages.addEssage(Essages.SYSTEM,String.format(getContext().getResources().getString(R.string.upgrade_bought), upgrade));
                                             update();
                                             serverConnect.getInstance().callScanRange();
                                         } else postError(response);
@@ -946,36 +946,36 @@ public class City extends GameObject implements ActiveObject {
                                         else err="U0000";
                                         switch (err){
                                             case "DB001":
-                                                Essages.addEssage("Ошибка сервера.");
+                                                Essages.addEssage(Essages.SYSTEM,"Ошибка сервера.");
                                                 break;
                                             case "L0001":
-                                                Essages.addEssage("Соединение потеряно.");
+                                                Essages.addEssage(Essages.SYSTEM,"Соединение потеряно.");
                                                 break;
                                             case "O0701":
-                                                Essages.addEssage("Город не найден.");
+                                                Essages.addEssage(Essages.SYSTEM,"Город не найден.");
                                                 break;
                                             case "O0702":
-                                                Essages.addEssage("Город слишком далеко.");
+                                                Essages.addEssage(Essages.SYSTEM,"Город слишком далеко.");
                                                 break;
                                             case "O0703":
                                                 ToastSend.send("Не хватает золота на оплату обучения.");
-                                                Essages.addEssage("Не хватает золота на оплату обучения.");
+                                                Essages.addEssage(Essages.SYSTEM,"Не хватает золота на оплату обучения.");
                                                 break;
                                             case "O0704":
                                                 ToastSend.send("Город слишком мал.");
-                                                Essages.addEssage("Город слишком мал.");
+                                                Essages.addEssage(Essages.SYSTEM,"Город слишком мал.");
 
                                                 break;
                                             case "O0705":
                                                 ToastSend.send("Не достаточно уровня для изучения умения.");
-                                                Essages.addEssage("Не достаточно уровня для изучения умения.");
+                                                Essages.addEssage(Essages.SYSTEM,"Не достаточно уровня для изучения умения.");
                                                 break;
                                             case "O0706":
                                                 ToastSend.send("Вы уже обучились максимальному навыку.");
-                                                Essages.addEssage("Вы уже обучились максимальному навыку.");
+                                                Essages.addEssage(Essages.SYSTEM,"Вы уже обучились максимальному навыку.");
                                             default:
-                                                if (response.has("Message")) Essages.addEssage(response.getString("Message"));
-                                                else Essages.addEssage("Непредвиденная ошибка.");
+                                                if (response.has("Message")) Essages.addEssage(Essages.SYSTEM,response.getString("Message"));
+                                                else Essages.addEssage(Essages.SYSTEM,"Непредвиденная ошибка.");
 
                                         }
                                     } catch (JSONException e) {
@@ -1068,7 +1068,7 @@ public class City extends GameObject implements ActiveObject {
                                 if (response.has("Result") && "OK".equals(response.getString("Result"))) {
                                     GameSound.playSound(GameSound.BUY_SOUND);
                                     GameObjects.getPlayer().setHirelings(GameObjects.getPlayer().getHirelings()+amount);
-                                    Essages.addEssage("Нанято "+amount+" чел. за "+gold+" золота.");
+                                    Essages.addEssage(Essages.SYSTEM,"Нанято "+amount+" чел. за "+gold+" золота.");
                                     serverConnect.getInstance().callScanRange();
                                 } else
                                 {
@@ -1090,28 +1090,28 @@ public class City extends GameObject implements ActiveObject {
                                 switch (err){
                                     case "L0001":
                                         //todo:Сделать вызов логина;
-                                        Essages.addEssage("Связь с сервером потеряна. Перезапустите приложение.");
+                                        Essages.addEssage(Essages.SYSTEM,"Связь с сервером потеряна. Перезапустите приложение.");
                                         break;
                                     case "O1301":
-                                        Essages.addEssage("Действие не выполнено. Такого города не существует.");
+                                        Essages.addEssage(Essages.SYSTEM,"Действие не выполнено. Такого города не существует.");
                                         break;
                                     case "O1302":
-                                        Essages.addEssage("Вы находитесь слишком далеко от города.");
+                                        Essages.addEssage(Essages.SYSTEM,"Вы находитесь слишком далеко от города.");
                                         break;
                                     case "O1303":
-                                        Essages.addEssage("Недостаточно денег для покупки.");
+                                        Essages.addEssage(Essages.SYSTEM,"Недостаточно денег для покупки.");
                                         break;
                                     case "O1304":
-                                        Essages.addEssage("Не хватает лидерства для покупки.");
+                                        Essages.addEssage(Essages.SYSTEM,"Не хватает лидерства для покупки.");
                                         break;
                                     default:
-                                        if (response.has("Message")) Essages.addEssage(response.getString("Message"));
-                                        else Essages.addEssage("Неопределенная ошибка");
+                                        if (response.has("Message")) Essages.addEssage(Essages.SYSTEM,response.getString("Message"));
+                                        else Essages.addEssage(Essages.SYSTEM,"Неопределенная ошибка");
 
                                 }
                             } else
                             {
-                                Essages.addEssage("Неопределенная ошибка");
+                                Essages.addEssage(Essages.SYSTEM,"Неопределенная ошибка");
                             }
                             } catch (JSONException e) {
                                 GATracker.trackException("Hire","ErrorAction Error JSON");

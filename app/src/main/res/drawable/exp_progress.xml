@@ -4,12 +4,14 @@
         <shape>
             <size android:height="3dp"/>
             <stroke android:color="@color/colorExp" android:width="1dp"/>
-            <solid android:color="@color/colorBack"/>
+            <solid android:color="@color/colorExp"/>
         </shape>
     </item>
     <item android:id="@android:id/progress">
-        <clip>
-            <color android:color="@color/colorExp"/>
-        </clip>
+        <shape>
+            <size android:height="3dp"/>
+            <stroke android:color="@color/colorBack" android:width="1dp"/>
+            <solid android:color="@color/colorBack"/>
+        </shape>
     </item>
 </layer-list>

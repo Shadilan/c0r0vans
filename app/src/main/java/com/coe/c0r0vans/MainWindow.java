@@ -505,6 +505,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
             UIControler.setActionLayout((ActionView) findViewById(R.id.actionView));
             lay.removeAllViews();
             GameSound.setVolumeControlStream(self);
+            Essages.init();
             MessageMap.init(getApplicationContext());
 
             ((ActionView)findViewById(R.id.actionView)).init();
@@ -587,7 +588,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                     }
                     if (errorMsg.equals("")) errorMsg = errorText;
                     if (!"Unexpected Response".equals(errorText) || "Y".equals(GameSettings.getInstance().get("SHOW_NETWORK_ERROR")))
-                        Essages.addEssage(errorMsg);
+                        Essages.addEssage(Essages.SYSTEM,errorMsg);
                     GATracker.trackException("NetworkError",errorMsg);
                 } catch (Exception e){
                     GATracker.trackException("NetworkError",e);
@@ -942,7 +943,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
             } else if (!MyGoogleMap.isMoveFixed()) {
                 MyGoogleMap.stopShowPoint();
             } else {
-                Essages.addEssage("Для выхода из приложения используйте кнопку Home.");
+                Essages.addEssage(Essages.SYSTEM,"Для выхода из приложения используйте кнопку Home.");
                 GATracker.trackHit("System","BackPressed");
             }
         } catch (Exception e)

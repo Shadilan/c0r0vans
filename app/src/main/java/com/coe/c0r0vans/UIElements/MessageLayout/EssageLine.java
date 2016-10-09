@@ -1,4 +1,4 @@
-package com.coe.c0r0vans.UIElements;
+package com.coe.c0r0vans.UIElements.MessageLayout;
 
 import android.content.Context;
 import android.util.AttributeSet;
@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.coe.c0r0vans.GameObjects.Message;
 import com.coe.c0r0vans.R;
+import com.coe.c0r0vans.ShowHideForm;
 import com.coe.c0r0vans.Singles.MyGoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 
@@ -16,6 +17,7 @@ import java.util.Date;
 
 import utility.GATracker;
 import utility.StringUtils;
+import utility.notification.Essages;
 
 /**
  * Строка Сообщения
@@ -26,14 +28,20 @@ public class EssageLine extends LinearLayout{
     private ImageButton showButton;
     private String txt="";
     private LatLng point;
-    private LinearLayout parentForm;
+    private ShowHideForm parentForm;
     private EssageLine current;
     private Message msg;
+    public void hide(){
+        setVisibility(INVISIBLE);
+    }
+    public void show(){
+        setVisibility(VISIBLE);
+    }
 
 
 
-    public void setParentForm(LinearLayout form){
-        parentForm=form; removeButton.setVisibility(VISIBLE);
+    public void setParentForm(ShowHideForm form){
+        parentForm=form;
 
     }
     public void setText(String text){
@@ -49,9 +57,11 @@ public class EssageLine extends LinearLayout{
     public void setText(Message text){
         point=text.getTarget();
         if (showButton!=null && point!=null) showButton.setVisibility(VISIBLE);
+        else showButton.setVisibility(INVISIBLE);
         txt=StringUtils.dateToStr(text.getTime()) + ":" + text.getMessage();
         if (this.text!=null) this.text.setText(txt);
         msg=text;
+        setVisibility(VISIBLE);
     }
 
     public void setPoint(LatLng point){
@@ -98,8 +108,10 @@ public class EssageLine extends LinearLayout{
             @Override
             public void onClick(View v) {
                 try {
-                    parentForm.removeView(current);
-                    if (msg != null) msg.remove();
+                    if (msg != null) Essages.remove(msg);;
+                    hide();
+                    if (parentForm !=null && parentForm instanceof MessageLayout) ((MessageLayout) parentForm).refresh();
+
                 } catch (Exception e){
                     GATracker.trackException("RemoveMessage","AfterInit");
                 }
@@ -110,15 +122,13 @@ public class EssageLine extends LinearLayout{
             @Override
             public void onClick(View v) {
                 if (point!=null) {
+                    if (parentForm!=null) parentForm.Hide();
                     MyGoogleMap.showPoint(point);
                 }
             }
         });
-
         if (point!=null) showButton.setVisibility(VISIBLE);
-        if (parentForm!=null) {
-            removeButton.setVisibility(VISIBLE);
-        }
+        removeButton.setVisibility(VISIBLE);
 
 
     }

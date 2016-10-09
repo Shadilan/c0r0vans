@@ -37,8 +37,10 @@ public class RouteInfoLine extends RelativeLayout {
     public void setData(Caravan r){
         if (r==null) return;
         point=r.getPosition();
+
         startCity=r.getStartPoint();
         endCity=r.getFinishPoint();
+        if (endCity==null && startCity!=null) point=startCity;
 
         if (lengthView!=null)
             if (r.getDistance()>0) lengthView.setText(String.format(getContext().getString(R.string.route_info_line), r.getDistance(), StringUtils.intToStr(r.getProfit()),StringUtils.intToStr(r.getTime())));

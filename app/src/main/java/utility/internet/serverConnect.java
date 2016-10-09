@@ -639,7 +639,7 @@ public class serverConnect {
                                 else if (response.has("Result")) err = response.getString("Result");
                                 if ("No player found.".equals(err) || "L0001".equals(err) || "DB001".equals(err)) {
                                     Token=null;
-                                    Essages.addEssage("Восстанавливаем соединение.");
+                                    Essages.addEssage(Essages.SYSTEM,"Восстанавливаем соединение.");
                                     SignIn.setListener(new SignInListener() {
                                         @Override
                                         public void onComplete(String token) {
@@ -697,15 +697,15 @@ public class serverConnect {
 
                                             switch (err) {
                                                 case "L0001":
-                                                    Essages.addEssage("Потеря соединения. Перезапустите клиента.");
+                                                    Essages.addEssage(Essages.SYSTEM,"Потеря соединения. Перезапустите клиента.");
                                                     break;
                                                 case "O1101":
-                                                    Essages.addEssage("Вы выбрали не существующую фракцию.");
+                                                    Essages.addEssage(Essages.SYSTEM,"Вы выбрали не существующую фракцию.");
                                                     break;
                                                 default:
                                                     if (response.has("Message"))
-                                                        Essages.addEssage(response.getString("Message"));
-                                                    else Essages.addEssage("Неизвестная ошибка");
+                                                        Essages.addEssage(Essages.SYSTEM,response.getString("Message"));
+                                                    else Essages.addEssage(Essages.SYSTEM,"Неизвестная ошибка");
                                             }
                                             //todo:Связность кода - плохо
                                             GameObjects.getPlayer().setRace(0);

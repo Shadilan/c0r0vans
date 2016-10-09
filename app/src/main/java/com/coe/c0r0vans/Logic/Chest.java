@@ -185,7 +185,7 @@ public class Chest extends GameObject implements ActiveObject {
                                 int gold=response.getInt("Gold");
                                 GameObjects.getPlayer().setGold(GameObjects.getPlayer().getGold()+gold);
                                 ToastSend.send("Получено "+gold+" золота.");
-                                Essages.addEssage("В сундуке обнаружено "+gold+" золота.");
+                                Essages.addEssage(Essages.SYSTEM,"В сундуке обнаружено "+gold+" золота.");
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
@@ -197,7 +197,7 @@ public class Chest extends GameObject implements ActiveObject {
                                 GameObjects.getPlayer().setGold(GameObjects.getPlayer().getGold()+obsidian);
                                 //TODO: Extract resources
                                 ToastSend.send(String.format("Получено одсидиана:%1$d.", obsidian));
-                                Essages.addEssage(String.format("Получено одсидиана:%1$d.", obsidian));
+                                Essages.addEssage(Essages.SYSTEM,String.format("Получено одсидиана:%1$d.", obsidian));
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
@@ -218,24 +218,24 @@ public class Chest extends GameObject implements ActiveObject {
                             else err = "U0000";
                             switch (err) {
                                 case "DB001":
-                                    Essages.addEssage("Ошибка сервера.");
+                                    Essages.addEssage(Essages.SYSTEM,"Ошибка сервера.");
                                     break;
                                 case "L0001":
-                                    Essages.addEssage("Соединение потеряно.");
+                                    Essages.addEssage(Essages.SYSTEM,"Соединение потеряно.");
                                     break;
                                 case "O1401":
-                                    Essages.addEssage("Сундук пуст.");
+                                    Essages.addEssage(Essages.SYSTEM,"Сундук пуст.");
                                     forceRemove();
                                     setVisibility(false);
                                     ToastSend.send("Пусто.");
                                     break;
                                 case "O1402":
-                                    Essages.addEssage("Сундук слишком далеко.");
+                                    Essages.addEssage(Essages.SYSTEM,"Сундук слишком далеко.");
                                     break;
                                 default:
                                     if (response.has("Message"))
-                                        Essages.addEssage(response.getString("Message"));
-                                    else Essages.addEssage("Непредвиденная ошибка.");
+                                        Essages.addEssage(Essages.SYSTEM,response.getString("Message"));
+                                    else Essages.addEssage(Essages.SYSTEM,"Непредвиденная ошибка.");
 
                             }
                         }catch (JSONException e)

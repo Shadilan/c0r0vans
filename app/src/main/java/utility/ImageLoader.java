@@ -137,7 +137,7 @@ public class ImageLoader {
     public static Bitmap getImage(String name){
         Bitmap result=images.get(name);
         if (result==null) {
-            Essages.addEssage("Изображение " + name + " не найдено.");
+            Essages.addEssage(Essages.SYSTEM,"Изображение " + name + " не найдено.");
             GATracker.trackException("ImageLoader","ImageNoteFound:"+name);
             result=images.get("unknown");
         }
@@ -150,7 +150,7 @@ public class ImageLoader {
         //BitmapDescriptor result=BitmapDescriptorFactory.fromBitmap(markers.get(name));
         if (result==null) {
             GATracker.trackException("ImageLoader","ImageNoteFound:"+name);
-            Essages.addEssage("Изображение объекта "+name + " не найдено.");
+            Essages.addEssage(Essages.SYSTEM,"Изображение объекта "+name + " не найдено.");
             result=BitmapDescriptorFactory.fromBitmap(images.get("unknown"));
         }
 

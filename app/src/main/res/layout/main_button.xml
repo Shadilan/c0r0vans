@@ -71,6 +71,17 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/QueueCnt"
+        android:layout_alignBottom="@+id/settings"
+        android:layout_alignRight="@+id/settings"
+        android:layout_alignEnd="@+id/settings"
+        android:layout_marginBottom="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginEnd="5dp"
+        />
     <TableLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -158,10 +169,16 @@
         android:paddingLeft="10dp"
         android:id="@+id/zoomButton"
         android:src="@mipmap/zoombutton"
-        android:layout_above="@+id/chatGroup"
+        android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
-
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/ZoomCnt"
+        android:layout_alignParentBottom="true"
+        android:layout_alignRight="@+id/QueueCnt"
+        android:layout_alignEnd="@+id/QueueCnt" />
 
 
 
@@ -173,64 +190,46 @@
         android:layout_centerHorizontal="true"
         android:visibility="invisible"
         android:src="@mipmap/closebutton" />
-    <LinearLayout
-        android:layout_width="match_parent"
+
+    <ImageView
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:id="@+id/chatGroup"
+        android:layout_gravity="end|top"
+        android:padding="10dp"
+        android:minHeight="40dp"
+        android:maxHeight="40dp"
+        android:minWidth="40dp"
+        android:maxWidth="40dp"
+        android:paddingRight="10dp"
+        android:paddingLeft="10dp"
+        android:id="@+id/mailButton"
+        android:src="@mipmap/mail"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true">
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:src="@mipmap/show"
-            android:id="@+id/showButton" />
-
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/imageView2"
-            android:src="@color/colorControls" />
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@android:color/white"
-            android:layout_gravity="bottom"
-            android:id="@+id/scrollView">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/chatBox"
-                android:scrollbarAlwaysDrawVerticalTrack="true"
-                android:gravity="bottom"
-                android:background="@color/backOp1"
-                android:focusable="true"
-                android:orientation="vertical" />
-        </ScrollView>
-    </LinearLayout>
-
+        android:layout_alignParentStart="true" />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/QueueCnt"
-        android:layout_alignBottom="@+id/settings"
-        android:layout_alignRight="@+id/settings"
-        android:layout_alignEnd="@+id/settings"
-        android:layout_marginBottom="5dp"
-        android:layout_marginRight="5dp"
-        android:layout_marginEnd="5dp"
+        android:id="@+id/mailCnt"
+        android:layout_alignParentBottom="true"
+        android:layout_alignRight="@+id/mailButton"
+        android:layout_alignEnd="@+id/mailButton" />
+
+    <com.coe.c0r0vans.UIElements.MessageLayout.EssageLine
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_toStartOf="@id/zoomButton"
+        android:layout_toRightOf="@id/zoomButton"
+        android:layout_toEndOf="@id/mailButton"
+        android:layout_toLeftOf="@id/mailButton"
+        android:background="@color/backOp1"
+        android:id="@+id/essage"
+        android:visibility="invisible"
         />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/ZoomCnt"
-        android:layout_above="@+id/chatGroup"
-        android:layout_alignRight="@+id/QueueCnt"
-        android:layout_alignEnd="@+id/QueueCnt" />
+
+
+
 
 </RelativeLayout>

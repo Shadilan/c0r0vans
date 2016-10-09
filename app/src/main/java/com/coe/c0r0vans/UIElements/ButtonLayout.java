@@ -23,6 +23,8 @@ import com.coe.c0r0vans.R;
 import com.coe.c0r0vans.Singles.GameObjects;
 import com.coe.c0r0vans.Singles.MyGoogleMap;
 import com.coe.c0r0vans.UIElements.InfoLayout.InfoLayout;
+import com.coe.c0r0vans.UIElements.MessageLayout.EssageLine;
+import com.coe.c0r0vans.UIElements.MessageLayout.MessageLayout;
 
 import org.json.JSONObject;
 
@@ -41,6 +43,7 @@ import utility.settings.SettingsListener;
 public class ButtonLayout extends RelativeLayout {
     private InfoLayout infoLayout;
     private ScrollView scrollView;
+    private MessageLayout messageLayout;
     //События должны приходить на основной слой
 
     public ButtonLayout(Context context) {
@@ -98,11 +101,15 @@ public class ButtonLayout extends RelativeLayout {
             textView.setTextColor(Color.GRAY);
             textView = (TextView) findViewById(R.id.QueueCnt);
             textView.setTextColor(Color.GRAY);
+            textView = (TextView) findViewById(R.id.mailCnt);
+            textView.setTextColor(Color.GRAY);
         } else
         {
             TextView textView = (TextView) findViewById(R.id.ZoomCnt);
             textView.setTextColor(Color.BLACK);
-             textView = (TextView) findViewById(R.id.QueueCnt);
+            textView = (TextView) findViewById(R.id.QueueCnt);
+            textView.setTextColor(Color.BLACK);
+            textView = (TextView) findViewById(R.id.mailCnt);
             textView.setTextColor(Color.BLACK);
         }
         GameSettings.addSettingsListener(new SettingsListener() {
@@ -155,7 +162,7 @@ public class ButtonLayout extends RelativeLayout {
             @Override
             public boolean onLongClick(View v) {
                 try {
-                    Essages.addEssage("Принудительная загрузка.");
+                    Essages.addEssage(Essages.SYSTEM,"Принудительная загрузка.");
                     serverConnect.getInstance().clearQueue();
                     //Run Refresh
                     serverConnect.getInstance().callScanRange();
@@ -212,36 +219,25 @@ public class ButtonLayout extends RelativeLayout {
                 loadFromPlayer();
             }
         });
-        LinearLayout logView = (LinearLayout) findViewById(R.id.chatBox);
+
         scrollView= (ScrollView) findViewById(R.id.scrollView);
         if (scrollView!=null) scrollView.getLayoutParams().height=60;
-        ImageView logButton = (ImageView) findViewById(R.id.showButton);
+        ImageView logButton = (ImageView) findViewById(R.id.mailButton);
+        messageLayout = new MessageLayout(getContext());
         if (logButton !=null) logButton.setOnClickListener(new View.OnClickListener() {
-            private boolean show = false;
 
             @Override
             public void onClick(View v) {
                 try {
-                    WindowManager windowManager = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
-
-                    if (show) {
-                        show = false;
-                        DisplayMetrics dm = new DisplayMetrics();
-                        windowManager.getDefaultDisplay().getMetrics(dm);
-                        scrollView.getLayoutParams().height = dm.heightPixels / 2;
-                        scrollView.requestLayout();
-
-                    } else {
-                        show = true;
-                        scrollView.getLayoutParams().height = 60;
-                        scrollView.requestLayout();
-                    }
+                    messageLayout.Show();
+                    TextView mailCnt= (TextView) findViewById(R.id.mailCnt);
+                    mailCnt.setText("");
                 }catch (Exception e){
                     GATracker.trackException("OpenMessages",e);
                 }
             }
         });
-        Essages.setTarget(logView);
+        Essages.setTarget((EssageLine) findViewById(R.id.essage), (TextView) findViewById(R.id.mailCnt));
         serverConnect.getInstance().addListener(new ServerListener() {
             @Override
             public void onResponse(int TYPE, JSONObject response) {

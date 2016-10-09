@@ -119,7 +119,10 @@
     "elementType": "geometry.stroke",
     "stylers": [
       {
-        "visibility": "off"
+        "color": "#ffe4b4"
+      },
+      {
+        "visibility": "on"
       }
     ]
   },
@@ -128,7 +131,10 @@
     "elementType": "geometry.stroke",
     "stylers": [
       {
-        "visibility": "off"
+        "color": "#ffe4b4"
+      },
+      {
+        "visibility": "on"
       }
     ]
   },
@@ -137,7 +143,10 @@
     "elementType": "geometry.stroke",
     "stylers": [
       {
-        "visibility": "off"
+        "color": "#ffe4b4"
+      },
+      {
+        "visibility": "on"
       }
     ]
   },
@@ -146,7 +155,10 @@
     "elementType": "geometry.stroke",
     "stylers": [
       {
-        "visibility": "off"
+        "color": "#ffe4b4"
+      },
+      {
+        "visibility": "on"
       }
     ]
   },
@@ -155,7 +167,10 @@
     "elementType": "geometry.stroke",
     "stylers": [
       {
-        "visibility": "off"
+        "color": "#ffe4b4"
+      },
+      {
+        "visibility": "on"
       }
     ]
   },

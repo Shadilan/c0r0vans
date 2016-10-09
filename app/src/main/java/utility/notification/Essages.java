@@ -2,9 +2,11 @@ package utility.notification;
 
 
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.coe.c0r0vans.GameObjects.Message;
-import com.coe.c0r0vans.UIElements.EssageLine;
+import com.coe.c0r0vans.Singles.MessageMap;
+import com.coe.c0r0vans.UIElements.MessageLayout.EssageLine;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -16,28 +18,41 @@ import utility.MainThread;
  *         Class to show messages that system return
  */
 public class Essages {
-    private static LinearLayout target;
-
+    private static EssageLine target;
+    private static ArrayList<Message> alert;
     private static ArrayList<Message> list;
+
+    public static final int ALERT =1;
+    public static final int SYSTEM =0;
+
     public static void clear(){
         if (list!=null && list.size()>0) {
             list.clear();
-            target.removeAllViews();
         }
+        if (alert!=null && alert.size()>0) {
+            alert.clear();
+        }
+        if (target!=null){
+            target.hide();
+        }
+        MessageMap.clearAll();
     }
-    public static void setTarget(LinearLayout target){
+    private static TextView essageCount;
+    public static void setTarget(EssageLine target, TextView cnt){
         Essages.target=target;
-        if (list!=null && list.size()>0){
-            for (Message msg:list){
-                EssageLine line=new EssageLine(target.getContext());
-                line.setText(msg);
-                line.setParentForm(target);
-                target.addView(line, 0);
-            }
-            list.clear();
-        }
+        essageCount=cnt;
+
     }
 
+    public static void remove(Message msg) {
+        list.remove(msg);
+        alert.remove(msg);
+    }
+
+    public static void init() {
+        if (alert==null) alert=new ArrayList<>();
+        if (list==null) list=new ArrayList<>();
+    }
 
 
     private static class MyRunnable implements Runnable{
@@ -45,15 +60,15 @@ public class Essages {
         public MyRunnable(Message msg){
             this.msg=msg;
 
+
         }
         @Override
         public void run() {
             if (target!=null) {
-                EssageLine line = new EssageLine(target.getContext());
-                line.setText(msg);
-                line.setParentForm(target);
-                target.addView(line, 0);
+                target.setText(msg);
+                target.setParentForm(null);
             }
+
         }
     }
     /**
@@ -61,16 +76,39 @@ public class Essages {
      *
      * @param text Text to add
      */
-    public static void addEssage(String text) {
+    public static void addEssage(int type,String text) {
         Message msg=new Message(text);
-        addEssage(msg);
+        addEssage(type,msg);
     }
-    public static void addEssage(Date time,String text) {
+    public static void addEssage(int type,Date time,String text) {
         Message msg=new Message(text,time);
-        addEssage(msg);
+        addEssage(type,msg);
     }
-    public static void addEssage(Message msg){
+    public static void addEssage(int type,Message msg){
         MainThread.post(new MyRunnable(msg));
         if (msg.notify) MessageNotification.notify(msg.getMessage(), msg.getType());
+        if (type==ALERT){
+            if (alert==null) alert=new ArrayList<>();
+            alert.add(msg);
+            if (essageCount!=null) {
+                String t = essageCount.getText().toString();
+                int cnt = 0;
+                if ("".equals(t) || t == null) cnt = 1;
+                else cnt = Integer.getInteger(t) + 1;
+                essageCount.setText(String.valueOf(cnt));
+            }
+
+        } else if (type==SYSTEM){
+            if (list==null) list=new ArrayList<>();
+            list.add(msg);
+        }
+
+    }
+
+    public static ArrayList<Message> getAlertList() {
+        return alert;
+    }
+    public static ArrayList<Message> getSystemList() {
+        return list;
     }
 }

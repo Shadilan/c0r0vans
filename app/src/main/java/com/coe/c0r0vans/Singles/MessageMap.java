@@ -52,7 +52,7 @@ public class MessageMap {
                         if (!"".equals(sptext))  loadJSON(new JSONObject(sptext));
                     } catch (JSONException e) {
                         if ("Y".equals(GameSettings.getInstance().get("SHOW_NETWORK_ERROR")))
-                            Essages.addEssage("Error Loading:"+ e.toString());
+                            Essages.addEssage(Essages.SYSTEM,"Error Loading:"+ e.toString());
                         GATracker.trackException("MessageSubsystem",e);
 
                     }
@@ -83,7 +83,7 @@ public class MessageMap {
 
                 if (put(message)){
                     message.notify=!load;
-                    Essages.addEssage(message);
+                    Essages.addEssage(Essages.ALERT,message);
                 }
             }
             if (jsonArray.length()>0){

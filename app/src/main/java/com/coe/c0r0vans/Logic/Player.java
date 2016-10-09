@@ -129,7 +129,7 @@ public class Player extends GameObject {
 
             @Override
             public void postAction(JSONObject response) {
-                Essages.addEssage("Незаконченый маршрут отменен.");
+                Essages.addEssage(Essages.SYSTEM,"Незаконченый маршрут отменен.");
             }
             @Override
             public void postError(JSONObject response) {
@@ -144,21 +144,21 @@ public class Player extends GameObject {
                     GameObjects.getPlayer().setRouteStart(true);
                     switch (err) {
                         case "DB001":
-                            Essages.addEssage("Ошибка сервера.");
+                            Essages.addEssage(Essages.SYSTEM,"Ошибка сервера.");
                             break;
                         case "L0001":
-                            Essages.addEssage("Соединение потеряно.");
+                            Essages.addEssage(Essages.SYSTEM,"Соединение потеряно.");
                             break;
                         case "O0801":
-                            Essages.addEssage("Маршрут не найден.");
+                            Essages.addEssage(Essages.SYSTEM,"Маршрут не найден.");
                             GameObjects.getPlayer().setCurrentRouteGUID(null);
                             GameObjects.getPlayer().setRouteStart(true);
                             setCurrentRoute(null);
                             break;
                         default:
                             if (response.has("Message"))
-                                Essages.addEssage(response.getString("Message"));
-                            else Essages.addEssage("Непредвиденная ошибка.");
+                                Essages.addEssage(Essages.SYSTEM,response.getString("Message"));
+                            else Essages.addEssage(Essages.SYSTEM,"Непредвиденная ошибка.");
 
                     }
                 }catch (JSONException e)
@@ -175,7 +175,7 @@ public class Player extends GameObject {
                 } catch (JSONException e) {
                     GATracker.trackException("DropRoute",e);
                 }
-                Essages.addEssage(message);
+                Essages.addEssage(Essages.SYSTEM,message);
             }
         };
         race=GameSettings.getFaction();
@@ -776,7 +776,7 @@ public class Player extends GameObject {
                     GameSound.playSound(GameSound.SET_AMBUSH);
 
 
-                    Essages.addEssage("Засада создана.");
+                    Essages.addEssage(Essages.SYSTEM,"Засада создана.");
                     if (response.has("Ambush")){
 
                         try {
@@ -807,28 +807,28 @@ public class Player extends GameObject {
                         else err="U0000";
                         switch (err){
                             case "DB001":
-                                Essages.addEssage("Ошибка сервера.");
+                                Essages.addEssage(Essages.SYSTEM,"Ошибка сервера.");
                                 break;
                             case "L0001":
-                                Essages.addEssage("Соединение потеряно.");
+                                Essages.addEssage(Essages.SYSTEM,"Соединение потеряно.");
                                 break;
                             case "O0201":
-                                Essages.addEssage("Неподходящее место для засады.");
+                                Essages.addEssage(Essages.SYSTEM,"Неподходящее место для засады.");
                                 break;
                             case "O0202":
-                                Essages.addEssage("Засада слишком далеко.");
+                                Essages.addEssage(Essages.SYSTEM,"Засада слишком далеко.");
                                 break;
                             case "O0203":
-                                Essages.addEssage("Все засады уже установлены.");
+                                Essages.addEssage(Essages.SYSTEM,"Все засады уже установлены.");
                                 ToastSend.send("Засады расставлены.");
                                 break;
                             case "O0204":
-                                Essages.addEssage("Не хватает наемников.");
+                                Essages.addEssage(Essages.SYSTEM,"Не хватает наемников.");
                                 ToastSend.send("Не достаточно наемников.");
                                 break;
                             default:
-                                if (response.has("Message")) Essages.addEssage(response.getString("Message"));
-                                else Essages.addEssage("Непредвиденная ошибка.");
+                                if (response.has("Message")) Essages.addEssage(Essages.SYSTEM,response.getString("Message"));
+                                else Essages.addEssage(Essages.SYSTEM,"Непредвиденная ошибка.");
 
                         }
                     } catch (JSONException e) {
@@ -869,8 +869,8 @@ public class Player extends GameObject {
                 public void postAction(JSONObject response) {
                     int distance= (int) GPSInfo.getDistance(GPSInfo.getInstance().getLatLng(),coord);
                     foundedCities++;
-                    Essages.addEssage("Поселение было создано в "+ distance+" метрах.");
-                    Essages.addEssage("Вы можете создать еще "+ (cityMax-foundedCities)+" поселений.");
+                    Essages.addEssage(Essages.SYSTEM,"Поселение было создано в "+ distance+" метрах.");
+                    Essages.addEssage(Essages.SYSTEM,"Вы можете создать еще "+ (cityMax-foundedCities)+" поселений.");
                     if (response.has("City")){
                         try {
                             City city=new City(MyGoogleMap.getMap(),response.getJSONObject("City"));
@@ -898,23 +898,23 @@ public class Player extends GameObject {
                         else err="U0000";
                         switch (err){
                             case "DB001":
-                                Essages.addEssage("Ошибка сервера.");
+                                Essages.addEssage(Essages.SYSTEM,"Ошибка сервера.");
                                 break;
                             case "L0001":
-                                Essages.addEssage("Соединение потеряно.");
+                                Essages.addEssage(Essages.SYSTEM,"Соединение потеряно.");
                                 break;
                             case "O1201":
-                                Essages.addEssage("Точка слишком далеко.");
+                                Essages.addEssage(Essages.SYSTEM,"Точка слишком далеко.");
                                 break;
                             case "O1202":
-                                Essages.addEssage("Неподходящее место для создания поселения.");
+                                Essages.addEssage(Essages.SYSTEM,"Неподходящее место для создания поселения.");
                                 break;
                             case "O1203":
-                                Essages.addEssage("Нет возможности создавать поселения. (Улучшите умение \"Основание городов\")");
+                                Essages.addEssage(Essages.SYSTEM,"Нет возможности создавать поселения. (Улучшите умение \"Основание городов\")");
                                 break;
                             default:
-                                if (response.has("Message")) Essages.addEssage(response.getString("Message"));
-                                else Essages.addEssage("Непредвиденная ошибка.");
+                                if (response.has("Message")) Essages.addEssage(Essages.SYSTEM,response.getString("Message"));
+                                else Essages.addEssage(Essages.SYSTEM,"Непредвиденная ошибка.");
 
                         }
                     } catch (JSONException e) {

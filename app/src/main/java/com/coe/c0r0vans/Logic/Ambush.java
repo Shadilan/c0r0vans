@@ -91,7 +91,7 @@ public class Ambush extends GameObject implements ActiveObject {
                     public void postAction(JSONObject response) {
                         GameSound.playSound(GameSound.REMOVE_AMBUSH);
                         GameObjects.getPlayer().removeAmbush(getGUID());
-                        Essages.addEssage("Засада распущена");
+                        Essages.addEssage(Essages.SYSTEM,"Засада распущена");
                         forceRemove();
                         RemoveObject();
                     }
@@ -106,20 +106,20 @@ public class Ambush extends GameObject implements ActiveObject {
                             else err = "U0000";
                             switch (err) {
                                 case "DB001":
-                                    Essages.addEssage("Ошибка сервера.");
+                                    Essages.addEssage(Essages.SYSTEM,"Ошибка сервера.");
                                     break;
                                 case "L0001":
-                                    Essages.addEssage("Соединение потеряно.");
+                                    Essages.addEssage(Essages.SYSTEM,"Соединение потеряно.");
                                     break;
                                 case "O0401":
-                                    Essages.addEssage("Эта засада уже уничтожена.");
+                                    Essages.addEssage(Essages.SYSTEM,"Эта засада уже уничтожена.");
                                     forceRemove();
                                     RemoveObject();
                                     break;
                                 default:
                                     if (response.has("Message"))
-                                        Essages.addEssage(response.getString("Message"));
-                                    else Essages.addEssage("Непредвиденная ошибка.");
+                                        Essages.addEssage(Essages.SYSTEM,response.getString("Message"));
+                                    else Essages.addEssage(Essages.SYSTEM,"Непредвиденная ошибка.");
 
                             }
                         }catch (JSONException e)
@@ -153,11 +153,11 @@ public class Ambush extends GameObject implements ActiveObject {
 
                         GameSound.playSound(GameSound.KILL_SOUND);
                         if (response.has("Message")) try {
-                            Essages.addEssage(response.getString("Message"));
+                            Essages.addEssage(Essages.SYSTEM,response.getString("Message"));
                         } catch (JSONException e) {
                             GATracker.trackException("ObjectAction",e);
                         }
-                        else Essages.addEssage("Разбойники уничтожены.");
+                        else Essages.addEssage(Essages.SYSTEM,"Разбойники уничтожены.");
                         forceRemove();
                         RemoveObject();
                     }
@@ -172,30 +172,30 @@ public class Ambush extends GameObject implements ActiveObject {
                             else err = "U0000";
                             switch (err) {
                                 case "DB001":
-                                    Essages.addEssage("Ошибка сервера.");
+                                    Essages.addEssage(Essages.SYSTEM,"Ошибка сервера.");
                                     break;
                                 case "L0001":
-                                    Essages.addEssage("Соединение потеряно.");
+                                    Essages.addEssage(Essages.SYSTEM,"Соединение потеряно.");
                                     break;
                                 case "O0301":
-                                    Essages.addEssage("Эта засада уже уничтожена.");
+                                    Essages.addEssage(Essages.SYSTEM,"Эта засада уже уничтожена.");
                                     forceRemove();
                                     RemoveObject();
                                     break;
                                 case "O0302":
-                                    Essages.addEssage("Засада слишком далеко.");
+                                    Essages.addEssage(Essages.SYSTEM,"Засада слишком далеко.");
                                     break;
                                 case "O0303":
-                                    Essages.addEssage("Это ваши соратники.");
+                                    Essages.addEssage(Essages.SYSTEM,"Это ваши соратники.");
                                     break;
                                 case "O0304":
-                                    Essages.addEssage("Не хватает наемников для уничтожения засады.");
+                                    Essages.addEssage(Essages.SYSTEM,"Не хватает наемников для уничтожения засады.");
                                     ToastSend.send("Не достаточно наемников.");
                                     break;
                                 default:
                                     if (response.has("Message"))
-                                        Essages.addEssage(response.getString("Message"));
-                                    else Essages.addEssage("Непредвиденная ошибка.");
+                                        Essages.addEssage(Essages.SYSTEM,response.getString("Message"));
+                                    else Essages.addEssage(Essages.SYSTEM,"Непредвиденная ошибка.");
 
                             }
                         }catch (JSONException e)
