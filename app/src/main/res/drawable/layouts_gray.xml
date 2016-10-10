@@ -4,9 +4,9 @@
         <shape>
             <stroke android:color="@android:color/black" android:width="1dp"/>
             <corners android:radius="5dp"/>
-            <solid
-                android:color="#807e7e"
-                />
+            <gradient android:angle="45"
+                android:startColor="#bababa"
+                android:endColor="#ffffff"/>
         </shape>
     </item>
 </layer-list>

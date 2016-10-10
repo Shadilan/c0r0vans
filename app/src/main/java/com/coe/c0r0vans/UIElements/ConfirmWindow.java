@@ -9,6 +9,8 @@ import android.widget.TextView;
 
 import com.coe.c0r0vans.R;
 
+import utility.settings.GameSettings;
+
 /**
  * Запрос подтверждения
  */
@@ -31,6 +33,9 @@ public class ConfirmWindow extends RelativeLayout {
     }
     private void init(){
         inflate(getContext(), R.layout.confirm_window,this);
+        if ("Y".equals(GameSettings.getValue("NIGHT_MODE")))
+            this.setBackgroundResource(R.drawable.layouts_night);
+        else  this.setBackgroundResource(R.drawable.layouts);
         Button button= (Button) findViewById(R.id.confirmButton);
         button.setOnClickListener(new OnClickListener() {
             @Override

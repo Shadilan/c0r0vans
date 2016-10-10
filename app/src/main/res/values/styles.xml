@@ -11,11 +11,13 @@
         <item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
         <item name="android:layout_margin">3dp</item>
         <item name="android:padding">3dp</item>
+        <item name="android:textColor">@android:color/black</item>
     </style>
     <style name="MediumTextNP">
         <item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
         <item name="android:layout_margin">1dp</item>
         <item name="android:padding">1dp</item>
+        <item name="android:textColor">@android:color/black</item>
     </style>
     <style name="SmallText">
         <item name="android:textAppearance">?android:attr/textAppearanceSmall</item>

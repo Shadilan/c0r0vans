@@ -19,6 +19,7 @@ import utility.GATracker;
 import utility.SwipeDetectLayout.OnSwipeListener;
 import utility.SwipeDetectLayout.SwipeDetectLayout;
 import utility.internet.serverConnect;
+import utility.settings.GameSettings;
 
 /**
  * Информация об игроке
@@ -68,6 +69,8 @@ public class InfoLayout extends SwipeDetectLayout implements ShowHideForm {
 
     }
     private void afterInit(){
+        if ("Y".equals(GameSettings.getValue("NIGHT_MODE"))) this.setBackgroundResource(R.drawable.layouts_night);
+        else  this.setBackgroundResource(R.drawable.layouts);
         informationLayout= (LinearLayout) findViewById(R.id.informationLayout);
 
         Button backButton= (Button) findViewById(R.id.back_button);
@@ -272,6 +275,9 @@ public class InfoLayout extends SwipeDetectLayout implements ShowHideForm {
         serverConnect.getInstance().callGetPlayerInfo();
         UIControler.getWindowLayout().removeAllViews();
         UIControler.getWindowLayout().addView(this);
+        this.setBackgroundResource(0);
+        if ("Y".equals(GameSettings.getValue("NIGHT_MODE"))) this.setBackgroundResource(R.drawable.layouts_night);
+        else  this.setBackgroundResource(R.drawable.layouts);
 
     }
     public void Hide(){

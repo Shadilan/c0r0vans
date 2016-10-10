@@ -2,14 +2,13 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:layout_gravity="center_horizontal"
-    android:background="@drawable/layouts"
-    >
+    android:layout_gravity="center_horizontal">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         style="@style/LargeText"
+        android:textColor="@android:color/black"
         android:text="@string/choose_faction"
         android:id="@+id/textView25"
         android:layout_alignParentTop="true"
@@ -62,6 +61,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@android:color/black"
             style="@style/LargeText"
             android:text="@string/guild_name"
             android:id="@+id/factionName"
@@ -71,6 +71,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@android:color/black"
             style="@style/SmallText"
             android:text="@string/guild_desc"
             android:id="@+id/factionDesc"

@@ -7,6 +7,8 @@ import android.widget.RelativeLayout;
 
 import com.coe.c0r0vans.R;
 
+import utility.settings.GameSettings;
+
 /**
  * About Layout
  */
@@ -27,6 +29,8 @@ public class AboutWindow extends RelativeLayout {
     }
     private void init(){
         inflate(getContext(), R.layout.about_layout,this);
+        if ("Y".equals(GameSettings.getValue("NIGHT_MODE"))) this.setBackgroundResource(R.drawable.layouts_night);
+        else  this.setBackgroundResource(R.drawable.layouts);
         findViewById(R.id.closeWindow).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {

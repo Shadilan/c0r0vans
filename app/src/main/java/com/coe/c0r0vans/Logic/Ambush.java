@@ -408,6 +408,8 @@ public class Ambush extends GameObject implements ActiveObject {
         }
         private void init(){
             inflate(this.getContext(), R.layout.ambush_layout, this);
+            if ("Y".equals(GameSettings.getValue("NIGHT_MODE"))) findViewById(R.id.ambushDesc).setBackgroundResource(R.drawable.layouts_night);
+            else  findViewById(R.id.ambushDesc).setBackgroundResource(R.drawable.layouts);
         }
         Ambush ambush;
 

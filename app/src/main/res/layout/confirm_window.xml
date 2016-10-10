@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="wrap_content"
-    android:background="@drawable/layouts">
+
+    >
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         style="@style/MediumText"
+        android:textColor="@android:color/black"
         android:id="@+id/question"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"

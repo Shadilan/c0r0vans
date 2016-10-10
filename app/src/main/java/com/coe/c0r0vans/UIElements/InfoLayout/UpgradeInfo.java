@@ -43,6 +43,7 @@ public class UpgradeInfo extends LinearLayout implements PlayerInfoLayout {
         upgradeInfo.removeAllViews();
         for (Upgrade u: GameObjects.getPlayer().getUpgrades()){
             LinearLayout l=new LinearLayout(getContext());
+
             l.setBackgroundResource(R.drawable.layouts_bordered);
             l.setOrientation(LinearLayout.HORIZONTAL);
             l.setClickable(false);

@@ -57,6 +57,8 @@ public class Settings extends RelativeLayout {
     protected void init() {
 
         inflate(getContext(), R.layout.settings_layout, this);
+        if ("Y".equals(GameSettings.getValue("NIGHT_MODE"))) this.setBackgroundResource(R.drawable.layouts_night);
+        else  this.setBackgroundResource(R.drawable.layouts);
         apply_button= (Button) findViewById(R.id.apply);
         cancel_button= (Button) findViewById(R.id.cancel);
         ambushRad= (CheckBox) findViewById(R.id.ambushRad);
@@ -171,6 +173,9 @@ public class Settings extends RelativeLayout {
         if (UIControler.getWindowLayout() == null) return;
         UIControler.getWindowLayout().removeAllViews();
         UIControler.getWindowLayout().addView(this);
+        this.setBackgroundResource(0);
+        if ("Y".equals(GameSettings.getValue("NIGHT_MODE"))) this.setBackgroundResource(R.drawable.layouts_night);
+        else  this.setBackgroundResource(R.drawable.layouts);
     }
     public void hide(){
         if (UIControler.getWindowLayout() == null) return;

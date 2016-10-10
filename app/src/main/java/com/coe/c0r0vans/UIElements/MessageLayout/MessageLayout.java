@@ -16,6 +16,7 @@ import com.coe.c0r0vans.UIElements.UIControler;
 import utility.SwipeDetectLayout.OnSwipeListener;
 import utility.SwipeDetectLayout.SwipeDetectLayout;
 import utility.notification.Essages;
+import utility.settings.GameSettings;
 
 /**
  * @author Shadilan
@@ -53,6 +54,8 @@ public class MessageLayout extends SwipeDetectLayout implements ShowHideForm {
     }
     private void init(){
         inflate(getContext(), R.layout.message_layout,this);
+        if ("Y".equals(GameSettings.getValue("NIGHT_MODE"))) this.setBackgroundResource(R.drawable.layouts_night);
+        else  this.setBackgroundResource(R.drawable.layouts);
         //Создать переключение
         Button backButton= (Button) findViewById(R.id.back_button);
         backButton.setOnClickListener(new OnClickListener() {
@@ -135,6 +138,9 @@ public class MessageLayout extends SwipeDetectLayout implements ShowHideForm {
     public void Show() {
         UIControler.getWindowLayout().removeAllViews();
         UIControler.getWindowLayout().addView(this);
+        this.setBackgroundResource(0);
+        if ("Y".equals(GameSettings.getValue("NIGHT_MODE"))) this.setBackgroundResource(R.drawable.layouts_night);
+        else  this.setBackgroundResource(R.drawable.layouts);
     }
 
     @Override

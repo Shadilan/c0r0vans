@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <utility.SwipeDetectLayout.SwipeDetectLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="match_parent"
-    android:background="@drawable/layouts"
     android:clickable="true"
     >
 
@@ -82,7 +81,6 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/layouts"
         android:layout_above="@+id/actionPanel"
         android:layout_below="@id/pageChoose"
         android:layout_margin="5dp"

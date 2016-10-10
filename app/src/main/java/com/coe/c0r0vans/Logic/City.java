@@ -770,8 +770,17 @@ public class City extends GameObject implements ActiveObject {
         public void init(){
             self=this;
             inflate(this.getContext(), R.layout.city_layout, this);
+            if ("Y".equals(GameSettings.getValue("NIGHT_MODE"))) {
+                this.setBackgroundResource(R.drawable.layouts_night);
+                findViewById(R.id.scrollView6).setBackgroundResource(R.drawable.layouts_night);
 
+            }
+            else  {
+                this.setBackgroundResource(R.drawable.layouts);
+                findViewById(R.id.scrollView6).setBackgroundResource(R.drawable.layouts);
+            }
         }
+
         boolean loaded=true;
 
 
@@ -1449,6 +1458,8 @@ public class City extends GameObject implements ActiveObject {
         }
         public void init(){
             inflate(this.getContext(), R.layout.city_actions, this);
+
+
         }
         boolean loaded=true;
 

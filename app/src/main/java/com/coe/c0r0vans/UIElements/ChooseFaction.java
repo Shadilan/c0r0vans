@@ -12,6 +12,7 @@ import com.coe.c0r0vans.R;
 import com.coe.c0r0vans.Singles.GameObjects;
 
 import utility.internet.serverConnect;
+import utility.settings.GameSettings;
 
 /**
  * View to chose faction
@@ -34,6 +35,8 @@ public class ChooseFaction extends RelativeLayout {
     private int faction=1;
     private void init(){
         inflate(getContext(), R.layout.choose_faction, this);
+        if ("Y".equals(GameSettings.getValue("NIGHT_MODE"))) this.setBackgroundResource(R.drawable.layouts_night);
+        else  this.setBackgroundResource(R.drawable.layouts);
         ImageButton btn= (ImageButton) findViewById(R.id.firstFaction);
         btn.setOnClickListener(new OnClickListener() {
             @Override
