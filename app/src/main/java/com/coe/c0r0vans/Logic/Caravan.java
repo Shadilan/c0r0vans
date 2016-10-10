@@ -84,7 +84,7 @@ public class Caravan extends GameObject {
                 GameObject target = SelectedObject.getInstance().getTarget();
                 if ("Y".equals(GameSettings.getValue("NIGHT_MODE")))
                     options.color(Color.GRAY);
-                else options.color(Color.rgb(75,84,84));
+                else options.color(Color.rgb(153,204,204));
                 options.geodesic(true);
                 options.add(startPoint);
                 options.add(finishPoint);
@@ -196,7 +196,7 @@ public class Caravan extends GameObject {
                         options.geodesic(true);
                         if ("Y".equals(GameSettings.getValue("NIGHT_MODE")))
                         options.color(Color.GRAY);
-                        else options.color(Color.rgb(75,84,84));
+                        else options.color(Color.rgb(153,204,204));
                         options.add(startPoint);
                         options.add(finishPoint);
                         options.zIndex(150);
@@ -304,7 +304,7 @@ public class Caravan extends GameObject {
             else line2.setVisible("Y".equals(GameSettings.getInstance().get("SHOW_CARAVAN_ROUTE")));
             if ("Y".equals(GameSettings.getValue("NIGHT_MODE")))
                 line2.setColor(Color.GRAY);
-            else line2.setColor(Color.rgb(75,84,84));
+            else line2.setColor(Color.rgb(153,204,204));
         }
     }
 
