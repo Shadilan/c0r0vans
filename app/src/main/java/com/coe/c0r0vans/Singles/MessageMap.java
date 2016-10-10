@@ -17,6 +17,7 @@ import java.util.List;
 
 import utility.GATracker;
 import utility.notification.Essages;
+import utility.notification.OnEssageListener;
 import utility.settings.GameSettings;
 
 /**
@@ -57,6 +58,22 @@ public class MessageMap {
 
                     }
                     load=false;
+                    Essages.addListener(new OnEssageListener() {
+                        @Override
+                        public void onAdd(int type, Message msg) {
+
+                        }
+
+                        @Override
+                        public void onClear() {
+                            clearAll();
+                        }
+
+                        @Override
+                        public void onRemove(Message msg) {
+
+                        }
+                    });
                 }
             }).start();
         } catch(Exception e){

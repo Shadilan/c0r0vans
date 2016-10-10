@@ -32,21 +32,15 @@ public class Essages {
         if (alert!=null && alert.size()>0) {
             alert.clear();
         }
-        if (target!=null){
-            target.hide();
-        }
-        MessageMap.clearAll();
+        for (OnEssageListener l:listeners) l.onClear();
     }
     private static TextView essageCount;
-    public static void setTarget(EssageLine target, TextView cnt){
-        Essages.target=target;
-        essageCount=cnt;
-
-    }
 
     public static void remove(Message msg) {
         list.remove(msg);
         alert.remove(msg);
+        execListener();
+        for (OnEssageListener l:listeners) l.onRemove(msg);
     }
 
     public static void init() {
@@ -102,7 +96,24 @@ public class Essages {
             if (list==null) list=new ArrayList<>();
             list.add(msg);
         }
+        execListener();
+        for (OnEssageListener l:listeners) l.onAdd(type,msg);
 
+    }
+    private static ArrayList<OnEssageListener> listeners;
+    private static ArrayList<OnEssageListener> remListeners;
+    public static void addListener(OnEssageListener listener){
+        if (listeners==null) listeners=new ArrayList<>();
+        listeners.add(listener);
+    }
+    public static void removeListener(OnEssageListener listener){
+        if (remListeners==null) remListeners=new ArrayList<>();
+        remListeners.add(listener);
+    }
+    private static boolean execListener(){
+        if (listeners==null) return false;
+        if (remListeners!=null && remListeners.size()>0) listeners.removeAll(remListeners);
+        return true;
     }
 
     public static ArrayList<Message> getAlertList() {

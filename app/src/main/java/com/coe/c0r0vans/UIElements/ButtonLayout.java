@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.coe.c0r0vans.GameObject.GameObject;
 import com.coe.c0r0vans.GameObject.OnGameObjectChange;
 import com.coe.c0r0vans.GameObjects.LevelTable;
+import com.coe.c0r0vans.GameObjects.Message;
 import com.coe.c0r0vans.R;
 import com.coe.c0r0vans.Singles.GameObjects;
 import com.coe.c0r0vans.Singles.MyGoogleMap;
@@ -34,6 +35,7 @@ import utility.StringUtils;
 import utility.internet.ServerListener;
 import utility.internet.serverConnect;
 import utility.notification.Essages;
+import utility.notification.OnEssageListener;
 import utility.settings.GameSettings;
 import utility.settings.SettingsListener;
 
@@ -235,6 +237,24 @@ public class ButtonLayout extends RelativeLayout {
                 }catch (Exception e){
                     GATracker.trackException("OpenMessages",e);
                 }
+            }
+        });
+        Essages.addListener(new OnEssageListener() {
+            @Override
+            public void onAdd(int type, Message msg) {
+                EssageLine line = (EssageLine) findViewById(R.id.essage);
+                line.setText(msg);
+                EssageLine line = (EssageLine) findViewById(R.id.essage);
+            }
+
+            @Override
+            public void onClear() {
+
+            }
+
+            @Override
+            public void onRemove(Message msg) {
+
             }
         });
         Essages.setTarget((EssageLine) findViewById(R.id.essage), (TextView) findViewById(R.id.mailCnt));
