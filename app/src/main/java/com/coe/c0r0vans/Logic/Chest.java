@@ -193,11 +193,11 @@ public class Chest extends GameObject implements ActiveObject {
                         }
                         if (response.has("Obsidian")){
                             try {
-                                int obsidian=response.getInt("obsidian");
-                                GameObjects.getPlayer().setGold(GameObjects.getPlayer().getGold()+obsidian);
+                                int obsidian=response.getInt("Obsidian");
+                                GameObjects.getPlayer().setObsidian(GameObjects.getPlayer().getObsidian()+obsidian);
                                 //TODO: Extract resources
-                                ToastSend.send(String.format("Получено одсидиана:%1$d.", obsidian));
-                                Essages.addEssage(Essages.SYSTEM,String.format("Получено одсидиана:%1$d.", obsidian));
+                                ToastSend.send(String.format("Получено обсидиана:%1$d.", obsidian));
+                                Essages.addEssage(Essages.SYSTEM,String.format("Получено обсидиана:%1$d.", obsidian));
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }

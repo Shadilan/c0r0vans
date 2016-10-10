@@ -84,7 +84,7 @@ public class Caravan extends GameObject {
                 GameObject target = SelectedObject.getInstance().getTarget();
                 if ("Y".equals(GameSettings.getValue("NIGHT_MODE")))
                     options.color(Color.GRAY);
-                else options.color(Color.CYAN);
+                else options.color(Color.rgb(75,84,84));
                 options.geodesic(true);
                 options.add(startPoint);
                 options.add(finishPoint);
@@ -196,7 +196,7 @@ public class Caravan extends GameObject {
                         options.geodesic(true);
                         if ("Y".equals(GameSettings.getValue("NIGHT_MODE")))
                         options.color(Color.GRAY);
-                        else options.color(Color.rgb(70,90,100));
+                        else options.color(Color.rgb(75,84,84));
                         options.add(startPoint);
                         options.add(finishPoint);
                         options.zIndex(150);
@@ -270,7 +270,7 @@ public class Caravan extends GameObject {
             markname = markname + GameObject.zoomToPostfix(MyGoogleMap.getClientZoom());
             if (!markname.equals(currentMarkName)) {
                 mark.setIcon(ImageLoader.getDescritor(markname));
-                if ("Y".equals(GameSettings.getInstance().get("USE_TILT")))
+                if ("Y".equals(GameSettings.getInstance().get("USE_TILT")) && !(startPoint!=null && finishPoint==null))
                     mark.setAnchor(0.5f, 1f);
                 else mark.setAnchor(0.5f, 0.5f);
                 currentMarkName=markname;
@@ -304,7 +304,7 @@ public class Caravan extends GameObject {
             else line2.setVisible("Y".equals(GameSettings.getInstance().get("SHOW_CARAVAN_ROUTE")));
             if ("Y".equals(GameSettings.getValue("NIGHT_MODE")))
                 line2.setColor(Color.GRAY);
-            else line2.setColor(Color.CYAN);
+            else line2.setColor(Color.rgb(75,84,84));
         }
     }
 

@@ -13,8 +13,6 @@ import com.coe.c0r0vans.ShowHideForm;
 import com.coe.c0r0vans.Singles.MyGoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 
-import java.util.Date;
-
 import utility.GATracker;
 import utility.StringUtils;
 import utility.notification.Essages;
@@ -22,52 +20,14 @@ import utility.notification.Essages;
 /**
  * Строка Сообщения
  */
-public class EssageLine extends LinearLayout{
+public class EssageLine extends LinearLayout {
     private TextView text;
-    private ImageButton removeButton;
+    private TextView time;
     private ImageButton showButton;
-    private String txt="";
     private LatLng point;
     private ShowHideForm parentForm;
-    private EssageLine current;
     private Message msg;
-    public void hide(){
-        setVisibility(INVISIBLE);
-    }
-    public void show(){
-        setVisibility(VISIBLE);
-    }
 
-
-
-    public void setParentForm(ShowHideForm form){
-        parentForm=form;
-
-    }
-    public void setText(String text){
-        txt= StringUtils.dateToStr(new Date()) + ":" + text;
-        if (this.text!=null) this.text.setText(txt);
-    }
-    public void setText(Date date,String text){
-        txt=StringUtils.dateToStr(date) + ":" +text;
-        if (this.text!=null) this.text.setText(txt);
-
-    }
-
-    public void setText(Message text){
-        point=text.getTarget();
-        if (showButton!=null && point!=null) showButton.setVisibility(VISIBLE);
-        else showButton.setVisibility(INVISIBLE);
-        txt=StringUtils.dateToStr(text.getTime()) + ":" + text.getMessage();
-        if (this.text!=null) this.text.setText(txt);
-        msg=text;
-        setVisibility(VISIBLE);
-    }
-
-    public void setPoint(LatLng point){
-        this.point=point;
-        showButton.setVisibility(VISIBLE);
-    }
     public EssageLine(Context context) {
         super(context);
         init();
@@ -79,22 +39,46 @@ public class EssageLine extends LinearLayout{
         init();
     }
 
+
     public EssageLine(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init();
     }
 
-    private void init(){
+    public void hide() {
+        setVisibility(INVISIBLE);
+    }
+
+    public void show() {
+        setVisibility(VISIBLE);
+    }
+
+    public void setParentForm(ShowHideForm form) {
+        parentForm = form;
+
+    }
+
+    public void setText(Message text) {
+        point = text.getTarget();
+        if (showButton != null && point != null) showButton.setVisibility(VISIBLE);
+        else if (showButton!=null) showButton.setVisibility(GONE);
+        if (time != null) time.setText(StringUtils.dateToStr(text.getTime()));
+        if (this.text != null) this.text.setText(text.getMessage());
+        msg = text;
+        setVisibility(VISIBLE);
+    }
+
+    private void init() {
         inflate(getContext(), R.layout.essage_line, this);
-        current=this;
         try {
             afterInit();
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
 
     }
+
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
@@ -102,32 +86,34 @@ public class EssageLine extends LinearLayout{
     }
 
     private void afterInit() {
-        text= (TextView) findViewById(R.id.my_text);
-        removeButton= (ImageButton) findViewById(R.id.removeButton);
+        text = (TextView) findViewById(R.id.my_text);
+        time = (TextView) findViewById(R.id.my_date);
+        ImageButton removeButton = (ImageButton) findViewById(R.id.removeButton);
         removeButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 try {
-                    if (msg != null) Essages.remove(msg);;
+                    if (msg != null) Essages.remove(msg);
                     hide();
-                    if (parentForm !=null && parentForm instanceof MessageLayout) ((MessageLayout) parentForm).refresh();
+                    if (parentForm != null && parentForm instanceof MessageLayout)
+                        ((MessageLayout) parentForm).refresh();
 
-                } catch (Exception e){
-                    GATracker.trackException("RemoveMessage","AfterInit");
+                } catch (Exception e) {
+                    GATracker.trackException("RemoveMessage", "AfterInit");
                 }
             }
         });
-        showButton= (ImageButton) findViewById(R.id.showButton);
+        showButton = (ImageButton) findViewById(R.id.showButton);
         showButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (point!=null) {
-                    if (parentForm!=null) parentForm.Hide();
+                if (point != null) {
+                    if (parentForm != null) parentForm.Hide();
                     MyGoogleMap.showPoint(point);
                 }
             }
         });
-        if (point!=null) showButton.setVisibility(VISIBLE);
+        if (point != null) showButton.setVisibility(VISIBLE);
         removeButton.setVisibility(VISIBLE);
 
 

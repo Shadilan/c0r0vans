@@ -143,5 +143,7 @@
     <string name="settings">Настройки</string>
     <string name="night_mode">Ночной режим</string>
     <string name="obsidian">Обсидиан:</string>
+    <string name="message_system">Системные</string>
+    <string name="message_alert">Оповещения</string>
 
 </resources>

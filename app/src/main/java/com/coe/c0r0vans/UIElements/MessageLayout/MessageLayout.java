@@ -5,19 +5,22 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.HorizontalScrollView;
 import android.widget.ListView;
 import android.widget.ToggleButton;
 
 import com.coe.c0r0vans.R;
 import com.coe.c0r0vans.ShowHideForm;
-import com.coe.c0r0vans.UIElements.InfoLayout.MainInfoTable;
 import com.coe.c0r0vans.UIElements.UIControler;
 
+import utility.SwipeDetectLayout.OnSwipeListener;
 import utility.SwipeDetectLayout.SwipeDetectLayout;
 import utility.notification.Essages;
 
 /**
- * Created by Shadilan on 09.10.2016.
+ * @author Shadilan
+ *
+ * Created for show messages
  */
 
 public class MessageLayout extends SwipeDetectLayout implements ShowHideForm {
@@ -93,6 +96,39 @@ public class MessageLayout extends SwipeDetectLayout implements ShowHideForm {
         listSystem.setAdapter(listAdapter);
         listAdapter=new MessageAdapter(getContext(),Essages.getAlertList(),this);
         listAlert.setAdapter(listAdapter);
+        this.setOnSwipeListener(new OnSwipeListener() {
+            @Override
+            public void onSwipeRight() {
+                HorizontalScrollView tabs= (HorizontalScrollView) findViewById(R.id.Tabs);
+                if (toggleAlert.isChecked()) {
+                    toggleAlert.setChecked(false);
+                    toggleSystem.setChecked(true);
+                    listAlert.setVisibility(GONE);
+                    listSystem.setVisibility(VISIBLE);
+                }
+
+            }
+
+            @Override
+            public void onSwipeLeft() {
+                if (toggleSystem.isChecked()){
+                    toggleAlert.setChecked(true);
+                    toggleSystem.setChecked(false);
+                    listAlert.setVisibility(VISIBLE);
+                    listSystem.setVisibility(GONE);
+                }
+            }
+
+            @Override
+            public void onSwipeUp() {
+
+            }
+
+            @Override
+            public void onSwipeDown() {
+
+            }
+        });
     }
 
     @Override
@@ -106,4 +142,5 @@ public class MessageLayout extends SwipeDetectLayout implements ShowHideForm {
         UIControler.getWindowLayout().removeAllViews();
 
     }
+
 }

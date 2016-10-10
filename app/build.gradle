@@ -15,7 +15,7 @@ android {
         applicationId 'com.coe.c0r0vans'
         minSdkVersion 14
         targetSdkVersion 24
-        versionCode 61
+        versionCode 64
         versionName "3.0.17a"
         signingConfig signingConfigs.Release
     }
@@ -47,9 +47,9 @@ dependencies {
     /*Версия 9 почему то вызывает зависание.*/
 
 
-    compile 'com.android.support:appcompat-v7:24.2.0'
-    compile 'com.android.support:design:24.2.0'
-    compile 'com.android.support:support-v4:24.2.0'
+    compile 'com.android.support:appcompat-v7:24.2.1'
+    compile 'com.android.support:design:24.2.1'
+    compile 'com.android.support:support-v4:24.2.1'
     compile 'com.google.android.gms:play-services:9.6.1'
     compile 'com.google.android.gms:play-services-ads:9.6.1'
     compile 'com.google.android.gms:play-services-identity:9.6.1'

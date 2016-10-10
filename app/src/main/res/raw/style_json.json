@@ -175,6 +175,18 @@
     ]
   },
   {
+    "featureType": "road",
+    "elementType": "labels.text.fill",
+    "stylers": [
+      {
+        "color": "#000000"
+      },
+      {
+        "visibility": "on"
+      }
+    ]
+  },
+  {
     "featureType": "water",
     "elementType": "geometry.fill",
     "stylers": [

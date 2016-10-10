@@ -12,6 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         style="@style/LargeText"
+        android:textColor="@android:color/black"
         android:text="@string/settings"
         android:id="@+id/settingTitle"
         android:layout_alignParentTop="true"
@@ -38,6 +39,7 @@
                 style="@style/MediumText"
                 android:text="@string/settings_display"
                 android:id="@+id/displayTitle"
+                android:textColor="@android:color/black"
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true"
                 android:textStyle="bold" />
@@ -47,6 +49,7 @@
                 android:layout_height="wrap_content"
                 style="@style/MediumText"
                 android:text="@string/settings_ambush_radius"
+                android:textColor="@android:color/black"
                 android:layout_alignBottom="@+id/ambushRad"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true" />
@@ -55,6 +58,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/ambushRad"
+                android:textColor="@android:color/black"
                 android:layout_below="@+id/displayTitle"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true"
@@ -68,12 +72,14 @@
                 style="@style/MediumText"
                 android:text="@string/settings_city_radius"
                 android:layout_alignBottom="@+id/cityRad"
+                android:textColor="@android:color/black"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true" />
 
             <CheckBox
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@android:color/black"
                 android:id="@+id/cityRad"
                 android:checked="true"
                 android:layout_below="@+id/ambushRad"
@@ -83,6 +89,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@android:color/black"
                 style="@style/MediumText"
                 android:text="@string/settings_show_routes"
                 android:layout_alignBottom="@+id/routeShow"
@@ -92,6 +99,7 @@
             <CheckBox
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@android:color/black"
                 android:id="@+id/routeShow"
                 android:checked="true"
                 android:layout_below="@+id/cityRad"
@@ -101,6 +109,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@android:color/black"
                 style="@style/MediumText"
                 android:text="@string/build_area_settings"
                 android:layout_alignBottom="@+id/buildArea"
@@ -110,6 +119,7 @@
             <CheckBox
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@android:color/black"
                 android:id="@+id/buildArea"
                 android:checked="true"
                 android:layout_below="@+id/routeShow"
@@ -118,6 +128,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@android:color/black"
                 style="@style/MediumText"
                 android:text="@string/screen_off"
                 android:layout_alignBottom="@+id/screenOff"
@@ -127,6 +138,7 @@
             <CheckBox
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@android:color/black"
                 android:id="@+id/screenOff"
                 android:checked="true"
                 android:layout_below="@+id/buildArea"
@@ -135,6 +147,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@android:color/black"
                 style="@style/MediumText"
                 android:text="@string/night_mode"
                 android:layout_alignBottom="@+id/nightMode"
@@ -144,6 +157,7 @@
             <CheckBox
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@android:color/black"
                 android:id="@+id/nightMode"
                 android:checked="true"
                 android:layout_below="@+id/screenOff"
@@ -153,6 +167,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@android:color/black"
                 style="@style/MediumText"
                 android:text="@string/setings_media"
                 android:id="@+id/mediaTitle"
@@ -162,6 +177,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@android:color/black"
                 style="@style/MediumText"
                 android:text="@string/settings_music"
                 android:layout_alignBottom="@+id/musicOn"
@@ -171,6 +187,7 @@
             <CheckBox
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@android:color/black"
                 android:id="@+id/musicOn"
                 android:layout_below="@+id/mediaTitle"
                 android:layout_alignParentRight="true"
@@ -180,6 +197,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@android:color/black"
                 style="@style/MediumText"
                 android:text="@string/settings_sound"
                 android:layout_alignBottom="@+id/soundOn"
@@ -189,6 +207,7 @@
             <CheckBox
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@android:color/black"
                 android:id="@+id/soundOn"
                 android:checked="true"
                 android:layout_below="@+id/musicOn"
@@ -197,6 +216,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@android:color/black"
                 style="@style/MediumText"
                 android:text="@string/vibrate_on"
                 android:layout_alignBottom="@+id/vibrateOn"
@@ -206,6 +226,7 @@
             <CheckBox
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@android:color/black"
                 android:id="@+id/vibrateOn"
                 android:checked="true"
                 android:layout_below="@+id/soundOn"
@@ -214,6 +235,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@android:color/black"
                 style="@style/MediumText"
                 android:text="@string/notification"
                 android:layout_alignBottom="@+id/notifySound"
@@ -223,6 +245,7 @@
             <CheckBox
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@android:color/black"
                 android:id="@+id/notifySound"
                 android:checked="true"
                 android:layout_below="@+id/vibrateOn"
@@ -232,6 +255,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@android:color/black"
                 style="@style/MediumText"
                 android:text="@string/settings_graphics"
                 android:id="@+id/graphicsTitle"
@@ -241,6 +265,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@android:color/black"
                 style="@style/MediumText"
                 android:text="@string/settings_graphics_tilt"
                 android:layout_alignBottom="@+id/useTilt"
@@ -250,6 +275,7 @@
             <CheckBox
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@android:color/black"
                 android:id="@+id/useTilt"
                 android:checked="false"
                 android:layout_below="@+id/graphicsTitle"
@@ -259,6 +285,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@android:color/black"
                 style="@style/MediumText"
                 android:text="@string/fast_actions"
                 android:layout_alignBottom="@+id/usePadding"
@@ -268,6 +295,7 @@
             <CheckBox
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@android:color/black"
                 android:id="@+id/usePadding"
                 android:checked="false"
                 android:layout_below="@+id/useTilt"
@@ -278,6 +306,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@android:color/black"
                 style="@style/MediumText"
                 android:text="@string/autoclose"
                 android:layout_alignBottom="@+id/closeWindow"
@@ -287,6 +316,7 @@
             <CheckBox
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@android:color/black"
                 android:id="@+id/closeWindow"
                 android:checked="false"
                 android:layout_below="@+id/usePadding"
@@ -297,6 +327,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@android:color/black"
                 style="@style/MediumText"
                 android:text="@string/location"
                 android:id="@+id/locationTitle"
@@ -306,6 +337,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@android:color/black"
                 style="@style/MediumText"
                 android:text="@string/background_gps"
                 android:layout_alignBottom="@+id/gpsOn"
@@ -316,6 +348,7 @@
             <CheckBox
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@android:color/black"
                 android:id="@+id/gpsOn"
                 android:checked="false"
                 android:layout_below="@+id/locationTitle"
@@ -324,6 +357,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@android:color/black"
                 style="@style/MediumText"
                 android:text="@string/gps_rating"
                 android:id="@+id/gpsRatingTitle"
@@ -334,6 +368,7 @@
             <SeekBar
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@android:color/black"
                 android:id="@+id/gpsRate"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true"
@@ -346,6 +381,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@android:color/black"
                 style="@style/MediumText"
                 android:text="@string/course_on_move"
                 android:layout_alignBottom="@+id/trackBearing"
@@ -355,6 +391,7 @@
             <CheckBox
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@android:color/black"
                 android:id="@+id/trackBearing"
                 android:checked="false"
                 android:layout_below="@+id/gpsRatingTitle"
@@ -364,6 +401,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@android:color/black"
                 style="@style/MediumText"
                 android:text="@string/settings_debug"
                 android:id="@+id/debugTitle"
@@ -374,6 +412,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@android:color/black"
                 style="@style/MediumText"
                 android:text="@string/network_error"
                 android:layout_alignBottom="@+id/netErrorLogOn"
@@ -383,6 +422,7 @@
             <CheckBox
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@android:color/black"
                 android:id="@+id/netErrorLogOn"
                 android:checked="false"
                 android:layout_below="@+id/debugTitle"
@@ -391,6 +431,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@android:color/black"
                 style="@style/MediumText"
                 android:text="@string/security"
                 android:id="@+id/securityTitle"
@@ -401,6 +442,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@android:color/black"
                 style="@style/MediumText"
                 android:id="@+id/accountName"
                 android:layout_alignBaseline="@+id/exitAccount"

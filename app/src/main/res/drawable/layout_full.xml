@@ -3,8 +3,8 @@
     <item android:id="@android:id/background">
         <shape>
             <gradient android:angle="45"
-                android:startColor="#bababa"
-                android:endColor="#fdfbfb"/>
+                android:startColor="#807e7e"
+                android:endColor="#bababa"/>
         </shape>
     </item>
 </layer-list>
