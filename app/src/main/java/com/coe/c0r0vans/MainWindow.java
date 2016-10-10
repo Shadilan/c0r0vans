@@ -587,8 +587,6 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                         errorMsg = response.getString("Message");
                     }
                     if (errorMsg.equals("")) errorMsg = errorText;
-                    if (!"Unexpected Response".equals(errorText) || "Y".equals(GameSettings.getInstance().get("SHOW_NETWORK_ERROR")))
-                        Essages.addEssage(Essages.SYSTEM,errorMsg);
                     GATracker.trackException("NetworkError",errorMsg);
                 } catch (Exception e){
                     GATracker.trackException("NetworkError",e);

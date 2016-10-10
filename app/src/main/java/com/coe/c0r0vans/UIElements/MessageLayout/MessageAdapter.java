@@ -31,13 +31,14 @@ public class MessageAdapter extends BaseAdapter {
 
     @Override
     public Message getItem(int position) {
-        return list.get(position);
+        return list.get(list.size()-1-position);
     }
 
 
     @Override
     public long getItemId(int position) {
-        return position;
+        return list.size()-1-position;
+
     }
 
     @Override
