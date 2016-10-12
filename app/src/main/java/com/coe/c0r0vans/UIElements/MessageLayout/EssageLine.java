@@ -27,6 +27,11 @@ public class EssageLine extends LinearLayout {
     private LatLng point;
     private ShowHideForm parentForm;
     private Message msg;
+    public boolean equal(Message msg){
+        if (this.msg==null) return false;
+        if (msg==null) return false;
+        return msg.getGUID().equals(this.msg.getGUID());
+    }
 
     public EssageLine(Context context) {
         super(context);
@@ -95,8 +100,8 @@ public class EssageLine extends LinearLayout {
                 try {
                     if (msg != null) Essages.remove(msg);
                     hide();
-                    if (parentForm != null && parentForm instanceof MessageLayout)
-                        ((MessageLayout) parentForm).refresh();
+
+
 
                 } catch (Exception e) {
                     GATracker.trackException("RemoveMessage", "AfterInit");

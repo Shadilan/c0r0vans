@@ -18,7 +18,7 @@ import utility.MainThread;
  *         Class to show messages that system return
  */
 public class Essages {
-    private static EssageLine target;
+
     private static ArrayList<Message> alert;
     private static ArrayList<Message> list;
 
@@ -32,38 +32,21 @@ public class Essages {
         if (alert!=null && alert.size()>0) {
             alert.clear();
         }
-        for (OnEssageListener l:listeners) l.onClear();
+        if (execListener())
+            for (OnEssageListener l:listeners) l.onClear();
     }
     private static TextView essageCount;
 
     public static void remove(Message msg) {
         list.remove(msg);
         alert.remove(msg);
-        execListener();
-        for (OnEssageListener l:listeners) l.onRemove(msg);
+        if (execListener())
+            for (OnEssageListener l:listeners) l.onRemove(msg);
     }
 
     public static void init() {
         if (alert==null) alert=new ArrayList<>();
         if (list==null) list=new ArrayList<>();
-    }
-
-
-    private static class MyRunnable implements Runnable{
-        private Message msg;
-        public MyRunnable(Message msg){
-            this.msg=msg;
-
-
-        }
-        @Override
-        public void run() {
-            if (target!=null) {
-                target.setText(msg);
-                target.setParentForm(null);
-            }
-
-        }
     }
     /**
      * Add Text to list
@@ -79,25 +62,17 @@ public class Essages {
         addEssage(type,msg);
     }
     public static void addEssage(int type,Message msg){
-        MainThread.post(new MyRunnable(msg));
         if (msg.notify) MessageNotification.notify(msg.getMessage(), msg.getType());
         if (type==ALERT){
             if (alert==null) alert=new ArrayList<>();
             alert.add(msg);
-            if (essageCount!=null) {
-                String t = essageCount.getText().toString();
-                int cnt = 0;
-                if ("".equals(t) || t == null) cnt = 1;
-                else cnt = Integer.getInteger(t) + 1;
-                essageCount.setText(String.valueOf(cnt));
-            }
 
         } else if (type==SYSTEM){
             if (list==null) list=new ArrayList<>();
             list.add(msg);
         }
-        execListener();
-        for (OnEssageListener l:listeners) l.onAdd(type,msg);
+        if (execListener())
+            for (OnEssageListener l:listeners) l.onAdd(type,msg);
 
     }
     private static ArrayList<OnEssageListener> listeners;

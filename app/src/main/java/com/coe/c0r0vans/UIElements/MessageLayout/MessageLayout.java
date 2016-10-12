@@ -9,6 +9,7 @@ import android.widget.HorizontalScrollView;
 import android.widget.ListView;
 import android.widget.ToggleButton;
 
+import com.coe.c0r0vans.GameObjects.Message;
 import com.coe.c0r0vans.R;
 import com.coe.c0r0vans.ShowHideForm;
 import com.coe.c0r0vans.UIElements.UIControler;
@@ -16,6 +17,7 @@ import com.coe.c0r0vans.UIElements.UIControler;
 import utility.SwipeDetectLayout.OnSwipeListener;
 import utility.SwipeDetectLayout.SwipeDetectLayout;
 import utility.notification.Essages;
+import utility.notification.OnEssageListener;
 import utility.settings.GameSettings;
 
 /**
@@ -130,6 +132,23 @@ public class MessageLayout extends SwipeDetectLayout implements ShowHideForm {
             @Override
             public void onSwipeDown() {
 
+            }
+        });
+
+        Essages.addListener(new OnEssageListener() {
+            @Override
+            public void onAdd(int type, Message msg) {
+                refresh();
+            }
+
+            @Override
+            public void onClear() {
+                refresh();
+            }
+
+            @Override
+            public void onRemove(Message msg) {
+                refresh();
             }
         });
     }

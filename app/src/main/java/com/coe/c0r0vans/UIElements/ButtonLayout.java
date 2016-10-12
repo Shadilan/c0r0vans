@@ -239,25 +239,28 @@ public class ButtonLayout extends RelativeLayout {
                 }
             }
         });
+
         Essages.addListener(new OnEssageListener() {
             @Override
             public void onAdd(int type, Message msg) {
                 EssageLine line = (EssageLine) findViewById(R.id.essage);
                 line.setText(msg);
-                EssageLine line = (EssageLine) findViewById(R.id.essage);
+                line.show();
             }
 
             @Override
             public void onClear() {
-
+                EssageLine line = (EssageLine) findViewById(R.id.essage);
+                line.hide();
             }
 
             @Override
             public void onRemove(Message msg) {
+                EssageLine line = (EssageLine) findViewById(R.id.essage);
+                if (line.equal(msg)) line.hide();
 
             }
         });
-        Essages.setTarget((EssageLine) findViewById(R.id.essage), (TextView) findViewById(R.id.mailCnt));
         serverConnect.getInstance().addListener(new ServerListener() {
             @Override
             public void onResponse(int TYPE, JSONObject response) {
