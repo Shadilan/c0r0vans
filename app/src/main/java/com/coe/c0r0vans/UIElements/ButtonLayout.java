@@ -25,6 +25,7 @@ import com.coe.c0r0vans.Singles.GameObjects;
 import com.coe.c0r0vans.Singles.MyGoogleMap;
 import com.coe.c0r0vans.UIElements.InfoLayout.InfoLayout;
 import com.coe.c0r0vans.UIElements.MessageLayout.EssageLine;
+import com.coe.c0r0vans.UIElements.MessageLayout.EssageLineView;
 import com.coe.c0r0vans.UIElements.MessageLayout.MessageLayout;
 
 import org.json.JSONObject;
@@ -243,20 +244,20 @@ public class ButtonLayout extends RelativeLayout {
         Essages.addListener(new OnEssageListener() {
             @Override
             public void onAdd(int type, Message msg) {
-                EssageLine line = (EssageLine) findViewById(R.id.essage);
+                EssageLineView line = (EssageLineView) findViewById(R.id.essage);
                 line.setText(msg);
                 line.show();
             }
 
             @Override
             public void onClear() {
-                EssageLine line = (EssageLine) findViewById(R.id.essage);
+                EssageLineView line = (EssageLineView) findViewById(R.id.essage);
                 line.hide();
             }
 
             @Override
             public void onRemove(Message msg) {
-                EssageLine line = (EssageLine) findViewById(R.id.essage);
+                EssageLineView line = (EssageLineView) findViewById(R.id.essage);
                 if (line.equal(msg)) line.hide();
 
             }

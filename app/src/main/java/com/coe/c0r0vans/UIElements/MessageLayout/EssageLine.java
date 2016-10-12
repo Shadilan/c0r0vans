@@ -26,11 +26,11 @@ public class EssageLine extends LinearLayout {
     private ImageButton showButton;
     private LatLng point;
     private ShowHideForm parentForm;
-    private Message msg;
+    protected Message msg;
     public boolean equal(Message msg){
         if (this.msg==null) return false;
-        if (msg==null) return false;
-        return msg.getGUID().equals(this.msg.getGUID());
+        else if (msg==null) return false;
+        else return msg.getGUID().equals(this.msg.getGUID());
     }
 
     public EssageLine(Context context) {
@@ -97,30 +97,32 @@ public class EssageLine extends LinearLayout {
         removeButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                try {
-                    if (msg != null) Essages.remove(msg);
-                    hide();
-
-
-
-                } catch (Exception e) {
-                    GATracker.trackException("RemoveMessage", "AfterInit");
-                }
+                clickClose();
             }
         });
         showButton = (ImageButton) findViewById(R.id.showButton);
         showButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (point != null) {
-                    if (parentForm != null) parentForm.Hide();
-                    MyGoogleMap.showPoint(point);
-                }
+               clickShow();
             }
         });
         if (point != null) showButton.setVisibility(VISIBLE);
         removeButton.setVisibility(VISIBLE);
-
-
     }
+    public void clickClose(){
+        try {
+            if (msg != null) Essages.remove(msg);
+            hide();
+        } catch (Exception e) {
+            GATracker.trackException("RemoveMessage", "AfterInit");
+        }
+    }
+    public void clickShow(){
+        if (point != null) {
+            if (parentForm != null) parentForm.Hide();
+            MyGoogleMap.showPoint(point);
+        }
+    }
+
 }

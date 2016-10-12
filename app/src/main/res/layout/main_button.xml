@@ -215,7 +215,7 @@
         android:layout_alignRight="@+id/mailButton"
         android:layout_alignEnd="@+id/mailButton" />
 
-    <com.coe.c0r0vans.UIElements.MessageLayout.EssageLine
+    <com.coe.c0r0vans.UIElements.MessageLayout.EssageLineView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
