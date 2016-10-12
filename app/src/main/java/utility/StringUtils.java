@@ -49,19 +49,23 @@ public class StringUtils {
         }
         return null;
     }
-    private static Context context;
-    public static void init(Context ctx){
+    //private static Context context;
+    /*public static void init(Context ctx){
         context=ctx;
-    }
-    public static String getString(int id){
+    }*/
+    /*public static String getString(int id){
         if (context==null) return null;
         return context.getString(id);
-    }
+    }*/
     public static String getTime(int time){
         String result="";
         int val=Math.abs(time);
         if (val<=180) {
-            if (String.valueOf(val).endsWith("1")) result = val + " минуту";
+            if (String.valueOf(val).endsWith("11")
+                    || String.valueOf(val).endsWith("12")
+                    ||String.valueOf(val).endsWith("13")
+                    ||String.valueOf(val).endsWith("14")) result = val + " минут";
+            else if (String.valueOf(val).endsWith("1")) result = val + " минуту";
             else if (String.valueOf(val).endsWith("2") || String.valueOf(val).endsWith("3")
                     || String.valueOf(val).endsWith("4"))
                 result = val + " минуты";
@@ -69,14 +73,22 @@ public class StringUtils {
         }
         else if (val > 180 && val < 2*60*24){
             val=Math.round(Math.abs(time)/60);
-            if (String.valueOf(val).endsWith("1")) result = val + " час";
+            if (String.valueOf(val).endsWith("11")
+                    || String.valueOf(val).endsWith("12")
+                    ||String.valueOf(val).endsWith("13")
+                    ||String.valueOf(val).endsWith("14")) result = val + " часов";
+            else if (String.valueOf(val).endsWith("1")) result = val + " час";
             else if (String.valueOf(val).endsWith("2") || String.valueOf(val).endsWith("3")
                     || String.valueOf(val).endsWith("4"))
                 result = val + " часа";
             else result=val + " часов";
         } else if (val>=2*60*24){
             val=Math.round(Math.abs(time)/60/24);
-            if (String.valueOf(val).endsWith("1")) result = val + " день";
+            if (String.valueOf(val).endsWith("11")
+                    || String.valueOf(val).endsWith("12")
+                    ||String.valueOf(val).endsWith("13")
+                    ||String.valueOf(val).endsWith("14")) result = val + " дней";
+            else if (String.valueOf(val).endsWith("1")) result = val + " день";
             else if (String.valueOf(val).endsWith("2") || String.valueOf(val).endsWith("3")
                     || String.valueOf(val).endsWith("4"))
                 result = val + " дня";
