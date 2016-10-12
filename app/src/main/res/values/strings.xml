@@ -15,7 +15,6 @@
     <string name="name">Name:</string>
     <string name="caravans">Caravans:</string>
     <string name="hirelings">Hirelings:</string>
-    <string name="homecity">Home city:</string>
     <string name="onroute">Route started.</string>
     <string name="experience">Exp</string>
     <string name="level">Level:</string>
@@ -24,7 +23,6 @@
     <string name="tnl">To next level:</string>
     <string name="ambushes">Ambushes:</string>
     <string name="ambushes_left">Ambushes left:</string>
-    <string name="most_in">Most reach in</string>
     <string name="title_activity_main">Information</string>
     <string name="ambush">Ambush</string>
     <string name="LoginComplete">Login complete. Waiting GPS.</string>
