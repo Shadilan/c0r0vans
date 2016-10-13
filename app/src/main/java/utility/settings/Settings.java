@@ -121,7 +121,7 @@ public class Settings extends RelativeLayout {
                 GameSettings.set("CLOSE_WINDOW", closeWindow.isChecked() ? "Y" : "N");
 
                 GameSettings.set("GPS_ON_BACK", gpsOn.isChecked() ? "Y" : "N");
-                GameSettings.set("GPS_RATE", String.valueOf(gpsRate.getProgress() + 1));
+                GameSettings.set("GPS_RATE", String.valueOf(5-(gpsRate.getProgress() + 1)));
                 GameSettings.set("TRACK_BEARING", trackBearing.isChecked() ? "Y" : "N");
 
                 GameSettings.set("SHOW_NETWORK_ERROR", netErrorLog.isChecked() ? "Y" : "N");
@@ -164,7 +164,7 @@ public class Settings extends RelativeLayout {
         int refreshRate=3;
         if (GameSettings.getInstance().get("GPS_RATE")!=null){
             String strRate=GameSettings.getInstance().get("GPS_RATE");
-            refreshRate=Integer.parseInt(strRate)-1;
+            refreshRate=5-(Integer.parseInt(strRate)+1);
         }
         gpsRate.setProgress(refreshRate);
     }
