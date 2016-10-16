@@ -68,7 +68,7 @@ public class Caravan extends GameObject {
                 options.width(3*GameSettings.getMetric()+2);
                 GameObject target = SelectedObject.getInstance().getTarget();
                 options.color(Color.rgb(90,58,0));
-                options.geodesic(true);
+                options.geodesic(false);
                 options.add(startPoint);
                 options.add(finishPoint);
                 options.zIndex(150);
@@ -85,7 +85,7 @@ public class Caravan extends GameObject {
                 if ("Y".equals(GameSettings.getValue("NIGHT_MODE")))
                     options.color(Color.GRAY);
                 else options.color(Color.rgb(153,204,204));
-                options.geodesic(true);
+                options.geodesic(false);
                 options.add(startPoint);
                 options.add(finishPoint);
                 options.zIndex(150);
@@ -178,7 +178,7 @@ public class Caravan extends GameObject {
                         PolylineOptions options = new PolylineOptions();
                         options.width(3*GameSettings.getMetric()+2);
                         GameObject target = SelectedObject.getInstance().getTarget();
-                        options.geodesic(true);
+                        options.geodesic(false);
                         options.color(Color.rgb(90,58,0));
                         options.add(startPoint);
                         options.add(finishPoint);
@@ -193,7 +193,7 @@ public class Caravan extends GameObject {
                         PolylineOptions options = new PolylineOptions();
                         options.width(3*GameSettings.getMetric());
                         GameObject target = SelectedObject.getInstance().getTarget();
-                        options.geodesic(true);
+                        options.geodesic(false);
                         if ("Y".equals(GameSettings.getValue("NIGHT_MODE")))
                         options.color(Color.GRAY);
                         else options.color(Color.rgb(153,204,204));

@@ -331,6 +331,12 @@ public class GameObjects{
                     case "NIGHT_MODE":
                         GameObjects.getPlayer().showRoute();
                         break;
+                    case "USE_TILT":
+                        getPlayer().changeMarkerSize();
+                        for (GameObject o:getPlayer().getAmbushes().values()) o.changeMarkerSize();
+                        for (GameObject o:getPlayer().getRoutes().values()) o.changeMarkerSize();
+                        for (GameObject o:objects.values()) o.changeMarkerSize();
+                        for (GameObject o:chests.values()) o.changeMarkerSize();
 
                 }
             }
