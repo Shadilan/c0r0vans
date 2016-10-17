@@ -3,6 +3,7 @@ package com.coe.c0r0vans.UIElements.MessageLayout;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.HorizontalScrollView;
@@ -12,6 +13,7 @@ import android.widget.ToggleButton;
 import com.coe.c0r0vans.GameObjects.Message;
 import com.coe.c0r0vans.R;
 import com.coe.c0r0vans.ShowHideForm;
+import com.coe.c0r0vans.Singles.MessageMap;
 import com.coe.c0r0vans.UIElements.UIControler;
 
 import utility.SwipeDetectLayout.OnSwipeListener;
@@ -19,6 +21,7 @@ import utility.SwipeDetectLayout.SwipeDetectLayout;
 import utility.notification.Essages;
 import utility.notification.OnEssageListener;
 import utility.settings.GameSettings;
+import utility.settings.Settings;
 
 /**
  * @author Shadilan
@@ -151,6 +154,28 @@ public class MessageLayout extends SwipeDetectLayout implements ShowHideForm {
                 refresh();
             }
         });
+        listSystem.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                GameSettings.set("SystemListScroll",String.valueOf(firstVisibleItem));
+            }
+        });
+        listAlert.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                GameSettings.set("AlertListScroll",String.valueOf(firstVisibleItem));
+            }
+        });
     }
 
     @Override
@@ -160,6 +185,18 @@ public class MessageLayout extends SwipeDetectLayout implements ShowHideForm {
         this.setBackgroundResource(0);
         if ("Y".equals(GameSettings.getValue("NIGHT_MODE"))) this.setBackgroundResource(R.drawable.layouts_night);
         else  this.setBackgroundResource(R.drawable.layouts);
+        String scr=GameSettings.getValue("SystemListScroll");
+        if (scr==null ||scr.equals("")){
+            scr="0";
+        }
+        int scroll=Integer.valueOf(scr);
+        listSystem.setSelection(scroll);
+        scr=GameSettings.getValue("SystemListScroll");
+        if (scr==null ||scr.equals("")){
+            scr="0";
+        }
+        scroll=Integer.valueOf(scr);
+        listAlert.setSelection(scroll);
     }
 
     @Override

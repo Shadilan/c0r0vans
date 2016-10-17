@@ -7,6 +7,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Date;
+import java.util.UUID;
 
 /**
  * @author Shadilan
@@ -41,7 +42,7 @@ public class Message {
         notify=false;
     }
     public Message(String text,Date date){
-        GUID="";
+        GUID= UUID.randomUUID().toString();
         message=text;
         type=0;
         state="";
