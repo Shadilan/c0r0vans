@@ -296,7 +296,7 @@ public class serverConnect {
         runRequest(UID, url, ResponseListenerWithUID.ACTION);
         return true;
     }
-    public boolean callCanelAmbush(ObjectAction action, String target){
+    public boolean callCancelAmbush(ObjectAction action, String target){
         if (!checkConnection()) return false;
         if (Token==null) return false;
         if (lockedActions==null) lockedActions=new ArrayList<>();
@@ -472,7 +472,145 @@ public class serverConnect {
         return true;
     }
 
+    public boolean setTower(ObjectAction action,int Lat,int Lng,int TLat,int TLng){
+        if (!checkConnection()) return false;
+        if (Token==null) return false;
+        if (lockedActions==null) lockedActions=new ArrayList<>();
+        String version=context.getResources().getString(R.string.version);
+        lockedActions.add(action);
+        action.preAction();
+        String UID=UUID.randomUUID().toString();
+        String url=new UrlBuilder(ServerAddres+"/getdata.jsp",action.getCommand(),version)
+                .put("Token",Token)
+                .put("plat",Lat)
+                .put("plng",Lng)
+                .put("lat",TLat)
+                .put("lng",TLng)
+                .put("UUID",UID)
+                .build();
+        listenersMap.put(UID, action);
+        errorMap.put(UID, action);
+        runRequest(UID, url, ResponseListenerWithUID.ACTION);
+        return true;
+    }
+    public boolean setTowerText(ObjectAction action,int Lat,int Lng,String tGUID,String text){
+        if (!checkConnection()) return false;
+        if (Token==null) return false;
+        if (lockedActions==null) lockedActions=new ArrayList<>();
+        String version=context.getResources().getString(R.string.version);
+        lockedActions.add(action);
+        action.preAction();
+        String UID=UUID.randomUUID().toString();
+        String url=new UrlBuilder(ServerAddres+"/getdata.jsp",action.getCommand(),version)
+                .put("Token",Token)
+                .put("plat",Lat)
+                .put("plng",Lng)
+                .put("TGUID",tGUID)
+                .put("text",text)
+                .put("UUID",UID)
+                .build();
+        listenersMap.put(UID, action);
+        errorMap.put(UID, action);
+        runRequest(UID, url, ResponseListenerWithUID.ACTION);
+        return true;
+    }
+    public boolean takeItems(ObjectAction action,int Lat,int Lng,String tGUID,String type){
+        if (!checkConnection()) return false;
+        if (Token==null) return false;
+        if (lockedActions==null) lockedActions=new ArrayList<>();
+        String version=context.getResources().getString(R.string.version);
+        lockedActions.add(action);
+        action.preAction();
+        String UID=UUID.randomUUID().toString();
+        String url=new UrlBuilder(ServerAddres+"/getdata.jsp",action.getCommand(),version)
+                .put("Token",Token)
+                .put("plat",Lat)
+                .put("plng",Lng)
+                .put("TGUID",tGUID)
+                .put("Type",type)
+                .put("UUID",UID)
+                .build();
+        listenersMap.put(UID, action);
+        errorMap.put(UID, action);
+        runRequest(UID, url, ResponseListenerWithUID.ACTION);
+        return true;
+    }
+    public boolean putItems(ObjectAction action,int Lat,int Lng,String tGUID,String type,int count){
+        if (!checkConnection()) return false;
+        if (Token==null) return false;
+        if (lockedActions==null) lockedActions=new ArrayList<>();
+        String version=context.getResources().getString(R.string.version);
+        lockedActions.add(action);
+        action.preAction();
+        String UID=UUID.randomUUID().toString();
+        String url=new UrlBuilder(ServerAddres+"/getdata.jsp",action.getCommand(),version)
+                .put("Token",Token)
+                .put("plat",Lat)
+                .put("plng",Lng)
+                .put("TGUID",tGUID)
+                .put("Type",type)
+                .put("Quanity",count)
+                .put("UUID",UID)
+                .build();
+        listenersMap.put(UID, action);
+        errorMap.put(UID, action);
+        runRequest(UID, url, ResponseListenerWithUID.ACTION);
+        return true;
+    }
+    public boolean destroyTower(ObjectAction action,int Lat,int Lng,String tGUID){
+        if (!checkConnection()) return false;
+        if (Token==null) return false;
+        if (lockedActions==null) lockedActions=new ArrayList<>();
+        String version=context.getResources().getString(R.string.version);
+        lockedActions.add(action);
+        action.preAction();
+        String UID=UUID.randomUUID().toString();
+        String url=new UrlBuilder(ServerAddres+"/getdata.jsp",action.getCommand(),version)
+                .put("Token",Token)
+                .put("plat",Lat)
+                .put("plng",Lng)
+                .put("TGUID",tGUID)
+                .put("UUID",UID)
+                .build();
+        listenersMap.put(UID, action);
+        errorMap.put(UID, action);
+        runRequest(UID, url, ResponseListenerWithUID.ACTION);
+        return true;
+    }
 
+    public boolean upgradeTower(ObjectAction action,int Lat,int Lng,String tGUID){
+        if (!checkConnection()) return false;
+        if (Token==null) return false;
+        if (lockedActions==null) lockedActions=new ArrayList<>();
+        String version=context.getResources().getString(R.string.version);
+        lockedActions.add(action);
+        action.preAction();
+        String UID=UUID.randomUUID().toString();
+        String url=new UrlBuilder(ServerAddres+"/getdata.jsp",action.getCommand(),version)
+                .put("Token",Token)
+                .put("plat",Lat)
+                .put("plng",Lng)
+                .put("TGUID",tGUID)
+                .put("UUID",UID)
+                .build();
+        listenersMap.put(UID, action);
+        errorMap.put(UID, action);
+        runRequest(UID, url, ResponseListenerWithUID.ACTION);
+        return true;
+    }
+
+    private void getTowerInfo(String GUID){
+        int Lat=GPSInfo.getInstance().GetLat();
+        int Lng=GPSInfo.getInstance().GetLng();
+        String UID=UUID.randomUUID().toString();
+        String url=new UrlBuilder(ServerAddres+"/getdata.jsp","GetTowerInfo",version)
+                .put("Token",Token)
+                .put("TGUID",GUID)
+                .put("UUID",UID)
+                .build();
+        runRequest(UUID.randomUUID().toString(), url, ResponseListenerWithUID.FASTSCAN,0);
+        syncFast=false;
+    }
 
     /**
      * Check if we have Token

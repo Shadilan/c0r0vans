@@ -122,6 +122,8 @@ All rights reserved to Circle of Eternity</string>
     <string name="upgrade_text">%1$s\n%2$s\n%3$s❍(Skill Multiplier:%4$s)</string>
     <string name="leftHirelings">Left to hire:</string>
     <string name="hire">Hire: %1$d of %2$d for %3$s</string>
+    <string name="put_obsidian">Put: %1$d of %2$d of Obsidian</string>
+    <string name="take_obsidian">Take: %1$d Obsidian</string>
     <string name="server_unavaible">Server unavaible.\nRetry in 30 seconds.</string>
     <string name="city_created">Town appear near you at %1$d meters.</string>
     <string name="gold_amount" translatable="false">%1$s ❍</string>
@@ -166,4 +168,5 @@ All rights reserved to Circle of Eternity</string>
     <string name="message_system">System</string>
     <string name="message_alert">Alert</string>
     <string name="message_clear" translatable="false">✖</string>
+    <string name="confirm_put">Are you sure? you want to put obsidian in tower? You won\'t get it back.</string>
 </resources>

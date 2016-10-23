@@ -14,6 +14,7 @@ import com.coe.c0r0vans.Logic.Caravan;
 import com.coe.c0r0vans.Logic.Chest;
 import com.coe.c0r0vans.Logic.City;
 import com.coe.c0r0vans.Logic.Player;
+import com.coe.c0r0vans.Logic.Tower;
 import com.coe.c0r0vans.UIElements.ChooseFaction;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
@@ -138,12 +139,16 @@ public class GameObjects{
                                         put(new City(MyGoogleMap.getMap(), JObj.getJSONObject(i)));
 
 
-                                    } else if (JObj.getJSONObject(i).getString("Type").equalsIgnoreCase("Ambush")) {
+                                    }else if (JObj.getJSONObject(i).getString("Type").equalsIgnoreCase("City")) {
+                                        put(new City(MyGoogleMap.getMap(), JObj.getJSONObject(i)));
 
-                                        Ambush ambush = new Ambush(MyGoogleMap.getMap(), JObj.getJSONObject(i));
+
+                                    }  else if (JObj.getJSONObject(i).getString("Type").equalsIgnoreCase("Tower")) {
+
+                                        Tower tower = new Tower(MyGoogleMap.getMap(), JObj.getJSONObject(i));
                                         /*if (ambush.isOwner()) player.getAmbushes().put(ambush.getGUID(),ambush);
                                         else objects.put(ambush.getGUID(), ambush);*/
-                                        put(ambush);
+                                        put(tower);
 
                                     } else if (JObj.getJSONObject(i).getString("Type").equalsIgnoreCase("Caravan")) {
 

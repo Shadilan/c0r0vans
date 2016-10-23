@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="utf-8"?>
+<utility.SwipeDetectLayout.SwipeDetectLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:clickable="true"
+    >
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/CommonButton"
+        android:id="@+id/closeActionButton"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:src="@mipmap/closebutton"
+        android:layout_marginBottom="0dp" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/LargeText"
+        android:id="@+id/owner"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/MediumText"
+        android:id="@+id/level"
+        android:layout_below="@id/owner"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"/>
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/level"
+        android:id="@+id/pageChoose">
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:orientation="horizontal">
+        <ToggleButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Description"
+            android:id="@+id/toggleDesc"
+            android:textOff="Description"
+            android:textOn="Description"
+            style="@style/TabButton"
+            android:checked="true" />
+        <ToggleButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Warehouse"
+            android:id="@+id/toggleWare"
+            android:textOff="Warehouse"
+            android:textOn="Warehouse"
+            style="@style/TabButton"
+            android:checked="false"
+            android:visibility="invisible"
+        />
+    </LinearLayout>
+    </HorizontalScrollView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/pageChoose"
+            android:layout_margin="5dp"
+            android:orientation="vertical"
+            android:id="@+id/swapPanel">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+
+                android:id="@+id/descriptionPanel"
+                android:visibility="visible">
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    style="@style/SmallText"
+                    android:id="@+id/description"
+                    android:layout_alignParentTop="true"
+                    android:padding="0dp"
+                    android:maxLength="256"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:inputType="none"
+                    android:layout_above="@+id/setDescription" />
+                <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/setDescription"
+                    android:src="@mipmap/table"
+                    style="@style/CommonButton"
+                    android:layout_alignParentBottom="true"
+                    android:layout_centerHorizontal="true"
+                    />
+                <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/destroyTower"
+                    android:src="@mipmap/destroy_tower"
+                    android:layout_alignParentBottom="true"
+                    style="@style/CommonButton"
+                    android:layout_toStartOf="@id/setDescription"
+                    android:layout_toLeftOf="@id/setDescription" />
+
+                <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/upgdadeTower"
+                    android:src="@mipmap/upgrade_tower"
+                    style="@style/CommonButton"
+                    android:layout_alignParentBottom="true"
+                    android:layout_toEndOf="@id/setDescription"
+                    android:layout_toRightOf="@id/setDescription" />
+
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/warehouse"
+                android:visibility="gone">
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/obsidianPanel">
+                        <ImageButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            style="@style/CommonButton"
+                            android:id="@+id/put_take"
+                            android:src="@mipmap/obsidian"
+                            android:layout_alignParentTop="true"
+                            android:layout_alignParentRight="true"
+                            android:layout_alignParentEnd="true"
+                            android:layout_marginRight="3dp"
+                            android:layout_marginLeft="0dp"
+                            android:layout_marginTop="0dp"
+                            android:layout_marginBottom="0dp"
+                            android:visibility="visible"/>
+
+                        <TextView
+                            style="@style/SmallText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/obsidian_count"
+                            android:visibility="visible"
+                            android:layout_alignTop="@+id/put_take"
+                            android:layout_alignLeft="@+id/count_minus"
+                            android:layout_alignStart="@+id/count_minus"
+                            android:gravity="center_vertical|center_horizontal"
+                            android:layout_toLeftOf="@+id/put_take"
+                            android:layout_toStartOf="@+id/put_take"
+                            android:text="@string/put_obsidian" />
+
+                        <Button
+                            style="?android:attr/buttonStyleSmall"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/minus"
+                            android:id="@+id/count_minus"
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentStart="true"
+                            android:layout_below="@+id/obsidian_count" />
+
+                        <SeekBar
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/count"
+                            android:layout_alignBottom="@+id/put_take"
+                            android:layout_below="@+id/obsidian_count"
+                            android:layout_toLeftOf="@+id/count_plus"
+                            android:layout_toStartOf="@+id/count_plus"
+                            android:layout_toRightOf="@+id/count_minus"
+                            android:layout_toEndOf="@+id/count_minus"
+                            android:indeterminate="false" />
+
+                        <Button
+                            style="?android:attr/buttonStyleSmall"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/plus"
+                            android:id="@+id/count_plus"
+                            android:layout_toLeftOf="@+id/put_take"
+                            android:layout_toStartOf="@+id/put_take"
+                            android:layout_alignTop="@+id/count" />
+                </RelativeLayout>
+
+
+            </RelativeLayout>
+
+
+        </LinearLayout>
+
+
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/MediumText"
+        android:id="@+id/distance"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+</utility.SwipeDetectLayout.SwipeDetectLayout>

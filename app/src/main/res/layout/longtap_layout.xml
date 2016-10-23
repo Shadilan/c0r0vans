@@ -2,24 +2,33 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="wrap_content">
 
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/CommonButton"
+        android:id="@+id/createTower"
+        android:src="@mipmap/create_tower"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="10dp"/>
     <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         style="@style/CommonButton"
         android:id="@+id/createAmbushAction"
         android:src="@mipmap/ambush_img"
-        android:layout_alignParentTop="true"
+        android:layout_below="@id/createTower"
         android:layout_toLeftOf="@+id/space"
         android:layout_toStartOf="@+id/space"
         android:layout_margin="10dp"/>
-
     <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         style="@style/CommonButton"
         android:id="@+id/longtapClose"
         android:src="@mipmap/cancel"
-        android:layout_alignParentTop="true"
+        android:layout_below="@id/createTower"
         android:layout_toRightOf="@+id/space"
         android:layout_toEndOf="@+id/space"
         android:layout_margin="10dp"/>
@@ -27,9 +36,10 @@
     <Space
         android:layout_width="70dp"
         android:layout_height="70dp"
-        android:layout_alignParentTop="true"
+
         android:layout_centerInParent="true"
         android:id="@+id/space"
+        android:layout_below="@id/createTower"
         android:layout_margin="10dp"/>
 
     <ImageButton

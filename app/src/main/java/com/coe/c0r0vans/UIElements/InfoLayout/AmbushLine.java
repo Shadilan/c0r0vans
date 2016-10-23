@@ -79,7 +79,7 @@ public class AmbushLine extends RelativeLayout {
                 confirmWindow.setConfirmAction(new Runnable() {
                     @Override
                     public void run() {
-                        serverConnect.getInstance().callCanelAmbush(ambush.getRemoveAction(), ambush.getGUID());
+                        serverConnect.getInstance().callCancelAmbush(ambush.getRemoveAction(), ambush.getGUID());
                         removeButton.setVisibility(INVISIBLE);
                         //self.setVisibility(GONE);
 

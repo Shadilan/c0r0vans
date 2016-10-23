@@ -78,6 +78,7 @@ public class Player extends GameObject {
     private HashMap<String,Ambush> Ambushes;
 
     protected Circle zone1;
+    private String tower;
 
 
     public Player() {
@@ -723,6 +724,14 @@ public class Player extends GameObject {
         return cityMax;
     }
 
+    public void setTower(String tower) {
+        this.tower = tower;
+    }
+
+    public String getTower() {
+        return tower;
+    }
+
 
     class ambushCreate extends RelativeLayout implements GameObjectView {
 
@@ -936,6 +945,19 @@ public class Player extends GameObject {
                     close();
                 }
             });
+            findViewById(R.id.createTower).setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (obsidian>=10 && (tower==null || "".equals(tower))) {
+                        serverConnect.getInstance().createCity(createTower,
+                                GPSInfo.getInstance().GetLat(), GPSInfo.getInstance().GetLng(),
+                                (int) (SelectedObject.getInstance().getPoint().latitude * 1e6),
+                                (int) (SelectedObject.getInstance().getPoint().longitude * 1e6)
+                        );
+                    }
+                    close();
+                }
+            });
         }
         ObjectAction createAmbush;
         ObjectAction createCity;
@@ -943,6 +965,12 @@ public class Player extends GameObject {
 
         @Override
         public void updateInZone(boolean inZone) {
+            if (tower==null){
+                findViewById(R.id.createTower).setVisibility(VISIBLE);
+            }
+            if (obsidian>=10 && inZone)
+                findViewById(R.id.createTower).setEnabled(true);
+            else findViewById(R.id.createTower).setEnabled(false);
             if (inZone){
                 Upgrade up=getUpgrade("ambushes");
                 int cnt=10;
@@ -1034,5 +1062,62 @@ public class Player extends GameObject {
             if (!(city.equals(r.getStartGUID()) || city.equals(r.getFinishGUID()))) r.fadeRoute();
         }
     }
+    ObjectAction createTower=new ObjectAction(this) {
+        @Override
+        public Bitmap getImage() {
+            return null;
+        }
 
+        @Override
+        public String getCommand() {
+            return "SetTower";
+        }
+
+        @Override
+        public void preAction() {
+            obsidian-=10;
+            tower="-";
+        }
+
+        @Override
+        public void postAction(JSONObject response) {
+            serverConnect.getInstance().callGetPlayerInfo();
+            serverConnect.getInstance().callScanRange();
+        }
+
+        @Override
+        public void postError(JSONObject response) {
+            try {
+                obsidian+=10;
+                tower="";
+                String err;
+                if (response.has("Error")) err = response.getString("Error");
+                else if (response.has("Result")) err = response.getString("Result");
+                else err = "U0000";
+                switch (err) {
+                    case "DB001":
+                        Essages.addEssage(Essages.SYSTEM, "Ошибка сервера.");
+                        break;
+                    case "L0001":
+                        Essages.addEssage(Essages.SYSTEM, "Соединение потеряно.");
+                        GameObjects.getPlayer().setRouteStart(true);
+                        break;
+                    case "O1501":
+                        Essages.addEssage(Essages.SYSTEM, "У вас уже есть башня.");
+                        break;
+                    case "O1502":
+                        Essages.addEssage(Essages.SYSTEM, "Слишком далеко.");
+                        break;
+                    default:
+                        GameObjects.getPlayer().setRouteStart(true);
+                        if (response.has("Message"))
+                            Essages.addEssage(Essages.SYSTEM, response.getString("Message"));
+                        else Essages.addEssage(Essages.SYSTEM, "Непредвиденная ошибка.");
+
+                }
+            } catch (JSONException e) {
+                GATracker.trackException("TowerSet", e);
+            }
+        }
+    };
 }
