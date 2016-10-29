@@ -1,12 +1,16 @@
 package utility;
 
 
+import android.Manifest;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -22,18 +26,18 @@ import utility.settings.SettingsListener;
 
 public class GPSInfo {
     private static GPSInfo instance;
-    private boolean on=false;
-    private Long lastTime= 0L;
+    private boolean on = false;
+    private Long lastTime = 0L;
 
-    public static boolean checkEnabled(){
+    public static boolean checkEnabled() {
 
-        if (instance.locationManager==null) return false;
-        boolean result=false;
+        if (instance.locationManager == null) return false;
+        boolean result = false;
         for (String prov : instance.locationManager.getAllProviders()) {
 
             if (!"passive".equals(prov) && instance.locationManager.isProviderEnabled(prov)) {
 
-                result=true ;
+                result = true;
             }
         }
         return result;
@@ -50,10 +54,12 @@ public class GPSInfo {
 
 
     private int speed;
-    public int getSpeed(){
+
+    public int getSpeed() {
 
         return speed;
     }
+
     public static GPSInfo getInstance() {
         return instance;
     }
@@ -81,70 +87,89 @@ public class GPSInfo {
 
     }
 
+    Location aim;
+    Location current;
+    long lastSync = 0;
+    double stepLat = 0;
+    double stepLng = 0;
     Context context;
-    private boolean hasAccuracy=false;
+    private boolean hasAccuracy = false;
+
     /**
      * Constructor
      * @param mContext Application context
      */
     private GPSInfo(Context mContext) {
         locationManager = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
-        context=mContext;
+        context = mContext;
         //Criteria criteria = new Criteria();
-        locationListener=new LocationListener() {
-            float accur=1000;
+        locationListener = new LocationListener() {
+            float accur = 1000;
+
             @Override
             public void onLocationChanged(Location location) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
-                    if (location.isFromMockProvider()){
+                    if (location.isFromMockProvider()) {
                         //Essages.addEssage("Вы используете фальшивые координаты. Информация отправлена администраторам.");
-                        GATracker.trackHit("GPS","SpoofingWithMock");
+                        GATracker.trackHit("GPS", "SpoofingWithMock");
                         return;
 
                     }
                 }
 
-                Long curTime=new Date().getTime()/1000;
-                LatLng newCord=new LatLng(location.getLatitude(),location.getLongitude());
-                LatLng oldCord=getLatLng();
-                if (oldCord.latitude==-1 && oldCord.longitude==-1) oldCord=newCord;
+                Long curTime = new Date().getTime() / 1000;
+                LatLng newCord = new LatLng(location.getLatitude(), location.getLongitude());
+                LatLng oldCord = getLatLng();
+                if (oldCord.latitude == -1 && oldCord.longitude == -1) oldCord = newCord;
                 float timespeed;
-                if (location.hasSpeed() &&location.getSpeed()>0){
+                if (location.hasSpeed() && location.getSpeed() > 0) {
                     timespeed = location.getSpeed();
                 } else {
-                    timespeed=Math.max(speed*5/18,1);
+                    timespeed = Math.max(speed * 5 / 18, 1);
 
-                    GATracker.trackHit("GPS","NoSpeed."+location.getProvider());
+                    GATracker.trackHit("GPS", "NoSpeed." + location.getProvider());
                 }
 
-                if ((timespeed)*(curTime-lastTime+1)*10<getDistance(oldCord,newCord) && curTime-lastTime<30000){
-                    GATracker.trackHit("GPS","ToFast."+location.getProvider());
+                if ((timespeed) * (curTime - lastTime + 1) * 10 < getDistance(oldCord, newCord) && curTime - lastTime < 30000) {
+                    GATracker.trackHit("GPS", "ToFast." + location.getProvider());
                     return;
                 }
-                if (curTime-lastTime<30000 && ((location.hasAccuracy() && location.getAccuracy()>100)|| !location.hasAccuracy())) {
-                    GATracker.trackHit("GPS", "NotAccurate."+location.getProvider());
+                if (curTime - lastTime < 30000 && ((location.hasAccuracy() && location.getAccuracy() > 100) || !location.hasAccuracy())) {
+                    GATracker.trackHit("GPS", "NotAccurate." + location.getProvider());
                     return;
                 }
-
 
 
                 if (location.hasAccuracy()) {
-                    hasAccuracy=true;
-                    accur=location.getAccuracy();
-                    GATracker.trackHit("GPS","Accuracy",(int)accur);
+                    hasAccuracy = true;
+                    accur = location.getAccuracy();
+                    GATracker.trackHit("GPS", "Accuracy", (int) accur);
 
                 }
 
-                if (location.hasSpeed()){
-                    speed = (int) (timespeed * 60 *60 / 1000);
-                    GATracker.trackHit("GPS","Speed",speed);
+                if (location.hasSpeed()) {
+                    speed = (int) (timespeed * 60 * 60 / 1000);
+                    GATracker.trackHit("GPS", "Speed", speed);
                 }
 
                 if (location.getLongitude() != -1 && location.getLatitude() != -1) {
                     lat = (int) (location.getLatitude() * 1000000);
                     lng = (int) (location.getLongitude() * 1000000);
-                    lastTime=curTime;
+                    lastTime = curTime;
 
+                }
+                if (location!=null) {
+                    aim = location;
+                    long t = (new Date()).getTime();
+                    if (lastSync == 0 || current == null) {
+                        current = aim;
+                        stepLat=0;
+                        stepLng=0;
+                    } else {
+                        long step = t - lastSync / 100;
+
+                    }
+                    lastSync = t;
                 }
 
                 //RequestUpdate(location.getProvider());
@@ -158,21 +183,56 @@ public class GPSInfo {
 
             }
 
+            Runnable refreshLock=new Runnable() {
+                @Override
+                public void run() {
+                    boolean needMove=true;
+                    if (stepLat==0 && stepLng==0) needMove=false;
+                    if (needMove) {
+                        if (aim != null) {
+                            if (current == null
+                                    || Math.abs(current.getLatitude() - aim.getLatitude()) < Math.abs(stepLat)
+                                    || Math.abs(current.getLongitude() - aim.getLongitude()) < Math.abs(stepLng)
+                                    ) {
+                                current = aim;
+                                stepLat = 0;
+                                stepLng = 0;
+                            } else {
+                                current.setLatitude(current.getLatitude() + stepLat);
+                                current.setLongitude(current.getLongitude() + stepLng);
+                            }
+                        }
+
+                        if (locationListeners != null) {
+                            if (locationListenersRem != null)
+                                locationListeners.removeAll(locationListenersRem);
+                            for (LocationListener ll : locationListeners) {
+                                ll.onLocationChanged(current);
+                            }
+                        }
+                    }
+                    MainThread.postDelayed(refreshLock,100);
+                }
+
+            };
+
             @Override
             public void onStatusChanged(String provider, int status, Bundle extras) {
-                if (locationListeners !=null){
-                    if (locationListenersRem !=null) locationListeners.removeAll(locationListenersRem);
-                    for (LocationListener ll:locationListeners){
-                        ll.onStatusChanged(provider,status,extras);
+                if (locationListeners != null) {
+                    if (locationListenersRem != null)
+                        locationListeners.removeAll(locationListenersRem);
+                    for (LocationListener ll : locationListeners) {
+                        ll.onStatusChanged(provider, status, extras);
                     }
                 }
             }
 
             @Override
             public void onProviderEnabled(String provider) {
-                if (locationListeners !=null){
-                    if (locationListenersRem !=null) locationListeners.removeAll(locationListenersRem);
-                    for (LocationListener ll:locationListeners){
+                if (locationListeners != null) {
+                    if (locationListenersRem != null)
+                        locationListeners.removeAll(locationListenersRem);
+                    for (LocationListener ll : locationListeners) {
                         ll.onProviderEnabled(provider);
                     }
                 }
@@ -180,10 +240,11 @@ public class GPSInfo {
 
             @Override
             public void onProviderDisabled(String provider) {
-                GATracker.trackHit("GPSProvider",provider+"Off");
-                if (locationListeners !=null){
-                    if (locationListenersRem !=null) locationListeners.removeAll(locationListenersRem);
-                    for (LocationListener ll:locationListeners){
+                GATracker.trackHit("GPSProvider", provider + "Off");
+                if (locationListeners != null) {
+                    if (locationListenersRem != null)
+                        locationListeners.removeAll(locationListenersRem);
+                    for (LocationListener ll : locationListeners) {
                         ll.onProviderDisabled(provider);
                     }
                 }
@@ -210,15 +271,23 @@ public class GPSInfo {
             }
         });
     }
-    public void onGPS(){
+
+    public void onGPS() {
 
         for (String prov : locationManager.getAllProviders()) {
             RequestUpdate(prov);
         }
-        on=true;
+        on = true;
     }
-    public void offGPS(){
 
+    public void offGPS() {
+
+        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
+        {
+            Toast.makeText(context,"Allow GPS Access",Toast.LENGTH_LONG);
+            return;
+        }
         locationManager.removeUpdates(locationListener);
         on=false;
     }
