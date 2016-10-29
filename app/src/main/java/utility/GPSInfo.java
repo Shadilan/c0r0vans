@@ -167,54 +167,24 @@ public class GPSInfo {
                         stepLng=0;
                     } else {
                         long step = t - lastSync / 100;
-
+                        stepLat=(aim.getLatitude()-current.getLatitude())/step;
+                        stepLng=(aim.getLongitude()-current.getLongitude())/step;
                     }
                     lastSync = t;
                 }
 
                 //RequestUpdate(location.getProvider());
-                if (locationListeners != null) {
+                /*if (locationListeners != null) {
                     if (locationListenersRem != null)
                         locationListeners.removeAll(locationListenersRem);
                     for (LocationListener ll : locationListeners) {
                         ll.onLocationChanged(location);
                     }
-                }
+                }*/
 
             }
 
-            Runnable refreshLock=new Runnable() {
-                @Override
-                public void run() {
-                    boolean needMove=true;
-                    if (stepLat==0 && stepLng==0) needMove=false;
-                    if (needMove) {
-                        if (aim != null) {
-                            if (current == null
-                                    || Math.abs(current.getLatitude() - aim.getLatitude()) < Math.abs(stepLat)
-                                    || Math.abs(current.getLongitude() - aim.getLongitude()) < Math.abs(stepLng)
-                                    ) {
-                                current = aim;
-                                stepLat = 0;
-                                stepLng = 0;
-                            } else {
-                                current.setLatitude(current.getLatitude() + stepLat);
-                                current.setLongitude(current.getLongitude() + stepLng);
-                            }
-                        }
 
-                        if (locationListeners != null) {
-                            if (locationListenersRem != null)
-                                locationListeners.removeAll(locationListenersRem);
-                            for (LocationListener ll : locationListeners) {
-                                ll.onLocationChanged(current);
-                            }
-                        }
-                    }
-                    MainThread.postDelayed(refreshLock,100);
-                }
-
-            };
 
             @Override
             public void onStatusChanged(String provider, int status, Bundle extras) {
@@ -270,6 +240,7 @@ public class GPSInfo {
                 }
             }
         });
+        MainThread.postDelayed(refreshLock,100);
     }
 
     public void onGPS() {
@@ -279,7 +250,38 @@ public class GPSInfo {
         }
         on = true;
     }
+    Runnable refreshLock=new Runnable() {
+        @Override
+        public void run() {
+            boolean needMove=true;
+            if (stepLat==0 && stepLng==0) needMove=false;
+            if (needMove) {
+                if (aim != null) {
+                    if (current == null
+                            || Math.abs(current.getLatitude() - aim.getLatitude()) < Math.abs(stepLat)
+                            || Math.abs(current.getLongitude() - aim.getLongitude()) < Math.abs(stepLng)
+                            ) {
+                        current = aim;
+                        stepLat = 0;
+                        stepLng = 0;
+                    } else {
+                        current.setLatitude(current.getLatitude() + stepLat);
+                        current.setLongitude(current.getLongitude() + stepLng);
+                    }
+                }
 
+                if (locationListeners != null) {
+                    if (locationListenersRem != null)
+                        locationListeners.removeAll(locationListenersRem);
+                    for (LocationListener ll : locationListeners) {
+                        ll.onLocationChanged(current);
+                    }
+                }
+            }
+            MainThread.postDelayed(refreshLock,100);
+        }
+
+    };
     public void offGPS() {
 
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
