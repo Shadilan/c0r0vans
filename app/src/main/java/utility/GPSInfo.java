@@ -254,7 +254,7 @@ public class GPSInfo {
         @Override
         public void run() {
             boolean needMove=true;
-            if (stepLat==0 && stepLng==0) needMove=false;
+            //if (stepLat==0 && stepLng==0) needMove=false;
             if (needMove) {
                 if (aim != null) {
                     if (current == null
