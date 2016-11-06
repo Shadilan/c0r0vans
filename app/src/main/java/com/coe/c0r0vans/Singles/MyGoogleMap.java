@@ -36,7 +36,7 @@ public class MyGoogleMap{
     private static boolean moveFixed=true;
     private static Marker targetMarker;
     private static ImageButton showpointButton;
-    static float bearing = 0;
+    private static float bearing = 0;
     private static long lastRotateTime=0;
     private static Context context;
 
@@ -150,6 +150,7 @@ public class MyGoogleMap{
                     oldBearing = location.getBearing();
                 }
                 LatLng target = new LatLng(location.getLatitude(), location.getLongitude());
+                
                 if (moveFixed) {
                     moveCamera(target, curBearing);
                 }
@@ -230,7 +231,7 @@ public class MyGoogleMap{
     /**
      * Перечитать настройки
      */
-    public static void changeSettings(){
+    private static void changeSettings(){
         stopShowPoint();
         moveCamera(map.getCameraPosition().target);
 

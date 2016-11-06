@@ -165,7 +165,7 @@ public class GameObject {
         }
     }
 
-    protected ArrayList<OnGameObjectChange> changeListeners;
+    private ArrayList<OnGameObjectChange> changeListeners;
     protected ArrayList<OnGameObjectRemove> removeListeners;
 
     public void addOnChangeListeners(OnGameObjectChange onGameObjectChange){
@@ -205,9 +205,6 @@ public class GameObject {
             zone.remove();
             zone=null;
         }
-
-
-
     }
     public LatLng getPosition() {return null;}
     public boolean isOwner() {

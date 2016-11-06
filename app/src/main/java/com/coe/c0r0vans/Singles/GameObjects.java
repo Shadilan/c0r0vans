@@ -161,9 +161,9 @@ public class GameObjects{
                             }
                             Calendar calendar = Calendar.getInstance();
                             calendar.setTime(new Date());
-                            calendar.add(Calendar.MINUTE,-20);
+                            calendar.add(Calendar.MINUTE,-5);
                             for (GameObject obj : remObjects) {
-                                //Если город то не удаляем в течении 20 минут.
+                                //Если город то не удаляем в течении 5 минут.
                                 if (!(obj instanceof City &&  obj.getUpdated().after(calendar.getTime())) && !(obj instanceof Chest)) {
                                     obj.RemoveObject();
                                     removeActive(obj);

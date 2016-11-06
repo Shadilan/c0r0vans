@@ -61,13 +61,35 @@ public class Upgrade {
         if (object.has("Cost")) Cost=object.getInt("Cost");
 
     }
-    public Upgrade(JSONObject object){
+    Upgrade(JSONObject object){
         try {
             loadJSON(object);
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
+    public int getTypeNum(){
+        switch (getType()){
+            case "speed": return 1;
+            case "set_ambushes":
+                return 2;
+            case "ambushes":
+                return 3;
+            case "cargo":
+                return 4;
+            case "bargain":
+                return 5;
+            case "paladin":
+                return 6;
+            case "founder":
+                return 7;
+            case "leadership":
+                return 8;
+            default:
+                return 0;
+        }
+    }
+
     //public int getNextCost(){return nextCost;}
     public Bitmap getImage(){
         return ImageLoader.getImage(Type);
@@ -80,17 +102,17 @@ public class Upgrade {
     }
     public String getType() {return Type;}
     public int getCost(){return Cost;}
-    public int getReqCityLev(){return reqCityLev;}
+    int getReqCityLev(){return reqCityLev;}
 
     public int getLevel() {
         return level;
     }
 
-    public int getEffect1() {
+    int getEffect1() {
         return effect1;
     }
 
-    public JSONObject getJSON() throws JSONException {
+    JSONObject getJSON() throws JSONException {
         JSONObject result=new JSONObject();
         result.put("Type",Type);
         result.put("Level",level);
@@ -104,7 +126,7 @@ public class Upgrade {
         return result;
     }
 
-    public int getEffect2() {
+    int getEffect2() {
         return effect2;
     }
 

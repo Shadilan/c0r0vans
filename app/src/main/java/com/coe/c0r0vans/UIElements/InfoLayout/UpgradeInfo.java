@@ -12,6 +12,11 @@ import com.coe.c0r0vans.R;
 import com.coe.c0r0vans.ShowHideForm;
 import com.coe.c0r0vans.Singles.GameObjects;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+
 import utility.StringUtils;
 
 /**
@@ -41,6 +46,13 @@ public class UpgradeInfo extends LinearLayout implements PlayerInfoLayout {
     @Override
     public void update() {
         upgradeInfo.removeAllViews();
+        ArrayList<Upgrade> ar=GameObjects.getPlayer().getUpgrades();
+        Collections.sort(ar,new Comparator<Upgrade>() {
+            @Override
+            public int compare(Upgrade o1, Upgrade o2) {
+                return (o1.getLevel() * 10 +o1.getTypeNum())-(o2.getLevel() * 10 +o2.getTypeNum());
+            }
+        });
         for (Upgrade u: GameObjects.getPlayer().getUpgrades()){
             LinearLayout l=new LinearLayout(getContext());
 
