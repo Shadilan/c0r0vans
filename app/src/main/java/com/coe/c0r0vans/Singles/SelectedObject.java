@@ -18,8 +18,8 @@ public class SelectedObject {
         return target;
     }
     private LatLng point;
-    Circle clickpos;
-    Circle clickPoint;
+    private Circle clickpos;
+    private Circle clickPoint;
     public void setPoint(LatLng point){
         this.point=point;
         if (clickpos != null) {
@@ -35,7 +35,7 @@ public class SelectedObject {
         }
 
         if (target instanceof ActiveObject)
-            clickpos.setRadius(((ActiveObject) target).getRadius());
+            clickpos.setRadius(((ActiveObject) target).getActionRadius());
         else clickpos.setRadius(GameObjects.getPlayer().getAmbushRad());
         if (clickPoint != null) {
             clickPoint.setCenter(point);

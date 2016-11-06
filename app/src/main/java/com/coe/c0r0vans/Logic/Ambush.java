@@ -60,7 +60,7 @@ public class Ambush extends GameObject implements ActiveObject {
         return life;
     }
 
-    LatLng latlng;
+    private LatLng latlng;
 
 
     @Override
@@ -300,7 +300,7 @@ public class Ambush extends GameObject implements ActiveObject {
             e.printStackTrace();
         }
     }
-    public JSONObject getJSON() throws JSONException {
+    JSONObject getJSON() throws JSONException {
         JSONObject object=new JSONObject();
         object.put("GUID",GUID);
         if (mark!=null){
@@ -386,11 +386,11 @@ public class Ambush extends GameObject implements ActiveObject {
             if (zone!=null) zone.setVisible(false);
         }
     }
-    public int getFaction() {
+    int getFaction() {
         return faction;
     }
 
-    class AmbushLayout extends RelativeLayout implements GameObjectView {
+    private class AmbushLayout extends RelativeLayout implements GameObjectView {
 
         public AmbushLayout(Context context) {
             super(context);
@@ -520,6 +520,11 @@ public class Ambush extends GameObject implements ActiveObject {
     }
     public int getRadius(){
         return this.radius;
+    }
+
+    @Override
+    public int getActionRadius() {
+        return 10;
     }
 
     @Override

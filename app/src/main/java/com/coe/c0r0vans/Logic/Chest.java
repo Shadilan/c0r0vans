@@ -84,7 +84,7 @@ public class Chest extends GameObject implements ActiveObject {
         super.setMarker(m);
         changeMarkerSize();
     }
-    boolean inZone=false;
+    private boolean inZone=false;
     public void refresh(){
 
         boolean oldInZone=inZone;
@@ -144,7 +144,7 @@ public class Chest extends GameObject implements ActiveObject {
     }
 
     @Override
-    public int getRadius() {
+    public int getActionRadius() {
         return 30;
     }
 

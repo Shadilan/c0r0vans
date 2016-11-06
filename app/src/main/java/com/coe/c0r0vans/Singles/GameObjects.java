@@ -59,7 +59,7 @@ public class GameObjects{
             if (o.getMarker()!=null && o.isVisible() && o.getMarker().isVisible() && o.getPosition()!=null){
                 float dist = GPSInfo.getDistance(latLng, o.getPosition());
                 float pdist = GPSInfo.getDistance(player.getPosition(),o.getPosition());
-                if (dist <  o.getRadius() && pdist<=player.getActionDistance()) {
+                if (dist <  o.getActionRadius() && pdist<=player.getActionDistance()) {
                     closestObject = o;
                     break;
                 }
@@ -72,10 +72,10 @@ public class GameObjects{
                     if (o.getPosition() != null) {
 
                         float dist = GPSInfo.getDistance(latLng, o.getPosition());
-                        if (o instanceof Chest && dist < ((ActiveObject) o).getRadius()) {
+                        if (o instanceof Chest && dist < ((ActiveObject) o).getActionRadius()) {
                             closestObject = (ActiveObject) o;
                             break;
-                        } else if (dist < closest && dist < ((ActiveObject) o).getRadius()) {
+                        } else if (dist < closest && dist < ((ActiveObject) o).getActionRadius()) {
                             closest = dist;
                             closestObject = (ActiveObject) o;
                             if (o instanceof Chest) break;
@@ -139,16 +139,14 @@ public class GameObjects{
                                         put(new City(MyGoogleMap.getMap(), JObj.getJSONObject(i)));
 
 
-                                    }else if (JObj.getJSONObject(i).getString("Type").equalsIgnoreCase("City")) {
-                                        put(new City(MyGoogleMap.getMap(), JObj.getJSONObject(i)));
-
-
-                                    }  else if (JObj.getJSONObject(i).getString("Type").equalsIgnoreCase("Tower")) {
-
+                                    }else if (JObj.getJSONObject(i).getString("Type").equalsIgnoreCase("Tower")) {
                                         Tower tower = new Tower(MyGoogleMap.getMap(), JObj.getJSONObject(i));
-                                        /*if (ambush.isOwner()) player.getAmbushes().put(ambush.getGUID(),ambush);
-                                        else objects.put(ambush.getGUID(), ambush);*/
                                         put(tower);
+
+                                    }  else if (JObj.getJSONObject(i).getString("Type").equalsIgnoreCase("Ambush")) {
+                                        Ambush ambush = new Ambush(MyGoogleMap.getMap(), JObj.getJSONObject(i));
+                                        if (ambush.isOwner()) player.getAmbushes().put(ambush.getGUID(),ambush);
+                                        else put(ambush);
 
                                     } else if (JObj.getJSONObject(i).getString("Type").equalsIgnoreCase("Caravan")) {
 

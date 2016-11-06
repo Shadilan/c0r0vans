@@ -146,5 +146,7 @@
     <string name="message_system">Системные</string>
     <string name="message_alert">Оповещения</string>
     <string name="confirm_put">Вы уверены, что хотите оставить обсидиан? Забрать его обратно не получится.</string>
+    <string name="do_google_authorization">Выполнение Авторизации Google.</string>
+    <string name="google_authorization_done">Google Авторизация выполнена.</string>
 
 </resources>

@@ -86,7 +86,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
     private  void signIn(){
         TextView status=((TextView)findViewById(R.id.status));
         if (status!=null) {
-            status.setText("Выполнение Авторизации Google.");
+            status.setText(R.string.do_google_authorization);
         }
         SignIn.init(this);
         SignIn.setListener(new SignInListener() {
@@ -97,7 +97,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                 idToken=token;
                 TextView status=((TextView)findViewById(R.id.status));
                 if (status!=null) {
-                    status.setText("Google Авторизация выполнена.");
+                    status.setText(R.string.google_authorization_done);
                 }
                 loginWithToken();
             }
@@ -597,7 +597,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
         });
         View touchView = findViewById(R.id.touchView);
         touchView.setOnTouchListener(new View.OnTouchListener() {
-            public boolean moved;
+            boolean moved;
             long tm = -1;
             Point oldPos;
             Point f1;
@@ -680,7 +680,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                                     for (GameObject o : GameObjects.getInstance().values()) {
                                         if ((o instanceof ActiveObject) && o.getMarker().isVisible()) {
                                             float d = GPSInfo.getDistance(latLng, o.getMarker().getPosition());
-                                            if (d < ((ActiveObject) o).getRadius()) setAmush = false;
+                                            if (d < ((ActiveObject) o).getActionRadius()) setAmush = false;
                                         }
                                     }
                                     if (setAmush) {

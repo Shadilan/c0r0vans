@@ -169,4 +169,6 @@ All rights reserved to Circle of Eternity</string>
     <string name="message_alert">Alert</string>
     <string name="message_clear" translatable="false">✖</string>
     <string name="confirm_put">Are you sure? you want to put obsidian in tower? You won\'t get it back.</string>
+    <string name="do_google_authorization">Google Sign-in.</string>
+    <string name="google_authorization_done">Google Sign-in done.</string>
 </resources>

@@ -49,7 +49,7 @@ import utility.settings.GameSettings;
 import static com.coe.c0r0vans.R.mipmap.founder;
 
 /**
- * Created by Shadilan on 19.10.2016.
+ * Башня игрока
  */
 
 public class Tower extends GameObject implements ActiveObject {
@@ -132,7 +132,7 @@ public class Tower extends GameObject implements ActiveObject {
 
     @Override
     public void changeMarkerSize() {
-        String markname="";
+        String markname;
         switch (race){
             case 1:
                 markname="tower_1";
@@ -265,7 +265,7 @@ public class Tower extends GameObject implements ActiveObject {
             }
         }
     };
-    ObjectAction upgradeTower=new ObjectAction(this) {
+    private ObjectAction upgradeTower=new ObjectAction(this) {
         @Override
         public Bitmap getImage() {
             return ImageLoader.getImage("upgrade_tower");
@@ -320,7 +320,7 @@ public class Tower extends GameObject implements ActiveObject {
         }
     };
 
-    public void setDescription(String description) {
+    private void setDescription(String description) {
         this.description = description;
     }
 
@@ -330,7 +330,7 @@ public class Tower extends GameObject implements ActiveObject {
     }
 
     @Override
-    public int getRadius() {
+    public int getActionRadius() {
         return 30;
     }
 

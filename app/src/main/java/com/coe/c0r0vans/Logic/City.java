@@ -1677,6 +1677,11 @@ public class City extends GameObject implements ActiveObject {
     }
 
     @Override
+    public int getActionRadius() {
+        return getRadius();
+    }
+
+    @Override
     public void useObject() {
         SelectedObject.getInstance().setTarget(this);
         SelectedObject.getInstance().setPoint(this.getPosition());
