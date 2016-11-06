@@ -7,6 +7,7 @@ import android.widget.AbsListView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.HorizontalScrollView;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.ToggleButton;
 
@@ -91,7 +92,7 @@ public class MessageLayout extends SwipeDetectLayout implements ShowHideForm {
                 listSystem.setVisibility(GONE);
             }
         });
-        Button clearButton= (Button) findViewById(R.id.clear_button);
+        ImageButton clearButton= (ImageButton) findViewById(R.id.clear_button);
         clearButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {

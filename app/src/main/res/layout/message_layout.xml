@@ -56,15 +56,17 @@
                 android:textOn="@string/message_alert" />
         </GridLayout>
     </HorizontalScrollView>
-    <Button
+    <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/message_clear"
+        android:src="@mipmap/clear"
         android:id="@+id/clear_button"
         style="@style/TabButton"
-        android:layout_alignParentRight="true"
+        android:layout_alignBottom="@id/Tabs"
+        android:layout_alignTop="@id/Tabs"
         android:layout_alignParentEnd="true"
-        android:minWidth="5dp" />
+        android:minWidth="5dp"
+        android:layout_alignParentRight="true" />
     <ListView
         android:id="@+id/listSystem"
         android:layout_width="match_parent"
