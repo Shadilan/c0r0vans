@@ -774,7 +774,7 @@ public class Player extends GameObject {
 
                     Upgrade up=GameObjects.getPlayer().getUpgrade("ambushes");
                     if (up!=null) {
-                        GameObjects.getPlayer().setHirelings(GameObjects.getPlayer().getHirelings() - up.getEffect2() * 10);
+                        GameObjects.getPlayer().setHirelings(GameObjects.getPlayer().getHirelings() -  10);
                         GameObjects.getPlayer().setAmbushLeft(GameObjects.getPlayer().getAmbushLeft() - 1);
                     }
                 }
@@ -807,7 +807,7 @@ public class Player extends GameObject {
                     try {
                         Upgrade up=GameObjects.getPlayer().getUpgrade("ambushes");
                         if (up!=null) {
-                            GameObjects.getPlayer().setHirelings(GameObjects.getPlayer().getHirelings() + up.getEffect2() * 5);
+                            GameObjects.getPlayer().setHirelings(GameObjects.getPlayer().getHirelings() + 10);
                             GameObjects.getPlayer().setAmbushLeft(GameObjects.getPlayer().getAmbushLeft() + 1);
                         }
                         String err;
@@ -896,11 +896,6 @@ public class Player extends GameObject {
                 @Override
                 public void postError(JSONObject response) {
                     try {
-                        Upgrade up=GameObjects.getPlayer().getUpgrade("ambushes");
-                        if (up!=null) {
-                            GameObjects.getPlayer().setHirelings(GameObjects.getPlayer().getHirelings() + up.getEffect2() * 5);
-                            GameObjects.getPlayer().setAmbushLeft(GameObjects.getPlayer().getAmbushLeft() + 1);
-                        }
                         String err;
                         if (response.has("Error")) err=response.getString("Error");
                         else if (response.has("Result")) err=response.getString("Result");
