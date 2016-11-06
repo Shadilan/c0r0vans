@@ -64,11 +64,11 @@
     <string name="about_text">Copyright
         Program use:
 Images and Graphics based on graphics published on http://nicubunu.ro/ under Public domain licence.
-Images and Gaphics based on graphics published on https://openclipart.org/detail/16553/rogue-character under Public domain licence.
+Images and Graphics based on graphics published on https://openclipart.org/detail/16553/rogue-character under Public domain licence.
 Music and sounds published on https://freesound.org under Attribution Licence
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-Using this software you accept gathering data by GoogleAnalitics Service. Data gathered by service doesn\'t include personal data, only information about actions you perform while application using.
+Using this software you accept gathering data by GoogleAnalitics Service. Data gathered by service does not include personal data, only information about actions you perform while application using.
 
 Software provide for alpha test purpose. If you are not accepted for alpha test by Developers of software you may not use this software.
 
@@ -141,7 +141,7 @@ All rights reserved to Circle of Eternity</string>
     <string name="sk_name_paladin">Access Radius</string>
     <string name="founded">Founded by:</string>
     <string name="get_location">Acquire location.</string>
-    <string name="location_aquired">Location acquired.</string>
+    <string name="location_acquire">Location acquired.</string>
     <string name="exit">Exit</string>
     <string name="network_error">Network Error</string>
     <string name="security">Security</string>

@@ -387,17 +387,19 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
             GPSInfo.getInstance().AddLocationListener(new LocationListener() {
                 @Override
                 public void onLocationChanged(Location location) {
+                    GATracker.trackTimeStart("PositionChange","AcquireLocation");
                     try {
 
                         if (GPSInfo.getInstance().GetLat() != -1 && GPSInfo.getInstance().GetLng() != -1) {
                             GPSInfo.getInstance().RemoveLocationListener(this);
-                            ((TextView) findViewById(R.id.status)).setText(R.string.location_aquired);
+                            ((TextView) findViewById(R.id.status)).setText(R.string.location_acquire);
                             GATracker.trackTimeEnd("System", "LocationStart");
                             initStart();
                         }
                     } catch (Exception e) {
                         GATracker.trackException("GPS", e);
                     }
+                    GATracker.trackTimeEnd("PositionChange","AcquireLocation");
                 }
 
                 @Override

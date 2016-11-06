@@ -71,8 +71,9 @@ public class ActionView extends LinearLayout {
             locationListener = new LocationListener() {
                 @Override
                 public void onLocationChanged(Location location) {
-
+                    GATracker.trackTimeStart("PositionChange","ReloadActions");
                     reloadActions();
+                    GATracker.trackTimeEnd("PositionChange","ReloadActions");
 
                 }
 

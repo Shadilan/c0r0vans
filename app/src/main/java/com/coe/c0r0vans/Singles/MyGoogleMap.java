@@ -138,6 +138,7 @@ public class MyGoogleMap{
 
             @Override
             public void onLocationChanged(Location location) {
+                GATracker.trackTimeStart("PositionChange","MapMove");
                 float curBearing = map.getCameraPosition().bearing;
                 boolean trackBearing = "Y".equals(GameSettings.getInstance().get("TRACK_BEARING"));
 
@@ -155,6 +156,7 @@ public class MyGoogleMap{
                     moveCamera(target, curBearing);
                 }
                 serverConnect.getInstance().checkRefresh();
+                GATracker.trackTimeEnd("PositionChange","MapMove");
             }
 
             @Override

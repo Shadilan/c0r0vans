@@ -28,6 +28,7 @@ public class GPSInfo {
     private static GPSInfo instance;
     private boolean on = false;
     private Long lastTime = 0L;
+    private final int stepDuration=500;
 
     public static boolean checkEnabled() {
 
@@ -172,7 +173,7 @@ public class GPSInfo {
 
                 } else {
 
-                    double step = (t - lastSync)/100;
+                    double step = (t - lastSync)/stepDuration;
                     if (step==0) step=1;
 
                     stepLat = (aim.getLatitude() - current.getLatitude()) / step;
@@ -183,14 +184,14 @@ public class GPSInfo {
                 lastSync = t;
 
 
-                //RequestUpdate(location.getProvider());
-                /*if (locationListeners != null) {
+                RequestUpdate(location.getProvider());
+                if (locationListeners != null) {
                     if (locationListenersRem != null)
                         locationListeners.removeAll(locationListenersRem);
                     for (LocationListener ll : locationListeners) {
-                        ll.onLocationChanged(location);
+                        ll.onLocationChanged(current);
                     }
-                }*/
+                }
 
             }
 
@@ -250,7 +251,7 @@ public class GPSInfo {
                 }
             }
         });
-        MainThread.postDelayed(refreshLock,100);
+        MainThread.postDelayed(refreshLock,stepDuration);
     }
 
     public void onGPS() {
@@ -291,7 +292,7 @@ public class GPSInfo {
                     }
                 }
             }
-            MainThread.postDelayed(refreshLock,100);
+            MainThread.postDelayed(refreshLock,stepDuration);
         }
 
     };
