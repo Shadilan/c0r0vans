@@ -71,7 +71,7 @@ public class serverConnect {
     private RequestQueue reqq;  //Очередь запросов
     private String Token;       //Токен
     //private String login="";
-    String version="";
+    private String version="";
     private ArrayList<ObjectAction> lockedActions;
     private HashMap<String,ObjectAction> listenersMap;
     private HashMap<String,ObjectAction> errorMap;
@@ -122,7 +122,7 @@ public class serverConnect {
         remListeners.add(listener);
     }
 
-    public void clearListener(){
+    private void clearListener(){
         if (remListeners!=null && listeners!=null) {
             listeners.removeAll(remListeners);
             remListeners.clear();
@@ -166,9 +166,9 @@ public class serverConnect {
         return true;
     }
 
-    int oldLat=0;
-    int oldLng=0;
-    long oldTime=0;
+    private int oldLat=0;
+    private int oldLng=0;
+    private long oldTime=0;
 
 
 
@@ -490,6 +490,7 @@ public class serverConnect {
                 .build();
         listenersMap.put(UID, action);
         errorMap.put(UID, action);
+        Log.d("Tower",url);
         runRequest(UID, url, ResponseListenerWithUID.ACTION);
         return true;
     }
@@ -661,12 +662,12 @@ public class serverConnect {
 
 
     }
-    boolean busy=false;
+    private boolean busy=false;
 
 
 
     private class RequestData{
-        public RequestData(String UID,String request, int type){
+        RequestData(String UID, String request, int type){
             this.request=request;
             this.UID=UID;
             this.type=type;
@@ -675,7 +676,7 @@ public class serverConnect {
         String request;
         int type;
     }
-    LinkedList<RequestData> requestList=new LinkedList<>();
+    private LinkedList<RequestData> requestList=new LinkedList<>();
     private void runNextRequest(){
         if (syncMap){
             runScanRange();

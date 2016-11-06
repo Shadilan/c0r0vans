@@ -77,14 +77,14 @@ public class Player extends GameObject {
     private HashMap<String,Caravan> Routes;
     private HashMap<String,Ambush> Ambushes;
 
-    protected Circle zone1;
+    private Circle zone1;
     private String tower;
 
 
     public Player() {
         init();
     }
-    public boolean checkRoute(String guid){
+    boolean checkRoute(String guid){
         if (guid==null) return false;
         if (guid.equals(currentRouteGuid)) return true;
         if ("".equals(currentRouteGuid)|| currentRouteGuid==null) return false;
@@ -236,7 +236,7 @@ public class Player extends GameObject {
     /*public Circle getCircle(){
         return circle;
     }*/
-    ArrayList<String> lastCity;
+    private ArrayList<String> lastCity;
     public void setPosition(LatLng target){
         if (mark!=null) mark.setPosition(target);
         if (zone!=null) zone.setCenter(target);
@@ -504,7 +504,7 @@ public class Player extends GameObject {
     public LatLng getPosition() {
         return GPSInfo.getInstance().getLatLng();
     }
-    public void removeAmbush(String guid){
+    void removeAmbush(String guid){
         Ambush sa=Ambushes.get(guid);
         setHirelings(hirelings+sa.getLife());
         setAmbushLeft(AmbushesLeft+1);
@@ -548,7 +548,7 @@ public class Player extends GameObject {
     public int getAmbushLeft() {
         return AmbushesLeft;
     }
-    public void setAmbushLeft(int AmbushLeft){
+    private void setAmbushLeft(int AmbushLeft){
         AmbushesLeft=AmbushLeft;
         change(OnGameObjectChange.PLAYER);
     }
@@ -578,14 +578,14 @@ public class Player extends GameObject {
     }
     public HashMap<String,Ambush> getAmbushes() {return Ambushes;}
     public int getActionDistance(){return ActionDistance;}
-    public ObjectAction getDropRoute(){return dropRoute;}
+    ObjectAction getDropRoute(){return dropRoute;}
 
-    public void setRouteStart(boolean routeStart) {
+    void setRouteStart(boolean routeStart) {
         this.routeStart = routeStart;
         change(OnGameObjectChange.PLAYER);
     }
 
-    public boolean getRouteStart() {
+    boolean getRouteStart() {
         return routeStart;
     }
     public void showRoute(){
@@ -602,7 +602,7 @@ public class Player extends GameObject {
 
         return NextUpgrades.get(type);
     }
-    public Upgrade getUpgrade(String type){
+    Upgrade getUpgrade(String type){
         if (Upgrades==null) return null;
         for (Upgrade u:Upgrades) if(u.getType().equals(type)) return u;
         return null;
@@ -663,7 +663,7 @@ public class Player extends GameObject {
         return currentR;
     }
 
-    public void setCurrentRouteGUID(String currentRouteGUID) {
+    void setCurrentRouteGUID(String currentRouteGUID) {
         this.currentRouteGuid = currentRouteGUID;
     }
 
@@ -688,7 +688,7 @@ public class Player extends GameObject {
         change(OnGameObjectChange.INTERNAL);
     }
 
-    public void setHirelings(int hirelings) {
+    void setHirelings(int hirelings) {
         this.hirelings = hirelings;
         change(OnGameObjectChange.EXTERNAL);
     }
@@ -701,7 +701,7 @@ public class Player extends GameObject {
         this.race = race;
     }
 
-    public HashMap<String, Upgrade> getNextUpgrades() {
+    HashMap<String, Upgrade> getNextUpgrades() {
         return NextUpgrades;
     }
 
@@ -709,13 +709,13 @@ public class Player extends GameObject {
         return currentRouteGuid;
     }
 
-    public void setCurrentRoute(Caravan currentRoute) {
+    void setCurrentRoute(Caravan currentRoute) {
         if (this.currentR!=null) this.currentR.RemoveObject();
         this.currentR = currentRoute;
 
     }
 
-    public void setLeftToHire(int leftToHire) {
+    void setLeftToHire(int leftToHire) {
         this.leftToHire = leftToHire;
 
     }
@@ -728,12 +728,12 @@ public class Player extends GameObject {
         this.tower = tower;
     }
 
-    public String getTower() {
+    String getTower() {
         return tower;
     }
 
 
-    class ambushCreate extends RelativeLayout implements GameObjectView {
+    private class ambushCreate extends RelativeLayout implements GameObjectView {
 
         public ambushCreate(Context context) {
             super(context);
@@ -949,7 +949,7 @@ public class Player extends GameObject {
                 @Override
                 public void onClick(View v) {
                     if (obsidian>=10 && (tower==null || "".equals(tower))) {
-                        serverConnect.getInstance().createCity(createTower,
+                        serverConnect.getInstance().setTower(createTower,
                                 GPSInfo.getInstance().GetLat(), GPSInfo.getInstance().GetLng(),
                                 (int) (SelectedObject.getInstance().getPoint().latitude * 1e6),
                                 (int) (SelectedObject.getInstance().getPoint().longitude * 1e6)
@@ -1062,7 +1062,7 @@ public class Player extends GameObject {
             if (!(city.equals(r.getStartGUID()) || city.equals(r.getFinishGUID()))) r.fadeRoute();
         }
     }
-    ObjectAction createTower=new ObjectAction(this) {
+    private ObjectAction createTower=new ObjectAction(this) {
         @Override
         public Bitmap getImage() {
             return null;
