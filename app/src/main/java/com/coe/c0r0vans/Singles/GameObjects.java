@@ -347,14 +347,14 @@ public class GameObjects{
         GPSInfo.getInstance().AddLocationListener(new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
-                GATracker.trackTimeStart("PositionChange","PlayerMove");
+
                 LatLng target = new LatLng(location.getLatitude(), location.getLongitude());
                 GameObjects.getPlayer().setPosition(target);
-                GATracker.trackTimeEnd("PositionChange","PlayerMove");
+
                 try {
-                    GATracker.trackTimeStart("PositionChange","ChestRefresh");
+
                     for (Chest o:chests.values()) o.refresh();
-                    GATracker.trackTimeEnd("PositionChange","ChestRefresh");
+
                 } catch (Exception e){
                     GATracker.trackException("ChestRefresh",e);
                 }

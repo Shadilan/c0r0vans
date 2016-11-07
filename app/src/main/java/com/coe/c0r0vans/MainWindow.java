@@ -387,7 +387,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
             GPSInfo.getInstance().AddLocationListener(new LocationListener() {
                 @Override
                 public void onLocationChanged(Location location) {
-                    GATracker.trackTimeStart("PositionChange","AcquireLocation");
+
                     try {
 
                         if (GPSInfo.getInstance().GetLat() != -1 && GPSInfo.getInstance().GetLng() != -1) {
@@ -399,7 +399,7 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
                     } catch (Exception e) {
                         GATracker.trackException("GPS", e);
                     }
-                    GATracker.trackTimeEnd("PositionChange","AcquireLocation");
+
                 }
 
                 @Override
