@@ -149,6 +149,11 @@ public class Chest extends GameObject implements ActiveObject {
     }
 
     @Override
+    public int getRadius() {
+        return 0;
+    }
+
+    @Override
     public void useObject() {
 
         int dist= (int) GPSInfo.getDistance(GameObjects.getPlayer().getPosition(),getPosition());

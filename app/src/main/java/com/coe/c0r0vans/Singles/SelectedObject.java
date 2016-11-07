@@ -35,7 +35,7 @@ public class SelectedObject {
         }
 
         if (target instanceof ActiveObject)
-            clickpos.setRadius(((ActiveObject) target).getActionRadius());
+            clickpos.setRadius(((ActiveObject) target).getRadius());
         else clickpos.setRadius(GameObjects.getPlayer().getAmbushRad());
         if (clickPoint != null) {
             clickPoint.setCenter(point);
