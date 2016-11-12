@@ -36,6 +36,7 @@ public class Settings extends RelativeLayout {
     CheckBox notifySound;
     CheckBox screenOff;
     CheckBox nightMode;
+    CheckBox gpsSmooth;
     private CheckBox vibrateOn;
 
     public Settings(Context context) {
@@ -75,6 +76,7 @@ public class Settings extends RelativeLayout {
 
         useTilt=(CheckBox) findViewById(R.id.useTilt);
         gpsOn=(CheckBox) findViewById(R.id.gpsOn);
+        gpsSmooth=(CheckBox) findViewById(R.id.gpsSmooth);
         gpsRate=(SeekBar) findViewById(R.id.gpsRate);
 
         netErrorLog= (CheckBox) findViewById(R.id.netErrorLogOn);
@@ -121,6 +123,7 @@ public class Settings extends RelativeLayout {
                 GameSettings.set("CLOSE_WINDOW", closeWindow.isChecked() ? "Y" : "N");
 
                 GameSettings.set("GPS_ON_BACK", gpsOn.isChecked() ? "Y" : "N");
+                GameSettings.set("GPS_SMOOTH", gpsSmooth.isChecked() ? "Y" : "N");
                 GameSettings.set("GPS_RATE", String.valueOf(5-(gpsRate.getProgress() + 1)));
                 GameSettings.set("TRACK_BEARING", trackBearing.isChecked() ? "Y" : "N");
 
@@ -157,10 +160,13 @@ public class Settings extends RelativeLayout {
 
         useTilt.setChecked("Y".equals(GameSettings.getInstance().get("USE_TILT")));
         gpsOn.setChecked("Y".equals(GameSettings.getInstance().get("GPS_ON_BACK")));
+        gpsSmooth.setChecked("Y".equals(GameSettings.getInstance().get("GPS_SMOOTH")));
+
         netErrorLog.setChecked("Y".equals(GameSettings.getInstance().get("SHOW_NETWORK_ERROR")));
         usePadding.setChecked("Y".equals(GameSettings.getInstance().get("VIEW_PADDING")));
         trackBearing.setChecked("Y".equals(GameSettings.getInstance().get("TRACK_BEARING")));
         closeWindow.setChecked("Y".equals(GameSettings.getInstance().get("CLOSE_WINDOW")));
+
         int refreshRate=3;
         if (GameSettings.getInstance().get("GPS_RATE")!=null){
             String strRate=GameSettings.getInstance().get("GPS_RATE");

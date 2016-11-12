@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import utility.settings.GameSettings;
+import utility.settings.Settings;
 import utility.settings.SettingsListener;
 
 /**
@@ -28,7 +29,7 @@ public class GPSInfo {
     private static GPSInfo instance;
     private boolean on = false;
     private Long lastTime = 0L;
-    private final int stepDuration=500;
+    private final int stepDuration=100;
 
     public static boolean checkEnabled() {
 
@@ -121,7 +122,11 @@ public class GPSInfo {
 
                 Long curTime = new Date().getTime() / 1000;
                 LatLng newCord = new LatLng(location.getLatitude(), location.getLongitude());
-                LatLng oldCord = getLatLng();
+                LatLng oldCord;
+                if (aim!=null)
+                    oldCord = new LatLng(aim.getLatitude(), aim.getLongitude());
+                else
+                    oldCord = new LatLng(location.getLatitude(), location.getLongitude());
                 if (oldCord.latitude == -1 && oldCord.longitude == -1) oldCord = newCord;
                 float timespeed;
                 if (location.hasSpeed() && location.getSpeed() > 0) {
@@ -164,28 +169,35 @@ public class GPSInfo {
 
                 aim = location;
                 long t = (new Date()).getTime();
+                if ("Y".equals(GameSettings.getValue("GPS_SMOOTH"))) {
 
-                if (lastSync == 0 || current == null) {
 
-                    current = aim;
-                    stepLat=0;
-                    stepLng=0;
+                    if (lastSync == 0 || current == null) {
 
-                } else {
+                        current = aim;
+                        stepLat = 0;
+                        stepLng = 0;
 
-                    double step = (t - lastSync)/stepDuration;
-                    if (step==0) step=1;
+                    } else {
 
-                    stepLat = (aim.getLatitude() - current.getLatitude()) / step;
-                    stepLng = (aim.getLongitude() - current.getLongitude()) / step;
+                        double step = (t - lastSync) / stepDuration;
+                        if (step == 0) step = 1;
 
+                        stepLat = (aim.getLatitude() - current.getLatitude()) / step;
+                        stepLng = (aim.getLongitude() - current.getLongitude()) / step;
+
+                    }
+
+
+                } else
+                {
+                    current=aim;
                 }
-
                 lastSync = t;
 
 
                 RequestUpdate(location.getProvider());
-                if (locationListeners != null) {
+                if (locationListeners != null && current!=null) {
                     if (locationListenersRem != null)
                         locationListeners.removeAll(locationListenersRem);
                     for (LocationListener ll : locationListeners) {
@@ -264,30 +276,32 @@ public class GPSInfo {
     private Runnable refreshLock=new Runnable() {
         @Override
         public void run() {
-            boolean needMove=true;
-            if (stepLat==0 && stepLng==0) needMove=false;
-            if (needMove) {
-                if (aim != null) {
-                    if (current == null
-                            || Math.abs(current.getLatitude() - aim.getLatitude()) < Math.abs(stepLat)
-                            || Math.abs(current.getLongitude() - aim.getLongitude()) < Math.abs(stepLng)
-                            ) {
-                        current = aim;
-                        stepLat = 0;
-                        stepLng = 0;
-                    } else {
+            if (current!=aim) {
+                boolean needMove = true;
+                if (stepLat == 0 && stepLng == 0) needMove = false;
+                if (needMove) {
+                    if (aim != null) {
+                        if (current == null
+                                || Math.abs(current.getLatitude() - aim.getLatitude()) < Math.abs(stepLat)
+                                || Math.abs(current.getLongitude() - aim.getLongitude()) < Math.abs(stepLng)
+                                ) {
+                            current = aim;
+                            stepLat = 0;
+                            stepLng = 0;
+                        } else {
 
-                        double resLat = current.getLatitude() + stepLat;
-                        double resLng = current.getLongitude() + stepLng;
-                        current.setLatitude(resLat);
-                        current.setLongitude(resLng);
-                    }
+                            double resLat = current.getLatitude() + stepLat;
+                            double resLng = current.getLongitude() + stepLng;
+                            current.setLatitude(resLat);
+                            current.setLongitude(resLng);
+                        }
 
-                    if (locationListeners != null && current!=null) {
-                        if (locationListenersRem != null)
-                            locationListeners.removeAll(locationListenersRem);
-                        for (LocationListener ll : locationListeners) {
-                            ll.onLocationChanged(current);
+                        if (locationListeners != null && current != null) {
+                            if (locationListenersRem != null)
+                                locationListeners.removeAll(locationListenersRem);
+                            for (LocationListener ll : locationListeners) {
+                                ll.onLocationChanged(current);
+                            }
                         }
                     }
                 }
