@@ -7,9 +7,11 @@ import android.provider.Settings;
 import android.util.Log;
 
 import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.NetworkError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.ServerError;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
@@ -46,10 +48,7 @@ import utility.sign.SignInListener;
 public class serverConnect {
     private final int max_retry=3;
     private static serverConnect instance;
-    private String currentRequest="";
-    public String getCurrentRequest(){
-        return currentRequest;
-    }
+
 
     /**
      * Получить объект
@@ -740,7 +739,7 @@ public class serverConnect {
 
         busy=true;
         if (!checkConnection()) return;
-        currentRequest=request;
+
         if (type!=ResponseListenerWithUID.FASTSCAN) {
             String typeS;
             if (type == ResponseListenerWithUID.ACTION) {
@@ -755,7 +754,6 @@ public class serverConnect {
                     @Override
                     public void onResponse(JSONObject response) {
 
-                        currentRequest="";
                         GATracker.trackTimeEnd("Network","Timeout.Time");
                         //if (getType()!=ResponseListenerWithUID.FASTSCAN) {
                             String typeS;
@@ -940,7 +938,6 @@ public class serverConnect {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         GATracker.trackTimeEnd("Network","Timeout.Time");
-                        currentRequest="";
                         if (getType()!=ResponseListenerWithUID.FASTSCAN) {
                             String typeS;
                             if (getType() == ResponseListenerWithUID.ACTION) {
@@ -952,7 +949,11 @@ public class serverConnect {
                         }
                         try {
 
-                            if (error.getClass().equals(TimeoutError.class) && try_count<max_retry){
+                            if ((error.getClass().equals(TimeoutError.class) ||
+                                    error.getClass().equals(NetworkError.class) ||
+                                    error.getClass().equals(ServerError.class)
+                            )
+                                    && try_count<max_retry){
                                 GATracker.trackHit("Network","Timeout.Hit");
                                 GATracker.trackTimeStart("Network","Timeout.Time");
                                 runRequest(getUID(), getRequest(), getType(),try_count+1);

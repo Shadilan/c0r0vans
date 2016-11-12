@@ -25,8 +25,8 @@
         android:layout_alignParentBottom="false"
         android:layout_toRightOf="@+id/back_button"
         android:layout_toEndOf="@+id/back_button"
-        android:layout_toLeftOf="@+id/clear_button"
-        android:layout_toStartOf="@id/clear_button">
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true">
 
         <GridLayout
             android:orientation="horizontal"
@@ -56,18 +56,7 @@
                 android:textOn="@string/message_alert" />
         </GridLayout>
     </HorizontalScrollView>
-    <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@mipmap/clear"
-        android:id="@+id/clear_button"
-        style="@style/TabButton"
 
-        android:layout_alignBottom="@id/Tabs"
-        android:layout_alignTop="@id/Tabs"
-        android:layout_alignParentEnd="true"
-        android:minWidth="5dp"
-        android:layout_alignParentRight="true" />
     <ListView
         android:id="@+id/listSystem"
         android:layout_width="match_parent"
@@ -93,4 +82,16 @@
         android:focusableInTouchMode="true"
         android:visibility="gone"
         />
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/clear"
+        android:id="@+id/clear_button"
+        style="@style/RoundButton"
+
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:minWidth="5dp"
+         />
 </utility.SwipeDetectLayout.SwipeDetectLayout>

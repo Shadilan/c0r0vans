@@ -39,6 +39,10 @@
         <item name="android:background">@drawable/tab_button</item>
         <item name="android:layout_margin">0.1dp</item>
     </style>
+    <style name="RoundButton">
+        <item name="android:background">@drawable/round_button</item>
+        <item name="android:layout_margin">5dp</item>
+    </style>
 
     <style name="MyDialogTheme" parent="@style/Theme.AppCompat.Light.Dialog">
         <item name="android:windowFrame">@null</item>
