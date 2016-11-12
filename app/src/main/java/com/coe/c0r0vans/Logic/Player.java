@@ -961,7 +961,8 @@ public class Player extends GameObject {
         @Override
         public void updateInZone(boolean inZone) {
             if (tower==null){
-                findViewById(R.id.createTower).setVisibility(VISIBLE);
+                //findViewById(R.id.createTower).setVisibility(VISIBLE);
+                findViewById(R.id.createTower).setVisibility(INVISIBLE);
             }
             if (obsidian>=10 && inZone)
                 findViewById(R.id.createTower).setEnabled(true);
