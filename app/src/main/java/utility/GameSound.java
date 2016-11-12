@@ -164,8 +164,15 @@ public class GameSound {
                 instance.soundStream=-1;
             }
             instance.soundStream=instance.soundPool.play(soundId,1,1,1,0,1);
+            MainThread.postDelayed(instance.clearSound,5);
         }
     }
+    Runnable clearSound=new Runnable() {
+        @Override
+        public void run() {
+            instance.soundStream=-1;
+        }
+    };
 
 
 }

@@ -335,6 +335,11 @@ public class Tower extends GameObject implements ActiveObject {
     }
 
     @Override
+    public int getRadius() {
+        return 30;
+    }
+
+    @Override
     public void useObject() {
         SelectedObject.getInstance().setTarget(this);
         SelectedObject.getInstance().setPoint(this.getPosition());

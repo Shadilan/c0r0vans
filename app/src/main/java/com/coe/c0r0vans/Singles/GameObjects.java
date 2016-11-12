@@ -265,7 +265,7 @@ public class GameObjects{
                             }
 
                         }
-
+                        GATracker.trackHit("PositionChange","ChestCount",chests.size());
                     } catch (JSONException e) {
                         Log.d("FastScanMS", "Exception");
                         GATracker.trackException("FastScan",e);

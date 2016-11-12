@@ -88,7 +88,7 @@ public class Chest extends GameObject implements ActiveObject {
     public void refresh(){
 
         boolean oldInZone=inZone;
-        float dist=GPSInfo.getDistance(GameObjects.getPlayer().getPosition(),getPosition());
+        float dist=GPSInfo.getDistance(GPSInfo.getInstance().getLatLng(),getPosition());
         inZone = dist < GameObjects.getPlayer().getActionDistance();
         if (inZone!=oldInZone){
             changeMarkerSize();
@@ -145,7 +145,7 @@ public class Chest extends GameObject implements ActiveObject {
 
     @Override
     public int getActionRadius() {
-        return 30;
+        return 50;
     }
 
     @Override

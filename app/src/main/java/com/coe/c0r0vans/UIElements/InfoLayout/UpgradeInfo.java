@@ -50,7 +50,7 @@ public class UpgradeInfo extends LinearLayout implements PlayerInfoLayout {
         Collections.sort(ar,new Comparator<Upgrade>() {
             @Override
             public int compare(Upgrade o1, Upgrade o2) {
-                return (o1.getLevel() * 10 +o1.getTypeNum())-(o2.getLevel() * 10 +o2.getTypeNum());
+                return (o2.getLevel() * 10 +o2.getTypeNum())-(o1.getLevel() * 10 +o1.getTypeNum());
             }
         });
         for (Upgrade u: GameObjects.getPlayer().getUpgrades()){
