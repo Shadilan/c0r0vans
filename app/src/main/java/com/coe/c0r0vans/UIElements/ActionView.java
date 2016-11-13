@@ -8,11 +8,13 @@ import android.util.AttributeSet;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
+import com.coe.c0r0vans.GameObject.ActiveObject;
 import com.coe.c0r0vans.GameObject.GameObject;
 import com.coe.c0r0vans.GameObject.OnGameObjectChange;
 import com.coe.c0r0vans.Logic.Ambush;
 import com.coe.c0r0vans.Logic.City;
 import com.coe.c0r0vans.Logic.Player;
+import com.coe.c0r0vans.Logic.Tower;
 import com.coe.c0r0vans.Singles.GameObjects;
 import com.coe.c0r0vans.Singles.SelectedObject;
 
@@ -115,13 +117,13 @@ public class ActionView extends LinearLayout {
         GameObject target=SelectedObject.getInstance().getTarget();
         if (target instanceof Player){
             GATracker.trackTimeStart("System","OpenFormPlayer");
-            setCurrentView(target.getObjectView(getContext()));
+            setCurrentView(((Player) target).getObjectView(getContext()));
             GATracker.trackTimeEnd("System","OpenFormPlayer");
         } else
         if (target instanceof City)
         {
             GATracker.trackTimeStart("System","OpenFormCity");
-            setCurrentView(target.getObjectView(getContext()));
+            setCurrentView(((ActiveObject)target).getObjectView(getContext()));
             GATracker.trackTimeEnd("System","OpenFormCity");
             GATracker.trackTimeStart("System","higlight");
             GameObjects.getPlayer().higlight(target.getGUID());
@@ -129,8 +131,14 @@ public class ActionView extends LinearLayout {
         } else if (target instanceof Ambush)
         {
             GATracker.trackTimeStart("System","OpenFormAmbush");
-            setCurrentView(target.getObjectView(getContext()));
+            setCurrentView(((ActiveObject)target).getObjectView(getContext()));
             GATracker.trackTimeEnd("System","OpenFormAmbush");
+
+        } else if (target instanceof Tower)
+        {
+            GATracker.trackTimeStart("System","OpenTower");
+            setCurrentView(((ActiveObject)target).getObjectView(getContext()));
+            GATracker.trackTimeEnd("System","OpenTower");
 
         }
 

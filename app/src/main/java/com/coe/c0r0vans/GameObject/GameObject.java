@@ -142,9 +142,7 @@ public class GameObject {
         this.map = map;
     }
     public String getName(){return Name;}
-    public RelativeLayout getObjectView(Context context){
-        return null;
-    }
+
     public Circle getZone(){
         return zone;
     }

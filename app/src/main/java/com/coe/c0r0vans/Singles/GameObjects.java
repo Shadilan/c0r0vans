@@ -67,6 +67,7 @@ public class GameObjects{
         }
         if (closestObject==null) {
             for (GameObject o : activeObjects.values()) {
+
                 if (o instanceof ActiveObject && o.getMarker() != null && o.getMarker().isVisible()) {
 
                     if (o.getPosition() != null) {
@@ -388,6 +389,7 @@ public class GameObjects{
         objects.put(object.getGUID(),object);
         if (object instanceof  ActiveObject) {
             //Добавить в перечень активных объектов.
+
             putActive(object);
         }
         return objects;
@@ -397,6 +399,7 @@ public class GameObjects{
         if (!(object instanceof ActiveObject)) return null;
         if (activeObjects.get(object.getGUID())!=null) return activeObjects;
         activeObjects.put(object.getGUID(),object);
+
         return activeObjects;
     }
     public static HashMap<String,GameObject> removeActive(GameObject object){

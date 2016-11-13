@@ -3,10 +3,12 @@ package com.coe.c0r0vans.Logic;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.ToggleButton;
@@ -24,12 +26,14 @@ import com.coe.c0r0vans.UIElements.ActionView;
 import com.coe.c0r0vans.UIElements.ConfirmWindow;
 import com.coe.c0r0vans.UIElements.GameObjectView;
 
+import com.coe.c0r0vans.UIElements.TextWindow;
 import com.coe.c0r0vans.UIElements.UIControler;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -61,6 +65,11 @@ public class Tower extends GameObject implements ActiveObject {
     private String currentMarkName;
     private int obsidian;
 
+    @Override
+    public LatLng getPosition() {
+        return latlng;
+    }
+
     public Tower(){
         super();
     }
@@ -82,6 +91,7 @@ public class Tower extends GameObject implements ActiveObject {
         }
     }
     public void loadJSON(JSONObject obj) throws JSONException {
+
         GUID = obj.getString("GUID");
 
         if (obj.has("Lat") && obj.has("Lng")) {
@@ -92,7 +102,7 @@ public class Tower extends GameObject implements ActiveObject {
             latlng = new LatLng(lat / 1e6, lng / 1e6);
         }
         updated = new Date();
-        if (obj.has("Name")) Name = obj.getString("Name");
+        if (obj.has("Name")) Name = obj.getString("Name"); else Name="";
         if (obj.has("Race")) {
             race = obj.getInt("Race");
 
@@ -103,7 +113,7 @@ public class Tower extends GameObject implements ActiveObject {
 
         } else if (GUID.equals(GameObjects.getPlayer().getTower())){
             owner=true;
-        }
+        } else if (Name.equals(GameObjects.getPlayer().getName())) owner=true;
 
         else owner = false;
         if (obj.has("Level")) {
@@ -112,16 +122,24 @@ public class Tower extends GameObject implements ActiveObject {
         }
         if (obj.has("Text")) {
             description = obj.getString("Text");
+        }
+        if (mark == null) {
+            setMarker(map.addMarker(new MarkerOptions().position(latlng)));
 
-
-            if (mark == null) {
-                setMarker(map.addMarker(new MarkerOptions().position(latlng)));
-
-            } else {
-                mark.setPosition(latlng);
+        } else {
+            mark.setPosition(latlng);
+        }
+        changeMarkerSize();
+        update();
+        //TODO Нормальная обработка Итемов
+        if (obj.has("Storage") && obj.get("Storage") instanceof JSONArray){
+            JSONArray ar=obj.getJSONArray("Storage");
+            for (int i=1;i<ar.length();i++){
+                JSONObject item=ar.getJSONObject(i);
+                if (item.has("Type") && item.has("Quanity")){
+                    if ("Obsidian".equals(item.get("Type"))) obsidian=item.getInt("Quinity");
+                }
             }
-            changeMarkerSize();
-            update();
         }
     }
 
@@ -144,7 +162,7 @@ public class Tower extends GameObject implements ActiveObject {
                 markname="tower_3";
                 break;
             default:
-                markname="tower_0";
+                markname="tower_1";
                 break;
         }
         markname=markname+"_"+level;
@@ -153,7 +171,7 @@ public class Tower extends GameObject implements ActiveObject {
             mark.setIcon(ImageLoader.getDescritor(markname));
             if ("Y".equals(GameSettings.getInstance().get("USE_TILT")))
                 mark.setAnchor(0.5f, 1f);
-            else mark.setAnchor(0.5f, 0.5f);
+            else mark.setAnchor(0.5f, 1f);
             currentMarkName=markname;
         }
     }
@@ -326,7 +344,7 @@ public class Tower extends GameObject implements ActiveObject {
 
     public int getObsidian() {
         //TODO Obsidian
-        return 0;
+        return obsidian;
     }
 
     @Override
@@ -341,10 +359,18 @@ public class Tower extends GameObject implements ActiveObject {
 
     @Override
     public void useObject() {
+
         SelectedObject.getInstance().setTarget(this);
         SelectedObject.getInstance().setPoint(this.getPosition());
         UIControler.getActionLayout().ShowView();
 
+    }
+
+    @Override
+    public RelativeLayout getObjectView(Context context){
+        TowerWindow result=new TowerWindow(context);
+        result.setTower(this);
+        return result;
     }
 
     public void setObsidian(int obsidian) {
@@ -358,7 +384,9 @@ public class Tower extends GameObject implements ActiveObject {
 
         public TowerWindow(Context context) {
             super(context);
+
             init();
+
         }
 
         public TowerWindow(Context context, AttributeSet attrs) {
@@ -373,29 +401,32 @@ public class Tower extends GameObject implements ActiveObject {
         public void init(){
             self=this;
             inflate(this.getContext(), R.layout.tower_layout, this);
+
             if ("Y".equals(GameSettings.getValue("NIGHT_MODE"))) {
                 this.setBackgroundResource(R.drawable.layouts_night);
-                findViewById(R.id.scrollView6).setBackgroundResource(R.drawable.layouts_night);
+                //findViewById(R.id.scrollView6).setBackgroundResource(R.drawable.layouts_night);
 
             }
             else  {
                 this.setBackgroundResource(R.drawable.layouts);
-                findViewById(R.id.scrollView6).setBackgroundResource(R.drawable.layouts);
+                //findViewById(R.id.scrollView6).setBackgroundResource(R.drawable.layouts);
             }
         }
 
         boolean loaded=true;
 
 
-        public void setCity(Tower tower){
+        public void setTower(Tower tower){
             this.tower=tower;
             if (loaded) apply();
+
         }
 
 
 
         private void apply() {
             update();
+
             TextView name=(TextView) findViewById(R.id.owner);
             name.setText(getName());
             //Obsidian
@@ -512,6 +543,7 @@ public class Tower extends GameObject implements ActiveObject {
                                 update();
                             }
                         });
+                        updateInZone(false);
                         confirmWindow.show();
                     } else
                         if(owner){
@@ -609,6 +641,46 @@ public class Tower extends GameObject implements ActiveObject {
 
                 }
             });
+            //DestroyTower
+            findViewById(R.id.destroyTower).setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ConfirmWindow confirmWindow=new ConfirmWindow(getContext());
+                    confirmWindow.setText("Вы уверены что хотите уничтожить свою башню?");
+                    confirmWindow.setConfirmAction(new Runnable() {
+                        @Override
+                        public void run() {
+                            int lat=(int)(GPSInfo.getInstance().getLatLng().latitude*1e6);
+                            int lng=(int)(GPSInfo.getInstance().getLatLng().longitude*1e6);
+                            serverConnect.getInstance().destroyTower(destroyTower,lat,lng,tower.getGUID());
+                            update();
+                        }
+                    });
+                    confirmWindow.show();
+
+                }
+            });
+            //DestroyTower
+            findViewById(R.id.setDescription).setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    final TextWindow confirmWindow=new TextWindow(getContext());
+                    confirmWindow.setText("Укажите описание башни:");
+                    confirmWindow.setConfirmAction(new Runnable() {
+                        @Override
+                        public void run() {
+                            int lat=(int)(GPSInfo.getInstance().getLatLng().latitude*1e6);
+                            int lng=(int)(GPSInfo.getInstance().getLatLng().longitude*1e6);
+                            serverConnect.getInstance().setTowerText(setText,lat,lng,tower.getGUID(),confirmWindow.getText());
+                            update();
+                        }
+                    });
+                    confirmWindow.show();
+
+                }
+            });
+
+
 
             findViewById(R.id.toggleDesc).setOnClickListener(new OnClickListener() {
                 @Override
@@ -634,7 +706,7 @@ public class Tower extends GameObject implements ActiveObject {
             });
             this.setOnSwipeListener(new OnSwipeListener() {
                 @Override
-                public void onSwipeRight() {
+                public void onSwipeLeft() {
                     ToggleButton toggleDesc = (ToggleButton) findViewById(R.id.toggleDesc);
                     ToggleButton toggleWare = (ToggleButton) findViewById(R.id.toggleWare);
                     if (toggleWare.isChecked())
@@ -647,7 +719,7 @@ public class Tower extends GameObject implements ActiveObject {
                 }
 
                 @Override
-                public void onSwipeLeft() {
+                public void onSwipeRight() {
                     ToggleButton toggleDesc = (ToggleButton) findViewById(R.id.toggleDesc);
                     ToggleButton toggleWare = (ToggleButton) findViewById(R.id.toggleWare);
                     if (toggleDesc.isChecked() && toggleWare.getVisibility()==VISIBLE)
@@ -670,13 +742,20 @@ public class Tower extends GameObject implements ActiveObject {
 
                 }
             });
+            findViewById(R.id.closeActionButton).setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    close();
+                }
+            });
             count(1);
+
 
         }
         private void update(){
             TextView level=(TextView) findViewById(R.id.level);
-            level.setText("Башня "+level+" уровня");
-            EditText desc= (EditText) findViewById(R.id.description);
+            level.setText("Башня "+tower.level+" уровня");
+            TextView desc= (TextView) findViewById(R.id.description);
             if (!desc.isFocused()) desc.setText(description);
             if (tower.owner)
                 ((TextView)findViewById(R.id.obsidian_count)).setText(String.format(getContext().getString(R.string.take_obsidian), tower.getObsidian()));
@@ -704,37 +783,53 @@ public class Tower extends GameObject implements ActiveObject {
         }
 
         public void updateInZone(boolean inZone){
+
+            ToggleButton toggleWare = (ToggleButton) findViewById(R.id.toggleWare);
+            Button obs_plus = (Button) findViewById(R.id.count_plus);
+            Button obs_minus = (Button) findViewById(R.id.count_minus);
+            SeekBar obs_count = (SeekBar) findViewById(R.id.count);
+            ImageButton destroyTower = (ImageButton) findViewById(R.id.destroyTower);
+            ImageButton setText = (ImageButton) findViewById(R.id.setDescription);
+            ImageButton upgradeTower = (ImageButton) findViewById(R.id.upgdadeTower);
+            ImageButton putTake = (ImageButton) findViewById(R.id.put_take);
+            //Если владелец башни показать кнопки
+            if (tower.owner) {
+                destroyTower.setVisibility(VISIBLE);
+                setText.setVisibility(VISIBLE);
+                upgradeTower.setVisibility(VISIBLE);
+                toggleWare.setVisibility(VISIBLE);
+                obs_plus.setVisibility(INVISIBLE);
+                obs_minus.setVisibility(INVISIBLE);
+                obs_count.setVisibility(INVISIBLE);
+                putTake.setVisibility(INVISIBLE);
+            } else if (race == GameObjects.getPlayer().getRace()) {
+                destroyTower.setVisibility(GONE);
+                setText.setVisibility(GONE);
+                upgradeTower.setVisibility(GONE);
+                toggleWare.setVisibility(VISIBLE);
+                obs_plus.setVisibility(VISIBLE);
+                obs_minus.setVisibility(VISIBLE);
+                obs_count.setVisibility(VISIBLE);
+                putTake.setVisibility(VISIBLE);
+            } else {
+                destroyTower.setVisibility(INVISIBLE);
+                setText.setVisibility(INVISIBLE);
+                upgradeTower.setVisibility(INVISIBLE);
+                toggleWare.setVisibility(INVISIBLE);
+                putTake.setVisibility(INVISIBLE);
+            }
             if (inZone) {
-                ToggleButton toggleWare = (ToggleButton) findViewById(R.id.toggleWare);
-                Button obs_plus = (Button) findViewById(R.id.count_plus);
-                Button obs_minus = (Button) findViewById(R.id.count_minus);
-                SeekBar obs_count = (SeekBar) findViewById(R.id.count);
-                ImageButton destroyTower = (ImageButton) findViewById(R.id.destroyTower);
-                ImageButton setText = (ImageButton) findViewById(R.id.setDescription);
-                ImageButton upgradeTower = (ImageButton) findViewById(R.id.upgdadeTower);
-                //Если владелец башни показать кнопки
-                if (owner) {
-                    destroyTower.setVisibility(VISIBLE);
-                    setText.setVisibility(VISIBLE);
-                    upgradeTower.setVisibility(VISIBLE);
-                    toggleWare.setVisibility(VISIBLE);
-                    obs_plus.setVisibility(INVISIBLE);
-                    obs_minus.setVisibility(INVISIBLE);
-                    obs_count.setVisibility(INVISIBLE);
-                } else if (race == GameObjects.getPlayer().getRace()) {
-                    destroyTower.setVisibility(GONE);
-                    setText.setVisibility(GONE);
-                    upgradeTower.setVisibility(GONE);
-                    toggleWare.setVisibility(VISIBLE);
-                    obs_plus.setVisibility(VISIBLE);
-                    obs_minus.setVisibility(VISIBLE);
-                    obs_count.setVisibility(VISIBLE);
-                } else {
-                    destroyTower.setVisibility(VISIBLE);
-                    setText.setVisibility(VISIBLE);
-                    upgradeTower.setVisibility(VISIBLE);
-                    toggleWare.setVisibility(INVISIBLE);
-                }
+                destroyTower.setEnabled(true);
+                setText.setEnabled(true);
+                upgradeTower.setEnabled(true);
+                putTake.setEnabled(true);
+
+            } else
+            {
+                destroyTower.setEnabled(false);
+                setText.setEnabled(false);
+                upgradeTower.setEnabled(false);
+                putTake.setEnabled(false);
             }
         }
         public void close(){

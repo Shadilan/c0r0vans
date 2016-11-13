@@ -362,7 +362,8 @@
                 android:layout_alignBottom="@+id/gpsSmooth"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
-                android:id="@+id/gpsSmoothTitle" />
+                android:id="@+id/gpsSmoothTitle"
+                android:visibility="gone"/>
 
             <CheckBox
                 android:layout_width="wrap_content"
@@ -372,7 +373,8 @@
                 android:checked="false"
                 android:layout_below="@+id/gpsOn"
                 android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true" />
+                android:layout_alignParentEnd="true"
+                android:visibility="gone"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

@@ -524,7 +524,7 @@ public class Ambush extends GameObject implements ActiveObject {
 
     @Override
     public int getActionRadius() {
-        return this.radius;
+        return 20;
     }
 
     @Override

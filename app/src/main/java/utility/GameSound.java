@@ -158,6 +158,7 @@ public class GameSound {
     }
     public static void playSound(int soundId){
         if (soundId==-1) return;
+        if (instance.soundStream!=-1) return;
         if (instance.sound_on) {
             if (instance.soundStream!=-1) {
                 instance.soundPool.stop(instance.soundStream);
@@ -170,6 +171,7 @@ public class GameSound {
     Runnable clearSound=new Runnable() {
         @Override
         public void run() {
+
             instance.soundStream=-1;
         }
     };

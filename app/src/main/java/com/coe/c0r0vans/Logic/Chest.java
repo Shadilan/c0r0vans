@@ -1,7 +1,9 @@
 package com.coe.c0r0vans.Logic;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.util.Log;
+import android.widget.RelativeLayout;
 
 import com.coe.c0r0vans.GameObject.ActiveObject;
 import com.coe.c0r0vans.GameObject.GameObject;
@@ -162,6 +164,11 @@ public class Chest extends GameObject implements ActiveObject {
             serverConnect.getInstance().callOpenChest(getChestAction(), GPSInfo.getInstance().GetLat(),
                     GPSInfo.getInstance().GetLng(),getGUID());
         }
+    }
+
+    @Override
+    public RelativeLayout getObjectView(Context context) {
+        return null;
     }
 
     private ObjectAction chestAction;

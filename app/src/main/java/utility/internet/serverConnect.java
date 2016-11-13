@@ -228,6 +228,7 @@ public class serverConnect {
                 .put("plng",Lng)
                 .put("UUID",UID)
                 .build();
+        Log.d("Scan",url);
         runRequest(UID, url, ResponseListenerWithUID.REFRESH,0);
         oldLat=Lat;
         oldLng=Lng;

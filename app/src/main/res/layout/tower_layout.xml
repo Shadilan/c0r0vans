@@ -75,7 +75,7 @@
 
                 android:id="@+id/descriptionPanel"
                 android:visibility="visible">
-                <EditText
+                <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     style="@style/SmallText"
@@ -87,7 +87,8 @@
                     android:layout_marginLeft="5dp"
                     android:layout_marginRight="5dp"
                     android:inputType="none"
-                    android:layout_above="@+id/setDescription" />
+                    android:layout_above="@+id/setDescription"
+                    />
                 <ImageButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

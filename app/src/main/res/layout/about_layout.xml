@@ -14,13 +14,23 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
     <TextView
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@android:color/black"
         style="@style/SmallText"
         android:text="@string/version"
         android:id="@+id/version"
         android:layout_below="@+id/title" />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/black"
+        style="@style/SmallText"
+        android:text="@string/hotfix"
+        android:id="@+id/hotfix"
+        android:layout_below="@+id/title"
+        android:layout_toRightOf="@id/version"
+        android:layout_toEndOf="@id/version"/>
 
     <ScrollView
         android:layout_width="match_parent"

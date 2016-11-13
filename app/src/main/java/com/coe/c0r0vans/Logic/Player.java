@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
@@ -340,6 +341,8 @@ public class Player extends GameObject {
         result.put("LeftToHire",leftToHire);
         result.put("FoundedCities",foundedCities);
         result.put("Race",race);
+        result.put("Tower",tower);
+        //TODO сохранение текущего маршрута
         JSONArray upg=new JSONArray();
         for (Upgrade u:Upgrades){
             upg.put(u.getJSON());
@@ -385,6 +388,7 @@ public class Player extends GameObject {
             if (obj.has("Hirelings")) hirelings=obj.getInt("Hirelings"); else hirelings=100;
             if (obj.has("LeftToHire")) leftToHire=obj.getInt("LeftToHire"); else leftToHire=100;
             if (obj.has("FoundedCities")) foundedCities=obj.getInt("FoundedCities"); else foundedCities=0;
+            if (obj.has("Tower")) tower=obj.getString("Tower");else tower="";
             if (race!=0) GameSettings.setFaction(race);
             //TODO: Здесь не должно быть нула. Видимо маркер не инициализуерся в игроке.
             if (zone!=null) zone.setRadius(ActionDistance);
@@ -648,7 +652,6 @@ public class Player extends GameObject {
                 return race;
     }
 
-    @Override
     public RelativeLayout getObjectView(Context context) {
         return new ambushCreate(context);
 
@@ -940,10 +943,15 @@ public class Player extends GameObject {
                     close();
                 }
             });
-            findViewById(R.id.createTower).setOnClickListener(new OnClickListener() {
+            ImageButton setTower= (ImageButton) findViewById(R.id.createTower);
+            if (race!=1 && race!=2 && race!=3) race=1;
+            setTower.setImageBitmap(ImageLoader.getImage("tower_"+race));
+            Log.d("Tower",tower);
+            setTower.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (obsidian>=10 && (tower==null || "".equals(tower))) {
+                    Log.d("Tower",tower);
+                    if (obsidian>=10 && (tower==null || "".equals(tower)|| "false".equals(tower))) {
                         serverConnect.getInstance().setTower(createTower,
                                 GPSInfo.getInstance().GetLat(), GPSInfo.getInstance().GetLng(),
                                 (int) (SelectedObject.getInstance().getPoint().latitude * 1e6),
@@ -960,10 +968,11 @@ public class Player extends GameObject {
 
         @Override
         public void updateInZone(boolean inZone) {
-            if (tower==null){
+            if (tower!=null && !("".equals(tower) || "false".equals(tower))){
                 //findViewById(R.id.createTower).setVisibility(VISIBLE);
                 findViewById(R.id.createTower).setVisibility(INVISIBLE);
-            }
+            } else findViewById(R.id.createTower).setVisibility(VISIBLE);
+
             if (obsidian>=10 && inZone)
                 findViewById(R.id.createTower).setEnabled(true);
             else findViewById(R.id.createTower).setEnabled(false);

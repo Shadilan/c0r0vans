@@ -51,23 +51,26 @@ public class ImageLoader {
         createMarker(context, R.mipmap.city_9, "city_9");
         createMarker(context, R.mipmap.city_10, "city_10");
 
+        images.put("tower_1",BitmapFactory.decodeResource(context.getResources(), R.mipmap.tower_1));
         createMarker(context, R.mipmap.tower_1_1, "tower_1_1");
-        createMarker(context, R.mipmap.tower_1_1, "tower_1_2");
-        createMarker(context, R.mipmap.tower_1_1, "tower_1_3");
-        createMarker(context, R.mipmap.tower_1_1, "tower_1_4");
-        createMarker(context, R.mipmap.tower_1_1, "tower_1_5");
+        createMarker(context, R.mipmap.tower_1_2, "tower_1_2");
+        createMarker(context, R.mipmap.tower_1_3, "tower_1_3");
+        createMarker(context, R.mipmap.tower_1_4, "tower_1_4");
+        createMarker(context, R.mipmap.tower_1_5, "tower_1_5");
 
-        createMarker(context, R.mipmap.tower_1_1, "tower_2_1");
-        createMarker(context, R.mipmap.tower_1_1, "tower_2_2");
-        createMarker(context, R.mipmap.tower_1_1, "tower_2_3");
-        createMarker(context, R.mipmap.tower_1_1, "tower_2_4");
-        createMarker(context, R.mipmap.tower_1_1, "tower_2_5");
+        images.put("tower_2",BitmapFactory.decodeResource(context.getResources(), R.mipmap.tower_2_1));
+        createMarker(context, R.mipmap.tower_2_1, "tower_2_1");
+        createMarker(context, R.mipmap.tower_2_2, "tower_2_2");
+        createMarker(context, R.mipmap.tower_2_3, "tower_2_3");
+        createMarker(context, R.mipmap.tower_2_4, "tower_2_4");
+        createMarker(context, R.mipmap.tower_2_5, "tower_2_5");
 
-        createMarker(context, R.mipmap.tower_1_1, "tower_3_1");
-        createMarker(context, R.mipmap.tower_1_1, "tower_3_2");
-        createMarker(context, R.mipmap.tower_1_1, "tower_3_3");
-        createMarker(context, R.mipmap.tower_1_1, "tower_3_4");
-        createMarker(context, R.mipmap.tower_1_1, "tower_3_5");
+        images.put("tower_3",BitmapFactory.decodeResource(context.getResources(), R.mipmap.tower_3_1));
+        createMarker(context, R.mipmap.tower_3_1, "tower_3_1");
+        createMarker(context, R.mipmap.tower_3_2, "tower_3_2");
+        createMarker(context, R.mipmap.tower_3_3, "tower_3_3");
+        createMarker(context, R.mipmap.tower_3_4, "tower_3_4");
+        createMarker(context, R.mipmap.tower_3_5, "tower_3_5");
 
 
             createMarker(context, R.mipmap.ambush_00, "ambush_00");
