@@ -17,6 +17,7 @@ import com.google.android.gms.maps.model.LatLng;
 import java.util.ArrayList;
 import java.util.Date;
 
+import utility.notification.Essages;
 import utility.settings.GameSettings;
 import utility.settings.Settings;
 import utility.settings.SettingsListener;
@@ -120,7 +121,8 @@ public class GPSInfo {
                     }
                 }
 
-                Long curTime = new Date().getTime() / 1000;
+                Long curTime = location.getTime() / 1000;
+                if (curTime<lastTime) Essages.addEssage(Essages.SYSTEM,"Координаты прошлого получены.");
                 LatLng newCord = new LatLng(location.getLatitude(), location.getLongitude());
                 LatLng oldCord;
                 if (aim!=null)

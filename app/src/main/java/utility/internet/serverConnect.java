@@ -6,6 +6,7 @@ import android.net.NetworkInfo;
 import android.provider.Settings;
 import android.util.Log;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.NetworkError;
 import com.android.volley.Request;
@@ -14,6 +15,7 @@ import com.android.volley.Response;
 import com.android.volley.ServerError;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.HttpStack;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.coe.c0r0vans.GameObjects.ObjectAction;
@@ -26,11 +28,13 @@ import com.google.android.gms.maps.model.LatLng;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Map;
 import java.util.UUID;
 
 import utility.GATracker;
@@ -68,6 +72,7 @@ public class serverConnect {
     private String ServerAddres;//Адресс сервера
     private Context context;    //Контекст приложения
     private RequestQueue reqq;  //Очередь запросов
+    private RequestQueue debugReqq;
     private String Token;       //Токен
     //private String login="";
     private String version="";
@@ -83,15 +88,23 @@ public class serverConnect {
         errorMap=new HashMap<>();
     }
 
+    Runnable sender=new Runnable() {
+        @Override
+        public void run() {
+            sendCoord();
+        };
     /**
      * Установка параметров коннекта. и запуск очереди.
      * @param serverAddres Address of server
      * @param ctx Application context
      */
+
     public void connect(String serverAddres,Context ctx){
         ServerAddres = serverAddres;
         context = ctx;
         reqq = Volley.newRequestQueue(context);
+        debugReqq=Volley.newRequestQueue(context);
+        MainThread.postDelayed(sender,60000);
         version=context.getResources().getString(R.string.version);
 
     }
@@ -1025,7 +1038,57 @@ public class serverConnect {
                 });
         jsObjRequest.setRetryPolicy(new DefaultRetryPolicy(20 * 1000, 0,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-        reqq.add(jsObjRequest);
+        debugReqq.add(jsObjRequest);
+    }
+    public void sendCoord(){
+        if (!checkConnection()) return;
+        String request="https://support-merchantarg.rhcloud.com/statistics.jsp?Oper=doPosition";
+
+        JSONObject reqTest= null;
+        String android_id;
+        try {
+            android_id = Settings.Secure.getString(context.getContentResolver(),
+                    Settings.Secure.ANDROID_ID);
+        } catch(Exception e){
+            android_id="";
+        }
+        String user="";
+        //TODO:Получать имя другим способом возможно gmail.
+        if (GameObjects.getPlayer()!=null) user=GameObjects.getPlayer().getName();
+        //String version=context.getResources().getString(R.string.version);
+
+        try {
+            LatLng l=GPSInfo.getInstance().getLatLng();
+            int lat= (int) (l.latitude*1e6);
+            int lng= (int) (l.longitude*1e6);
+            int spd=GPSInfo.getInstance().getSpeed();
+
+            reqTest = new JSONObject().put("Key","1ac7659f-574c-4b9d-a036-2b343e8c63fc")
+                    .put("User", user)
+                    .put("Device",android_id)
+                    .put("Lat", lat)
+                    .put("Lng", lng).put("Speed",spd)
+                    ;
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        final JsonObjectRequest jsObjRequest = new JsonObjectRequest
+                (Request.Method.POST, request, reqTest, new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                });
+        jsObjRequest.setRetryPolicy(new DefaultRetryPolicy(20 * 1000, 0,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        debugReqq.add(jsObjRequest);
+        MainThread.postDelayed(sender,60000);
     }
     public void sendException(String group, Exception se){
         if (!checkConnection()) return;
@@ -1132,4 +1195,5 @@ public class serverConnect {
         runRequest(UUID.randomUUID().toString(),url,ResponseListenerWithUID.LOGIN);
         return true;
     }*/
+
 }
