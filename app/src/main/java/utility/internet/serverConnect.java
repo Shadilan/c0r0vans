@@ -92,7 +92,8 @@ public class serverConnect {
         @Override
         public void run() {
             sendCoord();
-        };
+        }
+    };
     /**
      * Установка параметров коннекта. и запуск очереди.
      * @param serverAddres Address of server
@@ -1069,6 +1070,8 @@ public class serverConnect {
                     .put("Lat", lat)
                     .put("Lng", lng).put("Speed",spd)
                     ;
+            Log.d("CoordSend",request);
+            Log.d("CoordSend",reqTest.toString());
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -1133,7 +1136,7 @@ public class serverConnect {
                 });
         jsObjRequest.setRetryPolicy(new DefaultRetryPolicy(20 * 1000, 0,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-        reqq.add(jsObjRequest);
+        debugReqq.add(jsObjRequest);
     }
     public void sendException(String group, String se){
         if (!checkConnection()) return;
@@ -1176,7 +1179,7 @@ public class serverConnect {
                 });
         jsObjRequest.setRetryPolicy(new DefaultRetryPolicy(20 * 1000, 0,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-        reqq.add(jsObjRequest);
+        debugReqq.add(jsObjRequest);
     }
     //UserActions
     /**

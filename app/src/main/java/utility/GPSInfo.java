@@ -122,7 +122,6 @@ public class GPSInfo {
                 }
 
                 Long curTime = location.getTime() / 1000;
-                if (curTime<lastTime) Essages.addEssage(Essages.SYSTEM,"Координаты прошлого получены.");
                 LatLng newCord = new LatLng(location.getLatitude(), location.getLongitude());
                 LatLng oldCord;
                 if (aim!=null)
