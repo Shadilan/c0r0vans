@@ -364,6 +364,7 @@ public class Tower extends GameObject implements ActiveObject {
         SelectedObject.getInstance().setPoint(this.getPosition());
         UIControler.getActionLayout().ShowView();
 
+
     }
 
     @Override
@@ -671,7 +672,9 @@ public class Tower extends GameObject implements ActiveObject {
                         public void run() {
                             int lat=(int)(GPSInfo.getInstance().getLatLng().latitude*1e6);
                             int lng=(int)(GPSInfo.getInstance().getLatLng().longitude*1e6);
-                            serverConnect.getInstance().setTowerText(setText,lat,lng,tower.getGUID(),confirmWindow.getText());
+                            String text=confirmWindow.getText();
+                            setDescription(text);
+                            serverConnect.getInstance().setTowerText(setText,lat,lng,tower.getGUID(),text);
                             update();
                         }
                     });
@@ -801,7 +804,7 @@ public class Tower extends GameObject implements ActiveObject {
                 obs_plus.setVisibility(INVISIBLE);
                 obs_minus.setVisibility(INVISIBLE);
                 obs_count.setVisibility(INVISIBLE);
-                putTake.setVisibility(INVISIBLE);
+                putTake.setVisibility(VISIBLE);
             } else if (race == GameObjects.getPlayer().getRace()) {
                 destroyTower.setVisibility(GONE);
                 setText.setVisibility(GONE);

@@ -946,7 +946,6 @@ public class Player extends GameObject {
             ImageButton setTower= (ImageButton) findViewById(R.id.createTower);
             if (race!=1 && race!=2 && race!=3) race=1;
             setTower.setImageBitmap(ImageLoader.getImage("tower_"+race));
-            Log.d("Tower",tower);
             setTower.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {

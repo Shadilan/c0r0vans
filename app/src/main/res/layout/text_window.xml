@@ -27,8 +27,8 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:inputType="textMultiLine"
-        android:padding="2dp"
+        android:inputType="text"
+        android:padding="10dp"
         android:singleLine="false" />
 
     <Button

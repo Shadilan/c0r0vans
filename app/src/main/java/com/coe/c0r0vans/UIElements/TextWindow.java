@@ -41,11 +41,13 @@ public class TextWindow extends RelativeLayout {
         if ("Y".equals(GameSettings.getValue("NIGHT_MODE"))){
             this.setBackgroundResource(R.drawable.layouts_night);
             findViewById(R.id.answer).setBackgroundResource(R.drawable.layouts_night);
+            findViewById(R.id.answer).setPadding(10,10,10,10);
         }
 
         else {
             this.setBackgroundResource(R.drawable.layouts);
             findViewById(R.id.answer).setBackgroundResource(R.drawable.layouts);
+            findViewById(R.id.answer).setPadding(10,10,10,10);
         }
         Button button= (Button) findViewById(R.id.confirmButton);
         button.setOnClickListener(new OnClickListener() {

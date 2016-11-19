@@ -72,11 +72,14 @@ public class GameObjects{
 
                     if (o.getPosition() != null) {
 
+
                         float dist = GPSInfo.getDistance(latLng, o.getPosition());
+
                         if (o instanceof Chest && dist < ((ActiveObject) o).getActionRadius()) {
                             closestObject = (ActiveObject) o;
                             break;
                         } else if (dist < closest && dist < ((ActiveObject) o).getActionRadius()) {
+
                             closest = dist;
                             closestObject = (ActiveObject) o;
                             if (o instanceof Chest) break;
@@ -382,7 +385,7 @@ public class GameObjects{
 
     public static HashMap put(GameObject object){
         if (objects.get(object.getGUID())!=null) return objects;
-        if (!(object instanceof City) && object.isOwner()){
+        if (!(object instanceof City) && !(object instanceof Tower) && object.isOwner()){
             player.putObject(object);
             return objects;
         }
@@ -391,6 +394,7 @@ public class GameObjects{
             //Добавить в перечень активных объектов.
 
             putActive(object);
+
         }
         return objects;
     }
