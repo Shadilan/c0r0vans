@@ -971,7 +971,10 @@ public class Player extends GameObject {
                 //findViewById(R.id.createTower).setVisibility(VISIBLE);
                 findViewById(R.id.createTower).setVisibility(INVISIBLE);
             } else findViewById(R.id.createTower).setVisibility(VISIBLE);
-
+            if (!(GameObjects.getPlayer().getName().equals("Shadilan")
+                    ||GameObjects.getPlayer().getName().equals("Zlodiak")
+                    ||GameObjects.getPlayer().getName().equals("Kami")))
+                findViewById(R.id.createTower).setVisibility(INVISIBLE);
             if (obsidian>=10 && inZone)
                 findViewById(R.id.createTower).setEnabled(true);
             else findViewById(R.id.createTower).setEnabled(false);
