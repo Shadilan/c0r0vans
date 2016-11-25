@@ -187,9 +187,15 @@ public class ButtonLayout extends RelativeLayout {
             @Override
             public void onClick(View v) {
                 try {
+                    GATracker.trackTimeStart("ZoomSwitch","MapSwitch");
                     MyGoogleMap.switchZoom();
+                    GATracker.trackTimeEnd("ZoomSwitch","MapSwitch");
+                    GATracker.trackTimeStart("ZoomSwitch","ObjectsSwitch");
                     GameObjects.updateZoom();
+                    GATracker.trackTimeEnd("ZoomSwitch","ObjectsSwitch");
+                    GATracker.trackTimeStart("ZoomSwitch","UpdateZoom");
                     updateZoom();
+                    GATracker.trackTimeEnd("ZoomSwitch","UpdateZoom");
                 } catch (Exception e) {
                     GATracker.trackException("ZoomClick",e);
                 }

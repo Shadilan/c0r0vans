@@ -9,6 +9,7 @@ import android.util.Log;
 import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.NetworkError;
+import com.android.volley.NoConnectionError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -29,6 +30,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -974,7 +976,8 @@ public class serverConnect {
 
                             if ((error.getClass().equals(TimeoutError.class) ||
                                     error.getClass().equals(NetworkError.class) ||
-                                    error.getClass().equals(ServerError.class)
+                                    error.getClass().equals(ServerError.class) ||
+                                    error.getClass().equals(NoConnectionError.class)
                             )
                                     && try_count<max_retry){
                                 GATracker.trackHit("Network","Timeout.Hit");

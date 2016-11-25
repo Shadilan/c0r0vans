@@ -190,6 +190,7 @@ public class Player extends GameObject {
     @Override
     public void changeMarkerSize() {
         //player.mark.setIcon(BitmapDescriptorFactory.fromResource(R.mipmap.marker));
+        GATracker.trackTimeStart("ZoomSwitch","PlayerZone");
         if (zone!=null) {
             if (MyGoogleMap.getClientZoom() == GameObject.ICON_SMALL) {
                 zone.setStrokeWidth(3);
@@ -202,10 +203,15 @@ public class Player extends GameObject {
                 zone1.setStrokeWidth(5+2);
             }
         }
+        GATracker.trackTimeEnd("ZoomSwitch","PlayerZone");
+        GATracker.trackTimeStart("ZoomSwitch","AmbushesZoom");
         for (GameObject obj : this.getAmbushes().values())
             if (obj.getMarker() != null) obj.changeMarkerSize();
+        GATracker.trackTimeEnd("ZoomSwitch","AmbushesZoom");
+        GATracker.trackTimeStart("ZoomSwitch","CaravanZoom");
         for (GameObject obj : this.getRoutes().values())
             if (obj.getMarker() != null) obj.changeMarkerSize();
+        GATracker.trackTimeEnd("ZoomSwitch","CaravanZoom");
         if (currentR!=null) currentR.changeMarkerSize();
 
 

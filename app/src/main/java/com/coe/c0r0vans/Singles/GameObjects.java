@@ -47,10 +47,16 @@ public class GameObjects{
 
     private static HashMap<String,Chest> chests;
     public static void updateZoom(){
+        GATracker.trackTimeStart("ZoomSwitch","GameObjectsZoom");
         for (GameObject obj : getInstance().values())
             if (obj.getMarker() != null) obj.changeMarkerSize();
+        GATracker.trackTimeEnd("ZoomSwitch","GameObjectsZoom");
+        GATracker.trackTimeStart("ZoomSwitch","ChestZoom");
         for (Chest chest:chests.values()) chest.changeMarkerSize();
+        GATracker.trackTimeEnd("ZoomSwitch","ChestZoom");
+        GATracker.trackTimeStart("ZoomSwitch","PlayerZoom");
         player.changeMarkerSize();
+        GATracker.trackTimeEnd("ZoomSwitch","PlayerZoom");
     }
     public static ActiveObject getClosestObject(LatLng latLng){
         float closest=1000;
@@ -60,8 +66,9 @@ public class GameObjects{
                 float dist = GPSInfo.getDistance(latLng, o.getPosition());
                 float pdist = GPSInfo.getDistance(player.getPosition(),o.getPosition());
                 if (dist <  o.getActionRadius() && pdist<=player.getActionDistance()) {
-                    closestObject = o;
-                    break;
+                    //closestObject = o;
+                    //break;
+                    o.useObject();
                 }
             }
         }

@@ -683,10 +683,10 @@ public class City extends GameObject implements ActiveObject {
         if (buildZone==null) return;
         String opt= GameSettings.getInstance().get("SHOW_BUILD_AREA");
         if (opt.equals("Y")){
-            buildZone.setVisible(true);
+            if (!buildZone.isVisible()) buildZone.setVisible(true);
         } else
         {
-            buildZone.setVisible(false);
+            if (buildZone.isVisible()) buildZone.setVisible(false);
         }
     }
     public void showRadius(){
@@ -694,12 +694,16 @@ public class City extends GameObject implements ActiveObject {
 
         String opt= GameSettings.getInstance().get("SHOW_CITY_RADIUS");
         if (opt.equals("Y") && MyGoogleMap.getClientZoom()!=ICON_SMALL){
-            zone.setVisible(visibility);
-            zoneAdd.setVisible(visibility);
+            if (!zone.isVisible()) {
+                zone.setVisible(visibility);
+                zoneAdd.setVisible(visibility);
+            }
         } else
         {
-            zone.setVisible(false);
-            zoneAdd.setVisible(false);
+            if (!zone.isVisible()) {
+                zone.setVisible(false);
+                zoneAdd.setVisible(false);
+            }
         }
     }
     void updateColor(){
