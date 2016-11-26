@@ -936,6 +936,9 @@ public class MainWindow extends FragmentActivity implements OnMapReadyCallback {
     public void onBackPressed() {
 
         try {
+            if (UIControler.getAlertLayout().getChildCount()>0 && serverConnect.getInstance().isLogin() && GameObjects.getPlayer().getRace()!=0){
+                UIControler.getAlertLayout().removeAllViews();
+            } else
             if (UIControler.getWindowLayout().getChildCount() > 0 && serverConnect.getInstance().isLogin() && GameObjects.getPlayer().getRace()!=0) {
                 UIControler.getWindowLayout().removeAllViews();
             } else if (findViewById(R.id.actionView).getVisibility() == View.VISIBLE) {

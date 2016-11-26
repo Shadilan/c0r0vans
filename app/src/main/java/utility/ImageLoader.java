@@ -4,9 +4,11 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
 import android.graphics.Paint;
+import android.util.SparseArray;
 
 import com.coe.c0r0vans.R;
 import com.google.android.gms.maps.MapsInitializer;
@@ -27,6 +29,8 @@ public class ImageLoader {
     private static HashMap<String,Bitmap> images=new HashMap<>();
     private static HashMap<String,Bitmap> markers=new HashMap<>();
     private static HashMap<String,BitmapDescriptor> descriptors = new HashMap<>();
+    private static SparseArray<BitmapDescriptor> cityRad;
+
     /**
      * Load images on start;
      * @param context Application Context
@@ -39,6 +43,7 @@ public class ImageLoader {
         images.put("income",BitmapFactory.decodeResource(context.getResources(),R.mipmap.ic_launcher));
         //Markers
         MapsInitializer.initialize(context);
+
         createMarker(context, R.mipmap.marker, "marker");
         createMarker(context, R.mipmap.city_1, "city_1");
         createMarker(context, R.mipmap.city_2, "city_2");
@@ -145,6 +150,31 @@ public class ImageLoader {
         //Workaround для решения проблемы белых квадратов
         Bitmap b=BitmapFactory.decodeResource(context.getResources(), R.mipmap.unknown);
         descriptors.put("unknown", BitmapDescriptorFactory.fromBitmap(Bitmap.createScaledBitmap(b, b.getWidth(), b.getHeight() , false)));
+
+
+    }
+
+    public static BitmapDescriptor getCityRadius(int radius,float zoom,int lat){
+        int k= (int) ((Math.cos((double)lat * Math.PI/180) * 2 * Math.PI * 6378137) / (256 * Math.pow(2,zoom)));
+        if (cityRad ==null) cityRad= new SparseArray<>();
+        BitmapDescriptor result=cityRad.get(k);
+        Paint paint=new Paint();
+        if (result==null){
+            Bitmap l=Bitmap.createBitmap(k*2,k*2, Bitmap.Config.ARGB_8888);
+            Canvas cnv=new Canvas(l);
+            cnv.drawColor(Color.TRANSPARENT);
+            paint.setColor(Color.BLACK);
+            cnv.drawCircle(k,k,k,paint);
+            paint.setColor(Color.GRAY);
+            cnv.drawCircle(k,k,k-4,paint);
+            paint.setColor(Color.BLACK);
+            cnv.drawCircle(k,k,k-5,paint);
+            paint.setColor(Color.TRANSPARENT);
+            cnv.drawCircle(k,k,k-6,paint);
+            result=BitmapDescriptorFactory.fromBitmap(l);
+            cityRad.put(k,result);
+        }
+        return result;
 
 
     }

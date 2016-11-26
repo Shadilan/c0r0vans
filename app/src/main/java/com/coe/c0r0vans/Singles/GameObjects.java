@@ -46,6 +46,44 @@ public class GameObjects{
     private static Player player;
 
     private static HashMap<String,Chest> chests;
+    public static void reloadMarkers(){
+        GATracker.trackTimeStart("Refresh","ReloadMarkers");
+        GATracker.trackTimeStart("Refresh","Objects");
+        ArrayList<GameObject> list;
+        list=new ArrayList<>(objects.values());
+        for (GameObject o:list){
+            o.createMarker();
+            o.createZone();
+        }
+        GATracker.trackTimeEnd("Refresh","Objects");
+        GATracker.trackTimeStart("Refresh","Chests");
+        ArrayList<Chest> list2=new ArrayList<>(chests.values());
+        for (GameObject o:list2){
+            o.createMarker();
+            o.createZone();
+        }
+        GATracker.trackTimeEnd("Refresh","Chests");
+        GATracker.trackTimeStart("Refresh","Player");
+        player.createMarker();
+        player.createZone();
+        GATracker.trackTimeEnd("Refresh","Player");
+        GATracker.trackTimeStart("Refresh","Ambushes");
+        ArrayList<Ambush> list3=new ArrayList<>(player.getAmbushes().values());
+        for (GameObject o:list3){
+            o.createMarker();
+            o.createZone();
+        }
+        GATracker.trackTimeEnd("Refresh","Ambushes");
+        GATracker.trackTimeStart("Refresh","Caravan");
+        ArrayList<Caravan> list4=new ArrayList<>(player.getRoutes().values());
+        for (GameObject o:list4){
+            o.createMarker();
+            o.createZone();
+        }
+        GATracker.trackTimeEnd("Refresh","Caravan");
+        GATracker.trackTimeEnd("Refresh","ReloadMarkers");
+
+    }
     public static void updateZoom(){
         GATracker.trackTimeStart("ZoomSwitch","GameObjectsZoom");
         for (GameObject obj : getInstance().values())
@@ -72,25 +110,23 @@ public class GameObjects{
                 }
             }
         }
-        if (closestObject==null) {
-            for (GameObject o : activeObjects.values()) {
+        for (GameObject o : activeObjects.values()) {
 
-                if (o instanceof ActiveObject && o.getMarker() != null && o.getMarker().isVisible()) {
+            if (o instanceof ActiveObject && o.getMarker() != null && o.getMarker().isVisible()) {
 
-                    if (o.getPosition() != null) {
+                if (o.getPosition() != null) {
 
 
-                        float dist = GPSInfo.getDistance(latLng, o.getPosition());
+                    float dist = GPSInfo.getDistance(latLng, o.getPosition());
 
-                        if (o instanceof Chest && dist < ((ActiveObject) o).getActionRadius()) {
-                            closestObject = (ActiveObject) o;
-                            break;
-                        } else if (dist < closest && dist < ((ActiveObject) o).getActionRadius()) {
+                    if (o instanceof Chest && dist < ((ActiveObject) o).getActionRadius()) {
+                        closestObject = (ActiveObject) o;
+                        break;
+                    } else if (dist < closest && dist < ((ActiveObject) o).getActionRadius()) {
 
-                            closest = dist;
-                            closestObject = (ActiveObject) o;
-                            if (o instanceof Chest) break;
-                        }
+                        closest = dist;
+                        closestObject = (ActiveObject) o;
+                        if (o instanceof Chest) break;
                     }
                 }
             }
@@ -434,5 +470,9 @@ public class GameObjects{
         if (objects!=null) for (GameObject object:objects.values()){
             object.setMap(map);
         }
+    }
+
+    public static HashMap<String, Chest> getChests() {
+        return chests;
     }
 }

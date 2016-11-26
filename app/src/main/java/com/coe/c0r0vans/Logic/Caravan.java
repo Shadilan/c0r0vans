@@ -97,7 +97,6 @@ public class Caravan extends GameObject {
 
     @Override
     public void setMarker(Marker m) {
-
         mark=m;
         changeMarkerSize();
     }
@@ -174,35 +173,13 @@ public class Caravan extends GameObject {
                     {
                         line.getPoints().set(0,startPoint);
                         line.getPoints().set(1,finishPoint);
-                    } else {
-                        PolylineOptions options = new PolylineOptions();
-                        options.width(3*GameSettings.getMetric()+2);
-                        GameObject target = SelectedObject.getInstance().getTarget();
-                        options.geodesic(false);
-                        options.color(Color.rgb(90,58,0));
-                        options.add(startPoint);
-                        options.add(finishPoint);
-                        options.zIndex(150);
-                        line = map.addPolyline(options);
-                    }
-                    if (line2 != null)
-                    {
                         line2.getPoints().set(0,startPoint);
                         line2.getPoints().set(1,finishPoint);
                     } else {
-                        PolylineOptions options = new PolylineOptions();
-                        options.width(3*GameSettings.getMetric());
-                        GameObject target = SelectedObject.getInstance().getTarget();
-                        options.geodesic(false);
-                        if ("Y".equals(GameSettings.getValue("NIGHT_MODE")))
-                        options.color(Color.GRAY);
-                        else options.color(Color.rgb(153,204,204));
-                        options.add(startPoint);
-                        options.add(finishPoint);
-                        options.zIndex(150);
-                        line2 = map.addPolyline(options);
+                        createZone();
                     }
-                    showRoute();
+
+
                 } else if(startPoint!=null && finishPoint==null && map!=null){
                     if (mark == null) {
                         if (map!=null) setMarker(map.addMarker(new MarkerOptions().position(startPoint)));
@@ -226,7 +203,7 @@ public class Caravan extends GameObject {
                 }
             }
 
-            changeMarkerSize();
+
         } catch (JSONException e) {
             GATracker.trackException("LoadCaravan", e);
         }
@@ -239,7 +216,7 @@ public class Caravan extends GameObject {
             if (mark != null) {
 
                 mark.setPosition(latLng);
-            } else setMarker(map.addMarker(new MarkerOptions().position(latLng)));
+            } else createMarker();
         }
     }
     private String currentMarkName="";
@@ -384,4 +361,37 @@ public class Caravan extends GameObject {
         visible=visibility;
         if (mark!=null) changeMarkerSize();
     }
+
+    @Override
+    public void createZone() {
+        if (map!=null && startPoint!=null && finishPoint!=null){
+            PolylineOptions options = new PolylineOptions();
+            options.width(3*GameSettings.getMetric()+2);
+            GameObject target = SelectedObject.getInstance().getTarget();
+            options.geodesic(false);
+            options.color(Color.rgb(90,58,0));
+            options.add(startPoint);
+            options.add(finishPoint);
+            line = map.addPolyline(options);
+            options = new PolylineOptions();
+            options.width(3*GameSettings.getMetric());
+            options.geodesic(false);
+            if ("Y".equals(GameSettings.getValue("NIGHT_MODE")))
+                options.color(Color.GRAY);
+            else options.color(Color.rgb(153,204,204));
+            options.add(startPoint);
+            options.add(finishPoint);
+            line2 = map.addPolyline(options);
+            showRoute();
+        }
+    }
+
+    @Override
+    public void createMarker() {
+        if (map!=null && latlng!=null && visible) {
+            currentMarkName="-";
+            setMarker(map.addMarker(new MarkerOptions().position(latlng)));
+        }
+    }
+
 }

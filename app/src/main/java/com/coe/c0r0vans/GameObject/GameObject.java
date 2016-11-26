@@ -2,13 +2,16 @@ package com.coe.c0r0vans.GameObject;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.widget.RelativeLayout;
 
 import com.coe.c0r0vans.GameObjects.ObjectAction;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.Circle;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -132,6 +135,7 @@ public class GameObject {
     public int getProgress() {
         return progress;
     }
+    boolean visibility=true;
 
     public void setVisibility(boolean visibility) {
 
@@ -151,7 +155,9 @@ public class GameObject {
         return life;
     }
 
+    private LatLng latLng;
     public void setPostion(LatLng latLng) {
+        this.latLng=latLng;
         update();
         if (mark!=null){
 
@@ -207,6 +213,14 @@ public class GameObject {
     public LatLng getPosition() {return null;}
     public boolean isOwner() {
         return owner;
+    }
+    public void createMarker(){
+
+    }
+
+    public void createZone(){
+
+
     }
 
 }

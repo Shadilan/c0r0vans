@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
@@ -166,6 +167,11 @@ public class ButtonLayout extends RelativeLayout {
             public boolean onLongClick(View v) {
                 try {
                     Essages.addEssage(Essages.SYSTEM,"Принудительная загрузка.");
+                    GATracker.trackTimeStart("Refresh","ClearMap");
+                    MyGoogleMap.getMap().clear();
+                    GATracker.trackTimeEnd("Refresh","ClearMap");
+                    GameObjects.reloadMarkers();
+
                     serverConnect.getInstance().clearQueue();
                     //Run Refresh
                     serverConnect.getInstance().callScanRange();
@@ -174,7 +180,9 @@ public class ButtonLayout extends RelativeLayout {
                     //RunGetMessage
                     serverConnect.getInstance().callGetMessage();
                     serverConnect.getInstance().callFastScan();
+
                 } catch (Exception e){
+                    Essages.addEssage(Essages.SYSTEM,"Error Forssync");
                     GATracker.trackException("ForceSync",e);
                 }
                 return true;
@@ -187,15 +195,11 @@ public class ButtonLayout extends RelativeLayout {
             @Override
             public void onClick(View v) {
                 try {
-                    GATracker.trackTimeStart("ZoomSwitch","MapSwitch");
                     MyGoogleMap.switchZoom();
-                    GATracker.trackTimeEnd("ZoomSwitch","MapSwitch");
-                    GATracker.trackTimeStart("ZoomSwitch","ObjectsSwitch");
+                    Essages.addEssage(Essages.SYSTEM,"ObjectCount:"+GameObjects.getInstance().size());
                     GameObjects.updateZoom();
-                    GATracker.trackTimeEnd("ZoomSwitch","ObjectsSwitch");
-                    GATracker.trackTimeStart("ZoomSwitch","UpdateZoom");
                     updateZoom();
-                    GATracker.trackTimeEnd("ZoomSwitch","UpdateZoom");
+
                 } catch (Exception e) {
                     GATracker.trackException("ZoomClick",e);
                 }

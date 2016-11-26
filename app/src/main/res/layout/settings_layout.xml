@@ -511,5 +511,16 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
          />
-
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/debug_button"
+        style="@style/CommonButton"
+        android:minHeight="2dp"
+        android:minWidth="40dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:visibility="invisible"
+        />
 </RelativeLayout>

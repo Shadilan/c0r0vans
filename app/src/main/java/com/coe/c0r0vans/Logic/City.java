@@ -38,6 +38,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 import utility.GATracker;
@@ -499,7 +500,7 @@ public class City extends GameObject implements ActiveObject {
     public void setMarker(Marker m) {
         mark=m;
         if (addMark==null){
-            addMark=map.addMarker(new MarkerOptions().position(m.getPosition()).icon(ImageLoader.getDescritor("route_finish")).visible(false).anchor(0.5f,1f));
+            addMark=map.addMarker(new MarkerOptions().position(m.getPosition()).visible(false).anchor(0.5f,1f));
             updateColor();
         }
         changeMarkerSize();
@@ -540,58 +541,19 @@ public class City extends GameObject implements ActiveObject {
 
 
             if (mark == null) {
-                setMarker(map.addMarker(new MarkerOptions().position(latlng)));
-
+                createMarker();
             } else {
                 mark.setPosition(latlng);
                 addMark.setPosition(latlng);
-
-            }
-            if (zoneAdd==null){
-                CircleOptions circleOptions = new CircleOptions();
-                circleOptions.center(latlng);
-                circleOptions.radius(radius);
-                //circleOptions.zIndex(100);
-                //circleOptions.visible(false);
-                circleOptions.strokeColor(Color.BLACK);
-                circleOptions.strokeWidth(2*GameSettings.getMetric()+2);
-                zoneAdd = map.addCircle(circleOptions);
-            } else {
-                zoneAdd.setCenter(latlng);
-                zoneAdd.setRadius(radius);
             }
 
             if (zone == null) {
-                CircleOptions circleOptions = new CircleOptions();
-                circleOptions.center(latlng);
-                circleOptions.radius(radius);
-                //circleOptions.zIndex(100);
-                //circleOptions.visible(false);
-                circleOptions.strokeColor(Color.GRAY);
-
-                circleOptions.strokeWidth(2*GameSettings.getMetric());
-                zone = map.addCircle(circleOptions);
+                createZone();
             } else {
+                zoneAdd.setCenter(latlng);
+                zoneAdd.setRadius(radius);
                 zone.setCenter(latlng);
                 zone.setRadius(radius);
-            }
-
-
-            if (buildZone == null) {
-                CircleOptions circleOptions = new CircleOptions();
-                circleOptions.center(latlng);
-                //circleOptions.visible(false);
-                int dist = 125;
-                if (owner) dist = 250;
-                Upgrade up = GameObjects.getPlayer().getUpgrade("founder");
-                if (up != null) dist += up.getEffect2();
-                else dist += 75;
-                circleOptions.radius(dist);
-                //circleOptions.zIndex(0);
-                circleOptions.fillColor(0x30ff0000);
-                circleOptions.strokeWidth(0);
-                buildZone = map.addCircle(circleOptions);
-            } else {
                 buildZone.setCenter(latlng);
                 int dist = 125;
                 if (owner) dist = 250;
@@ -600,6 +562,9 @@ public class City extends GameObject implements ActiveObject {
                 else dist += 75;
                 buildZone.setRadius(dist);
             }
+
+
+
             changeMarkerSize();
             updateColor();
             update();
@@ -1318,7 +1283,8 @@ public class City extends GameObject implements ActiveObject {
             int income=0;
             LinearLayout l= (LinearLayout) findViewById(R.id.routePanel);
             l.removeAllViews();
-            for (Caravan r: GameObjects.getPlayer().getRoutes().values()){
+            ArrayList<Caravan> list=new ArrayList<>(GameObjects.getPlayer().getRoutes().values());
+            for (Caravan r: list){
                 if (r.getStartGUID().equals(city.getGUID())||r.getFinishGUID().equals(city.getGUID())){
                     RouteInfoLine line = new RouteInfoLine(getContext());
                     amount++;
@@ -1690,5 +1656,54 @@ public class City extends GameObject implements ActiveObject {
         SelectedObject.getInstance().setTarget(this);
         SelectedObject.getInstance().setPoint(this.getPosition());
         UIControler.getActionLayout().ShowView();
+    }
+
+    @Override
+    public void createMarker() {
+        if (mark!=null) mark.remove();
+        if (addMark!=null) {
+            addMark.remove();
+            addMark=null;
+        }
+        if (map!=null && latlng!=null && visibility) {
+            currentMarkName="-";
+            addMarkName="-";
+            setMarker(map.addMarker(new MarkerOptions().position(latlng)));
+        }
+    }
+
+    @Override
+    public void createZone() {
+        if (map!=null && latlng!=null && visibility) {
+            //build zone
+            CircleOptions circleOptions = new CircleOptions();
+            circleOptions.center(latlng);
+            int dist = 125;
+            if (owner) dist = 250;
+            Upgrade up = GameObjects.getPlayer().getUpgrade("founder");
+            if (up != null) dist += up.getEffect2();
+            else dist += 75;
+            circleOptions.radius(dist);
+            circleOptions.fillColor(0x30ff0000);
+            circleOptions.strokeWidth(0);
+            buildZone = map.addCircle(circleOptions);
+            //zoneadd
+            circleOptions = new CircleOptions();
+            circleOptions.center(latlng);
+            circleOptions.radius(radius);
+            circleOptions.strokeColor(Color.BLACK);
+            circleOptions.strokeWidth(2*GameSettings.getMetric()+2);
+            zoneAdd = map.addCircle(circleOptions);
+            //zone
+            circleOptions = new CircleOptions();
+            circleOptions.center(latlng);
+            circleOptions.radius(radius);
+            circleOptions.strokeColor(Color.GRAY);
+            circleOptions.strokeWidth(2 * GameSettings.getMetric());
+            zone = map.addCircle(circleOptions);
+
+
+
+        }
     }
 }

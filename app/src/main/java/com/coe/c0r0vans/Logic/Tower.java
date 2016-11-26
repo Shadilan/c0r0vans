@@ -109,13 +109,10 @@ public class Tower extends GameObject implements ActiveObject {
         }
         if (race == 0) {
             owner = true;
-            race= GameObjects.getPlayer().getRace();
+            race = GameObjects.getPlayer().getRace();
 
-        } else if (GUID.equals(GameObjects.getPlayer().getTower())){
-            owner=true;
-        } else if (Name.equals(GameObjects.getPlayer().getName())) owner=true;
-
-        else owner = false;
+        } else
+            owner = GUID.equals(GameObjects.getPlayer().getTower()) || Name.equals(GameObjects.getPlayer().getName());
         if (obj.has("Level")) {
             level = obj.getInt("Level");
 
@@ -124,7 +121,7 @@ public class Tower extends GameObject implements ActiveObject {
             description = obj.getString("Text");
         }
         if (mark == null) {
-            setMarker(map.addMarker(new MarkerOptions().position(latlng)));
+            createMarker();
 
         } else {
             mark.setPosition(latlng);
@@ -146,6 +143,7 @@ public class Tower extends GameObject implements ActiveObject {
     @Override
     public void setMarker(Marker m) {
         super.setMarker(m);
+        changeMarkerSize();
     }
 
     @Override
@@ -181,7 +179,7 @@ public class Tower extends GameObject implements ActiveObject {
         this.visibility=visibility;
         if (mark!=null) mark.setVisible(visibility);
     }
-    ObjectAction setText=new ObjectAction(this) {
+    private ObjectAction setText=new ObjectAction(this) {
         @Override
         public Bitmap getImage() {
             return null;
@@ -234,7 +232,7 @@ public class Tower extends GameObject implements ActiveObject {
 
         }
     };
-    ObjectAction destroyTower=new ObjectAction(this) {
+    private ObjectAction destroyTower=new ObjectAction(this) {
         @Override
         public Bitmap getImage() {
             return ImageLoader.getImage("destroy_tower");
@@ -860,5 +858,18 @@ public class Tower extends GameObject implements ActiveObject {
         public void Hide() {
             close();
         }
+    }
+
+    @Override
+    public void createMarker() {
+        if (map!=null && latlng!=null && visibility) {
+            currentMarkName="-";
+            setMarker(map.addMarker(new MarkerOptions().position(latlng)));
+        }
+    }
+
+    @Override
+    public void createZone() {
+
     }
 }

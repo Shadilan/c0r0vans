@@ -10,8 +10,11 @@ import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import com.coe.c0r0vans.Logic.Player;
 import com.coe.c0r0vans.R;
+import com.coe.c0r0vans.Singles.GameObjects;
 import com.coe.c0r0vans.UIElements.AboutWindow;
+import com.coe.c0r0vans.UIElements.DebugInfo;
 import com.coe.c0r0vans.UIElements.UIControler;
 
 import utility.sign.SignIn;
@@ -140,11 +143,24 @@ public class Settings extends RelativeLayout {
                 about.show();
             }
         });
+        findViewById(R.id.debug_button).setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DebugInfo debug = new DebugInfo(getContext());
+                debug.show();
+            }
+        });
+
         onResume();
     }
 
 
     protected void onResume() {
+        if ("Shadilan".equals(GameObjects.getPlayer().getName())
+                || "Kami".equals(GameObjects.getPlayer().getName())
+                || "Zlodiak".equals(GameObjects.getPlayer().getName())
+                ) findViewById(R.id.debug_button).setVisibility(VISIBLE);
+        else findViewById(R.id.debug_button).setVisibility(INVISIBLE);
 
         ambushRad.setChecked("Y".equals(GameSettings.getInstance().get("SHOW_AMBUSH_RADIUS")));
         cityRad.setChecked("Y".equals(GameSettings.getInstance().get("SHOW_CITY_RADIUS")));

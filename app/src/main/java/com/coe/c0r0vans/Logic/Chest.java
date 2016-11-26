@@ -48,7 +48,7 @@ public class Chest extends GameObject implements ActiveObject {
                 int lng = obj.getInt("Lng");
                 latlng = new LatLng(lat / 1e6, lng / 1e6);
                 if (mark == null) {
-                    if (map!=null) setMarker(map.addMarker(new MarkerOptions().position(latlng)));
+                    createMarker();
                 } else {
                     mark.setPosition(latlng);
                 }
@@ -262,4 +262,16 @@ public class Chest extends GameObject implements ActiveObject {
         return chestAction;
     }
 
+    @Override
+    public void createMarker() {
+        if (map!=null && latlng!=null && visible)
+            currentMarkName="-";
+            setMarker(map.addMarker(new MarkerOptions().position(latlng)));
+
+    }
+
+    @Override
+    public void createZone() {
+
+    }
 }

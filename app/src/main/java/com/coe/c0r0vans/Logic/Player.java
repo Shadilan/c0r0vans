@@ -189,8 +189,6 @@ public class Player extends GameObject {
 
     @Override
     public void changeMarkerSize() {
-        //player.mark.setIcon(BitmapDescriptorFactory.fromResource(R.mipmap.marker));
-        GATracker.trackTimeStart("ZoomSwitch","PlayerZone");
         if (zone!=null) {
             if (MyGoogleMap.getClientZoom() == GameObject.ICON_SMALL) {
                 zone.setStrokeWidth(3);
@@ -203,15 +201,14 @@ public class Player extends GameObject {
                 zone1.setStrokeWidth(5+2);
             }
         }
-        GATracker.trackTimeEnd("ZoomSwitch","PlayerZone");
-        GATracker.trackTimeStart("ZoomSwitch","AmbushesZoom");
+
         for (GameObject obj : this.getAmbushes().values())
             if (obj.getMarker() != null) obj.changeMarkerSize();
-        GATracker.trackTimeEnd("ZoomSwitch","AmbushesZoom");
-        GATracker.trackTimeStart("ZoomSwitch","CaravanZoom");
+
+
         for (GameObject obj : this.getRoutes().values())
             if (obj.getMarker() != null) obj.changeMarkerSize();
-        GATracker.trackTimeEnd("ZoomSwitch","CaravanZoom");
+
         if (currentR!=null) currentR.changeMarkerSize();
 
 
@@ -291,41 +288,13 @@ public class Player extends GameObject {
     @Override
     public void setMarker(Marker m) {
         mark=m;
-        if (zone!=null) zone.setCenter(m.getPosition());
-        else
-        {
-            CircleOptions circleOptions=new CircleOptions();
-            circleOptions.center(m.getPosition());
-            circleOptions.radius(ActionDistance);
-            circleOptions.zIndex(2);
-            circleOptions.strokeColor(Color.parseColor("#D08D2E"));
-            circleOptions.strokeWidth(5);
-            zone=map.addCircle(circleOptions);
-
+        if (zone!=null) {
+            zone.setCenter(m.getPosition());
+            zone1.setCenter(m.getPosition());
+            circle2.setCenter(m.getPosition());
         }
-        if (zone1!=null) zone1.setCenter(m.getPosition());
         else
-        {
-            CircleOptions circleOptions=new CircleOptions();
-            circleOptions.center(m.getPosition());
-            circleOptions.radius(ActionDistance);
-            circleOptions.zIndex(1);
-            circleOptions.strokeColor(Color.BLACK);
-            circleOptions.strokeWidth(5+2);
-            zone1=map.addCircle(circleOptions);
-        }
-
-        if (circle2!=null) circle2.setCenter(m.getPosition());
-        else
-        {
-            CircleOptions circleOptions=new CircleOptions();
-            circleOptions.center(m.getPosition());
-            circleOptions.radius(5);
-            circleOptions.strokeColor(Color.parseColor("#FF0000"));
-            circleOptions.strokeWidth(5);
-            circleOptions.zIndex(200);
-            circle2=map.addCircle(circleOptions);
-        }
+          createZone();
         changeMarkerSize();
     }
 
@@ -621,31 +590,9 @@ public class Player extends GameObject {
     public void setMap(GoogleMap map) {
         this.map = map;
         //Todo Дваждый описано создание объектов видимо не правильно, надо вынести
-        mark=map.addMarker(new MarkerOptions().position(new LatLng(GPSInfo.getInstance().GetLat() / 1E6, GPSInfo.getInstance().GetLng() / 1E6)));
-        CircleOptions circleOptions=new CircleOptions();
-        circleOptions.center(new LatLng(GPSInfo.getInstance().GetLat() / 1E6, GPSInfo.getInstance().GetLng() / 1E6));
-        circleOptions.radius(ActionDistance);
-        circleOptions.strokeColor(Color.parseColor("#a67125"));
-        circleOptions.strokeWidth(6);
-        circleOptions.zIndex(2);
-        zone=map.addCircle(circleOptions);
-        circleOptions=new CircleOptions();
-        circleOptions.center(new LatLng(GPSInfo.getInstance().GetLat() / 1E6, GPSInfo.getInstance().GetLng() / 1E6));
-        circleOptions.radius(5);
-        circleOptions.strokeColor(Color.parseColor("#FF0000"));
-        circleOptions.strokeWidth(5);
-        circleOptions.zIndex(200);
-        circle2=map.addCircle(circleOptions);
-        circleOptions.center(new LatLng(GPSInfo.getInstance().GetLat() / 1E6, GPSInfo.getInstance().GetLng() / 1E6));
-        circleOptions.radius(ActionDistance);
-        circleOptions.strokeColor(Color.BLACK);
-        circleOptions.strokeWidth(5+2);
-        circleOptions.zIndex(1);
-        zone1=map.addCircle(circleOptions);
-
+        createMarker();
+        createZone();
         changeMarkerSize();
-        mark.setAnchor(0.5f, 0.5f);
-        mark.setVisible(false);
         for (Caravan caravan:Routes.values()){
             caravan.setMap(map);
         }
@@ -1133,4 +1080,41 @@ public class Player extends GameObject {
             }
         }
     };
+
+    @Override
+    public void createMarker() {
+        if (map!=null) {
+            mark = map.addMarker(new MarkerOptions().position(new LatLng(GPSInfo.getInstance().GetLat() / 1E6, GPSInfo.getInstance().GetLng() / 1E6)).visible(false));
+        }
+    }
+
+    @Override
+    public void createZone() {
+        if (map!=null && mark!=null) {
+            CircleOptions circleOptions = new CircleOptions();
+            circleOptions.center(mark.getPosition());
+            circleOptions.radius(ActionDistance);
+            circleOptions.zIndex(2);
+            circleOptions.strokeColor(Color.parseColor("#D08D2E"));
+            circleOptions.strokeWidth(5);
+            zone = map.addCircle(circleOptions);
+
+
+             circleOptions = new CircleOptions();
+            circleOptions.center(mark.getPosition());
+            circleOptions.radius(ActionDistance);
+            circleOptions.zIndex(1);
+            circleOptions.strokeColor(Color.BLACK);
+            circleOptions.strokeWidth(5 + 2);
+            zone1 = map.addCircle(circleOptions);
+
+             circleOptions = new CircleOptions();
+            circleOptions.center(mark.getPosition());
+            circleOptions.radius(5);
+            circleOptions.strokeColor(Color.parseColor("#FF0000"));
+            circleOptions.strokeWidth(5);
+            circleOptions.zIndex(200);
+            circle2 = map.addCircle(circleOptions);
+        }
+    }
 }
