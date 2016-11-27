@@ -17,6 +17,7 @@ import com.coe.c0r0vans.UIElements.AboutWindow;
 import com.coe.c0r0vans.UIElements.DebugInfo;
 import com.coe.c0r0vans.UIElements.UIControler;
 
+import utility.StringUtils;
 import utility.sign.SignIn;
 
 public class Settings extends RelativeLayout {
@@ -156,10 +157,7 @@ public class Settings extends RelativeLayout {
 
 
     protected void onResume() {
-        if ("Shadilan".equals(GameObjects.getPlayer().getName())
-                || "Kami".equals(GameObjects.getPlayer().getName())
-                || "Zlodiak".equals(GameObjects.getPlayer().getName())
-                ) findViewById(R.id.debug_button).setVisibility(VISIBLE);
+        if (StringUtils.isAdmin()) findViewById(R.id.debug_button).setVisibility(VISIBLE);
         else findViewById(R.id.debug_button).setVisibility(INVISIBLE);
 
         ambushRad.setChecked("Y".equals(GameSettings.getInstance().get("SHOW_AMBUSH_RADIUS")));

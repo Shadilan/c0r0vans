@@ -13,11 +13,11 @@ import java.util.ArrayList;
 /**
  * Адаптер ListView для отражения информации о маршрутах
  */
-public class RouteAdapter extends BaseAdapter {
-    ArrayList<Caravan> list;
-    ShowHideForm parent;
+class RouteAdapter extends BaseAdapter {
+    private ArrayList<Caravan> list;
+    private ShowHideForm parent;
     Context context;
-    public RouteAdapter(Context context,ArrayList<Caravan> list,ShowHideForm parent){
+    RouteAdapter(Context context, ArrayList<Caravan> list, ShowHideForm parent){
         this.context=context;
         this.list=list;
         this.parent=parent;
@@ -40,7 +40,8 @@ public class RouteAdapter extends BaseAdapter {
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
         RouteInfoLine l=new RouteInfoLine(context);
-        l.setData(getItem(i));
+        if (i>list.size()) l.setData(getItem(list.size()-1));
+        else l.setData(getItem(i));
         l.setParentForm(parent);
         return l;
     }

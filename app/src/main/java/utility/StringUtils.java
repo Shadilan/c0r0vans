@@ -2,6 +2,8 @@ package utility;
 
 import android.content.Context;
 
+import com.coe.c0r0vans.Singles.GameObjects;
+
 import java.text.DateFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
@@ -96,5 +98,16 @@ public class StringUtils {
         }
         return result;
     }
+    public static boolean isAdmin(){
+        if (GameObjects.getPlayer()==null) return false;
+        return "Shadilan".equals(GameObjects.getPlayer().getName())
+                || "Zlodiak".equals(GameObjects.getPlayer().getName())
+                || "Kami".equals(GameObjects.getPlayer().getName());
+    }
+    public static boolean isDev(){
+        if (GameObjects.getPlayer()==null) return false;
+        return "Shadilan".equals(GameObjects.getPlayer().getName());
+    }
+
 
 }

@@ -38,6 +38,7 @@ import utility.GPSInfo;
 import utility.GameSound;
 import utility.GameVibrate;
 import utility.ImageLoader;
+import utility.StringUtils;
 import utility.internet.serverConnect;
 import utility.notification.Essages;
 import utility.settings.GameSettings;
@@ -201,12 +202,12 @@ public class Player extends GameObject {
                 zone1.setStrokeWidth(5+2);
             }
         }
-
-        for (GameObject obj : this.getAmbushes().values())
+        ArrayList<Ambush> am=new ArrayList<>(this.getAmbushes().values());
+        for (GameObject obj : am)
             if (obj.getMarker() != null) obj.changeMarkerSize();
 
-
-        for (GameObject obj : this.getRoutes().values())
+        ArrayList<Caravan> ca=new ArrayList<>(this.getRoutes().values());
+        for (GameObject obj : ca)
             if (obj.getMarker() != null) obj.changeMarkerSize();
 
         if (currentR!=null) currentR.changeMarkerSize();
@@ -924,9 +925,7 @@ public class Player extends GameObject {
                 //findViewById(R.id.createTower).setVisibility(VISIBLE);
                 findViewById(R.id.createTower).setVisibility(INVISIBLE);
             } else findViewById(R.id.createTower).setVisibility(VISIBLE);
-            if (!(GameObjects.getPlayer().getName().equals("Shadilan")
-                    ||GameObjects.getPlayer().getName().equals("Zlodiak")
-                    ||GameObjects.getPlayer().getName().equals("Kami")))
+            if (!StringUtils.isAdmin())
                 findViewById(R.id.createTower).setVisibility(INVISIBLE);
             if (obsidian>=10 && inZone)
                 findViewById(R.id.createTower).setEnabled(true);

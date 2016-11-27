@@ -11,13 +11,13 @@ import com.coe.c0r0vans.ShowHideForm;
 import java.util.ArrayList;
 
 /**
- * Created by Shadilan on 15.09.2016.
+ * AmbushAdapter
  */
-public class AmbushAdapter extends BaseAdapter {
-    ArrayList<Ambush> list;
-    ShowHideForm parent;
+class AmbushAdapter extends BaseAdapter {
+    private ArrayList<Ambush> list;
+    private ShowHideForm parent;
     Context context;
-    public AmbushAdapter(Context context, ArrayList<Ambush> list, ShowHideForm parent){
+    AmbushAdapter(Context context, ArrayList<Ambush> list, ShowHideForm parent){
         this.context=context;
         this.list=list;
         this.parent=parent;
@@ -39,7 +39,10 @@ public class AmbushAdapter extends BaseAdapter {
 
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
-        AmbushLine l=new AmbushLine(context,list.get(i),parent);
-        return l;
+        if (list.size()<i) return new AmbushLine(context,list.get(list.size()-1),parent);
+            return new AmbushLine(context,list.get(i),parent);
+
     }
+
+
 }

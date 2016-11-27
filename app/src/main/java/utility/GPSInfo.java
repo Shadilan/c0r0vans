@@ -111,42 +111,46 @@ public class GPSInfo {
 
             @Override
             public void onLocationChanged(Location location) {
+                if (location==null)  {
+                    RequestUpdate(location.getProvider());
+                    GATracker.trackHit("GPS", "NoLocation");
+                    return;
 
+                }
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
                     if (location.isFromMockProvider()) {
                         //Essages.addEssage("Вы используете фальшивые координаты. Информация отправлена администраторам.");
                         GATracker.trackHit("GPS", "SpoofingWithMock");
+                        RequestUpdate(location.getProvider());
                         return;
 
                     }
                 }
 
-                Long curTime = location.getTime() / 1000;
-                if (curTime<lastTime) return;
-                lastTime=curTime;
-                LatLng newCord = new LatLng(location.getLatitude(), location.getLongitude());
-                LatLng oldCord;
-                if (aim!=null)
-                    oldCord = new LatLng(aim.getLatitude(), aim.getLongitude());
-                else
-                    oldCord = new LatLng(location.getLatitude(), location.getLongitude());
-                if (oldCord.latitude == -1 && oldCord.longitude == -1) oldCord = newCord;
+                Long curTime = location.getTime()/1000;
+                if (curTime<lastTime) {
+                    RequestUpdate(location.getProvider());
+                    GATracker.trackHit("GPS", "PreviousLocation");
+                    return;
+                }
+                if (aim==null || aim.getLatitude() == -1 && aim.getLongitude() == -1) aim = location;
                 float timespeed;
                 if (location.hasSpeed() && location.getSpeed() > 0) {
                     timespeed = location.getSpeed();
                 } else {
                     timespeed = Math.max(speed * 5 / 18, 1);
-
                     GATracker.trackHit("GPS", "NoSpeed." + location.getProvider());
                 }
 
-                if ((timespeed) * (curTime - lastTime + 1) * 10 < getDistance(oldCord, newCord) && curTime - lastTime < 30000) {
+                if (!StringUtils.isDev() && (timespeed) * (curTime - lastTime + 1) * 10 < getDistance(aim, location) && curTime - lastTime < 30000) {
                     GATracker.trackHit("GPS", "ToFast." + location.getProvider());
+                    RequestUpdate(location.getProvider());
                     return;
                 }
 
-                if (curTime - lastTime < 30000 && (!location.hasAccuracy() || location.getAccuracy() > 100)) {
+                if (!StringUtils.isDev() && curTime - lastTime < 30000 && (!location.hasAccuracy() || location.getAccuracy() > 100)) {
                     GATracker.trackHit("GPS", "NotAccurate." + location.getProvider());
+                    RequestUpdate(location.getProvider());
                     return;
                 }
 
@@ -155,7 +159,6 @@ public class GPSInfo {
                     hasAccuracy = true;
                     accur = location.getAccuracy();
                     GATracker.trackHit("GPS", "Accuracy", (int) accur);
-
                 }
 
                 if (location.hasSpeed()) {
@@ -168,46 +171,42 @@ public class GPSInfo {
                     lng = (int) (location.getLongitude() * 1000000);
                     lastTime = curTime;
 
-                }
 
-                aim = location;
-                long t = (new Date()).getTime();
-                if ("Y".equals(GameSettings.getValue("GPS_SMOOTH"))) {
+                    aim = location;
+                    long t = (new Date()).getTime();
+                    if ("Y".equals(GameSettings.getValue("GPS_SMOOTH"))) {
 
 
-                    if (lastSync == 0 || current == null) {
+                        if (lastSync == 0 || current == null) {
 
-                        current = aim;
-                        stepLat = 0;
-                        stepLng = 0;
+                            current = aim;
+                            stepLat = 0;
+                            stepLng = 0;
+
+                        } else {
+
+                            double step = (t - lastSync) / stepDuration;
+                            if (step == 0) step = 1;
+
+                            stepLat = (aim.getLatitude() - current.getLatitude()) / step;
+                            stepLng = (aim.getLongitude() - current.getLongitude()) / step;
+
+                        }
+
 
                     } else {
-
-                        double step = (t - lastSync) / stepDuration;
-                        if (step == 0) step = 1;
-
-                        stepLat = (aim.getLatitude() - current.getLatitude()) / step;
-                        stepLng = (aim.getLongitude() - current.getLongitude()) / step;
-
+                        current = aim;
                     }
-
-
-                } else
-                {
-                    current=aim;
+                    lastSync = t;
+                    if (locationListeners != null && current!=null) {
+                        if (locationListenersRem != null)
+                            locationListeners.removeAll(locationListenersRem);
+                        for (LocationListener ll : locationListeners) {
+                            ll.onLocationChanged(current);
+                        }
+                    }
                 }
-                lastSync = t;
-
-
                 RequestUpdate(location.getProvider());
-                if (locationListeners != null && current!=null) {
-                    if (locationListenersRem != null)
-                        locationListeners.removeAll(locationListenersRem);
-                    for (LocationListener ll : locationListeners) {
-                        ll.onLocationChanged(current);
-                    }
-                }
-
             }
 
 
@@ -369,6 +368,13 @@ public class GPSInfo {
         if (p1==null ||p2==null) return 0f;
         float[] distances = new float[1];
         Location.distanceBetween(p1.latitude, p1.longitude, p2.latitude, p2.longitude, distances);
+        if (distances.length<1) return -1;
+        else return distances[0];
+    }
+    public static float getDistance(Location p1,Location p2){
+        if (p1==null ||p2==null) return 0f;
+        float[] distances = new float[1];
+        Location.distanceBetween(p1.getLatitude(), p1.getLongitude(), p2.getLatitude(), p2.getLongitude(), distances);
         if (distances.length<1) return -1;
         else return distances[0];
     }

@@ -357,9 +357,7 @@ public class Tower extends GameObject implements ActiveObject {
 
     @Override
     public void useObject() {
-        if (!(GameObjects.getPlayer().getName().equals("Shadilan")
-                ||GameObjects.getPlayer().getName().equals("Zlodiak")
-                ||GameObjects.getPlayer().getName().equals("Kami"))) return;
+        if (!StringUtils.isAdmin()) return;
             SelectedObject.getInstance().setTarget(this);
             SelectedObject.getInstance().setPoint(this.getPosition());
             UIControler.getActionLayout().ShowView();

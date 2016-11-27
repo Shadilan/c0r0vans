@@ -13,11 +13,11 @@ import java.util.ArrayList;
 /**
  * Адаптер для ListView для отражения информации о городах
  */
-public class AtlasAdapter extends BaseAdapter {
-    ArrayList<City> list;
-    ShowHideForm parent;
+class AtlasAdapter extends BaseAdapter {
+    private ArrayList<City> list;
+    private ShowHideForm parent;
     Context context;
-    public AtlasAdapter(Context context,ArrayList<City> list,ShowHideForm parent){
+    AtlasAdapter(Context context, ArrayList<City> list, ShowHideForm parent){
         this.context=context;
         this.list=list;
         this.parent=parent;
@@ -39,7 +39,9 @@ public class AtlasAdapter extends BaseAdapter {
 
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
-        AtlasLine l=new AtlasLine(context,list.get(i));
+        AtlasLine l;
+        if (i>list.size()) l=new AtlasLine(context,list.get(list.size()-1));
+        else l=new AtlasLine(context,list.get(i));
         l.setParentForm(parent);
         return l;
     }

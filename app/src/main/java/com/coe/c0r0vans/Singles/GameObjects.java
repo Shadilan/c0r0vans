@@ -31,6 +31,7 @@ import java.util.Set;
 
 import utility.GATracker;
 import utility.GPSInfo;
+import utility.StringUtils;
 import utility.internet.ServerListener;
 import utility.internet.serverConnect;
 import utility.notification.Essages;
@@ -104,9 +105,11 @@ public class GameObjects{
                 float dist = GPSInfo.getDistance(latLng, o.getPosition());
                 float pdist = GPSInfo.getDistance(player.getPosition(),o.getPosition());
                 if (dist <  o.getActionRadius() && pdist<=player.getActionDistance()) {
-                    //closestObject = o;
-                    //break;
-                    o.useObject();
+                    if (StringUtils.isAdmin()) o.useObject();
+                        else {
+                        closestObject = o;
+                        break;
+                    }
                 }
             }
         }

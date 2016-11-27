@@ -1284,19 +1284,19 @@ public class City extends GameObject implements ActiveObject {
             LinearLayout l= (LinearLayout) findViewById(R.id.routePanel);
             l.removeAllViews();
             ArrayList<Caravan> list=new ArrayList<>(GameObjects.getPlayer().getRoutes().values());
+            if (city.getGUID()==null) return;
             for (Caravan r: list){
-                if (r.getStartGUID().equals(city.getGUID())||r.getFinishGUID().equals(city.getGUID())){
+                if (city.getGUID().equals(r.getStartGUID())||city.getGUID().equals(r.getFinishGUID())){
                     RouteInfoLine line = new RouteInfoLine(getContext());
                     amount++;
                     income+=r.getProfit();
                     l.addView(line);
                     line.setData(r);
                     line.setParentForm(self);
-
                 }
-                ((TextView)findViewById(R.id.routeCount)).setText(String.valueOf(amount));
-                ((TextView)findViewById(R.id.routeIncome)).setText(String.valueOf(income));
             }
+            ((TextView)findViewById(R.id.routeCount)).setText(String.valueOf(amount));
+            ((TextView)findViewById(R.id.routeIncome)).setText(String.valueOf(income));
         }
         public void updateInZone(boolean inZone){
             if (inZone) {

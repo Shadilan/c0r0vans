@@ -167,10 +167,12 @@ public class ButtonLayout extends RelativeLayout {
             public boolean onLongClick(View v) {
                 try {
                     Essages.addEssage(Essages.SYSTEM,"Принудительная загрузка.");
-                    GATracker.trackTimeStart("Refresh","ClearMap");
-                    MyGoogleMap.getMap().clear();
-                    GATracker.trackTimeEnd("Refresh","ClearMap");
-                    GameObjects.reloadMarkers();
+                    if (StringUtils.isDev()) {
+                        GATracker.trackTimeStart("Refresh", "ClearMap");
+                        MyGoogleMap.getMap().clear();
+                        GATracker.trackTimeEnd("Refresh", "ClearMap");
+                        GameObjects.reloadMarkers();
+                    }
 
                     serverConnect.getInstance().clearQueue();
                     //Run Refresh

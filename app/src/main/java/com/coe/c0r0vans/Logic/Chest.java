@@ -47,6 +47,7 @@ public class Chest extends GameObject implements ActiveObject {
                 int lat = obj.getInt("Lat");
                 int lng = obj.getInt("Lng");
                 latlng = new LatLng(lat / 1e6, lng / 1e6);
+                visible=true;
                 if (mark == null) {
                     createMarker();
                 } else {
@@ -66,24 +67,25 @@ public class Chest extends GameObject implements ActiveObject {
         if (mark!=null){
 
             mark.setPosition(latLng);
-        } else setMarker(map.addMarker(new MarkerOptions().position(latLng)));
+        } else createMarker();
     }
     public Chest(GoogleMap map, JSONObject jsonObject){
         super();
         loadJSON(jsonObject);
         setMap(map);
+
     }
 
     @Override
     public void setMap(GoogleMap map) {
         super.setMap(map);
         if (mark!=null) mark.remove();
-        setMarker(map.addMarker(new MarkerOptions().position(getPosition())));
+        createMarker();
     }
 
     @Override
     public void setMarker(Marker m) {
-        super.setMarker(m);
+        this.mark=m;
         changeMarkerSize();
     }
     private boolean inZone=false;
@@ -264,9 +266,12 @@ public class Chest extends GameObject implements ActiveObject {
 
     @Override
     public void createMarker() {
-        if (map!=null && latlng!=null && visible)
-            currentMarkName="-";
-            setMarker(map.addMarker(new MarkerOptions().position(latlng)));
+        Log.d("ChestShow","premarker");
+        if (map!=null && latlng!=null && visible) {
+            Log.d("ChestShow", "postmarker");
+            currentMarkName = "-";
+            setMarker(map.addMarker(new MarkerOptions().position(latlng).visible(true)));
+        }
 
     }
 
