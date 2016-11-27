@@ -109,8 +109,9 @@
     <string name="course_on_move">Курс по движению</string>
     <string name="leftHirelings">Можно нанять:</string>
     <string name="hire" >Нанять: %1$d (из %2$d) чел. за %3$s золота.</string>
-    <string name="put_obsidian">Положить: %1$d из %2$d шт. Обсидиана</string>
-    <string name="take_obsidian">Взять: %1$d шт. Обсидиана</string>
+    <string name="put_obsidian">%1$s Обсидиан: %2$d шт. В башне:%3$d </string>
+    <string name="put">Положить</string>
+    <string name="take">Взять</string>
     <string name="server_unavaible">Сервер не доступен.Попытка через 30 сек.</string>
     <string name="city_created" >Поселение возникло в %1$d метрах от вас.</string>
     <string name="build_area_settings">Зоны создания</string>
@@ -149,5 +150,6 @@
     <string name="do_google_authorization">Выполнение Авторизации Google.</string>
     <string name="google_authorization_done">Google Авторизация выполнена.</string>
     <string name="gps_smooth">Сглаживание GPS</string>
+    <string name="warehouse">Хранилище</string>
 
 </resources>

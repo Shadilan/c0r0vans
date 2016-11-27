@@ -123,8 +123,10 @@ All rights reserved to Circle of Eternity</string>
     <string name="upgrade_text">%1$s\n%2$s\n%3$s❍(Skill Multiplier:%4$s)</string>
     <string name="leftHirelings">Left to hire:</string>
     <string name="hire">Hire: %1$d of %2$d for %3$s</string>
-    <string name="put_obsidian">Put: %1$d of %2$d of Obsidian</string>
-    <string name="take_obsidian">Take: %1$d Obsidian</string>
+    <string name="put_obsidian">%1$s Obsidian: (%2$d). In Tower(%3$d)</string>
+    <string name="put">Put</string>
+    <string name="take">Take</string>
+
     <string name="server_unavaible">Server unavaible.\nRetry in 30 seconds.</string>
     <string name="city_created">Town appear near you at %1$d meters.</string>
     <string name="gold_amount" translatable="false">%1$s ❍</string>
@@ -173,5 +175,6 @@ All rights reserved to Circle of Eternity</string>
     <string name="do_google_authorization">Google Sign-in.</string>
     <string name="google_authorization_done">Google Sign-in done.</string>
     <string name="gps_smooth">GPS Smooth</string>
+    <string name="warehouse">Warehouse</string>
 
 </resources>

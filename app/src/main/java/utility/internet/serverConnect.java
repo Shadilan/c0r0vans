@@ -6,7 +6,6 @@ import android.net.NetworkInfo;
 import android.provider.Settings;
 import android.util.Log;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.NetworkError;
 import com.android.volley.NoConnectionError;
@@ -16,7 +15,6 @@ import com.android.volley.Response;
 import com.android.volley.ServerError;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.HttpStack;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.coe.c0r0vans.GameObjects.ObjectAction;
@@ -29,14 +27,11 @@ import com.google.android.gms.maps.model.LatLng;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.Map;
 import java.util.UUID;
 
 import utility.GATracker;
@@ -52,36 +47,36 @@ import utility.sign.SignInListener;
  */
 //TODO Синхронизировать типы вызовов в листенере и здесь
 public class serverConnect {
-    private final int max_retry=3;
     private static serverConnect instance;
-
-
-    /**
-     * Получить объект
-     * @return Объект коненкта
-     */
-    public static serverConnect getInstance(){
-        if (instance ==null){
-            instance=new serverConnect();
-        }
-        return instance;
-    }
+    private final int max_retry = 3;
     private boolean syncPlayer=false;
     private boolean syncMap=false;
     private boolean syncFast=false;
     private boolean syncMessage=false;
-
     private String ServerAddres;//Адресс сервера
     private Context context;    //Контекст приложения
     private RequestQueue reqq;  //Очередь запросов
     private RequestQueue debugReqq;
+    private Runnable sender = new Runnable() {
+        @Override
+        public void run() {
+            sendCoord();
+        }
+    };
     private String Token;       //Токен
     //private String login="";
     private String version="";
     private ArrayList<ObjectAction> lockedActions;
     private HashMap<String,ObjectAction> listenersMap;
     private HashMap<String,ObjectAction> errorMap;
-
+    //Listeners
+    private ArrayList<ServerListener> listeners;
+    private ArrayList<ServerListener> remListeners;
+    private int oldLat = 0;
+    private int oldLng = 0;
+    private long oldTime = 0;
+    private boolean busy = false;
+    private LinkedList<RequestData> requestList = new LinkedList<>();
     /**
      * Constructor
      */
@@ -90,12 +85,18 @@ public class serverConnect {
         errorMap=new HashMap<>();
     }
 
-    Runnable sender=new Runnable() {
-        @Override
-        public void run() {
-            sendCoord();
+    /**
+     * Получить объект
+     *
+     * @return Объект коненкта
+     */
+    public static serverConnect getInstance() {
+        if (instance == null) {
+            instance = new serverConnect();
         }
-    };
+        return instance;
+    }
+
     /**
      * Установка параметров коннекта. и запуск очереди.
      * @param serverAddres Address of server
@@ -124,14 +125,11 @@ public class serverConnect {
         return networkInfo != null && networkInfo.isConnected();
     }
 
-    //Listeners
-    private ArrayList<ServerListener> listeners;
-    private ArrayList<ServerListener> remListeners;
-
     public void addListener(ServerListener listener){
         if (listeners==null) listeners=new ArrayList<>();
         listeners.add(listener);
     }
+
     public void removeListener(ServerListener listener){
         if (remListeners==null) remListeners=new ArrayList<>();
         remListeners.add(listener);
@@ -144,7 +142,6 @@ public class serverConnect {
         }
     }
 
-
     private JSONObject formResponse(String resp){
         JSONObject result=new JSONObject();
         try {
@@ -156,6 +153,7 @@ public class serverConnect {
 
         return result;
     }
+
     /**
      *  Login and get Secure Token
 
@@ -181,12 +179,6 @@ public class serverConnect {
         return true;
     }
 
-    private int oldLat=0;
-    private int oldLng=0;
-    private long oldTime=0;
-
-
-
     public boolean callGetPlayerInfo(){
         if (!checkConnection()) return false;
         if (Token==null) return false;
@@ -194,6 +186,7 @@ public class serverConnect {
         else runGetPlayerInfo();
         return true;
     }
+
     private void runGetPlayerInfo(){
         String UID=UUID.randomUUID().toString();
         String url=new UrlBuilder(ServerAddres+"/getdata.jsp","GetPlayerInfo",version)
@@ -211,6 +204,7 @@ public class serverConnect {
         else runGetMessage();
         return true;
     }
+
     private void runGetMessage(){
         String UID=UUID.randomUUID().toString();
         String url=new UrlBuilder(ServerAddres+"/getdata.jsp","GetMessage",version)
@@ -220,6 +214,7 @@ public class serverConnect {
         runRequest(UUID.randomUUID().toString(),url,ResponseListenerWithUID.MESSAGE,0,null);
         syncMessage=false;
     }
+
     public boolean checkRefresh() {
         long newTime = new Date().getTime();
         return ((GPSInfo.getDistance(new LatLng(oldLat / 1e6, oldLng / 1e6), GPSInfo.getInstance().getLatLng()) > 500) || newTime - oldTime > 5 * 1000 * 60) && callScanRange();
@@ -233,6 +228,7 @@ public class serverConnect {
         else runScanRange();
         return true;
     }
+
     private void runScanRange(){
         int Lat=(int)(MyGoogleMap.getMap().getCameraPosition().target.latitude*1e6);
         int Lng=(int)(MyGoogleMap.getMap().getCameraPosition().target.longitude*1e6);
@@ -251,6 +247,7 @@ public class serverConnect {
         syncMap=false;
         oldTime=new Date().getTime();
     }
+
     public boolean callFastScan(){
         if (!checkConnection()) return false;
         if (Token==null) return false;
@@ -258,6 +255,7 @@ public class serverConnect {
         else runFastScan();
         return true;
     }
+
     private void runFastScan(){
         int Lat=GPSInfo.getInstance().GetLat();
         int Lng=GPSInfo.getInstance().GetLng();
@@ -312,6 +310,7 @@ public class serverConnect {
         runRequest(UID, url, ResponseListenerWithUID.ACTION,null);
         return true;
     }
+
     public boolean callCancelAmbush(ObjectAction action, String target){
         if (!checkConnection()) return false;
         if (Token==null) return false;
@@ -329,6 +328,7 @@ public class serverConnect {
         runRequest(UID, url, ResponseListenerWithUID.ACTION,null);
         return true;
     }
+
     public boolean callDropUnfinishedRoute(ObjectAction action){
         if (!checkConnection()) return false;
         if (Token==null) return false;
@@ -345,6 +345,7 @@ public class serverConnect {
         runRequest(UID, url, ResponseListenerWithUID.ACTION,null);
         return true;
     }
+
     public boolean callBuyUpgrade(ObjectAction action, int Lat,int Lng , String target){
         if (!checkConnection()) return false;
         if (Token==null) return false;
@@ -364,6 +365,7 @@ public class serverConnect {
         runRequest(UID, url, ResponseListenerWithUID.ACTION,null);
         return true;
     }
+
     public boolean callStartRoute(ObjectAction action,int Lat,int Lng,String target){
         if (!checkConnection()) return false;
         if (Token==null) return false;
@@ -444,8 +446,6 @@ public class serverConnect {
         return true;
     }
 
-
-
     public boolean createCity(ObjectAction action,int Lat,int Lng , int TLat,int TLng){
         if (!checkConnection()) return false;
         if (Token==null) return false;
@@ -466,6 +466,7 @@ public class serverConnect {
         runRequest(UID, url, ResponseListenerWithUID.ACTION,null);
         return true;
     }
+
     public boolean hirePeople(ObjectAction action,int Lat,int Lng , String target,int amount){
         if (!checkConnection()) return false;
         if (Token==null) return false;
@@ -511,6 +512,7 @@ public class serverConnect {
         runRequest(UID, url, ResponseListenerWithUID.ACTION,null);
         return true;
     }
+
     public boolean setTowerText(ObjectAction action,int Lat,int Lng,String tGUID,String text){
         if (!checkConnection()) return false;
         if (Token==null) return false;
@@ -537,7 +539,8 @@ public class serverConnect {
         runRequest(UID, url, ResponseListenerWithUID.ACTION,body);
         return true;
     }
-    public boolean takeItems(ObjectAction action,int Lat,int Lng,String tGUID,String type){
+
+    public boolean takeItems(ObjectAction action, int Lat, int Lng, String tGUID, String type, int count) {
         if (!checkConnection()) return false;
         if (Token==null) return false;
         if (lockedActions==null) lockedActions=new ArrayList<>();
@@ -550,14 +553,17 @@ public class serverConnect {
                 .put("plat",Lat)
                 .put("plng",Lng)
                 .put("TGUID",tGUID)
-                .put("Type",type)
+                .put("Type", type)
+                .put("Quantity", count)
                 .put("UUID",UID)
                 .build();
         listenersMap.put(UID, action);
         errorMap.put(UID, action);
-        runRequest(UID, url, ResponseListenerWithUID.ACTION,null);
+        runRequest(UID, url, ResponseListenerWithUID.ACTION, null);
+        Log.d("Tower", url);
         return true;
     }
+
     public boolean putItems(ObjectAction action,int Lat,int Lng,String tGUID,String type,int count){
         if (!checkConnection()) return false;
         if (Token==null) return false;
@@ -571,15 +577,18 @@ public class serverConnect {
                 .put("plat",Lat)
                 .put("plng",Lng)
                 .put("TGUID",tGUID)
-                .put("Type",type)
-                .put("Quanity",count)
+                .put("Type", type)
+                .put("Quantity", count)
                 .put("UUID",UID)
                 .build();
         listenersMap.put(UID, action);
         errorMap.put(UID, action);
+        Log.d("Tower", url);
         runRequest(UID, url, ResponseListenerWithUID.ACTION,null);
+
         return true;
     }
+
     public boolean destroyTower(ObjectAction action,int Lat,int Lng,String tGUID){
         if (!checkConnection()) return false;
         if (Token==null) return false;
@@ -634,6 +643,17 @@ public class serverConnect {
         runRequest(UUID.randomUUID().toString(), url, ResponseListenerWithUID.FASTSCAN,0,null);
         syncFast=false;
     }
+    /*public boolean GetRating(){
+        if (!checkConnection()) return false;
+        if (Token==null) return false;
+        String UID=UUID.randomUUID().toString();
+        String url=new UrlBuilder(ServerAddres+"/getdata.jsp","GetRate",version)
+                .put("Token",Token)
+                .put("UUID",UID)
+                .build();
+        runRequest(UUID.randomUUID().toString(),url,ResponseListenerWithUID.RATING);
+        return true;
+    }*/
 
     /**
      * Check if we have Token
@@ -655,18 +675,6 @@ public class serverConnect {
         runRequest(UUID.randomUUID().toString(), url, ResponseListenerWithUID.SETRACE,null);
         return true;
     }
-    /*public boolean GetRating(){
-        if (!checkConnection()) return false;
-        if (Token==null) return false;
-        String UID=UUID.randomUUID().toString();
-        String url=new UrlBuilder(ServerAddres+"/getdata.jsp","GetRate",version)
-                .put("Token",Token)
-                .put("UUID",UID)
-                .build();
-        runRequest(UUID.randomUUID().toString(),url,ResponseListenerWithUID.RATING);
-        return true;
-    }*/
-
 
     private void runRequest(String UID,String request,int type,JSONObject body){
         if (busy) requestList.add(new RequestData(UID,request,type,body));
@@ -684,23 +692,7 @@ public class serverConnect {
 
 
     }
-    private boolean busy=false;
 
-
-
-    private class RequestData{
-        RequestData(String UID, String request, int type,JSONObject body){
-            this.request=request;
-            this.UID=UID;
-            this.type=type;
-            this.body=body;
-        }
-        String UID;
-        String request;
-        int type;
-        JSONObject body;
-    }
-    private LinkedList<RequestData> requestList=new LinkedList<>();
     private void runNextRequest(){
         if (syncMap){
             runScanRange();
@@ -730,6 +722,7 @@ public class serverConnect {
             });
         }
     }
+
     public void clearQueue(){
         requestList.clear();
         busy=false;
@@ -1007,6 +1000,7 @@ public class serverConnect {
         reqq.add(jsObjRequest);
 
     }
+
     public void sendDebug(String group, String attribute, int hit, long time){
         if (!checkConnection()) return;
         String request="https://support-merchantarg.rhcloud.com/statistics.jsp?Oper=doAction";
@@ -1052,6 +1046,7 @@ public class serverConnect {
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         debugReqq.add(jsObjRequest);
     }
+
     private void sendCoord(){
         if (!checkConnection()) return;
         String request="https://support-merchantarg.rhcloud.com/statistics.jsp?Oper=doPosition";
@@ -1101,6 +1096,7 @@ public class serverConnect {
         debugReqq.add(jsObjRequest);
         MainThread.postDelayed(sender,60000);
     }
+
     public void sendException(String group, Exception se){
         if (!checkConnection()) return;
         String request="https://support-merchantarg.rhcloud.com/statistics.jsp?Oper=doException";
@@ -1146,6 +1142,7 @@ public class serverConnect {
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         debugReqq.add(jsObjRequest);
     }
+
     public void sendException(String group, String se){
         if (!checkConnection()) return;
         String request="https://support-merchantarg.rhcloud.com/statistics.jsp?Oper=doException";
@@ -1188,6 +1185,20 @@ public class serverConnect {
         jsObjRequest.setRetryPolicy(new DefaultRetryPolicy(20 * 1000, 0,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         debugReqq.add(jsObjRequest);
+    }
+
+    private class RequestData {
+        String UID;
+        String request;
+        int type;
+        JSONObject body;
+
+        RequestData(String UID, String request, int type, JSONObject body) {
+            this.request = request;
+            this.UID = UID;
+            this.type = type;
+            this.body = body;
+        }
     }
     //UserActions
     /**

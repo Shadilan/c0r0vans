@@ -9,12 +9,12 @@ android {
             storePassword 'Enternity8'
         }
     }
-    compileSdkVersion 24
-    buildToolsVersion "23.0.2"
+    compileSdkVersion 25
+    buildToolsVersion "24.0.3"
     defaultConfig {
         applicationId 'com.coe.c0r0vans'
         minSdkVersion 14
-        targetSdkVersion 24
+        targetSdkVersion 25
         versionCode 66
         versionName "3.0.17a"
         signingConfig signingConfigs.Release
@@ -47,14 +47,14 @@ dependencies {
     /*Версия 9 почему то вызывает зависание.*/
 
 
-    compile 'com.android.support:appcompat-v7:24.2.1'
-    compile 'com.android.support:design:24.2.1'
-    compile 'com.android.support:support-v4:24.2.1'
-    compile 'com.google.android.gms:play-services:9.6.1'
-    compile 'com.google.android.gms:play-services-ads:9.6.1'
-    compile 'com.google.android.gms:play-services-identity:9.6.1'
-    compile 'com.google.android.gms:play-services-auth:9.6.1'
-    compile 'com.google.android.gms:play-services-gcm:9.6.1'
+    compile 'com.android.support:appcompat-v7:25.0.1'
+    compile 'com.android.support:design:25.0.1'
+    compile 'com.android.support:support-v4:25.0.1'
+    compile 'com.google.android.gms:play-services:10.0.0'
+    compile 'com.google.android.gms:play-services-ads:10.0.0'
+    compile 'com.google.android.gms:play-services-identity:10.0.0'
+    compile 'com.google.android.gms:play-services-auth:10.0.0'
+    compile 'com.google.android.gms:play-services-gcm:10.0.0'
 
 
 

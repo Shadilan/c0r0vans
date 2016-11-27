@@ -3,14 +3,10 @@ package com.coe.c0r0vans.UIElements;
 import android.content.Context;
 import android.graphics.Color;
 import android.util.AttributeSet;
-import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
@@ -24,8 +20,8 @@ import com.coe.c0r0vans.GameObjects.Message;
 import com.coe.c0r0vans.R;
 import com.coe.c0r0vans.Singles.GameObjects;
 import com.coe.c0r0vans.Singles.MyGoogleMap;
+import com.coe.c0r0vans.Singles.SelectedObject;
 import com.coe.c0r0vans.UIElements.InfoLayout.InfoLayout;
-import com.coe.c0r0vans.UIElements.MessageLayout.EssageLine;
 import com.coe.c0r0vans.UIElements.MessageLayout.EssageLineView;
 import com.coe.c0r0vans.UIElements.MessageLayout.MessageLayout;
 
@@ -49,6 +45,7 @@ public class ButtonLayout extends RelativeLayout {
     private ScrollView scrollView;
     private MessageLayout messageLayout;
     //События должны приходить на основной слой
+    private TextView zoomCnt;
 
     public ButtonLayout(Context context) {
         super(context);
@@ -59,11 +56,11 @@ public class ButtonLayout extends RelativeLayout {
         super(context, attrs);
 
     }
-
     public ButtonLayout(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
 
     }
+
     public void init(){
         inflate(getContext(), R.layout.main_button, this);
         try {
@@ -72,7 +69,7 @@ public class ButtonLayout extends RelativeLayout {
             GATracker.trackException("ButtonLayout",e);
         }
     }
-    private TextView zoomCnt;
+
     private void afterInit() {
         MyGoogleMap.setShowpointButton((ImageButton) findViewById(R.id.showPosButton));
         infoLayout = new InfoLayout(getContext());
@@ -171,6 +168,7 @@ public class ButtonLayout extends RelativeLayout {
                         GATracker.trackTimeStart("Refresh", "ClearMap");
                         MyGoogleMap.getMap().clear();
                         GATracker.trackTimeEnd("Refresh", "ClearMap");
+                        SelectedObject.getInstance().createZone();
                         GameObjects.reloadMarkers();
                     }
 
@@ -198,7 +196,6 @@ public class ButtonLayout extends RelativeLayout {
             public void onClick(View v) {
                 try {
                     MyGoogleMap.switchZoom();
-                    Essages.addEssage(Essages.SYSTEM,"ObjectCount:"+GameObjects.getInstance().size());
                     GameObjects.updateZoom();
                     updateZoom();
 

@@ -47,6 +47,8 @@ public class GameObjects{
     private static Player player;
 
     private static HashMap<String,Chest> chests;
+    private static HashMap<String, GameObject> activeObjects;
+
     public static void reloadMarkers(){
         GATracker.trackTimeStart("Refresh","ReloadMarkers");
         GATracker.trackTimeStart("Refresh","Objects");
@@ -56,6 +58,7 @@ public class GameObjects{
             o.createMarker();
             o.createZone();
         }
+
         GATracker.trackTimeEnd("Refresh","Objects");
         GATracker.trackTimeStart("Refresh","Chests");
         ArrayList<Chest> list2=new ArrayList<>(chests.values());
@@ -67,6 +70,7 @@ public class GameObjects{
         GATracker.trackTimeStart("Refresh","Player");
         player.createMarker();
         player.createZone();
+
         GATracker.trackTimeEnd("Refresh","Player");
         GATracker.trackTimeStart("Refresh","Ambushes");
         ArrayList<Ambush> list3=new ArrayList<>(player.getAmbushes().values());
@@ -85,6 +89,7 @@ public class GameObjects{
         GATracker.trackTimeEnd("Refresh","ReloadMarkers");
 
     }
+
     public static void updateZoom(){
         GATracker.trackTimeStart("ZoomSwitch","GameObjectsZoom");
         for (GameObject obj : getInstance().values())
@@ -97,6 +102,7 @@ public class GameObjects{
         player.changeMarkerSize();
         GATracker.trackTimeEnd("ZoomSwitch","PlayerZoom");
     }
+
     public static ActiveObject getClosestObject(LatLng latLng){
         float closest=1000;
         ActiveObject closestObject=null;
@@ -105,36 +111,37 @@ public class GameObjects{
                 float dist = GPSInfo.getDistance(latLng, o.getPosition());
                 float pdist = GPSInfo.getDistance(player.getPosition(),o.getPosition());
                 if (dist <  o.getActionRadius() && pdist<=player.getActionDistance()) {
-                    if (StringUtils.isAdmin()) o.useObject();
-                        else {
-                        closestObject = o;
-                        break;
+                    if (StringUtils.isAdmin() && closestObject != null) {
+                        closestObject.useObject();
                     }
+                    closestObject = o;
+                    if (!StringUtils.isAdmin()) break;
                 }
             }
         }
-        for (GameObject o : activeObjects.values()) {
+        if (closestObject == null)
 
-            if (o instanceof ActiveObject && o.getMarker() != null && o.getMarker().isVisible()) {
+            for (GameObject o : activeObjects.values()) {
 
-                if (o.getPosition() != null) {
+                if (o instanceof ActiveObject && o.getMarker() != null && o.getMarker().isVisible()) {
+
+                    if (o.getPosition() != null) {
 
 
-                    float dist = GPSInfo.getDistance(latLng, o.getPosition());
+                        float dist = GPSInfo.getDistance(latLng, o.getPosition());
 
-                    if (o instanceof Chest && dist < ((ActiveObject) o).getActionRadius()) {
-                        closestObject = (ActiveObject) o;
-                        break;
-                    } else if (dist < closest && dist < ((ActiveObject) o).getActionRadius()) {
+                        if (o instanceof Chest && dist < ((ActiveObject) o).getActionRadius()) {
+                            closestObject = (ActiveObject) o;
+                            break;
+                        } else if (dist < closest && dist < ((ActiveObject) o).getActionRadius()) {
 
-                        closest = dist;
-                        closestObject = (ActiveObject) o;
-                        if (o instanceof Chest) break;
+                            closest = dist;
+                            closestObject = (ActiveObject) o;
+                            if (o instanceof Chest) break;
+                        }
                     }
                 }
             }
-        }
-
         return closestObject;
     }
 
@@ -315,7 +322,6 @@ public class GameObjects{
                             }
 
                         }
-                        GATracker.trackHit("PositionChange","ChestCount",chests.size());
                     } catch (JSONException e) {
                         Log.d("FastScanMS", "Exception");
                         GATracker.trackException("FastScan",e);
@@ -444,7 +450,7 @@ public class GameObjects{
         }
         return objects;
     }
-    private static HashMap<String,GameObject> activeObjects;
+
     public static HashMap<String,GameObject> putActive(GameObject object){
         if (!(object instanceof ActiveObject)) return null;
         if (activeObjects.get(object.getGUID())!=null) return activeObjects;
