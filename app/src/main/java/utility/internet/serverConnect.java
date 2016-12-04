@@ -353,6 +353,7 @@ public class serverConnect {
         lockedActions.add(action);
         action.preAction();
         String UID=UUID.randomUUID().toString();
+
         String url=new UrlBuilder(ServerAddres+"/getdata.jsp",action.getCommand(),version)
                 .put("Token",Token)
                 .put("plat",Lat)
@@ -362,6 +363,7 @@ public class serverConnect {
                 .build();
         listenersMap.put(UID, action);
         errorMap.put(UID, action);
+        Log.d("Upgrade", url);
         runRequest(UID, url, ResponseListenerWithUID.ACTION,null);
         return true;
     }
@@ -753,7 +755,7 @@ public class serverConnect {
         return size+requestList.size()+1;
     }
 
-    private void runRequest(String UID,String request,int type, final int try_count,JSONObject body){
+    private void runRequest(String UID, final String request, int type, final int try_count, JSONObject body) {
 
         busy=true;
         if (!checkConnection()) return;
@@ -898,8 +900,12 @@ public class serverConnect {
                                         callFastScan();
 
                                         break;
-                                    case ACTION: for (ServerListener l : listeners) l.onResponse(ServerListener.ACTION,response);
+                                    case ACTION:
+                                        Log.d("Upgrade", response.toString());
+                                        for (ServerListener l : listeners)
+                                            l.onResponse(ServerListener.ACTION, response);
                                         if (listenersMap.get(getUID()) != null) {
+
                                             GATracker.trackHit("Action",listenersMap.get(getUID()).getCommand());
                                             listenersMap.get(getUID()).postAction(response);
                                         }
